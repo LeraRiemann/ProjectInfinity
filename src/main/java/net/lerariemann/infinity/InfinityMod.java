@@ -3,6 +3,8 @@ package net.lerariemann.infinity;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.entity.ModBlockEntities;
 
 public class InfinityMod implements ModInitializer {
 	public static final String MOD_ID = "infinity";
@@ -10,6 +12,7 @@ public class InfinityMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-
+		ModBlocks.registerModBlocks();
+		ModBlockEntities.registerBlockEntities();
 	}
 }

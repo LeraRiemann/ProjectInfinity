@@ -1,33 +1,42 @@
 package net.lerariemann.infinity.mixin;
 
+import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
+import com.mojang.authlib.properties.Property;
+import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.google.common.hash.Hashing;
+import net.minecraft.util.math.Direction.Axis;
+import java.nio.charset.StandardCharsets;
 
+import java.util.Queue;
+import java.util.Set;
 import java.util.stream.IntStream;
 import java.util.stream.Collectors;
 
+import static net.minecraft.block.NetherPortalBlock.AXIS;
+
 @Mixin(NetherPortalBlock.class)
 public class NetherPortalBlockMixin {
-	private int dimension;
 
-	public int getDimension(){
-		return this.dimension;
-	}
-	public void setDimension(int dimension) {
-		this.dimension = dimension;
-	}
 	@Inject(at = @At("HEAD"), method = "onEntityCollision(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V")
 	private void injected(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo info) {
 		if (entity instanceof ItemEntity) {
@@ -36,15 +45,52 @@ public class NetherPortalBlockMixin {
 				BookScreen.Contents bookContent = BookScreen.Contents.create(itemStack);
 				String string = IntStream.range(0, bookContent.getPageCount()).mapToObj(bookContent::getPage).map(u -> {return u.getString();}).collect(Collectors.joining("\n"));
 				if(!string.isEmpty()){
-					int i = 0;
+					int i = Hashing.sha256().hashString(string, StandardCharsets.UTF_8).asInt() & Integer.MAX_VALUE;
 					modifyPortal(world, pos, state, i);
-					entity.remove(Entity.RemovalReason.DISCARDED);
+					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
 				}
 			}
 		}
 	}
 
+	@Redirect(method="getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Direction;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
+	private boolean injected(BlockState neighborState, Block block) {
+		return (neighborState.getBlock() instanceof NetherPortalBlock);
+	}
+
 	private void modifyPortal(World world, BlockPos pos, BlockState state, int i) {
-		world.setBlockState(pos, (BlockState)Blocks.BUDDING_AMETHYST.getDefaultState());
+		Set<BlockPos> set = Sets.newHashSet();
+		Queue<BlockPos> queue = Queues.newArrayDeque();
+		queue.add(pos);
+		BlockPos blockPos;
+		Direction.Axis axis = (Direction.Axis)state.get((Property)AXIS);
+		while ((blockPos = queue.poll()) != null) {
+			set.add(blockPos);
+			BlockState blockState = world.getBlockState(blockPos);
+			if (blockState.getBlock() instanceof NetherPortalBlock) {
+				world.setBlockState(blockPos, ModBlocks.NEITHER_PORTAL.getDefaultState().with((Property)AXIS, (Comparable)axis));
+				BlockEntity blockEntity = world.getBlockEntity(blockPos);
+				if (blockEntity instanceof NeitherPortalBlockEntity)
+					((NeitherPortalBlockEntity)blockEntity).setDimension(i);
+				BlockPos blockPos2 = blockPos.offset(Direction.UP);
+				if (!set.contains(blockPos2))
+					queue.add(blockPos2);
+				blockPos2 = blockPos.offset(Direction.DOWN);
+				if (!set.contains(blockPos2))
+					queue.add(blockPos2);
+				blockPos2 = blockPos.offset(Direction.NORTH);
+				if (!set.contains(blockPos2))
+					queue.add(blockPos2);
+				blockPos2 = blockPos.offset(Direction.SOUTH);
+				if (!set.contains(blockPos2))
+					queue.add(blockPos2);
+				blockPos2 = blockPos.offset(Direction.WEST);
+				if (!set.contains(blockPos2))
+					queue.add(blockPos2);
+				blockPos2 = blockPos.offset(Direction.EAST);
+				if (!set.contains(blockPos2))
+					queue.add(blockPos2);
+			}
+		}
 	}
 }
