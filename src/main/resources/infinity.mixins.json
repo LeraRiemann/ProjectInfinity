@@ -4,9 +4,11 @@
   "package": "net.lerariemann.infinity.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "NetherPortalBlockMixin"
   ],
   "client": [
-    "ExampleMixin"
+  ],
+  "server": [
   ],
   "injectors": {
     "defaultRequire": 1
