@@ -2,12 +2,10 @@ package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
-import com.mojang.authlib.properties.Property;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
@@ -18,13 +16,13 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.state.property.Property;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.google.common.hash.Hashing;
-import net.minecraft.util.math.Direction.Axis;
 import java.nio.charset.StandardCharsets;
 
 import java.util.Queue;
