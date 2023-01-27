@@ -56,22 +56,23 @@ public class NetherPortalBlockMixin {
 		return (neighborState.getBlock() instanceof NetherPortalBlock);
 	}
 
+	private void changeDim(World world, BlockPos pos, Direction.Axis axis, int i) {
+		world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.getDefaultState().with((Property)AXIS, (Comparable)axis));
+		BlockEntity blockEntity = world.getBlockEntity(pos);
+		((NeitherPortalBlockEntity)blockEntity).setDimension(i);
+	}
+
 	private void modifyPortal(World world, BlockPos pos, BlockState state, int i) {
 		Set<BlockPos> set = Sets.newHashSet();
 		Queue<BlockPos> queue = Queues.newArrayDeque();
 		queue.add(pos);
 		BlockPos blockPos;
-		Direction.Axis axis = (Direction.Axis)state.get((Property)AXIS);
+		Direction.Axis axis = (Direction.Axis)state.get((Property<Direction.Axis>)AXIS);
 		while ((blockPos = queue.poll()) != null) {
 			set.add(blockPos);
 			BlockState blockState = world.getBlockState(blockPos);
 			if (blockState.getBlock() instanceof NetherPortalBlock) {
-				world.setBlockState(blockPos, ModBlocks.NEITHER_PORTAL.getDefaultState().with((Property)AXIS, (Comparable)axis));
-				BlockEntity blockEntity = world.getBlockEntity(blockPos);
-				if (blockEntity instanceof NeitherPortalBlockEntity)
-					((NeitherPortalBlockEntity)blockEntity).setDimension(i);
-				else
-					blockEntity = new NeitherPortalBlockEntity(blockPos,world.getBlockState(blockPos),i);
+				this.changeDim(world, blockPos, axis, i);
 				BlockPos blockPos2 = blockPos.offset(Direction.UP);
 				if (!set.contains(blockPos2))
 					queue.add(blockPos2);
