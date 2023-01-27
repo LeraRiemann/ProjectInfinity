@@ -28,14 +28,14 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     }
     @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return (BlockEntity)new NeitherPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
+        return new NeitherPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
     }
 
     @Environment(EnvType.CLIENT)
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, net.minecraft.util.math.random.Random random) {
         if (random.nextInt(100) == 0) {
-            world.playSound((double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, random.nextFloat() * 0.4F + 0.8F, false);
+            world.playSound((double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS, 0.5F, random.nextFloat() * 0.4F + 0.8F, false);
         }
 
         for(int i = 0; i < 4; ++i) {

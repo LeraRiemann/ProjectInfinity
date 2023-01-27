@@ -3,6 +3,7 @@ package net.lerariemann.infinity.mixin;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -71,7 +72,7 @@ public class NetherPortalBlockMixin {
 		while ((blockPos = queue.poll()) != null) {
 			set.add(blockPos);
 			BlockState blockState = world.getBlockState(blockPos);
-			if (blockState.getBlock() instanceof NetherPortalBlock) {
+			if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof NeitherPortalBlock) {
 				this.changeDim(world, blockPos, axis, i);
 				BlockPos blockPos2 = blockPos.offset(Direction.UP);
 				if (!set.contains(blockPos2))

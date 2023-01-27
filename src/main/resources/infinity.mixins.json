@@ -4,11 +4,13 @@
   "package": "net.lerariemann.infinity.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "NetherPortalBlockMixin"
+    "NetherPortalBlockMixin",
+    "AbstractFireBlockMixin"
   ],
   "client": [
   ],
   "server": [
+    "PointOfInterestTypesMixin"
   ],
   "injectors": {
     "defaultRequire": 1
