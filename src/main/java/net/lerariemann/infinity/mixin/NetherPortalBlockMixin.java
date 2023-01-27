@@ -70,6 +70,8 @@ public class NetherPortalBlockMixin {
 				BlockEntity blockEntity = world.getBlockEntity(blockPos);
 				if (blockEntity instanceof NeitherPortalBlockEntity)
 					((NeitherPortalBlockEntity)blockEntity).setDimension(i);
+				else
+					blockEntity = new NeitherPortalBlockEntity(blockPos,world.getBlockState(blockPos),i);
 				BlockPos blockPos2 = blockPos.offset(Direction.UP);
 				if (!set.contains(blockPos2))
 					queue.add(blockPos2);
