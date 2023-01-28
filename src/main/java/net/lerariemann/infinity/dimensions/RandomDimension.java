@@ -1,81 +1,37 @@
 package net.lerariemann.infinity.dimensions;
 
+
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.*;
-
 import java.util.Random;
 
-import static java.lang.Math.min;
 
 public class RandomDimension {
-    private NbtCompound data;
-    private int id;
-    private RandomProvider PROVIDER;
+    private final NbtCompound data;
+    private final int id;
+    private final String PATH;
+    private final RandomProvider PROVIDER;
     public String name;
-    private Random random;
+    private final Random random;
     public int height;
 
-    public RandomDimension(int i, RandomProvider provider) {
+    public RandomDimension(int i, RandomProvider provider, String path) {
         random = new Random(i);
         PROVIDER = provider;
+        PATH = path;
         id = i;
         name = "generated_"+i;
-        height = 256;
         data = new NbtCompound();
-        data.put("type", randomDimensionType());
+        RandomDimensionType type = new RandomDimensionType(id, PROVIDER, PATH);
+        data.put("type", NbtString.of(type.fullname));
+        height = type.height;
         data.put("generator", randomDimensionGenerator());
-        CommonIO.write(data, "config/output.json");
+        CommonIO.write(data, path + "/datapacks/" + InfinityMod.MOD_ID + "/data/" + InfinityMod.MOD_ID + "/dimension", name + ".json");
     }
-
-    NbtCompound getData() {return data;}
 
     boolean weighedRandom(int weight0, int weight1) {
         int i = random.nextInt(weight0+weight1);
         return i < weight1;
-    }
-
-    double coordinateScale() {
-        WeighedStructure<Double> values = new WeighedStructure<>();
-        values.add(1.0, 2.0);
-        values.add(8.0, 2.0);
-        double random1 = Math.min(random.nextExponential(), 16.0);
-        values.add(Math.exp(random1+3.0), 1.0);
-        values.add(Math.exp(-random1), 1.0);
-        values.add(1.0 + 7*random.nextDouble(), 2.0);
-        return values.getRandomElement(random);
-    }
-
-    double ambientLight() {
-        if (random.nextBoolean())
-            return 0.0;
-        return random.nextDouble();
-    }
-
-    int minY() {
-        int random1 = Math.min(126, (int)Math.floor(random.nextExponential()*2));
-        return -16*random1;
-    }
-
-    NbtCompound randomDimensionType(){
-        NbtCompound res = new NbtCompound();
-        res.put("ultrawarm", NbtByte.of(random.nextBoolean()));
-        res.put("natural", NbtByte.of(random.nextBoolean()));
-        res.put("has_skylight", NbtByte.of(random.nextBoolean()));
-        res.put("piglin_safe", NbtByte.of(random.nextBoolean()));
-        res.put("bed_works", NbtByte.of(random.nextBoolean()));
-        res.put("respawn_anchor_works", NbtByte.of(random.nextBoolean()));
-        res.put("has_raids", NbtByte.of(random.nextBoolean()));
-        res.put("coordinate_scale", NbtDouble.of(coordinateScale()));
-        res.put("ambient_light", NbtDouble.of(ambientLight()));
-        if (random.nextBoolean()){
-            res.put("fixed_time", NbtInt.of(random.nextInt(24000)));
-        }
-        int min_y = minY();
-        res.put("min_y", NbtInt.of(min_y));
-        int max_y = -minY();
-        height = max_y - min_y;
-        res.put("height", NbtInt.of(max_y - min_y));
-        return res;
     }
 
     NbtCompound randomDimensionGenerator() {
@@ -209,31 +165,33 @@ public class RandomDimension {
 
     NbtElement randomMultiNoiseParameter() {
         if (random.nextBoolean()) {
-            NbtList res = new NbtList();
-            res.add(NbtDouble.of((random.nextDouble()-0.5)*4));
-            res.add(NbtDouble.of((random.nextDouble()-0.5)*4));
+            NbtCompound res = new NbtCompound();
+            double a = (random.nextDouble()-0.5)*4;
+            double b = (random.nextDouble()-0.5)*4;
+            res.put("min", NbtDouble.of(Math.min(a, b)));
+            res.put("max", NbtDouble.of(Math.max(a, b)));
             return res;
         }
         return NbtDouble.of((random.nextDouble()-0.5)*4);
     }
 
     String randomBiome() {
-        if (true) {
+        if (random.nextBoolean()) {
             return PROVIDER.BIOMES.getRandomElement(random);
         }
         else {
-            RandomBiome biome = new RandomBiome(random.nextInt(), PROVIDER);
-            return biome.name;
+            RandomBiome biome = new RandomBiome(random.nextInt(), PROVIDER, PATH);
+            return biome.fullname;
         }
     }
 
     String randomNoiseSettings() {
-        if (true) {
+        if (random.nextBoolean()) {
             return PROVIDER.NOISE_PRESETS.getRandomElement(random);
         }
         else {
-            RandomNoisePreset preset = new RandomNoisePreset(id, PROVIDER);
-            return preset.name;
+            RandomNoisePreset preset = new RandomNoisePreset(id, PROVIDER, PATH);
+            return preset.fullname;
         }
     }
 }

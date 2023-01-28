@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.state.property.Property;
+import net.minecraft.world.level.storage.LevelStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,6 +27,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.google.common.hash.Hashing;
 import java.nio.charset.StandardCharsets;
 
+import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -46,6 +49,7 @@ public class NetherPortalBlockMixin {
 				if(!string.isEmpty()){
 					int i = Hashing.sha256().hashString(string, StandardCharsets.UTF_8).asInt() & Integer.MAX_VALUE;
 					modifyPortal(world, pos, state, i);
+					Objects.requireNonNull(world.getServer()).getRunDirectory();
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
 				}
 			}

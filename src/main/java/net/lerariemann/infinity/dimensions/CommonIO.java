@@ -12,15 +12,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
-import net.minecraft.util.Pair;
 
 public class CommonIO {
 
-    public static void write(NbtCompound base, String path){
+    public static void write(NbtCompound base, String path, String filename) {
         String source = CompoundToString(base, 0);
         List<String> lines = Collections.singletonList(source);
-        Path file = Paths.get(path);
+        Path dir = Paths.get(path);
+        Path file = Paths.get(path+"/"+filename);
         try {
+            Files.createDirectories(dir);
             Files.write(file, lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -44,9 +45,7 @@ public class CommonIO {
     }
 
     public static String appendTabs(String parent, int t) {
-        String res = parent;
-        for (int i = 0; i<t; i++) res += "\t";
-        return res;
+        return parent + "\t".repeat(Math.max(0, t));
     }
 
     public static String ElementToString(NbtElement base, int t) {
