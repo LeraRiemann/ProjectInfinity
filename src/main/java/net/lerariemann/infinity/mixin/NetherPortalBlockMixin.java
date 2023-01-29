@@ -2,9 +2,13 @@ package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.dimensions.RandomDimension;
+import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
@@ -19,12 +23,15 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.state.property.Property;
 import net.minecraft.world.level.storage.LevelStorage;
+import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.google.common.hash.Hashing;
+
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import java.nio.file.Path;
@@ -49,7 +56,12 @@ public class NetherPortalBlockMixin {
 				if(!string.isEmpty()){
 					int i = Hashing.sha256().hashString(string, StandardCharsets.UTF_8).asInt() & Integer.MAX_VALUE;
 					modifyPortal(world, pos, state, i);
-					Objects.requireNonNull(world.getServer()).getRunDirectory();
+					try {
+						RandomDimension d = new RandomDimension(i, new RandomProvider("config/"+ InfinityMod.MOD_ID + "/"), "saves/New World");
+					} catch (IOException | CommandSyntaxException e) {
+						throw new RuntimeException(e);
+					}
+					LogManager.getLogger().info(Objects.requireNonNull(world.getServer()).getRunDirectory().toString());
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
 				}
 			}

@@ -54,6 +54,7 @@ public class CommonIO {
         else if (base instanceof NbtList) str = ListToString((NbtList)base, t+1);
         else if (base instanceof NbtByte) str = (((NbtByte)base).byteValue() != 0) ? "true" : "false";
         else if (base instanceof NbtDouble) str = String.valueOf(((NbtDouble) base).floatValue());
+        else if (base instanceof NbtFloat) str = String.valueOf(((NbtFloat) base).floatValue());
         else str = base.toString();
         return  str;
     }
@@ -73,10 +74,10 @@ public class CommonIO {
     }
     public static String ListToString(NbtList base, int t) {
         String res = "[\n";
-        for (int i=base.size() - 1; i>=0; i--) {
+        for (int i=0; i<base.size(); i++) {
             NbtElement elem = base.get(i);
             res = appendTabs(res, t+1) + ElementToString(elem, t);
-            if (i!=0) res += ",";
+            if (i!=(base.size()-1)) res += ",";
             res += "\n";
         }
         res = appendTabs(res, t) + "]";

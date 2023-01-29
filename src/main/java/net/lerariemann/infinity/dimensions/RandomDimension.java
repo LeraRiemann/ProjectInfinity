@@ -23,15 +23,10 @@ public class RandomDimension {
         name = "generated_"+i;
         data = new NbtCompound();
         RandomDimensionType type = new RandomDimensionType(id, PROVIDER, PATH);
-        data.put("type", NbtString.of(type.fullname));
+        data.putString("type", type.fullname);
         height = type.height;
         data.put("generator", randomDimensionGenerator());
         CommonIO.write(data, path + "/datapacks/" + InfinityMod.MOD_ID + "/data/" + InfinityMod.MOD_ID + "/dimension", name + ".json");
-    }
-
-    boolean weighedRandom(int weight0, int weight1) {
-        int i = random.nextInt(weight0+weight1);
-        return i < weight1;
     }
 
     NbtCompound randomDimensionGenerator() {
@@ -42,17 +37,17 @@ public class RandomDimension {
         list.add(0, 1.0);
         switch (list.getRandomElement(random)) {
             case 2 -> {
-                res.put("type", NbtString.of("minecraft:debug"));
+                res.putString("type", "minecraft:debug");
                 return res;
             }
             case 1 -> {
-                res.put("type", NbtString.of("minecraft:flat"));
+                res.putString("type", "minecraft:flat");
                 res.put("settings", randomSuperflatSettings());
                 return res;
             }
             default -> {
-                res.put("type", NbtString.of("minecraft:noise"));
-                res.put("settings", NbtString.of(randomNoiseSettings()));
+                res.putString("type", "minecraft:noise");
+                res.putString("settings", randomNoiseSettings());
                 res.put("biome_source", randomBiomeSource());
                 return res;
             }
@@ -61,21 +56,21 @@ public class RandomDimension {
 
     NbtCompound superflatLayer(int height, WeighedStructure<String> str) {
         NbtCompound res = new NbtCompound();
-        res.put("height", NbtInt.of(height));
-        res.put("block", NbtString.of(str.getRandomElement(random)));
+        res.putInt("height", height);
+        res.putString("block", str.getRandomElement(random));
         return res;
     }
 
     NbtCompound randomSuperflatSettings() {
         NbtCompound res = new NbtCompound();
         NbtList layers = new NbtList();
-        if (weighedRandom(1, 3)) {
+        if (RandomProvider.weighedRandom(random, 1, 3)) {
             int layer_count = Math.min(64, 1 + (int) Math.floor(random.nextExponential() * 2));
             int heightLeft = height;
             for (int i = 0; i < layer_count; i++) {
                 int layerHeight = Math.min(heightLeft, 1 + (int) Math.floor(random.nextExponential() * 2));
                 heightLeft -= layerHeight;
-                layers.add(superflatLayer(height, PROVIDER.FULL_BLOCKS));
+                layers.add(superflatLayer(layerHeight, PROVIDER.FULL_BLOCKS));
                 if (heightLeft <= 1) {
                     break;
                 }
@@ -85,9 +80,9 @@ public class RandomDimension {
             }
         }
         res.put("layers", layers);
-        res.put("biome", NbtString.of(randomBiome()));
-        res.put("lakes", NbtByte.of(random.nextBoolean()));
-        res.put("features", NbtByte.of(random.nextBoolean()));
+        res.putString("biome", randomBiome());
+        res.putBoolean("lakes", random.nextBoolean());
+        res.putBoolean("features", random.nextBoolean());
         return res;
     }
 
@@ -100,31 +95,31 @@ public class RandomDimension {
         list.add(0, 1.0);
         switch (list.getRandomElement(random)) {
             case 3 -> {
-                res.put("type", NbtString.of("minecraft:the_end"));
+                res.putString("type","minecraft:the_end");
                 return res;
             }
             case 2 -> {
-                res.put("type", NbtString.of("minecraft:checkerboard"));
+                res.putString("type","minecraft:checkerboard");
                 res.put("biomes", randomBiomesCheckerboard());
-                res.put("scale", NbtInt.of(Math.min(62, (int) Math.floor(random.nextExponential() * 2))));
+                res.putInt("scale", Math.min(62, (int) Math.floor(random.nextExponential() * 2)));
                 return res;
             }
             case 1 -> {
-                res.put("type", NbtString.of("minecraft:multi_noise"));
+                res.putString("type", "minecraft:multi_noise");
                 WeighedStructure<Integer> list2 = new WeighedStructure<>();
                 list2.add(2, 0.1);
                 list2.add(1, 0.1);
                 list2.add(0, 0.8);
                 switch (list2.getRandomElement(random)) {
-                    case 2 -> res.put("preset", NbtString.of("minecraft:overworld"));
-                    case 1 -> res.put("preset", NbtString.of("minecraft:nether"));
+                    case 2 -> res.putString("preset", "minecraft:overworld");
+                    case 1 -> res.putString("preset", "minecraft:nether");
                     default -> res.put("biomes", randomBiomes());
                 }
                 return res;
             }
             default -> {
-                res.put("type", NbtString.of("minecraft:fixed"));
-                res.put("biome", NbtString.of(randomBiome()));
+                res.putString("type", "minecraft:fixed");
+                res.putString("biome", randomBiome());
             }
         }
         return res;
@@ -144,7 +139,7 @@ public class RandomDimension {
         int biome_count = Math.min(16, 2 + (int) Math.floor(random.nextExponential()));
         for (int i = 0; i < biome_count; i++) {
             NbtCompound element = new NbtCompound();
-            element.put("biome", NbtString.of(randomBiome()));
+            element.putString("biome", randomBiome());
             element.put("parameters", randomMultiNoiseParameters());
             res.add(element);
         }
@@ -166,10 +161,10 @@ public class RandomDimension {
     NbtElement randomMultiNoiseParameter() {
         if (random.nextBoolean()) {
             NbtCompound res = new NbtCompound();
-            double a = (random.nextDouble()-0.5)*4;
-            double b = (random.nextDouble()-0.5)*4;
-            res.put("min", NbtDouble.of(Math.min(a, b)));
-            res.put("max", NbtDouble.of(Math.max(a, b)));
+            double a = (random.nextFloat()-0.5)*4;
+            double b = (random.nextFloat()-0.5)*4;
+            res.putFloat("min", (float)Math.min(a, b));
+            res.putFloat("max", (float)Math.max(a, b));
             return res;
         }
         return NbtDouble.of((random.nextDouble()-0.5)*4);
@@ -186,7 +181,7 @@ public class RandomDimension {
     }
 
     String randomNoiseSettings() {
-        if (random.nextBoolean()) {
+        if (true) {
             return PROVIDER.NOISE_PRESETS.getRandomElement(random);
         }
         else {
