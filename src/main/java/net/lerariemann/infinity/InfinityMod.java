@@ -20,7 +20,7 @@ public class InfinityMod implements ModInitializer {
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
 		try {
-			RandomDimension d = new RandomDimension(2, new RandomProvider("config/"+InfinityMod.MOD_ID + "/"), "saves/New World");
+			RandomDimension d = new RandomDimension(1, new RandomProvider("config/"+InfinityMod.MOD_ID + "/"), "saves/New World");
 		} catch (IOException | CommandSyntaxException e) {
 			throw new RuntimeException(e);
 		}

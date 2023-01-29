@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.dimensions;
 
+import net.lerariemann.infinity.dimensions.features.RandomLake;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -11,16 +12,19 @@ import java.util.Random;
 
 public class RandomFeaturesList {
     public NbtList data;
-
+    private final RandomProvider PROVIDER;
+    String configsPath;
     String PATH;
     Random random;
 
-    RandomFeaturesList(int i, String path) {
+    RandomFeaturesList(int i, RandomProvider provider, String path) {
         random = new Random(i);
-        PATH = path + "features/";
+        PROVIDER = provider;
+        configsPath = PROVIDER.PATH + "features/";
+        PATH = path;
         data = new NbtList();
         data.add(getAllElements("rawgeneration"));
-        data.add(getAllElements("lakes"));
+        data.add(lakes());
         data.add(getAllElements("localmodifications"));
         data.add(getAllElements("undergroundstructures"));
         data.add(getAllElements("surfacestructures"));
@@ -47,7 +51,7 @@ public class RandomFeaturesList {
     NbtString randomPlant(String path) {
         String plant = null;
         try {
-            plant = CommonIO.commonListReader(PATH + "vegetation/" + path + ".json").getRandomElement(random);
+            plant = CommonIO.commonListReader(configsPath + "vegetation/" + path + ".json").getRandomElement(random);
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -57,7 +61,7 @@ public class RandomFeaturesList {
     NbtList getAllElements(String name) {
         NbtList content = null;
         try {
-            content = CommonIO.read(PATH + name + ".json").getList("elements", NbtElement.COMPOUND_TYPE);
+            content = CommonIO.read(configsPath + name + ".json").getList("elements", NbtElement.COMPOUND_TYPE);
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -69,12 +73,12 @@ public class RandomFeaturesList {
         return res;
     }
 
-    /*NbtList lakes() {
+    NbtList lakes() {
         NbtList res = getAllElements("lakes");
         if (random.nextBoolean()) {
-            String lake = RandomLake(random.nextInt()).name;
-            res.add()
+            String lake = (new RandomLake(random.nextInt(), PROVIDER, PATH)).fullname;
+            res.add(NbtString.of(lake));
         }
         return res;
-    }*/
+    }
 }

@@ -13,7 +13,7 @@ public class RandomBiome {
     private final RandomProvider PROVIDER;
     public String name;
     public String fullname;
-    private Random random;
+    private final Random random;
 
     RandomBiome(int i, RandomProvider provider, String path) {
         random = new Random(i);
@@ -29,7 +29,7 @@ public class RandomBiome {
         if (random.nextBoolean()) res.putFloat("creature_spawn_probability", Math.min(random.nextFloat(), 0.9999999f));
         res.put("spawners", randomMobs());
         res.put("spawn_costs", new NbtCompound());
-        res.put("features", (new RandomFeaturesList(i, PROVIDER.PATH)).data);
+        res.put("features", (new RandomFeaturesList(i, PROVIDER, path)).data);
         res.put("carvers", new NbtCompound());
         CommonIO.write(res, path + "/datapacks/" + InfinityMod.MOD_ID + "/data/" + InfinityMod.MOD_ID + "/worldgen/biome", name + ".json");
     }

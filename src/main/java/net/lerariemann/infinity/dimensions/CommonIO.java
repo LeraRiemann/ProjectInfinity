@@ -33,6 +33,12 @@ public class CommonIO {
         return StringNbtReader.parse(content);
     }
 
+    public static NbtCompound readCarefully(String path, int i) throws IOException, CommandSyntaxException {
+        File file = new File(path);
+        String content = String.format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), i);
+        return StringNbtReader.parse(content);
+    }
+
     public static WeighedStructure<String> commonListReader(String path) throws IOException, CommandSyntaxException {
         NbtCompound base = read(path);
         WeighedStructure<String> res = new WeighedStructure<>();

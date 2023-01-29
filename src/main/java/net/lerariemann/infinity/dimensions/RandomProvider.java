@@ -1,7 +1,9 @@
 package net.lerariemann.infinity.dimensions;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
+import net.minecraft.nbt.NbtList;
 
 import java.io.IOException;
 import java.util.Random;
@@ -19,6 +21,8 @@ public class RandomProvider {
     public WeighedStructure<String> ITEMS;
     public WeighedStructure<String> MOBS;
     public WeighedStructure<String> MOBCATEGORIES;
+
+    public WeighedStructure<String> FLUIDS;
     public String PATH;
 
     public RandomProvider(String path) throws IOException, CommandSyntaxException {
@@ -35,6 +39,7 @@ public class RandomProvider {
         ITEMS = register("items");
         MOBS = register("mobs");
         MOBCATEGORIES = register("mobcategories");
+        FLUIDS = register("fluids");
     }
 
     WeighedStructure<String> register(String name) throws IOException, CommandSyntaxException {
@@ -45,4 +50,17 @@ public class RandomProvider {
         int i = random.nextInt(weight0+weight1);
         return i < weight1;
     }
+
+    public NbtCompound randomBlock(Random random, WeighedStructure<String> STR) {
+        NbtCompound res = new NbtCompound();
+        res.putString("Name", STR.getRandomElement(random));
+        return res;
+    }
+
+    public NbtCompound randomBlockProvider (Random random, WeighedStructure<String> STR) {
+        NbtCompound res = new NbtCompound();
+        res.putString("type", "minecraft:simple_state_provider");
+        res.put("state", randomBlock(random, STR));
+        return res;
+    };
 }
