@@ -13,6 +13,7 @@ public class RandomFungus extends  RandomisedFeature {
         id = "huge_fungus";
         type = "everylayer";
         validbaseblocks = valid_base_blocks;
+        validbaseblocks.add("minecraft:grass_block");
         save(path,1 + random.nextInt(10));
     }
 
