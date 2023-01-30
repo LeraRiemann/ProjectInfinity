@@ -157,7 +157,7 @@ public class RandomDimension {
     }
 
     String randomBiome() {
-        if (random.nextBoolean()) {
+        if (RandomProvider.weighedRandom(random, 3, 1)) {
             return PROVIDER.BIOMES.getRandomElement(random);
         }
         else {

@@ -6,12 +6,12 @@
   "mixins": [
     "NetherPortalBlockMixin",
     "AbstractFireBlockMixin",
-    "EntityMixin"
+    "EntityMixin",
+    "PortalForcerMixin"
   ],
   "client": [
   ],
   "server": [
-    "PointOfInterestTypesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

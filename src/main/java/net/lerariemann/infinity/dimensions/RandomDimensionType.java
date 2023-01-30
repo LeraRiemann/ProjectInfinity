@@ -29,7 +29,7 @@ public class RandomDimensionType {
         if (random.nextBoolean()){
             res.putInt("fixed_time", random.nextInt(24000));
         }
-        int min_y = -16*Math.min(127, (int)Math.floor(random.nextExponential()*2));
+        int min_y = -16*Math.min(127, 4 + (int)Math.floor(random.nextExponential()*2));
         res.putInt("min_y", min_y);
         int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
         height = 16 + max_y - min_y;

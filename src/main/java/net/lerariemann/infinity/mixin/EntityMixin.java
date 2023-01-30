@@ -25,7 +25,7 @@ public class EntityMixin {
             int id = ((NeitherPortalBlockEntity)serverWorld.getBlockEntity(this.lastNetherPortalPosition)).getDimension();
             serverWorld2 = serverWorld.getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD, new Identifier("infinity:generated_" + id)));
         }
-        return serverWorld2;
+        return (serverWorld2 != null) ? serverWorld2 : serverWorld;
     }
 
     @Redirect(method = "getTeleportTarget(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/world/TeleportTarget;",

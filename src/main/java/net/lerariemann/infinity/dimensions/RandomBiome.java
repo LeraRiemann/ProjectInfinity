@@ -92,7 +92,7 @@ public class RandomBiome {
 
     NbtCompound randomParticle(){
         NbtCompound res = new NbtCompound();
-        res.putFloat("probability", (float)(random.nextExponential()*0.005));
+        res.putFloat("probability", (float)(random.nextExponential()*0.01));
         res.put("options", particleOptions());
         return res;
     }
