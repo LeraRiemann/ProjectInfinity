@@ -18,12 +18,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.state.property.Property;
-import net.minecraft.world.level.storage.LevelStorage;
-import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -34,8 +33,6 @@ import com.google.common.hash.Hashing;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import java.nio.file.Path;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -57,11 +54,12 @@ public class NetherPortalBlockMixin {
 					int i = Hashing.sha256().hashString(string, StandardCharsets.UTF_8).asInt() & Integer.MAX_VALUE;
 					modifyPortal(world, pos, state, i);
 					try {
-						RandomDimension d = new RandomDimension(i, new RandomProvider("config/"+ InfinityMod.MOD_ID + "/"), "saves/New World");
+						if (!world.isClient()) {
+							RandomDimension d = new RandomDimension(i, new RandomProvider("config/"+ InfinityMod.MOD_ID + "/"), world.getServer().getSavePath(WorldSavePath.DATAPACKS).toString());
+						}
 					} catch (IOException | CommandSyntaxException e) {
 						throw new RuntimeException(e);
 					}
-					LogManager.getLogger().info(Objects.requireNonNull(world.getServer()).getRunDirectory().toString());
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
 				}
 			}

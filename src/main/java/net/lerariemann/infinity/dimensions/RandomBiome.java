@@ -2,11 +2,8 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.*;
-import net.minecraft.world.gen.feature.RandomFeature;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class RandomBiome {
     private NbtCompound res;
@@ -29,9 +26,9 @@ public class RandomBiome {
         if (random.nextBoolean()) res.putFloat("creature_spawn_probability", Math.min(random.nextFloat(), 0.9999999f));
         res.put("spawners", randomMobs());
         res.put("spawn_costs", new NbtCompound());
-        res.put("features", (new RandomFeaturesList(i, PROVIDER, path)).data);
+        res.put("features", (new RandomFeaturesList(i, PROVIDER, path).data));
         res.put("carvers", new NbtCompound());
-        CommonIO.write(res, path + "/datapacks/" + InfinityMod.MOD_ID + "/data/" + InfinityMod.MOD_ID + "/worldgen/biome", name + ".json");
+        CommonIO.write(res, path + "/worldgen/biome", name + ".json");
     }
 
     public NbtInt randomColor() {
@@ -155,10 +152,10 @@ public class RandomBiome {
             int b = 1 + random.nextInt(12);
             mob.putInt("minCount", Math.min(a, b));
             mob.putInt("maxCount", Math.max(a, b));
-            lists.get(PROVIDER.MOBCATEGORIES.getRandomElement(random)).add(mob);
+            lists.get(PROVIDER.MOB_CATEGORIES.getRandomElement(random)).add(mob);
         }
         NbtCompound res = new NbtCompound();
         for (int i = 0; i < 8; i++) res.put(titles[i], lists.get(titles[i]));
         return res;
-    };
+    }
 }

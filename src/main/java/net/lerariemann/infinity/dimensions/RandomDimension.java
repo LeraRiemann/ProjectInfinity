@@ -18,7 +18,7 @@ public class RandomDimension {
     public RandomDimension(int i, RandomProvider provider, String path) {
         random = new Random(i);
         PROVIDER = provider;
-        PATH = path;
+        PATH = path + "/" + InfinityMod.MOD_ID + "/data/" + InfinityMod.MOD_ID;
         id = i;
         name = "generated_"+i;
         data = new NbtCompound();
@@ -26,29 +26,24 @@ public class RandomDimension {
         data.putString("type", type.fullname);
         height = type.height;
         data.put("generator", randomDimensionGenerator());
-        CommonIO.write(data, path + "/datapacks/" + InfinityMod.MOD_ID + "/data/" + InfinityMod.MOD_ID + "/dimension", name + ".json");
+        CommonIO.write(data, PATH + "/dimension", name + ".json");
     }
 
     NbtCompound randomDimensionGenerator() {
         NbtCompound res = new NbtCompound();
-        WeighedStructure<Integer> list = new WeighedStructure<>();
-        list.add(2, 0.0001);
-        list.add(1, 0.01);
-        list.add(0, 1.0);
-        switch (list.getRandomElement(random)) {
-            case 2 -> {
-                res.putString("type", "minecraft:debug");
-                return res;
-            }
-            case 1 -> {
-                res.putString("type", "minecraft:flat");
+        String type = PROVIDER.GENERATOR_TYPES.getRandomElement(random);
+        res.putString("type", type);
+        switch (type) {
+            case "minecraft:flat" -> {
                 res.put("settings", randomSuperflatSettings());
                 return res;
             }
-            default -> {
-                res.putString("type", "minecraft:noise");
+            case "minecraft:noise" -> {
                 res.putString("settings", randomNoiseSettings());
                 res.put("biome_source", randomBiomeSource());
+                return res;
+            }
+            default -> {
                 return res;
             }
         }
@@ -88,24 +83,18 @@ public class RandomDimension {
 
     NbtCompound randomBiomeSource() {
         NbtCompound res = new NbtCompound();
-        WeighedStructure<Integer> list = new WeighedStructure<>();
-        list.add(3, 0.01);
-        list.add(2, 0.495);
-        list.add(1, 0.495);
-        list.add(0, 1.0);
-        switch (list.getRandomElement(random)) {
-            case 3 -> {
-                res.putString("type","minecraft:the_end");
+        String type = PROVIDER.BIOME_SOURCES.getRandomElement(random);
+        res.putString("type",type);
+        switch (type) {
+            case "minecraft:the_end" -> {
                 return res;
             }
-            case 2 -> {
-                res.putString("type","minecraft:checkerboard");
+            case "minecraft:checkerboard" -> {
                 res.put("biomes", randomBiomesCheckerboard());
                 res.putInt("scale", Math.min(62, (int) Math.floor(random.nextExponential() * 2)));
                 return res;
             }
-            case 1 -> {
-                res.putString("type", "minecraft:multi_noise");
+            case "minecraft:multi_noise" -> {
                 WeighedStructure<Integer> list2 = new WeighedStructure<>();
                 list2.add(2, 0.1);
                 list2.add(1, 0.1);
@@ -117,10 +106,7 @@ public class RandomDimension {
                 }
                 return res;
             }
-            default -> {
-                res.putString("type", "minecraft:fixed");
-                res.putString("biome", randomBiome());
-            }
+            case "minecraft:fixed" -> res.putString("biome", randomBiome());
         }
         return res;
     }
