@@ -3,30 +3,35 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
 public class RandomDimension {
     private final NbtCompound data;
-    private final int id;
-    private final String PATH;
-    private final RandomProvider PROVIDER;
+    public final int id;
+    public final String storagePath;
+    public final RandomProvider PROVIDER;
     public String name;
-    private final Random random;
+    public final Random random;
     public int height;
+    public int min_y;
+    public List<String> biomes;
 
     public RandomDimension(int i, RandomProvider provider, String path) {
         random = new Random(i);
         PROVIDER = provider;
-        PATH = path + "/" + InfinityMod.MOD_ID + "/data/" + InfinityMod.MOD_ID;
+        storagePath = path + "/" + InfinityMod.MOD_ID + "/data/" + InfinityMod.MOD_ID;
         id = i;
         name = "generated_"+i;
         data = new NbtCompound();
-        RandomDimensionType type = new RandomDimensionType(id, PROVIDER, PATH);
+        biomes = new ArrayList<>();
+        RandomDimensionType type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
-        height = type.height;
         data.put("generator", randomDimensionGenerator());
-        CommonIO.write(data, PATH + "/dimension", name + ".json");
+        CommonIO.write(data, storagePath + "/dimension", name + ".json");
     }
 
     NbtCompound randomDimensionGenerator() {
@@ -49,9 +54,9 @@ public class RandomDimension {
         }
     }
 
-    NbtCompound superflatLayer(int height, WeighedStructure<String> str) {
+    NbtCompound superflatLayer(int h, WeighedStructure<String> str) {
         NbtCompound res = new NbtCompound();
-        res.putInt("height", height);
+        res.putInt("height", h);
         res.putString("block", str.getRandomElement(random));
         return res;
     }
@@ -157,21 +162,19 @@ public class RandomDimension {
     }
 
     String randomBiome() {
-        if (RandomProvider.weighedRandom(random, 3, 1)) {
-            return PROVIDER.BIOMES.getRandomElement(random);
-        }
-        else {
-            RandomBiome biome = new RandomBiome(random.nextInt(), PROVIDER, PATH);
-            return biome.fullname;
-        }
+        String biome;
+        if (RandomProvider.weighedRandom(random, 3, 1)) biome = PROVIDER.BIOMES.getRandomElement(random);
+        else biome = new RandomBiome(random.nextInt(), this).fullname;
+        biomes.add(biome);
+        return biome;
     }
 
     String randomNoiseSettings() {
-        if (true) {
+        if (false) {
             return PROVIDER.NOISE_PRESETS.getRandomElement(random);
         }
         else {
-            RandomNoisePreset preset = new RandomNoisePreset(id, PROVIDER, PATH);
+            RandomNoisePreset preset = new RandomNoisePreset(this);
             return preset.fullname;
         }
     }

@@ -1,11 +1,9 @@
 package net.lerariemann.infinity.dimensions;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 
-import java.io.IOException;
 import java.util.Random;
 
 public class RandomProvider {
@@ -25,30 +23,30 @@ public class RandomProvider {
     public WeighedStructure<String> AIR;
     public WeighedStructure<String> BIOME_SOURCES;
     public WeighedStructure<String> GENERATOR_TYPES;
-    public String PATH;
+    public String configPath;
 
-    public RandomProvider(String path) throws IOException, CommandSyntaxException {
-        PATH = path;
-        ALL_BLOCKS = register("allblocks");
-        FULL_BLOCKS = register("fullblocks");
-        BIOMES = register("biomes");
-        NOISE_PRESETS = register("noise_presets");
-        TAGS = register("tags");
-        PRECIPITATION = register("precipitation");
-        SOUNDS = register("sounds");
-        MUSIC = register("music");
-        PARTICLES = register("particles");
-        ITEMS = register("items");
-        MOBS = register("mobs");
-        MOB_CATEGORIES = register("mobcategories");
-        FLUIDS = register("fluids");
-        AIR = register("airs");
-        BIOME_SOURCES = register("biomesourcetype");
-        GENERATOR_TYPES = register("generatortype");
+    public RandomProvider(String path) {
+        configPath = path;
+        ALL_BLOCKS = register("weighed_lists/allblocks");
+        FULL_BLOCKS = register("weighed_lists/fullblocks");
+        BIOMES = register("weighed_lists/biomes");
+        NOISE_PRESETS = register("weighed_lists/noise_presets");
+        TAGS = register("weighed_lists/tags");
+        PRECIPITATION = register("weighed_lists/precipitation");
+        SOUNDS = register("weighed_lists/sounds");
+        MUSIC = register("weighed_lists/music");
+        PARTICLES = register("weighed_lists/particles");
+        ITEMS = register("weighed_lists/items");
+        MOBS = register("weighed_lists/mobs");
+        MOB_CATEGORIES = register("weighed_lists/mobcategories");
+        FLUIDS = register("weighed_lists/fluids");
+        AIR = register("weighed_lists/airs");
+        BIOME_SOURCES = register("weighed_lists/biomesourcetype");
+        GENERATOR_TYPES = register("weighed_lists/generatortype");
     }
 
-    WeighedStructure<String> register(String name) throws IOException, CommandSyntaxException {
-        return CommonIO.commonListReader(PATH + name + ".json");
+    WeighedStructure<String> register(String name) {
+        return CommonIO.commonListReader(configPath + name + ".json");
     }
 
     public static boolean weighedRandom(Random random, int weight0, int weight1) {

@@ -18,7 +18,14 @@ public class EntityMixin {
     @Shadow BlockPos lastNetherPortalPosition;
     @Shadow World world;
 
-   @ModifyArg(method = "tickPortal()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;"), index = 0)
+    @ModifyArg(method = "tickPortal()V", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/server/MinecraftServer;getWorld(Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/server/world/ServerWorld;"), index = 0)
+    private RegistryKey<World> injected(RegistryKey<World> key) {
+        return this.world.getRegistryKey() == World.OVERWORLD ? World.NETHER : World.OVERWORLD;
+    }
+
+    @ModifyArg(method = "tickPortal()V", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/entity/Entity;moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;"), index = 0)
     private ServerWorld injected(ServerWorld serverWorld2) {
         ServerWorld serverWorld = (ServerWorld)this.world;
         if (serverWorld.getBlockState(this.lastNetherPortalPosition).isOf(ModBlocks.NEITHER_PORTAL)) {

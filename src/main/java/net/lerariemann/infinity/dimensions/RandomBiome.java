@@ -12,9 +12,9 @@ public class RandomBiome {
     public String fullname;
     private final Random random;
 
-    RandomBiome(int i, RandomProvider provider, String path) {
+    RandomBiome(int i, RandomDimension dim) {
         random = new Random(i);
-        PROVIDER = provider;
+        PROVIDER = dim.PROVIDER;
         name = "generated_" +i;
         fullname = InfinityMod.MOD_ID + ":" + name;
         res = new NbtCompound();
@@ -26,9 +26,9 @@ public class RandomBiome {
         if (random.nextBoolean()) res.putFloat("creature_spawn_probability", Math.min(random.nextFloat(), 0.9999999f));
         res.put("spawners", randomMobs());
         res.put("spawn_costs", new NbtCompound());
-        res.put("features", (new RandomFeaturesList(i, PROVIDER, path).data));
+        res.put("features", (new RandomFeaturesList(i, PROVIDER, dim.storagePath).data));
         res.put("carvers", new NbtCompound());
-        CommonIO.write(res, path + "/worldgen/biome", name + ".json");
+        CommonIO.write(res, dim.storagePath + "/worldgen/biome", name + ".json");
     }
 
     public NbtInt randomColor() {
@@ -148,8 +148,8 @@ public class RandomBiome {
             NbtCompound mob = new NbtCompound();
             mob.putString("type", PROVIDER.MOBS.getRandomElement(random));
             mob.putInt("weight", 1 + random.nextInt(20));
-            int a = 1 + random.nextInt(12);
-            int b = 1 + random.nextInt(12);
+            int a = 1 + random.nextInt(6);
+            int b = 1 + random.nextInt(6);
             mob.putInt("minCount", Math.min(a, b));
             mob.putInt("maxCount", Math.max(a, b));
             lists.get(PROVIDER.MOB_CATEGORIES.getRandomElement(random)).add(mob);

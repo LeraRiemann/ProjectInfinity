@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.dimensions.features;
 
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.WeighedStructure;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -12,18 +12,20 @@ import java.util.Objects;
 
 public class RandomVegetation extends RandomisedFeature {
     WeighedStructure <String> trees_vanilla;
-    List<String> blocks;
+    List<String> validbaseblocks;
+    String mainsurfaceblock;
     String PATH;
 
-    public RandomVegetation(int i, RandomProvider provider, String path, WeighedStructure<String> trees, List<String> top_blocks) {
-        super(i, provider);
-        trees_vanilla = trees;
-        name = "vegetation_" + i;
+    public RandomVegetation(RandomFeaturesList parent) {
+        super(parent.biome_id, parent.PROVIDER);
+        trees_vanilla = parent.trees;
+        name = "vegetation_" + parent.biome_id;
         id = "random_selector";
         type = "vegetation";
-        PATH = path;
-        blocks = top_blocks;
-        save(path,1 + random.nextInt(10));
+        PATH = parent.storagePath;
+        validbaseblocks = parent.blocks;
+        mainsurfaceblock = parent.surface_block;
+        save(PATH,1 + random.nextInt(10));
     }
 
     NbtElement randomTree() {
@@ -35,7 +37,7 @@ public class RandomVegetation extends RandomisedFeature {
         else {
             switch(random.nextInt(2)) {
                 case 0 -> {
-                    tree = (new RandomFungus(random.nextInt(), PROVIDER, PATH, blocks)).fullName();
+                    tree = (new RandomFungus(random.nextInt(), PROVIDER, PATH, validbaseblocks, mainsurfaceblock)).fullName();
                     return NbtString.of(tree);
                 }
                 case 1 -> tree = (new RandomMushroom(random.nextInt(), PROVIDER, PATH)).fullName();

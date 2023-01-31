@@ -27,19 +27,39 @@ public class CommonIO {
             throw new RuntimeException(e);
         }
     }
-    public static NbtCompound read(String path) throws IOException, CommandSyntaxException {
+    public static NbtCompound read(String path) {
         File file = new File(path);
-        String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-        return StringNbtReader.parse(content);
+        String content;
+        try {
+            content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            return StringNbtReader.parse(content);
+        } catch (IOException | CommandSyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static NbtCompound readCarefully(String path, int i) throws IOException, CommandSyntaxException {
+    public static NbtCompound readCarefully(String path, int i) {
         File file = new File(path);
-        String content = String.format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), i);
-        return StringNbtReader.parse(content);
+        try {
+            String content = String.format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), i);
+            return StringNbtReader.parse(content);
+        } catch (IOException | CommandSyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static WeighedStructure<String> commonListReader(String path) throws IOException, CommandSyntaxException {
+    public static NbtCompound readAndAddBlock(String path, String str) {
+        File file = new File(path);
+        NbtCompound block = RandomProvider.Block(str);
+        try {
+            String content = String.format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), CompoundToString(block, 0));
+            return StringNbtReader.parse(content);
+        } catch (IOException | CommandSyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static WeighedStructure<String> commonListReader(String path) {
         NbtCompound base = read(path);
         WeighedStructure<String> res = new WeighedStructure<>();
         NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);

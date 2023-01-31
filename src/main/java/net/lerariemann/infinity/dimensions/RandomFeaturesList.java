@@ -1,37 +1,34 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.dimensions.features.*;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 
-import java.io.IOException;
 import java.util.*;
 
 public class RandomFeaturesList {
     public NbtList data;
-    private final RandomProvider PROVIDER;
-    String configsPath;
-    String PATH;
-    Random random;
-    List<String> blocks;
-    WeighedStructure <String> trees;
-    int biome_id;
+    public final RandomProvider PROVIDER;
+    public String configPath;
+    public String storagePath;
+
+    public Random random;
+    public List<String> blocks;
+    public String surface_block;
+    public WeighedStructure <String> trees;
+    public int biome_id;
 
     RandomFeaturesList(int i, RandomProvider provider, String path) {
         random = new Random(i);
         PROVIDER = provider;
         biome_id = i;
         blocks = new ArrayList<>();
-        configsPath = PROVIDER.PATH + "features/";
-        try {
-            trees = CommonIO.commonListReader(configsPath + "vegetation/trees_checked.json");
-        } catch (IOException | CommandSyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        PATH = path;
+        surface_block = "minecraft:grass_block";
+        configPath = PROVIDER.configPath + "features/";
+        trees = CommonIO.commonListReader(configPath + "vegetation/trees_checked.json");
+        storagePath = path;
         data = new NbtList();
         data.add(getAllElements("rawgeneration"));
         data.add(lakes());
@@ -49,7 +46,7 @@ public class RandomFeaturesList {
     NbtList vegetation() {
         boolean useTree = random.nextBoolean();
         NbtList res = new NbtList();
-        if (!useTree) res.add(NbtString.of((new RandomVegetation(biome_id, PROVIDER, PATH, trees, blocks)).fullName()));
+        if (!useTree) res.add(NbtString.of((new RandomVegetation(this)).fullName()));
         res.addAll(getAllElements("vegetation/part1"));
         if (useTree) res.add(randomTree());
         res.add(randomPlant("flowers"));
@@ -61,22 +58,12 @@ public class RandomFeaturesList {
     }
 
     NbtString randomPlant(String path) {
-        String plant = null;
-        try {
-            plant = CommonIO.commonListReader(configsPath + "vegetation/" + path + ".json").getRandomElement(random);
-        } catch (IOException | CommandSyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        String plant = CommonIO.commonListReader(configPath + "vegetation/" + path + ".json").getRandomElement(random);
         return NbtString.of(plant);
     }
 
     NbtList getAllElements(String name) {
-        NbtList content = null;
-        try {
-            content = CommonIO.read(configsPath + name + ".json").getList("elements", NbtElement.COMPOUND_TYPE);
-        } catch (IOException | CommandSyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        NbtList content = CommonIO.read(configPath + name + ".json").getList("elements", NbtElement.COMPOUND_TYPE);
         NbtList res = new NbtList();
         for (NbtElement nbtElement : content) {
             NbtCompound element = (NbtCompound) nbtElement;
@@ -111,28 +98,28 @@ public class RandomFeaturesList {
 
     NbtList lakes() {
         NbtList res = getAllElements("lakes");
-        if (random.nextBoolean()) res.add(NbtString.of((new RandomLake(random.nextInt(), PROVIDER, PATH)).fullName()));
+        if (random.nextBoolean()) res.add(NbtString.of((new RandomLake(random.nextInt(), PROVIDER, storagePath)).fullName()));
         return res;
     }
 
     NbtList localModifications() {
         NbtList res = getAllElements("localmodifications");
-        if (random.nextBoolean()) addRandomFeature(res, new RandomIceberg(random.nextInt(), PROVIDER, PATH));
-        if (random.nextBoolean()) addRandomFeature(res, new RandomGeode(random.nextInt(), PROVIDER, PATH));
-        if (random.nextBoolean()) addRandomFeature(res, new RandomRock(random.nextInt(), PROVIDER, PATH));
+        if (random.nextBoolean()) addRandomFeature(res, new RandomIceberg(random.nextInt(), PROVIDER, storagePath));
+        if (random.nextBoolean()) addRandomFeature(res, new RandomGeode(random.nextInt(), PROVIDER, storagePath));
+        if (random.nextBoolean()) addRandomFeature(res, new RandomRock(random.nextInt(), PROVIDER, storagePath));
         return res;
     }
 
     NbtList surfaceStructures() {
         NbtList res = getAllElements("surfacestructures");
-        if (random.nextBoolean()) addRandomFeature(res, new RandomDelta(random.nextInt(), PROVIDER, PATH));
+        if (random.nextBoolean()) addRandomFeature(res, new RandomDelta(random.nextInt(), PROVIDER, storagePath));
         return res;
     }
 
     NbtString randomTree() {
         if (random.nextBoolean()) return randomPlant("trees");
         else {
-            RandomFungus fungus = new RandomFungus(random.nextInt(), PROVIDER, PATH, blocks);
+            RandomFungus fungus = new RandomFungus(random.nextInt(), PROVIDER, storagePath, blocks, surface_block);
             blocks.addAll(fungus.BLOCKS);
             return NbtString.of((fungus.fullName()));
         }

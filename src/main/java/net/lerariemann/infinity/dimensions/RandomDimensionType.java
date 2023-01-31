@@ -9,11 +9,12 @@ public class RandomDimensionType {
     public String name;
     public String fullname;
     private final Random random;
-    public int height;
+    public RandomDimension parent;
 
-    RandomDimensionType(int i, RandomProvider provider, String path) {
-        random = new Random(i);
-        name = "generated_" +i;
+    RandomDimensionType(RandomDimension dim) {
+        parent = dim;
+        random = dim.random;
+        name = "generated_" +dim.id;
         fullname = InfinityMod.MOD_ID + ":" + name;
         NbtCompound res = new NbtCompound();
         res.putBoolean("ultrawarm", random.nextBoolean());
@@ -29,17 +30,17 @@ public class RandomDimensionType {
         if (random.nextBoolean()){
             res.putInt("fixed_time", random.nextInt(24000));
         }
-        int min_y = -16*Math.min(127, 4 + (int)Math.floor(random.nextExponential()*2));
-        res.putInt("min_y", min_y);
+        parent.min_y = -16*Math.max(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
+        res.putInt("min_y", parent.min_y);
         int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
-        height = 16 + max_y - min_y;
-        res.putInt("height", height);
-        res.putInt("logical_height", random.nextBoolean() ? height : height/2 + random.nextInt(height/2));
+        parent.height = max_y - parent.min_y;
+        res.putInt("height", parent.height);
+        res.putInt("logical_height", random.nextBoolean() ? parent.height : parent.height/2 + random.nextInt(parent.height/2));
         res.putInt("monster_spawn_block_light_limit", random.nextInt(16));
         res.put("monster_spawn_light_level", RandomProvider.intProvider(random, 16, true));
-        res.putString("infiniburn", provider.TAGS.getRandomElement(random));
+        res.putString("infiniburn", dim.PROVIDER.TAGS.getRandomElement(random));
         if (RandomProvider.weighedRandom(random,2, 1)) res.putString("effect", RandomProvider.weighedRandom(random,4, 1) ? "minecraft:nether" : "minecraft:the_end");
-        CommonIO.write(res, path + "/dimension_type", name + ".json");
+        CommonIO.write(res, dim.storagePath + "/dimension_type", name + ".json");
     }
 
     double coordinateScale() {

@@ -1,13 +1,11 @@
 package net.lerariemann.infinity.dimensions.features;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtString;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -38,21 +36,17 @@ public abstract class RandomisedFeature {
 
     void save(String path, int replacement) {
         NbtCompound data;
-        try {
-            CommonIO.write(feature(), path + "/worldgen/configured_feature", name + ".json");
-            if (place) {
-                data = CommonIO.readCarefully(PROVIDER.PATH + "features/placements/" + type + ".json", replacement);
-                data.put("feature", NbtString.of(fullName()));
-                CommonIO.write(data, path + "/worldgen/placed_feature", name + ".json");
-            }
-        } catch (IOException | CommandSyntaxException e) {
-            throw new RuntimeException(e);
+        CommonIO.write(feature(), path + "/worldgen/configured_feature", name + ".json");
+        if (place) {
+            data = CommonIO.readCarefully(PROVIDER.configPath + "features/placements/" + type + ".json", replacement);
+            data.put("feature", NbtString.of(fullName()));
+            CommonIO.write(data, path + "/worldgen/placed_feature", name + ".json");
         }
     }
 
     String genBlockOrFluid() {
         String block;
-        if (random.nextBoolean()) {
+        if (RandomProvider.weighedRandom(random, 3, 1)) {
             block = PROVIDER.randomName(random, PROVIDER.FULL_BLOCKS);
             BLOCKS.add(block);
         }
