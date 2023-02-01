@@ -19,18 +19,18 @@ public class RandomDimensionType {
         NbtCompound res = new NbtCompound();
         res.putBoolean("ultrawarm", random.nextBoolean());
         res.putBoolean("natural", random.nextBoolean());
-        res.putBoolean("has_skylight", random.nextBoolean());
+        res.putBoolean("has_skylight", RandomProvider.weighedRandom(random, 1, 3));
         res.putBoolean("piglin_safe", random.nextBoolean());
         res.putBoolean("bed_works", random.nextBoolean());
         res.putBoolean("respawn_anchor_works", random.nextBoolean());
         res.putBoolean("has_raids", random.nextBoolean());
         res.putBoolean("has_ceiling", random.nextBoolean());
         res.putDouble("coordinate_scale", coordinateScale());
-        res.putFloat("ambient_light", ambientLight());
+        res.putFloat("ambient_light", random.nextFloat());
         if (random.nextBoolean()){
             res.putInt("fixed_time", random.nextInt(24000));
         }
-        parent.min_y = -16*Math.max(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
+        parent.min_y = 16*Math.min(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
         res.putInt("min_y", parent.min_y);
         int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
         parent.height = max_y - parent.min_y;
@@ -52,11 +52,5 @@ public class RandomDimensionType {
         values.add(Math.exp(-random1), 1.0);
         values.add(1.0 + 7*random.nextDouble(), 2.0);
         return values.getRandomElement(random);
-    }
-
-    float ambientLight() {
-        if (random.nextBoolean())
-            return 0.0f;
-        return random.nextFloat();
     }
 }

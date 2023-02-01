@@ -2,12 +2,12 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.*;
+import org.apache.logging.log4j.LogManager;
+
 import java.util.*;
 
 public class RandomNoisePreset {
-    private NbtCompound data;
-    private int id;
-    private RandomProvider PROVIDER;
+    private final RandomProvider PROVIDER;
     public String name;
     public String fullname;
     String storagePath;
@@ -23,7 +23,7 @@ public class RandomNoisePreset {
         storagePath = PROVIDER.configPath + "noise_settings/";
         name = "generated_" +dim.id;
         fullname = InfinityMod.MOD_ID + ":" + name;
-        data = new NbtCompound();
+        NbtCompound data = new NbtCompound();
         String type_alike = PROVIDER.NOISE_PRESETS.getRandomElement(dim.random);
         switch (type_alike) {
             case "minecraft:overworld", "minecraft:amplified", "minecraft:large_biomes" -> {
@@ -55,8 +55,10 @@ public class RandomNoisePreset {
         NbtCompound noise = new NbtCompound();
         noise.putInt("height", dim.height);
         noise.putInt("min_y", dim.min_y);
-        noise.putInt("size_horizontal", dim.random.nextInt(5));
-        noise.putInt("size_vertical", dim.random.nextInt(5));
+        int s = dim.random.nextInt(13);
+        noise.putInt("size_horizontal", 1 + (s < 8 ? s/4 : (s == 12 ? 2 : 3)));
+        s = dim.random.nextInt(3);
+        noise.putInt("size_vertical", 1 + (s == 2 ? s : 3));
         data.put("noise", noise);
         data.put("noise_router", resolve("noise_router", noise_router));
         data.put("spawn_target", resolve("spawn_target", spawn_target).get("spawn_target"));
@@ -70,53 +72,33 @@ public class RandomNoisePreset {
     }
 
     void registerBiomes() {
-        for (String key: new String[]{"nether", "special", "badlands", "surface", "frozen", "shallow", "second_layer", "deep"}) biomeRegistry.put(key, new HashSet<>());
-        for (String biome: parent.biomes) {
-            if (biome.startsWith("m")) registerVanillaBiome(biome.substring(10));
-            else registerRandomBiome(biome);
+        for (String key: new String[]{"inline", "special", "surface", "shallow", "second_layer", "deep"}) {
+            biomeRegistry.put(key, new HashSet<>());
+            NbtCompound full_list = resolve("surface_rule/registry", key);
+            for (NbtElement biome : (NbtList) Objects.requireNonNull(full_list.get("elements"))) {
+                String biome_name = Objects.requireNonNull(((NbtCompound) biome).get("biome")).toString();
+                biome_name = biome_name.substring(1, biome_name.length() - 1);
+                LogManager.getLogger().info(biome_name);
+                if (parent.vanilla_biomes.contains(biome_name)) {
+                    String biome_key = Objects.requireNonNull(((NbtCompound) biome).get("key")).toString();
+                    biome_key = biome_key.substring(1, biome_key.length() - 1);
+                    regBiome(key, biome_key);
+                }
+            }
+        }
+        for (int id: parent.random_biome_ids) {
+            String name = "infinity:generated_" + id;
+            registerRandomBiome(name);
         }
         for (String key: new String[]{"surface", "shallow", "deep"}) biomeRegistry.get(key).add("default_overworld");
-    }
-
-    void registerVanillaBiome(String biome) {
-        switch (biome) {
-            case "basalt_deltas", "soul_sand_valley", "nether_wastes" -> biomeRegistry.get("nether").add(biome);
-            case "wooded_badlands", "swamp", "crimson_forest", "warped_forest" -> biomeRegistry.get("special").add(biome);
-            case "mangrove_swamp" -> {
-                regBiome("special", biome);
-                regBiome("surface", biome);
-                regBiome("shallow", biome);
-            }
-            case "warm_ocean", "beach", "snowy_beach", "desert" -> {
-                String biomename = biome.equals("desert") ? biome : "warm_ocean_and_beaches";
-                regBiome("surface", biomename);
-                regBiome("shallow", biomename);
-                regBiome("second_layer", biomename);
-            }
-            case "frozen_peaks", "snowy_slopes", "jagged_peaks", "grove", "stony_peaks", "stony_shore", "windswept_hills",
-                    "dripstone_caves", "windswept_savanna", "windswept_gravelly_hills" -> {
-                regBiome("surface", biome);
-                regBiome("shallow", biome);
-            }
-            case "frozen_ocean", "deep_frozen_ocean" -> {
-                regBiome("surface", "frozen_oceans");
-                regBiome("frozen", "frozen_oceans");
-            }
-            case "old_growth_pine_taiga", "old_growth_spruce_taiga" -> regBiome("surface", "old_taigas");
-            case "ice_spikes", "mushroom_fields" -> regBiome("surface", biome);
-        }
-        switch (biome) {
-            case "wooded_badlands", "eroded_badlands", "badlands" -> regBiome("badlands", "badlands");
-            case "frozen_peaks", "jagged_peaks" -> regBiome("deep", "peaks");
-            case "warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean" -> regBiome("deep", "warmer_oceans");
-        }
     }
 
     void registerRandomBiome(String biome) {
         if (parent.random.nextBoolean()) {
             regBiome("surface", biome);
-            if (parent.random.nextBoolean()) regBiome("shallow", biome);
+            regBiome("shallow", biome);
         }
+        else parent.top_blocks.put(biome, "minecraft:grass_block");
     }
 
     void regBiome(String type, String name) {
@@ -169,9 +151,8 @@ public class RandomNoisePreset {
         }
         NbtCompound res = startingRule("sequence");
         NbtList sequence = new NbtList();
-        addNether(sequence);
+        addInline(sequence);
         if (!biomeRegistry.get("special").isEmpty()) sequence.add(getSpecial());
-        if (!biomeRegistry.get("badlands").isEmpty()) addBadlands(sequence);
         sequence.add(getSurface());
         sequence.add(getShallow());
         sequence.add(getDeep());
@@ -215,15 +196,12 @@ public class RandomNoisePreset {
         return sequenceType(sequence);
     }
 
-    void addNether(NbtList sequence) {
-        for (String biome : biomeRegistry.get("nether")) sequence.add(readBiome("nether", biome));
+    void addInline(NbtList sequence) {
+        for (String biome : biomeRegistry.get("inline")) sequence.add(readBiome("inline", biome));
     }
 
     NbtCompound getSpecial() {
         return conditionType(stoneCondition(false, 0, 0, true), readAllBiomes("special"));
-    }
-    void addBadlands(NbtList sequence) {
-        sequence.add(readBiome("badlands", "badlands"));
     }
 
     NbtCompound getSurface() {
@@ -233,7 +211,6 @@ public class RandomNoisePreset {
 
     NbtCompound getShallow() {
         NbtList sequence = new NbtList();
-        for (String biome : biomeRegistry.get("frozen")) sequence.add(readBiome("frozen", biome));
         sequence.add(conditionType(stoneCondition(true, 0, 0, true), readAllBiomes("shallow")));
         for (String biome : biomeRegistry.get("second_layer")) sequence.add(readBiome("second_layer", biome));
         return conditionType(waterCondition(true, -6, -1), sequenceType(sequence));
@@ -260,6 +237,10 @@ public class RandomNoisePreset {
 
     NbtCompound readBiome(String category, String biome) {
         if (!biome.startsWith("infinity:")) return resolve("surface_rule/" + category, biome);
-        else return biomeCondition(biome, blockType(PROVIDER.FULL_BLOCKS.getRandomElement(parent.random)));
+        else {
+            String block = PROVIDER.FULL_BLOCKS.getRandomElement(parent.random);
+            if (category.equals("surface")) parent.top_blocks.put(biome, block);
+            return biomeCondition(biome, blockType(block));
+        }
     }
 }

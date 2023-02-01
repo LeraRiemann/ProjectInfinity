@@ -18,17 +18,17 @@ public class RandomFeaturesList {
     public List<String> blocks;
     public String surface_block;
     public WeighedStructure <String> trees;
-    public int biome_id;
+    public RandomBiome parent;
 
-    RandomFeaturesList(int i, RandomProvider provider, String path) {
-        random = new Random(i);
-        PROVIDER = provider;
-        biome_id = i;
+    RandomFeaturesList(RandomBiome biome) {
+        parent = biome;
+        random = biome.random;
+        PROVIDER = biome.PROVIDER;
         blocks = new ArrayList<>();
-        surface_block = "minecraft:grass_block";
+        surface_block = parent.parent.top_blocks.get(parent.fullname);
         configPath = PROVIDER.configPath + "features/";
         trees = CommonIO.commonListReader(configPath + "vegetation/trees_checked.json");
-        storagePath = path;
+        storagePath = biome.parent.storagePath;
         data = new NbtList();
         data.add(getAllElements("rawgeneration"));
         data.add(lakes());

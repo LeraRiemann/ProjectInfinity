@@ -4,13 +4,10 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 public class RandomDimension {
-    private final NbtCompound data;
     public final int id;
     public final String storagePath;
     public final RandomProvider PROVIDER;
@@ -18,7 +15,9 @@ public class RandomDimension {
     public final Random random;
     public int height;
     public int min_y;
-    public List<String> biomes;
+    public List<String> vanilla_biomes;
+    public List<Integer> random_biome_ids;
+    public Map<String, String> top_blocks;
 
     public RandomDimension(int i, RandomProvider provider, String path) {
         random = new Random(i);
@@ -26,11 +25,16 @@ public class RandomDimension {
         storagePath = path + "/" + InfinityMod.MOD_ID + "/data/" + InfinityMod.MOD_ID;
         id = i;
         name = "generated_"+i;
-        data = new NbtCompound();
-        biomes = new ArrayList<>();
+        NbtCompound data = new NbtCompound();
+        vanilla_biomes = new ArrayList<>();
+        random_biome_ids = new ArrayList<>();
+        top_blocks = new HashMap<>();
         RandomDimensionType type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
         data.put("generator", randomDimensionGenerator());
+        for (Integer id: random_biome_ids) {
+            RandomBiome b = new RandomBiome(id, this);
+        }
         CommonIO.write(data, storagePath + "/dimension", name + ".json");
     }
 
@@ -44,8 +48,8 @@ public class RandomDimension {
                 return res;
             }
             case "minecraft:noise" -> {
-                res.putString("settings", randomNoiseSettings());
                 res.put("biome_source", randomBiomeSource());
+                res.putString("settings", randomNoiseSettings());
                 return res;
             }
             default -> {
@@ -163,14 +167,20 @@ public class RandomDimension {
 
     String randomBiome() {
         String biome;
-        if (RandomProvider.weighedRandom(random, 3, 1)) biome = PROVIDER.BIOMES.getRandomElement(random);
-        else biome = new RandomBiome(random.nextInt(), this).fullname;
-        biomes.add(biome);
+        if (RandomProvider.weighedRandom(random, 3, 1)) {
+            biome = PROVIDER.BIOMES.getRandomElement(random);
+            vanilla_biomes.add(biome);
+        }
+        else {
+            int id = random.nextInt();
+            random_biome_ids.add(id);
+            biome = "infinity:generated_" + id;
+        }
         return biome;
     }
 
     String randomNoiseSettings() {
-        if (false) {
+        if (RandomProvider.weighedRandom(random, 3, 1)) {
             return PROVIDER.NOISE_PRESETS.getRandomElement(random);
         }
         else {

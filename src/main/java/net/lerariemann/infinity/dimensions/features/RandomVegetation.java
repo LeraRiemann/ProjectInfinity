@@ -17,9 +17,9 @@ public class RandomVegetation extends RandomisedFeature {
     String PATH;
 
     public RandomVegetation(RandomFeaturesList parent) {
-        super(parent.biome_id, parent.PROVIDER);
+        super(parent.parent.id, parent.PROVIDER);
         trees_vanilla = parent.trees;
-        name = "vegetation_" + parent.biome_id;
+        name = "vegetation_" + parent.parent.id;
         id = "random_selector";
         type = "vegetation";
         PATH = parent.storagePath;

@@ -6,18 +6,21 @@ import net.minecraft.nbt.*;
 import java.util.*;
 
 public class RandomBiome {
-    private NbtCompound res;
-    private final RandomProvider PROVIDER;
+    public RandomDimension parent;
+    public final RandomProvider PROVIDER;
+    public int id;
     public String name;
     public String fullname;
-    private final Random random;
+    public final Random random;
 
     RandomBiome(int i, RandomDimension dim) {
+        id = i;
+        parent = dim;
         random = new Random(i);
         PROVIDER = dim.PROVIDER;
         name = "generated_" +i;
         fullname = InfinityMod.MOD_ID + ":" + name;
-        res = new NbtCompound();
+        NbtCompound res = new NbtCompound();
         res.putDouble("temperature", -1 + random.nextFloat()*3);
         res.putString("precipitation", PROVIDER.PRECIPITATION.getRandomElement(random));
         res.putString("temperature_modifier", RandomProvider.weighedRandom(random,3, 1) ? "none" : "frozen");
@@ -26,7 +29,7 @@ public class RandomBiome {
         if (random.nextBoolean()) res.putFloat("creature_spawn_probability", Math.min(random.nextFloat(), 0.9999999f));
         res.put("spawners", randomMobs());
         res.put("spawn_costs", new NbtCompound());
-        res.put("features", (new RandomFeaturesList(i, PROVIDER, dim.storagePath).data));
+        res.put("features", (new RandomFeaturesList(this).data));
         res.put("carvers", new NbtCompound());
         CommonIO.write(res, dim.storagePath + "/worldgen/biome", name + ".json");
     }

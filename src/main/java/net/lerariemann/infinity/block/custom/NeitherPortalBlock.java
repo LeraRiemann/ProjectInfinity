@@ -7,17 +7,23 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
@@ -29,6 +35,15 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new NeitherPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos,
+                              PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (!world.isClient) {
+            LogManager.getLogger().info(((NeitherPortalBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).getDimension());
+        }
+        return ActionResult.SUCCESS;
     }
 
     @Environment(EnvType.CLIENT)
@@ -48,10 +63,10 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             int k = random.nextInt(2) * 2 - 1;
             if (!world.getBlockState(pos.west()).isOf(this) && !world.getBlockState(pos.east()).isOf(this)) {
                 d = (double)pos.getX() + 0.5 + 0.25 * (double)k;
-                g = (double)(random.nextFloat() * 2.0F * (float)k);
+                g = random.nextFloat() * 2.0F * (float)k;
             } else {
                 f = (double)pos.getZ() + 0.5 + 0.25 * (double)k;
-                j = (double)(random.nextFloat() * 2.0F * (float)k);
+                j = random.nextFloat() * 2.0F * (float)k;
             }
 
             ParticleEffect eff = ParticleTypes.PORTAL;
@@ -60,7 +75,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 int dim = ((NeitherPortalBlockEntity)blockEntity).getDimension();
                 Vec3d vec3d = Vec3d.unpackRgb(dim);
                 double color = 1.0D + (dim >> 16 & 0xFF) / 255.0D;
-                eff = (ParticleEffect)new DustParticleEffect(new Vector3f((float)vec3d.x, (float)vec3d.y, (float)vec3d.z), (float)color);
+                eff = new DustParticleEffect(new Vector3f((float)vec3d.x, (float)vec3d.y, (float)vec3d.z), (float)color);
             }
 
             world.addParticle(eff, d, e, f, g, h, j);

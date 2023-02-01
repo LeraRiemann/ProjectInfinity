@@ -2,7 +2,6 @@ package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
@@ -30,7 +29,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.google.common.hash.Hashing;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import java.util.Queue;
@@ -53,12 +51,8 @@ public class NetherPortalBlockMixin {
 				if(!string.isEmpty()){
 					int i = Hashing.sha256().hashString(string, StandardCharsets.UTF_8).asInt() & Integer.MAX_VALUE;
 					modifyPortal(world, pos, state, i);
-					try {
-						if (!world.isClient()) {
-							RandomDimension d = new RandomDimension(i, new RandomProvider("config/"+ InfinityMod.MOD_ID + "/"), world.getServer().getSavePath(WorldSavePath.DATAPACKS).toString());
-						}
-					} catch (IOException | CommandSyntaxException e) {
-						throw new RuntimeException(e);
+					if (!world.isClient()) {
+						RandomDimension d = new RandomDimension(i, new RandomProvider("config/"+ InfinityMod.MOD_ID + "/"), world.getServer().getSavePath(WorldSavePath.DATAPACKS).toString());
 					}
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
 				}

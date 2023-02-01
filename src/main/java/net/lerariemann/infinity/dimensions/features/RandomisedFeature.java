@@ -46,7 +46,7 @@ public abstract class RandomisedFeature {
 
     String genBlockOrFluid() {
         String block;
-        if (RandomProvider.weighedRandom(random, 3, 1)) {
+        if (RandomProvider.weighedRandom(random, 15, 1)) {
             block = PROVIDER.randomName(random, PROVIDER.FULL_BLOCKS);
             BLOCKS.add(block);
         }
