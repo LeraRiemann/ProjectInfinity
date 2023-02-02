@@ -38,7 +38,7 @@ public class RandomDimensionType {
         res.putInt("logical_height", random.nextBoolean() ? parent.height : parent.height/2 + random.nextInt(parent.height/2));
         res.putInt("monster_spawn_block_light_limit", random.nextInt(16));
         res.put("monster_spawn_light_level", RandomProvider.intProvider(random, 16, true));
-        res.putString("infiniburn", dim.PROVIDER.TAGS.getRandomElement(random));
+        res.putString("infiniburn", dim.PROVIDER.randomName(random, "tags"));
         if (RandomProvider.weighedRandom(random,2, 1)) res.putString("effect", RandomProvider.weighedRandom(random,4, 1) ? "minecraft:nether" : "minecraft:the_end");
         CommonIO.write(res, dim.storagePath + "/dimension_type", name + ".json");
     }

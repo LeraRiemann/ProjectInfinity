@@ -1,6 +1,14 @@
 {
   "elements": [
     {
+      "key": "minecraft:allay",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:axolotl",
+      "weight": 1.0
+    },
+    {
       "key": "minecraft:bat",
       "weight": 1.0
     },
@@ -70,6 +78,10 @@
     },
     {
       "key": "minecraft:fox",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:frog",
       "weight": 1.0
     },
     {
@@ -250,6 +262,10 @@
     },
     {
       "key": "minecraft:wandering_trader",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:warden",
       "weight": 1.0
     },
     {

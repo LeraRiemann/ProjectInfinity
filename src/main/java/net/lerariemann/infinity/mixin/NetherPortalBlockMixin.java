@@ -50,10 +50,10 @@ public class NetherPortalBlockMixin {
 				String string = IntStream.range(0, bookContent.getPageCount()).mapToObj(bookContent::getPage).map(u -> {return u.getString();}).collect(Collectors.joining("\n"));
 				if(!string.isEmpty()){
 					int i = Hashing.sha256().hashString(string, StandardCharsets.UTF_8).asInt() & Integer.MAX_VALUE;
-					modifyPortal(world, pos, state, i);
 					if (!world.isClient()) {
 						RandomDimension d = new RandomDimension(i, new RandomProvider("config/"+ InfinityMod.MOD_ID + "/"), world.getServer().getSavePath(WorldSavePath.DATAPACKS).toString());
 					}
+					modifyPortal(world, pos, state, i);
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
 				}
 			}

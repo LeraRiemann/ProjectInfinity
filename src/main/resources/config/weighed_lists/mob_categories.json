@@ -10,7 +10,7 @@
     },
     {
       "key": "ambient",
-      "weight": 0.0
+      "weight": 0.1
     },
     {
       "key": "water_creature",
@@ -22,7 +22,7 @@
     },
     {
       "key": "water_ambient",
-      "weight": 0.0
+      "weight": 0.1
     },
     {
       "key": "misc",

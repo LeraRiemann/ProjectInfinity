@@ -4,6 +4,7 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.*;
 
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -22,9 +23,10 @@ public class RandomDimension {
     public RandomDimension(int i, RandomProvider provider, String path) {
         random = new Random(i);
         PROVIDER = provider;
-        storagePath = path + "/" + InfinityMod.MOD_ID + "/data/" + InfinityMod.MOD_ID;
         id = i;
         name = "generated_"+i;
+        String rootPath = path + "/" + name;
+        storagePath = rootPath + "/data/" + InfinityMod.MOD_ID;
         NbtCompound data = new NbtCompound();
         vanilla_biomes = new ArrayList<>();
         random_biome_ids = new ArrayList<>();
@@ -36,11 +38,21 @@ public class RandomDimension {
             RandomBiome b = new RandomBiome(id, this);
         }
         CommonIO.write(data, storagePath + "/dimension", name + ".json");
+        if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");
+    }
+
+    NbtCompound packMcmeta() {
+        NbtCompound res = new NbtCompound();
+        NbtCompound pack = new NbtCompound();
+        pack.putInt("pack_format", 10);
+        pack.putString("description", "Dimension #" + id);
+        res.put("pack", pack);
+        return res;
     }
 
     NbtCompound randomDimensionGenerator() {
         NbtCompound res = new NbtCompound();
-        String type = PROVIDER.GENERATOR_TYPES.getRandomElement(random);
+        String type = PROVIDER.randomName(random, "generator_types");
         res.putString("type", type);
         switch (type) {
             case "minecraft:flat" -> {
@@ -58,10 +70,10 @@ public class RandomDimension {
         }
     }
 
-    NbtCompound superflatLayer(int h, WeighedStructure<String> str) {
+    NbtCompound superflatLayer(int h, String str) {
         NbtCompound res = new NbtCompound();
         res.putInt("height", h);
-        res.putString("block", str.getRandomElement(random));
+        res.putString("block", PROVIDER.randomName(random, str));
         return res;
     }
 
@@ -74,13 +86,13 @@ public class RandomDimension {
             for (int i = 0; i < layer_count; i++) {
                 int layerHeight = Math.min(heightLeft, 1 + (int) Math.floor(random.nextExponential() * 2));
                 heightLeft -= layerHeight;
-                layers.add(superflatLayer(layerHeight, PROVIDER.FULL_BLOCKS));
+                layers.add(superflatLayer(layerHeight, "full_blocks"));
                 if (heightLeft <= 1) {
                     break;
                 }
             }
             if (random.nextBoolean()) {
-                layers.add(superflatLayer(1, PROVIDER.ALL_BLOCKS));
+                layers.add(superflatLayer(1, "top_blocks"));
             }
         }
         res.put("layers", layers);
@@ -92,7 +104,7 @@ public class RandomDimension {
 
     NbtCompound randomBiomeSource() {
         NbtCompound res = new NbtCompound();
-        String type = PROVIDER.BIOME_SOURCES.getRandomElement(random);
+        String type = PROVIDER.randomName(random, "biome_source_types");
         res.putString("type",type);
         switch (type) {
             case "minecraft:the_end" -> {
@@ -168,20 +180,20 @@ public class RandomDimension {
     String randomBiome() {
         String biome;
         if (RandomProvider.weighedRandom(random, 3, 1)) {
-            biome = PROVIDER.BIOMES.getRandomElement(random);
+            biome = PROVIDER.randomName(random, "biomes");
             vanilla_biomes.add(biome);
         }
         else {
             int id = random.nextInt();
             random_biome_ids.add(id);
-            biome = "infinity:generated_" + id;
+            biome = "infinity:biome_" + id;
         }
         return biome;
     }
 
     String randomNoiseSettings() {
         if (RandomProvider.weighedRandom(random, 3, 1)) {
-            return PROVIDER.NOISE_PRESETS.getRandomElement(random);
+            return PROVIDER.randomName(random, "noise_presets");
         }
         else {
             RandomNoisePreset preset = new RandomNoisePreset(this);

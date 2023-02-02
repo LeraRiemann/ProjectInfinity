@@ -3,7 +3,56 @@
   "continents": 0.0,
   "depth": 0.0,
   "erosion": 0.0,
-  "final_density": "infinity:final_density/floating_islands",
+  "final_density": {
+    "type": "minecraft:squeeze",
+    "argument": {
+      "type": "minecraft:mul",
+      "argument1": 0.64,
+      "argument2": {
+        "type": "minecraft:interpolated",
+        "argument": {
+          "type": "minecraft:blend_density",
+          "argument": {
+            "type": "minecraft:add",
+            "argument1": -0.234375,
+            "argument2": {
+              "type": "minecraft:mul",
+              "argument1": {
+                "type": "minecraft:y_clamped_gradient",
+                "from_value": 0.0,
+                "from_y": %d,
+                "to_value": 1.0,
+                "to_y": %d
+              },
+              "argument2": {
+                "type": "minecraft:add",
+                "argument1": 0.234375,
+                "argument2": {
+                  "type": "minecraft:add",
+                  "argument1": -23.4375,
+                  "argument2": {
+                    "type": "minecraft:mul",
+                    "argument1": {
+                      "type": "minecraft:y_clamped_gradient",
+                      "from_value": 1.0,
+                      "from_y": %d,
+                      "to_value": 0.0,
+                      "to_y": %d
+                    },
+                    "argument2": {
+                      "type": "minecraft:add",
+                      "argument1": 23.4375,
+                      "argument2": "minecraft:end/base_3d_noise"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "fluid_level_floodedness": 0.0,
   "fluid_level_spread": 0.0,
   "initial_density_without_jaggedness": 0.0,

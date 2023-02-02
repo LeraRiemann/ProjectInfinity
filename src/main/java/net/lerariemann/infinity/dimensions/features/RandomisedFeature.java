@@ -47,11 +47,11 @@ public abstract class RandomisedFeature {
     String genBlockOrFluid() {
         String block;
         if (RandomProvider.weighedRandom(random, 15, 1)) {
-            block = PROVIDER.randomName(random, PROVIDER.FULL_BLOCKS);
+            block = PROVIDER.randomName(random, "full_blocks");
             BLOCKS.add(block);
         }
         else {
-            block = PROVIDER.randomName(random, PROVIDER.FLUIDS);
+            block = PROVIDER.randomName(random, "fluids");
         }
         return block;
     }
@@ -70,13 +70,13 @@ public abstract class RandomisedFeature {
     }
 
     void addRandomBlockProvider(NbtCompound config, String key) {
-        String block = PROVIDER.randomName(random, PROVIDER.FULL_BLOCKS);
+        String block = PROVIDER.randomName(random, "full_blocks");
         addBlockProviderCarefully(config, key, block);
         BLOCKS.add(block);
     }
 
     void addRandomBlock(NbtCompound config, String key) {
-        addBlock(config, key, PROVIDER.randomName(random, PROVIDER.FULL_BLOCKS));
+        addBlock(config, key, PROVIDER.randomName(random, "full_blocks"));
     }
 
     abstract NbtCompound feature();

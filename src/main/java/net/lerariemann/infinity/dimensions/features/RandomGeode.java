@@ -15,16 +15,16 @@ public class RandomGeode extends RandomisedFeature {
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         NbtCompound blocks = new NbtCompound();
-        blocks.put("filling_provider", PROVIDER.randomBlockProvider(random, RandomProvider.weighedRandom(random,1, 3)? PROVIDER.AIR : PROVIDER.FLUIDS));
-        blocks.put("inner_layer_provider", PROVIDER.randomBlockProvider(random, PROVIDER.FULL_BLOCKS));
-        blocks.put("alternate_inner_layer_provider", PROVIDER.randomBlockProvider(random, PROVIDER.FULL_BLOCKS));
-        blocks.put("middle_layer_provider", PROVIDER.randomBlockProvider(random, PROVIDER.FULL_BLOCKS));
-        blocks.put("outer_layer_provider", PROVIDER.randomBlockProvider(random, PROVIDER.FULL_BLOCKS));
+        blocks.put("filling_provider", PROVIDER.randomBlockProvider(random, RandomProvider.weighedRandom(random,1, 3)? "airs" : "fluids"));
+        blocks.put("inner_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        blocks.put("alternate_inner_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        blocks.put("middle_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        blocks.put("outer_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
         NbtList inner_placements = new NbtList();
-        inner_placements.add(PROVIDER.randomBlock(random, PROVIDER.ALL_BLOCKS));
+        inner_placements.add(PROVIDER.randomBlock(random, "all_blocks"));
         blocks.put("inner_placements", inner_placements);
-        blocks.putString("cannot_replace", PROVIDER.TAGS.getRandomElement(random));
-        blocks.putString("invalid_blocks", PROVIDER.TAGS.getRandomElement(random));
+        blocks.putString("cannot_replace", PROVIDER.randomName(random, "tags"));
+        blocks.putString("invalid_blocks", PROVIDER.randomName(random, "tags"));
         config.put("blocks", blocks);
         NbtCompound layers = new NbtCompound();
         double r = 1.0;

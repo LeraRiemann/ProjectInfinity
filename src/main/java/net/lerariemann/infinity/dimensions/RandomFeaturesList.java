@@ -78,22 +78,14 @@ public class RandomFeaturesList {
 
     void checkForBlocks(String feature) {
         switch (feature) {
-            case "minecraft:end_island_decorated" -> {
-                blocks.add("minecraft:endstone");
-                return;
-            }
-            case "minecraft:small_basalt_columns", "minecraft:large_basalt_columns" -> {
-                blocks.add("minecraft:basalt");
-                return;
-            }
+            case "minecraft:end_island_decorated" -> blocks.add("minecraft:endstone");
+            case "minecraft:small_basalt_columns", "minecraft:large_basalt_columns" -> blocks.add("minecraft:basalt");
         }
     }
 
     void addRandomFeature(NbtList res, RandomisedFeature feature) {
         res.add(NbtString.of(feature.fullName()));
-        for (String i : feature.BLOCKS) if (i != null) {
-            blocks.add(i);
-        }
+        for (String i : feature.BLOCKS) if (i != null) blocks.add(i);
     }
 
     NbtList lakes() {
@@ -117,7 +109,7 @@ public class RandomFeaturesList {
     }
 
     NbtString randomTree() {
-        if (random.nextBoolean()) return randomPlant("trees");
+        if (Objects.equals(surface_block, "minecraft:grass_block") && random.nextBoolean()) return randomPlant("trees");
         else {
             RandomFungus fungus = new RandomFungus(random.nextInt(), PROVIDER, storagePath, blocks, surface_block);
             blocks.addAll(fungus.BLOCKS);

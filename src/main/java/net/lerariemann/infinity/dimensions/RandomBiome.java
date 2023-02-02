@@ -12,23 +12,25 @@ public class RandomBiome {
     public String name;
     public String fullname;
     public final Random random;
+    public List<String> mobs;
 
     RandomBiome(int i, RandomDimension dim) {
         id = i;
         parent = dim;
         random = new Random(i);
         PROVIDER = dim.PROVIDER;
-        name = "generated_" +i;
+        name = "biome_" +i;
         fullname = InfinityMod.MOD_ID + ":" + name;
+        mobs = new ArrayList<>();
         NbtCompound res = new NbtCompound();
         res.putDouble("temperature", -1 + random.nextFloat()*3);
-        res.putString("precipitation", PROVIDER.PRECIPITATION.getRandomElement(random));
+        res.putString("precipitation", PROVIDER.randomName(random, "precipitation"));
         res.putString("temperature_modifier", RandomProvider.weighedRandom(random,3, 1) ? "none" : "frozen");
         res.putDouble("downfall", random.nextDouble());
         res.put("effects", randomEffects());
         if (random.nextBoolean()) res.putFloat("creature_spawn_probability", Math.min(random.nextFloat(), 0.9999999f));
         res.put("spawners", randomMobs());
-        res.put("spawn_costs", new NbtCompound());
+        res.put("spawn_costs", spawnCosts());
         res.put("features", (new RandomFeaturesList(this).data));
         res.put("carvers", new NbtCompound());
         CommonIO.write(res, dim.storagePath + "/worldgen/biome", name + ".json");
@@ -46,7 +48,7 @@ public class RandomBiome {
     }
 
     NbtString randomSound(){
-        return NbtString.of(PROVIDER.SOUNDS.getRandomElement(random));
+        return NbtString.of(PROVIDER.randomName(random, "sounds"));
     }
 
     NbtCompound randomEffects() {
@@ -62,7 +64,7 @@ public class RandomBiome {
         if (RandomProvider.weighedRandom(random, 15, 1)) res.put("ambient_sound", randomSound());
         if (RandomProvider.weighedRandom(random, 7, 1)) res.put("mood_sound", randomMoodSound());
         if (RandomProvider.weighedRandom(random, 7, 1)) res.put("additions_sound", randomAdditionSound());
-        if (random.nextBoolean()) res.put("music", randomMusic());
+        res.put("music", randomMusic());
         return res;
     }
 
@@ -84,7 +86,7 @@ public class RandomBiome {
 
     NbtCompound randomMusic(){
         NbtCompound res = new NbtCompound();
-        res.put("sound", NbtString.of(PROVIDER.MUSIC.getRandomElement(random)));
+        res.put("sound", NbtString.of(PROVIDER.randomName(random, "music")));
         int a = random.nextInt(0, 24000);
         int b = random.nextInt(0, 24000);
         res.putInt("min_delay", Math.min(a,b));
@@ -102,18 +104,18 @@ public class RandomBiome {
 
     NbtCompound particleOptions() {
         NbtCompound res = new NbtCompound();
-        String particle = PROVIDER.PARTICLES.getRandomElement(random);
+        String particle = PROVIDER.randomName(random, "particles");
         res.putString("type", particle);
         switch(particle) {
             case "minecraft:block", "minecraft:block_marker", "minecraft:falling_dust" -> {
                 NbtCompound value = new NbtCompound();
-                value.putString("Name", PROVIDER.ALL_BLOCKS.getRandomElement(random));
+                value.putString("Name", PROVIDER.randomName(random, "all_blocks"));
                 res.put("value", value);
                 return res;
             }
             case "minecraft:item" -> {
                 NbtCompound value = new NbtCompound();
-                value.putString("Name", PROVIDER.ITEMS.getRandomElement(random));
+                value.putString("Name", PROVIDER.randomName(random, "items"));
                 res.put("value", value);
                 return res;
             }
@@ -149,16 +151,29 @@ public class RandomBiome {
         int mobCount = random.nextInt(20);
         for(int i = 0; i < mobCount; i++) {
             NbtCompound mob = new NbtCompound();
-            mob.putString("type", PROVIDER.MOBS.getRandomElement(random));
+            String mobname = PROVIDER.randomName(random, "mobs");
+            mob.putString("type", mobname);
+            mobs.add(mobname);
             mob.putInt("weight", 1 + random.nextInt(20));
             int a = 1 + random.nextInt(6);
             int b = 1 + random.nextInt(6);
             mob.putInt("minCount", Math.min(a, b));
             mob.putInt("maxCount", Math.max(a, b));
-            lists.get(PROVIDER.MOB_CATEGORIES.getRandomElement(random)).add(mob);
+            lists.get(PROVIDER.randomName(random, "mob_categories")).add(mob);
         }
         NbtCompound res = new NbtCompound();
         for (int i = 0; i < 8; i++) res.put(titles[i], lists.get(titles[i]));
+        return res;
+    }
+
+    NbtCompound spawnCosts() {
+        NbtCompound res = new NbtCompound();
+        for (String mob: mobs) {
+            NbtCompound mobData = new NbtCompound();
+            mobData.putDouble("energy_budget", random.nextDouble()*0.3);
+            mobData.putDouble("charge", 0.5 + random.nextDouble());
+            res.put(mob, mobData);
+        }
         return res;
     }
 }

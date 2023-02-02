@@ -4,49 +4,38 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class RandomProvider {
-    public WeighedStructure<String> FULL_BLOCKS;
-    public WeighedStructure<String> ALL_BLOCKS;
-    public WeighedStructure<String> BIOMES;
-    public WeighedStructure<String> NOISE_PRESETS;
-    public WeighedStructure<String> TAGS;
-    public WeighedStructure<String> PRECIPITATION;
-    public WeighedStructure<String> SOUNDS;
-    public WeighedStructure<String> MUSIC;
-    public WeighedStructure<String> PARTICLES;
-    public WeighedStructure<String> ITEMS;
-    public WeighedStructure<String> MOBS;
-    public WeighedStructure<String> MOB_CATEGORIES;
-    public WeighedStructure<String> FLUIDS;
-    public WeighedStructure<String> AIR;
-    public WeighedStructure<String> BIOME_SOURCES;
-    public WeighedStructure<String> GENERATOR_TYPES;
+    public Map<String, WeighedStructure<String>> registry;
     public String configPath;
 
     public RandomProvider(String path) {
         configPath = path;
-        ALL_BLOCKS = register("weighed_lists/allblocks");
-        FULL_BLOCKS = register("weighed_lists/fullblocks");
-        BIOMES = register("weighed_lists/biomes");
-        NOISE_PRESETS = register("weighed_lists/noise_presets");
-        TAGS = register("weighed_lists/tags");
-        PRECIPITATION = register("weighed_lists/precipitation");
-        SOUNDS = register("weighed_lists/sounds");
-        MUSIC = register("weighed_lists/music");
-        PARTICLES = register("weighed_lists/particles");
-        ITEMS = register("weighed_lists/items");
-        MOBS = register("weighed_lists/mobs");
-        MOB_CATEGORIES = register("weighed_lists/mobcategories");
-        FLUIDS = register("weighed_lists/fluids");
-        AIR = register("weighed_lists/airs");
-        BIOME_SOURCES = register("weighed_lists/biomesourcetype");
-        GENERATOR_TYPES = register("weighed_lists/generatortype");
+        registry = new HashMap<>();
+        register("all_blocks");
+        register("full_blocks");
+        register("top_blocks");
+        register("biomes");
+        register("noise_presets");
+        register("tags");
+        register("precipitation");
+        register("sounds");
+        register("music");
+        register("particles");
+        register("items");
+        register("mobs");
+        register("mob_categories");
+        register("fluids");
+        register("airs");
+        register("biome_source_types");
+        register("generator_types");
     }
 
-    WeighedStructure<String> register(String name) {
-        return CommonIO.commonListReader(configPath + name + ".json");
+    void register(String key) {
+        registry.put(key, CommonIO.commonListReader(configPath + "weighed_lists/" + key + ".json"));
     }
 
     public static boolean weighedRandom(Random random, int weight0, int weight1) {
@@ -59,7 +48,7 @@ public class RandomProvider {
         res.putString("Name", block);
         if (block.contains("_leaves")) {
             NbtCompound properties = new NbtCompound();
-            properties.putBoolean("persistent", true);
+            properties.putString("persistent", "true");
             res.put("Properties", properties);
         }
         return res;
@@ -72,16 +61,16 @@ public class RandomProvider {
         return res;
     }
 
-    public String randomName(Random random, WeighedStructure<String> STR) {
-        return STR.getRandomElement(random);
+    public String randomName(Random random, String key) {
+        return registry.get(key).getRandomElement(random);
     }
 
-    public NbtCompound randomBlock(Random random, WeighedStructure<String> STR) {
-        return Block(randomName(random, STR));
+    public NbtCompound randomBlock(Random random, String key) {
+        return Block(randomName(random, key));
     }
 
-    public NbtCompound randomBlockProvider (Random random, WeighedStructure<String> STR) {
-        return blockToProvider(randomBlock(random, STR));
+    public NbtCompound randomBlockProvider (Random random, String key) {
+        return blockToProvider(randomBlock(random, key));
     }
 
     static NbtCompound genBounds(Random random, int bound) {

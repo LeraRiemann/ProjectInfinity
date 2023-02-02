@@ -38,10 +38,10 @@ public class CommonIO {
         }
     }
 
-    public static NbtCompound readCarefully(String path, int i) {
+    public static NbtCompound readCarefully(String path,  Object... args) {
         File file = new File(path);
         try {
-            String content = String.format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), i);
+            String content = String.format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), args);
             return StringNbtReader.parse(content);
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);

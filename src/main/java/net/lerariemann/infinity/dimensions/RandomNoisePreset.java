@@ -24,7 +24,7 @@ public class RandomNoisePreset {
         name = "generated_" +dim.id;
         fullname = InfinityMod.MOD_ID + ":" + name;
         NbtCompound data = new NbtCompound();
-        String type_alike = PROVIDER.NOISE_PRESETS.getRandomElement(dim.random);
+        String type_alike = PROVIDER.randomName(dim.random, "noise_presets");
         switch (type_alike) {
             case "minecraft:overworld", "minecraft:amplified", "minecraft:large_biomes" -> {
                 noise_router = type_alike.substring(10);
@@ -37,13 +37,16 @@ public class RandomNoisePreset {
                 switch (type_alike) {
                     case "minecraft:floating_islands" -> sea_level_default = -64;
                     case "minecraft:end" -> sea_level_default = 0;
-                    case "minecraft:nether", "minecraft:caves" -> sea_level_default = 32;
+                    case "minecraft:nether", "minecraft:caves" -> {
+                        sea_level_default = 32;
+                        noise_router = "caves";
+                    }
                 }
             }
         }
         int sea_level = (int)Math.floor(dim.random.nextGaussian(sea_level_default, 8));
-        NbtCompound default_block = PROVIDER.randomBlock(dim.random, PROVIDER.FULL_BLOCKS);
-        WeighedStructure<String> whereFrom = RandomProvider.weighedRandom(dim.random, 1, 15) ? PROVIDER.FLUIDS : PROVIDER.FULL_BLOCKS;
+        NbtCompound default_block = PROVIDER.randomBlock(dim.random, "full_blocks");
+        String whereFrom = RandomProvider.weighedRandom(dim.random, 1, 15) ? "fluids" : "full_blocks";
         NbtCompound default_fluid = PROVIDER.randomBlock(dim.random, whereFrom);
         data.putBoolean("aquifers_enabled", dim.random.nextBoolean());
         data.putBoolean("ore_veins_enabled", dim.random.nextBoolean());
@@ -57,14 +60,38 @@ public class RandomNoisePreset {
         noise.putInt("min_y", dim.min_y);
         int s = dim.random.nextInt(13);
         noise.putInt("size_horizontal", 1 + (s < 8 ? s/4 : (s == 12 ? 2 : 3)));
-        s = dim.random.nextInt(3);
-        noise.putInt("size_vertical", 1 + (s == 2 ? s : 3));
+        s = 1 + dim.random.nextInt(3);
+        noise.putInt("size_vertical", (s == 3 ? 4 : s));
         data.put("noise", noise);
-        data.put("noise_router", resolve("noise_router", noise_router));
+        data.put("noise_router", getRouter(noise_router));
         data.put("spawn_target", resolve("spawn_target", spawn_target).get("spawn_target"));
         registerBiomes();
         data.put("surface_rule", buildSurfaceRule(surface_rule));
         CommonIO.write(data, dim.storagePath + "/worldgen/noise_settings", name + ".json");
+    }
+
+    NbtCompound getRouter(String router) {
+        String path = storagePath + "noise_router/" + router + ".json";
+        int min = parent.min_y;
+        int max = parent.height + parent.min_y;
+        switch(router) {
+            case "caves" -> {
+                return CommonIO.readCarefully(path, min - 8, min + 24, max - 24, max);
+            }
+            case "floating_islands" -> {
+                return CommonIO.readCarefully(path, min + 4, min + 32, max - 72, max + 184);
+            }
+            case "end" -> {
+                return CommonIO.readCarefully(path, min + 4, min + 32, max - 72, max + 184, min + 4, min + 32, max - 72, max + 184);
+            }
+            case "overworld", "large_biomes" -> {
+                return CommonIO.readCarefully(path, min, min + 24, min, min + 24);
+            }
+            case "amplified" -> {
+                return CommonIO.readCarefully(path, min, min + 24, max - 16, max, min, min + 24, max - 16, max);
+            }
+        }
+        return CommonIO.read(path);
     }
 
     NbtCompound resolve(String type, String name) {
@@ -129,7 +156,7 @@ public class RandomNoisePreset {
     }
 
     void addDeepslate(NbtList base) {
-        base.add(CommonIO.readAndAddBlock(storagePath + "surface_rule/main/deepslate.json", PROVIDER.FULL_BLOCKS.getRandomElement(parent.random)));
+        base.add(CommonIO.readAndAddBlock(storagePath + "surface_rule/main/deepslate.json", PROVIDER.randomName(parent.random, "full_blocks")));
     }
 
     void addType(NbtCompound base, String str) {
@@ -238,8 +265,12 @@ public class RandomNoisePreset {
     NbtCompound readBiome(String category, String biome) {
         if (!biome.startsWith("infinity:")) return resolve("surface_rule/" + category, biome);
         else {
-            String block = PROVIDER.FULL_BLOCKS.getRandomElement(parent.random);
-            if (category.equals("surface")) parent.top_blocks.put(biome, block);
+            String block;
+            if (category.equals("surface")) {
+                block = PROVIDER.randomName(parent.random, "top_blocks");
+                parent.top_blocks.put(biome, block);
+            }
+            else block = PROVIDER.randomName(parent.random, "full_blocks");
             return biomeCondition(biome, blockType(block));
         }
     }
