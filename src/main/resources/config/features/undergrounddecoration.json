@@ -1,0 +1,116 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:ore_infested",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:dripstone_cluster",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:pointed_dripstone",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:sculk_vein",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:sculk_patch_deep_dark",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:basalt_blobs",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:blackstone_blobs",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:spring_delta",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:spring_open",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:patch_fire",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:patch_soul_fire",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:glowstone_extra",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:glowstone",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:brown_mushroom_nether",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:red_mushroom_nether",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:patch_crimson_roots",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_magma",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:spring_closed",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_soul_sand",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_gravel_nether",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_blackstone",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_gold_nether",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_quartz_nether",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:spring_closed_double",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_gold_deltas",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_quartz_deltas",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_ancient_debris_large",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_debris_small",
+      "weight": 0.5
+    }
+  ]
+}

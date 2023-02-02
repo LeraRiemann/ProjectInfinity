@@ -1,0 +1,1520 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:acacia_leaves",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:acacia_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:acacia_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:acacia_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:amethyst_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:ancient_debris",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:andesite",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:azalea_leaves",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:barrel",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:barrier",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:basalt",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:beacon",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bedrock",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bee_nest",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:beehive",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:birch_leaves",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:birch_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:birch_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:birch_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:black_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:black_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:black_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:black_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:black_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:black_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:black_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blackstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blast_furnace",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blue_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blue_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blue_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blue_ice",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blue_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blue_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blue_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blue_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bone_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bookshelf",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:brain_coral_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:brown_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:brown_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:brown_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:brown_mushroom_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:brown_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:brown_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:brown_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:brown_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bubble_coral_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:budding_amethyst",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cake",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:calcite",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cartography_table",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:carved_pumpkin",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cauldron",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chain_command_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chest",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chiseled_deepslate",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chiseled_nether_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chiseled_polished_blackstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chiseled_quartz_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chiseled_red_sandstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chiseled_sandstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chiseled_stone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:clay",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:coal_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:coal_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:coarse_dirt",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cobbled_deepslate",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cobblestone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cobweb",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:command_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:composter",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:copper_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:copper_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cracked_deepslate_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cracked_deepslate_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cracked_nether_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cracked_polished_blackstone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cracked_stone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:crafting_table",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:crimson_hyphae",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:crimson_nylium",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:crimson_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:crimson_stem",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:crying_obsidian",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cut_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cut_red_sandstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cut_sandstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cyan_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cyan_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cyan_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cyan_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cyan_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cyan_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cyan_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dark_oak_leaves",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dark_oak_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dark_oak_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dark_oak_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dark_prismarine",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dead_brain_coral_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dead_bubble_coral_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dead_fire_coral_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dead_horn_coral_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dead_tube_coral_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate_coal_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate_copper_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate_diamond_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate_emerald_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate_gold_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate_iron_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate_lapis_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate_redstone_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:deepslate_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:diamond_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:diamond_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:diorite",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dirt",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dispenser",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dried_kelp_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dripstone_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dropper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:emerald_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:emerald_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:enchanting_table",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:end_gateway",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:end_stone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:end_stone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:ender_chest",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:exposed_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:exposed_cut_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:fire_coral_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:fletching_table",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:flowering_azalea_leaves",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:frosted_ice",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:furnace",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gilded_blackstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:glowstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gold_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gold_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:granite",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:grass_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gravel",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gray_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gray_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gray_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gray_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gray_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gray_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:gray_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:green_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:green_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:green_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:green_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:green_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:green_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:green_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:hay_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:honey_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:honeycomb_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:horn_coral_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:ice",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:infested_chiseled_stone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:infested_cobblestone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:infested_cracked_stone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:infested_deepslate",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:infested_mossy_stone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:infested_stone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:infested_stone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:iron_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:iron_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:jack_o_lantern",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:jigsaw",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:jukebox",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:jungle_leaves",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:jungle_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:jungle_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:jungle_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lapis_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lapis_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lava_cauldron",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_blue_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_blue_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_blue_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_blue_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_blue_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_blue_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_blue_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_gray_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_gray_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_gray_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_gray_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_gray_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_gray_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:light_gray_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lime_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lime_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lime_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lime_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lime_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lime_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lime_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lodestone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:loom",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:magenta_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:magenta_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:magenta_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:magenta_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:magenta_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:magenta_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:magenta_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:magma_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:melon",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:moss_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mossy_cobblestone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mossy_stone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mushroom_stem",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mycelium",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:nether_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:nether_gold_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:nether_quartz_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:nether_wart_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:netherite_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:netherrack",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:note_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oak_leaves",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oak_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oak_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oak_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:observer",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:obsidian",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:orange_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:orange_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:orange_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:orange_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:orange_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:orange_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:orange_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oxidized_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oxidized_cut_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:packed_ice",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pink_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pink_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pink_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pink_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pink_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pink_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pink_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:piston",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:podzol",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:polished_andesite",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:polished_basalt",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:polished_blackstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:polished_blackstone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:polished_deepslate",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:polished_deepslate_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:polished_diorite",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:polished_granite",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:powder_snow",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:powder_snow_cauldron",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:prismarine",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:prismarine_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pumpkin",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:purple_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:purple_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:purple_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:purple_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:purple_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:purple_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:purple_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:purpur_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:purpur_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:quartz_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:quartz_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:quartz_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:raw_copper_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:raw_gold_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:raw_iron_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_mushroom_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_nether_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_sand",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_sandstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:redstone_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:redstone_lamp",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:redstone_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:repeating_command_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:respawn_anchor",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:rooted_dirt",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sand",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sandstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sea_lantern",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:shroomlight",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:slime_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:smithing_table",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:smoker",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:smooth_basalt",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:smooth_quartz",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:smooth_red_sandstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:smooth_sandstone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:smooth_stone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:snow_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:soul_sand",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:soul_soil",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spawner",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sponge",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spruce_leaves",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spruce_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spruce_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spruce_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sticky_piston",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stone",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_acacia_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_acacia_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_birch_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_birch_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_crimson_hyphae",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_crimson_stem",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_dark_oak_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_dark_oak_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_jungle_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_jungle_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_oak_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_oak_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_spruce_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_spruce_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_warped_hyphae",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_warped_stem",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:structure_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:target",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:tinted_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:tnt",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trapped_chest",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:tube_coral_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:tuff",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:warped_hyphae",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:warped_nylium",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:warped_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:warped_stem",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:warped_wart_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:water_cauldron",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:waxed_copper_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:waxed_cut_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:waxed_exposed_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:waxed_exposed_cut_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:waxed_oxidized_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:waxed_oxidized_cut_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:waxed_weathered_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:waxed_weathered_cut_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:weathered_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:weathered_cut_copper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:wet_sponge",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:white_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:white_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:white_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:white_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:white_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:white_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:white_wool",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:yellow_concrete",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:yellow_concrete_powder",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:yellow_glazed_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:yellow_shulker_box",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:yellow_stained_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:yellow_terracotta",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:yellow_wool",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:music.creative",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:music.credits",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:music.dragon",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:music.end",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:music.game",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:music.menu",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:music.nether.basalt_deltas",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:music.nether.crimson_forest",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:music.nether.nether_wastes",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:music.nether.soul_sand_valley",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:music.nether.warped_forest",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:music.overworld.dripstone_caves",
+      "weight": 0.125
+    },
+    {
+      "key": "minecraft:music.overworld.frozen_peaks",
+      "weight": 0.125
+    },
+    {
+      "key": "minecraft:music.overworld.grove",
+      "weight": 0.125
+    },
+    {
+      "key": "minecraft:music.overworld.jagged_peaks",
+      "weight": 0.125
+    },
+    {
+      "key": "minecraft:music.overworld.lush_caves",
+      "weight": 0.125
+    },
+    {
+      "key": "minecraft:music.overworld.meadow",
+      "weight": 0.125
+    },
+    {
+      "key": "minecraft:music.overworld.snowy_slopes",
+      "weight": 0.125
+    },
+    {
+      "key": "minecraft:music.overworld.stony_peaks",
+      "weight": 0.125
+    },
+    {
+      "key": "minecraft:music.under_water",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:music_disc.11",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.13",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.blocks",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.cat",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.chirp",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.far",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.mall",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.mellohi",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.otherside",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.pigstep",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.stal",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.strad",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.wait",
+      "weight": 0.0625
+    },
+    {
+      "key": "minecraft:music_disc.ward",
+      "weight": 0.0625
+    }
+  ]
+}

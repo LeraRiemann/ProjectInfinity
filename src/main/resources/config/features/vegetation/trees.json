@@ -1,0 +1,84 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:trees_badlands",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_birch",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_flower_forest",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_birch_and_oak",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_water",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_grove",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_snowy",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_jungle",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_mangrove",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:birch_tall",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_old_growth_pine_taiga",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_old_growth_spruce_taiga",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_plains",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_savanna",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_taiga",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_sparse_jungle",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_swamp",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_windswept_forest",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_windswept_hills",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_windswept_savanna",
+      "weight": 1.0
+    }
+  ]
+}

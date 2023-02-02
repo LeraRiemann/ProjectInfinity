@@ -1,0 +1,16 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:spring_water",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:spring_lava",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:spring_lava_frozen",
+      "weight": 0.1
+    }
+  ]
+}

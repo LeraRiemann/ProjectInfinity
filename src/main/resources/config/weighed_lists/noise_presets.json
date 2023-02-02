@@ -1,0 +1,28 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:overworld",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:nether",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:amplified",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:caves",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:end",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:floating_islands",
+      "weight": 0.5
+    }
+  ]
+}

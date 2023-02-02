@@ -1,0 +1,24 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:flower_default",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:flower_warm",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:flower_flower_forest",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:flower_plains",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:flower_swamp",
+      "weight": 1.0
+    }
+  ]
+}

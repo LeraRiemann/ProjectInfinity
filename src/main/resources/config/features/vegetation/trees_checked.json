@@ -1,0 +1,60 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:azalea_tree",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:acacia_checked",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:birch_checked",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dark_oak_checked",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:fancy_oak_bees",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mega_jungle_tree_checked",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mega_pine_checked",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mega_spruce_checked",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mangrove_checked",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oak_checked",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oak_bees_002",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:birch_bees_002",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spruce",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:tall_mangrove_checked",
+      "weight": 1.0
+    }
+  ]
+}

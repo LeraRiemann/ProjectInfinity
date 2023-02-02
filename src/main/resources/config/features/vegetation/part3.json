@@ -1,0 +1,16 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:sea_pickle",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:kelp_cold",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:kelp_warm",
+      "weight": 0.2
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:freeze_top_layer",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:void_start_platform",
+      "weight": 0.01
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:debug",
+      "weight": 0.0001
+    },
+    {
+      "key": "minecraft:flat",
+      "weight": 0.01
+    },
+    {
+      "key": "minecraft:noise",
+      "weight": 0.9899
+    },
+  ]
+}

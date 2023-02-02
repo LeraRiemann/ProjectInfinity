@@ -1,0 +1,136 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:ore_dirt",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_gravel",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_granite_upper",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_granite_lower",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_diorite_upper",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_diorite_lower",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_andesite_upper",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_andesite_lower",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_tuff",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_coal_upper",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_coal_lower",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_iron_upper",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_iron_middle",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_iron_small",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_gold",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_gold_lower",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_redstone",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_redstone_lower",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_diamond",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_diamond_large",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_diamond_buried",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_lapis",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_lapis_buried",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_copper",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_copper_large",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:underwater_magma",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_clay",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_gold_extra",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:disk_sand",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:disk_grass",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:disk_clay",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:disk_gravel",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:ore_emerald",
+      "weight": 0.5
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "elements": [
+    {
+      "key": "peaks",
+      "biome": "minecraft:frozen_peaks"
+    },
+    {
+      "key": "peaks",
+      "biome": "minecraft:jagged_peaks"
+    },
+    {
+      "key": "warmer_oceans",
+      "biome": "minecraft:warm_ocean"
+    },
+    {
+      "key": "warmer_oceans",
+      "biome": "minecraft:lukewarm_ocean"
+    },
+    {
+      "key": "warmer_oceans",
+      "biome": "minecraft:deep_lukewarm_ocean"
+    }
+  ]
+}

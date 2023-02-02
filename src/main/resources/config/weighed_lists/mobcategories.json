@@ -1,0 +1,36 @@
+{
+  "elements": [
+    {
+      "key": "monster",
+      "weight": 3.0
+    },
+    {
+      "key": "creature",
+      "weight": 3.0
+    },
+    {
+      "key": "ambient",
+      "weight": 0.0
+    },
+    {
+      "key": "water_creature",
+      "weight": 0.25
+    },
+    {
+      "key": "underground_water_creature",
+      "weight": 0.25
+    },
+    {
+      "key": "water_ambient",
+      "weight": 0.0
+    },
+    {
+      "key": "misc",
+      "weight": 0.25
+    },
+    {
+      "key": "axolotls",
+      "weight": 0.25
+    }
+  ]
+}

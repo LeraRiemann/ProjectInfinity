@@ -1,0 +1,56 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:chorus_plant",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:glow_lichen",
+      "weight": 0.8
+    },
+    {
+      "key": "minecraft:dark_forest_vegetation",
+      "weight": 0.02
+    },
+    {
+      "key": "minecraft:mushroom_island_vegetation",
+      "weight": 0.02
+    },
+    {
+      "key": "minecraft:patch_large_fern",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_tall_grass",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_tall_grass_2",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_sunflower",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:forest_flowers",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:flower_forest_flowers",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:bamboo_light",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:bamboo",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:bamboo_vegetation",
+      "weight": 0.1
+    }
+  ]
+}

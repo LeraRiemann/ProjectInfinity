@@ -1,0 +1,40 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:seagrass_cold",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:seagrass_normal",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:seagrass_warm",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:seagrass_deep_cold",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:seagrass_deep",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:seagrass_deep_warm",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:seagrass_simple",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:seagrass_river",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:seagrass_swamp",
+      "weight": 1.0
+    }
+  ]
+}

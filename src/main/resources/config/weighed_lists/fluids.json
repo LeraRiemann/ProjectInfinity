@@ -1,0 +1,16 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:water",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lava",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:powder_snow",
+      "weight": 0.1
+    }
+  ]
+}

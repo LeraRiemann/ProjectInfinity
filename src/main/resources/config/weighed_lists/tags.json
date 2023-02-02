@@ -1,0 +1,600 @@
+{
+  "elements": [
+    {
+      "key": "#minecraft:acacia_logs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:all_signs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:ancient_city_replaceable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:animals_spawnable_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:anvil",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:axolotls_spawnable_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:azalea_grows_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:azalea_root_replaceable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:bamboo_plantable_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:banners",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:base_stone_nether",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:base_stone_overworld",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:beacon_base_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:beds",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:bee_growables",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:beehives",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:big_dripleaf_placeable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:birch_logs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:buttons",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:campfires",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:candle_cakes",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:candles",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:cauldrons",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:cave_vines",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:climbable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:coal_ores",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:completes_find_tree_tutorial",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:convertable_to_mud",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:copper_ores",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:coral_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:coral_plants",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:corals",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:crimson_stems",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:crops",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:crystal_sound_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:dampens_vibrations",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:dark_oak_logs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:dead_bush_may_place_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:deepslate_ore_replaceables",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:diamond_ores",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:dirt",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:doors",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:dragon_immune",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:dragon_transparent",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:dripstone_replaceable_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:emerald_ores",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:enderman_holdable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:fall_damage_resetting",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:features_cannot_replace",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:fence_gates",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:fences",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:fire",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:flower_pots",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:flowers",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:foxes_spawnable_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:frog_prefer_jump_to",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:frogs_spawnable_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:geode_invalid_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:goats_spawnable_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:gold_ores",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:guarded_by_piglins",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:hoglin_repellents",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:ice",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:impermeable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:infiniburn_end",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:infiniburn_nether",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:infiniburn_overworld",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:inside_step_sound_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:invalid_spawn_inside",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:iron_ores",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:jungle_logs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:lapis_ores",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:lava_pool_stone_cannot_replace",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:leaves",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:logs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:logs_that_burn",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:lush_ground_replaceable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:mangrove_logs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:mangrove_logs_can_grow_through",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:mangrove_roots_can_grow_through",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:mooshrooms_spawnable_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:moss_replaceable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:mushroom_grow_block",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:needs_diamond_tool",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:needs_iron_tool",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:needs_stone_tool",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:nether_carver_replaceables",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:nylium",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:oak_logs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:occludes_vibration_signals",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:overworld_carver_replaceables",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:overworld_natural_logs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:parrots_spawnable_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:piglin_repellents",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:planks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:polar_bears_spawnable_on_alternate",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:portals",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:pressure_plates",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:prevent_mob_spawning_inside",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:rabbits_spawnable_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:rails",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:redstone_ores",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:replaceable_plants",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:sand",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:saplings",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:sculk_replaceable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:sculk_replaceable_world_gen",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:shulker_boxes",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:signs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:slabs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:small_dripleaf_placeable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:small_flowers",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:snaps_goat_horn",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:snow",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:snow_layer_can_survive_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:snow_layer_cannot_survive_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:soul_fire_base_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:soul_speed_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:spruce_logs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:stairs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:standing_signs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:stone_bricks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:stone_ore_replaceables",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:stone_pressure_plates",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:strider_warm_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:tall_flowers",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:terracotta",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:trapdoors",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:underwater_bonemeals",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:unstable_bottom_center",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:valid_spawn",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wall_corals",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wall_post_override",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wall_signs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:walls",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:warped_stems",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wart_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wither_immune",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wither_summon_base_blocks",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wolves_spawnable_on",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wooden_buttons",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wooden_doors",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wooden_fences",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wooden_pressure_plates",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wooden_slabs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wooden_stairs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wooden_trapdoors",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wool",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wool_carpets",
+      "weight": 0.01
+    }
+  ]
+}

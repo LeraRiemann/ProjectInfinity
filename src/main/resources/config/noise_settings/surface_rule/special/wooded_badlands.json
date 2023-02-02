@@ -1,0 +1,99 @@
+{
+  "type": "minecraft:condition",
+  "if_true": {
+    "type": "minecraft:biome",
+    "biome_is": [
+      "minecraft:wooded_badlands"
+    ]
+  },
+  "then_run": {
+    "type": "minecraft:condition",
+    "if_true": {
+      "type": "minecraft:y_above",
+      "add_stone_depth": false,
+      "anchor": {
+        "absolute": 97
+      },
+      "surface_depth_multiplier": 2
+    },
+    "then_run": {
+      "type": "minecraft:sequence",
+      "sequence": [
+        {
+          "type": "minecraft:condition",
+          "if_true": {
+            "type": "minecraft:noise_threshold",
+            "max_threshold": -0.5454,
+            "min_threshold": -0.909,
+            "noise": "minecraft:surface"
+          },
+          "then_run": {
+            "type": "minecraft:block",
+            "result_state": {
+              "Name": "minecraft:coarse_dirt"
+            }
+          }
+        },
+        {
+          "type": "minecraft:condition",
+          "if_true": {
+            "type": "minecraft:noise_threshold",
+            "max_threshold": 0.1818,
+            "min_threshold": -0.1818,
+            "noise": "minecraft:surface"
+          },
+          "then_run": {
+            "type": "minecraft:block",
+            "result_state": {
+              "Name": "minecraft:coarse_dirt"
+            }
+          }
+        },
+        {
+          "type": "minecraft:condition",
+          "if_true": {
+            "type": "minecraft:noise_threshold",
+            "max_threshold": 0.909,
+            "min_threshold": 0.5454,
+            "noise": "minecraft:surface"
+          },
+          "then_run": {
+            "type": "minecraft:block",
+            "result_state": {
+              "Name": "minecraft:coarse_dirt"
+            }
+          }
+        },
+        {
+          "type": "minecraft:sequence",
+          "sequence": [
+            {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:water",
+                "add_stone_depth": false,
+                "offset": 0,
+                "surface_depth_multiplier": 0
+              },
+              "then_run": {
+                "type": "minecraft:block",
+                "result_state": {
+                  "Name": "minecraft:grass_block",
+                  "Properties": {
+                    "snowy": "false"
+                  }
+                }
+              }
+            },
+            {
+              "type": "minecraft:block",
+              "result_state": {
+                "Name": "minecraft:dirt"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

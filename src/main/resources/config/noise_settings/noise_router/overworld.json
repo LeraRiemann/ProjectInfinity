@@ -1,0 +1,37 @@
+{
+  "barrier": {
+    "type": "minecraft:noise",
+    "noise": "minecraft:aquifer_barrier",
+    "xz_scale": 1.0,
+    "y_scale": 0.5
+  },
+  "continents": "minecraft:overworld/continents",
+  "depth": "minecraft:overworld/depth",
+  "erosion": "minecraft:overworld/erosion",
+  "final_density": "infinity:final_density/overworld",
+  "fluid_level_floodedness": {
+    "type": "minecraft:noise",
+    "noise": "minecraft:aquifer_fluid_level_floodedness",
+    "xz_scale": 1.0,
+    "y_scale": 0.67
+  },
+  "fluid_level_spread": {
+    "type": "minecraft:noise",
+    "noise": "minecraft:aquifer_fluid_level_spread",
+    "xz_scale": 1.0,
+    "y_scale": 0.7142857142857143
+  },
+  "initial_density_without_jaggedness": "infinity:initial_density/overworld",
+  "lava": {
+    "type": "minecraft:noise",
+    "noise": "minecraft:aquifer_lava",
+    "xz_scale": 1.0,
+    "y_scale": 1.0
+  },
+  "ridges": "minecraft:overworld/ridges",
+  "temperature": "infinity:temperature",
+  "vegetation": "infinity:vegetation",
+  "vein_gap": "infinity:vein_gap",
+  "vein_ridged": "infinity:vein_ridged",
+  "vein_toggle": "infinity:vein_toggle"
+}

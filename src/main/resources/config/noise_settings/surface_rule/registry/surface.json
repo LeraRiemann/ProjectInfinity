@@ -1,0 +1,88 @@
+{
+  "elements": [
+    {
+      "key": "frozen_oceans",
+      "biome": "minecraft:frozen_ocean"
+    },
+    {
+      "key": "frozen_oceans",
+      "biome": "minecraft:deep_frozen_ocean"
+    },
+    {
+      "key": "frozen_peaks",
+      "biome": "minecraft:frozen_peaks"
+    },
+    {
+      "key": "snowy_slopes",
+      "biome": "minecraft:snowy_slopes"
+    },
+    {
+      "key": "jagged_peaks",
+      "biome": "minecraft:jagged_peaks"
+    },
+    {
+      "key": "grove",
+      "biome": "minecraft:grove"
+    },
+    {
+      "key": "stony_peaks",
+      "biome": "minecraft:stony_peaks"
+    },
+    {
+      "key": "stony_shore",
+      "biome": "minecraft:stony_shore"
+    },
+    {
+      "key": "windswept_hills",
+      "biome": "minecraft:windswept_hills"
+    },
+    {
+      "key": "warm_ocean_and_beaches",
+      "biome": "minecraft:warm_ocean"
+    },
+    {
+      "key": "warm_ocean_and_beaches",
+      "biome": "minecraft:beach"
+    },
+    {
+      "key": "warm_ocean_and_beaches",
+      "biome": "minecraft:snowy_beach"
+    },
+    {
+      "key": "desert",
+      "biome": "minecraft:desert"
+    },
+    {
+      "key": "dripstone_caves",
+      "biome": "minecraft:dripstone_caves"
+    },
+    {
+      "key": "windswept_savanna",
+      "biome": "minecraft:windswept_savanna"
+    },
+    {
+      "key": "windswept_gravelly_hills",
+      "biome": "minecraft:windswept_gravelly_hills"
+    },
+    {
+      "key": "old_taigas",
+      "biome": "minecraft:old_growth_pine_taiga"
+    },
+    {
+      "key": "old_taigas",
+      "biome": "minecraft:old_growth_spruce_taiga"
+    },
+    {
+      "key": "ice_spikes",
+      "biome": "minecraft:ice_spikes"
+    },
+    {
+      "key": "mangrove_swamp",
+      "biome": "minecraft:mangrove_swamp"
+    },
+    {
+      "key": "mushroom_fields",
+      "biome": "minecraft:mushroom_fields"
+    }
+  ]
+}

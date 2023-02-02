@@ -1,0 +1,24 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:air",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cave_air",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:void_air",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:moving_piston",
+      "weight": 0.01
+    },
+    {
+      "key": "minecraft:light",
+      "weight": 0.01
+    }
+  ]
+}

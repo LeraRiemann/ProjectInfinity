@@ -1,0 +1,168 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:flower_meadow",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:trees_meadow",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:lush_caves_ceiling_vegetation",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:cave_vines",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:lush_caves_clay",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:lush_caves_vegetation",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:rooted_azalea_tree",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:spore_blossom",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:classic_vines_cave_feature",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_dead_bush",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_dead_bush_2",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_dead_bush_badlands",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_waterlily",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:brown_mushroom_swamp",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:red_mushroom_swamp",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:brown_mushroom_old_growth",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:red_mushroom_old_growth",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:brown_mushroom_taiga",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:red_mushroom_taiga",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:brown_mushroom_normal",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:red_mushroom_normal",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_sugar_cane",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:patch_sugar_cane_badlands",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:patch_sugar_cane_desert",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:patch_sugar_cane_swamp",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:patch_pumpkin",
+      "weight": 0.5
+    },
+    {
+      "key": "minecraft:patch_berry_common",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_berry_rare",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:vines",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_melon",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_melon_sparse",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:patch_cactus_decorated",
+      "weight": 0.3
+    },
+    {
+      "key": "minecraft:patch_cactus_desert",
+      "weight": 0.3
+    },
+    {
+      "key": "minecraft:warped_fungi",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:warped_forest_vegetation",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:nether_sprouts",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:twisting_vines",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:weeping_vines",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:crimson_fungi",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:crimson_forest_vegetation",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:warm_ocean_vegetation",
+      "weight": 0.1
+    }
+  ]
+}

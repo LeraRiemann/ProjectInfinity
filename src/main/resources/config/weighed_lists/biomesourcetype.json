@@ -1,0 +1,20 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:the_end",
+      "weight": 0.01
+    },
+    {
+      "key": "minecraft:checkerboard",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:multi_noise",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:fixed",
+      "weight": 1.0
+    }
+  ]
+}

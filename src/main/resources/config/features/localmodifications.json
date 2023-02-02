@@ -1,0 +1,28 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:iceberg_packed",
+      "weight": 0.01
+    },
+    {
+      "key": "minecraft:iceberg_blue",
+      "weight": 0.01
+    },
+    {
+      "key": "minecraft:amethyst_geode",
+      "weight": 0.05
+    },
+    {
+      "key": "minecraft:forest_rock",
+      "weight": 0.01
+    },
+    {
+      "key": "minecraft:large_dripstone",
+      "weight": 0.1
+    },
+    {
+      "key": "minecraft:basalt_pillar",
+      "weight": 0.05
+    }
+  ]
+}

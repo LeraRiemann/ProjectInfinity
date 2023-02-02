@@ -16,6 +16,7 @@ public class InfinityMod implements ModInitializer {
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
 		ModPoi.registerPoi();
+		ConfigManager.registerAllConfigs();
 		//RandomDimension d = new RandomDimension(4, new RandomProvider("config/"+ InfinityMod.MOD_ID + "/"), "saves/New World/datapacks");
 	}
 }
