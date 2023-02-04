@@ -1,14 +1,13 @@
 package net.lerariemann.infinity.dimensions.features;
 
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.minecraft.nbt.NbtCompound;
 
 public class RandomMushroom extends RandomisedFeature {
-    public RandomMushroom(int i, RandomProvider provider, String path) {
-        super(i, provider, false);
-        name = "mushroom_" + i;
+    public RandomMushroom(RandomFeaturesList parent) {
+        super(parent, "mushroom", false);
         id = random.nextBoolean() ? "huge_brown_mushroom" : "huge_red_mushroom";
-        save(path,1 + random.nextInt(10));
+        save(1 + random.nextInt(10));
     }
 
     NbtCompound feature() {

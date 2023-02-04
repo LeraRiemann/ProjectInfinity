@@ -1,25 +1,25 @@
 package net.lerariemann.infinity.dimensions.features;
 
+import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
 public class RandomGeode extends RandomisedFeature {
-    public RandomGeode(int i, RandomProvider provider, String path) {
-        super(i, provider);
-        name = "geode_" + i;
-        id = type = "geode";
-        save(path,1 + random.nextInt(32));
+    public RandomGeode(RandomFeaturesList parent) {
+        super(parent, "geode");
+        type = "geode";
+        save(1 + random.nextInt(32));
     }
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         NbtCompound blocks = new NbtCompound();
         blocks.put("filling_provider", PROVIDER.randomBlockProvider(random, RandomProvider.weighedRandom(random,1, 3)? "airs" : "fluids"));
-        blocks.put("inner_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
-        blocks.put("alternate_inner_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
-        blocks.put("middle_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
-        blocks.put("outer_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        blocks.put("inner_layer_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
+        blocks.put("alternate_inner_layer_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
+        blocks.put("middle_layer_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
+        blocks.put("outer_layer_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
         NbtList inner_placements = new NbtList();
         inner_placements.add(PROVIDER.randomBlock(random, "all_blocks"));
         blocks.put("inner_placements", inner_placements);

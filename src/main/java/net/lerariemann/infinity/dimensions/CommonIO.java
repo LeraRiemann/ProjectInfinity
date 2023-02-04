@@ -70,6 +70,17 @@ public class CommonIO {
         return res;
     }
 
+    public static WeighedStructure<NbtElement> uncommonListReader(String path) {
+        NbtCompound base = read(path);
+        WeighedStructure<NbtElement> res = new WeighedStructure<>();
+        NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
+        for(int i = 0; i < list.size(); i++) {
+            NbtCompound a = list.getCompound(i);
+            res.add(a.get("key"), a.getDouble("weight"));
+        }
+        return res;
+    }
+
     public static String appendTabs(String parent, int t) {
         return parent + "\t".repeat(Math.max(0, t));
     }

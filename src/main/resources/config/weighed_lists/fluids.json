@@ -6,7 +6,7 @@
     },
     {
       "key": "minecraft:lava",
-      "weight": 1.0
+      "weight": 0.5
     },
     {
       "key": "minecraft:powder_snow",

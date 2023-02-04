@@ -18,7 +18,7 @@
     },
     {
       "key": "minecraft:light",
-      "weight": 0.01
+      "weight": 0.1
     }
   ]
 }

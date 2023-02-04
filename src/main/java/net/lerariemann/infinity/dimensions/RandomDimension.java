@@ -3,6 +3,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.*;
+import org.apache.logging.log4j.LogManager;
 
 import java.nio.file.Paths;
 import java.util.*;
@@ -16,6 +17,7 @@ public class RandomDimension {
     public final Random random;
     public int height;
     public int min_y;
+    public int sea_level;
     public List<String> vanilla_biomes;
     public List<Integer> random_biome_ids;
     public Map<String, String> top_blocks;
@@ -70,33 +72,36 @@ public class RandomDimension {
         }
     }
 
-    NbtCompound superflatLayer(int h, String str) {
+    NbtCompound superflatLayer(int h, String block) {
         NbtCompound res = new NbtCompound();
         res.putInt("height", h);
-        res.putString("block", PROVIDER.randomName(random, str));
+        res.putString("block", block);
         return res;
     }
 
     NbtCompound randomSuperflatSettings() {
         NbtCompound res = new NbtCompound();
         NbtList layers = new NbtList();
+        String biome = randomBiome();
         if (RandomProvider.weighedRandom(random, 1, 3)) {
             int layer_count = Math.min(64, 1 + (int) Math.floor(random.nextExponential() * 2));
             int heightLeft = height;
             for (int i = 0; i < layer_count; i++) {
                 int layerHeight = Math.min(heightLeft, 1 + (int) Math.floor(random.nextExponential() * 2));
                 heightLeft -= layerHeight;
-                layers.add(superflatLayer(layerHeight, "full_blocks"));
+                layers.add(superflatLayer(layerHeight, PROVIDER.randomName(random, "full_blocks_worldgen")));
                 if (heightLeft <= 1) {
                     break;
                 }
             }
             if (random.nextBoolean()) {
-                layers.add(superflatLayer(1, "top_blocks"));
+                String block = PROVIDER.randomName(random, "top_blocks");
+                top_blocks.put(biome, block);
+                layers.add(superflatLayer(1, block));
             }
         }
+        res.putString("biome", biome);
         res.put("layers", layers);
-        res.putString("biome", randomBiome());
         res.putBoolean("lakes", random.nextBoolean());
         res.putBoolean("features", random.nextBoolean());
         return res;
@@ -186,6 +191,7 @@ public class RandomDimension {
         else {
             int id = random.nextInt();
             random_biome_ids.add(id);
+            LogManager.getLogger().info(id);
             biome = "infinity:biome_" + id;
         }
         return biome;
@@ -193,6 +199,9 @@ public class RandomDimension {
 
     String randomNoiseSettings() {
         if (RandomProvider.weighedRandom(random, 3, 1)) {
+            for (int id: random_biome_ids) {
+                top_blocks.put("infinity:biome_"+id, "minecraft:grass_block");
+            }
             return PROVIDER.randomName(random, "noise_presets");
         }
         else {

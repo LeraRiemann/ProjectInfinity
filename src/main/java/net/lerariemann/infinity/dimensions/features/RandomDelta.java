@@ -1,15 +1,15 @@
 package net.lerariemann.infinity.dimensions.features;
 
+import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 
 public class RandomDelta extends RandomisedFeature {
-    public RandomDelta(int i, RandomProvider provider, String path) {
-        super(i, provider);
-        name = "delta_" + i;
+    public RandomDelta(RandomFeaturesList parent) {
+        super(parent, "delta");
         id = "delta_feature";
         type = "everylayer";
-        save(path,1 + random.nextInt(50));
+        save(1 + random.nextInt(50));
     }
 
     NbtCompound feature() {

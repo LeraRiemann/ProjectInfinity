@@ -190,15 +190,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:black_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:black_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:black_shulker_box",
       "weight": 1.0
     },
     {
@@ -226,19 +218,11 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:blue_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:blue_glazed_terracotta",
       "weight": 1.0
     },
     {
       "key": "minecraft:blue_ice",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:blue_shulker_box",
       "weight": 1.0
     },
     {
@@ -274,19 +258,11 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:brown_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:brown_glazed_terracotta",
       "weight": 1.0
     },
     {
       "key": "minecraft:brown_mushroom_block",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:brown_shulker_box",
       "weight": 1.0
     },
     {
@@ -327,10 +303,6 @@
     },
     {
       "key": "minecraft:chain_command_block",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:chest",
       "weight": 1.0
     },
     {
@@ -466,15 +438,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:cyan_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:cyan_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:cyan_shulker_box",
       "weight": 1.0
     },
     {
@@ -619,19 +583,11 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:end_gateway",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:end_stone",
       "weight": 1.0
     },
     {
       "key": "minecraft:end_stone_bricks",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:ender_chest",
       "weight": 1.0
     },
     {
@@ -696,23 +652,11 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:gravel",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:gray_concrete",
       "weight": 1.0
     },
     {
-      "key": "minecraft:gray_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:gray_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:gray_shulker_box",
       "weight": 1.0
     },
     {
@@ -732,15 +676,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:green_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:green_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:green_shulker_box",
       "weight": 1.0
     },
     {
@@ -861,15 +797,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:light_blue_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:light_blue_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:light_blue_shulker_box",
       "weight": 1.0
     },
     {
@@ -889,15 +817,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:light_gray_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:light_gray_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:light_gray_shulker_box",
       "weight": 1.0
     },
     {
@@ -917,15 +837,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:lime_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:lime_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:lime_shulker_box",
       "weight": 1.0
     },
     {
@@ -953,15 +865,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:magenta_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:magenta_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:magenta_shulker_box",
       "weight": 1.0
     },
     {
@@ -1066,15 +970,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:orange_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:orange_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:orange_shulker_box",
       "weight": 1.0
     },
     {
@@ -1106,15 +1002,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:pink_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:pink_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:pink_shulker_box",
       "weight": 1.0
     },
     {
@@ -1194,15 +1082,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:purple_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:purple_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:purple_shulker_box",
       "weight": 1.0
     },
     {
@@ -1254,10 +1134,6 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:red_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:red_glazed_terracotta",
       "weight": 1.0
     },
@@ -1270,15 +1146,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:red_sand",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:red_sandstone",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:red_shulker_box",
       "weight": 1.0
     },
     {
@@ -1318,10 +1186,6 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:sand",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:sandstone",
       "weight": 1.0
     },
@@ -1331,10 +1195,6 @@
     },
     {
       "key": "minecraft:shroomlight",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:shulker_box",
       "weight": 1.0
     },
     {
@@ -1507,10 +1367,6 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:trapped_chest",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:tube_coral_block",
       "weight": 1.0
     },
@@ -1591,15 +1447,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:white_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:white_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:white_shulker_box",
       "weight": 1.0
     },
     {
@@ -1619,15 +1467,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:yellow_concrete_powder",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:yellow_glazed_terracotta",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:yellow_shulker_box",
       "weight": 1.0
     },
     {

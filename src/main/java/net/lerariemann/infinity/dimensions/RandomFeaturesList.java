@@ -5,6 +5,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
@@ -25,12 +26,14 @@ public class RandomFeaturesList {
         random = biome.random;
         PROVIDER = biome.PROVIDER;
         blocks = new ArrayList<>();
+        LogManager.getLogger().info(parent.fullname);
         surface_block = parent.parent.top_blocks.get(parent.fullname);
+        LogManager.getLogger().info(surface_block);
         configPath = PROVIDER.configPath + "features/";
         trees = CommonIO.commonListReader(configPath + "vegetation/trees_checked.json");
         storagePath = biome.parent.storagePath;
         data = new NbtList();
-        data.add(getAllElements("rawgeneration"));
+        data.add(endIsland());
         data.add(lakes());
         data.add(localModifications());
         data.add(getAllElements("undergroundstructures"));
@@ -52,6 +55,8 @@ public class RandomFeaturesList {
         res.add(randomPlant("flowers"));
         res.add(randomPlant("grass"));
         res.addAll(getAllElements("vegetation/part2"));
+        if (random.nextBoolean()) res.add(NbtString.of(new RandomSurfacePatch(this).fullName()));
+        if (random.nextBoolean()) res.add(NbtString.of(new RandomFloatingPatch(this).fullName()));
         res.add(randomPlant("seagrass"));
         res.addAll(getAllElements("vegetation/part3"));
         return res;
@@ -88,30 +93,39 @@ public class RandomFeaturesList {
         for (String i : feature.BLOCKS) if (i != null) blocks.add(i);
     }
 
+    NbtList endIsland() {
+        NbtList res = getAllElements("rawgeneration");
+        if (random.nextBoolean()) {
+            res.add(NbtString.of((new RandomEndIsland(this)).fullName()));
+            blocks.add("minecraft:endstone");
+        }
+        return res;
+    }
+
     NbtList lakes() {
         NbtList res = getAllElements("lakes");
-        if (random.nextBoolean()) res.add(NbtString.of((new RandomLake(random.nextInt(), PROVIDER, storagePath)).fullName()));
+        if (random.nextBoolean()) res.add(NbtString.of((new RandomLake(this)).fullName()));
         return res;
     }
 
     NbtList localModifications() {
         NbtList res = getAllElements("localmodifications");
-        if (random.nextBoolean()) addRandomFeature(res, new RandomIceberg(random.nextInt(), PROVIDER, storagePath));
-        if (random.nextBoolean()) addRandomFeature(res, new RandomGeode(random.nextInt(), PROVIDER, storagePath));
-        if (random.nextBoolean()) addRandomFeature(res, new RandomRock(random.nextInt(), PROVIDER, storagePath));
+        if (random.nextBoolean()) addRandomFeature(res, new RandomIceberg(this));
+        if (random.nextBoolean()) addRandomFeature(res, new RandomGeode(this));
+        if (random.nextBoolean()) addRandomFeature(res, new RandomRock(this));
         return res;
     }
 
     NbtList surfaceStructures() {
         NbtList res = getAllElements("surfacestructures");
-        if (random.nextBoolean()) addRandomFeature(res, new RandomDelta(random.nextInt(), PROVIDER, storagePath));
+        if (random.nextBoolean()) addRandomFeature(res, new RandomDelta(this));
         return res;
     }
 
     NbtString randomTree() {
         if (Objects.equals(surface_block, "minecraft:grass_block") && random.nextBoolean()) return randomPlant("trees");
         else {
-            RandomFungus fungus = new RandomFungus(random.nextInt(), PROVIDER, storagePath, blocks, surface_block);
+            RandomFungus fungus = new RandomFungus(this);
             blocks.addAll(fungus.BLOCKS);
             return NbtString.of((fungus.fullName()));
         }

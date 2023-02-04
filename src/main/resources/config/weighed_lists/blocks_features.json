@@ -26,21 +26,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:mangrove_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:mangrove_door"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:mangrove_fence"
       },
       "weight": 1.0
@@ -68,24 +53,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:mangrove_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:mangrove_propagule"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:mangrove_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:mangrove_slab"
       },
       "weight": 1.0
@@ -99,12 +66,6 @@
     {
       "key": {
         "Name": "minecraft:mangrove_trapdoor"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:mangrove_wall_sign"
       },
       "weight": 1.0
     },
@@ -135,12 +96,6 @@
     {
       "key": {
         "Name": "minecraft:ochre_froglight"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:frogspawn"
       },
       "weight": 1.0
     },
@@ -200,30 +155,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:sculk_vein",
-        "Properties": {
-          "down": "true"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:acacia_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:acacia_door"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:acacia_fence"
       },
       "weight": 1.0
@@ -257,24 +188,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:acacia_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:acacia_sapling"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:acacia_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:acacia_slab"
       },
       "weight": 1.0
@@ -293,43 +206,13 @@
     },
     {
       "key": {
-        "Name": "minecraft:acacia_wall_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:acacia_wood"
       },
       "weight": 1.0
     },
     {
       "key": {
-        "Name": "minecraft:activator_rail"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:air"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:allium"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:amethyst_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:amethyst_cluster"
       },
       "weight": 1.0
     },
@@ -371,46 +254,10 @@
     },
     {
       "key": {
-        "Name": "minecraft:attached_melon_stem"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:attached_pumpkin_stem"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:azalea"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:azalea_leaves",
         "Properties": {
           "persistent": "true"
         }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:azure_bluet"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:bamboo"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:bamboo_sapling"
       },
       "weight": 1.0
     },
@@ -458,40 +305,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:beetroots"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:bell"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:big_dripleaf"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:big_dripleaf_stem"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:birch_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:birch_door"
       },
       "weight": 1.0
     },
@@ -530,24 +344,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:birch_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:birch_sapling"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:birch_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:birch_slab"
       },
       "weight": 1.0
@@ -566,19 +362,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:birch_wall_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:birch_wood"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:black_banner"
       },
       "weight": 1.0
     },
@@ -650,12 +434,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:black_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:black_wool"
       },
       "weight": 1.0
@@ -687,12 +465,6 @@
     {
       "key": {
         "Name": "minecraft:blast_furnace"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:blue_banner"
       },
       "weight": 1.0
     },
@@ -746,12 +518,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:blue_orchid"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:blue_shulker_box"
       },
       "weight": 1.0
@@ -776,12 +542,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:blue_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:blue_wool"
       },
       "weight": 1.0
@@ -800,25 +560,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:brain_coral"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:brain_coral_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:brain_coral_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:brain_coral_wall_fan"
       },
       "weight": 1.0
     },
@@ -849,12 +591,6 @@
     {
       "key": {
         "Name": "minecraft:bricks"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:brown_banner"
       },
       "weight": 1.0
     },
@@ -902,12 +638,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:brown_mushroom"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:brown_mushroom_block"
       },
       "weight": 1.0
@@ -938,12 +668,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:brown_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:brown_wool"
       },
       "weight": 1.0
@@ -956,37 +680,13 @@
     },
     {
       "key": {
-        "Name": "minecraft:bubble_coral"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:bubble_coral_block"
       },
       "weight": 1.0
     },
     {
       "key": {
-        "Name": "minecraft:bubble_coral_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:bubble_coral_wall_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:budding_amethyst"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:cactus"
       },
       "weight": 1.0
     },
@@ -1022,12 +722,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:carrots"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:cartography_table"
       },
       "weight": 1.0
@@ -1041,24 +735,6 @@
     {
       "key": {
         "Name": "minecraft:cauldron"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:cave_air"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:cave_vines"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:cave_vines_plant"
       },
       "weight": 1.0
     },
@@ -1125,18 +801,6 @@
     {
       "key": {
         "Name": "minecraft:chiseled_stone_bricks"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:chorus_flower"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:chorus_plant"
       },
       "weight": 1.0
     },
@@ -1220,19 +884,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:cocoa"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:command_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:comparator"
       },
       "weight": 1.0
     },
@@ -1257,12 +909,6 @@
     {
       "key": {
         "Name": "minecraft:copper_ore"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:cornflower"
       },
       "weight": 1.0
     },
@@ -1316,21 +962,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:crimson_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:crimson_door"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:crimson_fence"
       },
       "weight": 1.0
@@ -1338,12 +969,6 @@
     {
       "key": {
         "Name": "minecraft:crimson_fence_gate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:crimson_fungus"
       },
       "weight": 1.0
     },
@@ -1362,24 +987,6 @@
     {
       "key": {
         "Name": "minecraft:crimson_planks"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:crimson_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:crimson_roots"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:crimson_sign"
       },
       "weight": 1.0
     },
@@ -1404,12 +1011,6 @@
     {
       "key": {
         "Name": "minecraft:crimson_trapdoor"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:crimson_wall_sign"
       },
       "weight": 1.0
     },
@@ -1458,12 +1059,6 @@
     {
       "key": {
         "Name": "minecraft:cut_sandstone_slab"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:cyan_banner"
       },
       "weight": 1.0
     },
@@ -1535,12 +1130,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:cyan_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:cyan_wool"
       },
       "weight": 1.0
@@ -1548,27 +1137,6 @@
     {
       "key": {
         "Name": "minecraft:damaged_anvil"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dandelion"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dark_oak_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dark_oak_door"
       },
       "weight": 1.0
     },
@@ -1607,24 +1175,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:dark_oak_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dark_oak_sapling"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dark_oak_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:dark_oak_slab"
       },
       "weight": 1.0
@@ -1638,12 +1188,6 @@
     {
       "key": {
         "Name": "minecraft:dark_oak_trapdoor"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dark_oak_wall_sign"
       },
       "weight": 1.0
     },
@@ -1679,31 +1223,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:dead_brain_coral"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:dead_brain_coral_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_brain_coral_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_brain_coral_wall_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_bubble_coral"
       },
       "weight": 1.0
     },
@@ -1715,49 +1235,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:dead_bubble_coral_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_bubble_coral_wall_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_bush"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_fire_coral"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:dead_fire_coral_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_fire_coral_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_fire_coral_wall_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_horn_coral"
       },
       "weight": 1.0
     },
@@ -1769,37 +1247,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:dead_horn_coral_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_horn_coral_wall_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_tube_coral"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:dead_tube_coral_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_tube_coral_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dead_tube_coral_wall_fan"
       },
       "weight": 1.0
     },
@@ -1902,12 +1350,6 @@
     {
       "key": {
         "Name": "minecraft:deepslate_tiles"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:detector_rail"
       },
       "weight": 1.0
     },
@@ -2111,37 +1553,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:fern"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:fire"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:fire_coral"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:fire_coral_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:fire_coral_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:fire_coral_wall_fan"
       },
       "weight": 1.0
     },
@@ -2204,15 +1616,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:glow_lichen",
-        "Properties": {
-          "down": "true"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:glowstone"
       },
       "weight": 1.0
@@ -2268,12 +1671,6 @@
     {
       "key": {
         "Name": "minecraft:gravel"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:gray_banner"
       },
       "weight": 1.0
     },
@@ -2345,19 +1742,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:gray_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:gray_wool"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:green_banner"
       },
       "weight": 1.0
     },
@@ -2429,12 +1814,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:green_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:green_wool"
       },
       "weight": 1.0
@@ -2447,19 +1826,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:hanging_roots"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:hay_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:heavy_weighted_pressure_plate"
       },
       "weight": 1.0
     },
@@ -2483,25 +1850,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:horn_coral"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:horn_coral_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:horn_coral_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:horn_coral_wall_fan"
       },
       "weight": 1.0
     },
@@ -2567,12 +1916,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:iron_door"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:iron_ore"
       },
       "weight": 1.0
@@ -2598,21 +1941,6 @@
     {
       "key": {
         "Name": "minecraft:jukebox"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:jungle_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:jungle_door"
       },
       "weight": 1.0
     },
@@ -2651,24 +1979,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:jungle_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:jungle_sapling"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:jungle_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:jungle_slab"
       },
       "weight": 1.0
@@ -2687,37 +1997,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:jungle_wall_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:jungle_wood"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:kelp"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:kelp_plant"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:ladder"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:lantern"
       },
       "weight": 1.0
     },
@@ -2735,19 +2015,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:large_amethyst_bud"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:large_fern"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:lava"
       },
       "weight": 1.0
     },
@@ -2765,22 +2033,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:lever",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:light"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:light_blue_banner"
       },
       "weight": 1.0
     },
@@ -2852,19 +2105,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:light_blue_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:light_blue_wool"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:light_gray_banner"
       },
       "weight": 1.0
     },
@@ -2936,49 +2177,13 @@
     },
     {
       "key": {
-        "Name": "minecraft:light_gray_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:light_gray_wool"
       },
       "weight": 1.0
     },
     {
       "key": {
-        "Name": "minecraft:light_weighted_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:lightning_rod"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:lilac"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:lily_of_the_valley"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:lily_pad"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:lime_banner"
       },
       "weight": 1.0
     },
@@ -3050,12 +2255,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:lime_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:lime_wool"
       },
       "weight": 1.0
@@ -3069,12 +2268,6 @@
     {
       "key": {
         "Name": "minecraft:loom"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:magenta_banner"
       },
       "weight": 1.0
     },
@@ -3146,12 +2339,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:magenta_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:magenta_wool"
       },
       "weight": 1.0
@@ -3164,19 +2351,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:medium_amethyst_bud"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:melon"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:melon_stem"
       },
       "weight": 1.0
     },
@@ -3308,18 +2483,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:nether_sprouts"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:nether_wart"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:nether_wart_block"
       },
       "weight": 1.0
@@ -3339,21 +2502,6 @@
     {
       "key": {
         "Name": "minecraft:note_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:oak_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:oak_door"
       },
       "weight": 1.0
     },
@@ -3392,24 +2540,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:oak_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:oak_sapling"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:oak_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:oak_slab"
       },
       "weight": 1.0
@@ -3428,12 +2558,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:oak_wall_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:oak_wood"
       },
       "weight": 1.0
@@ -3447,12 +2571,6 @@
     {
       "key": {
         "Name": "minecraft:obsidian"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:orange_banner"
       },
       "weight": 1.0
     },
@@ -3524,25 +2642,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:orange_tulip"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:orange_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:orange_wool"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:oxeye_daisy"
       },
       "weight": 1.0
     },
@@ -3578,19 +2678,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:peony"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:petrified_oak_slab"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:pink_banner"
       },
       "weight": 1.0
     },
@@ -3657,18 +2745,6 @@
     {
       "key": {
         "Name": "minecraft:pink_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:pink_tulip"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:pink_wall_banner"
       },
       "weight": 1.0
     },
@@ -3770,21 +2846,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:polished_blackstone_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:polished_blackstone_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:polished_blackstone_slab"
       },
       "weight": 1.0
@@ -3858,18 +2919,6 @@
     {
       "key": {
         "Name": "minecraft:polished_granite_stairs"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:poppy"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:potatoes"
       },
       "weight": 1.0
     },
@@ -4073,12 +3122,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:powered_rail"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:prismarine"
       },
       "weight": 1.0
@@ -4122,18 +3165,6 @@
     {
       "key": {
         "Name": "minecraft:pumpkin"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:pumpkin_stem"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:purple_banner"
       },
       "weight": 1.0
     },
@@ -4205,12 +3236,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:purple_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:purple_wool"
       },
       "weight": 1.0
@@ -4271,12 +3296,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:rail"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:raw_copper_block"
       },
       "weight": 1.0
@@ -4290,12 +3309,6 @@
     {
       "key": {
         "Name": "minecraft:raw_iron_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:red_banner"
       },
       "weight": 1.0
     },
@@ -4338,12 +3351,6 @@
     {
       "key": {
         "Name": "minecraft:red_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:red_mushroom"
       },
       "weight": 1.0
     },
@@ -4433,18 +3440,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:red_tulip"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:red_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:red_wool"
       },
       "weight": 1.0
@@ -4469,30 +3464,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:redstone_torch"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:redstone_wall_torch"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:redstone_wire"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:repeater"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:repeating_command_block"
       },
       "weight": 1.0
@@ -4506,12 +3477,6 @@
     {
       "key": {
         "Name": "minecraft:rooted_dirt"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:rose_bush"
       },
       "weight": 1.0
     },
@@ -4565,18 +3530,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:sea_pickle"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:seagrass"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:shroomlight"
       },
       "weight": 1.0
@@ -4602,12 +3555,6 @@
     {
       "key": {
         "Name": "minecraft:slime_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:small_amethyst_bud"
       },
       "weight": 1.0
     },
@@ -4703,12 +3650,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:snow"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:snow_block"
       },
       "weight": 1.0
@@ -4716,18 +3657,6 @@
     {
       "key": {
         "Name": "minecraft:soul_campfire"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:soul_fire"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:soul_lantern"
       },
       "weight": 1.0
     },
@@ -4745,18 +3674,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:soul_torch"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:soul_wall_torch"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:spawner"
       },
       "weight": 1.0
@@ -4764,27 +3681,6 @@
     {
       "key": {
         "Name": "minecraft:sponge"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:spore_blossom"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:spruce_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:spruce_door"
       },
       "weight": 1.0
     },
@@ -4823,24 +3719,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:spruce_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:spruce_sapling"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:spruce_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:spruce_slab"
       },
       "weight": 1.0
@@ -4854,12 +3732,6 @@
     {
       "key": {
         "Name": "minecraft:spruce_trapdoor"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:spruce_wall_sign"
       },
       "weight": 1.0
     },
@@ -4902,21 +3774,6 @@
     {
       "key": {
         "Name": "minecraft:stone_bricks"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:stone_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:stone_pressure_plate"
       },
       "weight": 1.0
     },
@@ -5048,36 +3905,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:sugar_cane"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:sunflower"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:sweet_berry_bush"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:tall_grass"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:tall_seagrass"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:target"
       },
       "weight": 1.0
@@ -5102,12 +3929,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:torch"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:trapped_chest"
       },
       "weight": 1.0
@@ -5120,88 +3941,13 @@
     },
     {
       "key": {
-        "Name": "minecraft:tripwire_hook"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:tube_coral"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:tube_coral_block"
       },
       "weight": 1.0
     },
     {
       "key": {
-        "Name": "minecraft:tube_coral_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:tube_coral_wall_fan"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:tuff"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:turtle_egg"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:twisting_vines"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:twisting_vines_plant"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:vine"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:void_air"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:wall_torch"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:warped_button",
-        "Properties": {
-          "face": "floor"
-        }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:warped_door"
       },
       "weight": 1.0
     },
@@ -5214,12 +3960,6 @@
     {
       "key": {
         "Name": "minecraft:warped_fence_gate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:warped_fungus"
       },
       "weight": 1.0
     },
@@ -5238,24 +3978,6 @@
     {
       "key": {
         "Name": "minecraft:warped_planks"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:warped_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:warped_roots"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:warped_sign"
       },
       "weight": 1.0
     },
@@ -5285,19 +4007,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:warped_wall_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:warped_wart_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:water"
       },
       "weight": 1.0
     },
@@ -5429,31 +4139,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:weeping_vines"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:weeping_vines_plant"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:wet_sponge"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:wheat"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:white_banner"
       },
       "weight": 1.0
     },
@@ -5525,25 +4211,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:white_tulip"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:white_wall_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:white_wool"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:wither_rose"
       },
       "weight": 1.0
     },
@@ -5556,12 +4224,6 @@
     {
       "key": {
         "Name": "minecraft:wither_skeleton_wall_skull"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:yellow_banner"
       },
       "weight": 1.0
     },
@@ -5628,12 +4290,6 @@
     {
       "key": {
         "Name": "minecraft:yellow_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:yellow_wall_banner"
       },
       "weight": 1.0
     },

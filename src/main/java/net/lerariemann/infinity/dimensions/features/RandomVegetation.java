@@ -7,25 +7,17 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 
-import java.util.List;
 import java.util.Objects;
 
 public class RandomVegetation extends RandomisedFeature {
     WeighedStructure <String> trees_vanilla;
-    List<String> validbaseblocks;
-    String mainsurfaceblock;
-    String PATH;
 
     public RandomVegetation(RandomFeaturesList parent) {
-        super(parent.parent.id, parent.PROVIDER);
+        super(parent.parent.id, parent, "vegetation");
         trees_vanilla = parent.trees;
-        name = "vegetation_" + parent.parent.id;
         id = "random_selector";
         type = "vegetation";
-        PATH = parent.storagePath;
-        validbaseblocks = parent.blocks;
-        mainsurfaceblock = parent.surface_block;
-        save(PATH,1 + random.nextInt(10));
+        save(1 + random.nextInt(10));
     }
 
     NbtElement randomTree() {
@@ -37,10 +29,10 @@ public class RandomVegetation extends RandomisedFeature {
         else {
             switch(random.nextInt(2)) {
                 case 0 -> {
-                    tree = (new RandomFungus(random.nextInt(), PROVIDER, PATH, validbaseblocks, mainsurfaceblock)).fullName();
+                    tree = (new RandomFungus(parent)).fullName();
                     return NbtString.of(tree);
                 }
-                case 1 -> tree = (new RandomMushroom(random.nextInt(), PROVIDER, PATH)).fullName();
+                case 1 -> tree = (new RandomMushroom(parent)).fullName();
             }
         }
         NbtCompound placedfeature = new NbtCompound();

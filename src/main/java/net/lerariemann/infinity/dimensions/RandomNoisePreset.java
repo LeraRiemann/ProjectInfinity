@@ -17,6 +17,7 @@ public class RandomNoisePreset {
     Map<String,Set<String>> biomeRegistry;
 
     RandomNoisePreset(RandomDimension dim) {
+        LogManager.getLogger().info("Generating noise preset");
         parent = dim;
         biomeRegistry = new HashMap<>();
         PROVIDER = dim.PROVIDER;
@@ -45,8 +46,8 @@ public class RandomNoisePreset {
             }
         }
         int sea_level = (int)Math.floor(dim.random.nextGaussian(sea_level_default, 8));
-        NbtCompound default_block = PROVIDER.randomBlock(dim.random, "full_blocks");
-        String whereFrom = RandomProvider.weighedRandom(dim.random, 1, 15) ? "fluids" : "full_blocks";
+        NbtCompound default_block = PROVIDER.randomBlock(dim.random, "full_blocks_worldgen");
+        String whereFrom = RandomProvider.weighedRandom(dim.random, 1, 15) ? "fluids" : "full_blocks_worldgen";
         NbtCompound default_fluid = PROVIDER.randomBlock(dim.random, whereFrom);
         data.putBoolean("aquifers_enabled", dim.random.nextBoolean());
         data.putBoolean("ore_veins_enabled", dim.random.nextBoolean());
@@ -55,6 +56,7 @@ public class RandomNoisePreset {
         data.put("default_block", default_block);
         data.put("default_fluid", default_fluid);
         data.putInt("sea_level", sea_level);
+        parent.sea_level = sea_level;
         NbtCompound noise = new NbtCompound();
         noise.putInt("height", dim.height);
         noise.putInt("min_y", dim.min_y);
@@ -103,18 +105,13 @@ public class RandomNoisePreset {
             biomeRegistry.put(key, new HashSet<>());
             NbtCompound full_list = resolve("surface_rule/registry", key);
             for (NbtElement biome : (NbtList) Objects.requireNonNull(full_list.get("elements"))) {
-                String biome_name = Objects.requireNonNull(((NbtCompound) biome).get("biome")).toString();
-                biome_name = biome_name.substring(1, biome_name.length() - 1);
-                LogManager.getLogger().info(biome_name);
-                if (parent.vanilla_biomes.contains(biome_name)) {
-                    String biome_key = Objects.requireNonNull(((NbtCompound) biome).get("key")).toString();
-                    biome_key = biome_key.substring(1, biome_key.length() - 1);
-                    regBiome(key, biome_key);
-                }
+                String biome_name = Objects.requireNonNull(((NbtCompound) biome).get("biome")).asString();
+                if (parent.vanilla_biomes.contains(biome_name)) regBiome(key, Objects.requireNonNull(((NbtCompound) biome).get("key")).asString());
             }
         }
         for (int id: parent.random_biome_ids) {
-            String name = "infinity:generated_" + id;
+            LogManager.getLogger().info(id);
+            String name = "infinity:biome_" + id;
             registerRandomBiome(name);
         }
         for (String key: new String[]{"surface", "shallow", "deep"}) biomeRegistry.get(key).add("default_overworld");
@@ -156,7 +153,7 @@ public class RandomNoisePreset {
     }
 
     void addDeepslate(NbtList base) {
-        base.add(CommonIO.readAndAddBlock(storagePath + "surface_rule/main/deepslate.json", PROVIDER.randomName(parent.random, "full_blocks")));
+        base.add(CommonIO.readAndAddBlock(storagePath + "surface_rule/main/deepslate.json", PROVIDER.randomName(parent.random, "full_blocks_worldgen")));
     }
 
     void addType(NbtCompound base, String str) {

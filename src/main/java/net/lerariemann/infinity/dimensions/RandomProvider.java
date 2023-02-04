@@ -10,14 +10,18 @@ import java.util.Random;
 
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
+    public Map<String, WeighedStructure<NbtElement>> registry_uncommon;
     public String configPath;
 
     public RandomProvider(String path) {
         configPath = path;
         registry = new HashMap<>();
-        register("all_blocks");
-        register("full_blocks");
-        register("top_blocks");
+        registry_uncommon = new HashMap<>();
+        register_uncommon("all_blocks");
+        register_uncommon("top_blocks");
+        register_uncommon("blocks_features");
+        register_uncommon("full_blocks");
+        register_uncommon("full_blocks_worldgen");
         register("biomes");
         register("noise_presets");
         register("tags");
@@ -37,6 +41,9 @@ public class RandomProvider {
     void register(String key) {
         registry.put(key, CommonIO.commonListReader(configPath + "weighed_lists/" + key + ".json"));
     }
+    void register_uncommon(String key) {
+        registry_uncommon.put(key, CommonIO.uncommonListReader(configPath + "weighed_lists/" + key + ".json"));
+    }
 
     public static boolean weighedRandom(Random random, int weight0, int weight1) {
         int i = random.nextInt(weight0+weight1);
@@ -46,11 +53,6 @@ public class RandomProvider {
     public static NbtCompound Block(String block) {
         NbtCompound res = new NbtCompound();
         res.putString("Name", block);
-        if (block.contains("_leaves")) {
-            NbtCompound properties = new NbtCompound();
-            properties.putString("persistent", "true");
-            res.put("Properties", properties);
-        }
         return res;
     }
 
@@ -62,11 +64,29 @@ public class RandomProvider {
     }
 
     public String randomName(Random random, String key) {
-        return registry.get(key).getRandomElement(random);
+        switch (key) {
+            case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
+                NbtElement compound = registry_uncommon.get(key).getRandomElement(random);
+                if (compound instanceof NbtCompound) return ((NbtCompound)compound).getString("Name");
+                else return compound.asString();
+            }
+            default -> {
+                return registry.get(key).getRandomElement(random);
+            }
+        }
     }
 
     public NbtCompound randomBlock(Random random, String key) {
-        return Block(randomName(random, key));
+        switch (key) {
+            case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
+                NbtElement compound = registry_uncommon.get(key).getRandomElement(random);
+                if (compound instanceof NbtCompound) return ((NbtCompound)compound);
+                else return Block(compound.asString());
+            }
+            default -> {
+                return Block(registry.get(key).getRandomElement(random));
+            }
+        }
     }
 
     public NbtCompound randomBlockProvider (Random random, String key) {

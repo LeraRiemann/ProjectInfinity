@@ -6,7 +6,7 @@
     },
     {
       "key": "minecraft:void_start_platform",
-      "weight": 0.01
+      "weight": 0.5
     }
   ]
 }

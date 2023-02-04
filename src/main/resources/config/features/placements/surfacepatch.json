@@ -1,0 +1,15 @@
+{
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": %d
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
+    }
+  ]
+}
