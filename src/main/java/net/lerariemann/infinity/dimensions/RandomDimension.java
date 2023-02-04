@@ -199,10 +199,17 @@ public class RandomDimension {
 
     String randomNoiseSettings() {
         if (RandomProvider.weighedRandom(random, 3, 1)) {
-            for (int id: random_biome_ids) {
-                top_blocks.put("infinity:biome_"+id, "minecraft:grass_block");
+            String result = PROVIDER.randomName(random, "noise_presets");
+            String default_block;
+            switch(result) {
+                case "minecraft:end" -> default_block = "minecraft:endstone";
+                case "minecraft:nether" -> default_block = "minecraft:netherrack";
+                default -> default_block = "minecraft:grass_block";
             }
-            return PROVIDER.randomName(random, "noise_presets");
+            for (int id: random_biome_ids) {
+                top_blocks.put("infinity:biome_"+id, default_block);
+            }
+            return result;
         }
         else {
             RandomNoisePreset preset = new RandomNoisePreset(this);

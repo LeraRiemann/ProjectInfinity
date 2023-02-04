@@ -7,6 +7,10 @@
     {
       "key": "minecraft:void_start_platform",
       "weight": 0.5
+    },
+    {
+      "key": "infinity:bonus_chest",
+      "weight": 0.5
     }
   ]
 }

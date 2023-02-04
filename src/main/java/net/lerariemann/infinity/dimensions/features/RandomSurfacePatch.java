@@ -9,7 +9,7 @@ public class RandomSurfacePatch extends RandomisedFeature {
         super(parent, "patch");
         id = "random_patch";
         type = "surfacepatch";
-        save(1 + random.nextInt(300));
+        save(1 + random.nextInt(64));
     }
 
     NbtCompound feature() {

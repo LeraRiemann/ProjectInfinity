@@ -1,14 +1,6 @@
 {
   "elements": [
     {
-      "key": "frozen_oceans",
-      "biome": "minecraft:frozen_ocean"
-    },
-    {
-      "key": "frozen_oceans",
-      "biome": "minecraft:deep_frozen_ocean"
-    },
-    {
       "key": "frozen_peaks",
       "biome": "minecraft:frozen_peaks"
     },

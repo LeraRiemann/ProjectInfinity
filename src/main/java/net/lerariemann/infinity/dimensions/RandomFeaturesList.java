@@ -36,7 +36,7 @@ public class RandomFeaturesList {
         data.add(endIsland());
         data.add(lakes());
         data.add(localModifications());
-        data.add(getAllElements("undergroundstructures"));
+        data.add(undergroundStructures());
         data.add(surfaceStructures());
         data.add(getAllElements("strongholds"));
         data.add(getAllElements("undergroundores"));
@@ -113,6 +113,12 @@ public class RandomFeaturesList {
         if (random.nextBoolean()) addRandomFeature(res, new RandomIceberg(this));
         if (random.nextBoolean()) addRandomFeature(res, new RandomGeode(this));
         if (random.nextBoolean()) addRandomFeature(res, new RandomRock(this));
+        return res;
+    }
+
+    NbtList undergroundStructures() {
+        NbtList res = getAllElements("undergroundstructures");
+        addRandomFeature(res, new RandomDungeon(this));
         return res;
     }
 

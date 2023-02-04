@@ -16,10 +16,10 @@ public class RandomGeode extends RandomisedFeature {
         NbtCompound config = new NbtCompound();
         NbtCompound blocks = new NbtCompound();
         blocks.put("filling_provider", PROVIDER.randomBlockProvider(random, RandomProvider.weighedRandom(random,1, 3)? "airs" : "fluids"));
-        blocks.put("inner_layer_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
-        blocks.put("alternate_inner_layer_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
-        blocks.put("middle_layer_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
-        blocks.put("outer_layer_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
+        blocks.put("inner_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        blocks.put("alternate_inner_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        blocks.put("middle_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        blocks.put("outer_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
         NbtList inner_placements = new NbtList();
         inner_placements.add(PROVIDER.randomBlock(random, "all_blocks"));
         blocks.put("inner_placements", inner_placements);

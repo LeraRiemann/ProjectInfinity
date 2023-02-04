@@ -19,7 +19,7 @@ public class RandomEndIsland extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        addRandomBlock(config, "state");
+        addRandomBlock(config, "state", "blocks_features");
         return feature(config);
     }
 }

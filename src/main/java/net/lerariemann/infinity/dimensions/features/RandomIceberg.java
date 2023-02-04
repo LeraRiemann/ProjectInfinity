@@ -12,7 +12,7 @@ public class RandomIceberg extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        addRandomBlock(config, "state");
+        addRandomBlock(config, "state", "full_blocks");
         return feature(config);
     }
 }

@@ -20,9 +20,9 @@ public class RandomFungus extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        addRandomBlock(config, "hat_state");
-        addRandomBlock(config, "decor_state");
-        addRandomBlock(config, "stem_state");
+        addRandomBlock(config, "hat_state", "full_blocks");
+        addRandomBlock(config, "decor_state", "blocks_features");
+        addRandomBlock(config, "stem_state", "full_blocks");
         //String base_block = (validbaseblocks.size() == 0 || random.nextBoolean() ? mainsurfaceblock : validbaseblocks.get(random.nextInt(validbaseblocks.size())));
         String base_block = mainsurfaceblock;
         addBlockCarefully(config, "valid_base_block", base_block);

@@ -81,14 +81,14 @@ public abstract class RandomisedFeature {
         config.put(key, RandomProvider.blockToProvider(RandomProvider.Block(block)));
     }
 
-    void addRandomBlockProvider(NbtCompound config, String key) {
-        String block = PROVIDER.randomName(random, "blocks_features");
+    void addRandomBlockProvider(NbtCompound config, String key, String group) {
+        String block = PROVIDER.randomName(random, group);
         addBlockProviderCarefully(config, key, block);
         BLOCKS.add(block);
     }
 
-    void addRandomBlock(NbtCompound config, String key) {
-        addBlock(config, key, PROVIDER.randomName(random, "blocks_features"));
+    void addRandomBlock(NbtCompound config, String key, String group) {
+        addBlock(config, key, PROVIDER.randomName(random, group));
     }
 
     abstract NbtCompound feature();

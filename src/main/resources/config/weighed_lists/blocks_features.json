@@ -2015,12 +2015,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:large_fern"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:lava_cauldron"
       },
       "weight": 1.0
