@@ -27,25 +27,23 @@ public class RandomNoisePreset {
         fullname = InfinityMod.MOD_ID + ":" + name;
         randomiseblocks = RandomProvider.weighedRandom(dim.random, 3, 1);
         NbtCompound data = new NbtCompound();
-        type_alike = PROVIDER.randomName(dim.random, "noise_presets");
-        switch (type_alike) {
-            case "minecraft:overworld", "minecraft:amplified", "minecraft:large_biomes" -> {
-                noise_router = type_alike.substring(10);
-                surface_rule = spawn_target = "overworld";
-                data.putBoolean("aquifers_enabled", true);
-                sea_level_default = 63;
-            }
-            case "minecraft:floating_islands", "minecraft:caves", "minecraft:end", "minecraft:nether" -> {
-                noise_router = surface_rule = type_alike.substring(10);
-                data.putBoolean("aquifers_enabled", false);
-                spawn_target = "default";
-                switch (type_alike) {
-                    case "minecraft:floating_islands" -> sea_level_default = -64;
-                    case "minecraft:end" -> sea_level_default = 0;
-                    case "minecraft:nether", "minecraft:caves" -> {
-                        sea_level_default = 32;
-                        noise_router = "caves";
-                    }
+        type_alike = dim.type_alike;
+        if (!dim.isNotOverworld()) {
+            noise_router = type_alike.substring(10);
+            surface_rule = spawn_target = "overworld";
+            data.putBoolean("aquifers_enabled", true);
+            sea_level_default = 63;
+        }
+        else {
+            noise_router = surface_rule = type_alike.substring(10);
+            data.putBoolean("aquifers_enabled", false);
+            spawn_target = "default";
+            switch (type_alike) {
+                case "minecraft:floating_islands" -> sea_level_default = -64;
+                case "minecraft:end" -> sea_level_default = 0;
+                case "minecraft:nether", "minecraft:caves" -> {
+                    sea_level_default = 32;
+                    noise_router = "caves";
                 }
             }
         }
@@ -152,6 +150,8 @@ public class RandomNoisePreset {
     void registerBiomes() {
         for (String key: new String[]{"inline", "special", "surface", "shallow", "second_layer", "deep"}) {
             biomeRegistry.put(key, new HashSet<>());
+            if ((Objects.equals(parent.type_alike, "minecraft:nether")) && ((Objects.equals(key, "inline")) || (Objects.equals(key, "special"))))
+                biomeRegistry.get(key).add("default_nether");
             NbtCompound full_list = resolve("surface_rule/registry", key);
             for (NbtElement biome : (NbtList) Objects.requireNonNull(full_list.get("elements"))) {
                 String biome_name = Objects.requireNonNull(((NbtCompound) biome).get("biome")).asString();
@@ -163,7 +163,7 @@ public class RandomNoisePreset {
             String name = "infinity:biome_" + id;
             registerRandomBiome(name);
         }
-        for (String key: new String[]{"surface", "shallow", "deep"}) biomeRegistry.get(key).add("default_overworld");
+        if (parent.isMadeOfStone()) for (String key: new String[]{"surface", "shallow", "deep"}) biomeRegistry.get(key).add("default_overworld");
     }
 
     void registerRandomBiome(String biome) {

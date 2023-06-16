@@ -21,6 +21,7 @@ public class RandomDimension {
     public List<String> vanilla_biomes;
     public List<Integer> random_biome_ids;
     public Map<String, String> top_blocks;
+    public String type_alike;
 
     public RandomDimension(int i, RandomProvider provider, String path) {
         random = new Random(i);
@@ -33,6 +34,7 @@ public class RandomDimension {
         vanilla_biomes = new ArrayList<>();
         random_biome_ids = new ArrayList<>();
         top_blocks = new HashMap<>();
+        type_alike = PROVIDER.randomName(random, "noise_presets");
         RandomDimensionType type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
         data.put("generator", randomDimensionGenerator());
@@ -41,6 +43,19 @@ public class RandomDimension {
         }
         CommonIO.write(data, storagePath + "/dimension", name + ".json");
         if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");
+    }
+
+    boolean isNotOverworld() {
+        return (!Objects.equals(type_alike, "minecraft:overworld")) && (!Objects.equals(type_alike, "minecraft:large_biomes"))
+                && (!Objects.equals(type_alike, "minecraft:amplified"));
+    }
+
+    boolean hasCeiling() {
+        return ((Objects.equals(type_alike, "minecraft:nether")) || (Objects.equals(type_alike, "minecraft:caves")));
+    }
+
+    boolean isMadeOfStone() {
+        return (!(Objects.equals(type_alike, "minecraft:nether")) && !(Objects.equals(type_alike, "minecraft:end")));
     }
 
     NbtCompound packMcmeta() {
@@ -121,20 +136,24 @@ public class RandomDimension {
                 return res;
             }
             case "minecraft:multi_noise" -> {
-                WeighedStructure<Integer> list2 = new WeighedStructure<>();
-                list2.add(2, 0.1);
-                list2.add(1, 0.1);
-                list2.add(0, 0.8);
-                switch (list2.getRandomElement(random)) {
-                    case 2 -> res.putString("preset", "minecraft:overworld");
-                    case 1 -> res.putString("preset", "minecraft:nether");
-                    default -> res.put("biomes", randomBiomes());
+                String preset = PROVIDER.randomName(random, "multinoise_presets");
+                if (Objects.equals(preset, "none")) res.put("biomes", randomBiomes());
+                else {
+                    res.putString("preset", preset);
+                    addPresetBiomes(preset);
                 }
                 return res;
             }
             case "minecraft:fixed" -> res.putString("biome", randomBiome());
         }
         return res;
+    }
+
+    void addPresetBiomes(String preset) {
+        NbtList lst = PROVIDER.presetregistry.get(preset);
+        for (NbtElement i: lst) {
+            vanilla_biomes.add(((NbtString)i).asString());
+        }
     }
 
     NbtList randomBiomesCheckerboard() {

@@ -4,20 +4,19 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
     public Map<String, WeighedStructure<NbtElement>> registry_uncommon;
+    public Map<String, NbtList> presetregistry;
     public String configPath;
 
     public RandomProvider(String path) {
         configPath = path;
         registry = new HashMap<>();
         registry_uncommon = new HashMap<>();
+        presetregistry = new HashMap<>();
         register_uncommon("all_blocks");
         register_uncommon("top_blocks");
         register_uncommon("blocks_features");
@@ -40,8 +39,12 @@ public class RandomProvider {
         register("tree_decorators");
         register("trunk_placers");
         register("foliage_placers");
+        register("multinoise_presets");
         for (String mob: mobcategories()) {
             mobregister(mob);
+        }
+        for (String preset: registry.get("multinoise_presets").keys) {
+            if (!Objects.equals(preset, "none")) presetregister(preset);
         }
     }
 
@@ -55,6 +58,10 @@ public class RandomProvider {
 
     void mobregister(String key) {
         registry.put(key, CommonIO.commonListReader(configPath + "mobs/" + key + ".json"));
+    }
+
+    void presetregister(String key) {
+        presetregistry.put(key, CommonIO.read(configPath + "multinoisepresets/" + key + ".json").getList("elements", NbtElement.STRING_TYPE));
     }
 
     void register_uncommon(String key) {

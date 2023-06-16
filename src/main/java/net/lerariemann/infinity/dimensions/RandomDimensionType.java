@@ -24,13 +24,15 @@ public class RandomDimensionType {
         res.putBoolean("bed_works", random.nextBoolean());
         res.putBoolean("respawn_anchor_works", random.nextBoolean());
         res.putBoolean("has_raids", random.nextBoolean());
-        res.putBoolean("has_ceiling", random.nextBoolean());
+        res.putBoolean("has_ceiling", dim.hasCeiling());
         res.putDouble("coordinate_scale", coordinateScale());
         res.putFloat("ambient_light", random.nextFloat());
         if (random.nextBoolean()){
             res.putInt("fixed_time", random.nextInt(24000));
         }
-        parent.min_y = 16*Math.min(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
+        int min_y = 16*Math.min(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
+        if (parent.isNotOverworld()) min_y = Math.max(min_y, -48);
+        parent.min_y = min_y;
         res.putInt("min_y", parent.min_y);
         int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
         parent.height = max_y - parent.min_y;
