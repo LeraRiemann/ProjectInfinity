@@ -12,9 +12,10 @@ public class RandomNoisePreset {
     public String fullname;
     String storagePath;
     public RandomDimension parent;
-    String noise_router, surface_rule, spawn_target;
+    public String noise_router, surface_rule, spawn_target, type_alike;
     int sea_level_default;
     Map<String,Set<String>> biomeRegistry;
+    public boolean randomiseblocks;
 
     RandomNoisePreset(RandomDimension dim) {
         LogManager.getLogger().info("Generating noise preset");
@@ -24,8 +25,9 @@ public class RandomNoisePreset {
         storagePath = PROVIDER.configPath + "noise_settings/";
         name = "generated_" +dim.id;
         fullname = InfinityMod.MOD_ID + ":" + name;
+        randomiseblocks = RandomProvider.weighedRandom(dim.random, 3, 1);
         NbtCompound data = new NbtCompound();
-        String type_alike = PROVIDER.randomName(dim.random, "noise_presets");
+        type_alike = PROVIDER.randomName(dim.random, "noise_presets");
         switch (type_alike) {
             case "minecraft:overworld", "minecraft:amplified", "minecraft:large_biomes" -> {
                 noise_router = type_alike.substring(10);
@@ -47,10 +49,10 @@ public class RandomNoisePreset {
                 }
             }
         }
-        int sea_level = (int)Math.floor(dim.random.nextGaussian(sea_level_default, 8));
-        NbtCompound default_block = PROVIDER.randomBlock(dim.random, "full_blocks_worldgen");
-        String whereFrom = RandomProvider.weighedRandom(dim.random, 1, 15) ? "fluids" : "full_blocks_worldgen";
-        NbtCompound default_fluid = PROVIDER.randomBlock(dim.random, whereFrom);
+        int sea_level = randomiseblocks ? (int)Math.floor(dim.random.nextGaussian(sea_level_default, 8)) : sea_level_default;
+        NbtCompound default_block = randomiseblocks ? PROVIDER.randomBlock(dim.random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock());
+        NbtCompound default_fluid = randomiseblocks ? PROVIDER.randomBlock(dim.random,
+                RandomProvider.weighedRandom(dim.random, 1, 49) ? "fluids" : "full_blocks_worldgen") : RandomProvider.Block(defaultfluid());
         data.putBoolean("ore_veins_enabled", dim.random.nextBoolean());
         data.putBoolean("disable_mob_generation", false);
         data.putBoolean("legacy_random_source", false);
@@ -69,14 +71,56 @@ public class RandomNoisePreset {
         data.put("noise_router", getRouter(noise_router));
         data.put("spawn_target", resolve("spawn_target", spawn_target).get("spawn_target"));
         registerBiomes();
-        data.put("surface_rule", buildSurfaceRule(surface_rule));
+        data.put("surface_rule", buildSurfaceRule());
         CommonIO.write(data, dim.storagePath + "/worldgen/noise_settings", name + ".json");
+    }
+
+    String defaultblock() {
+        switch(type_alike) {
+            case "minecraft:end" -> {
+                return "minecraft:endstone";
+            }
+            case "minecraft:nether" -> {
+                return "minecraft:netherrack";
+            }
+            default -> {
+                return "minecraft:stone";
+            }
+        }
+    }
+    String defaultfluid() {
+        switch(type_alike) {
+            case "minecraft:end" -> {
+                return "minecraft:air";
+            }
+            case "minecraft:nether" -> {
+                return "minecraft:lava";
+            }
+            default -> {
+                return "minecraft:water";
+            }
+        }
+    }
+
+    String defaulttopblock() {
+        switch(type_alike) {
+            case "minecraft:end" -> {
+                return "minecraft:endstone";
+            }
+            case "minecraft:nether" -> {
+                return "minecraft:netherrack";
+            }
+            default -> {
+                return "minecraft:grass_block";
+            }
+        }
     }
 
     NbtCompound getRouter(String router) {
         String path = storagePath + "noise_router/" + router + ".json";
         int min = parent.min_y;
         int max = parent.height + parent.min_y;
+        int softmax = Math.min(max, 256);
         switch(router) {
             case "caves" -> {
                 return CommonIO.readCarefully(path, min - 8, min + 24, max - 24, max);
@@ -88,10 +132,14 @@ public class RandomNoisePreset {
                 return CommonIO.readCarefully(path, min + 4, min + 32, max - 72, max + 184, min + 4, min + 32, max - 72, max + 184);
             }
             case "overworld", "large_biomes" -> {
-                return CommonIO.readCarefully(path, min, min + 24, min, min + 24);
+                return CommonIO.readCarefully(path, min, min + 24, softmax - 16, softmax, min, max,
+                        (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4),
+                        min, min + 24, softmax - 16, softmax);
             }
             case "amplified" -> {
-                return CommonIO.readCarefully(path, min, min + 24, max - 16, max, min, min + 24, max - 16, max);
+                return CommonIO.readCarefully(path, min, min + 24, max - 16, max, min, max,
+                        (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4),
+                        min, min + 24, max - 16, max);
             }
         }
         return CommonIO.read(path);
@@ -119,20 +167,20 @@ public class RandomNoisePreset {
     }
 
     void registerRandomBiome(String biome) {
-        if (parent.random.nextBoolean()) {
+        if (randomiseblocks && parent.random.nextBoolean()) {
             regBiome("surface", biome);
             regBiome("shallow", biome);
         }
-        else parent.top_blocks.put(biome, "minecraft:grass_block");
+        else parent.top_blocks.put(biome, defaulttopblock());
     }
 
     void regBiome(String type, String name) {
         biomeRegistry.get(type).add(name);
     }
 
-    NbtCompound buildSurfaceRule(String surface_rule_base) {
+    NbtCompound buildSurfaceRule() {
         int i = 0;
-        switch (surface_rule_base) {
+        switch (surface_rule) {
             case "caves", "nether" -> i=1;
             case "floating_islands", "end" -> i=2;
         }
@@ -154,7 +202,8 @@ public class RandomNoisePreset {
     }
 
     void addDeepslate(NbtList base) {
-        base.add(CommonIO.readAndAddBlock(storagePath + "surface_rule/main/deepslate.json", PROVIDER.randomName(parent.random, "full_blocks_worldgen")));
+        base.add(CommonIO.readAndAddBlock(storagePath + "surface_rule/main/deepslate.json",
+                randomiseblocks ? PROVIDER.randomName(parent.random, "full_blocks_worldgen") : "minecraft:deepslate"));
     }
 
     void addType(NbtCompound base, String str) {

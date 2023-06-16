@@ -83,27 +83,27 @@ public class RandomDimension {
         NbtCompound res = new NbtCompound();
         NbtList layers = new NbtList();
         String biome = randomBiome();
-        if (RandomProvider.weighedRandom(random, 1, 3)) {
-            int layer_count = Math.min(64, 1 + (int) Math.floor(random.nextExponential() * 2));
-            int heightLeft = height;
-            for (int i = 0; i < layer_count; i++) {
-                int layerHeight = Math.min(heightLeft, 1 + (int) Math.floor(random.nextExponential() * 2));
-                heightLeft -= layerHeight;
-                layers.add(superflatLayer(layerHeight, PROVIDER.randomName(random, "full_blocks_worldgen")));
-                if (heightLeft <= 1) {
-                    break;
-                }
+        String block = "minecraft:air";
+        int layer_count = Math.min(64, 1 + (int) Math.floor(random.nextExponential() * 2));
+        int heightLeft = height;
+        for (int i = 0; i < layer_count; i++) {
+            int layerHeight = Math.min(heightLeft, 1 + (int) Math.floor(random.nextExponential() * 4));
+            heightLeft -= layerHeight;
+            block = PROVIDER.randomName(random, "full_blocks_worldgen");
+            layers.add(superflatLayer(layerHeight, block));
+            if (heightLeft <= 1) {
+                break;
             }
-            if (random.nextBoolean()) {
-                String block = PROVIDER.randomName(random, "top_blocks");
-                top_blocks.put(biome, block);
-                layers.add(superflatLayer(1, block));
-            }
+        }
+        if (random.nextBoolean()) {
+            block = PROVIDER.randomName(random, "top_blocks");
+            layers.add(superflatLayer(1, block));
         }
         res.putString("biome", biome);
         res.put("layers", layers);
         res.putBoolean("lakes", random.nextBoolean());
         res.putBoolean("features", random.nextBoolean());
+        top_blocks.put(biome, block);
         return res;
     }
 
@@ -198,22 +198,7 @@ public class RandomDimension {
     }
 
     String randomNoiseSettings() {
-        if (RandomProvider.weighedRandom(random, 3, 1)) {
-            String result = PROVIDER.randomName(random, "noise_presets");
-            String default_block;
-            switch(result) {
-                case "minecraft:end" -> default_block = "minecraft:endstone";
-                case "minecraft:nether" -> default_block = "minecraft:netherrack";
-                default -> default_block = "minecraft:grass_block";
-            }
-            for (int id: random_biome_ids) {
-                top_blocks.put("infinity:biome_"+id, default_block);
-            }
-            return result;
-        }
-        else {
-            RandomNoisePreset preset = new RandomNoisePreset(this);
-            return preset.fullname;
-        }
+        RandomNoisePreset preset = new RandomNoisePreset(this);
+        return preset.fullname;
     }
 }

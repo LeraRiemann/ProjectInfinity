@@ -12,7 +12,7 @@
       "type": "minecraft:not",
       "invert": {
         "type": "minecraft:noise_threshold",
-        "max_threshold": 1.7976931348623157E308,
+        "max_threshold": 2147483647,
         "min_threshold": 0.54,
         "noise": "minecraft:netherrack"
       }
@@ -34,7 +34,7 @@
             "type": "minecraft:condition",
             "if_true": {
               "type": "minecraft:noise_threshold",
-              "max_threshold": 1.7976931348623157E308,
+              "max_threshold": 2147483647,
               "min_threshold": 1.17,
               "noise": "minecraft:nether_wart"
             },
