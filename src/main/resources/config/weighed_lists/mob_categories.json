@@ -18,19 +18,15 @@
     },
     {
       "key": "underground_water_creature",
-      "weight": 0.25
-    },
-    {
-      "key": "water_ambient",
       "weight": 0.1
     },
     {
-      "key": "misc",
+      "key": "water_ambient",
       "weight": 0.25
     },
     {
       "key": "axolotls",
-      "weight": 0.25
+      "weight": 0.1
     }
   ]
 }

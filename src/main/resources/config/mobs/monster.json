@@ -1,0 +1,160 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:blaze",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cave_spider",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:creeper",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:drowned",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:elder_guardian",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:ender_dragon",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:enderman",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:endermite",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:evoker",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:ghast",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:giant",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:guardian",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:hoglin",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:husk",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:illusioner",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:magma_cube",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:phantom",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:piglin",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:piglin_brute",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pillager",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:ravager",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:shulker",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:silverfish",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:skeleton",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:skeleton_horse",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:slime",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spider",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stray",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:vex",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:vindicator",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:warden",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:witch",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:wither",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:wither_skeleton",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:zoglin",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:zombie",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:zombie_horse",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:zombie_villager",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:zombified_piglin",
+      "weight": 1.0
+    }
+  ]
+}

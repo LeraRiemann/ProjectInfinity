@@ -28,10 +28,10 @@ public class RandomBiome {
         res.putString("temperature_modifier", RandomProvider.weighedRandom(random,3, 1) ? "none" : "frozen");
         res.putDouble("downfall", random.nextDouble());
         res.put("effects", randomEffects());
-        if (random.nextBoolean()) res.putFloat("creature_spawn_probability", Math.min(random.nextFloat(), 0.9999999f));
-        res.put("spawners", randomMobs());
+        if (random.nextBoolean()) res.putFloat("creature_spawn_probability", random.nextFloat()*0.5f);
+        res.put("spawners", (new RandomMobsList(this)).asData());
         res.put("spawn_costs", spawnCosts());
-        res.put("features", (new RandomFeaturesList(this).data));
+        res.put("features", (new RandomFeaturesList(this)).data);
         res.put("carvers", new NbtCompound());
         CommonIO.write(res, dim.storagePath + "/worldgen/biome", name + ".json");
     }
@@ -142,28 +142,8 @@ public class RandomBiome {
         return res;
     }
 
-    NbtCompound randomMobs() {
-        Map<String, NbtList> lists = new HashMap<>();
-        String[] titles = {"monster", "creature", "ambient", "water_creature", "underground_water_creature", "water_ambient", "misc", "axolotls"};
-        for (int i = 0; i < 8; i++) {
-            lists.put(titles[i], new NbtList());
-        }
-        int mobCount = random.nextInt(20);
-        for(int i = 0; i < mobCount; i++) {
-            NbtCompound mob = new NbtCompound();
-            String mobname = PROVIDER.randomName(random, "mobs");
-            mob.putString("type", mobname);
-            mobs.add(mobname);
-            mob.putInt("weight", 1 + random.nextInt(20));
-            int a = 1 + random.nextInt(6);
-            int b = 1 + random.nextInt(6);
-            mob.putInt("minCount", Math.min(a, b));
-            mob.putInt("maxCount", Math.max(a, b));
-            lists.get(PROVIDER.randomName(random, "mob_categories")).add(mob);
-        }
-        NbtCompound res = new NbtCompound();
-        for (int i = 0; i < 8; i++) res.put(titles[i], lists.get(titles[i]));
-        return res;
+    void addMob(String mobname) {
+        mobs.add(mobname);
     }
 
     NbtCompound spawnCosts() {

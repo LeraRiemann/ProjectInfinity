@@ -5,6 +5,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -39,11 +40,23 @@ public class RandomProvider {
         register("tree_decorators");
         register("trunk_placers");
         register("foliage_placers");
+        for (String mob: mobcategories()) {
+            mobregister(mob);
+        }
+    }
+
+    List<String> mobcategories() {
+        return registry.get("mob_categories").keys;
     }
 
     void register(String key) {
         registry.put(key, CommonIO.commonListReader(configPath + "weighed_lists/" + key + ".json"));
     }
+
+    void mobregister(String key) {
+        registry.put(key, CommonIO.commonListReader(configPath + "mobs/" + key + ".json"));
+    }
+
     void register_uncommon(String key) {
         registry_uncommon.put(key, CommonIO.uncommonListReader(configPath + "weighed_lists/" + key + ".json"));
     }
