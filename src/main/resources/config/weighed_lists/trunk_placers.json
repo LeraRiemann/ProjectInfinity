@@ -1,0 +1,32 @@
+{
+  "elements": [
+    {
+      "key": "straight_trunk_placer",
+      "weight": 1.0
+    },
+    {
+      "key": "forking_trunk_placer",
+      "weight": 0.5
+    },
+    {
+      "key": "giant_trunk_placer",
+      "weight": 0.2
+    },
+    {
+      "key": "mega_jungle_trunk_placer",
+      "weight": 0.2
+    },
+    {
+      "key": "dark_oak_trunk_placer",
+      "weight": 0.2
+    },
+    {
+      "key": "bending_trunk_placer",
+      "weight": 0.5
+    },
+    {
+      "key": "upwards_branching_trunk_placer",
+      "weight": 0.5
+    }
+  ]
+}

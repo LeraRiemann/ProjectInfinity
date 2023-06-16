@@ -129,11 +129,24 @@ public class RandomFeaturesList {
     }
 
     NbtString randomTree() {
-        if (Objects.equals(surface_block, "minecraft:grass_block") && random.nextBoolean()) return randomPlant("trees");
-        else {
-            RandomFungus fungus = new RandomFungus(this);
-            blocks.addAll(fungus.BLOCKS);
-            return NbtString.of((fungus.fullName()));
+        int a = (Objects.equals(surface_block, "minecraft:grass_block")) ? 4 : 3;
+        switch (random.nextInt(a)) {
+            case 3 -> {
+                return randomPlant("trees");
+            }
+            case 2 -> {
+                RandomFungus fungus = new RandomFungus(this);
+                return NbtString.of(fungus.fullName());
+            }
+            case 1 -> {
+                RandomTree tree = new RandomTree(this, true);
+                return NbtString.of(tree.fullName());
+            }
+            case 0 -> {
+                RandomMushroom mushroom = new RandomMushroom(this, true);
+                return NbtString.of(mushroom.fullName());
+            }
         }
+        return NbtString.of("minecraft:oak");
     }
 }

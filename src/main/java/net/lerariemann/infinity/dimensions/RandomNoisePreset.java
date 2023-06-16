@@ -30,10 +30,12 @@ public class RandomNoisePreset {
             case "minecraft:overworld", "minecraft:amplified", "minecraft:large_biomes" -> {
                 noise_router = type_alike.substring(10);
                 surface_rule = spawn_target = "overworld";
+                data.putBoolean("aquifers_enabled", true);
                 sea_level_default = 63;
             }
             case "minecraft:floating_islands", "minecraft:caves", "minecraft:end", "minecraft:nether" -> {
                 noise_router = surface_rule = type_alike.substring(10);
+                data.putBoolean("aquifers_enabled", false);
                 spawn_target = "default";
                 switch (type_alike) {
                     case "minecraft:floating_islands" -> sea_level_default = -64;
@@ -49,7 +51,6 @@ public class RandomNoisePreset {
         NbtCompound default_block = PROVIDER.randomBlock(dim.random, "full_blocks_worldgen");
         String whereFrom = RandomProvider.weighedRandom(dim.random, 1, 15) ? "fluids" : "full_blocks_worldgen";
         NbtCompound default_fluid = PROVIDER.randomBlock(dim.random, whereFrom);
-        data.putBoolean("aquifers_enabled", dim.random.nextBoolean());
         data.putBoolean("ore_veins_enabled", dim.random.nextBoolean());
         data.putBoolean("disable_mob_generation", false);
         data.putBoolean("legacy_random_source", false);

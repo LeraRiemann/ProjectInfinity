@@ -17,7 +17,7 @@ public class RandomVegetation extends RandomisedFeature {
         trees_vanilla = parent.trees;
         id = "random_selector";
         type = "vegetation";
-        save(1 + random.nextInt(10));
+        save(1 + random.nextInt(10), (int) Math.floor(random.nextExponential()*4), parent.surface_block);
     }
 
     NbtElement randomTree() {
@@ -27,12 +27,13 @@ public class RandomVegetation extends RandomisedFeature {
             if (!Objects.equals(tree, "minecraft:azalea_tree")) return NbtString.of(tree);
         }
         else {
-            switch(random.nextInt(2)) {
+            switch(random.nextInt(3)) {
                 case 0 -> {
                     tree = (new RandomFungus(parent)).fullName();
                     return NbtString.of(tree);
                 }
-                case 1 -> tree = (new RandomMushroom(parent)).fullName();
+                case 1 -> tree = (new RandomMushroom(parent, false)).fullName();
+                case 2 -> tree = (new RandomTree(parent, false)).fullName();
             }
         }
         NbtCompound placedfeature = new NbtCompound();

@@ -1,0 +1,44 @@
+{
+  "elements": [
+    {
+      "key": "blob_foliage_placer",
+      "weight": 2.0
+    },
+    {
+      "key": "spruce_foliage_placer",
+      "weight": 1.0
+    },
+    {
+      "key": "pine_foliage_placer",
+      "weight": 1.0
+    },
+    {
+      "key": "acacia_foliage_placer",
+      "weight": 0.5
+    },
+    {
+      "key": "bush_foliage_placer",
+      "weight": 1.0
+    },
+    {
+      "key": "random_spread_foliage_placer",
+      "weight": 0.5
+    },
+    {
+      "key": "dark_oak_foliage_placer",
+      "weight": 0.2
+    },
+    {
+      "key": "mega_pine_foliage_placer",
+      "weight": 0.2
+    },
+    {
+      "key": "jungle_foliage_placer",
+      "weight": 0.5
+    },
+    {
+      "key": "fancy_foliage_placer",
+      "weight": 0.5
+    }
+  ]
+}

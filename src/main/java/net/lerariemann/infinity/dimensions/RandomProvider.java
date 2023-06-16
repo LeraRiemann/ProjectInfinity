@@ -36,6 +36,9 @@ public class RandomProvider {
         register("airs");
         register("biome_source_types");
         register("generator_types");
+        register("tree_decorators");
+        register("trunk_placers");
+        register("foliage_placers");
     }
 
     void register(String key) {
@@ -93,40 +96,44 @@ public class RandomProvider {
         return blockToProvider(randomBlock(random, key));
     }
 
-    static NbtCompound genBounds(Random random, int bound) {
+    static NbtCompound genBounds(Random random, int lbound, int bound) {
         NbtCompound value = new NbtCompound();
-        int a = random.nextInt(bound);
-        int b = random.nextInt(bound);
+        int a = random.nextInt(lbound, bound);
+        int b = random.nextInt(lbound, bound);
         value.putInt("min_inclusive", Math.min(a, b));
         value.putInt("max_inclusive", Math.max(a, b));
         return value;
     }
 
     public static NbtElement intProvider(Random random, int bound, boolean acceptDistributions) {
+        return intProvider(random, 0, bound, acceptDistributions);
+    }
+
+    public static NbtElement intProvider(Random random, int lbound, int bound, boolean acceptDistributions) {
         int i = random.nextInt(acceptDistributions ? 6 : 4);
         NbtCompound res = new NbtCompound();
         switch(i) {
             case 0 -> {
                 res.putString("type", "constant");
-                res.putInt("value", random.nextInt(bound));
+                res.putInt("value", random.nextInt(lbound, bound));
                 return res;
             }
             case 1, 2 -> {
                 res.putString("type", i==1 ? "uniform" : "biased_to_bottom");
-                res.put("value", genBounds(random, bound));
+                res.put("value", genBounds(random, lbound, bound));
                 return res;
             }
             case 4 -> {
                 res.putString("type", "clamped");
-                NbtCompound value = genBounds(random, bound);
-                value.put("source", intProvider(random, bound, false));
+                NbtCompound value = genBounds(random, lbound, bound);
+                value.put("source", intProvider(random, lbound, bound, false));
                 res.put("value", value);
                 return res;
             }
             case 3 -> {
                 res.putString("type", "clamped_normal");
-                NbtCompound value = genBounds(random, bound);
-                value.putDouble("mean", random.nextDouble()*bound);
+                NbtCompound value = genBounds(random, lbound, bound);
+                value.putDouble("mean", lbound + random.nextDouble()*(bound-lbound));
                 value.putDouble("deviation", random.nextExponential());
                 res.put("value", value);
                 return res;
@@ -137,7 +144,7 @@ public class RandomProvider {
                 NbtList list = new NbtList();
                 for (int k=0; k<j; k++) {
                     NbtCompound element = new NbtCompound();
-                    element.put("data", intProvider(random, bound, false));
+                    element.put("data", intProvider(random, lbound, bound, false));
                     element.putInt("weight", random.nextInt(100));
                     list.add(element);
                 }
