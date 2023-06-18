@@ -126,7 +126,7 @@ public class RandomTree extends RandomisedFeature {
                     dec.putFloat("probability", random.nextFloat());
                     dec.putInt("exclusion_radius_xz", Math.min((int) Math.floor(random.nextExponential()*2), 16));
                     dec.putInt("exclusion_radius_y", Math.min((int) Math.floor(random.nextExponential()*2), 16));
-                    dec.putInt("required_empty_blocks", Math.min((int) Math.floor(random.nextExponential()*2), 16));
+                    dec.putInt("required_empty_blocks", 1 + Math.min((int) Math.floor(random.nextExponential()*2), 15));
                     dec.put("block_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
                     NbtList directions = new NbtList();
                     String[] dirs = {"up", "down", "north", "south", "west", "east"};

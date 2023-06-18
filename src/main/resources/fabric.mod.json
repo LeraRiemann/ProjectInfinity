@@ -9,12 +9,12 @@
     "Lera Riemann"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/LeraRiemann",
+    "sources": "https://github.com/LeraRiemann/ProjectInfinity"
   },
 
   "license": "GNU LGPLv3",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/infinity/icon.png",
 
   "environment": "*",
   "entrypoints": {
@@ -26,7 +26,8 @@
     ]
   },
   "mixins": [
-    "infinity.mixins.json"
+    "infinity.mixins.json",
+    "dynreg.mixins.json"
   ],
 
   "depends": {

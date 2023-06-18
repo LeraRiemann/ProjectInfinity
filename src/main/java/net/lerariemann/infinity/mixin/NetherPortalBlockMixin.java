@@ -3,7 +3,9 @@ package net.lerariemann.infinity.mixin;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
@@ -17,11 +19,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.text.StringVisitable;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.state.property.Property;
+import net.minecraft.world.dimension.DimensionOptions;
+import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,6 +40,7 @@ import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
 
+import java.nio.file.Paths;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -47,14 +57,23 @@ public class NetherPortalBlockMixin {
 			ItemStack itemStack = ((ItemEntity)entity).getStack();
 			if (itemStack.getItem() == Items.WRITTEN_BOOK || itemStack.getItem() == Items.WRITABLE_BOOK) {
 				BookScreen.Contents bookContent = BookScreen.Contents.create(itemStack);
-				String string = IntStream.range(0, bookContent.getPageCount()).mapToObj(bookContent::getPage).map(u -> {return u.getString();}).collect(Collectors.joining("\n"));
+				String string = IntStream.range(0, bookContent.getPageCount()).mapToObj(bookContent::getPage).map(StringVisitable::getString).collect(Collectors.joining("\n"));
 				if(!string.isEmpty()){
 					int i = Hashing.sha256().hashString(string, StandardCharsets.UTF_8).asInt() & Integer.MAX_VALUE;
-					if (!world.isClient()) {
-						RandomDimension d = new RandomDimension(i, new RandomProvider("config/"+ InfinityMod.MOD_ID + "/"), world.getServer().getSavePath(WorldSavePath.DATAPACKS).toString());
-					}
 					modifyPortal(world, pos, state, i);
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+					MinecraftServer server = world.getServer();
+					RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, new Identifier(InfinityMod.MOD_ID, "generated_" + i));
+					if ((!world.isClient()) && (server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
+						LogManager.getLogger().info("Starting to generate");
+						RandomDimension d = new RandomDimension(i, new RandomProvider("config/"+ InfinityMod.MOD_ID + "/"), server.getSavePath(WorldSavePath.DATAPACKS).toString());
+						LogManager.getLogger().info("Generated dimension "+i);
+						DimensionGrabber grabber = new DimensionGrabber(server.getRegistryManager());
+						DimensionOptions options = grabber.grab_all(Paths.get(d.storagePath), i);
+						LogManager.getLogger().info("Grabbed dimension "+i);
+						((MinecraftServerAccess)(server)).addWorld(key, options);
+						LogManager.getLogger().info("Added dimension "+i);
+					}
 				}
 			}
 		}
@@ -66,7 +85,7 @@ public class NetherPortalBlockMixin {
 	}
 
 	private void changeDim(World world, BlockPos pos, Direction.Axis axis, int i) {
-		world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.getDefaultState().with((Property)AXIS, (Comparable)axis));
+		world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.getDefaultState().with(AXIS, axis));
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		((NeitherPortalBlockEntity)blockEntity).setDimension(i);
 	}
@@ -76,7 +95,7 @@ public class NetherPortalBlockMixin {
 		Queue<BlockPos> queue = Queues.newArrayDeque();
 		queue.add(pos);
 		BlockPos blockPos;
-		Direction.Axis axis = (Direction.Axis)state.get((Property<Direction.Axis>)AXIS);
+		Direction.Axis axis = state.get(AXIS);
 		while ((blockPos = queue.poll()) != null) {
 			set.add(blockPos);
 			BlockState blockState = world.getBlockState(blockPos);

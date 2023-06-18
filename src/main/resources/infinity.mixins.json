@@ -7,11 +7,10 @@
     "NetherPortalBlockMixin",
     "AbstractFireBlockMixin",
     "EntityMixin",
-    "PortalForcerMixin"
+    "PortalForcerMixin",
+    "MinecraftServerMixin"
   ],
   "client": [
-  ],
-  "server": [
   ],
   "injectors": {
     "defaultRequire": 1

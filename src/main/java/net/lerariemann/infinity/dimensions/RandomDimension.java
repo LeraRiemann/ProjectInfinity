@@ -3,8 +3,9 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.*;
-import org.apache.logging.log4j.LogManager;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -30,6 +31,14 @@ public class RandomDimension {
         name = "generated_"+i;
         String rootPath = path + "/" + name;
         storagePath = rootPath + "/data/" + InfinityMod.MOD_ID;
+        for (String s: new String[]{"dimension", "dimension_type", "worldgen/biome", "worldgen/configured_feature",
+        "worldgen/placed_feature", "worldgen/noise_settings"}) {
+            try {
+                Files.createDirectories(Paths.get(storagePath + "/" + s));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         NbtCompound data = new NbtCompound();
         vanilla_biomes = new ArrayList<>();
         random_biome_ids = new ArrayList<>();
@@ -152,7 +161,7 @@ public class RandomDimension {
     void addPresetBiomes(String preset) {
         NbtList lst = PROVIDER.presetregistry.get(preset);
         for (NbtElement i: lst) {
-            vanilla_biomes.add(((NbtString)i).asString());
+            vanilla_biomes.add(i.asString());
         }
     }
 
@@ -210,7 +219,6 @@ public class RandomDimension {
         else {
             int id = random.nextInt();
             random_biome_ids.add(id);
-            LogManager.getLogger().info(id);
             biome = "infinity:biome_" + id;
         }
         return biome;

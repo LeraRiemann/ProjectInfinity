@@ -5,7 +5,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
@@ -26,9 +25,7 @@ public class RandomFeaturesList {
         random = biome.random;
         PROVIDER = biome.PROVIDER;
         blocks = new ArrayList<>();
-        LogManager.getLogger().info(parent.fullname);
         surface_block = parent.parent.top_blocks.get(parent.fullname);
-        LogManager.getLogger().info(surface_block);
         configPath = PROVIDER.configPath + "features/";
         trees = CommonIO.commonListReader(configPath + "vegetation/trees_checked.json");
         storagePath = biome.parent.storagePath;

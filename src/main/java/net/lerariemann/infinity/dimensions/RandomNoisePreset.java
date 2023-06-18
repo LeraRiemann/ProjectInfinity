@@ -2,7 +2,6 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.*;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
@@ -18,7 +17,6 @@ public class RandomNoisePreset {
     public boolean randomiseblocks;
 
     RandomNoisePreset(RandomDimension dim) {
-        LogManager.getLogger().info("Generating noise preset");
         parent = dim;
         biomeRegistry = new HashMap<>();
         PROVIDER = dim.PROVIDER;
@@ -159,7 +157,6 @@ public class RandomNoisePreset {
             }
         }
         for (int id: parent.random_biome_ids) {
-            LogManager.getLogger().info(id);
             String name = "infinity:biome_" + id;
             registerRandomBiome(name);
         }
