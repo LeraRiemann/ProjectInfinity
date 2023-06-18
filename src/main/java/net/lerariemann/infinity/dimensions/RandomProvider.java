@@ -3,8 +3,13 @@ package net.lerariemann.infinity.dimensions;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import org.apache.logging.log4j.LogManager;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
+
+import static java.nio.file.Files.walk;
 
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
@@ -17,55 +22,32 @@ public class RandomProvider {
         registry = new HashMap<>();
         registry_uncommon = new HashMap<>();
         presetregistry = new HashMap<>();
-        register_uncommon("all_blocks");
-        register_uncommon("top_blocks");
-        register_uncommon("blocks_features");
-        register_uncommon("full_blocks");
-        register_uncommon("full_blocks_worldgen");
-        register("biomes");
-        register("noise_presets");
-        register("tags");
-        register("precipitation");
-        register("sounds");
-        register("music");
-        register("particles");
-        register("items");
-        register("mobs");
-        register("mob_categories");
-        register("fluids");
-        register("airs");
-        register("biome_source_types");
-        register("generator_types");
-        register("tree_decorators");
-        register("trunk_placers");
-        register("foliage_placers");
-        register("multinoise_presets");
-        for (String mob: mobcategories()) {
-            mobregister(mob);
-        }
-        for (String preset: registry.get("multinoise_presets").keys) {
-            if (!Objects.equals(preset, "none")) presetregister(preset);
+        register_all();
+    }
+
+    void register_all() {
+        register_category(registry, configPath + "weighed_lists/misc", CommonIO::commonListReader);
+        register_category(registry_uncommon, configPath + "weighed_lists/blocks", CommonIO::uncommonListReader);
+        register_category(registry, configPath + "weighed_lists/mobs", CommonIO::commonListReader);
+        register_category(presetregistry, configPath + "weighed_lists/multinoisepresets", s -> CommonIO.read(s).getList("elements", NbtElement.STRING_TYPE));
+    }
+
+    static <B> void register_category(Map<String, B> reg, String path, ListReader<B> reader) {
+        try {
+            walk(Paths.get(path)).forEach(p -> {
+                String fullname = p.toString();
+                if (fullname.endsWith(".json")) {
+                    LogManager.getLogger().info(fullname);
+                    String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
+                    if (!Objects.equals(name, "none")) reg.put(name, reader.op(fullname));
+                }});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     List<String> mobcategories() {
         return registry.get("mob_categories").keys;
-    }
-
-    void register(String key) {
-        registry.put(key, CommonIO.commonListReader(configPath + "weighed_lists/" + key + ".json"));
-    }
-
-    void mobregister(String key) {
-        registry.put(key, CommonIO.commonListReader(configPath + "mobs/" + key + ".json"));
-    }
-
-    void presetregister(String key) {
-        presetregistry.put(key, CommonIO.read(configPath + "multinoisepresets/" + key + ".json").getList("elements", NbtElement.STRING_TYPE));
-    }
-
-    void register_uncommon(String key) {
-        registry_uncommon.put(key, CommonIO.uncommonListReader(configPath + "weighed_lists/" + key + ".json"));
     }
 
     public static boolean weighedRandom(Random random, int weight0, int weight1) {
@@ -175,3 +157,4 @@ public class RandomProvider {
         return res;
     }
 }
+

@@ -74,7 +74,7 @@ public class RandomNoisePreset {
     String defaultblock() {
         switch(type_alike) {
             case "minecraft:end" -> {
-                return "minecraft:endstone";
+                return "minecraft:end_stone";
             }
             case "minecraft:nether" -> {
                 return "minecraft:netherrack";
@@ -101,7 +101,7 @@ public class RandomNoisePreset {
     String defaulttopblock() {
         switch(type_alike) {
             case "minecraft:end" -> {
-                return "minecraft:endstone";
+                return "minecraft:end_stone";
             }
             case "minecraft:nether" -> {
                 return "minecraft:netherrack";

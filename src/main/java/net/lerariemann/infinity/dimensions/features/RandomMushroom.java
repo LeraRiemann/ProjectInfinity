@@ -13,8 +13,8 @@ public class RandomMushroom extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        config.put("cap_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
-        config.put("stem_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        addRandomBlockProvider(config, "cap_provider", "full_blocks");
+        addRandomBlockProvider(config, "stem_provider", "full_blocks");
         config.putInt("foliage_radius", random.nextBoolean() ? 2 : 1 + (int)Math.floor(random.nextExponential()*2));
         return feature(config);
     }

@@ -9,7 +9,6 @@ import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
@@ -28,7 +27,6 @@ import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.minecraft.state.property.Property;
 import net.minecraft.world.dimension.DimensionOptions;
 import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -66,7 +64,8 @@ public class NetherPortalBlockMixin {
 					RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, new Identifier(InfinityMod.MOD_ID, "generated_" + i));
 					if ((!world.isClient()) && (server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
 						LogManager.getLogger().info("Starting to generate");
-						RandomDimension d = new RandomDimension(i, new RandomProvider("config/"+ InfinityMod.MOD_ID + "/"), server.getSavePath(WorldSavePath.DATAPACKS).toString());
+						RandomDimension d = new RandomDimension(i, ((MinecraftServerAccess)(server)).getDimensionProvider(),
+								server.getSavePath(WorldSavePath.DATAPACKS).toString());
 						LogManager.getLogger().info("Generated dimension "+i);
 						DimensionGrabber grabber = new DimensionGrabber(server.getRegistryManager());
 						DimensionOptions options = grabber.grab_all(Paths.get(d.storagePath), i);

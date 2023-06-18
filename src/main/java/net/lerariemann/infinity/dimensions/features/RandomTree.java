@@ -18,9 +18,9 @@ public class RandomTree extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        config.put("dirt_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
-        config.put("trunk_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
-        config.put("foliage_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        addRandomBlockProvider(config, "dirt_provider", "full_blocks");
+        addRandomBlockProvider(config, "trunk_provider", "full_blocks");
+        addRandomBlockProvider(config, "foliage_provider", "full_blocks");
         config.putBoolean("force_dirt", random.nextBoolean());
         config.putBoolean("ignore_vines", random.nextBoolean());
         config.put("trunk_placer", trunkPlacer());
@@ -34,11 +34,11 @@ public class RandomTree extends RandomisedFeature {
     NbtCompound rootPlacer() {
         NbtCompound res = new NbtCompound();
         res.putString("type", "mangrove_root_placer");
-        res.put("root_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        addRandomBlockProvider(res, "root_provider", "full_blocks");
         res.put("trunk_offset_y", RandomProvider.intProvider(random, 10, true));
         if (random.nextBoolean()) {
             NbtCompound above = new NbtCompound();
-            above.put("above_root_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
+            addRandomBlockProvider(above, "above_root_provider", "blocks_features");
             above.putFloat("above_root_placement_chance", random.nextFloat());
             res.put("above_root_placement", above);
         }
@@ -48,7 +48,7 @@ public class RandomTree extends RandomisedFeature {
         mangrove.putFloat("random_skew_chance", random.nextFloat());
         mangrove.putString("can_grow_through", PROVIDER.randomName(random, "tags"));
         mangrove.putString("muddy_roots_in", PROVIDER.randomName(random, "tags"));
-        mangrove.put("muddy_roots_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
+        addRandomBlockProvider(mangrove, "muddy_roots_provider", "full_blocks");
         res.put("mangrove_root_placement", mangrove);
         return res;
     }
@@ -121,13 +121,13 @@ public class RandomTree extends RandomisedFeature {
             dec.putString("type", type);
             switch(type) {
                 case "leave_vine", "cocoa", "beehive" -> dec.putFloat("probability", random.nextFloat());
-                case "alter_ground" -> dec.put("provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
+                case "alter_ground" -> addRandomBlockProvider(dec, "provider", "blocks_features");
                 case "attached_to_leaves" -> {
                     dec.putFloat("probability", random.nextFloat());
                     dec.putInt("exclusion_radius_xz", Math.min((int) Math.floor(random.nextExponential()*2), 16));
                     dec.putInt("exclusion_radius_y", Math.min((int) Math.floor(random.nextExponential()*2), 16));
                     dec.putInt("required_empty_blocks", 1 + Math.min((int) Math.floor(random.nextExponential()*2), 15));
-                    dec.put("block_provider", PROVIDER.randomBlockProvider(random, "blocks_features"));
+                    addRandomBlockProvider(dec, "block_provider", "blocks_features");
                     NbtList directions = new NbtList();
                     String[] dirs = {"up", "down", "north", "south", "west", "east"};
                     int j = 0;

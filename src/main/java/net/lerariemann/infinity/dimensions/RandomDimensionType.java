@@ -35,13 +35,13 @@ public class RandomDimensionType {
         parent.min_y = min_y;
         res.putInt("min_y", parent.min_y);
         int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
-        parent.height = max_y - parent.min_y;
+        parent.height = Math.max(128, max_y) - parent.min_y;
         res.putInt("height", parent.height);
         res.putInt("logical_height", random.nextBoolean() ? parent.height : parent.height/2 + random.nextInt(parent.height/2));
         res.putInt("monster_spawn_block_light_limit", random.nextInt(16));
         res.put("monster_spawn_light_level", RandomProvider.intProvider(random, 16, true));
         res.putString("infiniburn", dim.PROVIDER.randomName(random, "tags"));
-        if (RandomProvider.weighedRandom(random,2, 1)) res.putString("effect", RandomProvider.weighedRandom(random,4, 1) ? "minecraft:nether" : "minecraft:the_end");
+        res.putString("effects", dim.PROVIDER.randomName(random, "effects"));
         CommonIO.write(res, dim.storagePath + "/dimension_type", name + ".json");
     }
 

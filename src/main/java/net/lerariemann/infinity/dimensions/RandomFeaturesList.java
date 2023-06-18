@@ -15,20 +15,20 @@ public class RandomFeaturesList {
     public String storagePath;
 
     public Random random;
-    public List<String> blocks;
     public String surface_block;
     public WeighedStructure <String> trees;
     public RandomBiome parent;
+    public List<String> blocks;
 
     RandomFeaturesList(RandomBiome biome) {
         parent = biome;
         random = biome.random;
         PROVIDER = biome.PROVIDER;
-        blocks = new ArrayList<>();
         surface_block = parent.parent.top_blocks.get(parent.fullname);
         configPath = PROVIDER.configPath + "features/";
         trees = CommonIO.commonListReader(configPath + "vegetation/trees_checked.json");
         storagePath = biome.parent.storagePath;
+        blocks = new ArrayList<>();
         data = new NbtList();
         data.add(endIsland());
         data.add(lakes());
@@ -72,29 +72,19 @@ public class RandomFeaturesList {
             if (random.nextDouble() < element.getDouble("weight")) {
                 NbtElement featuretoadd = element.get("key");
                 res.add(featuretoadd);
-                checkForBlocks(featuretoadd.toString());
             }
         }
         return res;
     }
 
-    void checkForBlocks(String feature) {
-        switch (feature) {
-            case "minecraft:end_island_decorated" -> blocks.add("minecraft:endstone");
-            case "minecraft:small_basalt_columns", "minecraft:large_basalt_columns" -> blocks.add("minecraft:basalt");
-        }
-    }
-
     void addRandomFeature(NbtList res, RandomisedFeature feature) {
         res.add(NbtString.of(feature.fullName()));
-        for (String i : feature.BLOCKS) if (i != null) blocks.add(i);
     }
 
     NbtList endIsland() {
         NbtList res = getAllElements("rawgeneration");
         if (random.nextBoolean()) {
             res.add(NbtString.of((new RandomEndIsland(this)).fullName()));
-            blocks.add("minecraft:endstone");
         }
         return res;
     }

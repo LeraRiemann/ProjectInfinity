@@ -1,7 +1,9 @@
 package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.ImmutableList;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerTask;
@@ -47,10 +49,17 @@ public class MinecraftServerMixin implements MinecraftServerAccess {
         return null;
     }
     public Map<RegistryKey<World>, ServerWorld> worldsToAdd;
+    public RandomProvider dimensionProvider;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(CallbackInfo info) {
         worldsToAdd = new HashMap<>();
+        dimensionProvider = new RandomProvider("config/"+ InfinityMod.MOD_ID + "/");
+    }
+
+    @Override
+    public RandomProvider getDimensionProvider() {
+        return dimensionProvider;
     }
 
     @Override

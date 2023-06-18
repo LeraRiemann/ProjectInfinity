@@ -1,0 +1,16 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:overworld",
+      "weight": 0.6
+    },
+    {
+      "key": "minecraft:the_nether",
+      "weight": 0.2
+    },
+    {
+      "key": "minecraft:the_end",
+      "weight": 0.2
+    }
+  ]
+}

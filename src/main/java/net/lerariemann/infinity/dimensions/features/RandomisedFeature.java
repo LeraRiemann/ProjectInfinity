@@ -6,9 +6,7 @@ import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 public abstract class RandomisedFeature {
     protected final RandomProvider PROVIDER;
@@ -18,7 +16,6 @@ public abstract class RandomisedFeature {
     Random random;
     RandomFeaturesList parent;
     boolean place;
-    public Set<String> BLOCKS;
 
     public RandomisedFeature(RandomFeaturesList lst, String namecore) {
         this(lst.random.nextInt(), lst, namecore, true);
@@ -37,7 +34,6 @@ public abstract class RandomisedFeature {
         name = namecore + "_" + i;
         parent = lst;
         PROVIDER = parent.PROVIDER;
-        BLOCKS = new HashSet<>();
         place = placefeature;
     }
 
@@ -60,7 +56,6 @@ public abstract class RandomisedFeature {
         String block;
         if (RandomProvider.weighedRandom(random, 15, 1)) {
             block = PROVIDER.randomName(random, "blocks_features");
-            BLOCKS.add(block);
         }
         else {
             block = PROVIDER.randomName(random, "fluids");
@@ -72,23 +67,18 @@ public abstract class RandomisedFeature {
         config.put(key, RandomProvider.Block(block));
     }
 
-    void addBlock(NbtCompound config, String key, String block) {
-        addBlockCarefully(config, key, block);
-        BLOCKS.add(block);
-    }
-
     void addBlockProviderCarefully(NbtCompound config, String key, String block) {
         config.put(key, RandomProvider.blockToProvider(RandomProvider.Block(block)));
     }
 
     void addRandomBlockProvider(NbtCompound config, String key, String group) {
-        String block = PROVIDER.randomName(random, group);
-        addBlockProviderCarefully(config, key, block);
-        BLOCKS.add(block);
+        NbtCompound block = PROVIDER.randomBlock(random, group);
+        config.put(key, RandomProvider.blockToProvider(block));
     }
 
     void addRandomBlock(NbtCompound config, String key, String group) {
-        addBlock(config, key, PROVIDER.randomName(random, group));
+        NbtCompound block = PROVIDER.randomBlock(random, group);
+        config.put(key, block);
     }
 
     abstract NbtCompound feature();
