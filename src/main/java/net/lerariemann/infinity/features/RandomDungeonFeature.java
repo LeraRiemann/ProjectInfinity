@@ -40,10 +40,10 @@ public class RandomDungeonFeature extends Feature<RandomDungeonFeatureConfig> {
         BlockPos blockPos = context.getOrigin();
         Random random = context.getRandom();
         StructureWorldAccess structureWorldAccess = context.getWorld();
-        int j = random.nextInt(2) + context.getConfig().size;
+        int j = random.nextInt(2) + context.getConfig().size();
         int k = -j - 1;
         int l = j + 1;
-        int o = random.nextInt(2) + context.getConfig().size;
+        int o = random.nextInt(2) + context.getConfig().size();
         int p = -o - 1;
         int q = o + 1;
         int r = 0;
@@ -79,10 +79,10 @@ public class RandomDungeonFeature extends Feature<RandomDungeonFeatureConfig> {
                         }
                         if (!blockState.getMaterial().isSolid() || blockState.isOf(Blocks.CHEST)) continue;
                         if (t == -1 && random.nextInt(4) != 0) {
-                            this.setBlockStateIf(structureWorldAccess, blockPos2, context.getConfig().decorationProvider, predicate);
+                            this.setBlockStateIf(structureWorldAccess, blockPos2, context.getConfig().decorationProvider(), predicate);
                             continue;
                         }
-                        this.setBlockStateIf(structureWorldAccess, blockPos2, context.getConfig().mainProvider, predicate);
+                        this.setBlockStateIf(structureWorldAccess, blockPos2, context.getConfig().mainProvider(), predicate);
                         continue;
                     }
                     if (blockState.isOf(Blocks.CHEST) || blockState.isOf(Blocks.SPAWNER)) continue;
@@ -109,7 +109,7 @@ public class RandomDungeonFeature extends Feature<RandomDungeonFeatureConfig> {
         this.setBlockStateIf(structureWorldAccess, blockPos, Blocks.SPAWNER.getDefaultState(), predicate);
         BlockEntity blockEntity = structureWorldAccess.getBlockEntity(blockPos);
         if (blockEntity instanceof MobSpawnerBlockEntity mobSpawnerBlockEntity) {
-            mobSpawnerBlockEntity.setEntityType(EntityType.get(context.getConfig().mob).orElse(EntityType.PIG), random);
+            mobSpawnerBlockEntity.setEntityType(EntityType.get(context.getConfig().mob()).orElse(EntityType.PIG), random);
         } else {
             LOGGER.error("Failed to fetch mob spawner entity at ({}, {}, {})", blockPos.getX(), blockPos.getY(), blockPos.getZ());
         }

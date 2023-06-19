@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.dimensions;
+package net.lerariemann.infinity.util;
 
 public interface ListReader<B>  {
     B op(String s);

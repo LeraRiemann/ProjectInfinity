@@ -30,11 +30,11 @@
     },
     {
       "key": "minecraft:small_basalt_columns",
-      "weight": 0.05
+      "weight": 0.005
     },
     {
       "key": "minecraft:large_basalt_columns",
-      "weight": 0.05
+      "weight": 0.005
     }
   ]
 }

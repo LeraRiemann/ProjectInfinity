@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.dimensions.features;
 
-import net.lerariemann.infinity.dimensions.CommonIO;
+import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.minecraft.nbt.NbtCompound;
 

@@ -1,6 +1,7 @@
-package net.lerariemann.infinity.dimensions;
+package net.lerariemann.infinity.util;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.*;
 import org.apache.commons.io.FileUtils;
 

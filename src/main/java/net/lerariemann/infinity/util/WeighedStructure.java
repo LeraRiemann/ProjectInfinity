@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.dimensions;
+package net.lerariemann.infinity.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,9 @@ public class WeighedStructure<T> {
     public List<Double> weights;
     private double statsum;
 
-    WeighedStructure() {
-        keys = new ArrayList<T>();
-        weights = new ArrayList<Double>();
+    public WeighedStructure() {
+        keys = new ArrayList<>();
+        weights = new ArrayList<>();
         statsum = 0;
     }
 

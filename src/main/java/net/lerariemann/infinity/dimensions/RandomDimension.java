@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.*;
 
 import java.io.IOException;
@@ -159,7 +160,7 @@ public class RandomDimension {
     }
 
     void addPresetBiomes(String preset) {
-        NbtList lst = PROVIDER.presetregistry.get(preset);
+        NbtList lst = PROVIDER.presetRegistry.get(preset);
         for (NbtElement i: lst) {
             vanilla_biomes.add(i.asString());
         }

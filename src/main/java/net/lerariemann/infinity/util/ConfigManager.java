@@ -1,7 +1,8 @@
-package net.lerariemann.infinity;
+package net.lerariemann.infinity.util;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.lerariemann.infinity.InfinityMod;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,10 +30,10 @@ public class ConfigManager {
             throw new RuntimeException(e);
         }
     }
-    static void registerAllConfigs() {
+    public static void registerAllConfigs() {
         ModContainer modContainer = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
         try {
-            walk(modContainer.getRootPaths().get(0).resolve("config")).forEach(path -> registerConfig(path));
+            walk(modContainer.getRootPaths().get(0).resolve("config")).forEach(ConfigManager::registerConfig);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

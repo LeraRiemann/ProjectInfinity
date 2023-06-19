@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.dimensions.CommonIO;
+import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
@@ -79,6 +79,10 @@ public abstract class RandomisedFeature {
     void addRandomBlock(NbtCompound config, String key, String group) {
         NbtCompound block = PROVIDER.randomBlock(random, group);
         config.put(key, block);
+    }
+
+    void addRandomIntProvider(NbtCompound config, String key, int lbound, int bound) {
+        config.put(key, RandomProvider.intProvider(random, lbound, bound, true));
     }
 
     abstract NbtCompound feature();

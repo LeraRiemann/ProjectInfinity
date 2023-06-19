@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.dimensions.features.*;
+import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -16,7 +18,7 @@ public class RandomFeaturesList {
 
     public Random random;
     public String surface_block;
-    public WeighedStructure <String> trees;
+    public WeighedStructure<String> trees;
     public RandomBiome parent;
     public List<String> blocks;
 
@@ -46,14 +48,14 @@ public class RandomFeaturesList {
     NbtList vegetation() {
         boolean useTree = random.nextBoolean();
         NbtList res = new NbtList();
-        if (!useTree) res.add(NbtString.of((new RandomVegetation(this)).fullName()));
+        if (!useTree) addRandomFeature(res, new RandomVegetation(this), "vegetation");
         res.addAll(getAllElements("vegetation/part1"));
-        if (useTree) res.add(randomTree());
+        if (useTree && roll("vegetation")) res.add(randomTree());
         res.add(randomPlant("flowers"));
         res.add(randomPlant("grass"));
         res.addAll(getAllElements("vegetation/part2"));
-        if (random.nextBoolean()) res.add(NbtString.of(new RandomSurfacePatch(this).fullName()));
-        if (random.nextBoolean()) res.add(NbtString.of(new RandomFloatingPatch(this).fullName()));
+        addRandomFeature(res, new RandomSurfacePatch(this), "surface_patch");
+        addRandomFeature(res, new RandomFloatingPatch(this), "floating_patch");
         res.add(randomPlant("seagrass"));
         res.addAll(getAllElements("vegetation/part3"));
         return res;
@@ -81,55 +83,61 @@ public class RandomFeaturesList {
         res.add(NbtString.of(feature.fullName()));
     }
 
+    boolean roll(String key) {
+        return (random.nextDouble() < PROVIDER.chance(key));
+    }
+
+    void addRandomFeature(NbtList res, RandomisedFeature feature, String key) {
+        if (roll(key)) addRandomFeature(res, feature);
+    }
+
     NbtList endIsland() {
         NbtList res = getAllElements("rawgeneration");
-        if (random.nextBoolean()) {
-            res.add(NbtString.of((new RandomEndIsland(this)).fullName()));
-        }
+        addRandomFeature(res, new RandomEndIsland(this), "end_island");
         return res;
     }
 
     NbtList lakes() {
         NbtList res = getAllElements("lakes");
-        if (random.nextBoolean()) res.add(NbtString.of((new RandomLake(this)).fullName()));
+        addRandomFeature(res, new RandomLake(this), "lake");
         return res;
     }
 
     NbtList localModifications() {
         NbtList res = getAllElements("localmodifications");
-        if (random.nextBoolean()) addRandomFeature(res, new RandomIceberg(this));
-        if (random.nextBoolean()) addRandomFeature(res, new RandomGeode(this));
-        if (random.nextBoolean()) addRandomFeature(res, new RandomRock(this));
+        addRandomFeature(res, new RandomIceberg(this), "iceberg");
+        addRandomFeature(res, new RandomGeode(this), "geode");
+        addRandomFeature(res, new RandomRock(this), "rock");
         return res;
     }
 
     NbtList undergroundStructures() {
         NbtList res = getAllElements("undergroundstructures");
-        addRandomFeature(res, new RandomDungeon(this));
+        addRandomFeature(res, new RandomDungeon(this), "dungeon");
         return res;
     }
 
     NbtList surfaceStructures() {
         NbtList res = getAllElements("surfacestructures");
-        if (random.nextBoolean()) addRandomFeature(res, new RandomDelta(this));
+        addRandomFeature(res, new RandomDelta(this), "delta");
+        addRandomFeature(res, new RandomColumns(this), "columns");
         return res;
     }
 
     NbtString randomTree() {
-        int a = (Objects.equals(surface_block, "minecraft:grass_block")) ? 4 : 3;
-        switch (random.nextInt(a)) {
-            case 3 -> {
-                return randomPlant("trees");
-            }
-            case 2 -> {
+        if (Objects.equals(surface_block, "minecraft:grass_block") && roll("use_vanilla_trees")) {
+            return randomPlant("trees");
+        }
+        else switch (PROVIDER.floralDistribution.getRandomElement(random)) {
+            case "fungi" -> {
                 RandomFungus fungus = new RandomFungus(this);
                 return NbtString.of(fungus.fullName());
             }
-            case 1 -> {
+            case "trees" -> {
                 RandomTree tree = new RandomTree(this, true);
                 return NbtString.of(tree.fullName());
             }
-            case 0 -> {
+            case "mushrooms" -> {
                 RandomMushroom mushroom = new RandomMushroom(this, true);
                 return NbtString.of(mushroom.fullName());
             }

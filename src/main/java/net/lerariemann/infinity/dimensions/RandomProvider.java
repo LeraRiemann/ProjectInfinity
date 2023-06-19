@@ -1,5 +1,8 @@
 package net.lerariemann.infinity.dimensions;
 
+import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.ListReader;
+import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -13,23 +16,46 @@ import static java.nio.file.Files.walk;
 
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
-    public Map<String, WeighedStructure<NbtElement>> registry_uncommon;
-    public Map<String, NbtList> presetregistry;
+    public Map<String, WeighedStructure<NbtElement>> blockRegistry;
+    public Map<String, NbtList> presetRegistry;
+    public Map<String, Double> rootChances;
+    public WeighedStructure<String> floralDistribution;
     public String configPath;
+    public boolean runtimeGenerationEnabled;
 
     public RandomProvider(String path) {
         configPath = path;
         registry = new HashMap<>();
-        registry_uncommon = new HashMap<>();
-        presetregistry = new HashMap<>();
+        blockRegistry = new HashMap<>();
+        presetRegistry = new HashMap<>();
+        rootChances = new HashMap<>();
+        floralDistribution = new WeighedStructure<>();
         register_all();
     }
 
     void register_all() {
+        read_root_config();
         register_category(registry, configPath + "weighed_lists/misc", CommonIO::commonListReader);
-        register_category(registry_uncommon, configPath + "weighed_lists/blocks", CommonIO::uncommonListReader);
+        register_category(blockRegistry, configPath + "weighed_lists/blocks", CommonIO::uncommonListReader);
         register_category(registry, configPath + "weighed_lists/mobs", CommonIO::commonListReader);
-        register_category(presetregistry, configPath + "weighed_lists/multinoisepresets", s -> CommonIO.read(s).getList("elements", NbtElement.STRING_TYPE));
+        register_category(presetRegistry, configPath + "weighed_lists/multinoisepresets", s -> CommonIO.read(s).getList("elements", NbtElement.STRING_TYPE));
+    }
+
+    void read_root_config() {
+        NbtCompound rootConfig = CommonIO.read(configPath + "infinity.json");
+        runtimeGenerationEnabled = rootConfig.getBoolean("runtimeGenerationEnabled");
+        NbtCompound rootchances = rootConfig.getCompound("rootChances");
+        for (String s: rootchances.getKeys()) {
+            rootChances.put(s, rootchances.getDouble(s));
+        }
+        NbtCompound flora = rootConfig.getCompound("floralDistribution");
+        for (String s: flora.getKeys()) {
+            floralDistribution.add(s, flora.getDouble(s));
+        }
+    }
+
+    double chance(String key) {
+        return rootChances.get(key);
     }
 
     static <B> void register_category(Map<String, B> reg, String path, ListReader<B> reader) {
@@ -71,7 +97,7 @@ public class RandomProvider {
     public String randomName(Random random, String key) {
         switch (key) {
             case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
-                NbtElement compound = registry_uncommon.get(key).getRandomElement(random);
+                NbtElement compound = blockRegistry.get(key).getRandomElement(random);
                 if (compound instanceof NbtCompound) return ((NbtCompound)compound).getString("Name");
                 else return compound.asString();
             }
@@ -84,7 +110,7 @@ public class RandomProvider {
     public NbtCompound randomBlock(Random random, String key) {
         switch (key) {
             case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
-                NbtElement compound = registry_uncommon.get(key).getRandomElement(random);
+                NbtElement compound = blockRegistry.get(key).getRandomElement(random);
                 if (compound instanceof NbtCompound) return ((NbtCompound)compound);
                 else return Block(compound.asString());
             }

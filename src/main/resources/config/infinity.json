@@ -1,0 +1,22 @@
+{
+  "runtimeGenerationEnabled": true,
+  "rootChances": {
+    "vegetation": 1.0,
+    "surface_patch": 0.5,
+    "floating_patch": 0.1,
+    "end_island": 0.2,
+    "lake": 0.5,
+    "iceberg": 0.33,
+    "geode": 0.5,
+    "rock": 0.33,
+    "dungeon": 1.0,
+    "delta": 0.2,
+    "columns": 1.0,
+    "use_vanilla_trees": 0.25
+  },
+  "floralDistribution": {
+    "fungi": 1.0,
+    "mushrooms": 1.0,
+    "trees": 1.0
+  }
+}
