@@ -8,7 +8,7 @@ public class RandomDelta extends RandomisedFeature {
     public RandomDelta(RandomFeaturesList parent) {
         super(parent, "delta");
         id = "delta_feature";
-        type = "everylayer";
+        type = "everylayer_biome";
         save(1 + random.nextInt(50));
     }
 

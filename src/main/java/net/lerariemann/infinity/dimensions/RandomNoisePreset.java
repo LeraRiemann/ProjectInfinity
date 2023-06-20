@@ -148,7 +148,6 @@ public class RandomNoisePreset {
             String name = "infinity:biome_" + id;
             registerRandomBiome(name);
         }
-        for (String key: new String[]{"surface", "shallow", "deep"}) biomeRegistry.get(key).add("default_overworld");
     }
 
     void registerRandomBiome(String biome) {
@@ -251,6 +250,9 @@ public class RandomNoisePreset {
     NbtCompound readAllBiomes(String category) {
         NbtList sequence = new NbtList();
         for (String biome : biomeRegistry.get(category)) sequence.add(readBiome(category, biome));
+        if (Objects.equals(category, "surface") || Objects.equals(category, "shallow") || Objects.equals(category, "deep")) {
+            sequence.add(readBiome(category, "default_overworld"));
+        }
         return sequenceType(sequence);
     }
 
@@ -287,24 +289,27 @@ public class RandomNoisePreset {
     }
 
     NbtCompound blockType(String block) {
+        return blockType(RandomProvider.Block(block));
+    }
+
+    NbtCompound blockType(NbtCompound block) {
         NbtCompound res = startingRule("block");
-        NbtCompound result_state = RandomProvider.Block(block);
-        res.put("result_state", result_state);
+        res.put("result_state", block);
         return res;
     }
 
     NbtCompound readBiome(String category, String biome) {
         if (!biome.startsWith("infinity:")) return resolve("surface_rule/" + category, biome);
         else {
-            String block;
-            boolean useRandomBlock = randomiseblocks && parent.random.nextBoolean();
+            NbtCompound block;
+            boolean useRandomBlock = randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
             if (category.equals("surface")) {
-                block = useRandomBlock ? PROVIDER.randomName(parent.random, "top_blocks") : defaultblock("minecraft:grass_block");
-                parent.top_blocks.put(biome, block);
+                block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "top_blocks") : RandomProvider.Block(defaultblock("minecraft:grass_block"));
+                parent.top_blocks.put(biome, block.getString("Name"));
             }
             else {
-                block = useRandomBlock ? PROVIDER.randomName(parent.random, "full_blocks") : defaultblock("minecraft:dirt");
-                parent.underwater.put(biome, block);
+                block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "full_blocks") : RandomProvider.Block(defaultblock("minecraft:dirt"));
+                parent.underwater.put(biome, block.getString("Name"));
             }
             return biomeCondition(biome, blockType(block));
         }

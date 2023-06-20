@@ -104,6 +104,7 @@ public class RandomFeaturesList {
 
     NbtList surfaceStructures() {
         NbtList res = getAllElements("surfacestructures");
+        addRandomFeature(res, new RandomEndSpikes(this), "end_spikes");
         addRandomFeature(res, new RandomDelta(this), "delta");
         addRandomFeature(res, new RandomColumns(this), "columns");
         return res;
@@ -130,7 +131,7 @@ public class RandomFeaturesList {
     }
 
     NbtList vegetation() {
-        boolean useTree = random.nextBoolean();
+        boolean useTree = PROVIDER.roll(random, "use_one_tree");
         NbtList res = new NbtList();
         if (!useTree) addRandomFeature(res, new RandomVegetation(this), "vegetation");
         res.addAll(getAllElements("vegetation/part1"));

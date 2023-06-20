@@ -44,7 +44,7 @@ public class RandomCarver {
             putScale(shape, "horizontal_radius_factor", 2.0f);
             shape.putFloat("vertical_radius_default_factor", random.nextFloat(0.5f, 2.0f));
             shape.putFloat("vertical_radius_center_factor", random.nextFloat(0.5f, 2.0f));
-            shape.putInt("width_smoothness", random.nextInt(8));
+            shape.putInt("width_smoothness", 1 + random.nextInt(8));
             config.put("shape", shape);
         }
         res.put("config", config);

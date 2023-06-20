@@ -1,31 +1,12 @@
 {
   "placement": [
     {
-      "type": "minecraft:count",
-      "count": {
-        "type": "minecraft:weighted_list",
-        "distribution": [
-          {
-            "data": 0,
-            "weight": %d
-          },
-          {
-            "data": 1,
-            "weight": 1
-          }
-        ]
-      }
-    },
-    {
-      "type": "minecraft:in_square"
+      "type": "minecraft:count_on_every_layer",
+      "count": %d
     },
     {
       "type": "minecraft:surface_water_depth_filter",
       "max_water_depth": %d
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "OCEAN_FLOOR"
     },
     {
       "type": "minecraft:block_predicate_filter",

@@ -19,7 +19,7 @@ public class RandomDisk extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        NbtCompound block = PROVIDER.randomBlock(random, "blocks_features");
+        NbtCompound block = PROVIDER.randomBlock(random, "full_blocks");
         config.putInt("half_height", random.nextInt(5));
         addRandomIntProvider(config, "radius", 0, 9);
         NbtCompound targets = new NbtCompound();

@@ -6,7 +6,6 @@ import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -65,7 +64,6 @@ public class RandomProvider {
             walk(Paths.get(path)).forEach(p -> {
                 String fullname = p.toString();
                 if (fullname.endsWith(".json")) {
-                    LogManager.getLogger().info(fullname);
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
                     if (!Objects.equals(name, "none")) reg.put(name, reader.op(fullname));
                 }});
@@ -230,33 +228,30 @@ public class RandomProvider {
     }
 
     public static NbtCompound floatProvider(Random random, float lbound, float bound) {
-        int i = random.nextInt(4);
-        String[] types = new String[]{"constant", "uniform", "clamped_normal", "trapezoid"};
+        int i = random.nextInt(3);
+        String[] types = new String[]{"uniform", "clamped_normal", "trapezoid"};
         NbtCompound res = new NbtCompound();
         res.putString("type", types[i]);
         NbtCompound value = new NbtCompound();
+        float a = random.nextFloat(lbound, bound);
+        float b = random.nextFloat(lbound, bound);
+        float min = Math.min(a, b);
+        float max = Math.max(a, b);
         switch (i) {
-            case 0 -> value.putFloat("value", random.nextFloat(lbound, bound));
-            case 1, 2, 3 -> {
-                float a = random.nextFloat(lbound, bound);
-                float b = random.nextFloat(lbound, bound);
-                float min = Math.min(a, b);
-                float max = Math.max(a, b);
-                if (i == 1) {
-                    value.putFloat("max_exclusive", max);
-                    value.putFloat("min_inclusive", min);
-                }
-                if (i == 2) {
-                    value.putFloat("max", max);
-                    value.putFloat("min", min);
-                    value.putFloat("mean", random.nextFloat(min, max));
-                    value.putFloat("deviation", random.nextFloat(max - min));
-                }
-                if (i == 3) {
-                    value.putFloat("max", max);
-                    value.putFloat("min", min);
-                    value.putFloat("plateau", random.nextFloat(max - min));
-                }
+            case 0 -> {
+                value.putFloat("max_exclusive", max);
+                value.putFloat("min_inclusive", min);
+            }
+            case 1 -> {
+                value.putFloat("max", max);
+                value.putFloat("min", min);
+                value.putFloat("mean", random.nextFloat(min, max));
+                value.putFloat("deviation", random.nextFloat(max - min));
+            }
+            case 2 -> {
+                value.putFloat("max", max);
+                value.putFloat("min", min);
+                value.putFloat("plateau", random.nextFloat(max - min));
             }
         }
         res.put("value", value);

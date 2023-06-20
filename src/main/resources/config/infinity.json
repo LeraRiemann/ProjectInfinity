@@ -13,11 +13,13 @@
     },
     "noise_settings": {
       "randomise_blocks": 0.75,
+      "randomise_biome_blocks": 0.75,
       "solid_oceans": 0.02,
       "solid_lakes": 0.05
     },
     "biome": {
       "use_random_biome": 0.75,
+      "use_one_tree": 0.0,
       "use_particles": 0.5,
       "ambient_sound": 0.0625,
       "mood_sound": 0.125,
@@ -34,6 +36,7 @@
       "geode": 0.5,
       "rock": 0.33,
       "dungeon": 1.0,
+      "end_spikes": 0.2,
       "delta": 0.2,
       "columns": 0.2,
       "blobs": 0.33,
@@ -45,7 +48,10 @@
       "flood_geodes": 0.25,
       "use_vanilla_trees": 0.25,
       "huge_trees": 0.25,
-      "ores_spawn_everywhere": 0.1
+      "ores_spawn_everywhere": 0.02,
+      "scatter_ores": 0.2,
+      "scatter_end_spikes": 0.67,
+      "cage_crystals": 0.2
     }
   },
   "floralDistribution": {

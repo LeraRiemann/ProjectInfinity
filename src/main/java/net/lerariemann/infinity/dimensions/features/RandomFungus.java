@@ -11,7 +11,7 @@ public class RandomFungus extends RandomisedFeature {
         id = "huge_fungus";
         type = "everylayer";
         mainsurfaceblock = parent.surface_block;
-        save(1 + random.nextInt(10));
+        save(1 + random.nextInt(4));
     }
 
     NbtCompound feature() {

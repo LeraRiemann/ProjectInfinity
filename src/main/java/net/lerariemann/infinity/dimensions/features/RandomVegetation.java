@@ -17,29 +17,23 @@ public class RandomVegetation extends RandomisedFeature {
         trees_vanilla = parent.trees;
         id = "random_selector";
         type = "vegetation";
-        save(1 + random.nextInt(10), (int) Math.floor(random.nextExponential()*4), parent.surface_block);
+        save(1 + random.nextInt(10), (int) Math.floor(random.nextExponential()*4));
     }
 
     NbtElement randomTree() {
         String tree = "minecraft:oak";
-        if (random.nextBoolean()) {
+        if (Objects.equals(parent.surface_block, "minecraft:grass_block") && parent.roll("use_vanilla_trees")) {
             tree = trees_vanilla.getRandomElement(random);
-            if (!Objects.equals(tree, "minecraft:azalea_tree")) return NbtString.of(tree);
+            return NbtString.of(tree);
         }
         else {
-            switch(random.nextInt(3)) {
-                case 0 -> {
-                    tree = (new RandomFungus(parent)).fullName();
-                    return NbtString.of(tree);
-                }
-                case 1 -> tree = (new RandomMushroom(parent, false)).fullName();
-                case 2 -> tree = (new RandomTree(parent, false)).fullName();
+            switch(PROVIDER.floralDistribution.getRandomElement(random)) {
+                case "fungi" -> tree = (new RandomFungus(parent)).fullName();
+                case "mushrooms" -> tree = (new RandomMushroom(parent, true)).fullName();
+                case "trees" -> tree = (new RandomTree(parent, true)).fullName();
             }
         }
-        NbtCompound placedfeature = new NbtCompound();
-        placedfeature.putString("feature", tree);
-        placedfeature.put("placement", new NbtList());
-        return placedfeature;
+        return NbtString.of(tree);
     }
 
     NbtCompound feature() {

@@ -1,10 +1,6 @@
 {
   "elements": [
     {
-      "key": "minecraft:azalea_tree",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:acacia_checked",
       "weight": 1.0
     },

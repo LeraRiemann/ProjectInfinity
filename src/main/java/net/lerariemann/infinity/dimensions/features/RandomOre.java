@@ -12,7 +12,7 @@ public class RandomOre extends RandomisedFeature {
         super(parent, "ore");
         daddy = parent.parent.parent;
         type = "ore";
-        id = (random.nextBoolean()) ? "ore" : "scattered_ore";
+        id = (parent.PROVIDER.roll(random, "scatter_ores")) ? "scattered_ore" : "ore";
         int center = random.nextInt(daddy.min_y, daddy.min_y + daddy.height);
         int sigma = random.nextInt(daddy.height);
         save(1 + random.nextInt(128), center + sigma, center - sigma);

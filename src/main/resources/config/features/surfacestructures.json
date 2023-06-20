@@ -2,7 +2,7 @@
   "elements": [
     {
       "key": "minecraft:end_spike",
-      "weight": 0.2
+      "weight": 0.0
     },
     {
       "key": "minecraft:end_gateway_return",

@@ -7,7 +7,7 @@ public class RandomColumns extends RandomisedFeature {
     public RandomColumns(RandomFeaturesList parent) {
         super(parent, "columns");
         id = "random_columns";
-        type = "everylayer";
+        type = "everylayer_biome";
         save(1 + random.nextInt(4));
     }
 
