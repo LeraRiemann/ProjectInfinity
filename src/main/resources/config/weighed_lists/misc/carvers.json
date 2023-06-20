@@ -1,0 +1,20 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:nether_cave",
+      "weight": 0.75
+    },
+    {
+      "key": "minecraft:cave",
+      "weight": 0.75
+    },
+    {
+      "key": "minecraft:cave_extra_underground",
+      "weight": 0.75
+    },
+    {
+      "key": "minecraft:canyon",
+      "weight": 0.75
+    }
+  ]
+}

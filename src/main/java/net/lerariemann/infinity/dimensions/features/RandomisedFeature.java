@@ -54,7 +54,7 @@ public abstract class RandomisedFeature {
 
     String genBlockOrFluid() {
         String block;
-        if (RandomProvider.weighedRandom(random, 15, 1)) {
+        if (parent.roll("solid_lakes")) {
             block = PROVIDER.randomName(random, "blocks_features");
         }
         else {

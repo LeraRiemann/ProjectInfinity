@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
-import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -15,7 +14,7 @@ public class RandomGeode extends RandomisedFeature {
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         NbtCompound blocks = new NbtCompound();
-        blocks.put("filling_provider", PROVIDER.randomBlockProvider(random, RandomProvider.weighedRandom(random,1, 3)? "airs" : "fluids"));
+        blocks.put("filling_provider", PROVIDER.randomBlockProvider(random, parent.roll("flood_geodes") ? "fluids" : "airs"));
         blocks.put("inner_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
         blocks.put("alternate_inner_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));
         blocks.put("middle_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks"));

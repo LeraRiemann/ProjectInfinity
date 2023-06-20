@@ -7,6 +7,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
@@ -38,27 +39,11 @@ public class RandomFeaturesList {
         data.add(undergroundStructures());
         data.add(surfaceStructures());
         data.add(getAllElements("strongholds"));
-        data.add(getAllElements("undergroundores"));
-        data.add(getAllElements("undergrounddecoration"));
+        data.add(undergroundOres());
+        data.add(undergroundDecoration());
         data.add(getAllElements("fluidsprings"));
         data.add(vegetation());
         data.add(getAllElements("toplayermodification"));
-    }
-
-    NbtList vegetation() {
-        boolean useTree = random.nextBoolean();
-        NbtList res = new NbtList();
-        if (!useTree) addRandomFeature(res, new RandomVegetation(this), "vegetation");
-        res.addAll(getAllElements("vegetation/part1"));
-        if (useTree && roll("vegetation")) res.add(randomTree());
-        res.add(randomPlant("flowers"));
-        res.add(randomPlant("grass"));
-        res.addAll(getAllElements("vegetation/part2"));
-        addRandomFeature(res, new RandomSurfacePatch(this), "surface_patch");
-        addRandomFeature(res, new RandomFloatingPatch(this), "floating_patch");
-        res.add(randomPlant("seagrass"));
-        res.addAll(getAllElements("vegetation/part3"));
-        return res;
     }
 
     NbtString randomPlant(String path) {
@@ -83,8 +68,8 @@ public class RandomFeaturesList {
         res.add(NbtString.of(feature.fullName()));
     }
 
-    boolean roll(String key) {
-        return (random.nextDouble() < PROVIDER.chance(key));
+    public boolean roll(String key) {
+        return PROVIDER.roll(random, key);
     }
 
     void addRandomFeature(NbtList res, RandomisedFeature feature, String key) {
@@ -121,6 +106,42 @@ public class RandomFeaturesList {
         NbtList res = getAllElements("surfacestructures");
         addRandomFeature(res, new RandomDelta(this), "delta");
         addRandomFeature(res, new RandomColumns(this), "columns");
+        return res;
+    }
+
+    NbtList undergroundOres() {
+        NbtList res = getAllElements("undergroundores");
+        for (String s : parent.parent.underwater.keySet()) LogManager.getLogger().info(s);
+        int num_ores = random.nextInt( 4);
+        int num_disks = Math.max(3, (int) Math.floor(random.nextExponential()));
+        for (int i = 0; i < num_ores; i++) {
+            addRandomFeature(res, new RandomOre(this));
+        }
+        for (int i = 0; i < num_disks; i++) {
+            addRandomFeature(res, new RandomDisk(this));
+        }
+        return res;
+    }
+
+    NbtList undergroundDecoration() {
+        NbtList res = getAllElements("undergrounddecoration");
+        addRandomFeature(res, new RandomBlobs(this), "blobs");
+        return res;
+    }
+
+    NbtList vegetation() {
+        boolean useTree = random.nextBoolean();
+        NbtList res = new NbtList();
+        if (!useTree) addRandomFeature(res, new RandomVegetation(this), "vegetation");
+        res.addAll(getAllElements("vegetation/part1"));
+        if (useTree && roll("vegetation")) res.add(randomTree());
+        res.add(randomPlant("flowers"));
+        res.add(randomPlant("grass"));
+        res.addAll(getAllElements("vegetation/part2"));
+        addRandomFeature(res, new RandomSurfacePatch(this), "surface_patch");
+        addRandomFeature(res, new RandomFloatingPatch(this), "floating_patch");
+        res.add(randomPlant("seagrass"));
+        res.addAll(getAllElements("vegetation/part3"));
         return res;
     }
 

@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.util;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.*;
 import org.apache.commons.io.FileUtils;
 
@@ -49,9 +48,8 @@ public class CommonIO {
         }
     }
 
-    public static NbtCompound readAndAddBlock(String path, String str) {
+    public static NbtCompound readAndAddBlock(String path, NbtCompound block) {
         File file = new File(path);
-        NbtCompound block = RandomProvider.Block(str);
         try {
             String content = String.format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), CompoundToString(block, 0));
             return StringNbtReader.parse(content);

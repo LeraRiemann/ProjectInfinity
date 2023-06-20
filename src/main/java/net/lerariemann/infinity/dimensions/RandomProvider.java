@@ -45,8 +45,10 @@ public class RandomProvider {
         NbtCompound rootConfig = CommonIO.read(configPath + "infinity.json");
         runtimeGenerationEnabled = rootConfig.getBoolean("runtimeGenerationEnabled");
         NbtCompound rootchances = rootConfig.getCompound("rootChances");
-        for (String s: rootchances.getKeys()) {
-            rootChances.put(s, rootchances.getDouble(s));
+        for (String c: rootchances.getKeys()) {
+            for (String s: rootchances.getCompound(c).getKeys()) {
+                rootChances.put(s, rootchances.getCompound(c).getDouble(s));
+            }
         }
         NbtCompound flora = rootConfig.getCompound("floralDistribution");
         for (String s: flora.getKeys()) {
@@ -54,8 +56,8 @@ public class RandomProvider {
         }
     }
 
-    double chance(String key) {
-        return rootChances.get(key);
+    public boolean roll(Random random, String key) {
+        return (random.nextDouble() < rootChances.get(key));
     }
 
     static <B> void register_category(Map<String, B> reg, String path, ListReader<B> reader) {
@@ -74,11 +76,6 @@ public class RandomProvider {
 
     List<String> mobcategories() {
         return registry.get("mob_categories").keys;
-    }
-
-    public static boolean weighedRandom(Random random, int weight0, int weight1) {
-        int i = random.nextInt(weight0+weight1);
-        return i < weight1;
     }
 
     public static NbtCompound Block(String block) {

@@ -1,18 +1,50 @@
 {
   "runtimeGenerationEnabled": true,
   "rootChances": {
-    "vegetation": 1.0,
-    "surface_patch": 0.5,
-    "floating_patch": 0.1,
-    "end_island": 0.2,
-    "lake": 0.5,
-    "iceberg": 0.33,
-    "geode": 0.5,
-    "rock": 0.33,
-    "dungeon": 1.0,
-    "delta": 0.2,
-    "columns": 1.0,
-    "use_vanilla_trees": 0.25
+    "dimension_type": {
+      "ultrawarm": 0.5,
+      "natural": 0.5,
+      "has_skylight": 0.75,
+      "piglin_safe": 0.5,
+      "bed_works": 0.5,
+      "respawn_anchor_works": 0.5,
+      "has_raids": 0.5,
+      "fixed_time": 0.5
+    },
+    "noise_settings": {
+      "randomise_blocks": 0.75,
+      "solid_oceans": 0.02,
+      "solid_lakes": 0.05
+    },
+    "biome": {
+      "use_random_biome": 0.75,
+      "use_particles": 0.5,
+      "ambient_sound": 0.0625,
+      "mood_sound": 0.125,
+      "additions_sound": 0.125,
+      "music": 1.0,
+      "temperature_modifier_frozen": 0.25
+    },
+    "features_chances": {
+      "end_island": 0.2,
+      "lake": 0.5,
+      "iceberg": 0.33,
+      "geode": 0.5,
+      "rock": 0.33,
+      "dungeon": 1.0,
+      "delta": 0.2,
+      "columns": 0.2,
+      "blobs": 0.33,
+      "vegetation": 1.0,
+      "surface_patch": 0.5,
+      "floating_patch": 0.1
+    },
+    "features_rules": {
+      "flood_geodes": 0.25,
+      "use_vanilla_trees": 0.25,
+      "huge_trees": 0.25,
+      "ores_spawn_everywhere": 0.1
+    }
   },
   "floralDistribution": {
     "fungi": 1.0,

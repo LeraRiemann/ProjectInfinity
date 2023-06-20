@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.*;
 
 import java.util.*;
@@ -26,15 +27,19 @@ public class RandomBiome {
         NbtCompound res = new NbtCompound();
         res.putDouble("temperature", -1 + random.nextFloat()*3);
         res.putString("precipitation", PROVIDER.randomName(random, "precipitation"));
-        res.putString("temperature_modifier", RandomProvider.weighedRandom(random,3, 1) ? "none" : "frozen");
+        res.putString("temperature_modifier", roll("temperature_modifier_frozen") ? "frozen" : "none");
         res.putDouble("downfall", random.nextDouble());
         res.put("effects", randomEffects());
         if (random.nextBoolean()) res.putFloat("creature_spawn_probability", random.nextFloat()*0.5f);
         res.put("spawners", (new RandomMobsList(this)).asData());
         res.put("spawn_costs", spawnCosts());
         res.put("features", (new RandomFeaturesList(this)).data);
-        res.put("carvers", new NbtCompound());
+        res.put("carvers", carvers());
         CommonIO.write(res, dim.storagePath + "/worldgen/biome", name + ".json");
+    }
+
+    boolean roll(String key) {
+        return PROVIDER.roll(random, key);
     }
 
     public NbtInt randomColor() {
@@ -61,11 +66,11 @@ public class RandomBiome {
         if (random.nextBoolean()) res.put("foliage_color", randomColor());
         if (random.nextBoolean()) res.put("grass_color", randomColor());
         if (random.nextBoolean()) res.put("grass_color_modifier", NbtString.of(random.nextBoolean() ? "dark_forest" : "swamp"));
-        if (random.nextBoolean()) res.put("particle", randomParticle());
-        if (RandomProvider.weighedRandom(random, 15, 1)) res.put("ambient_sound", randomSound());
-        if (RandomProvider.weighedRandom(random, 7, 1)) res.put("mood_sound", randomMoodSound());
-        if (RandomProvider.weighedRandom(random, 7, 1)) res.put("additions_sound", randomAdditionSound());
-        res.put("music", randomMusic());
+        if (roll("use_particles")) res.put("particle", randomParticle());
+        if (roll("ambient_sound")) res.put("ambient_sound", randomSound());
+        if (roll("mood_sound")) res.put("mood_sound", randomMoodSound());
+        if (roll("additions_sound")) res.put("additions_sound", randomAdditionSound());
+        if (roll("music")) res.put("music", randomMusic());
         return res;
     }
 
@@ -155,6 +160,17 @@ public class RandomBiome {
             mobData.putDouble("charge", 0.5 + random.nextDouble());
             res.put(mob, mobData);
         }
+        return res;
+    }
+
+    NbtCompound carvers() {
+        NbtCompound res = new NbtCompound();
+        NbtList air = new NbtList();
+        WeighedStructure<String> carvers =  PROVIDER.registry.get("carvers");
+        for (int i = 0; i < carvers.keys.size(); i++) {
+            if (random.nextDouble() < carvers.weights.get(i)) air.add(NbtString.of(carvers.keys.get(i)));
+        }
+        res.put("air", air);
         return res;
     }
 }

@@ -74,12 +74,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:mangrove_propagule"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:mangrove_sign"
       },
       "weight": 1.0
@@ -129,12 +123,6 @@
     {
       "key": {
         "Name": "minecraft:ochre_froglight"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:frogspawn"
       },
       "weight": 1.0
     },
@@ -257,12 +245,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:acacia_sapling"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:acacia_sign"
       },
       "weight": 1.0
@@ -294,12 +276,6 @@
     {
       "key": {
         "Name": "minecraft:activator_rail"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:allium"
       },
       "weight": 1.0
     },
@@ -353,46 +329,10 @@
     },
     {
       "key": {
-        "Name": "minecraft:attached_melon_stem"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:attached_pumpkin_stem"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:azalea"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:azalea_leaves",
         "Properties": {
           "persistent": "true"
         }
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:azure_bluet"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:bamboo"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:bamboo_sapling"
       },
       "weight": 1.0
     },
@@ -440,25 +380,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:beetroots"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:bell"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:big_dripleaf"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:big_dripleaf_stem"
       },
       "weight": 1.0
     },
@@ -513,12 +435,6 @@
     {
       "key": {
         "Name": "minecraft:birch_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:birch_sapling"
       },
       "weight": 1.0
     },
@@ -711,12 +627,6 @@
     {
       "key": {
         "Name": "minecraft:blue_ice"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:blue_orchid"
       },
       "weight": 1.0
     },
@@ -932,12 +842,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:cactus"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:cake"
       },
       "weight": 1.0
@@ -963,12 +867,6 @@
     {
       "key": {
         "Name": "minecraft:candle_cake"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:carrots"
       },
       "weight": 1.0
     },
@@ -1053,18 +951,6 @@
     {
       "key": {
         "Name": "minecraft:chiseled_stone_bricks"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:chorus_flower"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:chorus_plant"
       },
       "weight": 1.0
     },
@@ -1184,12 +1070,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:cornflower"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:cracked_deepslate_bricks"
       },
       "weight": 1.0
@@ -1265,12 +1145,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:crimson_fungus"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:crimson_hyphae"
       },
       "weight": 1.0
@@ -1290,12 +1164,6 @@
     {
       "key": {
         "Name": "minecraft:crimson_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:crimson_roots"
       },
       "weight": 1.0
     },
@@ -1458,12 +1326,6 @@
     {
       "key": {
         "Name": "minecraft:damaged_anvil"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dandelion"
       },
       "weight": 1.0
     },
@@ -1985,12 +1847,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:fern"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:fire"
       },
       "weight": 1.0
@@ -2022,12 +1878,6 @@
     {
       "key": {
         "Name": "minecraft:flower_pot"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:flowering_azalea"
       },
       "weight": 1.0
     },
@@ -2118,12 +1968,6 @@
     {
       "key": {
         "Name": "minecraft:granite_wall"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:grass"
       },
       "weight": 1.0
     },
@@ -2501,12 +2345,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:jungle_sapling"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:jungle_sign"
       },
       "weight": 1.0
@@ -2537,18 +2375,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:kelp"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:kelp_plant"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:lantern"
       },
       "weight": 1.0
@@ -2568,12 +2394,6 @@
     {
       "key": {
         "Name": "minecraft:large_amethyst_bud"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:large_fern"
       },
       "weight": 1.0
     },
@@ -2780,24 +2600,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:lilac"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:lily_of_the_valley"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:lily_pad"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:lime_banner"
       },
       "weight": 1.0
@@ -2984,12 +2786,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:melon_stem"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:moss_block"
       },
       "weight": 1.0
@@ -3116,18 +2912,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:nether_sprouts"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:nether_wart"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:nether_wart_block"
       },
       "weight": 1.0
@@ -3201,12 +2985,6 @@
     {
       "key": {
         "Name": "minecraft:oak_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:oak_sapling"
       },
       "weight": 1.0
     },
@@ -3326,19 +3104,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:orange_tulip"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:orange_wool"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:oxeye_daisy"
       },
       "weight": 1.0
     },
@@ -3369,12 +3135,6 @@
     {
       "key": {
         "Name": "minecraft:packed_ice"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:peony"
       },
       "weight": 1.0
     },
@@ -3653,18 +3413,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:poppy"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:potatoes"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:potted_acacia_sapling"
       },
       "weight": 1.0
@@ -3917,12 +3665,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:pumpkin_stem"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:purple_banner"
       },
       "weight": 1.0
@@ -4127,12 +3869,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:red_mushroom"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:red_mushroom_block"
       },
       "weight": 1.0
@@ -4217,12 +3953,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:red_tulip"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:red_wall_banner"
       },
       "weight": 1.0
@@ -4289,12 +4019,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:rose_bush"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:sand"
       },
       "weight": 1.0
@@ -4344,12 +4068,6 @@
     {
       "key": {
         "Name": "minecraft:sea_pickle"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:seagrass"
       },
       "weight": 1.0
     },
@@ -4808,36 +4526,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:sugar_cane"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:sunflower"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:sweet_berry_bush"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:tall_grass"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:tall_seagrass"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:target"
       },
       "weight": 1.0
@@ -4910,18 +4598,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:twisting_vines"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:twisting_vines_plant"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:warped_button",
         "Properties": {
           "face": "floor"
@@ -4949,12 +4625,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:warped_fungus"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:warped_hyphae"
       },
       "weight": 1.0
@@ -4974,12 +4644,6 @@
     {
       "key": {
         "Name": "minecraft:warped_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:warped_roots"
       },
       "weight": 1.0
     },
@@ -5237,19 +4901,7 @@
     },
     {
       "key": {
-        "Name": "minecraft:white_tulip"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:white_wool"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:wither_rose"
       },
       "weight": 1.0
     },

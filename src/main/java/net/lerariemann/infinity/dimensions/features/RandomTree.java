@@ -11,7 +11,7 @@ public class RandomTree extends RandomisedFeature {
 
     public RandomTree(RandomFeaturesList parent, boolean placef) {
         super(parent, "tree", placef);
-        ishuge = random.nextBoolean();
+        ishuge = parent.roll("huge_trees");
         id = type = "tree";
         save(1 + random.nextInt(20), (int) Math.floor(random.nextExponential()*4), parent.surface_block);
     }

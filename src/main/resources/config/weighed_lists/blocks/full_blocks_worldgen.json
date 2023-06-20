@@ -137,10 +137,6 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:barrel",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:barrier",
       "weight": 1.0
     },
@@ -752,10 +748,6 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:jigsaw",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:jukebox",
       "weight": 1.0
     },
@@ -1344,10 +1336,6 @@
     },
     {
       "key": "minecraft:stripped_warped_stem",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:structure_block",
       "weight": 1.0
     },
     {

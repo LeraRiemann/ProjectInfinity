@@ -22,11 +22,11 @@
     },
     {
       "key": "minecraft:basalt_blobs",
-      "weight": 0.5
+      "weight": 0.05
     },
     {
       "key": "minecraft:blackstone_blobs",
-      "weight": 0.5
+      "weight": 0.05
     },
     {
       "key": "minecraft:spring_delta",

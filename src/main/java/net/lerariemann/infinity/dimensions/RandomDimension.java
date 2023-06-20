@@ -20,9 +20,13 @@ public class RandomDimension {
     public int height;
     public int min_y;
     public int sea_level;
+    public NbtCompound default_block;
+    public NbtCompound default_fluid;
+    public List<NbtCompound> additional_blocks;
     public List<String> vanilla_biomes;
     public List<Integer> random_biome_ids;
     public Map<String, String> top_blocks;
+    public Map<String, String> underwater;
     public String type_alike;
 
     public RandomDimension(int i, RandomProvider provider, String path) {
@@ -44,6 +48,10 @@ public class RandomDimension {
         vanilla_biomes = new ArrayList<>();
         random_biome_ids = new ArrayList<>();
         top_blocks = new HashMap<>();
+        underwater = new HashMap<>();
+        default_block = RandomProvider.Block("minecraft:stone");
+        default_fluid = RandomProvider.Block("minecraft:water");
+        additional_blocks = new ArrayList<>();
         type_alike = PROVIDER.randomName(random, "noise_presets");
         RandomDimensionType type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
@@ -62,10 +70,6 @@ public class RandomDimension {
 
     boolean hasCeiling() {
         return ((Objects.equals(type_alike, "minecraft:nether")) || (Objects.equals(type_alike, "minecraft:caves")));
-    }
-
-    boolean isMadeOfStone() {
-        return (!(Objects.equals(type_alike, "minecraft:nether")) && !(Objects.equals(type_alike, "minecraft:end")));
     }
 
     NbtCompound packMcmeta() {
@@ -213,7 +217,7 @@ public class RandomDimension {
 
     String randomBiome() {
         String biome;
-        if (RandomProvider.weighedRandom(random, 3, 1)) {
+        if (!PROVIDER.roll(random, "use_random_biome")) {
             biome = PROVIDER.randomName(random, "biomes");
             vanilla_biomes.add(biome);
         }

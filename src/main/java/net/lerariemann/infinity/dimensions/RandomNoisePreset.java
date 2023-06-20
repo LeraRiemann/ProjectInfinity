@@ -24,7 +24,7 @@ public class RandomNoisePreset {
         storagePath = PROVIDER.configPath + "noise_settings/";
         name = "generated_" +dim.id;
         fullname = InfinityMod.MOD_ID + ":" + name;
-        randomiseblocks = RandomProvider.weighedRandom(dim.random, 3, 1);
+        randomiseblocks = PROVIDER.roll(dim.random, "randomise_blocks");
         NbtCompound data = new NbtCompound();
         type_alike = dim.type_alike;
         if (!dim.isNotOverworld()) {
@@ -47,13 +47,14 @@ public class RandomNoisePreset {
             }
         }
         int sea_level = randomiseblocks ? (int)Math.floor(dim.random.nextGaussian(sea_level_default, 8)) : sea_level_default;
-        NbtCompound default_block = randomiseblocks ? PROVIDER.randomBlock(dim.random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock());
+        NbtCompound default_block = randomiseblocks ? PROVIDER.randomBlock(dim.random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:stone"));
         NbtCompound default_fluid = randomiseblocks ? PROVIDER.randomBlock(dim.random,
-                RandomProvider.weighedRandom(dim.random, 1, 49) ? "fluids" : "full_blocks_worldgen") : RandomProvider.Block(defaultfluid());
+                PROVIDER.roll(dim.random, "solid_oceans") ? "full_blocks_worldgen" : "fluids") : RandomProvider.Block(defaultfluid());
         data.putBoolean("ore_veins_enabled", dim.random.nextBoolean());
         data.putBoolean("disable_mob_generation", false);
         data.putBoolean("legacy_random_source", false);
         data.put("default_block", default_block);
+        parent.default_block = default_block;
         data.put("default_fluid", default_fluid);
         data.putInt("sea_level", sea_level);
         parent.sea_level = sea_level;
@@ -72,7 +73,7 @@ public class RandomNoisePreset {
         CommonIO.write(data, dim.storagePath + "/worldgen/noise_settings", name + ".json");
     }
 
-    String defaultblock() {
+    String defaultblock(String s) {
         switch(type_alike) {
             case "minecraft:end" -> {
                 return "minecraft:end_stone";
@@ -81,7 +82,7 @@ public class RandomNoisePreset {
                 return "minecraft:netherrack";
             }
             default -> {
-                return "minecraft:stone";
+                return s;
             }
         }
     }
@@ -95,20 +96,6 @@ public class RandomNoisePreset {
             }
             default -> {
                 return "minecraft:water";
-            }
-        }
-    }
-
-    String defaulttopblock() {
-        switch(type_alike) {
-            case "minecraft:end" -> {
-                return "minecraft:end_stone";
-            }
-            case "minecraft:nether" -> {
-                return "minecraft:netherrack";
-            }
-            default -> {
-                return "minecraft:grass_block";
             }
         }
     }
@@ -161,15 +148,12 @@ public class RandomNoisePreset {
             String name = "infinity:biome_" + id;
             registerRandomBiome(name);
         }
-        if (parent.isMadeOfStone()) for (String key: new String[]{"surface", "shallow", "deep"}) biomeRegistry.get(key).add("default_overworld");
+        for (String key: new String[]{"surface", "shallow", "deep"}) biomeRegistry.get(key).add("default_overworld");
     }
 
     void registerRandomBiome(String biome) {
-        if (randomiseblocks && parent.random.nextBoolean()) {
-            regBiome("surface", biome);
-            regBiome("shallow", biome);
-        }
-        else parent.top_blocks.put(biome, defaulttopblock());
+        regBiome("surface", biome);
+        regBiome("shallow", biome);
     }
 
     void regBiome(String type, String name) {
@@ -200,8 +184,10 @@ public class RandomNoisePreset {
     }
 
     void addDeepslate(NbtList base) {
-        base.add(CommonIO.readAndAddBlock(storagePath + "surface_rule/main/deepslate.json",
-                randomiseblocks ? PROVIDER.randomName(parent.random, "full_blocks_worldgen") : "minecraft:deepslate"));
+        NbtCompound deepslate = randomiseblocks ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") :
+                RandomProvider.Block("minecraft:deepslate");
+        base.add(CommonIO.readAndAddBlock(storagePath + "surface_rule/main/deepslate.json", deepslate));
+        parent.additional_blocks.add(deepslate);
     }
 
     void addType(NbtCompound base, String str) {
@@ -311,11 +297,15 @@ public class RandomNoisePreset {
         if (!biome.startsWith("infinity:")) return resolve("surface_rule/" + category, biome);
         else {
             String block;
+            boolean useRandomBlock = randomiseblocks && parent.random.nextBoolean();
             if (category.equals("surface")) {
-                block = PROVIDER.randomName(parent.random, "top_blocks");
+                block = useRandomBlock ? PROVIDER.randomName(parent.random, "top_blocks") : defaultblock("minecraft:grass_block");
                 parent.top_blocks.put(biome, block);
             }
-            else block = PROVIDER.randomName(parent.random, "full_blocks");
+            else {
+                block = useRandomBlock ? PROVIDER.randomName(parent.random, "full_blocks") : defaultblock("minecraft:dirt");
+                parent.underwater.put(biome, block);
+            }
             return biomeCondition(biome, blockType(block));
         }
     }

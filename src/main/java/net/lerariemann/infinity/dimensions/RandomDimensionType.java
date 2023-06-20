@@ -19,17 +19,17 @@ public class RandomDimensionType {
         name = "generated_" +dim.id;
         fullname = InfinityMod.MOD_ID + ":" + name;
         NbtCompound res = new NbtCompound();
-        res.putBoolean("ultrawarm", random.nextBoolean());
-        res.putBoolean("natural", random.nextBoolean());
-        res.putBoolean("has_skylight", RandomProvider.weighedRandom(random, 1, 3));
-        res.putBoolean("piglin_safe", random.nextBoolean());
-        res.putBoolean("bed_works", random.nextBoolean());
-        res.putBoolean("respawn_anchor_works", random.nextBoolean());
-        res.putBoolean("has_raids", random.nextBoolean());
+        add_roll(res, "ultrawarm");
+        add_roll(res, "natural");
+        add_roll(res, "has_skylight");
+        add_roll(res, "piglin_safe");
+        add_roll(res, "bed_works");
+        add_roll(res, "respawn_anchor_works");
+        add_roll(res, "has_raids");
         res.putBoolean("has_ceiling", dim.hasCeiling());
         res.putDouble("coordinate_scale", coordinateScale());
         res.putFloat("ambient_light", random.nextFloat());
-        if (random.nextBoolean()){
+        if (roll("fixed_time")) {
             res.putInt("fixed_time", random.nextInt(24000));
         }
         int min_y = 16*Math.min(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
@@ -45,6 +45,14 @@ public class RandomDimensionType {
         res.putString("infiniburn", dim.PROVIDER.randomName(random, "tags"));
         res.putString("effects", dim.PROVIDER.randomName(random, "effects"));
         CommonIO.write(res, dim.storagePath + "/dimension_type", name + ".json");
+    }
+
+    boolean roll(String key) {
+        return parent.PROVIDER.roll(random, key);
+    }
+
+    void add_roll(NbtCompound res, String key) {
+        res.putBoolean(key, roll(key));
     }
 
     double coordinateScale() {
