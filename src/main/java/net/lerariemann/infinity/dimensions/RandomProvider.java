@@ -179,5 +179,88 @@ public class RandomProvider {
         }
         return res;
     }
+
+    public static NbtCompound heightProvider(Random random, int lbound, int bound, boolean acceptDistributions, boolean trim) {
+        int i = random.nextInt(acceptDistributions ? 6 : 5);
+        String[] types = new String[]{"uniform", "biased_to_bottom", "very_biased_to_bottom", "trapezoid", "constant", "weighted_list"};
+        NbtCompound res = new NbtCompound();
+        res.putString("type", types[i]);
+        switch (i) {
+            case 4 -> {
+                NbtCompound value = new NbtCompound();
+                value.putInt("absolute", random.nextInt(lbound, bound));
+                res.put("value", value);
+            }
+            case 0, 1, 2, 3 -> {
+                NbtCompound min_inclusive = new NbtCompound();
+                NbtCompound max_inclusive = new NbtCompound();
+                int min, max;
+                if (!trim && (i == 3)) {
+                    int center = random.nextInt(lbound, bound);
+                    int sigma = random.nextInt(bound-lbound);
+                    min = center - sigma;
+                    max = center + sigma;
+                }
+                else {
+                    int k = random.nextInt(lbound, bound);
+                    int j = random.nextInt(lbound, bound);
+                    min = Math.min(k, j);
+                    max = Math.max(k, j);
+                }
+                min_inclusive.putInt("absolute", min);
+                max_inclusive.putInt("absolute", max);
+                res.put("min_inclusive", min_inclusive);
+                res.put("max_inclusive", max_inclusive);
+                if (i==3 && random.nextBoolean()) res.putInt("plateau", random.nextInt(1, max - min));
+                else if (i!=0) res.putInt("inner", 1 + (int)Math.floor(random.nextExponential()));
+            }
+            case 5 -> {
+                int j = 2 + random.nextInt(0, 5);
+                NbtList list = new NbtList();
+                for (int k=0; k<j; k++) {
+                    NbtCompound element = new NbtCompound();
+                    element.put("data", heightProvider(random, lbound, bound, false, trim));
+                    element.putInt("weight", random.nextInt(100));
+                    list.add(element);
+                }
+                res.put("distribution", list);
+            }
+        }
+        return res;
+    }
+
+    public static NbtCompound floatProvider(Random random, float lbound, float bound) {
+        int i = random.nextInt(4);
+        String[] types = new String[]{"constant", "uniform", "clamped_normal", "trapezoid"};
+        NbtCompound res = new NbtCompound();
+        res.putString("type", types[i]);
+        NbtCompound value = new NbtCompound();
+        switch (i) {
+            case 0 -> value.putFloat("value", random.nextFloat(lbound, bound));
+            case 1, 2, 3 -> {
+                float a = random.nextFloat(lbound, bound);
+                float b = random.nextFloat(lbound, bound);
+                float min = Math.min(a, b);
+                float max = Math.max(a, b);
+                if (i == 1) {
+                    value.putFloat("max_exclusive", max);
+                    value.putFloat("min_inclusive", min);
+                }
+                if (i == 2) {
+                    value.putFloat("max", max);
+                    value.putFloat("min", min);
+                    value.putFloat("mean", random.nextFloat(min, max));
+                    value.putFloat("deviation", random.nextFloat(max - min));
+                }
+                if (i == 3) {
+                    value.putFloat("max", max);
+                    value.putFloat("min", min);
+                    value.putFloat("plateau", random.nextFloat(max - min));
+                }
+            }
+        }
+        res.put("value", value);
+        return res;
+    }
 }
 

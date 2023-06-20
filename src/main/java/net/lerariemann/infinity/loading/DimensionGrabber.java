@@ -5,6 +5,7 @@ import net.minecraft.registry.*;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.carver.ConfiguredCarver;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.PlacedFeature;
@@ -32,6 +33,8 @@ public class DimensionGrabber {
                 rootdir.resolve("worldgen/configured_feature"));
         (new JsonGrabber<>(registryInfoGetter, PlacedFeature.CODEC,
                 (MutableRegistry<PlacedFeature>) (baseRegistryManager.get(RegistryKeys.PLACED_FEATURE)))).grab_all(rootdir.resolve("worldgen/placed_feature"));
+        (new JsonGrabber<>(registryInfoGetter, ConfiguredCarver.CODEC,
+                (MutableRegistry<ConfiguredCarver<?>>) (baseRegistryManager.get(RegistryKeys.CONFIGURED_CARVER)))).grab_all(rootdir.resolve("worldgen/configured_carver"));
         (new JsonGrabber<>(registryInfoGetter, Biome.CODEC,
                 (MutableRegistry<Biome>) (baseRegistryManager.get(RegistryKeys.BIOME)))).grab_all(rootdir.resolve("worldgen/biome"));
         (new JsonGrabber<>(registryInfoGetter, ChunkGeneratorSettings.CODEC,

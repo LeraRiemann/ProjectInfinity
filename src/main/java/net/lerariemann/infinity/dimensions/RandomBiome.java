@@ -166,7 +166,9 @@ public class RandomBiome {
     NbtCompound carvers() {
         NbtCompound res = new NbtCompound();
         NbtList air = new NbtList();
-        WeighedStructure<String> carvers =  PROVIDER.registry.get("carvers");
+        if (PROVIDER.roll(random, "use_random_cave")) air.add(NbtString.of((new RandomCarver(this, true)).fullname));
+        if (PROVIDER.roll(random, "use_random_canyon")) air.add(NbtString.of((new RandomCarver(this, false)).fullname));
+        WeighedStructure<String> carvers = PROVIDER.registry.get("carvers");
         for (int i = 0; i < carvers.keys.size(); i++) {
             if (random.nextDouble() < carvers.weights.get(i)) air.add(NbtString.of(carvers.keys.get(i)));
         }

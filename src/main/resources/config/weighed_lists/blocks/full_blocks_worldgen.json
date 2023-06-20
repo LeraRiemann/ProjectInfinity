@@ -145,10 +145,6 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:beacon",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:bedrock",
       "weight": 1.0
     },
@@ -291,10 +287,6 @@
     },
     {
       "key": "minecraft:carved_pumpkin",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:cauldron",
       "weight": 1.0
     },
     {
@@ -781,10 +773,6 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:lava_cauldron",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:light_blue_concrete",
       "weight": 1.0
     },
@@ -1051,10 +1039,6 @@
     },
     {
       "key": "minecraft:powder_snow",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:powder_snow_cauldron",
       "weight": 1.0
     },
     {
@@ -1380,10 +1364,6 @@
     },
     {
       "key": "minecraft:warped_wart_block",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:water_cauldron",
       "weight": 1.0
     },
     {

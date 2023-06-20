@@ -23,7 +23,9 @@
       "mood_sound": 0.125,
       "additions_sound": 0.125,
       "music": 1.0,
-      "temperature_modifier_frozen": 0.25
+      "temperature_modifier_frozen": 0.25,
+      "use_random_cave": 0.2,
+      "use_random_canyon": 0.2
     },
     "features_chances": {
       "end_island": 0.2,

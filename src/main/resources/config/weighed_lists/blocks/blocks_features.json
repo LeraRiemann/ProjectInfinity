@@ -704,7 +704,10 @@
     },
     {
       "key": {
-        "Name": "minecraft:campfire"
+        "Name": "minecraft:campfire",
+        "Properties": {
+          "lit": "false"
+        }
       },
       "weight": 1.0
     },
@@ -3650,7 +3653,10 @@
     },
     {
       "key": {
-        "Name": "minecraft:soul_campfire"
+        "Name": "minecraft:soul_campfire",
+        "Properties": {
+          "lit": "false"
+        }
       },
       "weight": 1.0
     },

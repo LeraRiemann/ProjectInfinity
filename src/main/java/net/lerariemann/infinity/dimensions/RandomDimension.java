@@ -36,14 +36,7 @@ public class RandomDimension {
         name = "generated_"+i;
         String rootPath = path + "/" + name;
         storagePath = rootPath + "/data/" + InfinityMod.MOD_ID;
-        for (String s: new String[]{"dimension", "dimension_type", "worldgen/biome", "worldgen/configured_feature",
-        "worldgen/placed_feature", "worldgen/noise_settings"}) {
-            try {
-                Files.createDirectories(Paths.get(storagePath + "/" + s));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        createDirectories();
         NbtCompound data = new NbtCompound();
         vanilla_biomes = new ArrayList<>();
         random_biome_ids = new ArrayList<>();
@@ -61,6 +54,17 @@ public class RandomDimension {
         }
         CommonIO.write(data, storagePath + "/dimension", name + ".json");
         if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");
+    }
+
+    void createDirectories() {
+        for (String s: new String[]{"dimension", "dimension_type", "worldgen/biome", "worldgen/configured_feature",
+                "worldgen/placed_feature", "worldgen/noise_settings", "worldgen/configured_carver"}) {
+            try {
+                Files.createDirectories(Paths.get(storagePath + "/" + s));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     boolean isNotOverworld() {
