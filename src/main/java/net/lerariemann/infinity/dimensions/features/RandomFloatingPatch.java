@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.minecraft.nbt.NbtCompound;
 
@@ -9,13 +8,12 @@ public class RandomFloatingPatch extends RandomisedFeature {
     public RandomFloatingPatch(RandomFeaturesList parent) {
         super(parent, "patch_floating");
         id = "random_patch";
-        type = "floatingpatch";
-        RandomDimension dim = parent.parent.parent;
-        int a = dim.min_y + random.nextInt(dim.height);
-        int b = dim.min_y + random.nextInt(dim.height);
+        type = "floating";
+        int a = daddy.min_y + random.nextInt(daddy.height);
+        int b = daddy.min_y + random.nextInt(daddy.height);
         int min_inclusive = Math.min(a, b);
         int max_inclusive = Math.max(a, b);
-        save(min_inclusive, max_inclusive);
+        save(random.nextInt(1,8), min_inclusive, max_inclusive);
     }
 
     NbtCompound feature() {

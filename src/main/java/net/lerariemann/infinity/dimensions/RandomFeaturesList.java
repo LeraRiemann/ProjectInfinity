@@ -105,6 +105,7 @@ public class RandomFeaturesList {
     NbtList surfaceStructures() {
         NbtList res = getAllElements("surfacestructures");
         addRandomFeature(res, new RandomEndSpikes(this), "end_spikes");
+        addRandomFeature(res, new RandomEndGateway(this), "end_gateway");
         addRandomFeature(res, new RandomDelta(this), "delta");
         addRandomFeature(res, new RandomColumns(this), "columns");
         return res;
@@ -127,6 +128,7 @@ public class RandomFeaturesList {
     NbtList undergroundDecoration() {
         NbtList res = getAllElements("undergrounddecoration");
         addRandomFeature(res, new RandomBlobs(this), "blobs");
+        addRandomFeature(res, new RandomCeilingBlob(this), "ceiling_blobs");
         return res;
     }
 

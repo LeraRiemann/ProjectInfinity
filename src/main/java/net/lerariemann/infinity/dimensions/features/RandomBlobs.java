@@ -1,16 +1,13 @@
 package net.lerariemann.infinity.dimensions.features;
 
-import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.minecraft.nbt.NbtCompound;
 
 public class RandomBlobs extends RandomisedFeature {
     NbtCompound block;
-    RandomDimension daddy;
 
     public RandomBlobs(RandomFeaturesList parent) {
         super(parent, "blob");
-        daddy = parent.parent.parent;
         block = parent.PROVIDER.randomBlock(random, "full_blocks_worldgen");
         daddy.additional_blocks.add(block);
         id = "netherrack_replace_blobs";

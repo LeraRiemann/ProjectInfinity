@@ -13,6 +13,7 @@ public class ModFeatures {
     public static Feature<RandomColumnsFeatureConfig> RANDOM_COLUMNS;
     public static Feature<RandomMushroomFeatureConfig> RANDOM_FLAT_MUSHROOM;
     public static Feature<RandomMushroomFeatureConfig> RANDOM_ROUND_MUSHROOM;
+    public static Feature<RandomCeilingBlobFeatureConfig> RANDOM_CEILING_BLOB;
 
     public static <C extends FeatureConfig, F extends Feature<C>> F register(String name, F feature) {
         return Registry.register(Registries.FEATURE, name, feature);
@@ -25,5 +26,6 @@ public class ModFeatures {
         RANDOM_COLUMNS = register("random_columns", new RandomColumnsFeature(RandomColumnsFeatureConfig.CODEC));
         RANDOM_FLAT_MUSHROOM = register("random_flat_mushroom", new RandomFlatMushroomFeature(RandomMushroomFeatureConfig.CODEC));
         RANDOM_ROUND_MUSHROOM = register("random_round_mushroom", new RandomRoundMushroomFeature(RandomMushroomFeatureConfig.CODEC));
+        RANDOM_CEILING_BLOB = register("random_ceiling_blob", new RandomCeilingBlobFeature(RandomCeilingBlobFeatureConfig.CODEC));
     }
 }

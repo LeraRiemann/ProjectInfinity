@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.RandomProvider;
@@ -15,6 +16,7 @@ public abstract class RandomisedFeature {
     String name;
     Random random;
     RandomFeaturesList parent;
+    RandomDimension daddy;
     boolean place;
 
     public RandomisedFeature(RandomFeaturesList lst, String namecore) {
@@ -33,6 +35,7 @@ public abstract class RandomisedFeature {
         id = namecore;
         name = namecore + "_" + i;
         parent = lst;
+        daddy = parent.parent.parent;
         PROVIDER = parent.PROVIDER;
         place = placefeature;
     }

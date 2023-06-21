@@ -37,9 +37,11 @@
       "rock": 0.33,
       "dungeon": 1.0,
       "end_spikes": 0.2,
+      "end_gateway": 1.0,
       "delta": 0.2,
       "columns": 0.2,
       "blobs": 0.33,
+      "ceiling_blobs": 1.0,
       "vegetation": 1.0,
       "surface_patch": 0.5,
       "floating_patch": 0.1
@@ -51,7 +53,8 @@
       "ores_spawn_everywhere": 0.02,
       "scatter_ores": 0.2,
       "scatter_end_spikes": 0.67,
-      "cage_crystals": 0.2
+      "cage_crystals": 0.2,
+      "exact_gateways": 0.2
     }
   },
   "floralDistribution": {

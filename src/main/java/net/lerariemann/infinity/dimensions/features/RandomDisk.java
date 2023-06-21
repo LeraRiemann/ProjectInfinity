@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.dimensions.features;
 
-import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
@@ -11,7 +10,6 @@ public class RandomDisk extends RandomisedFeature {
     String target;
     public RandomDisk(RandomFeaturesList parent) {
         super(parent, "disk");
-        RandomDimension daddy = parent.parent.parent;
         target = daddy.underwater.get(parent.parent.fullname);
         id = type = "disk";
         save(daddy.default_fluid.getString("Name"));

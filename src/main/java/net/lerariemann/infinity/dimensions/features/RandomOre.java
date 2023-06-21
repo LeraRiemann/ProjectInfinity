@@ -1,16 +1,13 @@
 package net.lerariemann.infinity.dimensions.features;
 
-import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
 public class RandomOre extends RandomisedFeature {
-    RandomDimension daddy;
 
     public RandomOre(RandomFeaturesList parent) {
         super(parent, "ore");
-        daddy = parent.parent.parent;
         type = "ore";
         id = (parent.PROVIDER.roll(random, "scatter_ores")) ? "scattered_ore" : "ore";
         int center = random.nextInt(daddy.min_y, daddy.min_y + daddy.height);

@@ -6,7 +6,7 @@
     },
     {
       "key": "minecraft:end_gateway_return",
-      "weight": 0.2
+      "weight": 0.05
     },
     {
       "key": "minecraft:desert_well",

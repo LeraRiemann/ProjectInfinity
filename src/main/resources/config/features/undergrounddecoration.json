@@ -46,11 +46,11 @@
     },
     {
       "key": "minecraft:glowstone_extra",
-      "weight": 0.5
+      "weight": 0.05
     },
     {
       "key": "minecraft:glowstone",
-      "weight": 0.5
+      "weight": 0.05
     },
     {
       "key": "minecraft:brown_mushroom_nether",

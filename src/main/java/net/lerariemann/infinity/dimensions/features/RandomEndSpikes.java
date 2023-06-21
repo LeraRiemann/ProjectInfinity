@@ -1,18 +1,15 @@
 package net.lerariemann.infinity.dimensions.features;
 
-import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtList;
 
 public class RandomEndSpikes extends RandomisedFeature {
-    RandomDimension daddy;
     public RandomEndSpikes(RandomFeaturesList parent) {
         super(parent, "spikes");
         id = "end_spike";
         type = "empty";
-        daddy = parent.parent.parent;
         save();
     }
 

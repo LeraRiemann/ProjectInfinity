@@ -1,6 +1,10 @@
 {
   "placement": [
     {
+      "type": "rarity_filter",
+      "chance": %d
+    },
+    {
       "type": "minecraft:height_range",
       "height": {
         "type": "uniform",
