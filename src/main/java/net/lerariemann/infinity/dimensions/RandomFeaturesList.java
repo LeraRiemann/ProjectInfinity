@@ -27,7 +27,7 @@ public class RandomFeaturesList {
         parent = biome;
         random = biome.random;
         PROVIDER = biome.PROVIDER;
-        surface_block = parent.parent.top_blocks.get(parent.fullname);
+        surface_block = parent.parent.top_blocks.get(parent.fullname).getString("Name");
         configPath = PROVIDER.configPath + "features/";
         trees = CommonIO.commonListReader(configPath + "vegetation/trees_checked.json");
         storagePath = biome.parent.storagePath;

@@ -9,13 +9,13 @@ public class RandomMushroom extends RandomisedFeature {
         super(parent, "mushroom", placef);
         id = random.nextBoolean() ? "random_flat_mushroom" : "random_round_mushroom";
         type = "everylayer";
-        save(1 + random.nextInt(4));
+        save(1);
     }
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        addRandomBlockProvider(config, "cap_provider", "full_blocks");
-        addRandomBlockProvider(config, "stem_provider", "full_blocks");
+        addRandomBlockProvider(config, "cap_provider", "full_blocks_worldgen");
+        addRandomBlockProvider(config, "stem_provider", "full_blocks_worldgen");
         config.put("valid_base_block", RandomProvider.Block(parent.surface_block));
         config.putInt("foliage_radius", random.nextBoolean() ? 2 : 1 + (int)Math.floor(random.nextExponential()*2));
         config.putInt("height", random.nextBoolean() ? 5 : random.nextInt(3, 7));

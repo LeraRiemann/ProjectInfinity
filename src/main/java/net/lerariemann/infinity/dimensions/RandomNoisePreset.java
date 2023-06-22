@@ -153,6 +153,11 @@ public class RandomNoisePreset {
     void registerRandomBiome(String biome) {
         regBiome("surface", biome);
         regBiome("shallow", biome);
+        boolean useRandomBlock = randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
+        NbtCompound top_block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "top_blocks") : RandomProvider.Block(defaultblock("minecraft:grass_block"));
+        parent.top_blocks.put(biome, top_block);
+        NbtCompound block_underwater = useRandomBlock ? PROVIDER.randomBlock(parent.random, "full_blocks") : RandomProvider.Block(defaultblock("minecraft:dirt"));
+        parent.underwater.put(biome, block_underwater);
     }
 
     void regBiome(String type, String name) {
@@ -302,15 +307,8 @@ public class RandomNoisePreset {
         if (!biome.startsWith("infinity:")) return resolve("surface_rule/" + category, biome);
         else {
             NbtCompound block;
-            boolean useRandomBlock = randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
-            if (category.equals("surface")) {
-                block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "top_blocks") : RandomProvider.Block(defaultblock("minecraft:grass_block"));
-                parent.top_blocks.put(biome, block.getString("Name"));
-            }
-            else {
-                block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "full_blocks") : RandomProvider.Block(defaultblock("minecraft:dirt"));
-                parent.underwater.put(biome, block.getString("Name"));
-            }
+            if (category.equals("surface")) block = parent.top_blocks.get(biome);
+            else block = parent.underwater.get(biome);
             return biomeCondition(biome, blockType(block));
         }
     }

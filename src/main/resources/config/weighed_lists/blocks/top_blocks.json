@@ -476,12 +476,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:black_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:black_candle"
       },
       "weight": 1.0
@@ -513,12 +507,6 @@
     {
       "key": {
         "Name": "minecraft:black_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:black_shulker_box"
       },
       "weight": 1.0
     },
@@ -584,12 +572,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:blue_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:blue_candle"
       },
       "weight": 1.0
@@ -627,12 +609,6 @@
     {
       "key": {
         "Name": "minecraft:blue_ice"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:blue_shulker_box"
       },
       "weight": 1.0
     },
@@ -728,12 +704,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:brown_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:brown_candle"
       },
       "weight": 1.0
@@ -777,12 +747,6 @@
     {
       "key": {
         "Name": "minecraft:brown_mushroom_block"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:brown_shulker_box"
       },
       "weight": 1.0
     },
@@ -1256,12 +1220,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:cyan_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:cyan_candle"
       },
       "weight": 1.0
@@ -1293,12 +1251,6 @@
     {
       "key": {
         "Name": "minecraft:cyan_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:cyan_shulker_box"
       },
       "weight": 1.0
     },
@@ -1994,12 +1946,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:gray_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:gray_candle"
       },
       "weight": 1.0
@@ -2036,12 +1982,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:gray_shulker_box"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:gray_stained_glass"
       },
       "weight": 1.0
@@ -2067,12 +2007,6 @@
     {
       "key": {
         "Name": "minecraft:green_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:green_bed"
       },
       "weight": 1.0
     },
@@ -2109,12 +2043,6 @@
     {
       "key": {
         "Name": "minecraft:green_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:green_shulker_box"
       },
       "weight": 1.0
     },
@@ -2441,12 +2369,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:light_blue_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:light_blue_candle"
       },
       "weight": 1.0
@@ -2483,12 +2405,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:light_blue_shulker_box"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:light_blue_stained_glass"
       },
       "weight": 1.0
@@ -2514,12 +2430,6 @@
     {
       "key": {
         "Name": "minecraft:light_gray_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:light_gray_bed"
       },
       "weight": 1.0
     },
@@ -2556,12 +2466,6 @@
     {
       "key": {
         "Name": "minecraft:light_gray_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:light_gray_shulker_box"
       },
       "weight": 1.0
     },
@@ -2609,12 +2513,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:lime_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:lime_candle"
       },
       "weight": 1.0
@@ -2646,12 +2544,6 @@
     {
       "key": {
         "Name": "minecraft:lime_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:lime_shulker_box"
       },
       "weight": 1.0
     },
@@ -2699,12 +2591,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:magenta_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:magenta_candle"
       },
       "weight": 1.0
@@ -2736,12 +2622,6 @@
     {
       "key": {
         "Name": "minecraft:magenta_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:magenta_shulker_box"
       },
       "weight": 1.0
     },
@@ -3041,12 +2921,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:orange_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:orange_candle"
       },
       "weight": 1.0
@@ -3078,12 +2952,6 @@
     {
       "key": {
         "Name": "minecraft:orange_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:orange_shulker_box"
       },
       "weight": 1.0
     },
@@ -3155,12 +3023,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:pink_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:pink_candle"
       },
       "weight": 1.0
@@ -3192,12 +3054,6 @@
     {
       "key": {
         "Name": "minecraft:pink_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:pink_shulker_box"
       },
       "weight": 1.0
     },
@@ -3674,12 +3530,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:purple_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:purple_candle"
       },
       "weight": 1.0
@@ -3711,12 +3561,6 @@
     {
       "key": {
         "Name": "minecraft:purple_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:purple_shulker_box"
       },
       "weight": 1.0
     },
@@ -3830,12 +3674,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:red_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:red_candle"
       },
       "weight": 1.0
@@ -3927,12 +3765,6 @@
     {
       "key": {
         "Name": "minecraft:red_sandstone_wall"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:red_shulker_box"
       },
       "weight": 1.0
     },
@@ -4077,12 +3909,6 @@
     {
       "key": {
         "Name": "minecraft:shroomlight"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:shulker_box"
       },
       "weight": 1.0
     },
@@ -4841,12 +4667,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:white_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:white_candle"
       },
       "weight": 1.0
@@ -4878,12 +4698,6 @@
     {
       "key": {
         "Name": "minecraft:white_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:white_shulker_box"
       },
       "weight": 1.0
     },
@@ -4931,12 +4745,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:yellow_bed"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:yellow_candle"
       },
       "weight": 1.0
@@ -4968,12 +4776,6 @@
     {
       "key": {
         "Name": "minecraft:yellow_glazed_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:yellow_shulker_box"
       },
       "weight": 1.0
     },

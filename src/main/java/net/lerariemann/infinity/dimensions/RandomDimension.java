@@ -25,8 +25,8 @@ public class RandomDimension {
     public List<NbtCompound> additional_blocks;
     public List<String> vanilla_biomes;
     public List<Integer> random_biome_ids;
-    public Map<String, String> top_blocks;
-    public Map<String, String> underwater;
+    public Map<String, NbtCompound> top_blocks;
+    public Map<String, NbtCompound> underwater;
     public String type_alike;
 
     public RandomDimension(int i, RandomProvider provider, String path) {
@@ -136,7 +136,8 @@ public class RandomDimension {
         res.put("layers", layers);
         res.putBoolean("lakes", random.nextBoolean());
         res.putBoolean("features", random.nextBoolean());
-        top_blocks.put(biome, block);
+        top_blocks.put(biome, RandomProvider.Block(block));
+        underwater.put(biome, RandomProvider.Block(block));
         return res;
     }
 

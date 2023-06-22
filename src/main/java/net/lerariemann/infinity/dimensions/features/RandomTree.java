@@ -13,14 +13,14 @@ public class RandomTree extends RandomisedFeature {
         super(parent, "tree", placef);
         ishuge = parent.roll("huge_trees");
         id = type = "tree";
-        save(1 + random.nextInt(4), (int) Math.floor(random.nextExponential()*4), parent.surface_block);
+        save(1, (int) Math.floor(random.nextExponential()*4), parent.surface_block);
     }
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         addRandomBlockProvider(config, "dirt_provider", "full_blocks");
-        addRandomBlockProvider(config, "trunk_provider", "full_blocks");
-        addRandomBlockProvider(config, "foliage_provider", "full_blocks");
+        addRandomBlockProvider(config, "trunk_provider", "full_blocks_worldgen");
+        addRandomBlockProvider(config, "foliage_provider", "full_blocks_worldgen");
         config.putBoolean("force_dirt", random.nextBoolean());
         config.putBoolean("ignore_vines", random.nextBoolean());
         config.put("trunk_placer", trunkPlacer());

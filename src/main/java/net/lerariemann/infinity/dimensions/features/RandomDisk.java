@@ -5,12 +5,15 @@ import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import org.apache.logging.log4j.LogManager;
 
 public class RandomDisk extends RandomisedFeature {
     String target;
     public RandomDisk(RandomFeaturesList parent) {
         super(parent, "disk");
-        target = daddy.underwater.get(parent.parent.fullname);
+        for (String s: daddy.underwater.keySet()) LogManager.getLogger().info(s);
+        target = daddy.underwater.get(parent.parent.fullname).getString("Name");
+        //if (target == null) target = "minecraft:dirt";
         id = type = "disk";
         save(daddy.default_fluid.getString("Name"));
     }
