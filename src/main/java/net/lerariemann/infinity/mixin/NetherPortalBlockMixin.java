@@ -4,6 +4,7 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.access.NetherPortalBlockAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
@@ -47,7 +48,7 @@ import java.util.stream.Collectors;
 import static net.minecraft.block.NetherPortalBlock.AXIS;
 
 @Mixin(NetherPortalBlock.class)
-public class NetherPortalBlockMixin {
+public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 
 	@Inject(at = @At("HEAD"), method = "onEntityCollision(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V")
 	private void injected(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo info) {
@@ -89,7 +90,8 @@ public class NetherPortalBlockMixin {
 		((NeitherPortalBlockEntity)blockEntity).setDimension(i);
 	}
 
-	private void modifyPortal(World world, BlockPos pos, BlockState state, int i) {
+	@Override
+	public void modifyPortal(World world, BlockPos pos, BlockState state, int i) {
 		Set<BlockPos> set = Sets.newHashSet();
 		Queue<BlockPos> queue = Queues.newArrayDeque();
 		queue.add(pos);

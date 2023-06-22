@@ -14,7 +14,7 @@ public class RandomEndGateway extends RandomisedFeature {
         int b = daddy.min_y + random.nextInt(daddy.height);
         int min_inclusive = Math.min(a, b);
         int max_inclusive = Math.max(a, b);
-        save(random.nextInt(1,19), min_inclusive, max_inclusive);
+        save(random.nextInt(1,33), min_inclusive, max_inclusive);
     }
 
     NbtCompound feature() {

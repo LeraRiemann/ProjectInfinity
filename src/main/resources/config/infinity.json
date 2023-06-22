@@ -37,11 +37,11 @@
       "rock": 0.33,
       "dungeon": 1.0,
       "end_spikes": 0.2,
-      "end_gateway": 1.0,
+      "end_gateway": 0.05,
       "delta": 0.2,
       "columns": 0.2,
       "blobs": 0.33,
-      "ceiling_blobs": 1.0,
+      "ceiling_blobs": 0.5,
       "vegetation": 1.0,
       "surface_patch": 0.5,
       "floating_patch": 0.1
