@@ -27,14 +27,15 @@ public class RandomNoisePreset {
         randomiseblocks = PROVIDER.roll(dim.random, "randomise_blocks");
         NbtCompound data = new NbtCompound();
         type_alike = dim.type_alike;
+        String typeshort = type_alike.substring(type_alike.lastIndexOf(":") + 1);
         if (!dim.isNotOverworld()) {
-            noise_router = type_alike.substring(10);
+            noise_router = typeshort;
             surface_rule = spawn_target = "overworld";
             data.putBoolean("aquifers_enabled", true);
             sea_level_default = 63;
         }
         else {
-            noise_router = surface_rule = type_alike.substring(10);
+            noise_router = surface_rule = typeshort;
             data.putBoolean("aquifers_enabled", false);
             spawn_target = "default";
             switch (type_alike) {
@@ -58,19 +59,28 @@ public class RandomNoisePreset {
         data.put("default_fluid", default_fluid);
         data.putInt("sea_level", sea_level);
         parent.sea_level = sea_level;
-        NbtCompound noise = new NbtCompound();
-        noise.putInt("height", dim.height);
-        noise.putInt("min_y", dim.min_y);
-        int s = dim.random.nextInt(13);
-        noise.putInt("size_horizontal", 1 + (s < 8 ? s/4 : (s == 12 ? 2 : 3)));
-        s = 1 + dim.random.nextInt(3);
-        noise.putInt("size_vertical", (s == 3 ? 4 : s));
-        data.put("noise", noise);
+        data.put("noise", noise(dim));
         data.put("noise_router", getRouter(noise_router));
         data.put("spawn_target", resolve("spawn_target", spawn_target).get("spawn_target"));
         registerBiomes();
         data.put("surface_rule", buildSurfaceRule());
         CommonIO.write(data, dim.storagePath + "/worldgen/noise_settings", name + ".json");
+    }
+
+    NbtCompound noise(RandomDimension dim) {
+        NbtCompound noise = new NbtCompound();
+        noise.putInt("height", dim.height);
+        noise.putInt("min_y", dim.min_y);
+        boolean rifts = PROVIDER.roll(dim.random, "rift_world_chance");
+        int s;
+        if (rifts) noise.putInt("size_horizontal", 3);
+        else {
+            s = dim.random.nextInt(1, 4);
+            noise.putInt("size_horizontal", (s == 3 ? 4 : s));
+        }
+        s = dim.random.nextInt(1, 4);
+        noise.putInt("size_vertical", (s == 3 ? 4 : s));
+        return noise;
     }
 
     String defaultblock(String s) {
@@ -124,6 +134,10 @@ public class RandomNoisePreset {
                 return CommonIO.readCarefully(path, min, min + 24, max - 16, max, min, max,
                         (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4),
                         min, min + 24, max - 16, max);
+            }
+            case "whack" -> {
+                return CommonIO.readCarefully(path, min, max, min, max, min, parent.sea_level, parent.sea_level, max,
+                        parent.random.nextExponential(), parent.random.nextDouble(1.0, 8.0), parent.random.nextDouble(1.0, 8.0));
             }
         }
         return CommonIO.read(path);
@@ -291,10 +305,6 @@ public class RandomNoisePreset {
         biome_is.add(NbtString.of(biome));
         if_true.put("biome_is", biome_is);
         return conditionType(if_true, then_run);
-    }
-
-    NbtCompound blockType(String block) {
-        return blockType(RandomProvider.Block(block));
     }
 
     NbtCompound blockType(NbtCompound block) {

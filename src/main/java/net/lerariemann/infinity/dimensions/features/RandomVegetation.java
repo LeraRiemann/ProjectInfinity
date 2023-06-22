@@ -11,12 +11,14 @@ import java.util.Objects;
 
 public class RandomVegetation extends RandomisedFeature {
     WeighedStructure <String> trees_vanilla;
+    boolean sparse;
 
     public RandomVegetation(RandomFeaturesList parent) {
         super(parent.parent.id, parent, "vegetation");
+        sparse = PROVIDER.roll(random, "use_sparse_vegetation");
         trees_vanilla = parent.trees;
         id = "random_selector";
-        type = "vegetation";
+        type = sparse ? "vegetation_sparse" : "vegetation";
         save(1 + random.nextInt(10), (int) Math.floor(random.nextExponential()*4));
     }
 
@@ -40,7 +42,7 @@ public class RandomVegetation extends RandomisedFeature {
         NbtCompound config = new NbtCompound();
         config.put("default", randomTree());
         NbtList features = new NbtList();
-        int numtreetypes = 1 +random.nextInt(6);
+        int numtreetypes = sparse ? random.nextInt(6) : random.nextInt(1,4);
         for (int i = 0; i < numtreetypes; i++) {
             NbtCompound tree = new NbtCompound();
             tree.putFloat("chance", random.nextFloat());

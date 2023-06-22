@@ -29,7 +29,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionOptions;
-import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -64,15 +63,13 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 					MinecraftServer server = world.getServer();
 					RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, new Identifier(InfinityMod.MOD_ID, "generated_" + i));
 					if ((!world.isClient()) && (server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
-						LogManager.getLogger().info("Starting to generate");
 						RandomDimension d = new RandomDimension(i, ((MinecraftServerAccess)(server)).getDimensionProvider(),
 								server.getSavePath(WorldSavePath.DATAPACKS).toString());
-						LogManager.getLogger().info("Generated dimension "+i);
-						DimensionGrabber grabber = new DimensionGrabber(server.getRegistryManager());
-						DimensionOptions options = grabber.grab_all(Paths.get(d.storagePath), i);
-						LogManager.getLogger().info("Grabbed dimension "+i);
-						((MinecraftServerAccess)(server)).addWorld(key, options);
-						LogManager.getLogger().info("Added dimension "+i);
+						if (((MinecraftServerAccess)(server)).getDimensionProvider().gameRules.get("runtimeGenerationEnabled")) {
+							DimensionGrabber grabber = new DimensionGrabber(server.getRegistryManager());
+							DimensionOptions options = grabber.grab_all(Paths.get(d.storagePath), i);
+							((MinecraftServerAccess) (server)).addWorld(key, options);
+						}
 					}
 				}
 			}

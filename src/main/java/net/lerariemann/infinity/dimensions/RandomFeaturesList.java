@@ -133,11 +133,9 @@ public class RandomFeaturesList {
     }
 
     NbtList vegetation() {
-        boolean useTree = PROVIDER.roll(random, "use_one_tree");
         NbtList res = new NbtList();
-        if (!useTree) addRandomFeature(res, new RandomVegetation(this), "vegetation");
+        addRandomFeature(res, new RandomVegetation(this), "vegetation");
         res.addAll(getAllElements("vegetation/part1"));
-        if (useTree && roll("vegetation")) res.add(randomTree());
         res.add(randomPlant("flowers"));
         res.add(randomPlant("grass"));
         res.addAll(getAllElements("vegetation/part2"));
@@ -146,26 +144,5 @@ public class RandomFeaturesList {
         res.add(randomPlant("seagrass"));
         res.addAll(getAllElements("vegetation/part3"));
         return res;
-    }
-
-    NbtString randomTree() {
-        if (Objects.equals(surface_block, "minecraft:grass_block") && roll("use_vanilla_trees")) {
-            return randomPlant("trees");
-        }
-        else switch (PROVIDER.floralDistribution.getRandomElement(random)) {
-            case "fungi" -> {
-                RandomFungus fungus = new RandomFungus(this);
-                return NbtString.of(fungus.fullName());
-            }
-            case "trees" -> {
-                RandomTree tree = new RandomTree(this, true);
-                return NbtString.of(tree.fullName());
-            }
-            case "mushrooms" -> {
-                RandomMushroom mushroom = new RandomMushroom(this, true);
-                return NbtString.of(mushroom.fullName());
-            }
-        }
-        return NbtString.of("minecraft:oak");
     }
 }

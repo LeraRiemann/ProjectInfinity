@@ -69,7 +69,7 @@ public class RandomDimension {
 
     boolean isNotOverworld() {
         return (!Objects.equals(type_alike, "minecraft:overworld")) && (!Objects.equals(type_alike, "minecraft:large_biomes"))
-                && (!Objects.equals(type_alike, "minecraft:amplified"));
+                && (!Objects.equals(type_alike, "minecraft:amplified")) && (!Objects.equals(type_alike, "infinity:whack"));
     }
 
     boolean hasCeiling() {

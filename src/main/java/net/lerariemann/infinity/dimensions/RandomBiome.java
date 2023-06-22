@@ -157,7 +157,7 @@ public class RandomBiome {
         for (String mob: mobs) {
             NbtCompound mobData = new NbtCompound();
             mobData.putDouble("energy_budget", random.nextDouble()*0.3);
-            mobData.putDouble("charge", 0.5 + random.nextDouble());
+            mobData.putDouble("charge", 0.5 + random.nextDouble()*0.4);
             res.put(mob, mobData);
         }
         return res;

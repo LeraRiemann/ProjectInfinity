@@ -1,0 +1,58 @@
+{
+  "vein_ridged": "infinity:vein_ridged",
+  "fluid_level_spread": 0.0,
+  "vegetation": "infinity:vegetation",
+  "vein_gap": "infinity:vein_gap",
+  "continents": "minecraft:overworld/continents",
+  "initial_density_without_jaggedness": {
+    "type": "minecraft:y_clamped_gradient",
+    "from_value": 1.0,
+    "from_y": %d,
+    "to_value": -1.0,
+    "to_y": %d
+  },
+  "lava": 0.0,
+  "barrier": 0.0,
+  "depth": {
+    "type": "minecraft:y_clamped_gradient",
+    "from_value": 1.5,
+    "from_y": %d,
+    "to_value": -1.5,
+    "to_y": %d
+  },
+  "ridges": "minecraft:overworld/ridges",
+  "erosion": "minecraft:overworld/erosion",
+  "temperature": "infinity:temperature",
+  "final_density": {
+    "type": "minecraft:add",
+    "argument1": {
+      "type": "minecraft:y_clamped_gradient",
+      "from_value": 1.0,
+      "from_y": %d,
+      "to_value": 0.0,
+      "to_y": %d
+    },
+    "argument2": {
+      "type": "minecraft:add",
+      "argument1": {
+        "type": "minecraft:y_clamped_gradient",
+        "from_value": 0.0,
+        "from_y": %d,
+        "to_value": -1.0,
+        "to_y": %d
+      },
+      "argument2": {
+        "type": "minecraft:mul",
+        "argument1": %f,
+        "argument2": {
+          "type": "minecraft:noise",
+          "noise": "infinity:noise",
+          "xz_scale": %f,
+          "y_scale": %f
+        }
+      }
+    }
+  },
+  "vein_toggle": "infinity:vein_toggle",
+  "fluid_level_floodedness": 0.0
+}

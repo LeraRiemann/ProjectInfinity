@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.mixin;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.NetherPortalBlockAccess;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -12,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProperties;
-import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,10 +26,8 @@ public class ServerPlayerEntityMixin {
             locals = LocalCapture.CAPTURE_FAILHARD)
     private void injected2(ServerWorld destination, CallbackInfoReturnable<Entity> ci, ServerWorld serverWorld, RegistryKey<World> registryKey,
                            WorldProperties worldProperties, PlayerManager playerManager, TeleportTarget teleportTarget) {
-        LogManager.getLogger().info(registryKey.getValue().toString());
-        LogManager.getLogger().info(registryKey.getValue().getNamespace());
-        LogManager.getLogger().info(registryKey.getValue().getPath());
-        if (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID)) {
+        if (((MinecraftServerAccess)(serverWorld.getServer())).getDimensionProvider().gameRules.get("returnPortalsEnabled") &&
+                (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = new BlockPos(teleportTarget.position);
             if (destination.getBlockState(pos).isOf(Blocks.NETHER_PORTAL)) {
                 String keystr = registryKey.getValue().getPath();

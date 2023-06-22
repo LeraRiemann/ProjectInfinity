@@ -18,9 +18,9 @@ public class RandomProvider {
     public Map<String, WeighedStructure<NbtElement>> blockRegistry;
     public Map<String, NbtList> presetRegistry;
     public Map<String, Double> rootChances;
+    public Map<String, Boolean> gameRules;
     public WeighedStructure<String> floralDistribution;
     public String configPath;
-    public boolean runtimeGenerationEnabled;
 
     public RandomProvider(String path) {
         configPath = path;
@@ -28,6 +28,7 @@ public class RandomProvider {
         blockRegistry = new HashMap<>();
         presetRegistry = new HashMap<>();
         rootChances = new HashMap<>();
+        gameRules = new HashMap<>();
         floralDistribution = new WeighedStructure<>();
         register_all();
     }
@@ -42,7 +43,10 @@ public class RandomProvider {
 
     void read_root_config() {
         NbtCompound rootConfig = CommonIO.read(configPath + "infinity.json");
-        runtimeGenerationEnabled = rootConfig.getBoolean("runtimeGenerationEnabled");
+        NbtCompound gamerules = rootConfig.getCompound("gameRules");
+        for (String s: gamerules.getKeys()) {
+            gameRules.put(s, gamerules.getBoolean(s));
+        }
         NbtCompound rootchances = rootConfig.getCompound("rootChances");
         for (String c: rootchances.getKeys()) {
             for (String s: rootchances.getCompound(c).getKeys()) {
