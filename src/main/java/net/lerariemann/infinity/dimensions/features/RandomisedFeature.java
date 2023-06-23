@@ -6,6 +6,9 @@ import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 
 import java.util.Random;
 
@@ -44,11 +47,15 @@ public abstract class RandomisedFeature {
         return InfinityMod.MOD_ID + ":" + name;
     }
 
+    <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key) {
+        return daddy.does_not_contain(key, name);
+    }
+
     void save(Object... args) {
         NbtCompound data;
         String path = parent.storagePath;
-        CommonIO.write(feature(), path + "/worldgen/configured_feature", name + ".json");
-        if (place) {
+        if (does_not_contain(RegistryKeys.CONFIGURED_FEATURE)) CommonIO.write(feature(), path + "/worldgen/configured_feature", name + ".json");
+        if (place && (does_not_contain(RegistryKeys.PLACED_FEATURE))) {
             data = CommonIO.readCarefully(PROVIDER.configPath + "features/placements/" + type + ".json", args);
             data.putString("feature", fullName());
             CommonIO.write(data, path + "/worldgen/placed_feature", name + ".json");

@@ -2,8 +2,15 @@ package net.lerariemann.infinity.dimensions;
 
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.*;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.WorldSavePath;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,13 +35,15 @@ public class RandomDimension {
     public Map<String, NbtCompound> top_blocks;
     public Map<String, NbtCompound> underwater;
     public String type_alike;
+    public MinecraftServer server;
 
-    public RandomDimension(int i, RandomProvider provider, String path) {
+    public RandomDimension(int i, MinecraftServer server) {
         random = new Random(i);
-        PROVIDER = provider;
+        this.server = server;
+        PROVIDER = ((MinecraftServerAccess)(server)).getDimensionProvider();
         id = i;
         name = "generated_"+i;
-        String rootPath = path + "/" + name;
+        String rootPath = server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + name;
         storagePath = rootPath + "/data/" + InfinityMod.MOD_ID;
         createDirectories();
         NbtCompound data = new NbtCompound();
@@ -49,11 +58,15 @@ public class RandomDimension {
         RandomDimensionType type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
         data.put("generator", randomDimensionGenerator());
-        for (Integer id: random_biome_ids) {
+        for (Integer id: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+id)) {
             RandomBiome b = new RandomBiome(id, this);
         }
         CommonIO.write(data, storagePath + "/dimension", name + ".json");
         if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");
+    }
+
+    public <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key, String name) {
+        return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, new Identifier(InfinityMod.MOD_ID, name))));
     }
 
     void createDirectories() {

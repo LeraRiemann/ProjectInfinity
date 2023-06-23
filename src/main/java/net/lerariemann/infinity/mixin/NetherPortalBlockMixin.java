@@ -2,10 +2,12 @@ package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
+import com.google.common.hash.HashCode;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.NetherPortalBlockAccess;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
@@ -24,7 +26,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -51,21 +52,23 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 
 	@Inject(at = @At("HEAD"), method = "onEntityCollision(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V")
 	private void injected(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo info) {
-		if (entity instanceof ItemEntity) {
+		if (!world.isClient() && entity instanceof ItemEntity) {
 			ItemStack itemStack = ((ItemEntity)entity).getStack();
 			if (itemStack.getItem() == Items.WRITTEN_BOOK || itemStack.getItem() == Items.WRITABLE_BOOK) {
 				BookScreen.Contents bookContent = BookScreen.Contents.create(itemStack);
 				String string = IntStream.range(0, bookContent.getPageCount()).mapToObj(bookContent::getPage).map(StringVisitable::getString).collect(Collectors.joining("\n"));
 				if(!string.isEmpty()){
-					int i = Hashing.sha256().hashString(string, StandardCharsets.UTF_8).asInt() & Integer.MAX_VALUE;
+					HashCode f = Hashing.sha256().hashString(string, StandardCharsets.UTF_8);
+					int i = f.asInt() & Integer.MAX_VALUE;
+					MinecraftServer server = world.getServer();
+					RandomProvider prov = ((MinecraftServerAccess)(server)).getDimensionProvider();
+					if (prov.rule("seedDependentDimensions")) i = (int)(world.getServer().getWorld(World.OVERWORLD).getSeed()) ^ i;
 					modifyPortal(world, pos, state, i);
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-					MinecraftServer server = world.getServer();
 					RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, new Identifier(InfinityMod.MOD_ID, "generated_" + i));
-					if ((!world.isClient()) && (server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
-						RandomDimension d = new RandomDimension(i, ((MinecraftServerAccess)(server)).getDimensionProvider(),
-								server.getSavePath(WorldSavePath.DATAPACKS).toString());
-						if (((MinecraftServerAccess)(server)).getDimensionProvider().gameRules.get("runtimeGenerationEnabled")) {
+					if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
+						RandomDimension d = new RandomDimension(i, server);
+						if (prov.rule("runtimeGenerationEnabled")) {
 							DimensionGrabber grabber = new DimensionGrabber(server.getRegistryManager());
 							DimensionOptions options = grabber.grab_all(Paths.get(d.storagePath), i);
 							((MinecraftServerAccess) (server)).addWorld(key, options);

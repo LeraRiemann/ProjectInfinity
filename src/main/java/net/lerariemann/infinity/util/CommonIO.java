@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class CommonIO {
 
@@ -28,7 +29,10 @@ public class CommonIO {
         }
     }
     public static NbtCompound read(String path) {
-        File file = new File(path);
+        return read(new File(path));
+    }
+
+    public static NbtCompound read(File file) {
         String content;
         try {
             content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
@@ -58,7 +62,7 @@ public class CommonIO {
         }
     }
 
-    public static WeighedStructure<String> commonListReader(String path) {
+    public static WeighedStructure<String> weighedListReader(String path) {
         NbtCompound base = read(path);
         WeighedStructure<String> res = new WeighedStructure<>();
         NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
@@ -69,13 +73,40 @@ public class CommonIO {
         return res;
     }
 
-    public static WeighedStructure<NbtElement> uncommonListReader(String path) {
-        NbtCompound base = read(path);
+    public static WeighedStructure<String> weighedListReader(String path, String subpath) {
+        WeighedStructure<String> res = new WeighedStructure<>();
+        for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
+            NbtCompound base = read(path1.toPath().resolve(subpath).toFile());
+            NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
+            for(int i = 0; i < list.size(); i++) {
+                NbtCompound a = list.getCompound(i);
+                res.add(a.getString("key"), a.getDouble("weight"));
+            }
+        }
+        return res;
+    }
+
+    public static WeighedStructure<NbtElement> blockListReader(String path, String subpath) {
         WeighedStructure<NbtElement> res = new WeighedStructure<>();
-        NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
-        for(int i = 0; i < list.size(); i++) {
-            NbtCompound a = list.getCompound(i);
-            res.add(a.get("key"), a.getDouble("weight"));
+        for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
+            File file = path1.toPath().resolve(subpath).toFile();
+            if (file.exists()) {
+                NbtCompound base = read(file);
+                NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
+                for(int i = 0; i < list.size(); i++) {
+                    NbtCompound a = list.getCompound(i);
+                    res.add(a.get("key"), a.getDouble("weight"));
+                }
+            }
+        }
+        return res;
+    }
+
+    public static NbtList nbtListReader(String path, String subpath) {
+        NbtList res = new NbtList();
+        for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
+            NbtList add = read(path1.getPath() + "/" + subpath).getList("elements", NbtElement.STRING_TYPE);
+            res.addAll(add);
         }
         return res;
     }

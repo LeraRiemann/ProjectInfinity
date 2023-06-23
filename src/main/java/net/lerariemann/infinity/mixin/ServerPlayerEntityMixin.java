@@ -26,7 +26,7 @@ public class ServerPlayerEntityMixin {
             locals = LocalCapture.CAPTURE_FAILHARD)
     private void injected2(ServerWorld destination, CallbackInfoReturnable<Entity> ci, ServerWorld serverWorld, RegistryKey<World> registryKey,
                            WorldProperties worldProperties, PlayerManager playerManager, TeleportTarget teleportTarget) {
-        if (((MinecraftServerAccess)(serverWorld.getServer())).getDimensionProvider().gameRules.get("returnPortalsEnabled") &&
+        if (((MinecraftServerAccess)(serverWorld.getServer())).getDimensionProvider().rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = new BlockPos(teleportTarget.position);
             if (destination.getBlockState(pos).isOf(Blocks.NETHER_PORTAL)) {

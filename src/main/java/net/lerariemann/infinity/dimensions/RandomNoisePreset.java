@@ -170,7 +170,7 @@ public class RandomNoisePreset {
         boolean useRandomBlock = randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
         NbtCompound top_block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "top_blocks") : RandomProvider.Block(defaultblock("minecraft:grass_block"));
         parent.top_blocks.put(biome, top_block);
-        NbtCompound block_underwater = useRandomBlock ? PROVIDER.randomBlock(parent.random, "full_blocks") : RandomProvider.Block(defaultblock("minecraft:dirt"));
+        NbtCompound block_underwater = useRandomBlock ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:dirt"));
         parent.underwater.put(biome, block_underwater);
     }
 

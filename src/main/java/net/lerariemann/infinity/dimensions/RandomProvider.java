@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.util.ListReader;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -38,11 +37,11 @@ public class RandomProvider {
 
     void register_all() {
         read_root_config();
-        register_category(registry, configPath + "weighed_lists/misc", CommonIO::commonListReader);
-        register_category(blockRegistry, configPath + "weighed_lists/blocks", CommonIO::uncommonListReader);
-        register_category(registry, configPath + "weighed_lists/mobs", CommonIO::commonListReader);
-        register_category(biomePresetRegistry, configPath + "lists/multinoisepresets", s -> CommonIO.read(s).getList("elements", NbtElement.STRING_TYPE));
-        register_category(miscListRegistry, configPath + "lists/misc", s -> CommonIO.read(s).getList("elements", NbtElement.STRING_TYPE));
+        register_category(registry, configPath + "weighed_lists", "misc", CommonIO::weighedListReader);
+        register_category(blockRegistry, configPath + "weighed_lists", "blocks", CommonIO::blockListReader);
+        register_category(registry, configPath + "weighed_lists", "mobs", CommonIO::weighedListReader);
+        register_category(biomePresetRegistry, configPath + "lists", "multinoisepresets", CommonIO::nbtListReader);
+        register_category(miscListRegistry, configPath + "lists", "misc", CommonIO::nbtListReader);
     }
 
     void read_root_config() {
@@ -66,14 +65,20 @@ public class RandomProvider {
     public boolean roll(Random random, String key) {
         return (random.nextDouble() < rootChances.get(key));
     }
+    public boolean rule(String key) {
+        return gameRules.get(key);
+    }
 
-    static <B> void register_category(Map<String, B> reg, String path, ListReader<B> reader) {
+    static <B> void register_category(Map<String, B> reg, String path, String subpath, ListReader<B> reader) {
         try {
-            walk(Paths.get(path)).forEach(p -> {
+            walk(Paths.get(path + "/minecraft/" + subpath)).forEach(p -> {
                 String fullname = p.toString();
                 if (fullname.endsWith(".json")) {
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
-                    if (!Objects.equals(name, "none")) reg.put(name, reader.op(fullname));
+                    if (!Objects.equals(name, "none")) {
+                        String sub = fullname.substring(fullname.lastIndexOf("/minecraft/")+11);
+                        reg.put(name, reader.op(path, sub));
+                    }
                 }});
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -266,3 +271,6 @@ public class RandomProvider {
     }
 }
 
+interface ListReader<B>  {
+    B op(String path, String subpath);
+}

@@ -1,7 +1,8 @@
 {
   "gameRules": {
     "runtimeGenerationEnabled": true,
-    "returnPortalsEnabled": true
+    "returnPortalsEnabled": true,
+    "seedDependentDimensions": false
   },
   "rootChances": {
     "dimension_type": {
