@@ -24,7 +24,7 @@ public class RandomVegetation extends RandomisedFeature {
 
     NbtElement randomTree() {
         String tree = "minecraft:oak";
-        if (Objects.equals(parent.surface_block, "minecraft:grass_block") && parent.roll("use_vanilla_trees")) {
+        if (Objects.equals(parent.surface_block.getString("Name"), "minecraft:grass_block") && parent.roll("use_vanilla_trees")) {
             tree = trees_vanilla.getRandomElement(random);
             return NbtString.of(tree);
         }

@@ -1,0 +1,20 @@
+{
+  "elements": [
+    {
+      "key": "cube",
+      "weight": 1.0
+    },
+    {
+      "key": "sphere",
+      "weight": 1.0
+    },
+    {
+      "key": "octahedron",
+      "weight": 1.0
+    },
+    {
+      "key": "star",
+      "weight": 1.0
+    }
+  ]
+}

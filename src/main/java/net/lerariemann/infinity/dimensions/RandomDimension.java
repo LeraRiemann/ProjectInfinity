@@ -169,7 +169,7 @@ public class RandomDimension {
     }
 
     void addPresetBiomes(String preset) {
-        NbtList lst = PROVIDER.presetRegistry.get(preset);
+        NbtList lst = PROVIDER.biomePresetRegistry.get(preset);
         for (NbtElement i: lst) {
             vanilla_biomes.add(i.asString());
         }

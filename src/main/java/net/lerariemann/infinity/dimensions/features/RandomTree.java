@@ -13,7 +13,7 @@ public class RandomTree extends RandomisedFeature {
         super(parent, "tree", placef);
         ishuge = parent.roll("huge_trees");
         id = type = "tree";
-        save(1, (int) Math.floor(random.nextExponential()*4), parent.surface_block);
+        save(1, (int) Math.floor(random.nextExponential()*4), parent.surface_block.getString("Name"));
     }
 
     NbtCompound feature() {

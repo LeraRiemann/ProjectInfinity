@@ -4,7 +4,7 @@ import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.minecraft.nbt.NbtCompound;
 
 public class RandomFungus extends RandomisedFeature {
-    String mainsurfaceblock;
+    NbtCompound mainsurfaceblock;
 
     public RandomFungus(RandomFeaturesList parent) {
         super(parent, "fungus");
@@ -19,7 +19,7 @@ public class RandomFungus extends RandomisedFeature {
         addRandomBlock(config, "hat_state", "full_blocks_worldgen");
         addRandomBlock(config, "decor_state", "blocks_features");
         addRandomBlock(config, "stem_state", "full_blocks_worldgen");
-        addBlockCarefully(config, "valid_base_block", mainsurfaceblock);
+        config.put("valid_base_block", mainsurfaceblock);
         return feature(config);
     }
 }

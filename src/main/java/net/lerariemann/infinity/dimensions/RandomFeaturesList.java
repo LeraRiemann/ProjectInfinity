@@ -18,7 +18,7 @@ public class RandomFeaturesList {
     public String storagePath;
 
     public Random random;
-    public String surface_block;
+    public NbtCompound surface_block;
     public WeighedStructure<String> trees;
     public RandomBiome parent;
     public List<String> blocks;
@@ -27,7 +27,7 @@ public class RandomFeaturesList {
         parent = biome;
         random = biome.random;
         PROVIDER = biome.PROVIDER;
-        surface_block = parent.parent.top_blocks.get(parent.fullname).getString("Name");
+        surface_block = parent.parent.top_blocks.get(parent.fullname);
         configPath = PROVIDER.configPath + "features/";
         trees = CommonIO.commonListReader(configPath + "vegetation/trees_checked.json");
         storagePath = biome.parent.storagePath;
@@ -72,42 +72,39 @@ public class RandomFeaturesList {
         return PROVIDER.roll(random, key);
     }
 
-    void addRandomFeature(NbtList res, RandomisedFeature feature, String key) {
-        if (roll(key)) addRandomFeature(res, feature);
-    }
-
     NbtList endIsland() {
         NbtList res = getAllElements("rawgeneration");
-        addRandomFeature(res, new RandomEndIsland(this), "end_island");
+        if (roll("end_island")) addRandomFeature(res, new RandomEndIsland(this));
+        if (roll("shape")) addRandomFeature(res, new RandomShape(this, PROVIDER.randomName(random, "shape_types")));
         return res;
     }
 
     NbtList lakes() {
         NbtList res = getAllElements("lakes");
-        addRandomFeature(res, new RandomLake(this), "lake");
+        if (roll("lake")) addRandomFeature(res, new RandomLake(this));
         return res;
     }
 
     NbtList localModifications() {
         NbtList res = getAllElements("localmodifications");
-        addRandomFeature(res, new RandomIceberg(this), "iceberg");
-        addRandomFeature(res, new RandomGeode(this), "geode");
-        addRandomFeature(res, new RandomRock(this), "rock");
+        if (roll("iceberg")) addRandomFeature(res, new RandomIceberg(this));
+        if (roll("geode")) addRandomFeature(res, new RandomGeode(this));
+        if (roll("rock")) addRandomFeature(res, new RandomRock(this));
         return res;
     }
 
     NbtList undergroundStructures() {
         NbtList res = getAllElements("undergroundstructures");
-        addRandomFeature(res, new RandomDungeon(this), "dungeon");
+        if (roll("dungeon")) addRandomFeature(res, new RandomDungeon(this));
         return res;
     }
 
     NbtList surfaceStructures() {
         NbtList res = getAllElements("surfacestructures");
-        addRandomFeature(res, new RandomEndSpikes(this), "end_spikes");
-        addRandomFeature(res, new RandomEndGateway(this), "end_gateway");
-        addRandomFeature(res, new RandomDelta(this), "delta");
-        addRandomFeature(res, new RandomColumns(this), "columns");
+        if (roll("end_spikes")) addRandomFeature(res, new RandomEndSpikes(this));
+        if (roll("end_gateway")) addRandomFeature(res, new RandomEndGateway(this));
+        if (roll("delta")) addRandomFeature(res, new RandomDelta(this));
+        if (roll("columns")) addRandomFeature(res, new RandomColumns(this));
         return res;
     }
 
@@ -127,20 +124,20 @@ public class RandomFeaturesList {
 
     NbtList undergroundDecoration() {
         NbtList res = getAllElements("undergrounddecoration");
-        addRandomFeature(res, new RandomBlobs(this), "blobs");
-        addRandomFeature(res, new RandomCeilingBlob(this), "ceiling_blobs");
+        if (roll("blobs"))  addRandomFeature(res, new RandomBlobs(this));
+        if (roll("ceiling_blobs"))  addRandomFeature(res, new RandomCeilingBlob(this));
         return res;
     }
 
     NbtList vegetation() {
         NbtList res = new NbtList();
-        addRandomFeature(res, new RandomVegetation(this), "vegetation");
+        if (roll("vegetation")) addRandomFeature(res, new RandomVegetation(this));
         res.addAll(getAllElements("vegetation/part1"));
         res.add(randomPlant("flowers"));
         res.add(randomPlant("grass"));
         res.addAll(getAllElements("vegetation/part2"));
-        addRandomFeature(res, new RandomSurfacePatch(this), "surface_patch");
-        addRandomFeature(res, new RandomFloatingPatch(this), "floating_patch");
+        if (roll("surface_patch")) addRandomFeature(res, new RandomSurfacePatch(this));
+        if (roll("floating_patch")) addRandomFeature(res, new RandomFloatingPatch(this));
         res.add(randomPlant("seagrass"));
         res.addAll(getAllElements("vegetation/part3"));
         return res;

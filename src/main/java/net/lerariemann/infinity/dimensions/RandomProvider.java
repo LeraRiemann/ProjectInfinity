@@ -6,6 +6,7 @@ import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -16,7 +17,8 @@ import static java.nio.file.Files.walk;
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
     public Map<String, WeighedStructure<NbtElement>> blockRegistry;
-    public Map<String, NbtList> presetRegistry;
+    public Map<String, NbtList> biomePresetRegistry;
+    public Map<String, NbtList> miscListRegistry;
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
     public WeighedStructure<String> floralDistribution;
@@ -26,7 +28,8 @@ public class RandomProvider {
         configPath = path;
         registry = new HashMap<>();
         blockRegistry = new HashMap<>();
-        presetRegistry = new HashMap<>();
+        biomePresetRegistry = new HashMap<>();
+        miscListRegistry = new HashMap<>();
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
         floralDistribution = new WeighedStructure<>();
@@ -38,7 +41,8 @@ public class RandomProvider {
         register_category(registry, configPath + "weighed_lists/misc", CommonIO::commonListReader);
         register_category(blockRegistry, configPath + "weighed_lists/blocks", CommonIO::uncommonListReader);
         register_category(registry, configPath + "weighed_lists/mobs", CommonIO::commonListReader);
-        register_category(presetRegistry, configPath + "weighed_lists/multinoisepresets", s -> CommonIO.read(s).getList("elements", NbtElement.STRING_TYPE));
+        register_category(biomePresetRegistry, configPath + "lists/multinoisepresets", s -> CommonIO.read(s).getList("elements", NbtElement.STRING_TYPE));
+        register_category(miscListRegistry, configPath + "lists/misc", s -> CommonIO.read(s).getList("elements", NbtElement.STRING_TYPE));
     }
 
     void read_root_config() {
@@ -86,9 +90,10 @@ public class RandomProvider {
         return res;
     }
 
-    public static NbtCompound blockToProvider(NbtCompound block) {
+    public NbtCompound blockToProvider(NbtCompound block, Random random) {
         NbtCompound res = new NbtCompound();
-        res.putString("type", "minecraft:simple_state_provider");
+        boolean bl = miscListRegistry.get("rotatable_blocks").contains(NbtString.of(block.getString("Name"))) && roll(random, "rotate_blocks");
+        res.putString("type", bl ? "minecraft:rotated_block_provider" : "minecraft:simple_state_provider");
         res.put("state", block);
         return res;
     }
@@ -107,20 +112,18 @@ public class RandomProvider {
     }
 
     public NbtCompound randomBlock(Random random, String key) {
-        switch (key) {
-            case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
-                NbtElement compound = blockRegistry.get(key).getRandomElement(random);
-                if (compound instanceof NbtCompound) return ((NbtCompound)compound);
-                else return Block(compound.asString());
-            }
-            default -> {
-                return Block(registry.get(key).getRandomElement(random));
-            }
+        if (blockRegistry.containsKey(key)) {
+            NbtElement compound = blockRegistry.get(key).getRandomElement(random);
+            if (compound instanceof NbtCompound) return ((NbtCompound)compound);
+            else return Block(compound.asString());
+        }
+        else {
+            return Block(registry.get(key).getRandomElement(random));
         }
     }
 
-    public NbtCompound randomBlockProvider (Random random, String key) {
-        return blockToProvider(randomBlock(random, key));
+    public NbtCompound randomBlockProvider(Random random, String key) {
+        return blockToProvider(randomBlock(random, key), random);
     }
 
     static NbtCompound genBounds(Random random, int lbound, int bound) {

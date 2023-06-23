@@ -14,8 +14,8 @@ public class RandomDelta extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        String block = genBlockOrFluid();
-        addBlockCarefully(config, "contents", block);
+        NbtCompound block = genBlockOrFluid();
+        config.put("contents", block);
         addRandomBlock(config, "rim", "full_blocks");
         config.put("size", RandomProvider.intProvider(random, 17, true));
         config.put("rim_size", RandomProvider.intProvider(random, 17, true));

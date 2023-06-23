@@ -1,0 +1,780 @@
+{
+  "elements": [
+    {
+      "key": {
+        "type": "weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:white_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_gray_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:gray_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:black_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:brown_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:orange_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:yellow_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:lime_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:green_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_blue_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:blue_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:cyan_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:purple_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:magenta_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_terracotta"
+            },
+            "weight": 1.0
+          }
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "type": "weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:white_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_gray_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:gray_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:black_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:brown_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:orange_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:yellow_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:lime_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:green_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_blue_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:blue_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:cyan_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:purple_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:magenta_stained_glass"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_stained_glass"
+            },
+            "weight": 1.0
+          }
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "type": "weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:white_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_gray_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:gray_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:black_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:brown_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:orange_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:yellow_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:lime_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:green_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_blue_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:blue_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:cyan_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:purple_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:magenta_stained_glass_pane"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_stained_glass_pane"
+            },
+            "weight": 1.0
+          }
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "type": "weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:white_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_gray_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:gray_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:black_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:brown_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:orange_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:yellow_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:lime_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:green_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_blue_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:blue_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:cyan_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:purple_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:magenta_glazed_terracotta"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_glazed_terracotta"
+            },
+            "weight": 1.0
+          }
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "type": "weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:white_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_gray_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:gray_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:black_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:brown_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:orange_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:yellow_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:lime_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:green_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_blue_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:blue_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:cyan_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:purple_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:magenta_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_candle",
+              "Properties": {
+                "candles": 4
+              }
+            },
+            "weight": 1.0
+          }
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "type": "weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:white_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_gray_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:gray_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:black_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:brown_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:orange_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:yellow_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:lime_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:green_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_blue_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:blue_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:cyan_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:purple_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:magenta_concrete"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_concrete"
+            },
+            "weight": 1.0
+          }
+        ]
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "type": "weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:white_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_gray_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:gray_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:black_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:brown_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:orange_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:yellow_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:lime_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:green_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_blue_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:blue_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:cyan_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:purple_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:magenta_wool"
+            },
+            "weight": 1.0
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_wool"
+            },
+            "weight": 1.0
+          }
+        ]
+      },
+      "weight": 1.0
+    }
+  ]
+}

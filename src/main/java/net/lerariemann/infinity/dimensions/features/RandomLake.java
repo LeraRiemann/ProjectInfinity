@@ -13,8 +13,8 @@ public class RandomLake extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        String block = genBlockOrFluid();
-        addBlockProviderCarefully(config, "fluid", block);
+        NbtCompound block = genBlockOrFluid();
+        config.put("fluid", PROVIDER.blockToProvider(block, random));
         addRandomBlockProvider(config, "barrier", "full_blocks");
         return feature(config);
     }
