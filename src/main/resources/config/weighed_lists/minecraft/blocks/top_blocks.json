@@ -74,12 +74,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:mangrove_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:mangrove_slab"
       },
       "weight": 1.0
@@ -240,12 +234,6 @@
     {
       "key": {
         "Name": "minecraft:acacia_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:acacia_sign"
       },
       "weight": 1.0
     },
@@ -435,12 +423,6 @@
     {
       "key": {
         "Name": "minecraft:birch_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:birch_sign"
       },
       "weight": 1.0
     },
@@ -1055,18 +1037,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:creeper_head"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:creeper_wall_head"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:crimson_button",
         "Properties": {
           "face": "floor"
@@ -1113,12 +1083,6 @@
     {
       "key": {
         "Name": "minecraft:crimson_pressure_plate"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:crimson_sign"
       },
       "weight": 1.0
     },
@@ -1317,12 +1281,6 @@
     {
       "key": {
         "Name": "minecraft:dark_oak_sapling"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dark_oak_sign"
       },
       "weight": 1.0
     },
@@ -1635,18 +1593,6 @@
     {
       "key": {
         "Name": "minecraft:dragon_egg"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dragon_head"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:dragon_wall_head"
       },
       "weight": 1.0
     },
@@ -2240,12 +2186,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:jungle_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:jungle_slab"
       },
       "weight": 1.0
@@ -2813,12 +2753,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:oak_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:oak_slab"
       },
       "weight": 1.0
@@ -3024,18 +2958,6 @@
     {
       "key": {
         "Name": "minecraft:piston_head"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:player_head"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:player_wall_head"
       },
       "weight": 1.0
     },
@@ -3824,18 +3746,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:skeleton_skull"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:skeleton_wall_skull"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:slime_block"
       },
       "weight": 1.0
@@ -4056,12 +3966,6 @@
     {
       "key": {
         "Name": "minecraft:spruce_sapling"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:spruce_sign"
       },
       "weight": 1.0
     },
@@ -4391,12 +4295,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:warped_sign"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:warped_slab"
       },
       "weight": 1.0
@@ -4631,18 +4529,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:wither_skeleton_skull"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:wither_skeleton_wall_skull"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:yellow_candle"
       },
       "weight": 1.0
@@ -4698,18 +4584,6 @@
     {
       "key": {
         "Name": "minecraft:yellow_wool"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:zombie_head"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:zombie_wall_head"
       },
       "weight": 1.0
     }

@@ -131,13 +131,17 @@ public class RandomProvider {
         return blockToProvider(randomBlock(random, key), random);
     }
 
-    static NbtCompound genBounds(Random random, int lbound, int bound) {
+    static NbtCompound genBounds(int lbound, int bound) {
         NbtCompound value = new NbtCompound();
+        value.putInt("min_inclusive", lbound);
+        value.putInt("max_inclusive", bound);
+        return value;
+    }
+
+    static NbtCompound genBounds(Random random, int lbound, int bound) {
         int a = random.nextInt(lbound, bound);
         int b = random.nextInt(lbound, bound);
-        value.putInt("min_inclusive", Math.min(a, b));
-        value.putInt("max_inclusive", Math.max(a, b));
-        return value;
+        return genBounds(Math.min(a, b), Math.max(a, b));
     }
 
     public static NbtElement intProvider(Random random, int bound, boolean acceptDistributions) {

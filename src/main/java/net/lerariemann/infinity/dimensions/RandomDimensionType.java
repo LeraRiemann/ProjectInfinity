@@ -41,7 +41,10 @@ public class RandomDimensionType {
         res.putInt("height", parent.height);
         res.putInt("logical_height", parent.height);
         res.putInt("monster_spawn_block_light_limit", random.nextInt(16));
-        res.put("monster_spawn_light_level", RandomProvider.intProvider(random, 16, true));
+        NbtCompound lightLevel = new NbtCompound();
+        lightLevel.putString("type", "uniform");
+        lightLevel.put("value", RandomProvider.genBounds(0, random.nextInt(16)));
+        res.put("monster_spawn_light_level", lightLevel);
         res.putString("infiniburn", dim.PROVIDER.randomName(random, "tags"));
         res.putString("effects", dim.PROVIDER.randomName(random, "effects"));
         CommonIO.write(res, dim.storagePath + "/dimension_type", name + ".json");

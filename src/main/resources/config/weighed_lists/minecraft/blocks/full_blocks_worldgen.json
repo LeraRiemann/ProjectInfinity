@@ -346,10 +346,6 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:cobweb",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:command_block",
       "weight": 1.0
     },
@@ -1023,10 +1019,6 @@
     },
     {
       "key": "minecraft:polished_deepslate",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:polished_deepslate_wall",
       "weight": 1.0
     },
     {

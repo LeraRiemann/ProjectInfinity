@@ -30,7 +30,6 @@ public class RandomBiome {
         res.putString("temperature_modifier", roll("temperature_modifier_frozen") ? "frozen" : "none");
         res.putDouble("downfall", random.nextDouble());
         res.put("effects", randomEffects());
-        if (random.nextBoolean()) res.putFloat("creature_spawn_probability", random.nextFloat()*0.5f);
         res.put("spawners", (new RandomMobsList(this)).asData());
         res.put("spawn_costs", spawnCosts());
         res.put("features", (new RandomFeaturesList(this)).data);
@@ -93,7 +92,7 @@ public class RandomBiome {
     NbtCompound randomMusic(){
         NbtCompound res = new NbtCompound();
         res.put("sound", NbtString.of(PROVIDER.randomName(random, "music")));
-        int a = random.nextInt(0, 24000);
+        int a = random.nextInt(0, 12000);
         int b = random.nextInt(0, 24000);
         res.putInt("min_delay", Math.min(a,b));
         res.putInt("max_delay", Math.max(a,b));

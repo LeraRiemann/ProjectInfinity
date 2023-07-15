@@ -9,11 +9,11 @@
       "ultrawarm": 0.5,
       "natural": 0.5,
       "has_skylight": 0.75,
-      "piglin_safe": 0.5,
+      "piglin_safe": 1.0,
       "bed_works": 0.5,
-      "respawn_anchor_works": 0.5,
+      "respawn_anchor_works": 1.0,
       "has_raids": 0.5,
-      "fixed_time": 0.5
+      "fixed_time": 0.25
     },
     "noise_settings": {
       "randomise_blocks": 0.75,

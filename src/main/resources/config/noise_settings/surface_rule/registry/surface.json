@@ -83,6 +83,18 @@
     {
       "key": "mushroom_fields",
       "biome": "minecraft:mushroom_fields"
+    },
+    {
+      "key": "default_nether",
+      "biome": "minecraft:nether_wastes"
+    },
+    {
+      "key": "default_nether",
+      "biome": "minecraft:crimson_forest"
+    },
+    {
+      "key": "default_nether",
+      "biome": "minecraft:warped_forest"
     }
   ]
 }
