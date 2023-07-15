@@ -1,6 +1,17 @@
 {
-  "type": "minecraft:block",
-  "result_state": {
-    "Name": "minecraft:netherrack"
+  "type": "minecraft:condition",
+  "if_true": {
+    "type": "minecraft:biome",
+    "biome_is": [
+      "minecraft:nether_wastes",
+      "minecraft:crimson_forest",
+      "minecraft:warped_forest"
+    ]
+  },
+  "then_run": {
+    "type": "minecraft:block",
+    "result_state": {
+      "Name": "minecraft:netherrack"
+    }
   }
 }
