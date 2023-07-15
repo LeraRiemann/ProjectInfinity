@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
@@ -109,7 +110,7 @@ public class RandomColumnsFeature
 
     private static boolean isAirOrOcean(WorldAccess world, int seaLevel, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
-        return blockState.isAir() || (blockState.isOf(Blocks.LAVA) || blockState.isOf(Blocks.WATER)) && pos.getY() <= seaLevel;
+        return blockState.isAir() || (blockState.getBlock() instanceof FluidBlock) && pos.getY() <= seaLevel;
     }
 }
 

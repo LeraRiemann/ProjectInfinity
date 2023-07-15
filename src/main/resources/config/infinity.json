@@ -36,7 +36,7 @@
     },
     "features_chances": {
       "end_island": 0.2,
-      "shape": 1.0,
+      "shape": 0.5,
       "lake": 0.5,
       "iceberg": 0.33,
       "geode": 0.5,
@@ -53,7 +53,8 @@
       "floating_patch": 0.1
     },
     "features_rules": {
-      "rotate_blocks": 1.0,
+      "generate_vanilla_features": 0.5,
+      "rotate_blocks": 0.75,
       "flood_geodes": 0.25,
       "use_vanilla_trees": 0.25,
       "huge_trees": 0.25,
@@ -62,7 +63,7 @@
       "scatter_end_spikes": 0.67,
       "cage_crystals": 0.2,
       "exact_gateways": 0.2,
-      "colourful_shapes": 1.0,
+      "colourful_shapes": 0.5,
       "banded_shapes": 0.5
     }
   },

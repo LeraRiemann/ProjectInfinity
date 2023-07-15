@@ -22,6 +22,7 @@ public class RandomFeaturesList {
     public WeighedStructure<String> trees;
     public RandomBiome parent;
     public List<String> blocks;
+    public boolean useVanillaFeatures;
 
     RandomFeaturesList(RandomBiome biome) {
         parent = biome;
@@ -32,6 +33,7 @@ public class RandomFeaturesList {
         trees = CommonIO.weighedListReader(configPath + "vegetation/trees_checked.json");
         storagePath = biome.parent.storagePath;
         blocks = new ArrayList<>();
+        useVanillaFeatures = roll("generate_vanilla_features");
         data = new NbtList();
         data.add(endIsland());
         data.add(lakes());
@@ -52,6 +54,7 @@ public class RandomFeaturesList {
     }
 
     NbtList getAllElements(String name) {
+        if (!useVanillaFeatures) return new NbtList();
         NbtList content = CommonIO.read(configPath + name + ".json").getList("elements", NbtElement.COMPOUND_TYPE);
         NbtList res = new NbtList();
         for (NbtElement nbtElement : content) {

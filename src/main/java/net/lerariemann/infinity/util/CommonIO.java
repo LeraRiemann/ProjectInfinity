@@ -76,11 +76,14 @@ public class CommonIO {
     public static WeighedStructure<String> weighedListReader(String path, String subpath) {
         WeighedStructure<String> res = new WeighedStructure<>();
         for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
-            NbtCompound base = read(path1.toPath().resolve(subpath).toFile());
-            NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
-            for(int i = 0; i < list.size(); i++) {
-                NbtCompound a = list.getCompound(i);
-                res.add(a.getString("key"), a.getDouble("weight"));
+            File readingthis = path1.toPath().resolve(subpath).toFile();
+            if (readingthis.exists()) {
+                NbtCompound base = read(readingthis);
+                NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
+                for(int i = 0; i < list.size(); i++) {
+                    NbtCompound a = list.getCompound(i);
+                    res.add(a.getString("key"), a.getDouble("weight"));
+                }
             }
         }
         return res;
@@ -105,8 +108,11 @@ public class CommonIO {
     public static NbtList nbtListReader(String path, String subpath) {
         NbtList res = new NbtList();
         for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
-            NbtList add = read(path1.getPath() + "/" + subpath).getList("elements", NbtElement.STRING_TYPE);
-            res.addAll(add);
+            File readingthis = new File(path1.getPath() + "/" + subpath);
+            if (readingthis.exists()) {
+                NbtList add = read(path1.getPath() + "/" + subpath).getList("elements", NbtElement.STRING_TYPE);
+                res.addAll(add);
+            }
         }
         return res;
     }

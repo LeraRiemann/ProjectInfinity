@@ -470,12 +470,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:black_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:black_candle"
       },
       "weight": 1.0
@@ -561,12 +555,6 @@
     {
       "key": {
         "Name": "minecraft:blast_furnace"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:blue_banner"
       },
       "weight": 1.0
     },
@@ -693,12 +681,6 @@
     {
       "key": {
         "Name": "minecraft:bricks"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:brown_banner"
       },
       "weight": 1.0
     },
@@ -1209,12 +1191,6 @@
     {
       "key": {
         "Name": "minecraft:cut_sandstone_slab"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:cyan_banner"
       },
       "weight": 1.0
     },
@@ -1940,12 +1916,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:gray_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:gray_candle"
       },
       "weight": 1.0
@@ -2001,12 +1971,6 @@
     {
       "key": {
         "Name": "minecraft:gray_wool"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:green_banner"
       },
       "weight": 1.0
     },
@@ -2363,12 +2327,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:light_blue_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:light_blue_candle"
       },
       "weight": 1.0
@@ -2424,12 +2382,6 @@
     {
       "key": {
         "Name": "minecraft:light_blue_wool"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:light_gray_banner"
       },
       "weight": 1.0
     },
@@ -2507,12 +2459,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:lime_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:lime_candle"
       },
       "weight": 1.0
@@ -2580,12 +2526,6 @@
     {
       "key": {
         "Name": "minecraft:loom"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:magenta_banner"
       },
       "weight": 1.0
     },
@@ -2915,12 +2855,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:orange_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:orange_candle"
       },
       "weight": 1.0
@@ -3012,12 +2946,6 @@
     {
       "key": {
         "Name": "minecraft:petrified_oak_slab"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:pink_banner"
       },
       "weight": 1.0
     },
@@ -3524,12 +3452,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:purple_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:purple_candle"
       },
       "weight": 1.0
@@ -3668,12 +3590,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:red_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:red_candle"
       },
       "weight": 1.0
@@ -3783,12 +3699,6 @@
     {
       "key": {
         "Name": "minecraft:red_terracotta"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:red_wall_banner"
       },
       "weight": 1.0
     },
@@ -4661,12 +4571,6 @@
     },
     {
       "key": {
-        "Name": "minecraft:white_banner"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
         "Name": "minecraft:white_candle"
       },
       "weight": 1.0
@@ -4734,12 +4638,6 @@
     {
       "key": {
         "Name": "minecraft:wither_skeleton_wall_skull"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:yellow_banner"
       },
       "weight": 1.0
     },
