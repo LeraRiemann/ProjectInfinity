@@ -135,6 +135,10 @@
     {
       "key": "minecraft:music_disc.ward",
       "weight": 0.0625
+    },
+    {
+      "key": "infinity:music.ivory.hope_instilled",
+      "weight": 0.0625
     }
   ]
 }

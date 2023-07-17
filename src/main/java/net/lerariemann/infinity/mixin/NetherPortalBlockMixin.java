@@ -24,6 +24,8 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -74,6 +76,7 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 							((MinecraftServerAccess) (server)).addWorld(key, options);
 						}
 					}
+					world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin;
 
-import net.lerariemann.infinity.poi.ModPoi;
+import net.lerariemann.infinity.var.ModPoi;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.PortalForcer;
 import net.minecraft.world.poi.PointOfInterestType;

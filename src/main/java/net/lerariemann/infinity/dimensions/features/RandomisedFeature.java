@@ -47,18 +47,24 @@ public abstract class RandomisedFeature {
         return InfinityMod.MOD_ID + ":" + name;
     }
 
+    public String fullNameConfigured() {
+        return InfinityMod.MOD_ID + ":" + name;
+    }
+
     <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key) {
         return daddy.does_not_contain(key, name);
     }
 
     void save(Object... args) {
-        NbtCompound data;
-        String path = parent.storagePath;
-        if (does_not_contain(RegistryKeys.CONFIGURED_FEATURE)) CommonIO.write(feature(), path + "/worldgen/configured_feature", name + ".json");
+        if (does_not_contain(RegistryKeys.CONFIGURED_FEATURE)) CommonIO.write(feature(), parent.storagePath + "/worldgen/configured_feature", name + ".json");
+        save_no_configure(args);
+    }
+
+    void save_no_configure(Object... args) {
         if (place && (does_not_contain(RegistryKeys.PLACED_FEATURE))) {
-            data = CommonIO.readCarefully(PROVIDER.configPath + "features/placements/" + type + ".json", args);
-            data.putString("feature", fullName());
-            CommonIO.write(data, path + "/worldgen/placed_feature", name + ".json");
+            NbtCompound data = CommonIO.readCarefully(PROVIDER.configPath + "features/placements/" + type + ".json", args);
+            data.putString("feature", fullNameConfigured());
+            CommonIO.write(data, parent.storagePath + "/worldgen/placed_feature", name + ".json");
         }
     }
 
