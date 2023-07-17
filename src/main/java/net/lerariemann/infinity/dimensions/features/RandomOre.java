@@ -18,7 +18,7 @@ public class RandomOre extends RandomisedFeature {
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         config.putInt("size", 1 + Math.min(63, (int)Math.floor(random.nextExponential()*4)));
-        config.putFloat("discard_chance_on_air_exposure", Math.min(1.0f, (float)(random.nextExponential()*0.2)));
+        config.putFloat("discard_chance_on_air_exposure", Math.max(0.0f, Math.min(1.0f, (float)(random.nextExponential()*0.2))));
         NbtCompound block = PROVIDER.randomBlock(random, "blocks_features");
         NbtList targets = new NbtList();
         int j = daddy.additional_blocks.size();

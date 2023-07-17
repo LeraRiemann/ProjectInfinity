@@ -26,11 +26,31 @@
   "final_density": {
     "type": "minecraft:add",
     "argument1": {
-      "type": "minecraft:y_clamped_gradient",
-      "from_value": 1.0,
-      "from_y": %d,
-      "to_value": 0.0,
-      "to_y": %d
+      "type": "minecraft:add",
+      "argument1": {
+        "type": "minecraft:add",
+        "argument1": {
+          "type": "minecraft:y_clamped_gradient",
+          "from_value": %f,
+          "from_y": %d,
+          "to_value": 0.0,
+          "to_y": %d
+        },
+        "argument2": {
+          "type": "minecraft:y_clamped_gradient",
+          "from_value": 0.0,
+          "from_y": %d,
+          "to_value": %f,
+          "to_y": %d
+        }
+      },
+      "argument2": {
+        "type": "minecraft:y_clamped_gradient",
+        "from_value": 1.0,
+        "from_y": %d,
+        "to_value": 0.0,
+        "to_y": %d
+      }
     },
     "argument2": {
       "type": "minecraft:add",

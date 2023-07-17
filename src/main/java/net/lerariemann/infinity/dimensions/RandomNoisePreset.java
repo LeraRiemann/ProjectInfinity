@@ -136,8 +136,11 @@ public class RandomNoisePreset {
                         min, min + 24, max - 16, max);
             }
             case "whack" -> {
-                return CommonIO.readCarefully(path, min, max, min, max, min, parent.sea_level, parent.sea_level, max,
-                        parent.random.nextExponential(), parent.random.nextDouble(1.0, 8.0), parent.random.nextDouble(1.0, 8.0));
+                double f = parent.random.nextExponential();
+                return CommonIO.readCarefully(path, min, max, min, max,
+                        2*f, min, min+8, max-8, -2*f, max,
+                        min, parent.sea_level, parent.sea_level, max,
+                        f, parent.random.nextDouble(1.0, 8.0), parent.random.nextDouble(1.0, 8.0));
             }
         }
         return CommonIO.read(path);
