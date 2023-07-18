@@ -123,13 +123,14 @@ public class CommonIO {
 
     public static String ElementToString(NbtElement base, int t) {
         String str;
-        if (base instanceof NbtCompound) str = CompoundToString((NbtCompound)base, t+1);
+        if (base == null) str = "!!NULL!!";
+        else if (base instanceof NbtCompound) str = CompoundToString((NbtCompound)base, t+1);
         else if (base instanceof NbtList) str = ListToString((NbtList)base, t+1);
         else if (base instanceof NbtByte) str = (((NbtByte)base).byteValue() != 0) ? "true" : "false";
         else if (base instanceof NbtDouble) str = String.valueOf(((NbtDouble) base).floatValue());
         else if (base instanceof NbtFloat) str = String.valueOf(((NbtFloat) base).floatValue());
         else str = base.toString();
-        return  str;
+        return str;
     }
 
     public static String CompoundToString(NbtCompound base, int t) {

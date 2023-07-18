@@ -4,6 +4,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.*;
 
+import java.io.File;
 import java.util.*;
 
 public class RandomNoisePreset {
@@ -152,31 +153,52 @@ public class RandomNoisePreset {
         for (String key: new String[]{"inline", "special", "surface", "shallow", "second_layer", "deep"}) {
             biomeRegistry.put(key, new HashSet<>());
             if ((Objects.equals(parent.type_alike, "minecraft:nether")) && ((Objects.equals(key, "inline")) || (Objects.equals(key, "special"))))
-                biomeRegistry.get(key).add("default_nether");
-            NbtCompound full_list = resolve("surface_rule/registry", key);
+                biomeRegistry.get(key).add("minecraft:default_nether");
+            NbtCompound full_list = getRegistry(key);
             for (NbtElement biome : (NbtList) Objects.requireNonNull(full_list.get("elements"))) {
-                String biome_name = Objects.requireNonNull(((NbtCompound) biome).get("biome")).asString();
-                if (parent.vanilla_biomes.contains(biome_name)) regBiome(key, Objects.requireNonNull(((NbtCompound) biome).get("key")).asString());
+                NbtCompound element = (NbtCompound) biome;
+                String biome_name = Objects.requireNonNull(element.get("biome")).asString();
+                String namespace = Objects.requireNonNull(element.get("namespace")).asString();
+                if (parent.vanilla_biomes.contains(biome_name)) regBiome(namespace, key,
+                        Objects.requireNonNull(element.get("key")).asString());
             }
         }
         for (int id: parent.random_biome_ids) {
-            String name = "infinity:biome_" + id;
+            String name = "biome_" + id;
             registerRandomBiome(name);
         }
     }
 
-    void registerRandomBiome(String biome) {
-        regBiome("surface", biome);
-        regBiome("shallow", biome);
-        boolean useRandomBlock = randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
-        NbtCompound top_block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "top_blocks") : RandomProvider.Block(defaultblock("minecraft:grass_block"));
-        parent.top_blocks.put(biome, top_block);
-        NbtCompound block_underwater = useRandomBlock ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:dirt"));
-        parent.underwater.put(biome, block_underwater);
+    NbtCompound getRegistry(String key) {
+        NbtList res = new NbtList();
+        for (File path1: Objects.requireNonNull((new File(PROVIDER.configPath + "surface_rule/")).listFiles(File::isDirectory))) {
+            String namespace = path1.toString().substring(path1.toString().lastIndexOf("/") + 1);
+            File readingthis = path1.toPath().resolve("registry/" + key + ".json").toFile();
+            if (readingthis.exists()) {
+                NbtList lst = CommonIO.read(readingthis).getList("elements", NbtElement.COMPOUND_TYPE);
+                for (NbtElement e: lst) if (e instanceof NbtCompound ee) {
+                    ee.putString("namespace", namespace);
+                    res.add(ee);
+                }
+            }
+        }
+        NbtCompound ret = new NbtCompound();
+        ret.put("elements", res);
+        return ret;
     }
 
-    void regBiome(String type, String name) {
-        biomeRegistry.get(type).add(name);
+    void registerRandomBiome(String biome) {
+        regBiome("infinity", "surface", biome);
+        regBiome("infinity", "shallow", biome);
+        boolean useRandomBlock = randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
+        NbtCompound top_block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "top_blocks") : RandomProvider.Block(defaultblock("minecraft:grass_block"));
+        parent.top_blocks.put("infinity:" + biome, top_block);
+        NbtCompound block_underwater = useRandomBlock ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:dirt"));
+        parent.underwater.put("infinity:" + biome, block_underwater);
+    }
+
+    void regBiome(String namespace, String type, String name) {
+        biomeRegistry.get(type).add(namespace + ":" + name);
     }
 
     NbtCompound buildSurfaceRule() {
@@ -196,16 +218,16 @@ public class RandomNoisePreset {
     }
 
     void addFloor(NbtList base) {
-        base.add(resolve("surface_rule", "main/bedrock_floor"));
+        base.add(resolve("surface_rule", "minecraft/main/bedrock_floor"));
     }
     void addRoof(NbtList base) {
-        base.add(resolve("surface_rule", "main/bedrock_roof"));
+        base.add(resolve("surface_rule", "minecraft/main/bedrock_roof"));
     }
 
     void addDeepslate(NbtList base) {
         NbtCompound deepslate = randomiseblocks ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") :
                 RandomProvider.Block("minecraft:deepslate");
-        base.add(CommonIO.readAndAddBlock(PROVIDER.configPath + "surface_rule/main/deepslate.json", deepslate));
+        base.add(CommonIO.readAndAddBlock(PROVIDER.configPath + "surface_rule/minecraft/main/deepslate.json", deepslate));
         parent.additional_blocks.add(deepslate);
     }
 
@@ -271,7 +293,7 @@ public class RandomNoisePreset {
         NbtList sequence = new NbtList();
         for (String biome : biomeRegistry.get(category)) sequence.add(readBiome(category, biome));
         if (Objects.equals(category, "surface") || Objects.equals(category, "shallow") || Objects.equals(category, "deep")) {
-            sequence.add(readBiome(category, "default_overworld"));
+            sequence.add(readBiome(category, "minecraft:default_overworld"));
         }
         return sequenceType(sequence);
     }
@@ -315,7 +337,9 @@ public class RandomNoisePreset {
     }
 
     NbtCompound readBiome(String category, String biome) {
-        if (!biome.startsWith("infinity:")) return resolve("surface_rule/" + category, biome);
+        String namespace = biome.substring(0, biome.lastIndexOf(":"));
+        String name = biome.substring(biome.lastIndexOf(":")+1);
+        if (!namespace.equals("infinity")) return resolve("surface_rule/" + namespace + "/" + category, name);
         else {
             NbtCompound block;
             if (category.equals("surface")) block = parent.top_blocks.get(biome);
