@@ -19,6 +19,10 @@
     {
       "key": "minecraft:flower_swamp",
       "weight": 1.0
+    },
+    {
+      "key": "minecraft:flower_cherry",
+      "weight": 1.0
     }
   ]
 }

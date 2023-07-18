@@ -303,6 +303,14 @@
     {
       "key": "minecraft:zombified_piglin",
       "weight": 1.0
+    },
+    {
+      "key": "minecraft:camel",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sniffer",
+      "weight": 1.0
     }
   ]
 }

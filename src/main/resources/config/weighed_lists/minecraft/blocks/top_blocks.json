@@ -1,6 +1,161 @@
 {
   "elements": [
     {
+      "key": "minecraft:cherry_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_cherry_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_cherry_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_bamboo_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_mosaic",
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "minecraft:cherry_leaves",
+        "Properties": {
+          "persistent": "true"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chiseled_bookshelf",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:suspicious_sand",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:suspicious_gravel",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_mosaic_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_mosaic_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "minecraft:cherry_button",
+        "Properties": {
+          "face": "floor"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_door",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_fence",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_fence_gate",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_pressure_plate",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_trapdoor",
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "minecraft:bamboo_button",
+        "Properties": {
+          "face": "floor"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_door",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_fence",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_fence_gate",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_pressure_plate",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_trapdoor",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:calibrated_sculk_sensor",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:potted_cherry_sapling",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:potted_torchflower",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:decorated_pot",
+      "weight": 1.0
+    },
+    {
       "key": {
         "Name": "minecraft:mangrove_log"
       },
@@ -363,12 +518,6 @@
     {
       "key": {
         "Name": "minecraft:beehive"
-      },
-      "weight": 1.0
-    },
-    {
-      "key": {
-        "Name": "minecraft:bell"
       },
       "weight": 1.0
     },

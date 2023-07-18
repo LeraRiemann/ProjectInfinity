@@ -21,19 +21,23 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(ServerPlayerEntity.class)
 public class ServerPlayerEntityMixin {
+
+
     @Inject(method = "moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setWorld(Lnet/minecraft/server/world/ServerWorld;)V"),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V"),
             locals = LocalCapture.CAPTURE_FAILHARD)
     private void injected2(ServerWorld destination, CallbackInfoReturnable<Entity> ci, ServerWorld serverWorld, RegistryKey<World> registryKey,
                            WorldProperties worldProperties, PlayerManager playerManager, TeleportTarget teleportTarget) {
         if (((MinecraftServerAccess)(serverWorld.getServer())).getDimensionProvider().rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
-            BlockPos pos = new BlockPos(teleportTarget.position);
-            if (destination.getBlockState(pos).isOf(Blocks.NETHER_PORTAL)) {
+            BlockPos pos = BlockPos.ofFloored(teleportTarget.position);
+            for (BlockPos pos2: new BlockPos[] {pos, pos.add(1, 0, 0), pos.add(0, 0, 1),
+                    pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
                 String keystr = registryKey.getValue().getPath();
                 String is = keystr.substring(keystr.lastIndexOf("_") + 1);
                 int i = Integer.parseInt(is);
-                ((NetherPortalBlockAccess)Blocks.NETHER_PORTAL).modifyPortal(destination, pos, destination.getBlockState(pos), i);
+                ((NetherPortalBlockAccess)Blocks.NETHER_PORTAL).modifyPortal(destination, pos2, destination.getBlockState(pos), i);
+                break;
             }
         }
     }

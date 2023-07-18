@@ -1,6 +1,258 @@
 {
   "elements": [
     {
+      "key": "minecraft:brush",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:music_disc_relic",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pitcher_pod",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:torchflower_seeds",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:angler_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:archer_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:arms_up_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blade_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:brewer_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:burn_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:danger_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:explorer_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:friend_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:heart_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:heartbreak_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:howl_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:miner_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mourner_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:plenty_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:prize_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sheaf_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:shelter_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:skull_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:snort_pottery_sherd",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:netherite_upgrade_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:coast_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dune_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:eye_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:host_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:raiser_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:rib_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sentry_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:shaper_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:silence_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:snout_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spire_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:tide_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:vex_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:ward_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:wayfinder_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:wild_armor_trim_smithing_template",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:camel_spawn_egg",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sniffer_spawn_egg",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_boat",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_raft",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oak_chest_boat",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spruce_chest_boat",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:birch_chest_boat",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:jungle_chest_boat",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:acacia_chest_boat",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dark_oak_chest_boat",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mangrove_chest_boat",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_chest_raft",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_chest_boat",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:tadpole_bucket",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:disc_fragment_5",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:echo_shard",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:goat_horn",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:music_disc_5",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:allay_spawn_egg",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:warden_spawn_egg",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:frog_spawn_egg",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:tadpole_spawn_egg",
+      "weight": 1.0
+    },
+    {
       "key": "minecraft:amethyst_shard",
       "weight": 1.0
     },

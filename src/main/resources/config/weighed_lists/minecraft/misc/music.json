@@ -45,39 +45,83 @@
       "weight": 0.2
     },
     {
-      "key": "minecraft:music.overworld.dripstone_caves",
-      "weight": 0.125
+      "key": "music.overworld.badlands",
+      "weight": 0.05
     },
     {
-      "key": "minecraft:music.overworld.frozen_peaks",
-      "weight": 0.125
+      "key": "music.overworld.bamboo_jungle",
+      "weight": 0.05
     },
     {
-      "key": "minecraft:music.overworld.grove",
-      "weight": 0.125
+      "key": "music.overworld.cherry_grove",
+      "weight": 0.05
     },
     {
-      "key": "minecraft:music.overworld.jagged_peaks",
-      "weight": 0.125
+      "key": "music.overworld.deep_dark",
+      "weight": 0.05
     },
     {
-      "key": "minecraft:music.overworld.lush_caves",
-      "weight": 0.125
+      "key": "music.overworld.desert",
+      "weight": 0.05
     },
     {
-      "key": "minecraft:music.overworld.meadow",
-      "weight": 0.125
+      "key": "music.overworld.dripstone_caves",
+      "weight": 0.05
     },
     {
-      "key": "minecraft:music.overworld.snowy_slopes",
-      "weight": 0.125
+      "key": "music.overworld.flower_forest",
+      "weight": 0.05
     },
     {
-      "key": "minecraft:music.overworld.stony_peaks",
-      "weight": 0.125
+      "key": "music.overworld.forest",
+      "weight": 0.05
     },
     {
-      "key": "minecraft:music.under_water",
+      "key": "music.overworld.frozen_peaks",
+      "weight": 0.05
+    },
+    {
+      "key": "music.overworld.grove",
+      "weight": 0.05
+    },
+    {
+      "key": "music.overworld.jagged_peaks",
+      "weight": 0.05
+    },
+    {
+      "key": "music.overworld.jungle",
+      "weight": 0.05
+    },
+    {
+      "key": "music.overworld.lush_caves",
+      "weight": 0.05
+    },
+    {
+      "key": "music.overworld.meadow",
+      "weight": 0.05
+    },
+    {
+      "key": "music.overworld.old_growth_taiga",
+      "weight": 0.05
+    },
+    {
+      "key": "music.overworld.snowy_slopes",
+      "weight": 0.05
+    },
+    {
+      "key": "music.overworld.sparse_jungle",
+      "weight": 0.05
+    },
+    {
+      "key": "music.overworld.stony_peaks",
+      "weight": 0.05
+    },
+    {
+      "key": "music.overworld.swamp",
+      "weight": 0.05
+    },
+    {
+      "key": "music.under_water",
       "weight": 1.0
     },
     {
@@ -137,8 +181,16 @@
       "weight": 0.0625
     },
     {
-      "key": "infinity:music.ivory.hope_instilled",
+      "key": "music_disc.5",
       "weight": 0.0625
+    },
+    {
+      "key": "music_disc.relic",
+      "weight": 0.0625
+    },
+    {
+      "key": "infinity:music.ivory.hope_instilled",
+      "weight": 0.05
     }
   ]
 }

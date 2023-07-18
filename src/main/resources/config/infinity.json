@@ -23,6 +23,7 @@
       "rift_world_chance": 0.01
     },
     "biome": {
+      "has_precipitation": 0.5,
       "use_random_biome": 0.75,
       "use_sparse_vegetation": 0.5,
       "use_particles": 0.5,

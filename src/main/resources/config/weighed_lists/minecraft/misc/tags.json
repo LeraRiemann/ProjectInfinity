@@ -1,7 +1,27 @@
 {
   "elements": [
     {
+      "key": "#minecraft:mineable/axe",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:mineable/hoe",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:mineable/pickaxe",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:mineable/shovel",
+      "weight": 0.01
+    },
+    {
       "key": "#minecraft:acacia_logs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:all_hanging_signs",
       "weight": 0.01
     },
     {
@@ -30,6 +50,10 @@
     },
     {
       "key": "#minecraft:azalea_root_replaceable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:bamboo_blocks",
       "weight": 0.01
     },
     {
@@ -97,11 +121,23 @@
       "weight": 0.01
     },
     {
+      "key": "#minecraft:ceiling_hanging_signs",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:cherry_logs",
+      "weight": 0.01
+    },
+    {
       "key": "#minecraft:climbable",
       "weight": 0.01
     },
     {
       "key": "#minecraft:coal_ores",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:combination_step_sound_blocks",
       "weight": 0.01
     },
     {
@@ -182,6 +218,14 @@
     },
     {
       "key": "#minecraft:emerald_ores",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:enchantment_power_provider",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:enchantment_power_transmitter",
       "weight": 0.01
     },
     {
@@ -309,6 +353,10 @@
       "weight": 0.01
     },
     {
+      "key": "#minecraft:maintains_farmland",
+      "weight": 0.01
+    },
+    {
       "key": "#minecraft:mangrove_logs",
       "weight": 0.01
     },
@@ -409,7 +457,11 @@
       "weight": 0.01
     },
     {
-      "key": "#minecraft:replaceable_plants",
+      "key": "#minecraft:replaceable",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:replaceable_by_trees",
       "weight": 0.01
     },
     {
@@ -449,7 +501,19 @@
       "weight": 0.01
     },
     {
+      "key": "#minecraft:smelts_to_glass",
+      "weight": 0.01
+    },
+    {
       "key": "#minecraft:snaps_goat_horn",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:sniffer_diggable_block",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:sniffer_egg_hatch_boost",
       "weight": 0.01
     },
     {
@@ -489,6 +553,10 @@
       "weight": 0.01
     },
     {
+      "key": "#minecraft:stone_buttons",
+      "weight": 0.01
+    },
+    {
       "key": "#minecraft:stone_ore_replaceables",
       "weight": 0.01
     },
@@ -501,11 +569,19 @@
       "weight": 0.01
     },
     {
+      "key": "#minecraft:sword_efficient",
+      "weight": 0.01
+    },
+    {
       "key": "#minecraft:tall_flowers",
       "weight": 0.01
     },
     {
       "key": "#minecraft:terracotta",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:trail_ruins_replaceable",
       "weight": 0.01
     },
     {
@@ -525,7 +601,15 @@
       "weight": 0.01
     },
     {
+      "key": "#minecraft:vibration_resonators",
+      "weight": 0.01
+    },
+    {
       "key": "#minecraft:wall_corals",
+      "weight": 0.01
+    },
+    {
+      "key": "#minecraft:wall_hanging_signs",
       "weight": 0.01
     },
     {

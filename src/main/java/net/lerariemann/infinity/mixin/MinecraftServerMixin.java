@@ -68,7 +68,7 @@ public class MinecraftServerMixin implements MinecraftServerAccess {
         UnmodifiableLevelProperties unmodifiableLevelProperties = new UnmodifiableLevelProperties(saveProperties, serverWorldProperties);
         ServerWorld world = new ServerWorld(((MinecraftServer) (Object) this), workerExecutor, session, unmodifiableLevelProperties,
                 key, options, worldGenerationProgressListenerFactory.create(11), saveProperties.isDebugWorld(),
-                BiomeAccess.hashSeed(saveProperties.getGeneratorOptions().getSeed()), ImmutableList.of(), false);
+                BiomeAccess.hashSeed(saveProperties.getGeneratorOptions().getSeed()), ImmutableList.of(), false, getWorld(World.OVERWORLD).getRandomSequences());
         getWorld(World.OVERWORLD).getWorldBorder().addListener(new WorldBorderListener.WorldBorderSyncer(world.getWorldBorder()));
         worldsToAdd.put(key, world);
         ((MinecraftServer) (Object) this).send(createTask(() -> {

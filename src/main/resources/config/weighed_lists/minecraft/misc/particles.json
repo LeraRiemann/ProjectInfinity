@@ -13,15 +13,23 @@
       "weight": 1.0
     },
     {
+      "key": "minecraft:block",
+      "weight": 5.0
+    },
+    {
+      "key": "minecraft:block_marker",
+      "weight": 5.0
+    },
+    {
       "key": "minecraft:bubble",
       "weight": 1.0
     },
     {
-      "key": "minecraft:bubble_column_up",
+      "key": "minecraft:bubble_pop",
       "weight": 1.0
     },
     {
-      "key": "minecraft:bubble_pop",
+      "key": "minecraft:bubble_column_up",
       "weight": 1.0
     },
     {
@@ -30,6 +38,10 @@
     },
     {
       "key": "minecraft:campfire_signal_smoke",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_leaves",
       "weight": 1.0
     },
     {
@@ -73,10 +85,6 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:dripping_honey",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:dripping_lava",
       "weight": 1.0
     },
@@ -101,6 +109,10 @@
       "weight": 1.0
     },
     {
+      "key": "minecraft:elder_guardian",
+      "weight": 1.0
+    },
+    {
       "key": "minecraft:electric_spark",
       "weight": 1.0
     },
@@ -121,6 +133,10 @@
       "weight": 1.0
     },
     {
+      "key": "minecraft:explosion_emitter",
+      "weight": 1.0
+    },
+    {
       "key": "minecraft:explosion",
       "weight": 1.0
     },
@@ -134,18 +150,10 @@
     },
     {
       "key": "minecraft:falling_dust",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:falling_honey",
-      "weight": 1.0
+      "weight": 5.0
     },
     {
       "key": "minecraft:falling_lava",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:falling_nectar",
       "weight": 1.0
     },
     {
@@ -197,7 +205,15 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:landing_honey",
+      "key": "minecraft:item",
+      "weight": 10.0
+    },
+    {
+      "key": "minecraft:item_slime",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:item_snowball",
       "weight": 1.0
     },
     {
@@ -241,31 +257,7 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:reverse_portal",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:scrape",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:sculk_charge",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:sculk_charge_pop",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:sculk_soul",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:shriek",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:small_flame",
       "weight": 1.0
     },
     {
@@ -278,10 +270,6 @@
     },
     {
       "key": "minecraft:snowflake",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:sonic_boom",
       "weight": 1.0
     },
     {

@@ -26,7 +26,7 @@ public class RandomBiome {
         mobs = new ArrayList<>();
         NbtCompound res = new NbtCompound();
         res.putDouble("temperature", -1 + random.nextFloat()*3);
-        res.putString("precipitation", PROVIDER.randomName(random, "precipitation"));
+        res.putBoolean("has_precipitation", PROVIDER.roll(random, "has_precipitation"));
         res.putString("temperature_modifier", roll("temperature_modifier_frozen") ? "frozen" : "none");
         res.putDouble("downfall", random.nextDouble());
         res.put("effects", randomEffects());

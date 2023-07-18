@@ -1,6 +1,55 @@
 {
   "elements": [
     {
+      "key": "minecraft:cherry_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_cherry_log",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_cherry_wood",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:stripped_bamboo_block",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_planks",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bamboo_mosaic",
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "minecraft:cherry_leaves",
+        "Properties": {
+          "persistent": "true"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:chiseled_bookshelf",
+      "weight": 1.0
+    },
+    {
       "key": "minecraft:mangrove_log",
       "weight": 1.0
     },

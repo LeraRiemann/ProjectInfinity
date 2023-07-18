@@ -251,6 +251,10 @@
     {
       "key": "minecraft:wooded_badlands",
       "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_grove",
+      "weight": 1.0
     }
   ]
 }

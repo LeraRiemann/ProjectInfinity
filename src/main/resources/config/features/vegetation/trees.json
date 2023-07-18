@@ -79,6 +79,10 @@
     {
       "key": "minecraft:trees_windswept_savanna",
       "weight": 1.0
+    },
+    {
+      "key": "minecraft:trees_cherry",
+      "weight": 1.0
     }
   ]
 }

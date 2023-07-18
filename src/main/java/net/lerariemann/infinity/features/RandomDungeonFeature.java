@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.block.entity.MobSpawnerBlockEntity;
@@ -51,8 +50,7 @@ public class RandomDungeonFeature extends Feature<RandomDungeonFeatureConfig> {
             for (t = -1; t <= 4; ++t) {
                 for (u = p; u <= q; ++u) {
                     blockPos2 = blockPos.add(s, t, u);
-                    Material material = structureWorldAccess.getBlockState(blockPos2).getMaterial();
-                    boolean bl = material.isSolid();
+                    boolean bl = structureWorldAccess.getBlockState(blockPos2).isSolid();
                     if (t == -1 && !bl) {
                         return false;
                     }
@@ -73,11 +71,11 @@ public class RandomDungeonFeature extends Feature<RandomDungeonFeatureConfig> {
                     blockPos2 = blockPos.add(s, t, u);
                     BlockState blockState = structureWorldAccess.getBlockState(blockPos2);
                     if (s == k || t == -1 || u == p || s == l || t == 4 || u == q) {
-                        if (blockPos2.getY() >= structureWorldAccess.getBottomY() && !structureWorldAccess.getBlockState(blockPos2.down()).getMaterial().isSolid()) {
+                        if (blockPos2.getY() >= structureWorldAccess.getBottomY() && !structureWorldAccess.getBlockState(blockPos2.down()).isSolid()) {
                             structureWorldAccess.setBlockState(blockPos2, AIR, Block.NOTIFY_LISTENERS);
                             continue;
                         }
-                        if (!blockState.getMaterial().isSolid() || blockState.isOf(Blocks.CHEST)) continue;
+                        if (!blockState.isSolid() || blockState.isOf(Blocks.CHEST)) continue;
                         if (t == -1 && random.nextInt(4) != 0) {
                             this.setBlockStateIf(structureWorldAccess, blockPos2, context.getConfig().decorationProvider(), predicate);
                             continue;
@@ -97,7 +95,7 @@ public class RandomDungeonFeature extends Feature<RandomDungeonFeatureConfig> {
                 if (!structureWorldAccess.isAir(blockPos3)) continue;
                 int x = 0;
                 for (Direction direction : Direction.Type.HORIZONTAL) {
-                    if (!structureWorldAccess.getBlockState(blockPos3.offset(direction)).getMaterial().isSolid()) continue;
+                    if (!structureWorldAccess.getBlockState(blockPos3.offset(direction)).isSolid()) continue;
                     ++x;
                 }
                 if (x != 1) continue;
