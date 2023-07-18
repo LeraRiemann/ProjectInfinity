@@ -10,7 +10,6 @@ public class RandomNoisePreset {
     private final RandomProvider PROVIDER;
     public String name;
     public String fullname;
-    String storagePath;
     public RandomDimension parent;
     public String noise_router, surface_rule, spawn_target, type_alike;
     int sea_level_default;
@@ -21,7 +20,6 @@ public class RandomNoisePreset {
         parent = dim;
         biomeRegistry = new HashMap<>();
         PROVIDER = dim.PROVIDER;
-        storagePath = PROVIDER.configPath + "noise_settings/";
         name = "generated_" +dim.id;
         fullname = InfinityMod.MOD_ID + ":" + name;
         randomiseblocks = PROVIDER.roll(dim.random, "randomise_blocks");
@@ -61,7 +59,7 @@ public class RandomNoisePreset {
         parent.sea_level = sea_level;
         data.put("noise", noise(dim));
         data.put("noise_router", getRouter(noise_router));
-        data.put("spawn_target", resolve("spawn_target", spawn_target).get("spawn_target"));
+        data.put("spawn_target", resolve("util/spawn_target", spawn_target).get("spawn_target"));
         registerBiomes();
         data.put("surface_rule", buildSurfaceRule());
         CommonIO.write(data, dim.storagePath + "/worldgen/noise_settings", name + ".json");
@@ -111,7 +109,7 @@ public class RandomNoisePreset {
     }
 
     NbtCompound getRouter(String router) {
-        String path = storagePath + "noise_router/" + router + ".json";
+        String path = PROVIDER.configPath + "util/noise_router/" + router + ".json";
         int min = parent.min_y;
         int max = parent.height + parent.min_y;
         int softmax = Math.min(max, 256);
@@ -147,7 +145,7 @@ public class RandomNoisePreset {
     }
 
     NbtCompound resolve(String type, String name) {
-        return CommonIO.read(storagePath + type + "/" + name + ".json");
+        return CommonIO.read(PROVIDER.configPath + type + "/" + name + ".json");
     }
 
     void registerBiomes() {
@@ -207,7 +205,7 @@ public class RandomNoisePreset {
     void addDeepslate(NbtList base) {
         NbtCompound deepslate = randomiseblocks ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") :
                 RandomProvider.Block("minecraft:deepslate");
-        base.add(CommonIO.readAndAddBlock(storagePath + "surface_rule/main/deepslate.json", deepslate));
+        base.add(CommonIO.readAndAddBlock(PROVIDER.configPath + "surface_rule/main/deepslate.json", deepslate));
         parent.additional_blocks.add(deepslate);
     }
 

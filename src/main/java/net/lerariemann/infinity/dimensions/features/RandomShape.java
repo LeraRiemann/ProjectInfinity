@@ -33,7 +33,7 @@ public class RandomShape extends RandomisedFeature {
         replaceable.add(parent.parent.parent.default_fluid);
         config.put("replaceable", replaceable);
         if (!usePreset) addRandomBlockProvider(config, "block_provider", "full_blocks_worldgen");
-        else config.put("block_provider", PROVIDER.randomBlock(random, useBands ? "color_presets" : "color_presets_noise"));
+        else config.put("block_provider", PROVIDER.randomPreset(random, useBands ? "weighted_state_provider" : "noise_provider"));
         config.put("radius", RandomProvider.floatProvider(random, 2.0f, 20.0f));
         config.putBoolean("use_bands", useBands);
         if (!Objects.equals(shape, "cube")) config.putDouble("power", Objects.equals(shape, "sphere") ? 2.0 :

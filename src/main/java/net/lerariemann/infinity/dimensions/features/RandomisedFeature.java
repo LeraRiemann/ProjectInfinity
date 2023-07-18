@@ -62,7 +62,7 @@ public abstract class RandomisedFeature {
 
     void save_no_configure(Object... args) {
         if (place && (does_not_contain(RegistryKeys.PLACED_FEATURE))) {
-            NbtCompound data = CommonIO.readCarefully(PROVIDER.configPath + "features/placements/" + type + ".json", args);
+            NbtCompound data = CommonIO.readCarefully(PROVIDER.configPath + "util/placements/" + type + ".json", args);
             data.putString("feature", fullNameConfigured());
             CommonIO.write(data, parent.storagePath + "/worldgen/placed_feature", name + ".json");
         }

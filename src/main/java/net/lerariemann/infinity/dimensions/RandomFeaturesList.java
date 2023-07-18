@@ -14,7 +14,6 @@ import java.util.*;
 public class RandomFeaturesList {
     public NbtList data;
     public final RandomProvider PROVIDER;
-    public String configPath;
     public String storagePath;
 
     public Random random;
@@ -29,8 +28,7 @@ public class RandomFeaturesList {
         random = biome.random;
         PROVIDER = biome.PROVIDER;
         surface_block = parent.parent.top_blocks.get(parent.fullname);
-        configPath = PROVIDER.configPath + "features/";
-        trees = CommonIO.weighedListReader(configPath + "vegetation/trees_checked.json");
+        trees = PROVIDER.registry.get("trees_checked");
         storagePath = biome.parent.storagePath;
         blocks = new ArrayList<>();
         useVanillaFeatures = roll("generate_vanilla_features");
@@ -49,21 +47,14 @@ public class RandomFeaturesList {
     }
 
     NbtString randomPlant(String path) {
-        String plant = CommonIO.weighedListReader(configPath + "vegetation/" + path + ".json").getRandomElement(random);
-        return NbtString.of(plant);
+        return NbtString.of(PROVIDER.randomName(random, path));
     }
 
     NbtList getAllElements(String name) {
         if (!useVanillaFeatures) return new NbtList();
-        NbtList content = CommonIO.read(configPath + name + ".json").getList("elements", NbtElement.COMPOUND_TYPE);
+        List<String> lst = PROVIDER.registry.get(name).getAllElements(random);
         NbtList res = new NbtList();
-        for (NbtElement nbtElement : content) {
-            NbtCompound element = (NbtCompound) nbtElement;
-            if (random.nextDouble() < element.getDouble("weight")) {
-                NbtElement featuretoadd = element.get("key");
-                res.add(featuretoadd);
-            }
-        }
+        for (String s : lst) res.add(NbtString.of(s));
         return res;
     }
 
@@ -138,14 +129,14 @@ public class RandomFeaturesList {
     NbtList vegetation() {
         NbtList res = new NbtList();
         addRandomFeature("vegetation", res, RandomVegetation::new);
-        res.addAll(getAllElements("vegetation/part1"));
+        res.addAll(getAllElements("vegetation_part1"));
         res.add(randomPlant("flowers"));
         res.add(randomPlant("grass"));
-        res.addAll(getAllElements("vegetation/part2"));
+        res.addAll(getAllElements("vegetation_part2"));
         addRandomFeature("surface_patch", res, RandomSurfacePatch::new);
         addRandomFeature("floating_patch", res, RandomFloatingPatch::new);
         res.add(randomPlant("seagrass"));
-        res.addAll(getAllElements("vegetation/part3"));
+        res.addAll(getAllElements("vegetation_part3"));
         return res;
     }
 }

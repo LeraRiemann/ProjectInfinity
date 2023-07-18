@@ -2,10 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.util.WeighedStructure;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
+import net.minecraft.nbt.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -16,17 +13,20 @@ import static java.nio.file.Files.walk;
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
     public Map<String, WeighedStructure<NbtElement>> blockRegistry;
+    public Map<String, WeighedStructure<NbtElement>> blockPresetRegistry;
     public Map<String, NbtList> biomePresetRegistry;
     public Map<String, NbtList> miscListRegistry;
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
     public WeighedStructure<String> floralDistribution;
     public String configPath;
+    public NbtCompound noise;
 
     public RandomProvider(String path) {
         configPath = path;
         registry = new HashMap<>();
         blockRegistry = new HashMap<>();
+        blockPresetRegistry = new HashMap<>();
         biomePresetRegistry = new HashMap<>();
         miscListRegistry = new HashMap<>();
         rootChances = new HashMap<>();
@@ -38,10 +38,15 @@ public class RandomProvider {
     void register_all() {
         read_root_config();
         register_category(registry, configPath + "weighed_lists", "misc", CommonIO::weighedListReader);
+        register_category(registry, configPath + "weighed_lists", "features", CommonIO::weighedListReader);
+        register_category(registry, configPath + "weighed_lists", "vegetation", CommonIO::weighedListReader);
         register_category(blockRegistry, configPath + "weighed_lists", "blocks", CommonIO::blockListReader);
+        register_category(blockPresetRegistry, configPath + "weighed_lists", "blockpresets", CommonIO::blockListReader);
         register_category(registry, configPath + "weighed_lists", "mobs", CommonIO::weighedListReader);
         register_category(biomePresetRegistry, configPath + "lists", "multinoisepresets", CommonIO::nbtListReader);
         register_category(miscListRegistry, configPath + "lists", "misc", CommonIO::nbtListReader);
+        register_category_hardcoded(configPath + "weighed_lists/hardcoded");
+        noise = CommonIO.read(configPath + "util/noise.json");
     }
 
     void read_root_config() {
@@ -75,11 +80,23 @@ public class RandomProvider {
                 String fullname = p.toString();
                 if (fullname.endsWith(".json")) {
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
-                    if (!Objects.equals(name, "none")) {
-                        String sub = fullname.substring(fullname.lastIndexOf("/minecraft/")+11);
-                        reg.put(name, reader.op(path, sub));
-                    }
+                    String sub = fullname.substring(fullname.lastIndexOf("/minecraft/")+11);
+                    reg.put(name, reader.op(path, sub));
                 }});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    void register_category_hardcoded(String path) {
+        try {
+            walk(Paths.get(path)).forEach(p -> {
+                String fullname = p.toString();
+                if (fullname.endsWith(".json")) {
+                    String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
+                    if (!Objects.equals(name, "none")) registry.put(name, CommonIO.weighedListReader(fullname));
+                }
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -129,6 +146,31 @@ public class RandomProvider {
 
     public NbtCompound randomBlockProvider(Random random, String key) {
         return blockToProvider(randomBlock(random, key), random);
+    }
+
+    public NbtCompound randomPreset(Random random, String key) {
+        NbtElement list = blockPresetRegistry.get("color_presets").getRandomElement(random);
+        NbtCompound res = new NbtCompound();
+        if (list instanceof NbtList lst) {
+            res.putString("type", key);
+            if (key.equals("noise_provider")) {
+                res.putInt("seed", 0);
+                res.putDouble("scale", 4.0);
+                res.put("states", lst);
+                res.put("noise", noise);
+            }
+            if (key.equals("weighted_state_provider")) {
+                NbtList entries = new NbtList();
+                for (NbtElement block : lst) {
+                    NbtCompound entry = new NbtCompound();
+                    entry.put("data", block);
+                    entry.putDouble("weight", 1.0);
+                    entries.add(entry);
+                }
+                res.put("entries", entries);
+            }
+        }
+        return res;
     }
 
     static NbtCompound genBounds(int lbound, int bound) {

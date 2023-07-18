@@ -1,5 +1,8 @@
 package net.lerariemann.infinity.util;
 
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,5 +36,12 @@ public class WeighedStructure<T> {
             if (r <= 0.0) break;
         }
         return keys.get(i);
+    }
+
+    public List<T> getAllElements(Random random) {
+        List<T> res = new ArrayList<>();
+        int i;
+        for (i = 0; i < size() - 1; ++i) if (random.nextDouble() < weights.get(i)) res.add(keys.get(i));
+        return res;
     }
 }
