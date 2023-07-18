@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.block.entity;
 
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -8,7 +9,7 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class NeitherPortalBlockEntity extends BlockEntity {
+public class NeitherPortalBlockEntity extends BlockEntity implements RenderAttachmentBlockEntity {
     private final PropertyDelegate propertyDelegate;
     private int dimension;
 
@@ -65,5 +66,10 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     @Override
     public NbtCompound toInitialChunkDataNbt() {
         return createNbt();
+    }
+
+    @Override
+    public Object getRenderAttachmentData() {
+        return dimension;
     }
 }

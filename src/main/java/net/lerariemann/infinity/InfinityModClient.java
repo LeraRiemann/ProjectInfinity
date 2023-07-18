@@ -13,8 +13,9 @@ public class InfinityModClient implements ClientModInitializer {
             if (world != null && pos != null) {
                 BlockEntity blockEntity = world.getBlockEntity(pos);
                 if (blockEntity instanceof NeitherPortalBlockEntity) {
-                    int j = ((NeitherPortalBlockEntity)blockEntity).getDimension();
-                    return j & 0xFFFFFF;
+                    Object j = ((NeitherPortalBlockEntity)blockEntity).getRenderAttachmentData();
+                    if (j == null) return 0;
+                    return (int)j & 0xFFFFFF;
                 }
             }
             return 16777215;

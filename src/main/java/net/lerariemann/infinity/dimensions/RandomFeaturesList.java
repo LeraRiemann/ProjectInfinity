@@ -97,6 +97,7 @@ public class RandomFeaturesList {
         addRandomFeature("end_gateway", res, RandomEndGateway::new);
         addRandomFeature("delta", res, RandomDelta::new);
         addRandomFeature("columns", res, RandomColumns::new);
+        addRandomFeature("crops", res, RandomCrop::new);
         return res;
     }
 

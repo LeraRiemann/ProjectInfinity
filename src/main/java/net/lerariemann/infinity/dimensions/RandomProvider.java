@@ -13,7 +13,7 @@ import static java.nio.file.Files.walk;
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
     public Map<String, WeighedStructure<NbtElement>> blockRegistry;
-    public Map<String, WeighedStructure<NbtElement>> blockPresetRegistry;
+    public Map<String, WeighedStructure<NbtElement>> extraRegistry;
     public Map<String, NbtList> biomePresetRegistry;
     public Map<String, NbtList> miscListRegistry;
     public Map<String, Double> rootChances;
@@ -25,7 +25,7 @@ public class RandomProvider {
         configPath = path;
         registry = new HashMap<>();
         blockRegistry = new HashMap<>();
-        blockPresetRegistry = new HashMap<>();
+        extraRegistry = new HashMap<>();
         biomePresetRegistry = new HashMap<>();
         miscListRegistry = new HashMap<>();
         rootChances = new HashMap<>();
@@ -39,7 +39,7 @@ public class RandomProvider {
         register_category(registry, configPath + "weighed_lists", "features", CommonIO::weighedListReader);
         register_category(registry, configPath + "weighed_lists", "vegetation", CommonIO::weighedListReader);
         register_category(blockRegistry, configPath + "weighed_lists", "blocks", CommonIO::blockListReader);
-        register_category(blockPresetRegistry, configPath + "weighed_lists", "blockpresets", CommonIO::blockListReader);
+        register_category(extraRegistry, configPath + "weighed_lists", "extra", CommonIO::blockListReader);
         register_category(registry, configPath + "weighed_lists", "mobs", CommonIO::weighedListReader);
         register_category(biomePresetRegistry, configPath + "lists", "multinoisepresets", CommonIO::nbtListReader);
         register_category(miscListRegistry, configPath + "lists", "misc", CommonIO::nbtListReader);
@@ -114,6 +114,13 @@ public class RandomProvider {
         return res;
     }
 
+    public static NbtCompound blockToProvider(NbtCompound block) {
+        NbtCompound res = new NbtCompound();
+        res.putString("type", "minecraft:simple_state_provider");
+        res.put("state", block);
+        return res;
+    }
+
     public String randomName(Random random, String key) {
         switch (key) {
             case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
@@ -143,7 +150,7 @@ public class RandomProvider {
     }
 
     public NbtCompound randomPreset(Random random, String key) {
-        NbtElement list = blockPresetRegistry.get("color_presets").getRandomElement(random);
+        NbtElement list = extraRegistry.get("color_presets").getRandomElement(random);
         NbtCompound res = new NbtCompound();
         if (list instanceof NbtList lst) {
             res.putString("type", key);

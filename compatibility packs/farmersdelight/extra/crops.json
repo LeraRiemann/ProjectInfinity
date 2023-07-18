@@ -1,0 +1,147 @@
+{
+  "elements": [
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:budding_tomatoes"
+        },
+        "block_0": {
+          "Name": "minecraft:farmland"
+        },
+        "needsWater": true
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:tomatoes"
+        },
+        "block_0": {
+          "Name": "minecraft:farmland"
+        },
+        "needsWater": true
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:cabbages"
+        },
+        "block_0": {
+          "Name": "minecraft:farmland"
+        },
+        "needsWater": true
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:onions"
+        },
+        "block_0": {
+          "Name": "minecraft:farmland"
+        },
+        "needsWater": true
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:sandy_shrub"
+        },
+        "block_0": {
+          "Name": "minecraft:sand"
+        },
+        "needsWater": false
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:wild_beetroots"
+        },
+        "block_0": {
+          "Name": "minecraft:grass_block"
+        },
+        "needsWater": false
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:wild_cabbages"
+        },
+        "block_0": {
+          "Name": "minecraft:grass_block"
+        },
+        "needsWater": false
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:wild_onions"
+        },
+        "block_0": {
+          "Name": "minecraft:grass_block"
+        },
+        "needsWater": false
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:wild_tomatoes"
+        },
+        "block_0": {
+          "Name": "minecraft:grass_block"
+        },
+        "needsWater": false
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:wild_carrots"
+        },
+        "block_0": {
+          "Name": "minecraft:grass_block"
+        },
+        "needsWater": false
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "blocks": 2,
+        "block_1": {
+          "Name": "farmersdelight:wild_potatoes"
+        },
+        "block_0": {
+          "Name": "minecraft:grass_block"
+        },
+        "needsWater": false
+      },
+      "weight": 1.0
+    }
+  ]
+}

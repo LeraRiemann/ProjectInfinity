@@ -47,6 +47,7 @@
       "end_gateway": 0.05,
       "delta": 0.2,
       "columns": 0.2,
+      "crops": 1.0,
       "blobs": 0.33,
       "ceiling_blobs": 0.5,
       "vegetation": 1.0,

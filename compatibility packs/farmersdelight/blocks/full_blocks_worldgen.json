@@ -1,0 +1,96 @@
+{
+  "elements": [
+    {
+      "key": "farmersdelight:stove",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:basket",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:carrot_crate",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:potato_crate",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:beetroot_crate",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:tomato_crate",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:onion_crate",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:cabbage_crate",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:rice_bale",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:rice_bag",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:straw_bale",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:oak_cabinet",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:birch_cabinet",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:spruce_cabinet",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:jungle_cabinet",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:acacia_cabinet",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:dark_oak_cabinet",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:mangrove_cabinet",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:crimson_cabinet",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:warped_cabinet",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:tatami",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:organic_compost",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:rich_soil",
+      "weight": 1.0
+    }
+  ]
+}

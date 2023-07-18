@@ -1,0 +1,113 @@
+{
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": %d
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:constant",
+        "value": {
+          "absolute": %d
+        }
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "not",
+        "predicate": {
+          "type": "matching_fluids",
+          "fluids": "minecraft:water"
+        }
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "any_of",
+        "predicates": [
+          {
+            "type": "matching_fluids",
+            "offset": [
+              -1,
+              0,
+              -1
+            ],
+            "fluids": "minecraft:water"
+          },
+          {
+            "type": "matching_fluids",
+            "offset": [
+              -1,
+              0,
+              0
+            ],
+            "fluids": "minecraft:water"
+          },
+          {
+            "type": "matching_fluids",
+            "offset": [
+              -1,
+              0,
+              1
+            ],
+            "fluids": "minecraft:water"
+          },
+          {
+            "type": "matching_fluids",
+            "offset": [
+              0,
+              0,
+              -1
+            ],
+            "fluids": "minecraft:water"
+          },
+          {
+            "type": "matching_fluids",
+            "offset": [
+              0,
+              0,
+              1
+            ],
+            "fluids": "minecraft:water"
+          },
+          {
+            "type": "matching_fluids",
+            "offset": [
+              1,
+              0,
+              -1
+            ],
+            "fluids": "minecraft:water"
+          },
+          {
+            "type": "matching_fluids",
+            "offset": [
+              1,
+              0,
+              0
+            ],
+            "fluids": "minecraft:water"
+          },
+          {
+            "type": "matching_fluids",
+            "offset": [
+              1,
+              0,
+              1
+            ],
+            "fluids": "minecraft:water"
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}
