@@ -1,0 +1,16 @@
+{
+  "elements": [
+    {
+      "key": "fungi",
+      "weight": 1.0
+    },
+    {
+      "key": "mushrooms",
+      "weight": 1.0
+    },
+    {
+      "key": "trees",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,87 +1,67 @@
 {
   "elements": [
     {
-      "key": "minecraft:trees_badlands",
+      "key": "minecraft:acacia_checked",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_birch",
+      "key": "minecraft:birch_checked",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_flower_forest",
+      "key": "minecraft:dark_oak_checked",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_birch_and_oak",
+      "key": "minecraft:fancy_oak_bees",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_water",
+      "key": "minecraft:mega_jungle_tree_checked",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_grove",
+      "key": "minecraft:mega_pine_checked",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_snowy",
+      "key": "minecraft:mega_spruce_checked",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_jungle",
+      "key": "minecraft:mangrove_checked",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_mangrove",
+      "key": "minecraft:oak_checked",
       "weight": 1.0
     },
     {
-      "key": "minecraft:birch_tall",
+      "key": "minecraft:oak_bees_002",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_old_growth_pine_taiga",
+      "key": "minecraft:birch_bees_002",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_old_growth_spruce_taiga",
+      "key": "minecraft:spruce",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_plains",
+      "key": "minecraft:pine_checked",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_savanna",
+      "key": "minecraft:jungle_tree",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_taiga",
+      "key": "minecraft:tall_mangrove_checked",
       "weight": 1.0
     },
     {
-      "key": "minecraft:trees_sparse_jungle",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:trees_swamp",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:trees_windswept_forest",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:trees_windswept_hills",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:trees_windswept_savanna",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:trees_cherry",
+      "key": "minecraft:cherry_checked",
       "weight": 1.0
     }
   ]

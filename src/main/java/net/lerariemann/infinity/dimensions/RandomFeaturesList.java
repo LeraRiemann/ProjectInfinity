@@ -1,10 +1,7 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.dimensions.features.*;
-import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +15,6 @@ public class RandomFeaturesList {
 
     public Random random;
     public NbtCompound surface_block;
-    public WeighedStructure<String> trees;
     public RandomBiome parent;
     public List<String> blocks;
     public boolean useVanillaFeatures;
@@ -28,7 +24,6 @@ public class RandomFeaturesList {
         random = biome.random;
         PROVIDER = biome.PROVIDER;
         surface_block = parent.parent.top_blocks.get(parent.fullname);
-        trees = PROVIDER.registry.get("trees_checked");
         storagePath = biome.parent.storagePath;
         blocks = new ArrayList<>();
         useVanillaFeatures = roll("generate_vanilla_features");

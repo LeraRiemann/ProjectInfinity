@@ -18,7 +18,6 @@ public class RandomProvider {
     public Map<String, NbtList> miscListRegistry;
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
-    public WeighedStructure<String> floralDistribution;
     public String configPath;
     public NbtCompound noise;
 
@@ -31,7 +30,6 @@ public class RandomProvider {
         miscListRegistry = new HashMap<>();
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
-        floralDistribution = new WeighedStructure<>();
         register_all();
     }
 
@@ -60,10 +58,6 @@ public class RandomProvider {
             for (String s: rootchances.getCompound(c).getKeys()) {
                 rootChances.put(s, rootchances.getCompound(c).getDouble(s));
             }
-        }
-        NbtCompound flora = rootConfig.getCompound("floralDistribution");
-        for (String s: flora.getKeys()) {
-            floralDistribution.add(s, flora.getDouble(s));
         }
     }
 

@@ -67,10 +67,5 @@
       "colourful_shapes": 0.5,
       "banded_shapes": 0.5
     }
-  },
-  "floralDistribution": {
-    "fungi": 1.0,
-    "mushrooms": 1.0,
-    "trees": 1.0
   }
 }
