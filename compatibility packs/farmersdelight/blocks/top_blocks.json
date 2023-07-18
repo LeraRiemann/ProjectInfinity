@@ -123,6 +123,38 @@
     {
       "key": "farmersdelight:rich_soil_farmland",
       "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:apple_pie",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:sweet_berry_cheesecake",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:chocolate_pie",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:roast_chicken_block",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:stuffed_pumpkin_block",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:honey_glazed_ham_block",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:shepherds_pie_block",
+      "weight": 1.0
+    },
+    {
+      "key": "farmersdelight:rice_roll_medley_block",
+      "weight": 1.0
     }
   ]
 }

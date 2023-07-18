@@ -142,6 +142,27 @@
         "needsWater": false
       },
       "weight": 1.0
+    },
+    {
+      "key": {
+        "offset": 2,
+        "blocks": 3,
+        "block_2": {
+          "Name": "farmersdelight:rice_panicle"
+        },
+        "block_1": {
+          "Name": "farmersdelight:rice",
+          "Properties": {
+            "age": 3,
+            "supporting": "true"
+          }
+        },
+        "block_0": {
+          "Name": "minecraft:dirt"
+        },
+        "needsWater": true
+      },
+      "weight": 1.0
     }
   ]
 }
