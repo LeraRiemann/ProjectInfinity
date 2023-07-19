@@ -4,8 +4,11 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.*;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
+
+import static java.nio.file.Files.walk;
 
 public class RandomNoisePreset {
     private final RandomProvider PROVIDER;
@@ -60,8 +63,7 @@ public class RandomNoisePreset {
         parent.sea_level = sea_level;
         data.put("noise", noise(dim));
         data.put("noise_router", getRouter(noise_router));
-        data.put("spawn_target", resolve("util/spawn_target", spawn_target).get("spawn_target"));
-        registerBiomes();
+        data.put("spawn_target", CommonIO.read(PROVIDER.configPath + "util/spawn_target/" + spawn_target + ".json").get("spawn_target"));
         data.put("surface_rule", buildSurfaceRule());
         CommonIO.write(data, dim.storagePath + "/worldgen/noise_settings", name + ".json");
     }
@@ -145,62 +147,6 @@ public class RandomNoisePreset {
         return CommonIO.read(path);
     }
 
-    NbtCompound resolve(String type, String name) {
-        return CommonIO.read(PROVIDER.configPath + type + "/" + name + ".json");
-    }
-
-    void registerBiomes() {
-        for (String key: new String[]{"inline", "special", "surface", "shallow", "second_layer", "deep"}) {
-            biomeRegistry.put(key, new HashSet<>());
-            if ((Objects.equals(parent.type_alike, "minecraft:nether")) && ((Objects.equals(key, "inline")) || (Objects.equals(key, "special"))))
-                biomeRegistry.get(key).add("minecraft:default_nether");
-            NbtCompound full_list = getRegistry(key);
-            for (NbtElement biome : (NbtList) Objects.requireNonNull(full_list.get("elements"))) {
-                NbtCompound element = (NbtCompound) biome;
-                String biome_name = Objects.requireNonNull(element.get("biome")).asString();
-                String namespace = Objects.requireNonNull(element.get("namespace")).asString();
-                if (parent.vanilla_biomes.contains(biome_name)) regBiome(namespace, key,
-                        Objects.requireNonNull(element.get("key")).asString());
-            }
-        }
-        for (int id: parent.random_biome_ids) {
-            String name = "biome_" + id;
-            registerRandomBiome(name);
-        }
-    }
-
-    NbtCompound getRegistry(String key) {
-        NbtList res = new NbtList();
-        for (File path1: Objects.requireNonNull((new File(PROVIDER.configPath + "surface_rule/")).listFiles(File::isDirectory))) {
-            String namespace = path1.toString().substring(path1.toString().lastIndexOf("/") + 1);
-            File readingthis = path1.toPath().resolve("registry/" + key + ".json").toFile();
-            if (readingthis.exists()) {
-                NbtList lst = CommonIO.read(readingthis).getList("elements", NbtElement.COMPOUND_TYPE);
-                for (NbtElement e: lst) if (e instanceof NbtCompound ee) {
-                    ee.putString("namespace", namespace);
-                    res.add(ee);
-                }
-            }
-        }
-        NbtCompound ret = new NbtCompound();
-        ret.put("elements", res);
-        return ret;
-    }
-
-    void registerRandomBiome(String biome) {
-        regBiome("infinity", "surface", biome);
-        regBiome("infinity", "shallow", biome);
-        boolean useRandomBlock = randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
-        NbtCompound top_block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "top_blocks") : RandomProvider.Block(defaultblock("minecraft:grass_block"));
-        parent.top_blocks.put("infinity:" + biome, top_block);
-        NbtCompound block_underwater = useRandomBlock ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:dirt"));
-        parent.underwater.put("infinity:" + biome, block_underwater);
-    }
-
-    void regBiome(String namespace, String type, String name) {
-        biomeRegistry.get(type).add(namespace + ":" + name);
-    }
-
     NbtCompound buildSurfaceRule() {
         int i = 0;
         switch (surface_rule) {
@@ -209,35 +155,24 @@ public class RandomNoisePreset {
         }
         NbtCompound res = startingRule("sequence");
         NbtList sequence = new NbtList();
-        if (i!=2) addFloor(sequence);
-        if (i==1) addRoof(sequence);
+        if (i!=2) sequence.add(CommonIO.read(PROVIDER.configPath + "util/surface_rule/bedrock_floor.json"));
+        if (i==1) sequence.add(CommonIO.read(PROVIDER.configPath + "util/surface_rule/bedrock_roof.json"));
         sequence.add(getBiomes(i==0));
         if (i==0) addDeepslate(sequence);
         res.put("sequence", sequence);
         return res;
     }
 
-    void addFloor(NbtList base) {
-        base.add(resolve("surface_rule", "minecraft/main/bedrock_floor"));
-    }
-    void addRoof(NbtList base) {
-        base.add(resolve("surface_rule", "minecraft/main/bedrock_roof"));
-    }
-
     void addDeepslate(NbtList base) {
         NbtCompound deepslate = randomiseblocks ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") :
                 RandomProvider.Block("minecraft:deepslate");
-        base.add(CommonIO.readAndAddBlock(PROVIDER.configPath + "surface_rule/minecraft/main/deepslate.json", deepslate));
+        base.add(CommonIO.readAndAddBlock(PROVIDER.configPath + "util/surface_rule/deepslate.json", deepslate));
         parent.additional_blocks.add(deepslate);
-    }
-
-    void addType(NbtCompound base, String str) {
-        base.putString("type", "minecraft:" + str);
     }
 
     NbtCompound startingRule(String str) {
         NbtCompound res = new NbtCompound();
-        addType(res, str);
+        res.putString("type", "minecraft:" + str);
         return res;
     }
 
@@ -249,102 +184,54 @@ public class RandomNoisePreset {
             return res;
         }
         NbtCompound res = startingRule("sequence");
-        NbtList sequence = new NbtList();
-        addInline(sequence);
-        if (!biomeRegistry.get("special").isEmpty()) sequence.add(getSpecial());
-        sequence.add(getSurface());
-        sequence.add(getShallow());
-        sequence.add(getDeep());
+        NbtList sequence = biomeSequence();
         res.put("sequence", sequence);
         return res;
     }
 
-    NbtCompound stoneCondition(boolean add_surface_depth, int offset, int secondary_depth_range, boolean floor) {
-        NbtCompound res = startingRule("stone_depth");
-        res.putBoolean("add_surface_depth", add_surface_depth);
-        res.putInt("offset", offset);
-        res.putInt("secondary_depth_range", secondary_depth_range);
-        res.putString("surface_type", floor ? "floor" : "ceiling");
-        return res;
+    NbtList biomeSequence() {
+        NbtList sequence = new NbtList();
+        try {
+            walk(Paths.get(PROVIDER.configPath + "modular/")).forEach(p -> {
+                if (p.toString().contains("surface_rule") && p.toFile().isFile()) {
+                    NbtCompound compound = CommonIO.readSurfaceRule(p.toFile(), parent.sea_level);
+                    NbtList biomes = compound.getList("biomes", NbtElement.STRING_TYPE);
+                    NbtList biomestoadd = new NbtList();
+                    for (NbtElement b : biomes) {
+                        if (parent.vanilla_biomes.contains(b.asString())) biomestoadd.add(b);
+                    }
+                    if (!biomestoadd.isEmpty()) {
+                        NbtCompound rule = compound.getCompound("rule");
+                        sequence.add(ruleWrap(biomestoadd, rule));
+                    }
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (int id: parent.random_biome_ids) {
+            String biome = "infinity:biome_" + id;
+            boolean useRandomBlock = randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
+            NbtCompound top_block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "top_blocks") : RandomProvider.Block(defaultblock("minecraft:grass_block"));
+            parent.top_blocks.put(biome, top_block);
+            NbtCompound block_underwater = useRandomBlock ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:dirt"));
+            parent.underwater.put(biome, block_underwater);
+            NbtCompound rule = CommonIO.readCarefully(PROVIDER.configPath + "util/surface_rule/custom.json",
+                    CommonIO.CompoundToString(top_block, 8), CommonIO.CompoundToString(block_underwater, 7), CommonIO.CompoundToString(block_underwater, 9),
+                    CommonIO.CompoundToString(parent.default_block, 7), CommonIO.CompoundToString(block_underwater, 6));
+            NbtList biomestoadd = new NbtList();
+            biomestoadd.add(NbtString.of(biome));
+            sequence.add(ruleWrap(biomestoadd, rule));
+        }
+        return sequence;
     }
 
-    NbtCompound waterCondition(boolean add_stone_depth, int offset, int surface_depth_multiplier) {
-        NbtCompound res = startingRule("water");
-        res.putBoolean("add_stone_depth", add_stone_depth);
-        res.putInt("offset", offset);
-        res.putInt("surface_depth_multiplier", surface_depth_multiplier);
-        return res;
-    }
-
-    NbtCompound conditionType(NbtCompound if_true, NbtCompound then_run) {
+    NbtCompound ruleWrap(NbtList biomes, NbtCompound rule) {
         NbtCompound res = startingRule("condition");
-        res.put("if_true", if_true);
-        res.put("then_run", then_run);
-        return res;
-    }
-
-    NbtCompound sequenceType(NbtList sequence) {
-        NbtCompound res = startingRule("sequence");
-        res.put("sequence", sequence);
-        return res;
-    }
-
-    NbtCompound readAllBiomes(String category) {
-        NbtList sequence = new NbtList();
-        for (String biome : biomeRegistry.get(category)) sequence.add(readBiome(category, biome));
-        if (Objects.equals(category, "surface") || Objects.equals(category, "shallow") || Objects.equals(category, "deep")) {
-            sequence.add(readBiome(category, "minecraft:default_overworld"));
-        }
-        return sequenceType(sequence);
-    }
-
-    void addInline(NbtList sequence) {
-        for (String biome : biomeRegistry.get("inline")) sequence.add(readBiome("inline", biome));
-    }
-
-    NbtCompound getSpecial() {
-        return conditionType(stoneCondition(false, 0, 0, true), readAllBiomes("special"));
-    }
-
-    NbtCompound getSurface() {
-        NbtCompound then_run = conditionType(waterCondition(false, -1, 0), readAllBiomes("surface"));
-        return conditionType(stoneCondition(false, 0, 0, true), then_run);
-    }
-
-    NbtCompound getShallow() {
-        NbtList sequence = new NbtList();
-        sequence.add(conditionType(stoneCondition(true, 0, 0, true), readAllBiomes("shallow")));
-        for (String biome : biomeRegistry.get("second_layer")) sequence.add(readBiome("second_layer", biome));
-        return conditionType(waterCondition(true, -6, -1), sequenceType(sequence));
-    }
-
-    NbtCompound getDeep() {
-        return conditionType(stoneCondition(false, 0,0, true), readAllBiomes("deep"));
-    }
-
-    NbtCompound biomeCondition(String biome, NbtCompound then_run) {
         NbtCompound if_true = startingRule("biome");
-        NbtList biome_is = new NbtList();
-        biome_is.add(NbtString.of(biome));
-        if_true.put("biome_is", biome_is);
-        return conditionType(if_true, then_run);
-    }
-
-    NbtCompound blockType(NbtCompound block) {
-        NbtCompound res = startingRule("block");
-        res.put("result_state", block);
+        if_true.put("biome_is", biomes);
+        res.put("if_true", if_true);
+        res.put("then_run", rule);
         return res;
-    }
-
-    NbtCompound readBiome(String category, String biome) {
-        String namespace = biome.substring(0, biome.lastIndexOf(":"));
-        String name = biome.substring(biome.lastIndexOf(":")+1);
-        if (!namespace.equals("infinity")) return resolve("surface_rule/" + namespace + "/" + category, name);
-        else {
-            NbtCompound block;
-            if (category.equals("surface")) block = parent.top_blocks.get(biome);
-            else block = parent.underwater.get(biome);
-            return biomeCondition(biome, blockType(block));
-        }
     }
 }

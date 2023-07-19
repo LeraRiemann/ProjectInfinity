@@ -11,6 +11,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -182,8 +183,11 @@ public class RandomDimension {
     }
 
     void addPresetBiomes(String preset) {
+        LogManager.getLogger().info("preset is " + preset);
         NbtList lst = PROVIDER.listRegistry.get(preset);
+        LogManager.getLogger().info(lst.size());
         for (NbtElement i: lst) {
+            LogManager.getLogger().info("preset " + i.asString());
             vanilla_biomes.add(i.asString());
         }
     }

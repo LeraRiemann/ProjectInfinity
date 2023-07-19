@@ -62,6 +62,32 @@ public class CommonIO {
         }
     }
 
+    public static NbtCompound readSurfaceRule(File file, int sealevel) {
+        try {
+            String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            return format(content, sealevel);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static NbtCompound format(String content, int sealevel) {
+        int i = content.lastIndexOf("%");
+        if (i == -1) {
+            try {
+                return StringNbtReader.parse(content);
+            } catch (CommandSyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else if (content.contains("%SL%")) return format(content.replace("%SL%", String.valueOf(sealevel)), sealevel);
+        else {
+            int j = content.lastIndexOf("%SL");
+            String num = content.substring(j+3, i);
+            return format(content.replace("%SL" + num + "%", String.valueOf(sealevel + Integer.parseInt(num))), sealevel);
+        }
+    }
+
     public static WeighedStructure<String> weighedListReader(String path) {
         NbtCompound base = read(path);
         WeighedStructure<String> res = new WeighedStructure<>();

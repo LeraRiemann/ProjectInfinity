@@ -75,7 +75,8 @@ public class RandomProvider {
                 if (p.toFile().isFile()) {
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
                     name = name.substring(name.lastIndexOf('\\') + 1);
-                    String sub = fullname.substring(fullname.lastIndexOf("minecraft")+10);
+                    int i = fullname.replace("minecraft_", "%%%").lastIndexOf("minecraft");
+                    String sub = fullname.substring(i+10);
                     LogManager.getLogger().info("registered " + name + " from " + fullname);
                     reg.put(name, reader.op(path, sub));
                 }});
