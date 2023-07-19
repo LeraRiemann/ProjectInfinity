@@ -3,6 +3,7 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.*;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -70,9 +71,12 @@ public class RandomProvider {
         try {
             walk(Paths.get(path + "/minecraft/" + subpath)).forEach(p -> {
                 String fullname = p.toString();
-                if (fullname.endsWith(".json")) {
+                LogManager.getLogger().info(fullname);
+                if (p.toFile().isFile()) {
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
-                    String sub = fullname.substring(fullname.lastIndexOf("/minecraft/")+11);
+                    name = name.substring(name.lastIndexOf('\\') + 1);
+                    String sub = fullname.substring(fullname.lastIndexOf("minecraft")+10);
+                    LogManager.getLogger().info("registered " + name + " from " + fullname);
                     reg.put(name, reader.op(path, sub));
                 }});
         } catch (IOException e) {
@@ -84,8 +88,11 @@ public class RandomProvider {
         try {
             walk(Paths.get(path)).forEach(p -> {
                 String fullname = p.toString();
+                LogManager.getLogger().info(fullname);
                 if (fullname.endsWith(".json")) {
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
+                    name = name.substring(name.lastIndexOf('\\') + 1);
+                    LogManager.getLogger().info("registered " + name + " from " + fullname);
                     if (!Objects.equals(name, "none")) registry.put(name, CommonIO.weighedListReader(fullname));
                 }
             });
@@ -120,6 +127,7 @@ public class RandomProvider {
     }
 
     public String randomName(Random random, String key) {
+        LogManager.getLogger().info("drawing " + key);
         switch (key) {
             case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
                 NbtElement compound = blockRegistry.get(key).getRandomElement(random);

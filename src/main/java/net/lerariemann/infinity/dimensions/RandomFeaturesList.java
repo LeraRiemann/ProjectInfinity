@@ -4,7 +4,6 @@ import net.lerariemann.infinity.dimensions.features.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
@@ -103,7 +102,6 @@ public class RandomFeaturesList {
 
     NbtList undergroundOres() {
         NbtList res = getAllElements("undergroundores");
-        for (String s : parent.parent.underwater.keySet()) LogManager.getLogger().info(s);
         int num_ores = random.nextInt( 4);
         int num_disks = Math.max(3, (int) Math.floor(random.nextExponential()));
         for (int i = 0; i < num_ores; i++) {
