@@ -68,5 +68,6 @@
       "colourful_shapes": 0.5,
       "banded_shapes": 0.5
     }
-  }
+  },
+  "packVersion": 1.2
 }

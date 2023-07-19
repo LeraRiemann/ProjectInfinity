@@ -14,8 +14,7 @@ public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
     public Map<String, WeighedStructure<NbtElement>> blockRegistry;
     public Map<String, WeighedStructure<NbtElement>> extraRegistry;
-    public Map<String, NbtList> biomePresetRegistry;
-    public Map<String, NbtList> miscListRegistry;
+    public Map<String, NbtList> listRegistry;
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
     public String configPath;
@@ -26,8 +25,7 @@ public class RandomProvider {
         registry = new HashMap<>();
         blockRegistry = new HashMap<>();
         extraRegistry = new HashMap<>();
-        biomePresetRegistry = new HashMap<>();
-        miscListRegistry = new HashMap<>();
+        listRegistry = new HashMap<>();
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
         register_all();
@@ -35,15 +33,15 @@ public class RandomProvider {
 
     void register_all() {
         read_root_config();
-        register_category(registry, configPath + "weighed_lists", "misc", CommonIO::weighedListReader);
-        register_category(registry, configPath + "weighed_lists", "features", CommonIO::weighedListReader);
-        register_category(registry, configPath + "weighed_lists", "vegetation", CommonIO::weighedListReader);
-        register_category(blockRegistry, configPath + "weighed_lists", "blocks", CommonIO::blockListReader);
-        register_category(extraRegistry, configPath + "weighed_lists", "extra", CommonIO::blockListReader);
-        register_category(registry, configPath + "weighed_lists", "mobs", CommonIO::weighedListReader);
-        register_category(biomePresetRegistry, configPath + "lists", "multinoisepresets", CommonIO::nbtListReader);
-        register_category(miscListRegistry, configPath + "lists", "misc", CommonIO::nbtListReader);
-        register_category_hardcoded(configPath + "weighed_lists/hardcoded");
+        String path = configPath + "modular";
+        register_category(registry, path, "misc", CommonIO::weighedListReader);
+        register_category(registry, path, "features", CommonIO::weighedListReader);
+        register_category(registry, path, "vegetation", CommonIO::weighedListReader);
+        register_category(blockRegistry, path, "blocks", CommonIO::blockListReader);
+        register_category(extraRegistry, path, "extra", CommonIO::blockListReader);
+        register_category(registry, path, "mobs", CommonIO::weighedListReader);
+        register_category(listRegistry, path, "lists", CommonIO::nbtListReader);
+        register_category_hardcoded(configPath + "hardcoded");
         noise = CommonIO.read(configPath + "util/noise.json");
     }
 
@@ -108,7 +106,7 @@ public class RandomProvider {
 
     public NbtCompound blockToProvider(NbtCompound block, Random random) {
         NbtCompound res = new NbtCompound();
-        boolean bl = miscListRegistry.get("rotatable_blocks").contains(NbtString.of(block.getString("Name"))) && roll(random, "rotate_blocks");
+        boolean bl = listRegistry.get("rotatable_blocks").contains(NbtString.of(block.getString("Name"))) && roll(random, "rotate_blocks");
         res.putString("type", bl ? "minecraft:rotated_block_provider" : "minecraft:simple_state_provider");
         res.put("state", block);
         return res;

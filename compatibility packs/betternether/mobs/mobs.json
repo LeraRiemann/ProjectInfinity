@@ -1,0 +1,28 @@
+{
+  "elements": [
+    {
+      "key": "betternether:firefly",
+      "weight": 1.0
+    },
+    {
+      "key": "betternether:flying_pig",
+      "weight": 1.0
+    },
+    {
+      "key": "betternether:hydrogen_jellyfish",
+      "weight": 1.0
+    },
+    {
+      "key": "betternether:jungle_skeleton",
+      "weight": 1.0
+    },
+    {
+      "key": "betternether:naga",
+      "weight": 1.0
+    },
+    {
+      "key": "betternether:skull",
+      "weight": 1.0
+    }
+  ]
+}
