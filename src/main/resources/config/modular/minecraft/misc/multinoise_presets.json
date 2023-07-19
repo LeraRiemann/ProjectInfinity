@@ -2,15 +2,15 @@
   "elements": [
     {
       "key": "minecraft_overworld",
-      "weight": 0.1
+      "weight": 0.01
     },
     {
       "key": "minecraft_nether",
-      "weight": 0.1
+      "weight": 0.01
     },
     {
       "key": "none",
-      "weight": 1.0
+      "weight": 0.89
     }
   ]
 }

@@ -171,7 +171,7 @@ public class RandomDimension {
                 String preset = PROVIDER.randomName(random, "multinoise_presets");
                 if (Objects.equals(preset, "none")) res.put("biomes", randomBiomes());
                 else {
-                    res.putString("preset", preset);
+                    res.putString("preset", preset.replace("_", ":"));
                     addPresetBiomes(preset);
                 }
                 return res;
