@@ -16,22 +16,22 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.StringVisitable;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionOptions;
+import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -44,8 +44,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Queue;
 import java.util.Set;
-import java.util.stream.IntStream;
-import java.util.stream.Collectors;
 
 import static net.minecraft.block.NetherPortalBlock.AXIS;
 
@@ -57,10 +55,10 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 		if (!world.isClient() && entity instanceof ItemEntity) {
 			ItemStack itemStack = ((ItemEntity)entity).getStack();
 			if (itemStack.getItem() == Items.WRITTEN_BOOK || itemStack.getItem() == Items.WRITABLE_BOOK) {
-				BookScreen.Contents bookContent = BookScreen.Contents.create(itemStack);
-				String string = IntStream.range(0, bookContent.getPageCount()).mapToObj(bookContent::getPage).map(StringVisitable::getString).collect(Collectors.joining("\n"));
-				if(!string.isEmpty()){
-					HashCode f = Hashing.sha256().hashString(string, StandardCharsets.UTF_8);
+				NbtCompound compound = itemStack.getNbt();
+				if(compound != null){
+					LogManager.getLogger().info(compound.asString());
+					HashCode f = Hashing.sha256().hashString(compound.asString(), StandardCharsets.UTF_8);
 					int i = f.asInt() & Integer.MAX_VALUE;
 					MinecraftServer server = world.getServer();
 					RandomProvider prov = ((MinecraftServerAccess)(server)).getDimensionProvider();
