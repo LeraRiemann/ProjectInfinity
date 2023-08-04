@@ -27,6 +27,10 @@
     {
       "key": "upwards_branching_trunk_placer",
       "weight": 0.5
+    },
+    {
+      "key": "cherry_trunk_placer",
+      "weight": 0.5
     }
   ]
 }

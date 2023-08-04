@@ -39,6 +39,10 @@
     {
       "key": "fancy_foliage_placer",
       "weight": 0.5
+    },
+    {
+      "key": "cherry_foliage_placer",
+      "weight": 1.0
     }
   ]
 }

@@ -71,6 +71,21 @@ public class RandomTree extends RandomisedFeature {
                 res.putFloat("place_branch_per_log_probability", random.nextFloat());
                 res.putString("can_grow_through", PROVIDER.randomName(random, "tags"));
             }
+            case "cherry_trunk_placer" -> {
+                addRandomIntProvider(res, "branch_count", 1, 3);
+                addRandomIntProvider(res, "branch_horizontal_length", 2, 16);
+                NbtCompound branch_start_offset_from_top = new NbtCompound();
+                int a = random.nextInt(-16, 0);
+                int b = random.nextInt(-16, 0);
+                if (a==b) {
+                    if (a==0) a-=1;
+                    else a+=1;
+                }
+                branch_start_offset_from_top.putInt("min_inclusive", Math.min(a, b));
+                branch_start_offset_from_top.putInt("max_inclusive", Math.max(a, b));
+                res.put("branch_start_offset_from_top", branch_start_offset_from_top);
+                addRandomIntProvider(res, "branch_end_offset_from_top", -16, 16);
+            }
         }
         return res;
     }
@@ -89,6 +104,13 @@ public class RandomTree extends RandomisedFeature {
             case "random_spread_foliage_placer" -> {
                 addRandomIntProvider(res, "foliage_height", 1, ishuge ? 512 : 16);
                 res.putInt("leaf_placement_attempts", random.nextInt(256));
+            }
+            case "cherry_foliage_placer" -> {
+                res.put("height", RandomProvider.intProvider(random, 4, 16, true));
+                res.putFloat("wide_bottom_layer_hole_chance", random.nextFloat());
+                res.putFloat("corner_hole_chance", random.nextFloat());
+                res.putFloat("hanging_leaves_chance", random.nextFloat());
+                res.putFloat("hanging_leaves_extension_chance", random.nextFloat());
             }
         }
         return res;
