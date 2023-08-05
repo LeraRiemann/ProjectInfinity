@@ -1,7 +1,9 @@
 package net.lerariemann.infinity.loading;
 
 import me.basiqueevangelist.dynreg.util.RegistryUtils;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.*;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
@@ -9,6 +11,7 @@ import net.minecraft.world.gen.carver.ConfiguredCarver;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.PlacedFeature;
+import org.apache.logging.log4j.LogManager;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -43,6 +46,19 @@ public class DimensionGrabber {
         (new JsonGrabber<>(registryInfoGetter, DimensionType.CODEC,
                 (MutableRegistry<DimensionType>) (baseRegistryManager.get(RegistryKeys.DIMENSION_TYPE)))).grab_all(rootdir.resolve("dimension_type"));
         return grab_dimension(rootdir, i);
+    }
+
+    public void grab_for_client(Identifier id, NbtCompound optiondata) {
+        if (!(baseRegistryManager.get(RegistryKeys.DIMENSION_TYPE).contains(RegistryKey.of(RegistryKeys.DIMENSION_TYPE, id)))) {
+            (new JsonGrabber<>(registryInfoGetter, DimensionType.CODEC,
+                    (MutableRegistry<DimensionType>) (baseRegistryManager.get(RegistryKeys.DIMENSION_TYPE)))).grab(id, optiondata);
+            LogManager.getLogger().info("Dimension registered");
+        }
+        /*
+        if (!(baseRegistryManager.get(RegistryKeys.DIMENSION).contains(RegistryKey.of(RegistryKeys.DIMENSION, id)))) {
+            (new JsonGrabber<>(registryInfoGetter, DimensionOptions.CODEC,
+                    (MutableRegistry<DimensionOptions>) (baseRegistryManager.get(RegistryKeys.DIMENSION)))).grab(id, dimdata);
+        }*/
     }
 
     DimensionOptions grab_dimension(Path rootdir, int i) {

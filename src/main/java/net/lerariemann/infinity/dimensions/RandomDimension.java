@@ -37,6 +37,8 @@ public class RandomDimension {
     public Map<String, NbtCompound> underwater;
     public String type_alike;
     public MinecraftServer server;
+    public NbtCompound data;
+    public RandomDimensionType type;
 
     public RandomDimension(int i, MinecraftServer server) {
         random = new Random(i);
@@ -47,7 +49,7 @@ public class RandomDimension {
         String rootPath = server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + name;
         storagePath = rootPath + "/data/" + InfinityMod.MOD_ID;
         createDirectories();
-        NbtCompound data = new NbtCompound();
+        data = new NbtCompound();
         vanilla_biomes = new ArrayList<>();
         random_biome_ids = new ArrayList<>();
         top_blocks = new HashMap<>();
@@ -56,7 +58,7 @@ public class RandomDimension {
         default_fluid = RandomProvider.Block("minecraft:water");
         additional_blocks = new ArrayList<>();
         type_alike = PROVIDER.randomName(random, "noise_presets");
-        RandomDimensionType type = new RandomDimensionType(this);
+        type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
         data.put("generator", randomDimensionGenerator());
         for (Integer id: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+id)) {

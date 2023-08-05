@@ -3,6 +3,8 @@ package net.lerariemann.infinity.mixin;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.google.common.hash.HashCode;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.NetherPortalBlockAccess;
@@ -21,8 +23,8 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -57,7 +59,6 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 			if (itemStack.getItem() == Items.WRITTEN_BOOK || itemStack.getItem() == Items.WRITABLE_BOOK) {
 				NbtCompound compound = itemStack.getNbt();
 				if(compound != null){
-					LogManager.getLogger().info(compound.asString());
 					HashCode f = Hashing.sha256().hashString(compound.asString(), StandardCharsets.UTF_8);
 					int i = f.asInt() & Integer.MAX_VALUE;
 					MinecraftServer server = world.getServer();
@@ -65,13 +66,20 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 					if (prov.rule("seedDependentDimensions")) i = (int)(world.getServer().getWorld(World.OVERWORLD).getSeed()) ^ i;
 					modifyPortal(world, pos, state, i);
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-					RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, new Identifier(InfinityMod.MOD_ID, "generated_" + i));
+					Identifier id = new Identifier(InfinityMod.MOD_ID, "generated_" + i);
+					RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
 					if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
 						RandomDimension d = new RandomDimension(i, server);
 						if (prov.rule("runtimeGenerationEnabled")) {
 							DimensionGrabber grabber = new DimensionGrabber(server.getRegistryManager());
 							DimensionOptions options = grabber.grab_all(Paths.get(d.storagePath), i);
 							((MinecraftServerAccess) (server)).addWorld(key, options);
+							PacketByteBuf buf = PacketByteBufs.create();
+							buf.writeIdentifier(id);
+							buf.writeNbt(d.type.data);
+							world.getServer().getPlayerManager().getPlayerList().forEach(a ->
+									ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buf));
+							LogManager.getLogger().info("Packet sent");
 						}
 					}
 					world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
