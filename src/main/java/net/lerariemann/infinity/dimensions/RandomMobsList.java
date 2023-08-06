@@ -24,15 +24,7 @@ public class RandomMobsList {
         int mobCount = random.nextInt(20);
         for(int i = 0; i < mobCount; i++) {
             String category = PROVIDER.randomName(random, "mob_categories");
-            NbtCompound mob = new NbtCompound();
-            String mobname = PROVIDER.randomName(random, category);
-            mob.putString("type", mobname);
-            biome.addMob(mobname);
-            mob.putInt("weight", 1 + random.nextInt(20));
-            int a = 1 + random.nextInt(6);
-            int b = 1 + random.nextInt(6);
-            mob.putInt("minCount", Math.min(a, b));
-            mob.putInt("maxCount", Math.max(a, b));
+            NbtCompound mob = biome.addMob(category);
             data.get(category).add(mob);
         }
     }

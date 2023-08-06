@@ -1,0 +1,12 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:concentric_rings",
+      "weight": 0.01
+    },
+    {
+      "key": "minecraft:random_spread",
+      "weight": 0.99
+    }
+  ]
+}

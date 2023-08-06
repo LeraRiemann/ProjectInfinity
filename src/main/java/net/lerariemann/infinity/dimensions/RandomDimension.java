@@ -66,6 +66,7 @@ public class RandomDimension {
         for (Integer id: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+id)) {
             RandomBiome b = new RandomBiome(id, this);
             random_biomes.add(b);
+            addStructures(b);
         }
         CommonIO.write(data, storagePath + "/dimension", name + ".json");
         if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");
@@ -77,7 +78,7 @@ public class RandomDimension {
 
     void createDirectories() {
         for (String s: new String[]{"dimension", "dimension_type", "worldgen/biome", "worldgen/configured_feature",
-                "worldgen/placed_feature", "worldgen/noise_settings", "worldgen/configured_carver"}) {
+                "worldgen/placed_feature", "worldgen/noise_settings", "worldgen/configured_carver", "worldgen/structure", "worldgen/structure_set"}) {
             try {
                 Files.createDirectories(Paths.get(storagePath + "/" + s));
             } catch (IOException e) {
@@ -259,5 +260,10 @@ public class RandomDimension {
     String randomNoiseSettings() {
         RandomNoisePreset preset = new RandomNoisePreset(this);
         return preset.fullname;
+    }
+
+    void addStructures(RandomBiome b) {
+        int numstructures = random.nextInt(1, 5);
+        for (int i = 0; i < numstructures; i++) (new RandomStructure(random.nextInt(), b)).save();
     }
 }

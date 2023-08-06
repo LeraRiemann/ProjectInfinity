@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import me.basiqueevangelist.dynreg.util.RegistryUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.*;
+import net.minecraft.structure.StructureSet;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionOptions;
@@ -12,6 +13,7 @@ import net.minecraft.world.gen.carver.ConfiguredCarver;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.PlacedFeature;
+import net.minecraft.world.gen.structure.Structure;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -35,6 +37,8 @@ public class DimensionGrabber {
         buildGrabber(PlacedFeature.CODEC, RegistryKeys.PLACED_FEATURE).grab_all(rootdir.resolve("worldgen/placed_feature"));
         buildGrabber(ConfiguredCarver.CODEC, RegistryKeys.CONFIGURED_CARVER).grab_all(rootdir.resolve("worldgen/configured_carver"));
         buildGrabber(Biome.CODEC, RegistryKeys.BIOME).grab_all(rootdir.resolve("worldgen/biome"));
+        buildGrabber(Structure.STRUCTURE_CODEC, RegistryKeys.STRUCTURE).grab_all(rootdir.resolve("worldgen/structure"));
+        buildGrabber(StructureSet.CODEC, RegistryKeys.STRUCTURE_SET).grab_all(rootdir.resolve("worldgen/structure_set"));
         buildGrabber(ChunkGeneratorSettings.CODEC, RegistryKeys.CHUNK_GENERATOR_SETTINGS).grab_all(rootdir.resolve("worldgen/noise_settings"));
         buildGrabber(DimensionType.CODEC, RegistryKeys.DIMENSION_TYPE).grab_all(rootdir.resolve("dimension_type"));
         return grab_dimension(rootdir, i);

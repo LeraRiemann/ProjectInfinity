@@ -67,7 +67,19 @@
       "exact_gateways": 0.2,
       "colourful_shapes": 0.5,
       "banded_shapes": 0.5
+    },
+    "structures": {
+      "spawn_override": 0.5,
+      "full_box": 0.5,
+      "ruins_warm": 0.5,
+      "shipwrecks_beach": 0.5,
+      "mineshafts_mesa": 0.5,
+      "portal_overgrown": 0.5,
+      "portal_vines": 0.5,
+      "portal_cold": 0.5,
+      "portal_blackstone": 0.5,
+      "triangular_spread": 0.1
     }
   },
-  "packVersion": 1.2
+  "packVersion": 1.4
 }

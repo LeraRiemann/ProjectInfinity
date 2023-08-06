@@ -148,8 +148,17 @@ public class RandomBiome {
         return res;
     }
 
-    void addMob(String mobname) {
+    NbtCompound addMob(String category) {
+        NbtCompound mob = new NbtCompound();
+        String mobname = PROVIDER.randomName(random, category);
+        mob.putString("type", mobname);
         mobs.add(mobname);
+        mob.putInt("weight", 1 + random.nextInt(20));
+        int a = 1 + random.nextInt(6);
+        int b = 1 + random.nextInt(6);
+        mob.putInt("minCount", Math.min(a, b));
+        mob.putInt("maxCount", Math.max(a, b));
+        return mob;
     }
 
     NbtCompound spawnCosts() {

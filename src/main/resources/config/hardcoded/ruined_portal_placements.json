@@ -1,0 +1,28 @@
+{
+  "elements": [
+    {
+      "key": "on_land_surface",
+      "weight": 10.0
+    },
+    {
+      "key": "partly_buried",
+      "weight": 1.0
+    },
+    {
+      "key": "on_ocean_floor",
+      "weight": 1.0
+    },
+    {
+      "key": "in_mountain",
+      "weight": 1.0
+    },
+    {
+      "key": "underground",
+      "weight": 1.0
+    },
+    {
+      "key": "in_nether",
+      "weight": 1.0
+    }
+  ]
+}

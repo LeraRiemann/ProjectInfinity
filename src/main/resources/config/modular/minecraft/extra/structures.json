@@ -1,0 +1,346 @@
+{
+  "elements": [
+    {
+      "key": {
+        "name": "minecraft:jigsaw",
+        "spawn_overrides": {
+          "ambient": {
+            "bounding_box": "full",
+            "spawns": []
+          },
+          "axolotls": {
+            "bounding_box": "full",
+            "spawns": []
+          },
+          "creature": {
+            "bounding_box": "full",
+            "spawns": []
+          },
+          "misc": {
+            "bounding_box": "full",
+            "spawns": []
+          },
+          "monster": {
+            "bounding_box": "full",
+            "spawns": []
+          },
+          "underground_water_creature": {
+            "bounding_box": "full",
+            "spawns": []
+          },
+          "water_ambient": {
+            "bounding_box": "full",
+            "spawns": []
+          },
+          "water_creature": {
+            "bounding_box": "full",
+            "spawns": []
+          }
+        },
+        "settings": {
+          "start_height": {
+            "above_bottom": 47
+          },
+          "start_jigsaw_name": "minecraft:city_anchor",
+          "start_pool": "minecraft:ancient_city/city_center",
+          "step": "underground_decoration",
+          "terrain_adaptation": "beard_box",
+          "use_expansion_hack": false
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:jigsaw",
+        "snap_to_sea_level": "true",
+        "settings": {
+          "start_pool": "minecraft:bastion/starts",
+          "step": "surface_structures",
+          "use_expansion_hack": false
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:buried_treasure",
+        "settings": {
+          "step": "underground_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:desert_pyramid",
+        "settings": {
+          "step": "surface_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:end_city",
+        "settings": {
+          "step": "surface_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:fortress",
+        "spawn_overrides": {
+          "monster": {
+            "bounding_box": "piece",
+            "spawns": [
+              {
+                "type": "minecraft:blaze",
+                "maxCount": 3,
+                "minCount": 2,
+                "weight": 10
+              },
+              {
+                "type": "minecraft:zombified_piglin",
+                "maxCount": 4,
+                "minCount": 4,
+                "weight": 5
+              },
+              {
+                "type": "minecraft:wither_skeleton",
+                "maxCount": 5,
+                "minCount": 5,
+                "weight": 8
+              },
+              {
+                "type": "minecraft:skeleton",
+                "maxCount": 5,
+                "minCount": 5,
+                "weight": 2
+              },
+              {
+                "type": "minecraft:magma_cube",
+                "maxCount": 4,
+                "minCount": 4,
+                "weight": 3
+              }
+            ]
+          }
+        },
+        "settings": {
+          "step": "underground_decoration"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:igloo",
+        "settings": {
+          "step": "surface_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:jungle_temple",
+        "settings": {
+          "step": "surface_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:mineshaft",
+        "settings": {
+          "step": "underground_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:nether_fossil",
+        "settings": {
+          "step": "underground_decoration",
+          "terrain_adaptation": "beard_thin"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:ocean_monument",
+        "spawn_overrides": {
+          "axolotls": {
+            "bounding_box": "full",
+            "spawns": []
+          },
+          "monster": {
+            "bounding_box": "full",
+            "spawns": [
+              {
+                "type": "minecraft:guardian",
+                "maxCount": 4,
+                "minCount": 2,
+                "weight": 1
+              }
+            ]
+          },
+          "underground_water_creature": {
+            "bounding_box": "full",
+            "spawns": []
+          }
+        },
+        "settings": {
+          "step": "surface_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:ocean_ruin",
+        "settings": {
+          "step": "surface_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:jigsaw",
+        "spawn_overrides": {
+          "monster": {
+            "bounding_box": "full",
+            "spawns": [
+              {
+                "type": "minecraft:pillager",
+                "maxCount": 1,
+                "minCount": 1,
+                "weight": 1
+              }
+            ]
+          }
+        },
+        "settings": {
+          "project_start_to_heightmap": "WORLD_SURFACE_WG",
+          "start_height": {
+            "absolute": 0
+          },
+          "start_pool": "minecraft:pillager_outpost/base_plates",
+          "step": "surface_structures",
+          "terrain_adaptation": "beard_thin",
+          "use_expansion_hack": true
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:ruined_portal",
+        "settings": {
+          "step": "surface_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:shipwreck",
+        "settings": {
+          "step": "surface_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:stronghold",
+        "settings": {
+          "step": "surface_structures",
+          "terrain_adaptation": "bury"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:swamp_hut",
+        "spawn_overrides": {
+          "creature": {
+            "bounding_box": "piece",
+            "spawns": [
+              {
+                "type": "minecraft:cat",
+                "maxCount": 1,
+                "minCount": 1,
+                "weight": 1
+              }
+            ]
+          },
+          "monster": {
+            "bounding_box": "piece",
+            "spawns": [
+              {
+                "type": "minecraft:witch",
+                "maxCount": 1,
+                "minCount": 1,
+                "weight": 1
+              }
+            ]
+          }
+        },
+        "settings": {
+          "step": "surface_structures"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:jigsaw",
+        "settings": {
+          "project_start_to_heightmap": "WORLD_SURFACE_WG",
+          "start_height": {
+            "absolute": -15
+          },
+          "start_pool": "minecraft:trail_ruins/tower",
+          "step": "underground_structures",
+          "terrain_adaptation": "bury",
+          "use_expansion_hack": false
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:jigsaw",
+        "village": true,
+        "settings": {
+          "project_start_to_heightmap": "WORLD_SURFACE_WG",
+          "start_height": {
+            "absolute": 0
+          },
+          "step": "surface_structures",
+          "terrain_adaptation": "beard_thin",
+          "use_expansion_hack": true
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "name": "minecraft:woodland_mansion",
+        "settings": {
+          "step": "surface_structures"
+        }
+      },
+      "weight": 1.0
+    }
+  ]
+}

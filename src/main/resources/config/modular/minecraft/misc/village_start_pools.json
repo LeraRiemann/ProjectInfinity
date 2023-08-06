@@ -1,0 +1,24 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:village/desert/town_centers",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:village/plains/town_centers",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:village/savanna/town_centers",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:village/snowy/town_centers",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:village/taiga/town_centers",
+      "weight": 1.0
+    }
+  ]
+}
