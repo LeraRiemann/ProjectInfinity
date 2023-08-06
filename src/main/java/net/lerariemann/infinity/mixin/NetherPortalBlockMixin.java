@@ -44,6 +44,7 @@ import com.google.common.hash.Hashing;
 import java.nio.charset.StandardCharsets;
 
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 
@@ -58,39 +59,53 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 			ItemStack itemStack = ((ItemEntity)entity).getStack();
 			if (itemStack.getItem() == Items.WRITTEN_BOOK || itemStack.getItem() == Items.WRITABLE_BOOK) {
 				NbtCompound compound = itemStack.getNbt();
-				if(compound != null){
-					HashCode f = Hashing.sha256().hashString(compound.asString(), StandardCharsets.UTF_8);
-					int i = f.asInt() & Integer.MAX_VALUE;
-					MinecraftServer server = world.getServer();
+				MinecraftServer server = world.getServer();
+				if (compound != null && server != null) {
 					RandomProvider prov = ((MinecraftServerAccess)(server)).getDimensionProvider();
-					if (prov.rule("seedDependentDimensions")) i = (int)(world.getServer().getWorld(World.OVERWORLD).getSeed()) ^ i;
+					int i = getDimensionSeed(compound, prov.rule("seedDependentDimensions"), server);
 					modifyPortal(world, pos, state, i);
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-					Identifier id = new Identifier(InfinityMod.MOD_ID, "generated_" + i);
-					RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
-					if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
-						RandomDimension d = new RandomDimension(i, server);
-						if (prov.rule("runtimeGenerationEnabled")) {
-							DimensionGrabber grabber = new DimensionGrabber(server.getRegistryManager());
-							DimensionOptions options = grabber.grab_all(Paths.get(d.storagePath), i);
-							((MinecraftServerAccess) (server)).addWorld(key, options);
-							PacketByteBuf buf = PacketByteBufs.create();
-							buf.writeIdentifier(id);
-							buf.writeNbt(d.type.data);
-							buf.writeInt(d.random_biomes.size());
-							d.random_biomes.forEach(b -> {
-								buf.writeIdentifier(new Identifier(InfinityMod.MOD_ID, b.name));
-								buf.writeNbt(b.data);
-							});
-							world.getServer().getPlayerManager().getPlayerList().forEach(a ->
-									ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buf));
-							LogManager.getLogger().info("Packet sent");
-						}
-					}
+					addDimension(server, i, prov.rule("runtimeGenerationEnabled"));
 					world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
 				}
 			}
 		}
+	}
+
+	int getDimensionSeed(NbtCompound compound, boolean bl, MinecraftServer server) {
+		HashCode f = Hashing.sha256().hashString(compound.asString(), StandardCharsets.UTF_8);
+		int i = f.asInt() & Integer.MAX_VALUE;
+		if (bl) {
+			long worldseed = Objects.requireNonNull(server.getWorld(World.OVERWORLD)).getSeed();
+			i = (int)(worldseed) ^ i;
+		}
+		return i;
+	}
+
+	void addDimension(MinecraftServer server, int i, boolean bl) {
+		Identifier id = new Identifier(InfinityMod.MOD_ID, "generated_" + i);
+		RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
+		if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
+			RandomDimension d = new RandomDimension(i, server);
+			if (bl) {
+				((MinecraftServerAccess) (server)).addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(Paths.get(d.storagePath), i));
+				server.getPlayerManager().getPlayerList().forEach(a ->
+						ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(id, d)));
+				LogManager.getLogger().info("Packet sent");
+			}
+		}
+	}
+
+	PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
+		PacketByteBuf buf = PacketByteBufs.create();
+		buf.writeIdentifier(id);
+		buf.writeNbt(d.type.data);
+		buf.writeInt(d.random_biomes.size());
+		d.random_biomes.forEach(b -> {
+			buf.writeIdentifier(new Identifier(InfinityMod.MOD_ID, b.name));
+			buf.writeNbt(b.data);
+		});
+		return buf;
 	}
 
 	@Redirect(method="getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Direction;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
@@ -101,7 +116,7 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 	private void changeDim(World world, BlockPos pos, Direction.Axis axis, int i) {
 		world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.getDefaultState().with(AXIS, axis));
 		BlockEntity blockEntity = world.getBlockEntity(pos);
-		((NeitherPortalBlockEntity)blockEntity).setDimension(i);
+		if (blockEntity != null) ((NeitherPortalBlockEntity)blockEntity).setDimension(i);
 	}
 
 	@Override

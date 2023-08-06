@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.loading;
 
+import com.mojang.serialization.Codec;
 import me.basiqueevangelist.dynreg.util.RegistryUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.*;
@@ -11,7 +12,6 @@ import net.minecraft.world.gen.carver.ConfiguredCarver;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.PlacedFeature;
-import org.apache.logging.log4j.LogManager;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -31,43 +31,38 @@ public class DimensionGrabber {
     }
 
     public DimensionOptions grab_all(Path rootdir, int i) {
-        (new JsonGrabber<>(registryInfoGetter, ConfiguredFeature.CODEC,
-                (MutableRegistry<ConfiguredFeature<?, ?>>) (baseRegistryManager.get(RegistryKeys.CONFIGURED_FEATURE)))).grab_all(
-                rootdir.resolve("worldgen/configured_feature"));
-        (new JsonGrabber<>(registryInfoGetter, PlacedFeature.CODEC,
-                (MutableRegistry<PlacedFeature>) (baseRegistryManager.get(RegistryKeys.PLACED_FEATURE)))).grab_all(rootdir.resolve("worldgen/placed_feature"));
-        (new JsonGrabber<>(registryInfoGetter, ConfiguredCarver.CODEC,
-                (MutableRegistry<ConfiguredCarver<?>>) (baseRegistryManager.get(RegistryKeys.CONFIGURED_CARVER)))).grab_all(rootdir.resolve("worldgen/configured_carver"));
-        (new JsonGrabber<>(registryInfoGetter, Biome.CODEC,
-                (MutableRegistry<Biome>) (baseRegistryManager.get(RegistryKeys.BIOME)))).grab_all(rootdir.resolve("worldgen/biome"));
-        (new JsonGrabber<>(registryInfoGetter, ChunkGeneratorSettings.CODEC,
-                (MutableRegistry<ChunkGeneratorSettings>) (baseRegistryManager.get(RegistryKeys.CHUNK_GENERATOR_SETTINGS)))).grab_all(
-                rootdir.resolve("worldgen/noise_settings"));
-        (new JsonGrabber<>(registryInfoGetter, DimensionType.CODEC,
-                (MutableRegistry<DimensionType>) (baseRegistryManager.get(RegistryKeys.DIMENSION_TYPE)))).grab_all(rootdir.resolve("dimension_type"));
+        buildGrabber(ConfiguredFeature.CODEC, RegistryKeys.CONFIGURED_FEATURE).grab_all(rootdir.resolve("worldgen/configured_feature"));
+        buildGrabber(PlacedFeature.CODEC, RegistryKeys.PLACED_FEATURE).grab_all(rootdir.resolve("worldgen/placed_feature"));
+        buildGrabber(ConfiguredCarver.CODEC, RegistryKeys.CONFIGURED_CARVER).grab_all(rootdir.resolve("worldgen/configured_carver"));
+        buildGrabber(Biome.CODEC, RegistryKeys.BIOME).grab_all(rootdir.resolve("worldgen/biome"));
+        buildGrabber(ChunkGeneratorSettings.CODEC, RegistryKeys.CHUNK_GENERATOR_SETTINGS).grab_all(rootdir.resolve("worldgen/noise_settings"));
+        buildGrabber(DimensionType.CODEC, RegistryKeys.DIMENSION_TYPE).grab_all(rootdir.resolve("dimension_type"));
         return grab_dimension(rootdir, i);
     }
 
+    <T> JsonGrabber<T> buildGrabber(Codec<T> codec, RegistryKey<Registry<T>> key) {
+        return (new JsonGrabber<>(registryInfoGetter, codec, (MutableRegistry<T>) (baseRegistryManager.get(key))));
+    }
+
+    <T> void grab_one_for_client(Codec<T> codec, RegistryKey<Registry<T>> key, Identifier id, NbtCompound optiondata) {
+        if (!(baseRegistryManager.get(key).contains(RegistryKey.of(key, id)))) buildGrabber(codec, key).grab(id, optiondata);
+    }
+
     public void grab_for_client(Identifier id, NbtCompound optiondata, List<Identifier> biomeids, List<NbtCompound> biomes) {
-        if (!(baseRegistryManager.get(RegistryKeys.DIMENSION_TYPE).contains(RegistryKey.of(RegistryKeys.DIMENSION_TYPE, id)))) {
-            (new JsonGrabber<>(registryInfoGetter, DimensionType.CODEC,
-                    (MutableRegistry<DimensionType>) (baseRegistryManager.get(RegistryKeys.DIMENSION_TYPE)))).grab(id, optiondata);
-            LogManager.getLogger().info("Dimension registered");
-        }
+        grab_one_for_client(DimensionType.CODEC, RegistryKeys.DIMENSION_TYPE, id, optiondata);
         int i = biomes.size();
-        for (int j = 0; j<i; j++) {
-            if (!(baseRegistryManager.get(RegistryKeys.BIOME).contains(RegistryKey.of(RegistryKeys.BIOME, id)))) {
-                (new JsonGrabber<>(registryInfoGetter, Biome.CODEC,
-                        (MutableRegistry<Biome>) (baseRegistryManager.get(RegistryKeys.BIOME)))).grab(biomeids.get(j), biomes.get(j));
-            }
-        }
+        for (int j = 0; j<i; j++) grab_one_for_client(Biome.CODEC, RegistryKeys.BIOME, biomeids.get(j), biomes.get(j));
+        close();
     }
 
     DimensionOptions grab_dimension(Path rootdir, int i) {
-        DimensionOptions ret = (new JsonGrabber<>(registryInfoGetter, DimensionOptions.CODEC,
-                (MutableRegistry<DimensionOptions>) (baseRegistryManager.get(RegistryKeys.DIMENSION)))).grab_with_return(rootdir.toString()+"/dimension", i, false);
-        baseRegistryManager.streamAllRegistries().forEach((entry) -> entry.value().freeze());
+        DimensionOptions ret = buildGrabber(DimensionOptions.CODEC, RegistryKeys.DIMENSION).grab_with_return(rootdir.toString()+"/dimension", i, false);
+        close();
         return ret;
+    }
+
+    void close() {
+        baseRegistryManager.streamAllRegistries().forEach((entry) -> entry.value().freeze());
     }
 
     public RegistryOps.RegistryInfoGetter getGetter(List<MutableRegistry<?>> additionalRegistries) {
