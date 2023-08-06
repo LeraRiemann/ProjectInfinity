@@ -11,6 +11,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class InfinityModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
@@ -28,10 +31,17 @@ public class InfinityModClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(InfinityMod.WORLD_ADD, (client, handler, buf, responseSender) -> {
             Identifier id = buf.readIdentifier();
             NbtCompound optiondata = buf.readNbt();
+            int i = buf.readInt();
+            List<Identifier> biomeids = new ArrayList<>();
+            List<NbtCompound> biomes = new ArrayList<>();
+            for (int j = 0; j < i; j++) {
+                biomeids.add(buf.readIdentifier());
+                biomes.add(buf.readNbt());
+            }
 
             client.execute(() -> {
                 LogManager.getLogger().info("Packet received");
-                (new DimensionGrabber(client.getNetworkHandler().getRegistryManager())).grab_for_client(id, optiondata);
+                (new DimensionGrabber(client.getNetworkHandler().getRegistryManager())).grab_for_client(id, optiondata, biomeids, biomes);
             });
         });
     }

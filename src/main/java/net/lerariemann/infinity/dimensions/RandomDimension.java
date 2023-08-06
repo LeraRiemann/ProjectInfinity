@@ -33,6 +33,7 @@ public class RandomDimension {
     public List<NbtCompound> additional_blocks;
     public List<String> vanilla_biomes;
     public List<Integer> random_biome_ids;
+    public List<RandomBiome> random_biomes;
     public Map<String, NbtCompound> top_blocks;
     public Map<String, NbtCompound> underwater;
     public String type_alike;
@@ -52,6 +53,7 @@ public class RandomDimension {
         data = new NbtCompound();
         vanilla_biomes = new ArrayList<>();
         random_biome_ids = new ArrayList<>();
+        random_biomes = new ArrayList<>();
         top_blocks = new HashMap<>();
         underwater = new HashMap<>();
         default_block = RandomProvider.Block("minecraft:stone");
@@ -63,6 +65,7 @@ public class RandomDimension {
         data.put("generator", randomDimensionGenerator());
         for (Integer id: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+id)) {
             RandomBiome b = new RandomBiome(id, this);
+            random_biomes.add(b);
         }
         CommonIO.write(data, storagePath + "/dimension", name + ".json");
         if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");

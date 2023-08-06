@@ -15,6 +15,7 @@ public class RandomBiome {
     public String fullname;
     public final Random random;
     public List<String> mobs;
+    public NbtCompound data;
 
     RandomBiome(int i, RandomDimension dim) {
         id = i;
@@ -24,17 +25,17 @@ public class RandomBiome {
         name = "biome_" +i;
         fullname = InfinityMod.MOD_ID + ":" + name;
         mobs = new ArrayList<>();
-        NbtCompound res = new NbtCompound();
-        res.putDouble("temperature", -1 + random.nextFloat()*3);
-        res.putBoolean("has_precipitation", PROVIDER.roll(random, "has_precipitation"));
-        res.putString("temperature_modifier", roll("temperature_modifier_frozen") ? "frozen" : "none");
-        res.putDouble("downfall", random.nextDouble());
-        res.put("effects", randomEffects());
-        res.put("spawners", (new RandomMobsList(this)).asData());
-        res.put("spawn_costs", spawnCosts());
-        res.put("features", (new RandomFeaturesList(this)).data);
-        res.put("carvers", carvers());
-        CommonIO.write(res, dim.storagePath + "/worldgen/biome", name + ".json");
+        data = new NbtCompound();
+        data.putDouble("temperature", -1 + random.nextFloat()*3);
+        data.putBoolean("has_precipitation", PROVIDER.roll(random, "has_precipitation"));
+        data.putString("temperature_modifier", roll("temperature_modifier_frozen") ? "frozen" : "none");
+        data.putDouble("downfall", random.nextDouble());
+        data.put("effects", randomEffects());
+        data.put("spawners", (new RandomMobsList(this)).asData());
+        data.put("spawn_costs", spawnCosts());
+        data.put("features", (new RandomFeaturesList(this)).data);
+        data.put("carvers", carvers());
+        CommonIO.write(data, dim.storagePath + "/worldgen/biome", name + ".json");
     }
 
     boolean roll(String key) {

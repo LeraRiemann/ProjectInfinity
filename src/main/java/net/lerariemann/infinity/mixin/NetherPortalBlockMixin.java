@@ -77,6 +77,11 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 							PacketByteBuf buf = PacketByteBufs.create();
 							buf.writeIdentifier(id);
 							buf.writeNbt(d.type.data);
+							buf.writeInt(d.random_biomes.size());
+							d.random_biomes.forEach(b -> {
+								buf.writeIdentifier(new Identifier(InfinityMod.MOD_ID, b.name));
+								buf.writeNbt(b.data);
+							});
 							world.getServer().getPlayerManager().getPlayerList().forEach(a ->
 									ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buf));
 							LogManager.getLogger().info("Packet sent");

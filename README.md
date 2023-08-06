@@ -1,4 +1,4 @@
-# Infinite Dimensions - Alpha 1.3.3 for Minecraft 1.20.1
+# Infinite Dimensions - Alpha 1.3.4 for Minecraft 1.20.1
 
 **Infinite Dimensions** is a mod that reworks and reimagines 20w14infinite - the April Fools' snapshot of 2020 - in modern versions of Minecraft.
 

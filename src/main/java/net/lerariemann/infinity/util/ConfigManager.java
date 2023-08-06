@@ -3,7 +3,6 @@ package net.lerariemann.infinity.util;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,7 +17,6 @@ public class ConfigManager {
         String path1 = path.toString();
         String fullname = path1.substring(path1.lastIndexOf("config") + 6);
         Path endfile = Paths.get("config/" + InfinityMod.MOD_ID + fullname);
-        LogManager.getLogger().info("creating " + endfile);
         try {
             if (!endfile.toFile().exists() && fullname.endsWith(".json")) {
                 int i = fullname.lastIndexOf("/");

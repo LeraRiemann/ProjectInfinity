@@ -48,17 +48,19 @@ public class DimensionGrabber {
         return grab_dimension(rootdir, i);
     }
 
-    public void grab_for_client(Identifier id, NbtCompound optiondata) {
+    public void grab_for_client(Identifier id, NbtCompound optiondata, List<Identifier> biomeids, List<NbtCompound> biomes) {
         if (!(baseRegistryManager.get(RegistryKeys.DIMENSION_TYPE).contains(RegistryKey.of(RegistryKeys.DIMENSION_TYPE, id)))) {
             (new JsonGrabber<>(registryInfoGetter, DimensionType.CODEC,
                     (MutableRegistry<DimensionType>) (baseRegistryManager.get(RegistryKeys.DIMENSION_TYPE)))).grab(id, optiondata);
             LogManager.getLogger().info("Dimension registered");
         }
-        /*
-        if (!(baseRegistryManager.get(RegistryKeys.DIMENSION).contains(RegistryKey.of(RegistryKeys.DIMENSION, id)))) {
-            (new JsonGrabber<>(registryInfoGetter, DimensionOptions.CODEC,
-                    (MutableRegistry<DimensionOptions>) (baseRegistryManager.get(RegistryKeys.DIMENSION)))).grab(id, dimdata);
-        }*/
+        int i = biomes.size();
+        for (int j = 0; j<i; j++) {
+            if (!(baseRegistryManager.get(RegistryKeys.BIOME).contains(RegistryKey.of(RegistryKeys.BIOME, id)))) {
+                (new JsonGrabber<>(registryInfoGetter, Biome.CODEC,
+                        (MutableRegistry<Biome>) (baseRegistryManager.get(RegistryKeys.BIOME)))).grab(biomeids.get(j), biomes.get(j));
+            }
+        }
     }
 
     DimensionOptions grab_dimension(Path rootdir, int i) {
