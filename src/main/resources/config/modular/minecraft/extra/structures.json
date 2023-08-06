@@ -2,7 +2,8 @@
   "elements": [
     {
       "key": {
-        "name": "minecraft:jigsaw",
+        "name": "ancient_city",
+        "jigsaw": true,
         "spawn_overrides": {
           "ambient": {
             "bounding_box": "full",
@@ -52,7 +53,8 @@
     },
     {
       "key": {
-        "name": "minecraft:jigsaw",
+        "name": "bastion_remnant",
+        "jigsaw": true,
         "snap_to_sea_level": "true",
         "settings": {
           "start_pool": "minecraft:bastion/starts",
@@ -64,7 +66,7 @@
     },
     {
       "key": {
-        "name": "minecraft:buried_treasure",
+        "name": "buried_treasure",
         "settings": {
           "step": "underground_structures"
         }
@@ -73,7 +75,7 @@
     },
     {
       "key": {
-        "name": "minecraft:desert_pyramid",
+        "name": "desert_pyramid",
         "settings": {
           "step": "surface_structures"
         }
@@ -82,7 +84,7 @@
     },
     {
       "key": {
-        "name": "minecraft:end_city",
+        "name": "end_city",
         "settings": {
           "step": "surface_structures"
         }
@@ -91,7 +93,7 @@
     },
     {
       "key": {
-        "name": "minecraft:fortress",
+        "name": "fortress",
         "spawn_overrides": {
           "monster": {
             "bounding_box": "piece",
@@ -137,7 +139,7 @@
     },
     {
       "key": {
-        "name": "minecraft:igloo",
+        "name": "igloo",
         "settings": {
           "step": "surface_structures"
         }
@@ -146,7 +148,7 @@
     },
     {
       "key": {
-        "name": "minecraft:jungle_temple",
+        "name": "jungle_temple",
         "settings": {
           "step": "surface_structures"
         }
@@ -155,7 +157,7 @@
     },
     {
       "key": {
-        "name": "minecraft:mineshaft",
+        "name": "mineshaft",
         "settings": {
           "step": "underground_structures"
         }
@@ -164,7 +166,7 @@
     },
     {
       "key": {
-        "name": "minecraft:nether_fossil",
+        "name": "nether_fossil",
         "settings": {
           "step": "underground_decoration",
           "terrain_adaptation": "beard_thin"
@@ -174,7 +176,7 @@
     },
     {
       "key": {
-        "name": "minecraft:ocean_monument",
+        "name": "ocean_monument",
         "spawn_overrides": {
           "axolotls": {
             "bounding_box": "full",
@@ -204,7 +206,7 @@
     },
     {
       "key": {
-        "name": "minecraft:ocean_ruin",
+        "name": "ocean_ruin",
         "settings": {
           "step": "surface_structures"
         }
@@ -213,7 +215,8 @@
     },
     {
       "key": {
-        "name": "minecraft:jigsaw",
+        "name": "pillager_outpost",
+        "jigsaw": "true",
         "spawn_overrides": {
           "monster": {
             "bounding_box": "full",
@@ -242,7 +245,7 @@
     },
     {
       "key": {
-        "name": "minecraft:ruined_portal",
+        "name": "ruined_portal",
         "settings": {
           "step": "surface_structures"
         }
@@ -251,7 +254,7 @@
     },
     {
       "key": {
-        "name": "minecraft:shipwreck",
+        "name": "shipwreck",
         "settings": {
           "step": "surface_structures"
         }
@@ -260,7 +263,7 @@
     },
     {
       "key": {
-        "name": "minecraft:stronghold",
+        "name": "stronghold",
         "settings": {
           "step": "surface_structures",
           "terrain_adaptation": "bury"
@@ -270,7 +273,7 @@
     },
     {
       "key": {
-        "name": "minecraft:swamp_hut",
+        "name": "swamp_hut",
         "spawn_overrides": {
           "creature": {
             "bounding_box": "piece",
@@ -303,7 +306,8 @@
     },
     {
       "key": {
-        "name": "minecraft:jigsaw",
+        "name": "trail_ruins",
+        "jigsaw": "true",
         "settings": {
           "project_start_to_heightmap": "WORLD_SURFACE_WG",
           "start_height": {
@@ -319,7 +323,8 @@
     },
     {
       "key": {
-        "name": "minecraft:jigsaw",
+        "name": "village",
+        "jigsaw": "true",
         "village": true,
         "settings": {
           "project_start_to_heightmap": "WORLD_SURFACE_WG",
@@ -335,7 +340,7 @@
     },
     {
       "key": {
-        "name": "minecraft:woodland_mansion",
+        "name": "woodland_mansion",
         "settings": {
           "step": "surface_structures"
         }

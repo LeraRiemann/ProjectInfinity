@@ -35,6 +35,7 @@ public class RandomDimension {
     public List<Integer> random_biome_ids;
     public List<RandomBiome> random_biomes;
     public Map<String, NbtCompound> top_blocks;
+    public Map<String, List<String>> structure_ids;
     public Map<String, NbtCompound> underwater;
     public String type_alike;
     public MinecraftServer server;
@@ -56,6 +57,7 @@ public class RandomDimension {
         random_biomes = new ArrayList<>();
         top_blocks = new HashMap<>();
         underwater = new HashMap<>();
+        structure_ids = new HashMap<>();
         default_block = RandomProvider.Block("minecraft:stone");
         default_fluid = RandomProvider.Block("minecraft:water");
         additional_blocks = new ArrayList<>();
@@ -67,6 +69,7 @@ public class RandomDimension {
             RandomBiome b = new RandomBiome(id, this);
             random_biomes.add(b);
             addStructures(b);
+            writeTags(rootPath);
         }
         CommonIO.write(data, storagePath + "/dimension", name + ".json");
         if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");
@@ -264,6 +267,35 @@ public class RandomDimension {
 
     void addStructures(RandomBiome b) {
         int numstructures = random.nextInt(1, 5);
-        for (int i = 0; i < numstructures; i++) (new RandomStructure(random.nextInt(), b)).save();
+        for (int i = 0; i < numstructures; i++) {
+            RandomStructure s = new RandomStructure(random.nextInt(), b);
+            s.save();
+            if (!structure_ids.containsKey(s.type)) structure_ids.put(s.type, new ArrayList<>());
+            structure_ids.get(s.type).add(s.fullname);
+        }
+    }
+
+    void writeTags(String rootPath) {
+        String path = rootPath + "/data/minecraft/tags/worldgen/structure";
+        try {
+            Files.createDirectories(Paths.get(path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        NbtCompound dictionary = CommonIO.read(PROVIDER.configPath + "util/structure_tags.json");
+        Map<String, NbtList> tags = new HashMap<>();
+        for (String s : structure_ids.keySet()) if (dictionary.contains(s)) {
+            for (NbtElement e : (NbtList) Objects.requireNonNull(dictionary.get(s))) {
+                String t = e.asString();
+                if (!tags.containsKey(t)) tags.put(t, new NbtList());
+                structure_ids.get(s).forEach(fullname -> tags.get(t).add(NbtString.of(fullname)));
+            }
+        }
+        for (String t : tags.keySet()) {
+            NbtCompound compound = new NbtCompound();
+            compound.putBoolean("replace", false);
+            compound.put("values", tags.get(t));
+            CommonIO.write(compound, path, t + ".json");
+        }
     }
 }

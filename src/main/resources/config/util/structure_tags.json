@@ -1,0 +1,35 @@
+{
+  "village": [
+    "village"
+  ],
+  "stronghold": [
+    "eye_of_ender_located"
+  ],
+  "buried_treasure": [
+    "on_treasure_maps"
+  ],
+  "shipwreck": [
+    "dolphin_located",
+    "shipwreck"
+  ],
+  "woodland_mansion": [
+    "on_woodland_explorer_maps"
+  ],
+  "ocean_monument": [
+    "on_ocean_explorer_maps"
+  ],
+  "ocean_ruin": [
+    "dolphin_located",
+    "ocean_ruin"
+  ],
+  "swamp_hut": [
+    "cats_spawn_in",
+    "cats_spawn_as_black"
+  ],
+  "mineshaft": [
+    "mineshaft"
+  ],
+  "ruined_portal": [
+    "ruined_portal"
+  ]
+}

@@ -28,17 +28,18 @@ public class RandomStructure {
         name = type + "_" + i;
         fullname = InfinityMod.MOD_ID + ":" + name;
         data = rawdata.getCompound("settings");
-        data.putString("type", type);
         data.putString("biomes", b.fullname);
         data.put("spawn_overrides", spawnOverrides(rawdata));
         RandomDimension daddy = parent.parent;
         if (rawdata.contains("village")) data.putString("start_pool", parent.PROVIDER.randomName(random, "village_start_pools"));
+        if (rawdata.contains("jigsaw")) {
+            data.putString("type", "jigsaw");
+            if (!data.contains("size")) data.putInt("size", random.nextInt(4,8));
+            if (!data.contains("start_height")) data.put("start_height", startHeight(rawdata));
+            if (!data.contains("max_distance_from_center")) data.putInt("max_distance_from_center", random.nextInt(1,117));
+        }
+        else data.putString("type", type);
         switch (type) {
-            case "jigsaw" -> {
-                if (!data.contains("size")) data.putInt("size", random.nextInt(4,8));
-                if (!data.contains("start_height")) data.put("start_height", startHeight(rawdata));
-                if (!data.contains("max_distance_from_center")) data.putInt("max_distance_from_center", random.nextInt(1,117));
-            }
             case "nether_fossil" -> data.put("height", RandomProvider.heightProvider(random, daddy.min_y, daddy.min_y + daddy.height, false, true));
             case "ocean_ruin" -> {
                 data.putString("biome_temp", roll("ruins_warm") ? "warm" : "cold");
@@ -86,7 +87,6 @@ public class RandomStructure {
         res.putInt("absolute", i);
         return res;
     }
-
     NbtCompound spawnOverrides(NbtCompound rawdata) {
         boolean bl = rawdata.contains("spawn_overrides");
         if (roll("spawn_override")) {
