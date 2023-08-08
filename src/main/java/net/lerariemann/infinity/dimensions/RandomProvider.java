@@ -18,6 +18,7 @@ public class RandomProvider {
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
     public String configPath;
+    public String portalKey;
     public NbtCompound noise;
 
     public RandomProvider(String path) {
@@ -47,6 +48,7 @@ public class RandomProvider {
 
     void read_root_config() {
         NbtCompound rootConfig = CommonIO.read(configPath + "infinity.json");
+        portalKey = rootConfig.getString("portalKey");
         NbtCompound gamerules = rootConfig.getCompound("gameRules");
         for (String s: gamerules.getKeys()) {
             gameRules.put(s, gamerules.getBoolean(s));

@@ -3,17 +3,12 @@ package net.lerariemann.infinity.mixin;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.google.common.hash.HashCode;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.NetherPortalBlockAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.dimensions.RandomProvider;
-import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
@@ -23,18 +18,12 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.*;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionOptions;
-import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -43,7 +32,6 @@ import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
 
-import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
@@ -65,13 +53,12 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 					int i = getDimensionSeed(compound, prov.rule("seedDependentDimensions"), server);
 					modifyPortal(world, pos, state, i);
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-					addDimension(server, i, prov.rule("runtimeGenerationEnabled"));
-					world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
 				}
 			}
 		}
 	}
 
+	@Unique
 	int getDimensionSeed(NbtCompound compound, boolean bl, MinecraftServer server) {
 		HashCode f = Hashing.sha256().hashString(compound.asString(), StandardCharsets.UTF_8);
 		int i = f.asInt() & Integer.MAX_VALUE;
@@ -82,37 +69,12 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 		return i;
 	}
 
-	void addDimension(MinecraftServer server, int i, boolean bl) {
-		Identifier id = new Identifier(InfinityMod.MOD_ID, "generated_" + i);
-		RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
-		if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
-			RandomDimension d = new RandomDimension(i, server);
-			if (bl) {
-				((MinecraftServerAccess) (server)).addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(Paths.get(d.storagePath), i));
-				server.getPlayerManager().getPlayerList().forEach(a ->
-						ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(id, d)));
-				LogManager.getLogger().info("Packet sent");
-			}
-		}
-	}
-
-	PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
-		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeIdentifier(id);
-		buf.writeNbt(d.type.data);
-		buf.writeInt(d.random_biomes.size());
-		d.random_biomes.forEach(b -> {
-			buf.writeIdentifier(new Identifier(InfinityMod.MOD_ID, b.name));
-			buf.writeNbt(b.data);
-		});
-		return buf;
-	}
-
 	@Redirect(method="getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Direction;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
 	private boolean injected(BlockState neighborState, Block block) {
 		return (neighborState.getBlock() instanceof NetherPortalBlock);
 	}
 
+	@Unique
 	private void changeDim(World world, BlockPos pos, Direction.Axis axis, int i) {
 		world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.getDefaultState().with(AXIS, axis));
 		BlockEntity blockEntity = world.getBlockEntity(pos);

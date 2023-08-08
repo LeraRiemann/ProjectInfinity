@@ -2,19 +2,34 @@ package net.lerariemann.infinity.block.custom;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.dimensions.RandomDimension;
+import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -23,6 +38,7 @@ import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Random;
 
@@ -42,8 +58,50 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                               PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
             LogManager.getLogger().info(((NeitherPortalBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).getDimension());
+            MinecraftServer s = world.getServer();
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            ItemStack itemStack = player.getStackInHand(hand);
+            if (s!=null && blockEntity instanceof NeitherPortalBlockEntity) {
+                RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
+                Item item = Registries.ITEM.get(new Identifier(prov.portalKey));
+                if (itemStack.isOf(item)) {
+                    if (!player.getAbilities().creativeMode) {
+                        itemStack.decrement(1);
+                    }
+                    int i = ((NeitherPortalBlockEntity) blockEntity).getDimension();
+                    addDimension(s, i, prov.rule("runtimeGenerationEnabled"));
+                    world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
+                }
+            }
         }
         return ActionResult.SUCCESS;
+    }
+
+
+    void addDimension(MinecraftServer server, int i, boolean bl) {
+        Identifier id = new Identifier(InfinityMod.MOD_ID, "generated_" + i);
+        RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
+        if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
+            RandomDimension d = new RandomDimension(i, server);
+            if (bl) {
+                ((MinecraftServerAccess) (server)).addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(Paths.get(d.storagePath), i));
+                server.getPlayerManager().getPlayerList().forEach(a ->
+                        ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(id, d)));
+                LogManager.getLogger().info("Packet sent");
+            }
+        }
+    }
+
+    PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeIdentifier(id);
+        buf.writeNbt(d.type.data);
+        buf.writeInt(d.random_biomes.size());
+        d.random_biomes.forEach(b -> {
+            buf.writeIdentifier(new Identifier(InfinityMod.MOD_ID, b.name));
+            buf.writeNbt(b.data);
+        });
+        return buf;
     }
 
     @Environment(EnvType.CLIENT)

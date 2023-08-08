@@ -4,6 +4,7 @@
     "returnPortalsEnabled": true,
     "seedDependentDimensions": false
   },
+  "portalKey": "minecraft:diamond",
   "rootChances": {
     "dimension_type": {
       "ultrawarm": 0.5,
@@ -81,5 +82,5 @@
       "triangular_spread": 0.1
     }
   },
-  "packVersion": 1.4
+  "packVersion": 1.5
 }
