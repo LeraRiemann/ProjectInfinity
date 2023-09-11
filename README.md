@@ -17,3 +17,5 @@ Please make sure to report any problems you have with the mod (i'm well aware pr
 I appreciate BasiqueEvangelist for helping with runtime dimension registration and his permission to port a part of his code.
 
 This mod also has copyright-free music from [ivory rosewood](https://www.youtube.com/@ivorysoundtracks980) - she's an amazing person, check her out! - that i hid among the dimensions. See if you're able to find it out there, it's pretty rare :D
+
+Sample text
