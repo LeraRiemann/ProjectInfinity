@@ -57,7 +57,7 @@ public class JsonGrabber<E> {
         DataResult<E> dataResult = decoder.parse(registryOps, jsonElement);
         E object = dataResult.getOrThrow(false, (error) -> {
         });
-        registry.add(key, object, Lifecycle.stable());
+        if (!registry.contains(key)) registry.add(key, object, Lifecycle.stable());
     }
 
     void grab(String path, RegistryKey<E> registryKey) {

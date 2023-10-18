@@ -1,10 +1,15 @@
 package net.lerariemann.infinity.dimensions;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -18,11 +23,13 @@ public class RandomProvider {
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
     public String configPath;
+    public String savingPath;
     public String portalKey;
     public NbtCompound noise;
 
-    public RandomProvider(String path) {
-        configPath = path;
+    public RandomProvider(String configpath, String savingpath) {
+        configPath = configpath;
+        savingPath = savingpath;
         registry = new HashMap<>();
         blockRegistry = new HashMap<>();
         extraRegistry = new HashMap<>();
@@ -30,6 +37,7 @@ public class RandomProvider {
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
         register_all();
+        saveAllPortals();
     }
 
     void register_all() {
@@ -59,6 +67,50 @@ public class RandomProvider {
                 rootChances.put(s, rootchances.getCompound(c).getDouble(s));
             }
         }
+    }
+
+    void saveAllPortals() {
+        extraRegistry.get("palettes").keys.forEach(e -> {
+            if (!(Paths.get(savingPath + "/data/" + InfinityMod.MOD_ID + "/structures/"
+                    + ((NbtCompound)e).getString("name") + ".nbt")).toFile().exists()) {
+                savePortalFromPalette((NbtCompound)e);
+            }
+        });
+        if (!(Paths.get(savingPath + "/pack.mcmeta")).toFile().exists()) savePackMcmeta();
+    }
+
+    void savePortalFromPalette(NbtCompound rawdata) {
+        String name = rawdata.getString("name");
+        NbtCompound datanbt = CommonIO.read(configPath + "util/portal/main.json");
+        NbtCompound moredata = CommonIO.readCarefully(configPath +
+                        "util/portal/palette_" + (rawdata.getBoolean("properties") ? "wood" : "stone") + ".json",
+                rawdata.getString("plank"),
+                rawdata.getString("log"),
+                rawdata.getString("stair"),
+                rawdata.getString("stair"));
+        datanbt.put("palette", moredata.get("palette"));
+        String path = savingPath + "/data/" + InfinityMod.MOD_ID + "/structures";
+        Path dir = Paths.get(path);
+        Path file = Paths.get(path + "/" + name + ".nbt");
+        List<String> lines = new ArrayList<>();
+        try {
+            Files.createDirectories(dir);
+            Files.write(file, lines, StandardCharsets.UTF_8);
+            NbtIo.write(datanbt, new File(file.toUri()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        CommonIO.write(CommonIO.readCarefully(configPath + "util/portal/pool.json", name),
+                savingPath + "/data/" + InfinityMod.MOD_ID + "/worldgen/template_pool", name + ".json");
+    }
+
+    void savePackMcmeta() {
+        NbtCompound res = new NbtCompound();
+        NbtCompound pack = new NbtCompound();
+        pack.putInt("pack_format", 10);
+        pack.putString("description", "Common template pools for Infinite Dimensions");
+        res.put("pack", pack);
+        CommonIO.write(res, savingPath, "pack.mcmeta");
     }
 
     public boolean roll(Random random, String key) {

@@ -9,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerTask;
 import net.minecraft.server.WorldGenerationProgressListenerFactory;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.world.SaveProperties;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.source.BiomeAccess;
@@ -24,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -48,13 +50,19 @@ public class MinecraftServerMixin implements MinecraftServerAccess {
     protected ServerTask createTask(Runnable runnable) {
         return null;
     }
+    @Shadow
+    public Path getSavePath(WorldSavePath worldSavePath) {
+        return null;
+    }
+
     public Map<RegistryKey<World>, ServerWorld> worldsToAdd;
     public RandomProvider dimensionProvider;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(CallbackInfo info) {
         worldsToAdd = new HashMap<>();
-        dimensionProvider = new RandomProvider("config/"+ InfinityMod.MOD_ID + "/");
+        dimensionProvider = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
+                getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
     }
 
     @Override

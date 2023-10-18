@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "weight": 1,
+      "structure": "%s"
+    }
+  ],
+  "placement": {
+    "salt": %d,
+    "spacing": %d,
+    "separation": %d,
+    "type": "minecraft:random_spread",
+    "frequency": %f
+  }
+}

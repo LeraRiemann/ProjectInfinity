@@ -729,10 +729,6 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:honey_block",
-      "weight": 1.0
-    },
-    {
       "key": "minecraft:honeycomb_block",
       "weight": 1.0
     },
@@ -1212,10 +1208,6 @@
     },
     {
       "key": "minecraft:shroomlight",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:slime_block",
       "weight": 1.0
     },
     {

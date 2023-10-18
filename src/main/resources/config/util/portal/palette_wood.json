@@ -1,0 +1,71 @@
+{
+  "palette": [
+    {
+      "Name": "%s"
+    },
+    {
+      "Properties": {
+        "axis": "y"
+      },
+      "Name": "%s"
+    },
+    {
+      "Name": "minecraft:obsidian"
+    },
+    {
+      "Name": "minecraft:air"
+    },
+    {
+      "Properties": {
+        "half": "bottom",
+        "waterlogged": "false",
+        "shape": "straight",
+        "facing": "south"
+      },
+      "Name": "%s"
+    },
+    {
+      "Properties": {
+        "half": "bottom",
+        "waterlogged": "false",
+        "shape": "straight",
+        "facing": "north"
+      },
+      "Name": "%s"
+    },
+    {
+      "Properties": {
+        "facing": "east"
+      },
+      "Name": "minecraft:wall_torch"
+    },
+    {
+      "Properties": {
+        "facing": "west"
+      },
+      "Name": "minecraft:wall_torch"
+    },
+    {
+      "Properties": {
+        "axis": "x"
+      },
+      "Name": "minecraft:nether_portal"
+    },
+    {
+      "Properties": {
+        "waterlogged": "false",
+        "facing": "east",
+        "type": "single"
+      },
+      "Name": "minecraft:chest"
+    },
+    {
+      "Properties": {
+        "waterlogged": "false",
+        "facing": "west",
+        "type": "single"
+      },
+      "Name": "minecraft:chest"
+    }
+  ]
+}

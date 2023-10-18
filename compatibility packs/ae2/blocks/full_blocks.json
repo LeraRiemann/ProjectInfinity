@@ -1,0 +1,180 @@
+{
+  "elements": [
+    {
+      "key": "ae2:flawless_budding_quartz",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:flawed_budding_quartz",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:chipped_budding_quartz",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:damaged_budding_quartz",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:quartz_block",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:cut_quartz_block",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:smooth_quartz_block",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:quartz_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:quartz_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:chiseled_quartz_block",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:quartz_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:quartz_vibrant_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:fluix_block",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:sky_stone_block",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:smooth_sky_stone_block",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:sky_stone_brick",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:sky_stone_small_brick",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:mysterious_cube",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:not_so_mysterious_cube",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:controller",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:drive",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:chest",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:interface",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:cell_workbench",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:io_port",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:condenser",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:energy_acceptor",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:vibration_chamber",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:growth_accelerator",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:energy_cell",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:dense_energy_cell",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:spatial_pylon",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:spatial_io_port",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:creative_energy_cell",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:crafting_unit",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:crafting_accelerator",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:1k_crafting_storage",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:4k_crafting_storage",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:16k_crafting_storage",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:64k_crafting_storage",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:256k_crafting_storage",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:crafting_monitor",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:pattern_provider",
+      "weight": 1.0
+    },
+    {
+      "key": "ae2:molecular_assembler",
+      "weight": 1.0
+    }
+  ]
+}

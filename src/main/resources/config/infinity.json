@@ -25,7 +25,7 @@
     },
     "biome": {
       "has_precipitation": 0.5,
-      "use_random_biome": 0.75,
+      "use_random_biome": 1.0,
       "use_sparse_vegetation": 0.5,
       "use_particles": 0.5,
       "ambient_sound": 0.0625,
@@ -53,7 +53,8 @@
       "ceiling_blobs": 0.5,
       "vegetation": 1.0,
       "surface_patch": 0.5,
-      "floating_patch": 0.1
+      "floating_patch": 0.1,
+      "random_portal": 0.0
     },
     "features_rules": {
       "generate_vanilla_features": 0.5,

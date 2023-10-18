@@ -273,6 +273,10 @@ public class RandomDimension {
             if (!structure_ids.containsKey(s.type)) structure_ids.put(s.type, new ArrayList<>());
             structure_ids.get(s.type).add(s.fullname);
         }
+        if (PROVIDER.roll(random, "random_portal")) {
+            RandomPortal p = new RandomPortal(random.nextInt(), b);
+            p.save();
+        }
     }
 
     void writeTags(String rootPath) {

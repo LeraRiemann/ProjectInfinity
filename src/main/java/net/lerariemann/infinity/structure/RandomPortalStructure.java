@@ -16,10 +16,7 @@ import net.minecraft.structure.pool.StructurePoolBasedGenerator;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.util.math.BlockBox;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
@@ -50,7 +47,6 @@ public class RandomPortalStructure extends Structure {
     private final boolean useExpansionHack;
     private final Optional<Heightmap.Type> projectStartToHeightmap;
     private final int maxDistanceFromCenter;
-    BlockPos pos;
 
     private static DataResult<RandomPortalStructure> validate(RandomPortalStructure structure) {
         int i;
@@ -82,7 +78,6 @@ public class RandomPortalStructure extends Structure {
         int i = this.startHeight.get(context.random(), new HeightContext(context.chunkGenerator(), context.world()));
         BlockPos blockPos = new BlockPos(chunkPos.getStartX(), i, chunkPos.getStartZ());
         Optional<Structure.StructurePosition> s = StructurePoolBasedGenerator.generate(context, this.startPool, this.startJigsawName, this.size, blockPos, this.useExpansionHack, this.projectStartToHeightmap, this.maxDistanceFromCenter);
-        pos = s.isPresent() ? s.get().position() : blockPos;
         return s;
     }
 
@@ -94,6 +89,7 @@ public class RandomPortalStructure extends Structure {
     @Override
     public void postPlace(StructureWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox box, ChunkPos chunkPos, StructurePiecesList pieces) {
         Box b = Box.from(pieces.getBoundingBox());
+        BlockPos pos = BlockPos.ofFloored(b.getCenter().x, b.getCenter().y, b.getCenter().z);
         try {
             if (!world.isClient() && world.toServerWorld().getEntitiesByType(TypeFilter.instanceOf(ItemEntity.class), b, RandomPortalStructure::isBook).isEmpty()) {
                 ItemStack stack = ItemStack.fromNbt(StringNbtReader.parse(
