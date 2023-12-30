@@ -13,6 +13,7 @@ public class RandomDimensionType {
     private final Random random;
     public RandomDimension parent;
     public NbtCompound data;
+    public boolean ultrawarm, foggy;
 
     RandomDimensionType(RandomDimension dim) {
         parent = dim;
@@ -20,7 +21,8 @@ public class RandomDimensionType {
         name = "generated_" +dim.id;
         fullname = InfinityMod.MOD_ID + ":" + name;
         data = new NbtCompound();
-        add_roll(data, "ultrawarm");
+        ultrawarm = roll("ultrawarm");
+        data.putBoolean("ultrawarm", ultrawarm);
         add_roll(data, "natural");
         add_roll(data, "has_skylight");
         add_roll(data, "piglin_safe");
@@ -47,7 +49,9 @@ public class RandomDimensionType {
         lightLevel.put("value", RandomProvider.genBounds(0, random.nextInt(16)));
         data.put("monster_spawn_light_level", lightLevel);
         data.putString("infiniburn", dim.PROVIDER.randomName(random, "tags"));
-        data.putString("effects", dim.PROVIDER.randomName(random, "effects"));
+        String s = dim.PROVIDER.randomName(random, "effects");
+        foggy = s.equals("minecraft:the_nether");
+        data.putString("effects", s);
         CommonIO.write(data, dim.storagePath + "/dimension_type", name + ".json");
     }
 

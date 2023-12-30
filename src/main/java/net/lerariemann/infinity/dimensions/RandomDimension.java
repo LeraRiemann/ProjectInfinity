@@ -21,9 +21,9 @@ import java.util.*;
 
 public class RandomDimension {
     public final int id;
-    public final String storagePath;
+    public final String rootPath, storagePath;
     public final RandomProvider PROVIDER;
-    public String name;
+    public String name, fullname;
     public final Random random;
     public int height;
     public int min_y;
@@ -48,7 +48,8 @@ public class RandomDimension {
         PROVIDER = ((MinecraftServerAccess)(server)).getDimensionProvider();
         id = i;
         name = "generated_"+i;
-        String rootPath = server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + name;
+        fullname = InfinityMod.MOD_ID + ":" + name;
+        rootPath = server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + name;
         storagePath = rootPath + "/data/" + InfinityMod.MOD_ID;
         createDirectories();
         data = new NbtCompound();

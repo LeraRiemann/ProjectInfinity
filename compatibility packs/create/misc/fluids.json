@@ -1,0 +1,12 @@
+{
+  "elements": [
+    {
+      "key": "create:chocolate",
+      "weight": 1.0
+    },
+    {
+      "key": "create:honey",
+      "weight": 1.0
+    }
+  ]
+}

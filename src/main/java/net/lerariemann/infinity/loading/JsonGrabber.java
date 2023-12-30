@@ -32,35 +32,39 @@ public class JsonGrabber<E> {
     }
 
     void grab_all(Path rootdir) {
+        grab_all(rootdir, false);
+    }
+
+    void grab_all(Path rootdir, boolean bl) {
         try {
-            walk(rootdir).forEach(this::grab);
+            walk(rootdir).forEach(a -> grab(a, bl));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    void grab(Path path) {
+    void grab(Path path, boolean bl) {
         String path1 = path.toString();
         if (path1.endsWith(".json")) {
             String fullname = path1.substring(path1.lastIndexOf("/") + 1, path1.length() - 5);
             RegistryKey<E> key = RegistryKey.of(registry.getKey(), new Identifier(InfinityMod.MOD_ID, fullname));
-            grab(path1, key);
+            grab(path1, key, bl);
         }
     }
 
-    void grab(Identifier id, NbtCompound compound) {
-        grab(RegistryKey.of(registry.getKey(), id), JsonParser.parseString(CommonIO.CompoundToString(compound, 0)));
+    void grab(Identifier id, NbtCompound compound, boolean bl) {
+        grab(RegistryKey.of(registry.getKey(), id), JsonParser.parseString(CommonIO.CompoundToString(compound, 0)), bl);
     }
 
-    void grab(RegistryKey<E> key, JsonElement jsonElement) {
+    void grab(RegistryKey<E> key, JsonElement jsonElement, boolean bl) {
         RegistryOps<JsonElement> registryOps = RegistryOps.of(JsonOps.INSTANCE, registryInfoGetter);
         DataResult<E> dataResult = decoder.parse(registryOps, jsonElement);
         E object = dataResult.getOrThrow(false, (error) -> {
         });
-        if (!registry.contains(key)) registry.add(key, object, Lifecycle.stable());
+        if (bl || !registry.contains(key)) registry.add(key, object, Lifecycle.stable());
     }
 
-    void grab(String path, RegistryKey<E> registryKey) {
+    void grab(String path, RegistryKey<E> registryKey, boolean bl) {
         File file = new File(path);
         String content;
         try {
@@ -69,7 +73,7 @@ public class JsonGrabber<E> {
             throw new RuntimeException(e);
         }
         JsonElement jsonElement = JsonParser.parseString(content);
-        grab(registryKey, jsonElement);
+        grab(registryKey, jsonElement, bl);
     }
 
     E grab_with_return(String rootdir, int i, boolean register) {

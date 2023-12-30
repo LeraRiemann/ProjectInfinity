@@ -22,6 +22,7 @@ public class RandomProvider {
     public Map<String, NbtList> listRegistry;
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
+    public Map<String, Integer> gameRulesInt;
     public String configPath;
     public String savingPath;
     public String portalKey;
@@ -46,7 +47,8 @@ public class RandomProvider {
         register_category(registry, path, "misc", CommonIO::weighedListReader);
         register_category(registry, path, "features", CommonIO::weighedListReader);
         register_category(registry, path, "vegetation", CommonIO::weighedListReader);
-        register_category(blockRegistry, path, "blocks", CommonIO::blockListReader);
+        ///register_category(blockRegistry, path, "blocks", CommonIO::blockListReader);
+        register_blocks(path);
         register_category(extraRegistry, path, "extra", CommonIO::blockListReader);
         register_category(registry, path, "mobs", CommonIO::weighedListReader);
         register_category(listRegistry, path, "lists", CommonIO::nbtListReader);
@@ -59,7 +61,11 @@ public class RandomProvider {
         portalKey = rootConfig.getString("portalKey");
         NbtCompound gamerules = rootConfig.getCompound("gameRules");
         for (String s: gamerules.getKeys()) {
-            gameRules.put(s, gamerules.getBoolean(s));
+            NbtElement elem = gamerules.get(s);
+            if (elem!=null) {
+                if (elem.getType() == 3) gameRulesInt.put(s, gamerules.getInt(s));
+                else gameRules.put(s, gamerules.getBoolean(s));
+            }
         }
         NbtCompound rootchances = rootConfig.getCompound("rootChances");
         for (String c: rootchances.getKeys()) {
@@ -118,6 +124,47 @@ public class RandomProvider {
     }
     public boolean rule(String key) {
         return gameRules.get(key);
+    }
+    public int rule_int(String key) {
+        return gameRulesInt.get(key);
+    }
+
+    void register_blocks(String path) {
+        Map<String, WeighedStructure<NbtElement>> temp = new HashMap<>();
+        register_category(temp, path, "blocks", CommonIO::blockListReader);
+        if (temp.containsKey("blocks")) {
+            WeighedStructure<NbtElement> allblocks = new WeighedStructure<>();
+            WeighedStructure<NbtElement> blocksfeatures = new WeighedStructure<>();
+            WeighedStructure<NbtElement> topblocks = new WeighedStructure<>();
+            WeighedStructure<NbtElement> fullblocks = new WeighedStructure<>();
+            WeighedStructure<NbtElement> fullblockswg = new WeighedStructure<>();
+            for (int i = 0; i < temp.get("blocks").keys.size(); i++) {
+                NbtCompound e = (NbtCompound)(temp.get("blocks").keys.get(i));
+                boolean isfull, istop, isfloat, islaggy;
+                isfull = check(e, "full", false);
+                islaggy = check(e, "laggy", false);
+                isfloat = check(e, "float", isfull);
+                istop = check(e, "top", isfull);
+                istop = istop || isfloat;
+                Double w = temp.get("blocks").weights.get(i);
+                allblocks.add(e, w);
+                if (isfull) fullblocks.add(e, w);
+                if (istop && !islaggy) topblocks.add(e, w);
+                if (isfloat) blocksfeatures.add(e, w);
+                if (isfull && isfloat && !islaggy) fullblockswg.add(e, w);
+            }
+            blockRegistry.put("all_blocks", allblocks);
+            blockRegistry.put("blocks_features", blocksfeatures);
+            blockRegistry.put("full_blocks", fullblocks);
+            blockRegistry.put("full_blocks_worldgen", fullblockswg);
+            blockRegistry.put("top_blocks", topblocks);
+        }
+    }
+
+    static boolean check(NbtCompound e, String key, boolean def) {
+        boolean res = e.contains(key) ? e.getBoolean(key) : def;
+        e.remove(key);
+        return res;
     }
 
     static <B> void register_category(Map<String, B> reg, String path, String subpath, ListReader<B> reader) {

@@ -2,7 +2,7 @@
   "elements": [
     {
       "key": "minecraft:water",
-      "weight": 0.89
+      "weight": 1.0
     },
     {
       "key": "minecraft:lava",

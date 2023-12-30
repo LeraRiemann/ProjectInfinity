@@ -59,6 +59,7 @@ public class RandomNoisePreset {
         data.put("default_block", default_block);
         parent.default_block = default_block;
         data.put("default_fluid", default_fluid);
+        parent.default_fluid = default_fluid;
         data.putInt("sea_level", sea_level);
         parent.sea_level = sea_level;
         data.put("noise", noise(dim));

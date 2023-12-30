@@ -1,0 +1,2336 @@
+{
+  "elements": [
+    {
+      "key": "create:creative_motor",
+      "weight": 1.0
+    },
+    {
+      "key": "create:crushing_wheel_controller",
+      "weight": 1.0
+    },
+    {
+      "key": "create:glass_fluid_pipe",
+      "weight": 1.0
+    },
+    {
+      "key": "create:metal_girder",
+      "weight": 1.0
+    },
+    {
+      "key": "create:metal_girder_encased_shaft",
+      "weight": 1.0
+    },
+    {
+      "key": "create:millstone",
+      "weight": 1.0
+    },
+    {
+      "key": "create:minecart_anchor",
+      "weight": 1.0
+    },
+    {
+      "key": "create:powered_shaft",
+      "weight": 1.0
+    },
+    {
+      "key": "create:pulley_magnet",
+      "weight": 1.0
+    },
+    {
+      "key": "create:rope",
+      "weight": 1.0
+    },
+    {
+      "key": "create:steam_engine",
+      "weight": 1.0
+    },
+    {
+      "key": "create:schematic_table",
+      "weight": 1.0
+    },
+    {
+      "key": "create:turntable",
+      "weight": 1.0
+    },
+    {
+      "key": "create:shaft",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cogwheel",
+      "weight": 1.0
+    },
+    {
+      "key": "create:large_cogwheel",
+      "weight": 1.0
+    },
+    {
+      "key": "create:piston_extension_pole",
+      "weight": 1.0
+    },
+    {
+      "key": "create:depot",
+      "weight": 1.0
+    },
+    {
+      "key": "create:blaze_burner",
+      "weight": 1.0
+    },
+    {
+      "key": "create:chute",
+      "weight": 1.0
+    },
+    {
+      "key": "create:speedometer",
+      "weight": 1.0
+    },
+    {
+      "key": "create:stressometer",
+      "weight": 1.0
+    },
+    {
+      "key": "create:fluid_pipe",
+      "weight": 1.0
+    },
+    {
+      "key": "create:item_drain",
+      "weight": 1.0
+    },
+    {
+      "key": "create:gantry_shaft",
+      "weight": 1.0
+    },
+    {
+      "key": "create:rope_pulley",
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:sticker",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": "create:smart_fluid_pipe",
+      "weight": 1.0
+    },
+    {
+      "key": "create:fluid_valve",
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:copper_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:white_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:red_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:orange_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:yellow_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:lime_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:green_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:light_blue_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:blue_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:purple_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:cyan_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:magenta_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:pink_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:light_gray_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:gray_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:brown_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:black_valve_handle",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:mechanical_drill",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:mechanical_saw",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:deployer",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:sail_frame",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:white_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:red_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:orange_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:yellow_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:lime_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:green_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:light_blue_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:blue_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:purple_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:cyan_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:magenta_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:pink_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:light_gray_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:gray_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:brown_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:black_sail",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": "create:flywheel",
+      "weight": 1.0
+    },
+    {
+      "key": "create:controls",
+      "weight": 1.0
+    },
+    {
+      "key": "create:red_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:orange_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:yellow_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:lime_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:green_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:light_blue_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:blue_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cyan_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:purple_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:magenta_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:pink_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:white_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:light_gray_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:gray_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:brown_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:black_toolbox",
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:andesite_funnel",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:brass_funnel",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:display_link",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": "create:display_board",
+      "weight": 1.0
+    },
+    {
+      "key": "create:creative_crate",
+      "weight": 1.0
+    },
+    {
+      "key": "create:andesite_bars",
+      "weight": 1.0
+    },
+    {
+      "key": "create:brass_bars",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copper_bars",
+      "weight": 1.0
+    },
+    {
+      "key": "create:andesite_scaffolding",
+      "weight": 1.0
+    },
+    {
+      "key": "create:brass_scaffolding",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copper_scaffolding",
+      "weight": 1.0
+    },
+    {
+      "key": "create:metal_girder",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copycat_step",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copycat_panel",
+      "weight": 1.0
+    },
+    {
+      "key": "create:red_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:orange_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:yellow_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:lime_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:green_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:light_blue_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:blue_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cyan_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:purple_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:magenta_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:pink_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:white_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:light_gray_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:gray_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:brown_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:black_seat",
+      "weight": 1.0
+    },
+    {
+      "key": "create:andesite_door",
+      "weight": 1.0
+    },
+    {
+      "key": "create:brass_door",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copper_door",
+      "weight": 1.0
+    },
+    {
+      "key": "create:train_door",
+      "weight": 1.0
+    },
+    {
+      "key": "create:framed_glass_door",
+      "weight": 1.0
+    },
+    {
+      "key": "create:train_trapdoor",
+      "weight": 1.0
+    },
+    {
+      "key": "create:framed_glass_trapdoor",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copper_shingle_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:exposed_copper_shingle_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:weathered_copper_shingle_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:oxidized_copper_shingle_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copper_shingle_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:exposed_copper_shingle_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:weathered_copper_shingle_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:oxidized_copper_shingle_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_copper_shingle_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_exposed_copper_shingle_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_weathered_copper_shingle_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_oxidized_copper_shingle_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_copper_shingle_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_exposed_copper_shingle_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_weathered_copper_shingle_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_oxidized_copper_shingle_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copper_tile_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:exposed_copper_tile_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:weathered_copper_tile_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:oxidized_copper_tile_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copper_tile_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:exposed_copper_tile_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:weathered_copper_tile_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:oxidized_copper_tile_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_copper_tile_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_exposed_copper_tile_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_weathered_copper_tile_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_oxidized_copper_tile_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_copper_tile_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_exposed_copper_tile_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_weathered_copper_tile_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_oxidized_copper_tile_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:oak_window_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:birch_window_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:spruce_window_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:jungle_window_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:acacia_window_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:dark_oak_window_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:mangrove_window_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:crimson_window_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:warped_window_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:ornate_iron_window_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:tiled_glass_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:framed_glass_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:horizontal_framed_glass_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:vertical_framed_glass_pane",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_granite_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_granite_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_granite_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_granite_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_granite_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_granite_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_granite_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_granite_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_granite_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_granite_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_granite_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_granite_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_diorite_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_diorite_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_diorite_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_diorite_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_diorite_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_diorite_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_diorite_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_diorite_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_diorite_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_diorite_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_diorite_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_diorite_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_andesite_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_andesite_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_andesite_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_andesite_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_andesite_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_andesite_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_andesite_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_andesite_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_andesite_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_andesite_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_andesite_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_andesite_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_calcite_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_calcite_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_calcite_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_calcite_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_calcite_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_calcite_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_calcite_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_calcite_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_calcite_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_calcite_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_calcite_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_calcite_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_dripstone_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_dripstone_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_dripstone_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_dripstone_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_dripstone_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_dripstone_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_dripstone_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_dripstone_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_dripstone_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_dripstone_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_dripstone_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_dripstone_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_deepslate_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_deepslate_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_deepslate_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_deepslate_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_deepslate_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_deepslate_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_deepslate_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_deepslate_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_deepslate_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_deepslate_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_deepslate_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_deepslate_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_tuff_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_tuff_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_tuff_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_tuff_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_tuff_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_tuff_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_tuff_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_tuff_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_tuff_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_tuff_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_tuff_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_tuff_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_asurine_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_asurine_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_asurine_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_asurine_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_asurine_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_asurine_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_asurine_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_asurine_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_asurine_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_asurine_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_asurine_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_asurine_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_crimsite_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_crimsite_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_crimsite_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_crimsite_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_crimsite_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_crimsite_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_crimsite_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_crimsite_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_crimsite_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_crimsite_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_crimsite_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_crimsite_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_limestone_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_limestone_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_limestone_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_limestone_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_limestone_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_limestone_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_limestone_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_limestone_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_limestone_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_limestone_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_limestone_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_limestone_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_ochrum_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_ochrum_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_ochrum_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_ochrum_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_ochrum_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_ochrum_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_ochrum_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_ochrum_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_ochrum_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_ochrum_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_ochrum_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_ochrum_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scoria_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_scoria_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scoria_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_scoria_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scoria_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_scoria_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scoria_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_scoria_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scoria_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_scoria_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scoria_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_scoria_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scorchia_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_scorchia_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scorchia_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_scorchia_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scorchia_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_scorchia_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scorchia_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_scorchia_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scorchia_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_scorchia_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scorchia_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_scorchia_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_veridium_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_veridium_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_veridium_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_veridium_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_veridium_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_veridium_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_veridium_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_veridium_brick_stairs",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_veridium_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_veridium_brick_slab",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_veridium_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_veridium_brick_wall",
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:hand_crank",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": {
+        "Name": "create:redstone_link",
+        "Properties": {
+          "facing": "up"
+        }
+      },
+      "weight": 1.0
+    },
+    {
+      "key": "create:analog_lever",
+      "weight": 1.0
+    },
+    {
+      "key": "create:pulse_repeater",
+      "weight": 1.0
+    },
+    {
+      "key": "create:pulse_extender",
+      "weight": 1.0
+    },
+    {
+      "key": "create:powered_latch",
+      "weight": 1.0
+    },
+    {
+      "key": "create:powered_toggle_latch",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cart_assembler",
+      "weight": 1.0
+    },
+    {
+      "key": "create:controller_rail",
+      "weight": 1.0
+    },
+    {
+      "key": "create:clipboard",
+      "weight": 1.0
+    },
+    {
+      "key": "create:steam_whistle",
+      "weight": 1.0
+    },
+    {
+      "key": "create:steam_whistle_extension",
+      "weight": 1.0
+    },
+    {
+      "key": "create:gearbox",
+      "weight": 1.0
+    },
+    {
+      "key": "create:clutch",
+      "weight": 1.0
+    },
+    {
+      "key": "create:gearshift",
+      "weight": 1.0
+    },
+    {
+      "key": "create:encased_chain_drive",
+      "weight": 1.0
+    },
+    {
+      "key": "create:adjustable_chain_gearshift",
+      "weight": 1.0
+    },
+    {
+      "key":
+      {
+        "key": {
+          "Name": "create:encased_fan",
+          "Properties": {
+            "facing": "up"
+          }
+        },
+        "weight": 1.0
+      },
+      "weight": 1.0
+    },
+    {
+      "key": "create:smart_chute",
+      "weight": 1.0
+    },
+    {
+      "key": "create:fluid_tank",
+      "weight": 1.0
+    },
+    {
+      "key": "create:creative_fluid_tank",
+      "weight": 1.0
+    },
+    {
+      "key": "create:portable_storage_interface",
+      "weight": 1.0
+    },
+    {
+      "key": "create:portable_fluid_interface",
+      "weight": 1.0
+    },
+    {
+      "key": "create:mechanical_piston",
+      "weight": 1.0
+    },
+    {
+      "key": "create:sticky_mechanical_piston",
+      "weight": 1.0
+    },
+    {
+      "key": "create:windmill_bearing",
+      "weight": 1.0
+    },
+    {
+      "key": "create:mechanical_bearing",
+      "weight": 1.0
+    },
+    {
+      "key": "create:clockwork_bearing",
+      "weight": 1.0
+    },
+    {
+      "key": "create:redstone_contact",
+      "weight": 1.0
+    },
+    {
+      "key": "create:basin",
+      "weight": 1.0
+    },
+    {
+      "key": "create:rotational_speed_controller",
+      "weight": 1.0
+    },
+    {
+      "key": "create:stockpile_switch",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copycat_base",
+      "weight": 1.0
+    },
+    {
+      "key": "create:elevator_contact",
+      "weight": 1.0
+    },
+    {
+      "key": "create:encased_fluid_pipe",
+      "weight": 1.0
+    },
+    {
+      "key": "create:encased_fluid_pipe",
+      "weight": 1.0
+    },
+    {
+      "key": "create:zinc_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "create:deepslate_zinc_ore",
+      "weight": 1.0
+    },
+    {
+      "key": "create:raw_zinc_block",
+      "weight": 1.0
+    },
+    {
+      "key": "create:zinc_block",
+      "weight": 1.0
+    },
+    {
+      "key": "create:andesite_alloy_block",
+      "weight": 1.0
+    },
+    {
+      "key": "create:industrial_iron_block",
+      "weight": 1.0
+    },
+    {
+      "key": "create:brass_block",
+      "weight": 1.0
+    },
+    {
+      "key": "create:experience_block",
+      "weight": 1.0
+    },
+    {
+      "key": "create:rose_quartz_block",
+      "weight": 1.0
+    },
+    {
+      "key": "create:rose_quartz_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_rose_quartz_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copper_shingles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:exposed_copper_shingles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:weathered_copper_shingles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:oxidised_copper_shingles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_copper_shingles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_exposed_copper_shingles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_weathered_copper_shingles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_oxidised_copper_shingles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copper_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:exposed_copper_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:weathered_copper_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:oxidised_copper_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_copper_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_exposed_copper_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_weathered_copper_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:waxed_oxidised_copper_tiles",
+      "weight": 1.0
+    },
+    {
+      "key": "create:oak_window",
+      "weight": 1.0
+    },
+    {
+      "key": "create:birch_window",
+      "weight": 1.0
+    },
+    {
+      "key": "create:spruce_window",
+      "weight": 1.0
+    },
+    {
+      "key": "create:jungle_window",
+      "weight": 1.0
+    },
+    {
+      "key": "create:acacia_window",
+      "weight": 1.0
+    },
+    {
+      "key": "create:dark_oak_window",
+      "weight": 1.0
+    },
+    {
+      "key": "create:mangrove_window",
+      "weight": 1.0
+    },
+    {
+      "key": "create:crimson_window",
+      "weight": 1.0
+    },
+    {
+      "key": "create:warped_window",
+      "weight": 1.0
+    },
+    {
+      "key": "create:ornate_iron_window",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_granite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_granite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_granite_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_granite_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_granite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:granite_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_diorite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_diorite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_diorite_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_diorite_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_diorite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:diorite_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_andesite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_andesite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_andesite_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_andesite_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_andesite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:andesite_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_calcite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_calcite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_calcite_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_calcite_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_calcite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:calcite_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_dripstone",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_dripstone",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_dripstone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_dripstone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_dripstone",
+      "weight": 1.0
+    },
+    {
+      "key": "create:dripstone_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_deepslate",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_deepslate",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_deepslate_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_deepslate_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_deepslate",
+      "weight": 1.0
+    },
+    {
+      "key": "create:deepslate_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_tuff",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_tuff",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_tuff_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_tuff_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_tuff",
+      "weight": 1.0
+    },
+    {
+      "key": "create:tuff_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:azurine",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_azurine",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_azurine",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_azurine_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_azurine_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_azurine",
+      "weight": 1.0
+    },
+    {
+      "key": "create:azurine_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:crimsite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_crimsite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_crimsite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_crimsite_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_crimsite_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_crimsite",
+      "weight": 1.0
+    },
+    {
+      "key": "create:crimsite_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:limestone",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_limestone",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_limestone",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_limestone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_limestone_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_limestone",
+      "weight": 1.0
+    },
+    {
+      "key": "create:limestone_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:ochrum",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_ochrum",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_ochrum",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_ochrum_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_ochrum_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_ochrum",
+      "weight": 1.0
+    },
+    {
+      "key": "create:ochrum_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:scoria",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scoria",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_scoria",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scoria_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_scoria_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_scoria",
+      "weight": 1.0
+    },
+    {
+      "key": "create:scoria_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:scorchia",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scorchia",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_scorchia",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_scorchia_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_scorchia_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_scorchia",
+      "weight": 1.0
+    },
+    {
+      "key": "create:scorchia_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:veridium",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium",
+      "weight": 1.0
+    },
+    {
+      "key": "create:polished_cut_veridium",
+      "weight": 1.0
+    },
+    {
+      "key": "create:cut_veridium_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:small_veridium_bricks",
+      "weight": 1.0
+    },
+    {
+      "key": "create:layered_veridium",
+      "weight": 1.0
+    },
+    {
+      "key": "create:veridium_pillar",
+      "weight": 1.0
+    },
+    {
+      "key": "create:andesite_casing",
+      "weight": 1.0
+    },
+    {
+      "key": "create:brass_casing",
+      "weight": 1.0
+    },
+    {
+      "key": "create:copper_casing",
+      "weight": 1.0
+    },
+    {
+      "key": "create:railway_casing",
+      "weight": 1.0
+    },
+    {
+      "key": "create:refined_radiance_casing",
+      "weight": 1.0
+    },
+    {
+      "key": "create:shadow_steel_casing",
+      "weight": 1.0
+    },
+    {
+      "key": "create:rose_quartz_lamp",
+      "weight": 1.0
+    },
+    {
+      "key": "create:tiled_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "create:framed_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "create:horizontal_framed_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "create:vertical_framed_glass",
+      "weight": 1.0
+    },
+    {
+      "key": "create:linear_chassis",
+      "weight": 1.0
+    },
+    {
+      "key": "create:secondary_linear_chassis",
+      "weight": 1.0
+    },
+    {
+      "key": "create:radial_chassis",
+      "weight": 1.0
+    },
+    {
+      "key": "create:item_vault",
+      "weight": 1.0
+    },
+    {
+      "key": "create:content_observer",
+      "weight": 1.0
+    }
+  ]
+}

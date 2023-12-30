@@ -48,7 +48,7 @@ public abstract class RandomisedFeature {
     }
 
     public String fullNameConfigured() {
-        return InfinityMod.MOD_ID + ":" + name;
+        return InfinityMod.MOD_ID + ":configured_" + name;
     }
 
     <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key) {
@@ -56,7 +56,8 @@ public abstract class RandomisedFeature {
     }
 
     void save(Object... args) {
-        if (does_not_contain(RegistryKeys.CONFIGURED_FEATURE)) CommonIO.write(feature(), parent.storagePath + "/worldgen/configured_feature", name + ".json");
+        if (does_not_contain(RegistryKeys.CONFIGURED_FEATURE)) CommonIO.write(feature(),
+                parent.storagePath + "/worldgen/configured_feature", "configured_" + name + ".json");
         save_no_configure(args);
     }
 

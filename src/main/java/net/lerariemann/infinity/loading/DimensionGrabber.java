@@ -34,7 +34,7 @@ public class DimensionGrabber {
 
     public DimensionOptions grab_all(Path rootdir, int i) {
         buildGrabber(ConfiguredFeature.CODEC, RegistryKeys.CONFIGURED_FEATURE).grab_all(rootdir.resolve("worldgen/configured_feature"));
-        buildGrabber(PlacedFeature.CODEC, RegistryKeys.PLACED_FEATURE).grab_all(rootdir.resolve("worldgen/placed_feature"));
+        buildGrabber(PlacedFeature.CODEC, RegistryKeys.PLACED_FEATURE).grab_all(rootdir.resolve("worldgen/placed_feature"), true);
         buildGrabber(ConfiguredCarver.CODEC, RegistryKeys.CONFIGURED_CARVER).grab_all(rootdir.resolve("worldgen/configured_carver"));
         buildGrabber(Biome.CODEC, RegistryKeys.BIOME).grab_all(rootdir.resolve("worldgen/biome"));
         buildGrabber(Structure.STRUCTURE_CODEC, RegistryKeys.STRUCTURE).grab_all(rootdir.resolve("worldgen/structure"));
@@ -49,7 +49,7 @@ public class DimensionGrabber {
     }
 
     <T> void grab_one_for_client(Codec<T> codec, RegistryKey<Registry<T>> key, Identifier id, NbtCompound optiondata) {
-        if (!(baseRegistryManager.get(key).contains(RegistryKey.of(key, id)))) buildGrabber(codec, key).grab(id, optiondata);
+        if (!(baseRegistryManager.get(key).contains(RegistryKey.of(key, id)))) buildGrabber(codec, key).grab(id, optiondata, false);
     }
 
     public void grab_for_client(Identifier id, NbtCompound optiondata, List<Identifier> biomeids, List<NbtCompound> biomes) {
