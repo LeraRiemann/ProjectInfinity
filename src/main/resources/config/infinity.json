@@ -54,14 +54,15 @@
       "vegetation": 1.0,
       "surface_patch": 0.5,
       "floating_patch": 0.1,
-      "random_portal": 0.0
+      "random_portal": 0.0,
+      "random_flowers": 1.0
     },
     "features_rules": {
       "generate_vanilla_features": 0.5,
       "rotate_blocks": 0.75,
       "flood_geodes": 0.25,
       "use_vanilla_trees": 0.25,
-      "huge_trees": 0.25,
+      "huge_trees": 0.0,
       "ores_spawn_everywhere": 0.02,
       "scatter_ores": 0.2,
       "scatter_end_spikes": 0.67,

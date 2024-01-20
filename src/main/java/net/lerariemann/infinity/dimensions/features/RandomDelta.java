@@ -8,8 +8,11 @@ public class RandomDelta extends RandomisedFeature {
     public RandomDelta(RandomFeaturesList parent) {
         super(parent, "delta");
         id = "delta_feature";
-        type = "everylayer_biome";
-        save(1 + random.nextInt(50));
+        save_with_placement();
+    }
+
+    void placement() {
+        placement_everylayer_biome(1 + random.nextInt(50));
     }
 
     NbtCompound feature() {

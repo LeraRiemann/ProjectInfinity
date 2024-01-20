@@ -56,7 +56,10 @@ public class RandomFeaturesList {
         res.add(NbtString.of(feature.fullName()));
     }
     void addRandomFeature(String key, NbtList res, FeatureRegistrar registrar) {
-        if (roll(key)) res.add(NbtString.of(registrar.op(this).fullName()));
+        if (roll(key)) addRandomFeature(res, registrar);
+    }
+    void addRandomFeature(NbtList res, FeatureRegistrar registrar) {
+        res.add(NbtString.of(registrar.op(this).fullName()));
     }
 
     public boolean roll(String key) {
@@ -124,7 +127,8 @@ public class RandomFeaturesList {
         NbtList res = new NbtList();
         addRandomFeature("vegetation", res, RandomVegetation::new);
         res.addAll(getAllElements("vegetation_part1"));
-        res.add(randomPlant("flowers"));
+        if (!PROVIDER.roll(random, "random_flowers")) res.add(randomPlant("flowers"));
+        else addRandomFeature(res, RandomFlowerPatch::new);
         res.add(randomPlant("grass"));
         res.addAll(getAllElements("vegetation_part2"));
         addRandomFeature("surface_patch", res, RandomSurfacePatch::new);

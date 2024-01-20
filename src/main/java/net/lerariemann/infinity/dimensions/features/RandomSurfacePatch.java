@@ -8,8 +8,13 @@ public class RandomSurfacePatch extends RandomisedFeature {
     public RandomSurfacePatch(RandomFeaturesList parent) {
         super(parent, "patch");
         id = "random_patch";
-        type = "surfacepatch";
-        save(1 + random.nextInt(64));
+        save_with_placement();
+    }
+
+    void placement() {
+        addRarityFilter(1 + random.nextInt(64));
+        addInSquare();
+        addBiome();
     }
 
     NbtCompound feature() {

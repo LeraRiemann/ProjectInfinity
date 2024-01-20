@@ -9,12 +9,13 @@ public class RandomEndGateway extends RandomisedFeature {
     public RandomEndGateway(RandomFeaturesList parent) {
         super(parent, "gateway");
         id = "end_gateway";
-        type = "floating";
+        save_with_placement();
+    }
+
+    void placement() {
         int a = daddy.min_y + random.nextInt(daddy.height);
         int b = daddy.min_y + random.nextInt(daddy.height);
-        int min_inclusive = Math.min(a, b);
-        int max_inclusive = Math.max(a, b);
-        save(random.nextInt(1,33), min_inclusive, max_inclusive);
+        placement_floating(random.nextInt(1,33), a, b);
     }
 
     NbtCompound feature() {

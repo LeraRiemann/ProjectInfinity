@@ -7,8 +7,11 @@ public class RandomDungeon extends RandomisedFeature {
     public RandomDungeon(RandomFeaturesList parent) {
         super(parent, "dungeon");
         id = "random_dungeon";
-        type = "uniform";
-        save(10 + random.nextInt(200));
+        save_with_placement();
+    }
+
+    void placement() {
+        placement_uniform(10 + random.nextInt(200));
     }
 
     NbtCompound feature() {

@@ -125,9 +125,6 @@ public class RandomProvider {
     public boolean rule(String key) {
         return gameRules.get(key);
     }
-    public int rule_int(String key) {
-        return gameRulesInt.get(key);
-    }
 
     void register_blocks(String path) {
         Map<String, WeighedStructure<NbtElement>> temp = new HashMap<>();
@@ -158,7 +155,9 @@ public class RandomProvider {
             blockRegistry.put("full_blocks", fullblocks);
             blockRegistry.put("full_blocks_worldgen", fullblockswg);
             blockRegistry.put("top_blocks", topblocks);
-            blockRegistry.put("fluids", temp.get("fluids"));
+            temp.keySet().forEach(a -> {
+                if (!Objects.equals(a, "blocks")) blockRegistry.put(a, temp.get(a));
+            });
         }
     }
 

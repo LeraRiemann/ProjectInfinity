@@ -6,8 +6,15 @@ import net.minecraft.nbt.NbtCompound;
 public class RandomRock extends RandomisedFeature {
     public RandomRock(RandomFeaturesList parent) {
         super(parent, "rock");
-        id = type = "forest_rock";
-        save(1 + random.nextInt(8));
+        id = "forest_rock";
+        save_with_placement();
+    }
+
+    void placement() {
+        addCount(1 + random.nextInt(8));
+        addInSquare();
+        addHeightmap("MOTION_BLOCKING");
+        addBiome();
     }
 
     NbtCompound feature() {

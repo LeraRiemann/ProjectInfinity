@@ -9,9 +9,12 @@ public class RandomFungus extends RandomisedFeature {
     public RandomFungus(RandomFeaturesList parent) {
         super(parent, "fungus");
         id = "huge_fungus";
-        type = "everylayer";
         mainsurfaceblock = parent.surface_block;
-        save(1);
+        save_with_placement();
+    }
+
+    void placement() {
+        addCountEveryLayer(1);
     }
 
     NbtCompound feature() {

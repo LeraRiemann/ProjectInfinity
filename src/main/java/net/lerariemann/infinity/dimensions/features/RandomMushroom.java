@@ -4,11 +4,14 @@ import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.minecraft.nbt.NbtCompound;
 
 public class RandomMushroom extends RandomisedFeature {
-    public RandomMushroom(RandomFeaturesList parent, boolean placef) {
-        super(parent, "mushroom", placef);
+    public RandomMushroom(RandomFeaturesList parent) {
+        super(parent, "mushroom");
         id = random.nextBoolean() ? "random_flat_mushroom" : "random_round_mushroom";
-        type = "everylayer";
-        save(1);
+        save_with_placement();
+    }
+
+    void placement() {
+        addCountEveryLayer(1);
     }
 
     NbtCompound feature() {

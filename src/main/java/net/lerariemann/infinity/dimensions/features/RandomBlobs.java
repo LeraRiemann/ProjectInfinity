@@ -11,8 +11,11 @@ public class RandomBlobs extends RandomisedFeature {
         block = parent.PROVIDER.randomBlock(random, "full_blocks_worldgen");
         daddy.additional_blocks.add(block);
         id = "netherrack_replace_blobs";
-        type = "uniform";
-        save(1 + random.nextInt(32));
+        save_with_placement();
+    }
+
+    void placement() {
+        placement_uniform(1 + random.nextInt(32));
     }
 
     NbtCompound feature() {

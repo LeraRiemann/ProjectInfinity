@@ -1,0 +1,68 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:poppy",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dandelion",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:allium",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:azure_bluet",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:red_tulip",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:orange_tulip",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:white_tulip",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pink_tulip",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oxeye_daisy",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cornflower",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lily_of_the_valley",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:blue_orchid",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:flowering_azalea",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:wither_rose",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pink_petals",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:torchflower",
+      "weight": 1.0
+    }
+  ]
+}

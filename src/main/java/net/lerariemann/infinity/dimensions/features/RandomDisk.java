@@ -10,8 +10,15 @@ public class RandomDisk extends RandomisedFeature {
     public RandomDisk(RandomFeaturesList parent) {
         super(parent, "disk");
         target = daddy.underwater.get(parent.parent.fullname).getString("Name");
-        id = type = "disk";
-        save(daddy.default_fluid.getString("fluidName"));
+        id = "disk";
+        save_with_placement();
+    }
+
+    void placement() {
+        addInSquare();
+        addHeightmap("OCEAN_FLOOR_WG");
+        addBlockPredicateFilter(matchingFluids(daddy.default_fluid.getString("fluidName")));
+        addBiome();
     }
 
     NbtCompound feature() {

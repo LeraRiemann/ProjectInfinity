@@ -8,11 +8,17 @@ public class RandomOre extends RandomisedFeature {
 
     public RandomOre(RandomFeaturesList parent) {
         super(parent, "ore");
-        type = "ore";
         id = (parent.PROVIDER.roll(random, "scatter_ores")) ? "scattered_ore" : "ore";
+        save_with_placement();
+    }
+
+    void placement() {
         int center = random.nextInt(daddy.min_y, daddy.min_y + daddy.height);
         int sigma = random.nextInt(daddy.height);
-        save(1 + random.nextInt(128), center + sigma, center - sigma);
+        addCount(1 + random.nextInt(128));
+        addInSquare();
+        addHeightRange(heightRange(center + sigma, center - sigma, "trapezoid"));
+        addBiome();
     }
 
     NbtCompound feature() {

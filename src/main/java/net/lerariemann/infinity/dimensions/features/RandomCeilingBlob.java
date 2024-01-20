@@ -8,8 +8,14 @@ public class RandomCeilingBlob extends RandomisedFeature {
     public RandomCeilingBlob(RandomFeaturesList parent) {
         super(parent, "ceilingblob");
         id = "random_ceiling_blob";
-        type = "ceiling_blob";
-        save(random.nextInt(1, daddy.height/8));
+        save_with_placement();
+    }
+
+    void placement() {
+        addCount(random.nextInt(1, daddy.height/8));
+        addInSquare();
+        addHeightRange(fullHeightRange());
+        addBiome();
     }
 
     NbtCompound feature() {

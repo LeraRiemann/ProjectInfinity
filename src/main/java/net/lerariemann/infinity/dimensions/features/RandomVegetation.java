@@ -1,10 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
+import net.minecraft.nbt.*;
 
 import java.util.Objects;
 
@@ -15,8 +12,17 @@ public class RandomVegetation extends RandomisedFeature {
         super(parent.parent.id, parent, "vegetation");
         sparse = PROVIDER.roll(random, "use_sparse_vegetation");
         id = "random_selector";
-        type = sparse ? "vegetation_sparse" : "vegetation";
-        save(1 + random.nextInt(10), (int) Math.floor(random.nextExponential()*4));
+        save_with_placement();
+    }
+
+    void placement() {
+        int a = 1 + random.nextInt(10);
+        if (sparse) addRarityFilter(a);
+        else addCount(a);
+        addInSquare();
+        addWaterDepthFilter((int) Math.floor(random.nextExponential()*4));
+        addHeightmap("MOTION_BLOCKING");
+        addBiome();
     }
 
     NbtElement randomTree() {
@@ -28,8 +34,8 @@ public class RandomVegetation extends RandomisedFeature {
         else {
             switch(PROVIDER.randomName(random, "floral_distribution")) {
                 case "fungi" -> tree = (new RandomFungus(parent)).fullName();
-                case "mushrooms" -> tree = (new RandomMushroom(parent, true)).fullName();
-                case "trees" -> tree = (new RandomTree(parent, true)).fullName();
+                case "mushrooms" -> tree = (new RandomMushroom(parent)).fullName();
+                case "trees" -> tree = (new RandomTree(parent)).fullName();
             }
         }
         return NbtString.of(tree);

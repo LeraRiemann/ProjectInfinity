@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.dimensions.features;
 
-import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
@@ -18,13 +17,13 @@ public class RandomShape extends RandomisedFeature {
         this.usePreset = parent.roll("colourful_shapes");
         this.useBands = parent.roll("banded_shapes");
         id = (Objects.equals(shape, "cube")) ? "random_cube" : "random_shape";
-        type = "floating";
-        RandomDimension dim = parent.parent.parent;
-        int a = (int)random.nextGaussian(dim.sea_level, 16);
-        int b = random.nextInt(dim.sea_level, dim.height + dim.min_y);
-        int min_inclusive = Math.min(b, Math.max(a, dim.min_y));
-        int max_inclusive = Math.max(a, b);
-        save(1 + random.nextInt(64), min_inclusive, max_inclusive);
+        save_with_placement();
+    }
+
+    void placement() {
+        int a = (int)random.nextGaussian(daddy.sea_level, 16);
+        int b = random.nextInt(daddy.sea_level, daddy.height + daddy.min_y);
+        placement_floating(1 + random.nextInt(64), Math.max(a, daddy.min_y), b);
     }
 
     NbtCompound feature() {

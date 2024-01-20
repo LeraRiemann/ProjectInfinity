@@ -4,11 +4,23 @@ import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
+import static java.lang.Math.max;
+
 public class RandomGeode extends RandomisedFeature {
     public RandomGeode(RandomFeaturesList parent) {
         super(parent, "geode");
-        type = "geode";
-        save(1 + random.nextInt(32));
+        save_with_placement();
+    }
+
+    void placement() {
+        int sea = max(daddy.sea_level, daddy.min_y + daddy.height / 8);
+        int halfsea = (sea + daddy.min_y) / 2;
+        int minbound = random.nextInt(daddy.min_y, halfsea);
+        int maxbound = random.nextInt(halfsea, daddy.sea_level);
+        addRarityFilter(1 + random.nextInt(32));
+        addInSquare();
+        addHeightRange(uniformHeightRange(minbound, maxbound));
+        addBiome();
     }
 
     NbtCompound feature() {

@@ -6,23 +6,21 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 
+import java.util.Arrays;
+
 public class RandomCrop extends RandomisedFeature {
     NbtCompound cropp;
+    boolean water;
+    int start;
 
     public RandomCrop(RandomFeaturesList parent) {
         super(parent, "crop");
         id = "block_column";
         NbtElement crop = PROVIDER.extraRegistry.get("crops").getRandomElement(random);
         cropp = (NbtCompound)crop;
-        int start = daddy.sea_level - (cropp.getKeys().contains("offset") ? cropp.getInt("offset") : 1);
-        boolean water = cropp.getBoolean("needsWater");
-        if (water) {
-            type = "crop_water";
-            save(random.nextInt(16), start);
-        } else {
-            type = "crop";
-            save(random.nextInt(16), parent.surface_block.getString("Name"));
-        }
+        start = daddy.sea_level - (cropp.getKeys().contains("offset") ? cropp.getInt("offset") : 1);
+        water = cropp.getBoolean("needsWater");
+        save_with_placement();
     }
 
     static NbtCompound blockToLayer(NbtCompound block) {
@@ -31,6 +29,35 @@ public class RandomCrop extends RandomisedFeature {
         layer.put("provider", provider);
         layer.putInt("height", 1);
         return layer;
+    }
+
+    void placement() {
+        if (!water) {
+            addCountEveryLayer(random.nextInt(16));
+            NbtCompound toAdd = ofType("random_offset");
+            toAdd.putInt("xz_spread", -1);
+            toAdd.putInt("y_spread", 0);
+            placement_data.add(toAdd);
+            addBlockPredicateFilter(matchingBlocks(parent.surface_block.getString("Name")));
+            addBiome();
+        }
+        NbtCompound value = new NbtCompound();
+        value.putInt("absolute", start);
+        NbtList predicates = new NbtList();
+        Arrays.asList(Arrays.asList(-1, 0, 0),
+                Arrays.asList(-1, 0, -1),
+                Arrays.asList(-1, 0, 1),
+                Arrays.asList(1, 0, -1),
+                Arrays.asList(1, 0, 0),
+                Arrays.asList(1, 0, 1),
+                Arrays.asList(0, 0, 1),
+                Arrays.asList(0, 0, -1)).forEach(a -> predicates.add(matchingWaterOffset(offsetToNbt((a)))));
+        addCount(random.nextInt(16));
+        addInSquare();
+        addHeightRange(singleRule("constant", "value", value));
+        addBlockPredicateFilter(not(matchingWater()));
+        addBlockPredicateFilter(singleRule("any_of", "predicates", predicates));
+        addBiome();
     }
 
     @Override

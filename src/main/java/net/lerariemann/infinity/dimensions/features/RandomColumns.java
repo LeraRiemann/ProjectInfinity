@@ -7,8 +7,11 @@ public class RandomColumns extends RandomisedFeature {
     public RandomColumns(RandomFeaturesList parent) {
         super(parent, "columns");
         id = "random_columns";
-        type = "everylayer_biome";
-        save(1 + random.nextInt(4));
+        save_with_placement();
+    }
+
+    void placement() {
+        placement_everylayer_biome(1 + random.nextInt(4));
     }
 
     NbtCompound feature() {

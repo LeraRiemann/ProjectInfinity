@@ -9,8 +9,11 @@ public class RandomEndSpikes extends RandomisedFeature {
     public RandomEndSpikes(RandomFeaturesList parent) {
         super(parent, "spikes");
         id = "end_spike";
-        type = "empty";
-        save();
+        save_with_placement();
+    }
+
+    void placement() {
+        addBiome();
     }
 
     NbtCompound feature() {

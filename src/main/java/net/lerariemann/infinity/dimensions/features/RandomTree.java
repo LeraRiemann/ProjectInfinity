@@ -6,14 +6,24 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 
+import java.util.Arrays;
+
 public class RandomTree extends RandomisedFeature {
     boolean ishuge;
 
-    public RandomTree(RandomFeaturesList parent, boolean placef) {
-        super(parent, "tree", placef);
+    public RandomTree(RandomFeaturesList parent) {
+        super(parent, "tree");
         ishuge = parent.roll("huge_trees");
-        id = type = "tree";
-        save(1, (int) Math.floor(random.nextExponential()*4), parent.surface_block.getString("Name"));
+        id = "tree";
+        save_with_placement();
+    }
+
+    void placement() {
+        NbtCompound predicate = matchingBlocks(parent.surface_block.getString("Name"));
+        predicate.put("offset", offsetToNbt(Arrays.asList(0, -1, 0)));
+        addCountEveryLayer(1);
+        addWaterDepthFilter((int) Math.floor(random.nextExponential()*4));
+        addBlockPredicateFilter(predicate);
     }
 
     NbtCompound feature() {

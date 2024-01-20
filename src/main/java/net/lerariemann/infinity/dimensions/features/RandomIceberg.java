@@ -6,8 +6,13 @@ import net.minecraft.nbt.NbtCompound;
 public class RandomIceberg extends RandomisedFeature {
     public RandomIceberg(RandomFeaturesList parent) {
         super(parent, "iceberg");
-        type = "iceberg";
-        save(1 + random.nextInt(16));
+        save_with_placement();
+    }
+
+    void placement() {
+        addRarityFilter(1 + random.nextInt(16));
+        addInSquare();
+        addBiome();
     }
 
     NbtCompound feature() {
