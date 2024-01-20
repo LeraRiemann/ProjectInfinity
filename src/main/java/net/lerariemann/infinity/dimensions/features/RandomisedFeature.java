@@ -76,6 +76,7 @@ public abstract class RandomisedFeature {
         }
         else {
             block = PROVIDER.randomBlock(random, "fluids");
+            block.remove("fluidName");
         }
         return block;
     }

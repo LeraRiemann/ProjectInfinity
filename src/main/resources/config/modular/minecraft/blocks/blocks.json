@@ -3394,7 +3394,8 @@
     {
       "key": {
         "Name": "minecraft:hopper",
-        "float": true
+        "float": true,
+        "laggy": true
       },
       "weight": 1.0
     },

@@ -51,14 +51,14 @@ public class RandomNoisePreset {
         }
         int sea_level = randomiseblocks ? (int)Math.floor(dim.random.nextGaussian(sea_level_default, 8)) : sea_level_default;
         NbtCompound default_block = randomiseblocks ? PROVIDER.randomBlock(dim.random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:stone"));
-        NbtCompound default_fluid = randomiseblocks ? PROVIDER.randomBlock(dim.random,
-                PROVIDER.roll(dim.random, "solid_oceans") ? "full_blocks_worldgen" : "fluids") : RandomProvider.Block(defaultfluid());
+        NbtCompound default_fluid = randomiseblocks ? PROVIDER.randomBlock(dim.random, "fluids") : RandomProvider.Block(defaultfluid());
         data.putBoolean("ore_veins_enabled", dim.random.nextBoolean());
         data.putBoolean("disable_mob_generation", false);
         data.putBoolean("legacy_random_source", false);
         data.put("default_block", default_block);
         parent.default_block = default_block;
-        data.put("default_fluid", default_fluid);
+        if (!default_fluid.contains("fluidName")) default_fluid.put("fluidName", default_fluid.get("Name"));
+        data.put("default_fluid", RandomProvider.Block(default_fluid.getString("Name")));
         parent.default_fluid = default_fluid;
         data.putInt("sea_level", sea_level);
         parent.sea_level = sea_level;
