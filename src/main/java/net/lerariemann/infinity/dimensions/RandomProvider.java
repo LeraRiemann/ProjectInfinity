@@ -158,6 +158,7 @@ public class RandomProvider {
             blockRegistry.put("full_blocks", fullblocks);
             blockRegistry.put("full_blocks_worldgen", fullblockswg);
             blockRegistry.put("top_blocks", topblocks);
+            blockRegistry.put("fluids", temp.get("fluids"));
         }
     }
 
@@ -208,6 +209,13 @@ public class RandomProvider {
         return res;
     }
 
+    public static NbtCompound Fluid(String block) {
+        NbtCompound res = new NbtCompound();
+        res.putString("Name", block);
+        res.putString("fluidName", block);
+        return res;
+    }
+
     public NbtCompound blockToProvider(NbtCompound block, Random random) {
         NbtCompound res = new NbtCompound();
         boolean bl = listRegistry.get("rotatable_blocks").contains(NbtString.of(block.getString("Name"))) && roll(random, "rotate_blocks");
@@ -245,6 +253,12 @@ public class RandomProvider {
         else {
             return Block(registry.get(key).getRandomElement(random));
         }
+    }
+
+    public NbtCompound randomFluid(Random random) {
+        NbtElement compound = blockRegistry.get("fluids").getRandomElement(random);
+        if (compound instanceof NbtCompound) return ((NbtCompound)compound);
+        else return Fluid(compound.asString());
     }
 
     public NbtCompound randomBlockProvider(Random random, String key) {

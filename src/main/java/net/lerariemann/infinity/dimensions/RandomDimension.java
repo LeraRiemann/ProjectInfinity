@@ -60,7 +60,7 @@ public class RandomDimension {
         underwater = new HashMap<>();
         structure_ids = new HashMap<>();
         default_block = RandomProvider.Block("minecraft:stone");
-        default_fluid = RandomProvider.Block("minecraft:water");
+        default_fluid = RandomProvider.Fluid("minecraft:water");
         additional_blocks = new ArrayList<>();
         type_alike = PROVIDER.randomName(random, "noise_presets");
         type = new RandomDimensionType(this);
