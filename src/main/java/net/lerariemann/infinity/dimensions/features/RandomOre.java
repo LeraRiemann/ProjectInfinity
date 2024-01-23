@@ -17,7 +17,7 @@ public class RandomOre extends RandomisedFeature {
         int sigma = random.nextInt(daddy.height);
         addCount(1 + random.nextInt(128));
         addInSquare();
-        addHeightRange(heightRange(center + sigma, center - sigma, "trapezoid"));
+        addHeightRange(heightRange(center - sigma,center + sigma, "trapezoid"));
         addBiome();
     }
 
