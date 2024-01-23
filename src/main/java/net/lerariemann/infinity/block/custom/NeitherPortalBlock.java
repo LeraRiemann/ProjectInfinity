@@ -53,6 +53,16 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         return new NeitherPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
     }
 
+    public static void open(MinecraftServer s, World world, BlockPos pos) {
+        RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof NeitherPortalBlockEntity) {
+            int i = ((NeitherPortalBlockEntity) blockEntity).getDimension();
+            addDimension(s, i, prov.rule("runtimeGenerationEnabled"));
+            world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
+        }
+    }
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos,
                               PlayerEntity player, Hand hand, BlockHitResult hit) {
@@ -60,17 +70,20 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             LogManager.getLogger().info(((NeitherPortalBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).getDimension());
             MinecraftServer s = world.getServer();
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            ItemStack itemStack = player.getStackInHand(hand);
             if (s!=null && blockEntity instanceof NeitherPortalBlockEntity) {
                 RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
+                boolean bl = Objects.equals(prov.portalKey, "minecraft:air");
+                if (bl) {
+                    open(s, world, pos);
+                    return ActionResult.SUCCESS;
+                }
+                ItemStack itemStack = player.getStackInHand(hand);
                 Item item = Registries.ITEM.get(new Identifier(prov.portalKey));
                 if (itemStack.isOf(item)) {
                     if (!player.getAbilities().creativeMode) {
                         itemStack.decrement(1);
                     }
-                    int i = ((NeitherPortalBlockEntity) blockEntity).getDimension();
-                    addDimension(s, i, prov.rule("runtimeGenerationEnabled"));
-                    world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
+                    open(s, world, pos);
                 }
             }
         }
@@ -78,7 +91,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     }
 
 
-    void addDimension(MinecraftServer server, int i, boolean bl) {
+    static void addDimension(MinecraftServer server, int i, boolean bl) {
         Identifier id = new Identifier(InfinityMod.MOD_ID, "generated_" + i);
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
         if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
@@ -92,7 +105,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         }
     }
 
-    PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
+    static PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeIdentifier(id);
         buf.writeNbt(d.type.data);

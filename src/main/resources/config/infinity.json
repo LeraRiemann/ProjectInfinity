@@ -4,7 +4,7 @@
     "returnPortalsEnabled": true,
     "seedDependentDimensions": false
   },
-  "portalKey": "minecraft:diamond",
+  "portalKey": "minecraft:air",
   "rootChances": {
     "dimension_type": {
       "ultrawarm": 0.5,
