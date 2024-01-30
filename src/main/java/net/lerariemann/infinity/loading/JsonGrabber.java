@@ -47,6 +47,8 @@ public class JsonGrabber<E> {
         String path1 = path.toString();
         if (path1.endsWith(".json")) {
             String fullname = path1.substring(path1.lastIndexOf("/") + 1, path1.length() - 5);
+            int i = fullname.lastIndexOf("\\");
+            if (i>=0) fullname = fullname.substring(i + 1);
             RegistryKey<E> key = RegistryKey.of(registry.getKey(), new Identifier(InfinityMod.MOD_ID, fullname));
             grab(path1, key, bl);
         }

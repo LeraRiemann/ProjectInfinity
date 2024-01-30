@@ -28,6 +28,7 @@ public class RandomDimension {
     public int height;
     public int min_y;
     public int sea_level;
+    public boolean randomiseblocks;
     public NbtCompound default_block;
     public NbtCompound default_fluid;
     public List<NbtCompound> additional_blocks;
@@ -52,17 +53,8 @@ public class RandomDimension {
         rootPath = server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + name;
         storagePath = rootPath + "/data/" + InfinityMod.MOD_ID;
         createDirectories();
-        data = new NbtCompound();
-        vanilla_biomes = new ArrayList<>();
-        random_biome_ids = new ArrayList<>();
-        random_biomes = new ArrayList<>();
-        top_blocks = new HashMap<>();
-        underwater = new HashMap<>();
-        structure_ids = new HashMap<>();
-        default_block = RandomProvider.Block("minecraft:stone");
-        default_fluid = RandomProvider.Fluid("minecraft:water");
-        additional_blocks = new ArrayList<>();
-        type_alike = PROVIDER.randomName(random, "noise_presets");
+        initializeStorage();
+        genBasics();
         type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
         data.put("generator", randomDimensionGenerator());
@@ -70,10 +62,70 @@ public class RandomDimension {
             RandomBiome b = new RandomBiome(id, this);
             random_biomes.add(b);
             addStructures(b);
-            writeTags(rootPath);
         }
+        writeTags(rootPath);
         CommonIO.write(data, storagePath + "/dimension", name + ".json");
         if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");
+    }
+
+    public void initializeStorage() {
+        data = new NbtCompound();
+        vanilla_biomes = new ArrayList<>();
+        random_biome_ids = new ArrayList<>();
+        random_biomes = new ArrayList<>();
+        top_blocks = new HashMap<>();
+        underwater = new HashMap<>();
+        structure_ids = new HashMap<>();
+        additional_blocks = new ArrayList<>();
+    }
+
+    public void genBasics() {
+        type_alike = PROVIDER.randomName(random, "noise_presets");
+        min_y = 16*Math.min(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
+        if (isNotOverworld()) min_y = Math.max(min_y, -48);
+        int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
+        if (isNotOverworld()) max_y = Math.max(max_y, 80);
+        randomiseblocks = PROVIDER.roll(random, "randomise_blocks");
+        int sea_level_default = 63;
+        if (isNotOverworld()) sea_level_default = switch(type_alike) {
+            case "minecraft:floating_islands" -> -64;
+            case "minecraft:end" -> 0;
+            case "minecraft:nether", "minecraft:caves" -> 32;
+            default -> 63;
+        };
+        sea_level = randomiseblocks ? (int)Math.floor(random.nextGaussian(sea_level_default, 8)) : sea_level_default;
+        max_y = Math.max(max_y, 16 * (int) (1 + Math.floor(sea_level / 16.0)));
+        height = max_y - min_y;
+        default_block = randomiseblocks ? PROVIDER.randomBlock(random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:stone"));
+        default_fluid = randomiseblocks ? PROVIDER.randomFluid(random) : RandomProvider.Fluid(defaultfluid());
+    }
+
+    String defaultblock(String s) {
+        switch(type_alike) {
+            case "minecraft:end" -> {
+                return "minecraft:end_stone";
+            }
+            case "minecraft:nether" -> {
+                return "minecraft:netherrack";
+            }
+            default -> {
+                return s;
+            }
+        }
+    }
+
+    String defaultfluid() {
+        switch(type_alike) {
+            case "minecraft:end" -> {
+                return "minecraft:air";
+            }
+            case "minecraft:nether" -> {
+                return "minecraft:lava";
+            }
+            default -> {
+                return "minecraft:water";
+            }
+        }
     }
 
     public <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key, String name) {

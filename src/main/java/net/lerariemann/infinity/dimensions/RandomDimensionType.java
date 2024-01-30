@@ -2,7 +2,6 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.*;
 
 import java.util.Random;
@@ -14,6 +13,7 @@ public class RandomDimensionType {
     public RandomDimension parent;
     public NbtCompound data;
     public boolean ultrawarm, foggy;
+    static double SQRT8 = Math.sqrt(8);
 
     RandomDimensionType(RandomDimension dim) {
         parent = dim;
@@ -35,12 +35,7 @@ public class RandomDimensionType {
         if (roll("fixed_time")) {
             data.putInt("fixed_time", random.nextInt(24000));
         }
-        int min_y = 16*Math.min(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
-        if (parent.isNotOverworld()) min_y = Math.max(min_y, -48);
-        parent.min_y = min_y;
         data.putInt("min_y", parent.min_y);
-        int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
-        parent.height = max_y - parent.min_y;
         data.putInt("height", parent.height);
         data.putInt("logical_height", parent.height);
         data.putInt("monster_spawn_block_light_limit", random.nextInt(16));
@@ -64,13 +59,8 @@ public class RandomDimensionType {
     }
 
     double coordinateScale() {
-        WeighedStructure<Double> values = new WeighedStructure<>();
-        values.add(1.0, 2.0);
-        values.add(8.0, 2.0);
-        double random1 = Math.min(random.nextExponential(), 16.0);
-        values.add(Math.exp(random1+3.0), 1.0);
-        values.add(Math.exp(-random1), 1.0);
-        values.add(1.0 + 7*random.nextDouble(), 2.0);
-        return values.getRandomElement(random);
+        double random1 = random.nextBoolean() ? 1.0 : Math.max(SQRT8*random.nextDouble(), 0.00001);
+        double random2 = 8 / random1;
+        return random.nextBoolean() ? random1 : random2;
     }
 }

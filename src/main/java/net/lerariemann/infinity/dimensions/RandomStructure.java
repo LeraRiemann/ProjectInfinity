@@ -95,7 +95,7 @@ public class RandomStructure {
             int nummobs = random.nextInt(1, 7);
             for (int i = 0; i < nummobs; i++) {
                 String mobcategory = parent.PROVIDER.randomName(random, "mob_categories");
-                NbtCompound mob = parent.addMob(mobcategory);
+                NbtCompound mob = parent.addMob(mobcategory, false);
                 if (!moblist.containsKey(mobcategory)) moblist.put(mobcategory, new NbtList());
                 moblist.get(mobcategory).add(mob);
             }
