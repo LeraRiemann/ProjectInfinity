@@ -16,7 +16,7 @@ public class RandomGeode extends RandomisedFeature {
         int sea = max(daddy.sea_level, daddy.min_y + daddy.height / 8);
         int halfsea = (sea + daddy.min_y) / 2;
         int minbound = random.nextInt(daddy.min_y, halfsea);
-        int maxbound = random.nextInt(halfsea, daddy.sea_level);
+        int maxbound = random.nextInt(halfsea, sea);
         addRarityFilter(1 + random.nextInt(32));
         addInSquare();
         addHeightRange(uniformHeightRange(minbound, maxbound));

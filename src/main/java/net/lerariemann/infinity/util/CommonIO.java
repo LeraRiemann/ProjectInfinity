@@ -10,9 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class CommonIO {
 
@@ -45,7 +43,7 @@ public class CommonIO {
     public static NbtCompound readCarefully(String path,  Object... args) {
         File file = new File(path);
         try {
-            String content = String.format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), args);
+            String content = String.valueOf((new Formatter(Locale.US)).format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), args));
             return StringNbtReader.parse(content);
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);
@@ -55,7 +53,7 @@ public class CommonIO {
     public static NbtCompound readAndAddBlock(String path, NbtCompound block) {
         File file = new File(path);
         try {
-            String content = String.format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), CompoundToString(block, 0));
+            String content = String.valueOf((new Formatter(Locale.US)).format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), CompoundToString(block, 0)));
             return StringNbtReader.parse(content);
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);

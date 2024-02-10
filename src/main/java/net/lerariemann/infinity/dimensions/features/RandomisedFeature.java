@@ -101,6 +101,7 @@ public abstract class RandomisedFeature {
 
     void placement_floating(int chance, int a, int b) {
         addRarityFilter(chance);
+        if (a==b) a+=1;
         addHeightRange(uniformHeightRange(Math.min(a, b), Math.max(a, b)));
         addBlockPredicateFilter(not(ofType("solid")));
         addBiome();
