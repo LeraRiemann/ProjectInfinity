@@ -2,7 +2,7 @@
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "returnPortalsEnabled": true,
-    "longArithmeticEnabled": true
+    "longArithmeticEnabled": false
   },
   "portalKey": "",
   "salt": "",

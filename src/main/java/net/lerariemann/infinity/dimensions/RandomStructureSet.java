@@ -45,14 +45,14 @@ public class RandomStructureSet {
         switch (type) {
             case "minecraft:random_spread" -> {
                 if (parent.roll("triangular_spread")) res.putString("spread_type", "triangular");
-                int a = f(random, 4095, 32);
-                int b = f(random, 4095, 32);
+                int a = f(random, 4095, 12);
+                int b = f(random, 4095, 12);
                 if (a == b) a+=1;
                 res.putInt("spacing", Math.max(a, b));
                 res.putInt("separation", Math.min(a, b));
             }
             case "minecraft:concentric_rings" -> {
-                res.putInt("distance", f(random, 1023, 32));
+                res.putInt("distance", f(random, 1023, 8));
                 res.putInt("count", 1 + f(random, 4094, 64));
                 res.putInt("spread", 1 + f(random, 1023, 3));
                 res.putString("preferred_biomes", parent.parent.fullname);
