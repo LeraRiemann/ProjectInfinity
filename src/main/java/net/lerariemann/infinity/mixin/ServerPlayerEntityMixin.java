@@ -57,7 +57,7 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
                     pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
                 String keystr = registryKey.getValue().getPath();
                 String is = keystr.substring(keystr.lastIndexOf("_") + 1);
-                int i = Integer.parseInt(is);
+                long i = Long.parseLong(is);
                 ((NetherPortalBlockAccess)Blocks.NETHER_PORTAL).modifyPortal(destination, pos2, destination.getBlockState(pos), i);
                 break;
             }

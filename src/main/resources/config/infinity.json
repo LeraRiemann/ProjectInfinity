@@ -2,9 +2,10 @@
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "returnPortalsEnabled": true,
-    "seedDependentDimensions": false
+    "longArithmeticEnabled": true
   },
-  "portalKey": "minecraft:air",
+  "portalKey": "",
+  "salt": "",
   "rootChances": {
     "dimension_type": {
       "ultrawarm": 0.5,
@@ -84,5 +85,5 @@
       "triangular_spread": 0.1
     }
   },
-  "packVersion": 1.5
+  "packVersion": 1.6
 }

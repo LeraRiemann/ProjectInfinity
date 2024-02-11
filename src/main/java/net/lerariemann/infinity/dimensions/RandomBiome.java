@@ -10,14 +10,14 @@ import java.util.*;
 public class RandomBiome {
     public RandomDimension parent;
     public final RandomProvider PROVIDER;
-    public int id;
+    public long id;
     public String name;
     public String fullname;
     public final Random random;
     public List<String> mobs;
     public NbtCompound data;
 
-    RandomBiome(int i, RandomDimension dim) {
+    RandomBiome(long i, RandomDimension dim) {
         id = i;
         parent = dim;
         random = new Random(i);

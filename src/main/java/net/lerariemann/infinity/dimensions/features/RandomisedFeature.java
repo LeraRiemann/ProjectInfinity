@@ -23,10 +23,10 @@ public abstract class RandomisedFeature {
     NbtList placement_data;
 
     public RandomisedFeature(RandomFeaturesList lst, String namecore) {
-        this(lst.random.nextInt(), lst, namecore);
+        this(lst.PROVIDER.rule("longArithmeticEnabled") ? lst.random.nextLong() : lst.random.nextInt(), lst, namecore);
     }
 
-    public RandomisedFeature(int i, RandomFeaturesList lst, String namecore) {
+    public RandomisedFeature(long i, RandomFeaturesList lst, String namecore) {
         random = new Random(i);
         id = namecore;
         name = namecore + "_" + i;

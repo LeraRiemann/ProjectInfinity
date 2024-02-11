@@ -173,7 +173,7 @@ public class RandomNoisePreset {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        for (int id: parent.random_biome_ids) {
+        for (long id: parent.random_biome_ids) {
             String biome = "infinity:biome_" + id;
             boolean useRandomBlock = parent.randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
             NbtCompound top_block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "top_blocks") :

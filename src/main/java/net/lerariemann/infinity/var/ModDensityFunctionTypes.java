@@ -43,6 +43,8 @@ public class ModDensityFunctionTypes {
                 case COS -> Math.cos(density);
                 case SQRT -> Math.sqrt(density);
                 case INVERT -> (Math.abs(density) < 0.001 ? 1000*Math.signum(density) : 1.0 / density);
+                case EXP -> (Math.exp(density));
+                case LN -> Math.log(density);
             };
         }
 
@@ -66,7 +68,9 @@ public class ModDensityFunctionTypes {
             SIN("sin"),
             COS("cos"),
             SQRT("sqrt"),
-            INVERT("invert");
+            INVERT("invert"),
+            LN("ln"),
+            EXP("exp");
 
             private final String name;
             final CodecHolder<NonbinaryOperation> codecHolder = CodecHolder.of((DensityFunction.FUNCTION_CODEC.fieldOf("argument")).xmap(input -> create(this, input), NonbinaryOperation::input));
@@ -79,12 +83,13 @@ public class ModDensityFunctionTypes {
 
     record Coordinate(double scale, int axis) implements DensityFunction.Base {
         public static final CodecHolder<Coordinate> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.create(instance -> instance.group(
-                Codec.DOUBLE.fieldOf("scale").forGetter(a -> a.scale),
+                Codec.DOUBLE.fieldOf("scale").orElse(1.0).forGetter(a -> a.scale),
                 Codec.INT.fieldOf("axis").forGetter(a -> a.axis)).apply(
                 instance, Coordinate::new)));
 
         @Override
         public double sample(NoisePos pos) {
+            if (axis == -1 || scale == 0.0) return apply(pos);
             double d = apply(pos) * scale;
             d -= Math.floor(d);
             return (d - 0.5)*2*Math.PI;
@@ -107,12 +112,17 @@ public class ModDensityFunctionTypes {
 
         public double apply(NoisePos pos) {
             return switch(axis) {
-                case 1 -> pos.blockX();
-                case 2 -> pos.blockY();
-                case 3 -> pos.blockZ();
-                case 0 -> Math.sqrt(pos.blockX()*pos.blockX() + pos.blockZ()*pos.blockZ());
+                case 1 -> pos.blockX(); //x
+                case 2 -> pos.blockY(); //y
+                case 3 -> pos.blockZ(); //z
+                case 0 -> r(pos); //r
+                case -1 -> Math.acos(pos.blockX() / r(pos))*(pos.blockZ() < 0 ? -1 : 1); //phi
                 default -> 0.0;
             };
+        }
+
+        static double r(NoisePos pos) {
+            return Math.sqrt(pos.blockX()*pos.blockX() + pos.blockZ()*pos.blockZ());
         }
     }
 

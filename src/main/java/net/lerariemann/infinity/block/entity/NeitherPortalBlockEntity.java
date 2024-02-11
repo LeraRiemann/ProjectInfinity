@@ -11,14 +11,14 @@ import org.jetbrains.annotations.Nullable;
 
 public class NeitherPortalBlockEntity extends BlockEntity implements RenderAttachmentBlockEntity {
     private final PropertyDelegate propertyDelegate;
-    private int dimension;
+    private long dimension;
 
     public NeitherPortalBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.NEITHER_PORTAL, pos, state);
         this.propertyDelegate = new PropertyDelegate() {
             public int get(int index) {
                 if (index == 0) {
-                    return NeitherPortalBlockEntity.this.dimension;
+                    return (int)(NeitherPortalBlockEntity.this.dimension);
                 }
                 return 0;
             }
@@ -35,26 +35,26 @@ public class NeitherPortalBlockEntity extends BlockEntity implements RenderAttac
         };
     }
 
-    public NeitherPortalBlockEntity(BlockPos pos, BlockState state, int i) {
+    public NeitherPortalBlockEntity(BlockPos pos, BlockState state, long i) {
         this(pos, state);
         this.dimension = i;
     }
 
-    public int getDimension() {
+    public long getDimension() {
         return this.dimension;
     }
 
-    public void setDimension(int i) {
+    public void setDimension(long i) {
         this.dimension = i;
     }
     public void writeNbt(NbtCompound tag) {
         super.writeNbt(tag);
-        tag.putInt("Dimension", this.dimension);
+        tag.putLong("Dimension", this.dimension);
     }
 
     public void readNbt(NbtCompound tag) {
         super.readNbt(tag);
-        this.dimension = tag.getInt("Dimension");
+        this.dimension = tag.getLong("Dimension");
     }
 
     @Nullable
@@ -70,6 +70,6 @@ public class NeitherPortalBlockEntity extends BlockEntity implements RenderAttac
 
     @Override
     public Object getRenderAttachmentData() {
-        return dimension;
+        return (int)dimension;
     }
 }

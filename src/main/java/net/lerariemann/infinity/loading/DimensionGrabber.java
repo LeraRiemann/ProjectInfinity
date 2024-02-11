@@ -32,7 +32,7 @@ public class DimensionGrabber {
         registryInfoGetter = getGetter(entries);
     }
 
-    public DimensionOptions grab_all(Path rootdir, int i) {
+    public DimensionOptions grab_all(Path rootdir, long i) {
         buildGrabber(ConfiguredFeature.CODEC, RegistryKeys.CONFIGURED_FEATURE).grab_all(rootdir.resolve("worldgen/configured_feature"));
         buildGrabber(PlacedFeature.CODEC, RegistryKeys.PLACED_FEATURE).grab_all(rootdir.resolve("worldgen/placed_feature"), true);
         buildGrabber(ConfiguredCarver.CODEC, RegistryKeys.CONFIGURED_CARVER).grab_all(rootdir.resolve("worldgen/configured_carver"));
@@ -59,7 +59,7 @@ public class DimensionGrabber {
         close();
     }
 
-    DimensionOptions grab_dimension(Path rootdir, int i) {
+    DimensionOptions grab_dimension(Path rootdir, long i) {
         DimensionOptions ret = buildGrabber(DimensionOptions.CODEC, RegistryKeys.DIMENSION).grab_with_return(rootdir.toString()+"/dimension", i, false);
         close();
         return ret;

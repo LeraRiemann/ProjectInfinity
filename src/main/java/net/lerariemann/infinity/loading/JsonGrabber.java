@@ -78,7 +78,7 @@ public class JsonGrabber<E> {
         grab(registryKey, jsonElement, bl);
     }
 
-    E grab_with_return(String rootdir, int i, boolean register) {
+    E grab_with_return(String rootdir, long i, boolean register) {
         String path = rootdir + "/generated_" + i + ".json";
         RegistryKey<E> key = RegistryKey.of(registry.getKey(), new Identifier(InfinityMod.MOD_ID, "generated_"+i));
         File file = new File(path);

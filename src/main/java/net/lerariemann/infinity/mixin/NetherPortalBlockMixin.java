@@ -42,7 +42,7 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 				NbtCompound compound = itemStack.getNbt();
 				MinecraftServer server = world.getServer();
 				if (compound != null && server != null) {
-					int i = ModCommands.getDimensionSeed(compound.asString(), server);
+					long i = ModCommands.getDimensionSeed(compound.asString(), server);
 					modifyPortal(world, pos, state, i);
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
 				}
@@ -56,14 +56,14 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 	}
 
 	@Unique
-	private void changeDim(World world, BlockPos pos, Direction.Axis axis, int i) {
+	private void changeDim(World world, BlockPos pos, Direction.Axis axis, long i) {
 		world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.getDefaultState().with(AXIS, axis));
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if (blockEntity != null) ((NeitherPortalBlockEntity)blockEntity).setDimension(i);
 	}
 
 	@Override
-	public void modifyPortal(World world, BlockPos pos, BlockState state, int i) {
+	public void modifyPortal(World world, BlockPos pos, BlockState state, long i) {
 		Set<BlockPos> set = Sets.newHashSet();
 		Queue<BlockPos> queue = Queues.newArrayDeque();
 		queue.add(pos);

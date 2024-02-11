@@ -50,6 +50,15 @@ public class RandomDimensionType {
         CommonIO.write(data, dim.storagePath + "/dimension_type", name + ".json");
     }
 
+    public RandomDimensionType(RandomDimension dim, NbtCompound data) {
+        parent = dim;
+        random = dim.random;
+        name = "generated_" +dim.id;
+        fullname = InfinityMod.MOD_ID + ":" + name;
+        this.data = data;
+        CommonIO.write(data, dim.storagePath + "/dimension_type", name + ".json");
+    }
+
     boolean roll(String key) {
         return parent.PROVIDER.roll(random, key);
     }

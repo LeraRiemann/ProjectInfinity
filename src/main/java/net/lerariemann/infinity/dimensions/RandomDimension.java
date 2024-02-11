@@ -20,7 +20,7 @@ import java.util.*;
 
 
 public class RandomDimension {
-    public final int id;
+    public final long id;
     public final String rootPath, storagePath;
     public final RandomProvider PROVIDER;
     public String name, fullname;
@@ -33,7 +33,7 @@ public class RandomDimension {
     public NbtCompound default_fluid;
     public List<NbtCompound> additional_blocks;
     public List<String> vanilla_biomes;
-    public List<Integer> random_biome_ids;
+    public List<Long> random_biome_ids;
     public List<RandomBiome> random_biomes;
     public Map<String, NbtCompound> top_blocks;
     public Map<String, List<String>> structure_ids;
@@ -42,8 +42,9 @@ public class RandomDimension {
     public MinecraftServer server;
     public NbtCompound data;
     public RandomDimensionType type;
+    public String typeForEaster;
 
-    public RandomDimension(int i, MinecraftServer server) {
+    public RandomDimension(long i, MinecraftServer server) {
         random = new Random(i);
         this.server = server;
         PROVIDER = ((MinecraftServerAccess)(server)).getDimensionProvider();
@@ -54,18 +55,21 @@ public class RandomDimension {
         storagePath = rootPath + "/data/" + InfinityMod.MOD_ID;
         createDirectories();
         initializeStorage();
+        if (Easterizer.easterize(this)) {
+            wrap_up();
+            return;
+        }
         genBasics();
         type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
         data.put("generator", randomDimensionGenerator());
-        for (Integer id: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+id)) {
+        for (Long id: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+id)) {
             RandomBiome b = new RandomBiome(id, this);
             random_biomes.add(b);
             addStructures(b);
         }
         writeTags(rootPath);
-        CommonIO.write(data, storagePath + "/dimension", name + ".json");
-        if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");
+        wrap_up();
     }
 
     public void initializeStorage() {
@@ -77,6 +81,7 @@ public class RandomDimension {
         underwater = new HashMap<>();
         structure_ids = new HashMap<>();
         additional_blocks = new ArrayList<>();
+        typeForEaster = "";
     }
 
     public void genBasics() {
@@ -98,6 +103,11 @@ public class RandomDimension {
         height = max_y - min_y;
         default_block = randomiseblocks ? PROVIDER.randomBlock(random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:stone"));
         default_fluid = randomiseblocks ? PROVIDER.randomFluid(random) : RandomProvider.Fluid(defaultfluid());
+    }
+
+    void wrap_up() {
+        CommonIO.write(data, storagePath + "/dimension", name + ".json");
+        if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");
     }
 
     String defaultblock(String s) {
@@ -306,7 +316,7 @@ public class RandomDimension {
             vanilla_biomes.add(biome);
         }
         else {
-            int id = random.nextInt();
+            long id = PROVIDER.rule("longArithmeticEnabled") ? random.nextLong() : random.nextInt();
             random_biome_ids.add(id);
             biome = "infinity:biome_" + id;
         }

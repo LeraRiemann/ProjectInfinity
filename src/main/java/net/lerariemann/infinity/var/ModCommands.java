@@ -8,20 +8,19 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
+import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.command.CommandException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.world.World;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 import static net.minecraft.server.command.CommandManager.*;
 
 public class ModCommands {
-    static void warpId(CommandContext<ServerCommandSource> context, int value) {
+    static void warpId(CommandContext<ServerCommandSource> context, long value) {
         MinecraftServer s = context.getSource().getServer();
         boolean bl = ((MinecraftServerAccess)(s)).getDimensionProvider().rule("runtimeGenerationEnabled");
         NeitherPortalBlock.addDimension(s, value, bl);
@@ -31,15 +30,19 @@ public class ModCommands {
         ((ServerPlayerEntityAccess)(self)).setWarpTimer(20, value);
     }
 
-    public static int getDimensionSeed(String compound, MinecraftServer server) {
-        HashCode f = Hashing.sha256().hashString(compound, StandardCharsets.UTF_8);
-        int i = f.asInt() & Integer.MAX_VALUE;
-        boolean bl = ((MinecraftServerAccess)(server)).getDimensionProvider().rule("seedDependentDimensions");
-        if (bl) {
-            long worldseed = Objects.requireNonNull(server.getWorld(World.OVERWORLD)).getSeed();
-            i = (int)(worldseed) ^ i;
-        }
-        return i;
+    public static long getDimensionSeedFromText(String text, MinecraftServer s) {
+        return getDimensionSeedFromText(text, ((MinecraftServerAccess)(s)).getDimensionProvider());
+    }
+    public static long getDimensionSeed(String compound, MinecraftServer s) {
+        return getDimensionSeed(compound, ((MinecraftServerAccess)(s)).getDimensionProvider());
+    }
+
+    public static long getDimensionSeedFromText(String text, RandomProvider prov) {
+        return getDimensionSeed("{pages:[\"" + text + "\"]}", prov);
+    }
+    public static long getDimensionSeed(String compound, RandomProvider prov) {
+        HashCode f = Hashing.sha256().hashString(compound + prov.salt, StandardCharsets.UTF_8);
+        return prov.rule("longArithmeticEnabled") ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
     }
 
     public static void registerCommands() {
@@ -54,7 +57,7 @@ public class ModCommands {
                 .requires(source -> source.hasPermissionLevel(2))
                 .then(argument("text", StringArgumentType.string()).executes(context -> {
                     final String text = StringArgumentType.getString(context, "text");
-                    warpId(context, getDimensionSeed("{pages:[\"" + text + "\"]}", context.getSource().getServer()));
+                    warpId(context, getDimensionSeedFromText(text, context.getSource().getServer()));
                     return 1;
                 }))));
     }

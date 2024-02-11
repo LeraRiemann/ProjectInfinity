@@ -29,7 +29,7 @@ public class EntityMixin {
     private ServerWorld injected(ServerWorld serverWorld2) {
         ServerWorld serverWorld = (ServerWorld)this.world;
         if (serverWorld.getBlockState(this.lastNetherPortalPosition).isOf(ModBlocks.NEITHER_PORTAL)) {
-            int id = ((NeitherPortalBlockEntity)serverWorld.getBlockEntity(this.lastNetherPortalPosition)).getDimension();
+            long id = ((NeitherPortalBlockEntity)serverWorld.getBlockEntity(this.lastNetherPortalPosition)).getDimension();
             serverWorld2 = serverWorld.getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD, new Identifier("infinity:generated_" + id)));
         }
         return (serverWorld2 != null) ? serverWorld2 : serverWorld;

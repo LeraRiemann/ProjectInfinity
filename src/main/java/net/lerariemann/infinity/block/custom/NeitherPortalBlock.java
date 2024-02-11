@@ -57,7 +57,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof NeitherPortalBlockEntity) {
-            int i = ((NeitherPortalBlockEntity) blockEntity).getDimension();
+            long i = ((NeitherPortalBlockEntity) blockEntity).getDimension();
             addDimension(s, i, prov.rule("runtimeGenerationEnabled"));
             world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
         }
@@ -72,7 +72,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (s!=null && blockEntity instanceof NeitherPortalBlockEntity) {
                 RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
-                boolean bl = Objects.equals(prov.portalKey, "minecraft:air");
+                boolean bl = prov.portalKey.isBlank();
                 if (bl) {
                     open(s, world, pos);
                     return ActionResult.SUCCESS;
@@ -91,7 +91,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     }
 
 
-    public static void addDimension(MinecraftServer server, int i, boolean bl) {
+    public static void addDimension(MinecraftServer server, long i, boolean bl) {
         Identifier id = new Identifier(InfinityMod.MOD_ID, "generated_" + i);
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
         if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
@@ -143,8 +143,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             ParticleEffect eff = ParticleTypes.PORTAL;
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof NeitherPortalBlockEntity) {
-                int dim = ((NeitherPortalBlockEntity)blockEntity).getDimension();
-                Vec3d vec3d = Vec3d.unpackRgb(dim);
+                long dim = ((NeitherPortalBlockEntity)blockEntity).getDimension();
+                Vec3d vec3d = Vec3d.unpackRgb((int)dim);
                 double color = 1.0D + (dim >> 16 & 0xFF) / 255.0D;
                 eff = new DustParticleEffect(new Vector3f((float)vec3d.x, (float)vec3d.y, (float)vec3d.z), (float)color);
             }

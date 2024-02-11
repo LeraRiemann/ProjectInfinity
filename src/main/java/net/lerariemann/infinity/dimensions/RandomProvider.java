@@ -27,6 +27,8 @@ public class RandomProvider {
     public String savingPath;
     public String portalKey;
     public NbtCompound noise;
+    public String salt;
+    public Easterizer easterizer;
 
     public RandomProvider(String configpath, String savingpath) {
         configPath = configpath;
@@ -39,6 +41,7 @@ public class RandomProvider {
         gameRules = new HashMap<>();
         register_all();
         saveAllPortals();
+        easterizer = new Easterizer(CommonIO.read(configPath + "util/easter/egg_map.json").getList("elements", NbtElement.COMPOUND_TYPE),this);
     }
 
     void register_all() {
@@ -47,7 +50,6 @@ public class RandomProvider {
         register_category(registry, path, "misc", CommonIO::weighedListReader);
         register_category(registry, path, "features", CommonIO::weighedListReader);
         register_category(registry, path, "vegetation", CommonIO::weighedListReader);
-        ///register_category(blockRegistry, path, "blocks", CommonIO::blockListReader);
         register_blocks(path);
         register_category(extraRegistry, path, "extra", CommonIO::blockListReader);
         register_category(registry, path, "mobs", CommonIO::weighedListReader);
@@ -59,6 +61,7 @@ public class RandomProvider {
     void read_root_config() {
         NbtCompound rootConfig = CommonIO.read(configPath + "infinity.json");
         portalKey = rootConfig.getString("portalKey");
+        salt = rootConfig.getString("salt");
         NbtCompound gamerules = rootConfig.getCompound("gameRules");
         for (String s: gamerules.getKeys()) {
             NbtElement elem = gamerules.get(s);
