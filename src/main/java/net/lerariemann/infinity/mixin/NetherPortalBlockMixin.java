@@ -2,13 +2,11 @@ package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
-import com.google.common.hash.HashCode;
-import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.NetherPortalBlockAccess;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.var.ModCommands;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
@@ -28,11 +26,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.google.common.hash.Hashing;
-
-import java.nio.charset.StandardCharsets;
-
-import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 
@@ -49,24 +42,12 @@ public class NetherPortalBlockMixin implements NetherPortalBlockAccess {
 				NbtCompound compound = itemStack.getNbt();
 				MinecraftServer server = world.getServer();
 				if (compound != null && server != null) {
-					RandomProvider prov = ((MinecraftServerAccess)(server)).getDimensionProvider();
-					int i = getDimensionSeed(compound, prov.rule("seedDependentDimensions"), server);
+					int i = ModCommands.getDimensionSeed(compound.asString(), server);
 					modifyPortal(world, pos, state, i);
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
 				}
 			}
 		}
-	}
-
-	@Unique
-	int getDimensionSeed(NbtCompound compound, boolean bl, MinecraftServer server) {
-		HashCode f = Hashing.sha256().hashString(compound.asString(), StandardCharsets.UTF_8);
-		int i = f.asInt() & Integer.MAX_VALUE;
-		if (bl) {
-			long worldseed = Objects.requireNonNull(server.getWorld(World.OVERWORLD)).getSeed();
-			i = (int)(worldseed) ^ i;
-		}
-		return i;
 	}
 
 	@Redirect(method="getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Direction;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))

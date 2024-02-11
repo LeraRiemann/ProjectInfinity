@@ -91,7 +91,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     }
 
 
-    static void addDimension(MinecraftServer server, int i, boolean bl) {
+    public static void addDimension(MinecraftServer server, int i, boolean bl) {
         Identifier id = new Identifier(InfinityMod.MOD_ID, "generated_" + i);
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
         if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {

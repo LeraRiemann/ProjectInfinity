@@ -1,4 +1,6 @@
 {
   "block.infinity.neither_portal": "Infinity Portal",
-  "subtitles.music.ivory.hope_instilled": "ivory - hope instilled"
+  "subtitles.music.ivory.hope_instilled": "ivory - hope instilled",
+  "commands.warp.runtime_disabled": "Runtime dimension generation is disabled",
+  "commands.warp.not_a_player": "Only players can warp"
 }
