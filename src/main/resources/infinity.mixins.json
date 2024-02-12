@@ -4,11 +4,12 @@
   "package": "net.lerariemann.infinity.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "NetherPortalBlockMixin",
     "AbstractFireBlockMixin",
     "EntityMixin",
-    "PortalForcerMixin",
+    "MaterialRuleContextAccess",
     "MinecraftServerMixin",
+    "NetherPortalBlockMixin",
+    "PortalForcerMixin",
     "ServerPlayerEntityMixin"
   ],
   "client": [

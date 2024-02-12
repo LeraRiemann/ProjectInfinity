@@ -14,6 +14,16 @@
       "easter-id": 2,
       "easter-type": 0,
       "text": "debug"
+    },
+    {
+      "easter-id": 3,
+      "easter-type": 0,
+      "text": "checkerboard"
+    },
+    {
+      "easter-id": 4,
+      "easter-type": 0,
+      "text": "pride"
     }
   ]
 }

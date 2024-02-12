@@ -1,0 +1,32 @@
+{
+  "has_precipitation": true,
+  "temperature": 0.5,
+  "downfall": 0.8,
+  "effects": {
+    "fog_color": 12607947,
+    "sky_color": 11894492,
+    "water_color": 11894492,
+    "water_fog_color": 16734003,
+    "foliage_color": 13800191,
+    "grass_color": 11983713
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:flower_meadow",
+      "infinity:trees_pride"
+    ],
+    []
+  ],
+  "spawners": {},
+  "spawn_costs": {},
+  "carvers": {}
+}
