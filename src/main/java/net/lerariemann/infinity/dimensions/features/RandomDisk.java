@@ -5,6 +5,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 
+import java.util.Objects;
+
 public class RandomDisk extends RandomisedFeature {
     String target;
     public RandomDisk(RandomFeaturesList parent) {
@@ -17,7 +19,8 @@ public class RandomDisk extends RandomisedFeature {
     void placement() {
         addInSquare();
         addHeightmap("OCEAN_FLOOR_WG");
-        addBlockPredicateFilter(matchingFluids(daddy.default_fluid.getString("fluidName")));
+        String s = daddy.default_fluid.getString("fluidName");
+        if (!Objects.equals(s, "minecraft:air")) addBlockPredicateFilter(matchingFluids(s));
         addBiome();
     }
 

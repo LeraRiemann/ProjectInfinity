@@ -9,6 +9,11 @@
       "easter-id": 1,
       "easter-type": 0,
       "text": "spiral"
+    },
+    {
+      "easter-id": 2,
+      "easter-type": 0,
+      "text": "debug"
     }
   ]
 }
