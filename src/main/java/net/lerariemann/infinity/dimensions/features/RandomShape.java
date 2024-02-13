@@ -4,7 +4,6 @@ import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.Objects;
 
@@ -24,9 +23,6 @@ public class RandomShape extends RandomisedFeature {
 
     void placement() {
         int a = (int)random.nextGaussian(daddy.sea_level, 16);
-        LogManager.getLogger().info(daddy.sea_level);
-        LogManager.getLogger().info(daddy.height);
-        LogManager.getLogger().info(daddy.min_y);
         int b = random.nextInt(daddy.sea_level, daddy.height + daddy.min_y);
         placement_floating(1 + random.nextInt(64), Math.max(a, daddy.min_y), b);
     }

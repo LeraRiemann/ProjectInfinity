@@ -70,6 +70,7 @@ public class RandomFeaturesList {
         NbtList res = getAllElements("rawgeneration");
         addRandomFeature("end_island", res, RandomEndIsland::new);
         if (roll("shape")) addRandomFeature(res, new RandomShape(this, PROVIDER.randomName(random, "shape_types")));
+        addRandomFeature("text", res, RandomText::new);
         return res;
     }
 

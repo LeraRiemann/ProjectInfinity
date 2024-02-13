@@ -84,7 +84,7 @@ public class ModMaterialConditions {
         }
     }
 
-    record TextCondition(int font_size, int char_spacing, int line_spacing, int max_width, String text, Pair<Integer, Pair<List<List<Integer>>, List<List<Character>>>> data) implements MaterialRules.MaterialCondition
+    public record TextCondition(int font_size, int char_spacing, int line_spacing, int max_width, String text, Pair<Integer, Pair<List<List<Integer>>, List<List<Character>>>> data) implements MaterialRules.MaterialCondition
     {
         static final CodecHolder<TextCondition> CODEC = CodecHolder.of(RecordCodecBuilder.create(instance -> instance.group(
                 (Codec.INT.fieldOf("font_size").orElse(1).forGetter(a -> a.font_size)),
@@ -96,11 +96,11 @@ public class ModMaterialConditions {
                 new TextCondition(font_size, char_spacing, line_spacing, max_width, text,
                         genData(char_spacing, max_width, text)))));
 
-        static int width(Character c, int char_spacing) {
+        public static int width(Character c, int char_spacing) {
             return storage.get(c).size() + char_spacing;
         }
 
-        static Pair<Integer, Pair<List<List<Integer>>, List<List<Character>>>> genData(int char_spacing, int max_width, String text) {
+        public static Pair<Integer, Pair<List<List<Integer>>, List<List<Character>>>> genData(int char_spacing, int max_width, String text) {
             int x = 0;
             int z = 0;
             int longest_line = 0;
@@ -144,7 +144,7 @@ public class ModMaterialConditions {
             return new Pair<>(longest_line, new Pair<>(textmap, charmap));
         }
 
-        static final Map<Character, List<Integer>> storage = Map.ofEntries(
+        public static final Map<Character, List<Integer>> storage = Map.ofEntries(
                 Map.entry('a', List.of(0b00100000, 0b01010100, 0b01010100, 0b01010100, 0b01111000)),
                 Map.entry('b', List.of(0b01111111, 0b01001000, 0b01000100, 0b01000100, 0b00111000)),
                 Map.entry('c', List.of(0b00111000, 0b01000100, 0b01000100, 0b01000100, 0b00101000)),
@@ -242,14 +242,14 @@ public class ModMaterialConditions {
                 Map.entry('0', List.of(0b00111110, 0b01010001, 0b01001001, 0b01000101, 0b00111110))
         );
 
-        static boolean check(int x, int z, Character c) {
+        public static boolean check(int x, int z, Character c) {
             List<Integer> lst = storage.get(c);
             if(x >= lst.size()) return false;
             int column = lst.get(x);
             return ((column >> z)%2) == 1;
         }
 
-        int find(int x, int line_num) {
+        public int find(int x, int line_num) {
             int char_num = Collections.binarySearch(data.getRight().getLeft().get(line_num), x);
             if (char_num < 0) char_num = -char_num - 2;
             return char_num;

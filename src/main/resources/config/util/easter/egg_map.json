@@ -29,6 +29,11 @@
       "easter-id": 5,
       "easter-type": 0,
       "text": "elephants"
+    },
+    {
+      "easter-id": 6,
+      "easter-type": 0,
+      "text": "credits"
     }
   ]
 }
