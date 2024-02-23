@@ -14,7 +14,7 @@ public class RandomBiome {
     public String name;
     public String fullname;
     public final Random random;
-    public List<String> mobs;
+    public Set<String> mobs;
     public NbtCompound data;
 
     RandomBiome(long i, RandomDimension dim) {
@@ -24,7 +24,7 @@ public class RandomBiome {
         PROVIDER = dim.PROVIDER;
         name = "biome_" +i;
         fullname = InfinityMod.MOD_ID + ":" + name;
-        mobs = new ArrayList<>();
+        mobs = new HashSet<>();
         data = new NbtCompound();
         data.putDouble("temperature", -1 + random.nextFloat()*3);
         data.putBoolean("has_precipitation", PROVIDER.roll(random, "has_precipitation"));

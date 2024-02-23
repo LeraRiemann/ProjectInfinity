@@ -1,7 +1,5 @@
 package net.lerariemann.infinity.dimensions.features;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.var.ModMaterialConditions;
@@ -41,60 +39,76 @@ public class RandomText extends RandomisedFeature {
         return feature(config);
     }
 
+    String genText() {
+        Path p = Path.of(parent.PROVIDER.configPath).toAbsolutePath().getParent().getParent();
+        File f = p.resolve("config/infinity/text.txt").toFile();
+        try {
+            switch (random.nextInt(f.exists() ? 4 : 3)) {
+                case 0 -> {
+                    return genTextFromPath(p, true);
+                }
+                case 1 -> {
+                }
+                default -> {
+                    return genTextRandomly();
+                }
+                case 3 -> {
+                    return genTextFromFile(f, false);
+                }
+            }
+        }
+        catch (Exception e) {
+            try {
+                if ((f.exists()) && random.nextBoolean()) return genTextFromFile(f, false);
+                return genTextFromFile(p.resolve("logs/latest.log").toFile(), false);
+            } catch (Exception ex) {
+                return genTextRandomly();
+            }
+        }
+        return genTextRandomly();
+    }
+
+    String genTextFromPath(Path p, boolean trim) throws IOException {
+        try {
+            List<File> lst = new ArrayList<>();
+            walk(p).forEach(a -> {
+                if ((a!=null) && (a.toFile().isFile())) {
+                    String s = a.toFile().toString();
+                    if (!s.endsWith(".mca") && !s.endsWith(".png") && !s.endsWith(".gz")) lst.add(a.toFile());
+                }
+            });
+            if (lst.size() == 0) throw new IOException();
+            return genTextFromList(lst, trim);
+        }
+        catch (Exception e) {
+            throw new IOException();
+        }
+    }
+
+    String genTextFromList(List<File> lst, boolean trim) throws IOException {
+        try {
+            return genTextFromFile(lst.get(random.nextInt(lst.size())), trim);
+        }
+        catch (Exception e) {
+            throw new IOException();
+        }
+    }
+
+    String genTextFromFile(File f, boolean trim) throws IOException {
+        try {
+            return select(FileUtils.readFileToString(f, StandardCharsets.UTF_8), trim);
+        }
+        catch (Exception e) {
+            throw new IOException();
+        }
+    }
+
     String select(String str, boolean trim) {
         if (trim) str = str.replaceAll("\\s+","");
         int i2 = random.nextInt(8, 128);
         if (str.length() <= i2) return str;
         int i1 = random.nextInt(str.length() - i2);
-        String substring = str.substring(i1, i1 + i2);
-        return substring;
-    }
-
-    String genText() {
-        Path p = Path.of(parent.PROVIDER.configPath).toAbsolutePath().getParent().getParent();
-        Path p1 = Objects.requireNonNull(FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null)).getRootPaths().get(0);
-        File f = p.resolve("config/infinity/text.txt").toFile();
-        try {
-            switch (random.nextInt(f.exists() ? 5 : 4)) {
-                case 0 -> {
-                    return genTextFromPath(p1, true);
-                }
-                case 1 -> {
-                    return genTextFromPath(p, true);
-                }
-                case 2 -> {
-                    return genTextFromFile(p.resolve("logs/latest.log").toFile(), false);
-                }
-                default -> {
-                    return genTextRandomly();
-                }
-                case 4 -> {
-                    return genTextFromFile(f, false);
-                }
-            }
-        }
-        catch (IOException e) {
-            return genTextRandomly();
-        }
-    }
-
-    String genTextFromPath(Path p, boolean trim) throws IOException {
-        List<File> lst = new ArrayList<>();
-        walk(p).forEach(a -> {
-                if (a.toFile().isFile()) {
-                    String s = a.toFile().toString();
-                    if (!s.endsWith(".mca") && !s.endsWith(".png") && !s.endsWith(".gz")) lst.add(a.toFile());
-                }
-            });
-        return genTextFromList(lst, trim);
-    }
-
-    String genTextFromList(List<File> lst, boolean trim) throws IOException {
-        return genTextFromFile(lst.get(random.nextInt(lst.size())), trim);
-    }
-
-    String genTextFromFile(File f, boolean trim) throws IOException {
-        return select(FileUtils.readFileToString(f, StandardCharsets.UTF_8), trim);
+        return str.substring(i1, i1 + i2);
     }
 
     String genTextRandomly() {

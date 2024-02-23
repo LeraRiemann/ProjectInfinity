@@ -45,8 +45,8 @@ public class RandomStructureSet {
         switch (type) {
             case "minecraft:random_spread" -> {
                 if (parent.roll("triangular_spread")) res.putString("spread_type", "triangular");
-                int a = f(random, 4095, 12);
-                int b = f(random, 4095, 12);
+                int a = 6 + f(random, 4095, 6);
+                int b = f(random, 4095, 6);
                 if (a == b) a+=1;
                 res.putInt("spacing", Math.max(a, b));
                 res.putInt("separation", Math.min(a, b));
