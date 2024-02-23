@@ -330,11 +330,15 @@ public class RandomDimension {
 
     void addStructures(RandomBiome b) {
         int numstructures = random.nextInt(1, 5);
+        Set<String> temp = new HashSet<>();
         for (int i = 0; i < numstructures; i++) {
             RandomStructure s = new RandomStructure(random.nextInt(), b);
-            s.save();
-            if (!structure_ids.containsKey(s.type)) structure_ids.put(s.type, new ArrayList<>());
-            structure_ids.get(s.type).add(s.fullname);
+            if (!temp.contains(s.name)) {
+                temp.add(s.name);
+                s.save();
+                if (!structure_ids.containsKey(s.type)) structure_ids.put(s.type, new ArrayList<>());
+                structure_ids.get(s.type).add(s.fullname);
+            }
         }
         if (PROVIDER.roll(random, "random_portal")) {
             RandomPortal p = new RandomPortal(random.nextInt(), b);

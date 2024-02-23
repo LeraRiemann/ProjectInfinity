@@ -16,21 +16,25 @@ public class RandomStructure {
     public String name;
     public String fullname;
     public final Random random;
+    public NbtCompound rawdata;
     public NbtCompound data;
 
     RandomStructure(int i, RandomBiome b) {
         id = i;
         parent = b;
-        random = new Random(i);
-        NbtCompound rawdata = (NbtCompound)(b.PROVIDER.extraRegistry.get("structures").getRandomElement(random));
+        random = new Random(parent.id);
+        rawdata = (NbtCompound)(b.PROVIDER.extraRegistry.get("structures").getRandomElement(new Random(i)));
         String name_raw = rawdata.getString("name");
-        if (name_raw.lastIndexOf(":") < 0) name = name_raw + "_" + i;
-        else name = name_raw.substring(0, name_raw.lastIndexOf(":")) + "_" + name_raw.substring(name_raw.lastIndexOf(":") + 1) + "_" + i;
+        if (name_raw.lastIndexOf(":") < 0) name = name_raw + "_" + parent.id;
+        else name = name_raw.substring(0, name_raw.lastIndexOf(":")) + "_" + name_raw.substring(name_raw.lastIndexOf(":") + 1) + "_" + parent.id;
         type = rawdata.getString("type");
         if (type.length() == 0) type = name_raw;
+    }
+
+    void save() {
         fullname = InfinityMod.MOD_ID + ":" + name;
         data = rawdata.getCompound("settings");
-        data.putString("biomes", b.fullname);
+        data.putString("biomes", parent.fullname);
         data.put("spawn_overrides", spawnOverrides(rawdata));
         RandomDimension daddy = parent.parent;
         if (rawdata.contains("village")) data.putString("start_pool", parent.PROVIDER.randomName(random, "village_start_pools"));
@@ -57,9 +61,6 @@ public class RandomStructure {
             case "shipwreck" -> data.putBoolean("is_beached", roll("shipwrecks_beach"));
             case "mineshaft" -> data.putString("mineshaft_type", roll("mineshafts_mesa") ? "mesa" : "normal");
         }
-    }
-
-    void save() {
         CommonIO.write(data, parent.parent.storagePath + "/worldgen/structure", name + ".json");
         (new RandomStructureSet(this)).save();
     }
