@@ -23,9 +23,11 @@ public class RandomStructure {
         parent = b;
         random = new Random(i);
         NbtCompound rawdata = (NbtCompound)(b.PROVIDER.extraRegistry.get("structures").getRandomElement(random));
-        type = rawdata.getString("name");
-        if (type.lastIndexOf(":") < 0) name = type + "_" + i;
-        else name = type.substring(0, type.lastIndexOf(":")) + "_" + type.substring(type.lastIndexOf(":") + 1) + "_" + i;
+        String name_raw = rawdata.getString("name");
+        if (name_raw.lastIndexOf(":") < 0) name = name_raw + "_" + i;
+        else name = name_raw.substring(0, name_raw.lastIndexOf(":")) + "_" + name_raw.substring(name_raw.lastIndexOf(":") + 1) + "_" + i;
+        type = rawdata.getString("type");
+        if (type.length() == 0) type = name_raw;
         fullname = InfinityMod.MOD_ID + ":" + name;
         data = rawdata.getCompound("settings");
         data.putString("biomes", b.fullname);
