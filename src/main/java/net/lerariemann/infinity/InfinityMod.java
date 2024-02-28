@@ -18,15 +18,16 @@ public class InfinityMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ConfigManager.registerAllConfigs();
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
 		ModPoi.registerPoi();
 		ModCommands.registerCommands();
 		ModDensityFunctionTypes.registerFunctions();
 		ModMaterialConditions.registerConditions();
+		ModMaterialRules.registerRules();
 		ModStructureType.registerStructures();
 		ModSounds.registerSounds();
 		ModFeatures.registerFeatures();
-		ConfigManager.registerAllConfigs();
 	}
 }

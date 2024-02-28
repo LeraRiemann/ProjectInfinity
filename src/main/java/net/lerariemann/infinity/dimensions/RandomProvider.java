@@ -31,8 +31,13 @@ public class RandomProvider {
     public Easterizer easterizer;
 
     public RandomProvider(String configpath, String savingpath) {
-        configPath = configpath;
+        this(configpath);
         savingPath = savingpath;
+        saveAllPortals();
+    }
+
+    public RandomProvider(String configpath) {
+        configPath = configpath;
         registry = new HashMap<>();
         blockRegistry = new HashMap<>();
         extraRegistry = new HashMap<>();
@@ -40,7 +45,6 @@ public class RandomProvider {
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
         register_all();
-        saveAllPortals();
         easterizer = new Easterizer(CommonIO.read(configPath + "util/easter/egg_map.json").getList("elements", NbtElement.COMPOUND_TYPE),this);
     }
 
@@ -233,12 +237,15 @@ public class RandomProvider {
         return res;
     }
 
+    public static String blockElementToName(NbtElement e) {
+        if (e instanceof NbtCompound) return ((NbtCompound)e).getString("Name");
+        else return e.asString();
+    }
+
     public String randomName(Random random, String key) {
         switch (key) {
             case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
-                NbtElement compound = blockRegistry.get(key).getRandomElement(random);
-                if (compound instanceof NbtCompound) return ((NbtCompound)compound).getString("Name");
-                else return compound.asString();
+                return blockElementToName(blockRegistry.get(key).getRandomElement(random));
             }
             default -> {
                 return registry.get(key).getRandomElement(random);

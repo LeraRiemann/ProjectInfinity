@@ -34,6 +34,11 @@
       "easter-id": 6,
       "easter-type": 0,
       "text": "credits"
+    },
+    {
+      "easter-id": 7,
+      "easter-type": 0,
+      "text": "chaos"
     }
   ]
 }

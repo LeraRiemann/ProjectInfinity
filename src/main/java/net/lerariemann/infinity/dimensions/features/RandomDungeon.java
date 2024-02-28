@@ -16,7 +16,7 @@ public class RandomDungeon extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        addRandomBlock(config, "main_state", "full_blocks");
+        addRandomBlock(config, "main_state", "full_blocks_worldgen");
         addRandomBlock(config, "decor_state", "full_blocks");
         config.putString("mob", PROVIDER.randomName(random, "mobs"));
         config.putInt("size", 1 + random.nextInt(6));

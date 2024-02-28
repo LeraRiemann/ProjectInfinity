@@ -9,11 +9,15 @@ import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.ConfigGenerator;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldView;
 
 import java.nio.charset.StandardCharsets;
 
@@ -60,5 +64,15 @@ public class ModCommands {
                     warpId(context, getDimensionSeedFromText(text, context.getSource().getServer()));
                     return 1;
                 }))));
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("generate_configs")
+                .requires(source -> source.hasPermissionLevel(2))
+                .then(argument("pos_air", BlockPosArgumentType.blockPos()).executes(context -> 1)
+                .then(argument("pos_stone", BlockPosArgumentType.blockPos()).executes(context -> {
+                    BlockPos bp1 = BlockPosArgumentType.getBlockPos(context, "pos_air");
+                    BlockPos bp2 = BlockPosArgumentType.getBlockPos(context, "pos_stone");
+                    WorldView w = context.getSource().getWorld();
+                    ConfigGenerator.generateAll(w, bp1, bp2);
+                    return 1;
+                })))));
     }
 }
