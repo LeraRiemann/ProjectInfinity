@@ -126,10 +126,85 @@ public class ModDensityFunctionTypes {
         }
     }
 
+    record Menger(double scale, int max_y) implements DensityFunction.Base {
+        public static final CodecHolder<Menger> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.create(instance -> instance.group(
+                Codec.DOUBLE.fieldOf("scale").orElse(1.0).forGetter(a -> a.scale),
+                Codec.INT.fieldOf("max_y").orElse(0).forGetter(a -> a.max_y)).apply(
+                instance, Menger::new)));
+
+        @Override
+        public double sample(NoisePos pos) {
+            int x = pos.blockX();
+            int y = pos.blockY();
+            int z = pos.blockZ();
+            return (y > max_y || check(x, z) || check(x, y) || check(y, z)) ? -scale : scale;
+        }
+
+        @Override
+        public double minValue() {
+            return -scale;
+        }
+
+        @Override
+        public double maxValue() {
+            return scale;
+        }
+
+        @Override
+        public CodecHolder<? extends DensityFunction> getCodecHolder() {
+            return CODEC_HOLDER;
+        }
+
+        public boolean check(int a, int b) {
+            int a1 = Math.abs(a);
+            int b1 = Math.abs(b);
+            while (a1 > 0 && b1 > 0) {
+                if (a1 % 3 == 1 && b1 % 3 == 1) return true;
+                a1 /= 3;
+                b1 /= 3;
+            }
+            return false;
+        }
+    }
+
+    record Skygrid(double scale, int size, int separation) implements DensityFunction.Base {
+        public static final CodecHolder<Skygrid> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.create(instance -> instance.group(
+                Codec.DOUBLE.fieldOf("scale").orElse(1.0).forGetter(a -> a.scale),
+                Codec.INT.fieldOf("size").orElse(1).forGetter(a -> a.size),
+                Codec.INT.fieldOf("separation").orElse(3).forGetter(a -> a.separation)).apply(
+                instance, Skygrid::new)));
+
+        @Override
+        public double sample(NoisePos pos) {
+            int n = separation + size;
+            int x = Math.abs(pos.blockX());
+            int y = Math.abs(pos.blockY());
+            int z = Math.abs(pos.blockZ());
+            return (x % n < size && y % n < size && z % n < size) ? scale : -scale;
+        }
+
+        @Override
+        public double minValue() {
+            return -scale;
+        }
+
+        @Override
+        public double maxValue() {
+            return scale;
+        }
+
+        @Override
+        public CodecHolder<? extends DensityFunction> getCodecHolder() {
+            return CODEC_HOLDER;
+        }
+    }
+
     public static void registerFunctions() {
         for (NonbinaryOperation.Type enum_ : NonbinaryOperation.Type.values()) {
             Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":" + enum_.name, enum_.codecHolder.codec());
         }
         Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":coordinate", Coordinate.CODEC_HOLDER.codec());
+        Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":menger", Menger.CODEC_HOLDER.codec());
+        Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":skygrid", Skygrid.CODEC_HOLDER.codec());
     }
 }

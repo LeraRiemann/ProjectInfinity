@@ -1,0 +1,25 @@
+{
+  "feature": "%s",
+  "placement": [
+    {
+      "count": 1,
+      "type": "minecraft:count_on_every_layer"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 8
+    },
+    {
+      "predicate": {
+        "offset": [
+          0,
+          -1,
+          0
+        ],
+        "blocks": "%s",
+        "type": "minecraft:matching_blocks"
+      },
+      "type": "minecraft:block_predicate_filter"
+    }
+  ]
+}

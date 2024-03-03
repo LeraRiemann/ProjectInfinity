@@ -1545,6 +1545,9 @@
 				"laggy": true,
 				"float": true,
 				"Name": "minecraft:campfire",
+				"Properties": {
+					"lit": "false"
+				},
 				"full": false
 			}
 		},

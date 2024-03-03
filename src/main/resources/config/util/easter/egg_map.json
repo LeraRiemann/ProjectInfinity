@@ -39,6 +39,21 @@
       "easter-id": 7,
       "easter-type": 0,
       "text": "chaos"
+    },
+    {
+      "easter-id": 8,
+      "easter-type": 8,
+      "text": "sponge"
+    },
+    {
+      "easter-id": 9,
+      "easter-type": 0,
+      "text": "skygrid"
+    },
+    {
+      "easter-id": 10,
+      "easter-type": 0,
+      "text": "random_forest"
     }
   ]
 }

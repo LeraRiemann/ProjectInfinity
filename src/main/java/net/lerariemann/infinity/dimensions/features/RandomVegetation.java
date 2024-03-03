@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.dimensions.features;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.*;
-
-import java.util.Objects;
 
 public class RandomVegetation extends RandomisedFeature {
     boolean sparse;
@@ -24,12 +24,14 @@ public class RandomVegetation extends RandomisedFeature {
         addHeightmap("MOTION_BLOCKING");
         addBiome();
     }
-
     NbtElement randomTree() {
         String tree = "minecraft:oak";
-        if (Objects.equals(parent.surface_block.getString("Name"), "minecraft:grass_block") && parent.roll("use_vanilla_trees")) {
+        if (parent.roll("use_vanilla_trees")) {
             tree = PROVIDER.randomName(random, "trees");
-            return NbtString.of(tree);
+            NbtCompound c = PROVIDER.notRandomTree(tree, parent.surface_block.getString("Name"));
+            String s = tree.substring(tree.lastIndexOf(':') + 1) + "_" + parent.parent.id;
+            CommonIO.write(c, parent.storagePath + "/worldgen/placed_feature", s + ".json");
+            return NbtString.of(InfinityMod.MOD_ID + ":" + s);
         }
         else {
             switch(PROVIDER.randomName(random, "floral_distribution")) {

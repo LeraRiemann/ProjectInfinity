@@ -33,7 +33,7 @@ public class RandomProvider {
     public RandomProvider(String configpath, String savingpath) {
         this(configpath);
         savingPath = savingpath;
-        saveAllPortals();
+        genCorePack();
     }
 
     public RandomProvider(String configpath) {
@@ -82,13 +82,41 @@ public class RandomProvider {
         }
     }
 
-    void saveAllPortals() {
+    public NbtCompound notRandomTree(String tree, String block) {
+        return CommonIO.readCarefully(configPath + "/util/placements/tree_vanilla.json", tree, block);
+    }
+
+    void saveTrees() {
+        List<String> trees = registry.get("trees").keys;
+        double size = trees.size();
+        NbtCompound c = new NbtCompound();
+        NbtList l = new NbtList();
+        c.putString("default", trees.get(0));
+        for (int i = 1; i < size; i++) {
+            NbtCompound c1 = new NbtCompound();
+            c1.put("feature", notRandomTree(trees.get(i), "minecraft:grass_block"));
+            c1.putDouble("chance", 1 / (size - i + 1));
+            l.add(c1);
+        }
+        c.put("features", l);
+        NbtCompound c2 = new NbtCompound();
+        c2.putString("type", "minecraft:random_selector");
+        c2.put("config", c);
+        CommonIO.write(c2, savingPath + "/data/" + InfinityMod.MOD_ID + "/worldgen/configured_feature", "all_trees.json");
+        CommonIO.write(CommonIO.read(configPath + "util/all_trees.json"),
+                savingPath + "/data/" + InfinityMod.MOD_ID + "/worldgen/placed_feature", "all_trees.json");
+        CommonIO.write(CommonIO.read(configPath + "util/random_forest.json"),
+                savingPath + "/data/" + InfinityMod.MOD_ID + "/worldgen/biome", "random_forest.json");
+    }
+
+    void genCorePack() {
         extraRegistry.get("palettes").keys.forEach(e -> {
             if (!(Paths.get(savingPath + "/data/" + InfinityMod.MOD_ID + "/structures/"
                     + ((NbtCompound)e).getString("name") + ".nbt")).toFile().exists()) {
                 savePortalFromPalette((NbtCompound)e);
             }
         });
+        saveTrees();
         if (!(Paths.get(savingPath + "/pack.mcmeta")).toFile().exists()) savePackMcmeta();
     }
 

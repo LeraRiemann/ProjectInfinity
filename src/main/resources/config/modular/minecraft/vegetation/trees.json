@@ -1,55 +1,31 @@
 {
   "elements": [
     {
-      "key": "minecraft:acacia_checked",
+      "key": "minecraft:acacia",
       "weight": 1.0
     },
     {
-      "key": "minecraft:birch_checked",
+      "key": "minecraft:azalea_tree",
       "weight": 1.0
     },
     {
-      "key": "minecraft:dark_oak_checked",
+      "key": "minecraft:birch",
       "weight": 1.0
     },
     {
-      "key": "minecraft:fancy_oak_bees",
+      "key": "minecraft:birch_tall",
       "weight": 1.0
     },
     {
-      "key": "minecraft:mega_jungle_tree_checked",
+      "key": "minecraft:cherry",
       "weight": 1.0
     },
     {
-      "key": "minecraft:mega_pine_checked",
+      "key": "minecraft:dark_oak",
       "weight": 1.0
     },
     {
-      "key": "minecraft:mega_spruce_checked",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:mangrove_checked",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:oak_checked",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:oak_bees_002",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:birch_bees_002",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:spruce",
-      "weight": 1.0
-    },
-    {
-      "key": "minecraft:pine_checked",
+      "key": "minecraft:fancy_oak",
       "weight": 1.0
     },
     {
@@ -57,11 +33,47 @@
       "weight": 1.0
     },
     {
-      "key": "minecraft:tall_mangrove_checked",
+      "key": "minecraft:mangrove",
       "weight": 1.0
     },
     {
-      "key": "minecraft:cherry_checked",
+      "key": "minecraft:mega_jungle_tree",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mega_pine",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mega_spruce",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:oak",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pine",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spruce",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:swamp_oak",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:tall_mangrove",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:huge_brown_mushroom",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:huge_red_mushroom",
       "weight": 1.0
     }
   ]
