@@ -91,7 +91,7 @@ public class RandomProvider {
         double size = trees.size();
         NbtCompound c = new NbtCompound();
         NbtList l = new NbtList();
-        c.putString("default", trees.get(0));
+        c.put("default", notRandomTree(trees.get(0), "minecraft:grass_block"));
         for (int i = 1; i < size; i++) {
             NbtCompound c1 = new NbtCompound();
             c1.put("feature", notRandomTree(trees.get(i), "minecraft:grass_block"));
