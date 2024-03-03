@@ -2,8 +2,8 @@ package net.lerariemann.infinity.mixin;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.access.NetherPortalBlockAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
+import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
@@ -58,7 +58,7 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
                 String keystr = registryKey.getValue().getPath();
                 String is = keystr.substring(keystr.lastIndexOf("_") + 1);
                 long i = Long.parseLong(is);
-                ((NetherPortalBlockAccess)Blocks.NETHER_PORTAL).modifyPortal(destination, pos2, destination.getBlockState(pos), i);
+                NeitherPortalBlock.modifyPortal(destination, pos2, destination.getBlockState(pos), i, true);
                 break;
             }
         }

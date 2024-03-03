@@ -15,8 +15,10 @@ import org.spongepowered.asm.mixin.injection.*;
 
 @Mixin(Entity.class)
 public class EntityMixin {
-    @Shadow BlockPos lastNetherPortalPosition;
-    @Shadow World world;
+    @Shadow
+    protected BlockPos lastNetherPortalPosition;
+    @Shadow
+    private World world;
 
     @ModifyArg(method = "tickPortal()V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/MinecraftServer;getWorld(Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/server/world/ServerWorld;"), index = 0)
@@ -29,8 +31,11 @@ public class EntityMixin {
     private ServerWorld injected(ServerWorld serverWorld2) {
         ServerWorld serverWorld = (ServerWorld)this.world;
         if (serverWorld.getBlockState(this.lastNetherPortalPosition).isOf(ModBlocks.NEITHER_PORTAL)) {
-            long id = ((NeitherPortalBlockEntity)serverWorld.getBlockEntity(this.lastNetherPortalPosition)).getDimension();
+            NeitherPortalBlockEntity e = ((NeitherPortalBlockEntity)serverWorld.getBlockEntity(this.lastNetherPortalPosition));
+            if (e == null) return serverWorld;
+            long id = e.getDimension();
             serverWorld2 = serverWorld.getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD, new Identifier("infinity:generated_" + id)));
+            return (serverWorld2 != null && e.getOpen()) ? serverWorld2 : serverWorld;
         }
         return (serverWorld2 != null) ? serverWorld2 : serverWorld;
     }

@@ -1,11 +1,14 @@
 package net.lerariemann.infinity.block.custom;
 
+import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomProvider;
@@ -32,6 +35,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
@@ -40,7 +44,9 @@ import org.joml.Vector3f;
 
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
     private static final Random RANDOM = new Random();
@@ -59,8 +65,52 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (blockEntity instanceof NeitherPortalBlockEntity) {
             long i = ((NeitherPortalBlockEntity) blockEntity).getDimension();
             addDimension(s, i, prov.rule("runtimeGenerationEnabled"));
+            modifyPortal(world, pos, world.getBlockState(pos), i, true);
             world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
         }
+    }
+
+    private static void changeDim(World world, BlockPos pos, Direction.Axis axis, long i, boolean open) {
+        world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.getDefaultState().with(AXIS, axis));
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity != null) {
+            ((NeitherPortalBlockEntity)blockEntity).setDimension(i);
+            ((NeitherPortalBlockEntity)blockEntity).setOpen(open);
+        }
+    }
+
+    public static void modifyPortal(World world, BlockPos pos, BlockState state, long i, boolean open) {
+        Set<BlockPos> set = Sets.newHashSet();
+        Queue<BlockPos> queue = Queues.newArrayDeque();
+        queue.add(pos);
+        BlockPos blockPos;
+        Direction.Axis axis = state.get(AXIS);
+        while ((blockPos = queue.poll()) != null) {
+            set.add(blockPos);
+            BlockState blockState = world.getBlockState(blockPos);
+            if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof NeitherPortalBlock) {
+                changeDim(world, blockPos, axis, i, open);
+                BlockPos blockPos2 = blockPos.offset(Direction.UP);
+                if (!set.contains(blockPos2))
+                    queue.add(blockPos2);
+                blockPos2 = blockPos.offset(Direction.DOWN);
+                if (!set.contains(blockPos2))
+                    queue.add(blockPos2);
+                blockPos2 = blockPos.offset(Direction.NORTH);
+                if (!set.contains(blockPos2))
+                    queue.add(blockPos2);
+                blockPos2 = blockPos.offset(Direction.SOUTH);
+                if (!set.contains(blockPos2))
+                    queue.add(blockPos2);
+                blockPos2 = blockPos.offset(Direction.WEST);
+                if (!set.contains(blockPos2))
+                    queue.add(blockPos2);
+                blockPos2 = blockPos.offset(Direction.EAST);
+                if (!set.contains(blockPos2))
+                    queue.add(blockPos2);
+            }
+        }
+        if (open) world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
     }
 
     @Override
@@ -71,6 +121,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             MinecraftServer s = world.getServer();
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (s!=null && blockEntity instanceof NeitherPortalBlockEntity) {
+                if (((NeitherPortalBlockEntity)blockEntity).getOpen()) return ActionResult.SUCCESS;
                 RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
                 boolean bl = prov.portalKey.isBlank();
                 if (bl) {

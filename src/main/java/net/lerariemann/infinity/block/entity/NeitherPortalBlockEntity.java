@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class NeitherPortalBlockEntity extends BlockEntity implements RenderAttachmentBlockEntity {
     private final PropertyDelegate propertyDelegate;
     private long dimension;
+    private boolean isOpen;
 
     public NeitherPortalBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.NEITHER_PORTAL, pos, state);
@@ -38,23 +39,33 @@ public class NeitherPortalBlockEntity extends BlockEntity implements RenderAttac
     public NeitherPortalBlockEntity(BlockPos pos, BlockState state, long i) {
         this(pos, state);
         this.dimension = i;
+        this.isOpen = false;
     }
 
     public long getDimension() {
         return this.dimension;
     }
+    public boolean getOpen() {
+        return this.isOpen;
+    }
 
     public void setDimension(long i) {
         this.dimension = i;
     }
+
+    public void setOpen(boolean i) {
+        this.isOpen = i;
+    }
     public void writeNbt(NbtCompound tag) {
         super.writeNbt(tag);
         tag.putLong("Dimension", this.dimension);
+        tag.putBoolean("Open", this.isOpen);
     }
 
     public void readNbt(NbtCompound tag) {
         super.readNbt(tag);
         this.dimension = tag.getLong("Dimension");
+        this.isOpen = tag.getBoolean("Open");
     }
 
     @Nullable
