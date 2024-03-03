@@ -74,6 +74,7 @@ public class RandomNoisePreset {
         int min = parent.min_y;
         int max = parent.height + parent.min_y;
         int softmax = Math.min(max, 256);
+        Random r = parent.random;
         switch(router) {
             case "caves" -> {
                 return CommonIO.readCarefully(path, min - 8, min + 24, max - 24, max);
@@ -95,9 +96,9 @@ public class RandomNoisePreset {
                         min, min + 24, max - 16, max);
             }
             case "whack" -> {
-                double f = parent.random.nextExponential();
-                double a = parent.random.nextDouble(1.0, 8.0);
-                double b = parent.random.nextDouble(1.0, 8.0);
+                double f = r.nextExponential();
+                double a = r.nextDouble(1.0, 8.0);
+                double b = r.nextDouble(1.0, 8.0);
                 return CommonIO.readCarefully(path,
                         2*f, min, min+8, max-8, -2*f, max,
                         min, parent.sea_level, parent.sea_level, max,
@@ -107,6 +108,12 @@ public class RandomNoisePreset {
                         min, parent.sea_level, parent.sea_level, max,
                         f, a, b);
             }
+            case "tangled" -> {
+                double f = r.nextDouble(0.005, 0.1);
+                double a = r.nextExponential();
+                double b = r.nextExponential();
+                return CommonIO.readCarefully(path, min+32, min, min, max, a, b, a, b, f, min+16, min, max-16, max);
+            }
         }
         return CommonIO.read(path);
     }
@@ -114,7 +121,7 @@ public class RandomNoisePreset {
     NbtCompound buildSurfaceRule() {
         int i = 0;
         switch (surface_rule) {
-            case "caves", "nether" -> i=1;
+            case "caves", "nether", "tangled" -> i=1;
             case "floating_islands", "end" -> i=2;
         }
         NbtCompound res = startingRule("sequence");

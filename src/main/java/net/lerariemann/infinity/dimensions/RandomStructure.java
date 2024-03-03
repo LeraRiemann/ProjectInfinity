@@ -15,18 +15,18 @@ public class RandomStructure {
     public String type;
     public String name;
     public String fullname;
-    public final Random random;
+    public Random random;
     public NbtCompound rawdata;
     public NbtCompound data;
 
     RandomStructure(int i, RandomBiome b) {
         id = i;
         parent = b;
-        random = new Random(parent.id);
-        rawdata = (NbtCompound)(b.PROVIDER.extraRegistry.get("structures").getRandomElement(new Random(i)));
+        random = new Random(i);
+        rawdata = (NbtCompound)(b.PROVIDER.extraRegistry.get("structures").getRandomElement(random));
         String name_raw = rawdata.getString("name");
-        if (name_raw.lastIndexOf(":") < 0) name = name_raw + "_" + parent.id;
-        else name = name_raw.substring(0, name_raw.lastIndexOf(":")) + "_" + name_raw.substring(name_raw.lastIndexOf(":") + 1) + "_" + parent.id;
+        if (name_raw.lastIndexOf(":") < 0) name = name_raw + "_" + i;
+        else name = name_raw.substring(0, name_raw.lastIndexOf(":")) + "_" + name_raw.substring(name_raw.lastIndexOf(":") + 1) + "_" + i;
         type = rawdata.getString("type");
         if (type.length() == 0) type = name_raw;
     }
