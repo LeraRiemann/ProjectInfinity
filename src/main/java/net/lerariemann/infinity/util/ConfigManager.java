@@ -9,8 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static java.nio.file.Files.walk;
-
 public class ConfigManager {
 
     static void registerConfig(Path path) {
@@ -33,7 +31,12 @@ public class ConfigManager {
     public static void registerAllConfigs() {
         ModContainer modContainer = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
         try {
-            walk(modContainer.getRootPaths().get(0).resolve("config")).forEach(ConfigManager::registerConfig);
+            Path path = Paths.get("config/" + InfinityMod.MOD_ID);
+            if (!path.toFile().exists()) {
+                Files.createDirectories(path);
+            }
+
+            Files.walk(modContainer.getRootPaths().get(0).resolve("config")).forEach(ConfigManager::registerConfig);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
