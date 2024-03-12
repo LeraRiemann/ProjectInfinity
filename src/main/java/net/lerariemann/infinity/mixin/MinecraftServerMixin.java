@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.ImmutableList;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.dimensions.RandomProvider;
@@ -86,6 +87,7 @@ public class MinecraftServerMixin implements MinecraftServerAccess {
             worlds.put(key, world);
             worldsToAdd.clear();
         }));
+        ServerWorldEvents.LOAD.invoker().onWorldLoad((MinecraftServer) (Object) this, world);
     }
 
     @Override
