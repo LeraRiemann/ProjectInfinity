@@ -28,6 +28,7 @@ public class InfinityMod implements ModInitializer {
 		ModDensityFunctionTypes.registerFunctions();
 		ModMaterialConditions.registerConditions();
 		ModMaterialRules.registerRules();
+		ModPlacementModifiers.registerModifiers();
 		ModStructureType.registerStructures();
 		ModSounds.registerSounds();
 		ModFeatures.registerFeatures();
