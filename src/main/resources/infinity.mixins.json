@@ -6,6 +6,7 @@
   "mixins": [
     "AbstractFireBlockMixin",
     "ChunkRegionMixin",
+    "CreeperEntityMixin",
     "EntityMixin",
     "MaterialRuleContextAccess",
     "MinecraftServerMixin",

@@ -29,7 +29,6 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -71,8 +70,8 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
         return super.cannotDespawn() || isFriendly();
     }
     @Override
-    public boolean isUndead() {
-        return super.isUndead() || isFriendly();
+    public boolean isAffectedByDaylight() {
+        return super.isAffectedByDaylight() && !isFriendly();
     }
 
     public void copySkeleton(SkeletonEntity newSkeleton) {
@@ -177,16 +176,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     }
 
     @Override
-    public Vector3f getColor() {
-        int i = this.getEffect().getColor();
-        float f = (float)(i >> 16 & 0xFF) / 255.0f;
-        float g = (float)(i >> 8 & 0xFF) / 255.0f;
-        float h = (float)(i & 0xFF) / 255.0f;
-        return new Vector3f(f, g, h);
-    }
-
-    @Override
-    public float getAlpha() {
-        return 1.0f;
+    public int getColorRaw() {
+        return this.getEffect().getColor();
     }
 }
