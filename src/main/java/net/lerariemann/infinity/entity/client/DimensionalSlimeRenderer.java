@@ -17,7 +17,7 @@ public class DimensionalSlimeRenderer extends MobEntityRenderer<DimensionalSlime
     public DimensionalSlimeRenderer(EntityRendererFactory.Context context) {
         super(context, new SlimeEntityModel<>(context.getPart(EntityModelLayers.SLIME)), 0.25f);
         this.addFeature(new DimensionalSlimeCoreRenderer(this, context.getBlockRenderManager()));
-        this.addFeature(new DimensionalSlimeOutlineRenderer(this, context.getModelLoader()));
+        this.addFeature(new TintedLayerRenderer<>(this, new SlimeEntityModel<>(context.getModelLoader().getModelPart(EntityModelLayers.SLIME_OUTER))));
     }
     @Override
     public Identifier getTexture(DimensionalSlime slimeEntity) {

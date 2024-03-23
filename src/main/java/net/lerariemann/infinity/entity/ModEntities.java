@@ -5,11 +5,14 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.client.DimensionalSlimeRenderer;
+import net.lerariemann.infinity.entity.client.DimensionalSkeletonRenderer;
+import net.lerariemann.infinity.entity.custom.DimensionalSkeleton;
 import net.lerariemann.infinity.entity.custom.DimensionalSlime;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -20,13 +23,18 @@ public class ModEntities {
     }
     public static final EntityType<DimensionalSlime> DIMENSIONAL_SLIME = register("dimensional_slime",
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, DimensionalSlime::new)
-                    .dimensions(EntityDimensions.fixed(2.04f, 2.04f)).trackRangeBlocks(10));
+                    .dimensions(EntityDimensions.fixed(2.04f, 2.04f)).trackRangeChunks(10));
+    public static final EntityType<DimensionalSkeleton> DIMENSIONAL_SKELETON = register("dimensional_skeleton",
+            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, DimensionalSkeleton::new)
+                    .dimensions(EntityDimensions.fixed(0.6f, 1.99f)).trackRangeChunks(8));
 
     public static void registerEntities() {
         FabricDefaultAttributeRegistry.register(DIMENSIONAL_SLIME, DimensionalSlime.createAttributes());
+        FabricDefaultAttributeRegistry.register(DIMENSIONAL_SKELETON, AbstractSkeletonEntity.createAbstractSkeletonAttributes());
     }
 
     public static void registerEntityRenderers() {
         EntityRendererRegistry.register(DIMENSIONAL_SLIME, DimensionalSlimeRenderer::new);
+        EntityRendererRegistry.register(DIMENSIONAL_SKELETON, DimensionalSkeletonRenderer::new);
     }
 }

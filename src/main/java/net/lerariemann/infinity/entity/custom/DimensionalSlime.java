@@ -32,7 +32,7 @@ import org.joml.Vector3f;
 import java.util.Objects;
 import java.util.Random;
 
-public class DimensionalSlime extends SlimeEntity {
+public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     public static final TrackedData<BlockState> core = DataTracker.registerData(DimensionalSlime.class, TrackedDataHandlerRegistry.BLOCK_STATE);
     public static final TrackedData<Vector3f> color = DataTracker.registerData(DimensionalSlime.class, TrackedDataHandlerRegistry.VECTOR3F);
 
@@ -73,9 +73,13 @@ public class DimensionalSlime extends SlimeEntity {
     public void setCore(BlockState c) {
         this.dataTracker.set(core, c);
     }
+    @Override
     public Vector3f getColor() {
         return this.dataTracker.get(color);
     }
+    @Override
+    public float getAlpha() {return 1.0f;}
+
     public BlockState getCore() {
         return this.dataTracker.get(core);
     }
