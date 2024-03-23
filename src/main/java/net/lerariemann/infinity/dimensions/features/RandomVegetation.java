@@ -30,6 +30,7 @@ public class RandomVegetation extends RandomisedFeature {
             tree = PROVIDER.randomName(random, "trees");
             NbtCompound c = PROVIDER.notRandomTree(tree, parent.surface_block.getString("Name"));
             String s = tree.substring(tree.lastIndexOf(':') + 1) + "_" + parent.parent.id;
+            s = s.replace("/", "_");
             CommonIO.write(c, parent.storagePath + "/worldgen/placed_feature", s + ".json");
             return NbtString.of(InfinityMod.MOD_ID + ":" + s);
         }

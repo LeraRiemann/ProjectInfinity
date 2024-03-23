@@ -10,6 +10,7 @@ import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.ConfigGenerator;
+import net.lerariemann.infinity.util.RandomLootDrops;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.MinecraftServer;
@@ -74,5 +75,12 @@ public class ModCommands {
                     ConfigGenerator.generateAll(w, bp1, bp2);
                     return 1;
                 })))));
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("generate_loot")
+                .requires(source -> source.hasPermissionLevel(2))
+                .then(argument("seed", IntegerArgumentType.integer()).executes(context -> {
+                    final int seed = IntegerArgumentType.getInteger(context, "seed");
+                    RandomLootDrops.genAll(seed, context.getSource().getServer());
+                    return 1;
+                })))); //experimental command, will likely get separated into its own mod
     }
 }
