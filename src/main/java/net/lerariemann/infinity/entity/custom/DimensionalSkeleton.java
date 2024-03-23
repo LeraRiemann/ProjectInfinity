@@ -113,7 +113,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
             }
         }
         if (itemStack.isOf(Items.GLASS_BOTTLE)) {
-            ItemStack itemStack2 = setPotion(Items.POTION.getDefaultStack(), this.getEffectRaw(), this.getDuration() * 60);
+            ItemStack itemStack2 = setPotion(Items.LINGERING_POTION.getDefaultStack(), this.getEffectRaw(), this.getDuration() * 60);
             ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
             player.setStackInHand(hand, itemStack3);
             this.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
