@@ -54,6 +54,11 @@
       "easter-id": 10,
       "easter-type": 0,
       "text": "random_forest"
+    },
+    {
+      "easter-id": 11,
+      "easter-type": 0,
+      "text": "slime"
     }
   ]
 }

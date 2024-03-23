@@ -2,5 +2,12 @@
   "block.infinity.neither_portal": "Infinity Portal",
   "subtitles.music.ivory.hope_instilled": "ivory - hope instilled",
   "commands.warp.runtime_disabled": "Runtime dimension generation is disabled",
-  "commands.warp.not_a_player": "Only players can warp"
+  "commands.warp.not_a_player": "Only players can warp",
+  "biome.infinity.slime_plains": "Slime Plains",
+  "biome.infinity.chaos": "Abode of Chaos",
+  "biome.infinity.checkerboard": "Chess Battle Advanced",
+  "biome.infinity.pride": "Iridescent Valley",
+  "biome.infinity.sponge": "Overdry Barrens",
+  "entity.infinity.dimensional_slime": "Chaotic Slime",
+  "entity.infinity.dimensional_skeleton": "Chaotic Skeleton"
 }
