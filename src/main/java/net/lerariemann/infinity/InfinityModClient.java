@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -44,5 +45,6 @@ public class InfinityModClient implements ClientModInitializer {
                 (new DimensionGrabber(client.getNetworkHandler().getRegistryManager())).grab_for_client(id, optiondata, biomeids, biomes);
             });
         });
+        ModEntities.registerEntityRenderers();
     }
 }

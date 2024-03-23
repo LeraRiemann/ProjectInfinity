@@ -12,6 +12,7 @@
     "NetherPortalBlockMixin",
     "PortalForcerMixin",
     "ServerPlayerEntityMixin",
+    "SlimeEntityMixin",
     "WorldChunkMixin"
   ],
   "client": [

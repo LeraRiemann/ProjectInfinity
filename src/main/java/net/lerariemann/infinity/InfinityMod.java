@@ -1,6 +1,7 @@
 package net.lerariemann.infinity;
 
 import net.fabricmc.api.ModInitializer;
+import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
 import net.lerariemann.infinity.structure.ModStructureType;
 import net.lerariemann.infinity.var.*;
@@ -21,6 +22,7 @@ public class InfinityMod implements ModInitializer {
 		ConfigManager.registerAllConfigs();
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
+		ModEntities.registerEntities();
 		ModPoi.registerPoi();
 		ModCommands.registerCommands();
 		ModDensityFunctionTypes.registerFunctions();
