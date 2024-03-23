@@ -29,8 +29,8 @@ public class DimensionalSlimeCoreRenderer extends FeatureRenderer<DimensionalSli
         BlockState blockState = slime.getCore();
         int m = LivingEntityRenderer.getOverlay(slime, 0.0f);
         matrixStack.push();
-        matrixStack.scale(0.25f, -0.25f, 0.25f);
-        matrixStack.translate(-0.5f, -5.5f, -0.5f);
+        matrixStack.scale(0.25f, 0.25f, 0.25f);
+        matrixStack.translate(-0.5f, 4.5f, -0.5f);
         this.renderCore(matrixStack, vertexConsumerProvider, i, blockState, m);
         matrixStack.pop();
     }
