@@ -15,7 +15,7 @@ import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
 
 public class ModPlacementModifiers {
     public static class CenterProximityPlacementModifier extends AbstractConditionalPlacementModifier {
-        public static final Codec<CenterProximityPlacementModifier> MODIFIER_CODEC = (Codecs.POSITIVE_INT.fieldOf("chance")).xmap(
+        public static final Codec<CenterProximityPlacementModifier> MODIFIER_CODEC = (Codecs.POSITIVE_INT.fieldOf("radius")).xmap(
                 CenterProximityPlacementModifier::new, a -> a.radius).codec();
         private final int radius;
 
