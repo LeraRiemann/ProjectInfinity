@@ -59,6 +59,11 @@
       "easter-id": 11,
       "easter-type": 0,
       "text": "slime"
+    },
+    {
+      "easter-id": 12,
+      "easter-type": 0,
+      "text": "content"
     }
   ]
 }
