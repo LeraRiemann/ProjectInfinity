@@ -1,0 +1,32 @@
+{
+  "textures": {
+    "particle": "minecraft:block/chiseled_bookshelf_top",
+    "top": "minecraft:block/chiseled_bookshelf_top",
+    "side": "infinity:block/book_box_side",
+    "inner": "minecraft:block/white_concrete"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "texture": "#top", "cullface": "down" },
+        "up":    { "texture": "#top", "cullface": "up" },
+        "north": { "texture": "#side", "cullface": "north" },
+        "south": { "texture": "#side", "cullface": "south" },
+        "west":  { "texture": "#side", "cullface": "west" },
+        "east":  { "texture": "#side", "cullface": "east" }
+      }
+    },
+    {
+      "from": [ 0.1, 0.1, 0.1 ],
+      "to": [ 15.9, 15.9, 15.9 ],
+      "faces": {
+        "north": { "texture": "#inner", "cullface": "north", "tintindex": 0 },
+        "south": { "texture": "#inner", "cullface": "south", "tintindex": 0 },
+        "west":  { "texture": "#inner", "cullface": "west", "tintindex": 0 },
+        "east":  { "texture": "#inner", "cullface": "east", "tintindex": 0 }
+      }
+    }
+  ]
+}

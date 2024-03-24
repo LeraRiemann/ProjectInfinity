@@ -18,7 +18,7 @@ public class Easterizer {
         map = new HashMap<>();
         for (NbtElement c : maps) {
             Pair<Integer, Integer> easter_pair = new Pair<>(((NbtCompound)c).getInt("easter-id"), ((NbtCompound)c).getInt("easter-type"));
-            Long l = ModCommands.getDimensionSeedFromText(((NbtCompound)c).getString("text"), prov);
+            Long l = ModCommands.getDimensionSeed(((NbtCompound)c).getString("text"), prov);
             map.put(l, easter_pair);
         }
     }

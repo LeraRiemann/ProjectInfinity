@@ -35,40 +35,40 @@ public class RandomText extends RandomisedFeature {
         replaceable.add(RandomProvider.Block(parent.parent.parent.default_fluid.getString("Name")));
         config.put("replaceable", replaceable);
         config.putInt("orientation", random.nextInt(24));
-        config.putString("text", genText());
+        config.putString("text", genText(random, parent.PROVIDER));
         return feature(config);
     }
 
-    String genText() {
-        Path p = Path.of(parent.PROVIDER.configPath).toAbsolutePath().getParent().getParent();
+    public static String genText(Random random, RandomProvider provider) {
+        Path p = Path.of(provider.configPath).toAbsolutePath().getParent().getParent();
         File f = p.resolve("config/infinity/text.txt").toFile();
         try {
             switch (random.nextInt(f.exists() ? 4 : 3)) {
                 case 0 -> {
-                    return genTextFromPath(p, true);
+                    return genTextFromPath(random, p, true);
                 }
                 case 1 -> {
                 }
                 default -> {
-                    return genTextRandomly();
+                    return genTextRandomly(random);
                 }
                 case 3 -> {
-                    return genTextFromFile(f, false);
+                    return genTextFromFile(random, f, false);
                 }
             }
         }
         catch (Exception e) {
             try {
-                if ((f.exists()) && random.nextBoolean()) return genTextFromFile(f, false);
-                return genTextFromFile(p.resolve("logs/latest.log").toFile(), false);
+                if ((f.exists()) && random.nextBoolean()) return genTextFromFile(random, f, false);
+                return genTextFromFile(random, p.resolve("logs/latest.log").toFile(), false);
             } catch (Exception ex) {
-                return genTextRandomly();
+                return genTextRandomly(random);
             }
         }
-        return genTextRandomly();
+        return genTextRandomly(random);
     }
 
-    String genTextFromPath(Path p, boolean trim) throws IOException {
+    static String genTextFromPath(Random random, Path p, boolean trim) throws IOException {
         try {
             List<File> lst = new ArrayList<>();
             walk(p).forEach(a -> {
@@ -78,32 +78,32 @@ public class RandomText extends RandomisedFeature {
                 }
             });
             if (lst.size() == 0) throw new IOException();
-            return genTextFromList(lst, trim);
+            return genTextFromList(random, lst, trim);
         }
         catch (Exception e) {
             throw new IOException();
         }
     }
 
-    String genTextFromList(List<File> lst, boolean trim) throws IOException {
+    static String genTextFromList(Random random, List<File> lst, boolean trim) throws IOException {
         try {
-            return genTextFromFile(lst.get(random.nextInt(lst.size())), trim);
+            return genTextFromFile(random, lst.get(random.nextInt(lst.size())), trim);
         }
         catch (Exception e) {
             throw new IOException();
         }
     }
 
-    String genTextFromFile(File f, boolean trim) throws IOException {
+    static String genTextFromFile(Random random, File f, boolean trim) throws IOException {
         try {
-            return select(FileUtils.readFileToString(f, StandardCharsets.UTF_8), trim);
+            return select(random, FileUtils.readFileToString(f, StandardCharsets.UTF_8), trim);
         }
         catch (Exception e) {
             throw new IOException();
         }
     }
 
-    String select(String str, boolean trim) {
+    static String select(Random random, String str, boolean trim) {
         if (trim) str = str.replaceAll("\\s+","");
         int i2 = random.nextInt(8, 128);
         if (str.length() <= i2) return str;
@@ -111,10 +111,14 @@ public class RandomText extends RandomisedFeature {
         return str.substring(i1, i1 + i2);
     }
 
-    String genTextRandomly() {
+    public static String genTextRandomly(Random random) {
+        return genTextRandomly(random, 64);
+    }
+
+    public static String genTextRandomly(Random random, int bound) {
         Set<Character> s = ModMaterialConditions.TextCondition.storage.keySet();
         StringBuilder res = new StringBuilder();
-        for (int j = 0; j<64; j++) res.append(s.stream().toList().get(random.nextInt(s.size())));
+        for (int j = 0; j<bound; j++) res.append(s.stream().toList().get(random.nextInt(s.size())));
         return res.toString();
     }
 }

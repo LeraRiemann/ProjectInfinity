@@ -13,6 +13,9 @@ import net.lerariemann.infinity.util.ConfigGenerator;
 import net.lerariemann.infinity.util.RandomLootDrops;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.argument.BlockPosArgumentType;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -35,18 +38,16 @@ public class ModCommands {
         ((ServerPlayerEntityAccess)(self)).setWarpTimer(20, value);
     }
 
-    public static long getDimensionSeedFromText(String text, MinecraftServer s) {
-        return getDimensionSeedFromText(text, ((MinecraftServerAccess)(s)).getDimensionProvider());
+    public static long getDimensionSeed(String text, MinecraftServer s) {
+        return getDimensionSeed(text, ((MinecraftServerAccess)(s)).getDimensionProvider());
     }
-    public static long getDimensionSeed(String compound, MinecraftServer s) {
-        return getDimensionSeed(compound, ((MinecraftServerAccess)(s)).getDimensionProvider());
+    public static long getDimensionSeed(NbtCompound compound, MinecraftServer s) {
+        NbtList pages = compound.getList("pages", NbtElement.STRING_TYPE);
+        return getDimensionSeed(pages.get(0).asString(), ((MinecraftServerAccess)(s)).getDimensionProvider());
     }
 
-    public static long getDimensionSeedFromText(String text, RandomProvider prov) {
-        return getDimensionSeed("{pages:[\"" + text + "\"]}", prov);
-    }
-    public static long getDimensionSeed(String compound, RandomProvider prov) {
-        HashCode f = Hashing.sha256().hashString(compound + prov.salt, StandardCharsets.UTF_8);
+    public static long getDimensionSeed(String text, RandomProvider prov) {
+        HashCode f = Hashing.sha256().hashString(text + prov.salt, StandardCharsets.UTF_8);
         return prov.rule("longArithmeticEnabled") ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
     }
 
@@ -62,7 +63,7 @@ public class ModCommands {
                 .requires(source -> source.hasPermissionLevel(2))
                 .then(argument("text", StringArgumentType.string()).executes(context -> {
                     final String text = StringArgumentType.getString(context, "text");
-                    warpId(context, getDimensionSeedFromText(text, context.getSource().getServer()));
+                    warpId(context, getDimensionSeed(text, context.getSource().getServer()));
                     return 1;
                 }))));
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("generate_configs")
