@@ -53,10 +53,19 @@ public class ModMaterialRules {
         static final BlockState floor = Blocks.OAK_SLAB.getDefaultState();
         static final BlockState wall = ModBlocks.BOOK_BOX.getDefaultState();
         static final BlockState decor = Blocks.GLOWSTONE.getDefaultState();
+        static final BlockState glass = Blocks.OAK_TRAPDOOR.getDefaultState();
         static final BlockState column = Blocks.OAK_PLANKS.getDefaultState();
+        static final BlockState air = Blocks.AIR.getDefaultState();
         int normalize(int x, int size) {
             int a = Math.abs(x < 0 ? x+1 : x) % size;
             return (x < 0) ? size - 1 - a : a;
+        }
+        BlockState floor(int max_xz, int min_xz) {
+            if (max_xz == 4) {
+                if (min_xz == 4) return decor;
+                if (min_xz == 0) return glass;
+            }
+            return floor;
         }
         @Override
         public BlockState tryApply(int i, int j, int k) {
@@ -65,18 +74,28 @@ public class ModMaterialRules {
             int z = normalize(k, 15);
             int max_xz = Math.max(Math.abs(7 - x), Math.abs(7 - z));
             int min_xz = Math.min(Math.abs(7 - x), Math.abs(7 - z));
+            if (j == 63) {
+                return floor(max_xz, min_xz); //ceiling
+            }
             if (max_xz == 7) {
-                return (y == 0 && min_xz < 2) ? floor : wall; //walls
+                if (min_xz < 2) {
+                    if (y == 0) return floor;
+                    if (y < 4) return air; //corridors
+                }
+                return wall; //walls
             }
             if (max_xz < 2) {
-                return ((x + z) % 2 == 1) ? wall : column; //column
+                return ((x + z) % 2 == 1) ? wall : column; //central column
             }
             if (max_xz == 2 && min_xz == 1) {
+                if (j == 0) return floor;
                 Direction d = (x == 5 ? Direction.WEST : x == 9 ? Direction.EAST : z == 5 ? Direction.NORTH : Direction.SOUTH);
-                return (j == 0) ? floor : Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, d);
+                return Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, d); //ladders
             }
-            if (max_xz == 4 && min_xz == 4) return decor;
-            return floor;
+            if (y == 0) {
+                return floor(max_xz, min_xz); //floor
+            }
+            return air;
         }
     }
     enum LibraryRule implements MaterialRules.MaterialRule {

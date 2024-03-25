@@ -25,9 +25,7 @@
       "vegetation": "infinity:vegetation",
       "vein_gap": "infinity:vein_gap",
       "continents": "minecraft:overworld/continents",
-      "initial_density_without_jaggedness": {
-        "type": "infinity:menger"
-      },
+      "initial_density_without_jaggedness": -1.0,
       "lava": 0.0,
       "barrier": 0.0,
       "depth": {
@@ -40,10 +38,7 @@
       "ridges": "minecraft:overworld/ridges",
       "erosion": "minecraft:overworld/erosion",
       "temperature": "infinity:temperature",
-      "final_density": {
-        "type": "infinity:menger",
-        "max_y": 242
-      },
+      "final_density": -1.0,
       "vein_toggle": "infinity:vein_toggle",
       "fluid_level_floodedness": 0.0
     },

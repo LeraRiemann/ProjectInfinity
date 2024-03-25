@@ -15,7 +15,7 @@
     "spawn_target": [],
     "noise": {
       "min_y": 0,
-      "height": 64,
+      "height": 96,
       "size_horizontal": 2,
       "size_vertical": 2
     },
@@ -25,24 +25,14 @@
       "vegetation": "infinity:vegetation",
       "vein_gap": "infinity:vein_gap",
       "continents": "minecraft:overworld/continents",
-      "initial_density_without_jaggedness": {
-        "type": "infinity:skygrid"
-      },
+      "initial_density_without_jaggedness": 1.0,
       "lava": 0.0,
       "barrier": 0.0,
-      "depth": {
-        "from_value": 1.5,
-        "to_y": 64,
-        "to_value": -1.5,
-        "type": "minecraft:y_clamped_gradient",
-        "from_y": 0
-      },
+      "depth": 0.0,
       "ridges": "minecraft:overworld/ridges",
       "erosion": "minecraft:overworld/erosion",
       "temperature": "infinity:temperature",
-      "final_density": {
-        "type": "infinity:library"
-      },
+      "final_density": 1.0,
       "vein_toggle": "infinity:vein_toggle",
       "fluid_level_floodedness": 0.0
     },
