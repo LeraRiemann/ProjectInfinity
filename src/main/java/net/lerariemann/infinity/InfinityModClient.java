@@ -19,20 +19,20 @@ import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class InfinityModClient implements ClientModInitializer {
-    static long seed = (new Random()).nextLong();
-    int posToColor(BlockPos pos) {
-        DoublePerlinNoiseSampler sampler_r = DoublePerlinNoiseSampler.create(new CheckedRandom(seed + 10000), -2, 1.0, 1.0, 1.0, 0.0);
-        DoublePerlinNoiseSampler sampler_g = DoublePerlinNoiseSampler.create(new CheckedRandom(seed), -2, 1.0, 1.0, 1.0, 0.0);
-        DoublePerlinNoiseSampler sampler_b = DoublePerlinNoiseSampler.create(new CheckedRandom(seed - 10000), -2, 1.0, 1.0, 1.0, 0.0);
-        double r = sampler_r.sample(pos.getX(), pos.getY(), pos.getZ());
-        double g = sampler_g.sample(pos.getX(), pos.getY(), pos.getZ());
-        double b = sampler_b.sample(pos.getX(), pos.getY(), pos.getZ());
-        return (int)(256 * ((r + 1)/2)) + 256*((int)(256 * ((g + 1)/2)) + 256*(int)(256 * ((b + 1)/2)));
+    final static DoublePerlinNoiseSampler sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -2, 1.0, 1.0, 1.0, 0.0);
+
+    double sample(int x, int y, int z) {
+        return sampler.sample(x, y, z);
     }
 
+    int posToColor(BlockPos pos) {
+        double r = sample(pos.getX(), pos.getY() - 10000, pos.getZ());
+        double g = sample(pos.getX(), pos.getY(), pos.getZ());
+        double b = sample(pos.getX(), pos.getY() + 10000, pos.getZ());
+        return (int)(256 * ((r + 1)/2)) + 256*((int)(256 * ((g + 1)/2)) + 256*(int)(256 * ((b + 1)/2)));
+    }
     @Override
     public void onInitializeClient() {
         ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
@@ -63,7 +63,6 @@ public class InfinityModClient implements ClientModInitializer {
                 biomeids.add(buf.readIdentifier());
                 biomes.add(buf.readNbt());
             }
-
             client.execute(() -> {
                 LogManager.getLogger().info("Packet received");
                 (new DimensionGrabber(client.getNetworkHandler().getRegistryManager())).grab_for_client(id, optiondata, biomeids, biomes);
