@@ -19,8 +19,8 @@
       }
     },
     {
-      "from": [ 0.1, 0.1, 0.1 ],
-      "to": [ 15.9, 15.9, 15.9 ],
+      "from": [ 0.1, 0, 0.1 ],
+      "to": [ 15.9, 16, 15.9 ],
       "faces": {
         "north": { "texture": "#inner", "cullface": "north", "tintindex": 0 },
         "south": { "texture": "#inner", "cullface": "south", "tintindex": 0 },

@@ -19,6 +19,7 @@
       "max_inclusive": 7
     }
   },
+  "fixed_time": 6000,
   "monster_spawn_block_light_limit": 0,
   "infiniburn": "#infiniburn_overworld",
   "effects": "overworld"
