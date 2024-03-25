@@ -74,9 +74,6 @@ public class ModMaterialRules {
             int z = normalize(k, 15);
             int max_xz = Math.max(Math.abs(7 - x), Math.abs(7 - z));
             int min_xz = Math.min(Math.abs(7 - x), Math.abs(7 - z));
-            if (j == 63) {
-                return floor(max_xz, min_xz); //ceiling
-            }
             if (max_xz == 7) {
                 if (min_xz < 2) {
                     if (y == 0) return floor;
