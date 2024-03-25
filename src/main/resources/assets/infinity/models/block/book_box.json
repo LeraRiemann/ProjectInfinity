@@ -1,6 +1,6 @@
 {
   "textures": {
-    "particle": "minecraft:block/chiseled_bookshelf_top",
+    "particle": "minecraft:block/white_concrete",
     "top": "minecraft:block/chiseled_bookshelf_top",
     "side": "infinity:block/book_box_side",
     "inner": "minecraft:block/white_concrete"
