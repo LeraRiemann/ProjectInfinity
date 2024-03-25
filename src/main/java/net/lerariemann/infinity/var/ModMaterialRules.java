@@ -60,13 +60,6 @@ public class ModMaterialRules {
             int a = Math.abs(x < 0 ? x+1 : x) % size;
             return (x < 0) ? size - 1 - a : a;
         }
-        BlockState floor(int max_xz, int min_xz) {
-            if (max_xz == 4) {
-                if (min_xz == 4) return decor;
-                if (min_xz == 0) return glass;
-            }
-            return floor;
-        }
         @Override
         public BlockState tryApply(int i, int j, int k) {
             int x = normalize(i, 15);
@@ -90,7 +83,11 @@ public class ModMaterialRules {
                 return Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, d); //ladders
             }
             if (y == 0) {
-                return floor(max_xz, min_xz); //floor
+                if (max_xz == 4) {
+                    if (min_xz == 4) return decor;
+                    if (min_xz == 0 && j > 0) return glass; //lighting
+                }
+                return floor; //floor
             }
             return air;
         }
