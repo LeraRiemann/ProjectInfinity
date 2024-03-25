@@ -15,7 +15,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.gen.densityfunction.DensityFunction;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
 
 public class ModMaterialRules {
@@ -51,6 +50,10 @@ public class ModMaterialRules {
     }
     public static class Library implements MaterialRules.BlockStateRule
     {
+        static final BlockState floor = Blocks.OAK_SLAB.getDefaultState();
+        static final BlockState wall = ModBlocks.BOOK_BOX.getDefaultState();
+        static final BlockState decor = Blocks.GLOWSTONE.getDefaultState();
+        static final BlockState column = Blocks.OAK_PLANKS.getDefaultState();
         int normalize(int x, int size) {
             int a = Math.abs(x < 0 ? x+1 : x) % size;
             return (x < 0) ? size - 1 - a : a;
@@ -63,17 +66,17 @@ public class ModMaterialRules {
             int max_xz = Math.max(Math.abs(7 - x), Math.abs(7 - z));
             int min_xz = Math.min(Math.abs(7 - x), Math.abs(7 - z));
             if (max_xz == 7) {
-                return (y == 0 && min_xz < 2) ? Blocks.OAK_SLAB.getDefaultState() : ModBlocks.BOOK_BOX.getDefaultState(); //walls
+                return (y == 0 && min_xz < 2) ? floor : wall; //walls
             }
             if (max_xz < 2) {
-                return ((x + z) % 2 == 1) ? ModBlocks.BOOK_BOX.getDefaultState() : Blocks.OAK_PLANKS.getDefaultState(); //column
+                return ((x + z) % 2 == 1) ? wall : column; //column
             }
             if (max_xz == 2 && min_xz == 1) {
                 Direction d = (x == 5 ? Direction.WEST : x == 9 ? Direction.EAST : z == 5 ? Direction.NORTH : Direction.SOUTH);
-                return Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, d);
+                return (j == 0) ? floor : Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, d);
             }
-            if (max_xz == 4 && min_xz == 4) return Blocks.GLOWSTONE.getDefaultState();
-            return Blocks.OAK_SLAB.getDefaultState();
+            if (max_xz == 4 && min_xz == 4) return decor;
+            return floor;
         }
     }
     enum LibraryRule implements MaterialRules.MaterialRule {

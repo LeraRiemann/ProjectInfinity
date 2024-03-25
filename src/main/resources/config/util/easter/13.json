@@ -15,7 +15,7 @@
     "spawn_target": [],
     "noise": {
       "min_y": 0,
-      "height": 256,
+      "height": 64,
       "size_horizontal": 2,
       "size_vertical": 2
     },
@@ -32,7 +32,7 @@
       "barrier": 0.0,
       "depth": {
         "from_value": 1.5,
-        "to_y": 256,
+        "to_y": 64,
         "to_value": -1.5,
         "type": "minecraft:y_clamped_gradient",
         "from_y": 0
@@ -52,6 +52,6 @@
   },
   "biome_source": {
     "type": "fixed",
-    "biome": "infinity:content"
+    "biome": "infinity:default"
   }
 }
