@@ -7,7 +7,7 @@
     "aquifers_enabled": false,
     "legacy_random_source": false,
     "default_block": {
-      "Name": "minecraft:air"
+      "Name": "minecraft:stone"
     },
     "default_fluid": {
       "Name": "minecraft:air"
@@ -26,7 +26,7 @@
       "vein_gap": "infinity:vein_gap",
       "continents": "minecraft:overworld/continents",
       "initial_density_without_jaggedness": {
-        "type": "infinity:menger"
+        "type": "infinity:skygrid"
       },
       "lava": 0.0,
       "barrier": 0.0,
@@ -41,21 +41,17 @@
       "erosion": "minecraft:overworld/erosion",
       "temperature": "infinity:temperature",
       "final_density": {
-        "type": "infinity:menger",
-        "max_y": 242
+        "type": "infinity:library"
       },
       "vein_toggle": "infinity:vein_toggle",
       "fluid_level_floodedness": 0.0
     },
     "surface_rule": {
-      "type": "minecraft:block",
-      "result_state": {
-        "Name": "minecraft:air"
-      }
+      "type": "infinity:library"
     }
   },
   "biome_source": {
     "type": "fixed",
-    "biome": "infinity:default"
+    "biome": "infinity:content"
   }
 }

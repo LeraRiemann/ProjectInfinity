@@ -64,6 +64,11 @@
       "easter-id": 12,
       "easter-type": 0,
       "text": "content"
+    },
+    {
+      "easter-id": 13,
+      "easter-type": 0,
+      "text": "library"
     }
   ]
 }

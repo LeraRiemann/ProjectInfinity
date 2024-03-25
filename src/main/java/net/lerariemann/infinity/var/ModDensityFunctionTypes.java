@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.var;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.registry.Registries;
@@ -199,12 +200,72 @@ public class ModDensityFunctionTypes {
         }
     }
 
+    interface TileableStructure extends DensityFunction.Base {
+        int size(int axis);
+        boolean testBlock(int x, int y, int z);
+
+        default int normalize(int x, int axis) {
+            int a = Math.abs(x < 0 ? x+1 : x) % size(axis);
+            return (x < 0) ? size(axis) - 1 - a : a;
+        }
+
+        @Override
+        default double sample(NoisePos pos) {
+            int x = normalize(pos.blockX(),0);
+            int y = normalize(pos.blockY(),1);
+            int z = normalize(pos.blockZ(),2);
+            return testBlock(x, y, z) ? 1 : -1;
+        }
+        @Override
+        default double minValue() {
+            return -1;
+        }
+        @Override
+        default double maxValue() {
+            return 1;
+        }
+    }
+
+    public enum Library implements TileableStructure {
+        INSTANCE;
+        static final CodecHolder<Library> CODEC_HOLDER = CodecHolder.of(MapCodec.unit(INSTANCE));
+
+        @Override
+        public int size(int axis) {
+            return (axis == 1) ? 16 : 15;
+        }
+
+        @Override
+        public boolean testBlock(int x, int y, int z) {
+            int max_xz = Math.max(Math.abs(7 - x), Math.abs(7 - z));
+            int min_xz = Math.min(Math.abs(7 - x), Math.abs(7 - z));
+            if (max_xz == 7) {
+                return y >= 3 || y == 0 || min_xz > 1; //walls
+            }
+            if (max_xz < 2) {
+                return true; // central column 3*3
+            }
+            if (max_xz == 2 && min_xz == 1) return true; //ladders
+            return y == 0; // floor
+        }
+
+        @Override
+        public CodecHolder<? extends DensityFunction> getCodecHolder() {
+            return CODEC_HOLDER;
+        }
+    }
+
+    public static <T extends DensityFunction> void register(String name, CodecHolder<T> holder) {
+        Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":" + name, holder.codec());
+    }
+
     public static void registerFunctions() {
         for (NonbinaryOperation.Type enum_ : NonbinaryOperation.Type.values()) {
-            Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":" + enum_.name, enum_.codecHolder.codec());
+            register(enum_.name, enum_.codecHolder);
         }
-        Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":coordinate", Coordinate.CODEC_HOLDER.codec());
-        Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":menger", Menger.CODEC_HOLDER.codec());
-        Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":skygrid", Skygrid.CODEC_HOLDER.codec());
+        register("coordinate", Coordinate.CODEC_HOLDER);
+        register("menger", Menger.CODEC_HOLDER);
+        register("skygrid", Skygrid.CODEC_HOLDER);
+        register("library", Library.CODEC_HOLDER);
     }
 }
