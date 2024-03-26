@@ -139,11 +139,14 @@ public class ChaosPawn extends HostileEntity {
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random r = new Random();
         setAllColors(r, world.getBlockState(this.getBlockPos().down(2)));
-        this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(r.nextInt(Registries.ITEM.size())).getDefaultStack());
-        ((MobEntityAccess)this).setPersistent(false);
         double i = 15*r.nextExponential();
         this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(i);
         this.setHealth((float)i);
+        int a;
+        if ((a = (int)(0.1*i)) > 0) {
+            this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(r.nextInt(Registries.ITEM.size())).getDefaultStack().copyWithCount(a));
+            ((MobEntityAccess)this).setPersistent(false);
+        }
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 }
