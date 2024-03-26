@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.access;
+package net.lerariemann.access;
 
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.registry.RegistryKey;

@@ -28,6 +28,5 @@ public class ModBlocks {
         registerBlock("book_box", BOOK_BOX);
         registerItem("book_box", BOOK_BOX_ITEM);
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(content -> content.addAfter(Items.CHISELED_BOOKSHELF, BOOK_BOX_ITEM));
-        InfinityMod.LOGGER.debug("Registering ModBlocks for " + InfinityMod.MOD_ID);
     }
 }

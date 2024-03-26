@@ -2,7 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.access.MinecraftServerAccess;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
@@ -42,7 +42,6 @@ public class RandomDimension {
     public MinecraftServer server;
     public NbtCompound data;
     public RandomDimensionType type;
-    public String typeForEaster;
 
     public RandomDimension(long i, MinecraftServer server) {
         random = new Random(i);
@@ -81,7 +80,6 @@ public class RandomDimension {
         underwater = new HashMap<>();
         structure_ids = new HashMap<>();
         additional_blocks = new ArrayList<>();
-        typeForEaster = "";
     }
 
     public void genBasics() {

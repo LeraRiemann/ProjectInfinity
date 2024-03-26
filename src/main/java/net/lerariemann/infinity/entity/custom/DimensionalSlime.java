@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.access.MinecraftServerAccess;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

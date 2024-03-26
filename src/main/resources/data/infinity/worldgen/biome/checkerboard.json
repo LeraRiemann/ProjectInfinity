@@ -26,7 +26,20 @@
     ],
     []
   ],
-  "spawners": {},
-  "spawn_costs": {},
-  "carvers": {}
+  "spawners": {
+    "monster": [
+      {
+        "type": "infinity:chaos_pawn",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 100
+      }
+    ]
+  },
+  "spawn_costs": {
+  },
+  "carvers": {},
+  "values": [
+    
+  ]
 }

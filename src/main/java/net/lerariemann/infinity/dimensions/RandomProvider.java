@@ -45,7 +45,7 @@ public class RandomProvider {
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
         register_all();
-        easterizer = new Easterizer(CommonIO.read(configPath + "util/easter/egg_map.json").getList("elements", NbtElement.COMPOUND_TYPE),this);
+        easterizer = new Easterizer(this);
     }
 
     void register_all() {

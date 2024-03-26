@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.mixin;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
+import net.lerariemann.access.MinecraftServerAccess;
+import net.lerariemann.access.ServerPlayerEntityAccess;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;

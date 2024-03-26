@@ -10,6 +10,7 @@
     "EntityMixin",
     "MaterialRuleContextAccess",
     "MinecraftServerMixin",
+    "MobEntityMixin",
     "NetherPortalBlockMixin",
     "PortalForcerMixin",
     "ServerPlayerEntityMixin",
