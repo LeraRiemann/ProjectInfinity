@@ -7,6 +7,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.custom.*;
 import net.lerariemann.infinity.entity.client.*;
 import net.minecraft.entity.*;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
@@ -35,7 +36,7 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(DIMENSIONAL_SLIME, DimensionalSlime.createAttributes());
         FabricDefaultAttributeRegistry.register(DIMENSIONAL_SKELETON, AbstractSkeletonEntity.createAbstractSkeletonAttributes());
         FabricDefaultAttributeRegistry.register(DIMENSIONAL_CREEPER, CreeperEntity.createCreeperAttributes());
-        FabricDefaultAttributeRegistry.register(CHAOS_PAWN, HostileEntity.createHostileAttributes());
+        FabricDefaultAttributeRegistry.register(CHAOS_PAWN, HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0));
     }
 
     public static void registerEntityRenderers() {

@@ -15,7 +15,7 @@ public class ChaosPawnRenderer extends MobEntityRenderer<ChaosPawn, BipedEntityM
         this.addFeature(new ChaosPawnTint(this, new BipedEntityModel<>(context.getModelLoader().getModelPart(EntityModelLayers.PLAYER))));
     }
     @Override
-    public Identifier getTexture(ChaosPawn slimeEntity) {
+    public Identifier getTexture(ChaosPawn e) {
         return TEXTURE;
     }
 }

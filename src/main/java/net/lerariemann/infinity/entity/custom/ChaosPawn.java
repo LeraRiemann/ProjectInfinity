@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -49,6 +50,7 @@ public class ChaosPawn extends HostileEntity {
     @Override
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
+        this.goalSelector.add(1, new EscapeDangerGoal(this, 1.25));
         this.goalSelector.add(2, new MeleeAttackGoal(this, 1.0, false));
         this.targetSelector.add(3, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
         this.goalSelector.add(5, new EatGrassGoal(this));
@@ -60,7 +62,7 @@ public class ChaosPawn extends HostileEntity {
     @Override
     public void onEatingGrass() {
         super.onEatingGrass();
-        this.setAllColors(new Random(), this.getWorld().getBiome(this.getBlockPos()).value().getGrassColorAt(this.getX(), this.getZ()));
+        this.setAllColors(this.getWorld().getBiome(this.getBlockPos()).value().getGrassColorAt(this.getX(), this.getZ()));
     }
 
     @Override
@@ -80,32 +82,35 @@ public class ChaosPawn extends HostileEntity {
     @Override
     public Identifier getLootTableId() {
         return switch (this.dataTracker.get(special_case)) {
-            case 0 -> new Identifier("infinity:entities/chaos_pawn_black.json");
-            case 1 -> new Identifier("infinity:entities/chaos_pawn_white.json");
+            case 0 -> new Identifier("infinity:entities/chaos_pawn_black");
+            case 1 -> new Identifier("infinity:entities/chaos_pawn_white");
             default -> new Identifier("");
         };
     }
 
-    public void setAllColors(Random r, int color) {
+    public void setAllColors(int color) {
         NbtCompound c = new NbtCompound();
         Arrays.stream((new String[]{"head", "body", "left_arm", "right_arm", "left_leg", "right_leg"})).forEach(s -> c.putInt(s, color));
-        c.putInt("hat", r.nextInt(16777216));
+        c.putInt("hat", 0xFFFFFF ^ color);
         this.setColors(c);
     }
 
     public void setAllColors(Random r, BlockState state) {
         if (state.isOf(Blocks.WHITE_WOOL)) {
             this.dataTracker.set(special_case, 1);
-            setAllColors(r, 16777215);
+            setAllColors(16777215);
             return;
         }
         if (state.isOf(Blocks.BLACK_WOOL)) {
             this.dataTracker.set(special_case, 0);
-            setAllColors(r, 0);
+            setAllColors(0);
             return;
         }
         NbtCompound c = new NbtCompound();
-        Arrays.stream((new String[]{"head", "body", "hat", "left_arm", "right_arm", "left_leg", "right_leg"})).forEach(s -> c.putInt(s, r.nextInt(16777216)));
+        int i = r.nextInt(16777216);
+        Arrays.stream((new String[]{"body", "left_arm", "right_arm", "left_leg", "right_leg"})).forEach(s -> c.putInt(s, r.nextInt(16777216)));
+        c.putInt("head", i);
+        c.putInt("hat", i ^ 0xFFFFFF);
         this.setColors(c);
     }
 
@@ -134,10 +139,11 @@ public class ChaosPawn extends HostileEntity {
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random r = new Random();
         setAllColors(r, world.getBlockState(this.getBlockPos().down(2)));
-        if (this.dataTracker.get(special_case) < 0) {
-            this.equipLootStack(EquipmentSlot.FEET, Registries.ITEM.get(r.nextInt(Registries.ITEM.size())).getDefaultStack());
-            ((MobEntityAccess)this).setPersistent(false);
-        }
+        this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(r.nextInt(Registries.ITEM.size())).getDefaultStack());
+        ((MobEntityAccess)this).setPersistent(false);
+        double i = 15*r.nextExponential();
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(i);
+        this.setHealth((float)i);
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 }
