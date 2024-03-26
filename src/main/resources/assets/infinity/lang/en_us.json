@@ -12,7 +12,8 @@
   "biome.infinity.random_forest": "Random Forest",
   "biome.infinity.content": "Content Void",
   "biome.infinity.default": "Default Void",
-  "entity.infinity.dimensional_slime": "Chaotic Slime",
-  "entity.infinity.dimensional_skeleton": "Chaotic Skeleton",
-  "entity.infinity.dimensional_creeper": "Chaotic Creeper"
+  "entity.infinity.dimensional_slime": "Chaos Slime",
+  "entity.infinity.dimensional_skeleton": "Chaos Skeleton",
+  "entity.infinity.dimensional_creeper": "Chaos Creeper",
+  "entity.infinity.chaos_pawn": "Chaos Pawn"
 }
