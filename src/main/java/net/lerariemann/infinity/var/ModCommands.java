@@ -7,6 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.lerariemann.access.ServerPlayerEntityAccess;
 import net.lerariemann.access.MinecraftServerAccess;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.ConfigGenerator;
@@ -16,11 +17,14 @@ import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 import java.nio.charset.StandardCharsets;
@@ -38,6 +42,14 @@ public class ModCommands {
         if (bl2) self.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
         self.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
         ((ServerPlayerEntityAccess)(self)).setWarpTimer(20, value);
+    }
+
+    public static boolean checkEnd(long d, MinecraftServer s) {
+        return (d == ModCommands.getDimensionSeed("abatised redivides", s));
+    }
+
+    public static RegistryKey<World> getKey(long d, MinecraftServer s) {
+        return checkEnd(d, s) ? World.END : RegistryKey.of(RegistryKeys.WORLD, InfinityMod.getId("generated_" + d));
     }
 
     public static long getDimensionSeed(String text, MinecraftServer s) {

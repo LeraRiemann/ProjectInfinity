@@ -2,11 +2,10 @@ package net.lerariemann.infinity.mixin;
 
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.var.ModCommands;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,8 +32,8 @@ public class EntityMixin {
         if (serverWorld.getBlockState(this.lastNetherPortalPosition).isOf(ModBlocks.NEITHER_PORTAL)) {
             NeitherPortalBlockEntity e = ((NeitherPortalBlockEntity)serverWorld.getBlockEntity(this.lastNetherPortalPosition));
             if (e == null) return serverWorld;
-            long id = e.getDimension();
-            serverWorld2 = serverWorld.getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD, new Identifier("infinity:generated_" + id)));
+            long d = e.getDimension();
+            serverWorld2 = serverWorld.getServer().getWorld(ModCommands.getKey(d, serverWorld.getServer()));
             return (serverWorld2 != null && e.getOpen()) ? serverWorld2 : serverWorld;
         }
         return (serverWorld2 != null) ? serverWorld2 : serverWorld;

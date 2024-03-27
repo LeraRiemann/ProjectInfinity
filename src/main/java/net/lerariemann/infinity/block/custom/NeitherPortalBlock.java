@@ -15,6 +15,7 @@ import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.loading.DimensionGrabber;
+import net.lerariemann.infinity.var.ModCommands;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.BlockEntityProvider;
@@ -165,7 +166,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     public static boolean addDimension(MinecraftServer server, long i, boolean bl) {
         Identifier id = InfinityMod.getId("generated_" + i);
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
-        if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
+        if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key)) && !ModCommands.checkEnd(i, server)) {
             RandomDimension d = new RandomDimension(i, server);
             if (bl) {
                 ((MinecraftServerAccess) (server)).addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(Paths.get(d.storagePath), i));

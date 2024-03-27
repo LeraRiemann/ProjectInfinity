@@ -8,28 +8,36 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TimeHelper;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.UUID;
 
-public class ChaosPawn extends HostileEntity {
+public class ChaosPawn extends HostileEntity implements Angerable {
     public static final TrackedData<NbtCompound> colors = DataTracker.registerData(ChaosPawn.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
     public static final TrackedData<Integer> special_case = DataTracker.registerData(ChaosPawn.class, TrackedDataHandlerRegistry.INTEGER);
+    private int angerTime;
+    @Nullable
+    private UUID angryAt;
 
     public ChaosPawn(EntityType<? extends ChaosPawn> entityType, World world) {
         super(entityType, world);
@@ -42,6 +50,32 @@ public class ChaosPawn extends HostileEntity {
     }
 
     @Override
+    public void setAngerTime(int angerTime) {
+        this.angerTime = angerTime;
+    }
+    @Override
+    public int getAngerTime() {
+        return this.angerTime;
+    }
+    @Override
+    public void setAngryAt(@Nullable UUID angryAt) {
+        this.angryAt = angryAt;
+    }
+    @Override
+    @Nullable
+    public UUID getAngryAt() {
+        return this.angryAt;
+    }
+    @Override
+    public void chooseRandomAngerTime() {
+        this.setAngerTime(TimeHelper.betweenSeconds(20, 40).get(this.random));
+    }
+
+    public static DefaultAttributeContainer.Builder createAttributes() {
+        return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0);
+    }
+
+    @Override
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(colors, new NbtCompound());
@@ -50,9 +84,10 @@ public class ChaosPawn extends HostileEntity {
     @Override
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new EscapeDangerGoal(this, 1.25));
+        this.targetSelector.add(1, new RevengeGoal(this).setGroupRevenge());
         this.goalSelector.add(2, new MeleeAttackGoal(this, 1.0, false));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.add(3, new ActiveTargetGoal<>(this, DimensionalSlime.class, true));
+        this.targetSelector.add(3, new UniversalAngerGoal<>(this, true));
         this.goalSelector.add(5, new EatGrassGoal(this));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
         this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
@@ -148,5 +183,11 @@ public class ChaosPawn extends HostileEntity {
             ((MobEntityAccess)this).setPersistent(false);
         }
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+    }
+
+    @Override
+    protected void mobTick() {
+        this.tickAngerLogic((ServerWorld)this.getWorld(), false);
+        super.mobTick();
     }
 }

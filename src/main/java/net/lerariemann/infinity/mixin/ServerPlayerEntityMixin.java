@@ -4,18 +4,17 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.access.MinecraftServerAccess;
 import net.lerariemann.access.ServerPlayerEntityAccess;
+import net.lerariemann.infinity.var.ModCommands;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
@@ -75,7 +74,7 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
     private void onTick(CallbackInfo ci) {
         if (--this.ticksUntilWarp == 0L) {
             MinecraftServer s = this.getServerWorld().getServer();
-            ServerWorld w = s.getWorld(RegistryKey.of(RegistryKeys.WORLD, new Identifier("infinity:generated_" + this.idForWarp)));
+            ServerWorld w = s.getWorld(ModCommands.getKey(this.idForWarp, s));
             if (w==null) return;
             double d = DimensionType.getCoordinateScaleFactor(this.getServerWorld().getDimension(), w.getDimension());
             Entity self = getCameraEntity();
