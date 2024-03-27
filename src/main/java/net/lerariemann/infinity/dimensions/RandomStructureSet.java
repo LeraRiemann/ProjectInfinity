@@ -20,7 +20,7 @@ public class RandomStructureSet {
     }
 
     void save() {
-        CommonIO.write(data, parent.parent.parent.storagePath + "/worldgen/structure_set", parent.name + ".json");
+        CommonIO.write(data, parent.parent.parent.getStoragePath() + "/worldgen/structure_set", parent.name + ".json");
     }
 
     NbtList structures() {

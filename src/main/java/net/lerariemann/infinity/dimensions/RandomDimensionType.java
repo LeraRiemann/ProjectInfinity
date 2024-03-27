@@ -47,16 +47,7 @@ public class RandomDimensionType {
         String s = dim.PROVIDER.randomName(random, "effects");
         foggy = s.equals("minecraft:the_nether");
         data.putString("effects", s);
-        CommonIO.write(data, dim.storagePath + "/dimension_type", name + ".json");
-    }
-
-    public RandomDimensionType(RandomDimension dim, NbtCompound data) {
-        parent = dim;
-        random = dim.random;
-        name = "generated_" +dim.id;
-        fullname = InfinityMod.MOD_ID + ":" + name;
-        this.data = data;
-        CommonIO.write(data, dim.storagePath + "/dimension_type", name + ".json");
+        CommonIO.write(data, dim.getStoragePath() + "/dimension_type", name + ".json");
     }
 
     boolean roll(String key) {

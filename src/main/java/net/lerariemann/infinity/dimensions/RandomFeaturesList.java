@@ -23,7 +23,7 @@ public class RandomFeaturesList {
         random = biome.random;
         PROVIDER = biome.PROVIDER;
         surface_block = parent.parent.top_blocks.get(parent.fullname);
-        storagePath = biome.parent.storagePath;
+        storagePath = biome.parent.getStoragePath();
         blocks = new ArrayList<>();
         useVanillaFeatures = roll("generate_vanilla_features");
         data = new NbtList();

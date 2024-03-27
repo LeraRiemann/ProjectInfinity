@@ -50,7 +50,7 @@ public class RandomNoisePreset {
         data.put("noise_router", getRouter(noise_router));
         data.put("spawn_target", CommonIO.read(PROVIDER.configPath + "util/spawn_target/" + spawn_target + ".json").get("spawn_target"));
         data.put("surface_rule", buildSurfaceRule());
-        CommonIO.write(data, dim.storagePath + "/worldgen/noise_settings", name + ".json");
+        CommonIO.write(data, dim.getStoragePath() + "/worldgen/noise_settings", name + ".json");
     }
 
     NbtCompound noise(RandomDimension dim) {

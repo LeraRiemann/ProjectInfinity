@@ -48,7 +48,7 @@ public class RandomCarver {
             config.put("shape", shape);
         }
         res.put("config", config);
-        CommonIO.write(res, parent.parent.storagePath + "/worldgen/configured_carver", name + ".json");
+        CommonIO.write(res, parent.parent.getStoragePath() + "/worldgen/configured_carver", name + ".json");
     }
 
     void putScale(NbtCompound config, String key, float bound) {

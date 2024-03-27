@@ -1,117 +1,89 @@
 {
   "parent": "infinity:library",
   "criteria": {
-    "library": {
+    "debug": {
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "infinity:library"
-              }
-            }
-          }
-        ]
+        "to": "infinity:debug"
       },
-      "trigger": "minecraft:location"
-    },
-    "checkerboard": {
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "infinity:checkerboard"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
-    },
-    "pride": {
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "infinity:pride"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
-    },
-    "sponge": {
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "infinity:sponge"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
+      "trigger": "minecraft:changed_dimension"
     },
     "chaos": {
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "infinity:chaos"
-              }
-            }
-          }
-        ]
+        "to": "infinity:chaos"
       },
-      "trigger": "minecraft:location"
+      "trigger": "minecraft:changed_dimension"
+    },
+    "checkerboard": {
+      "conditions": {
+        "to": "infinity:checkerboard"
+      },
+      "trigger": "minecraft:changed_dimension"
     },
     "content": {
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "infinity:content"
-              }
-            }
-          }
-        ]
+        "to": "infinity:content"
       },
-      "trigger": "minecraft:location"
+      "trigger": "minecraft:changed_dimension"
     },
-    "slime_plains": {
+    "credits": {
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "infinity:slime_plains"
-              }
-            }
-          }
-        ]
+        "to": "infinity:credits"
       },
-      "trigger": "minecraft:location"
+      "trigger": "minecraft:changed_dimension"
+    },
+    "elephants": {
+      "conditions": {
+        "to": "infinity:elephants"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "hills": {
+      "conditions": {
+        "to": "infinity:hills"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "library": {
+      "conditions": {
+        "to": "infinity:library"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "pride": {
+      "conditions": {
+        "to": "infinity:pride"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "random_forest": {
+      "conditions": {
+        "to": "infinity:random_forest"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "skygrid": {
+      "conditions": {
+        "to": "infinity:skygrid"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "slime": {
+      "conditions": {
+        "to": "infinity:slime"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "spiral": {
+      "conditions": {
+        "to": "infinity:spiral"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "sponge": {
+      "conditions": {
+        "to": "infinity:sponge"
+      },
+      "trigger": "minecraft:changed_dimension"
     }
   },
   "display": {

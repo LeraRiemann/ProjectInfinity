@@ -51,6 +51,6 @@
   },
   "biome_source": {
     "type": "fixed",
-    "biome": "infinity:default"
+    "biome": "infinity:content"
   }
 }

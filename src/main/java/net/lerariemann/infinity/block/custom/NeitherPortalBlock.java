@@ -29,13 +29,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -54,7 +54,6 @@ import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.Random;
@@ -164,14 +163,13 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
 
     public static boolean addDimension(MinecraftServer server, long i, boolean bl) {
-        Identifier id = InfinityMod.getId("generated_" + i);
-        RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
+        RegistryKey<World> key = ModCommands.getKey(i, server);
         if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key)) && !ModCommands.checkEnd(i, server)) {
             RandomDimension d = new RandomDimension(i, server);
             if (bl) {
-                ((MinecraftServerAccess) (server)).addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(Paths.get(d.storagePath), i));
+                ((MinecraftServerAccess) (server)).addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d));
                 server.getPlayerManager().getPlayerList().forEach(a ->
-                        ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(id, d)));
+                        ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(ModCommands.getIdentifier(i, server), d)));
                 LogManager.getLogger().info("Packet sent");
                 return true;
             }
@@ -182,7 +180,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     static PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeIdentifier(id);
-        buf.writeNbt(d.type.data);
+        buf.writeNbt(d.type != null ? d.type.data : new NbtCompound());
         buf.writeInt(d.random_biomes.size());
         d.random_biomes.forEach(b -> {
             buf.writeIdentifier(InfinityMod.getId(b.name));

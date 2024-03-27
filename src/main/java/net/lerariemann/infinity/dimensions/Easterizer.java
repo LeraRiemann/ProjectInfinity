@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.dimensions;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.var.ModCommands;
 import net.minecraft.nbt.NbtCompound;
@@ -14,7 +15,7 @@ import static java.nio.file.Files.walk;
 
 
 public class Easterizer {
-    Map<Long, Pair<NbtCompound, String>> map;
+    Map<Long, Pair<NbtCompound, Pair<String, String>>> map;
 
     public Easterizer(RandomProvider prov) {
         map = new HashMap<>();
@@ -35,7 +36,7 @@ public class Easterizer {
                         compound.remove("easter-type");
                     }
                     Long l = ModCommands.getDimensionSeed(name, prov);
-                    Pair<NbtCompound, String> easter_pair = new Pair<>(compound, type);
+                    Pair<NbtCompound, Pair<String, String>> easter_pair = new Pair<>(compound, new Pair<>(name, type));
                     map.put(l, easter_pair);
                 }});
         } catch (IOException e) {
@@ -44,11 +45,19 @@ public class Easterizer {
     }
 
     public static boolean easterize(RandomDimension d) {
-        Map<Long, Pair<NbtCompound, String>> map = d.PROVIDER.easterizer.map;
+        Map<Long, Pair<NbtCompound, Pair<String, String>>> map = d.PROVIDER.easterizer.map;
         if (!map.containsKey(d.id)) return false;
-        d.type = new RandomDimensionType(d, CommonIO.read(d.PROVIDER.configPath + "util/easter/" + map.get(d.id).getRight() + "_type.json"));
-        d.data.putString("type", d.type.fullname);
+        d.data.putString("type", InfinityMod.MOD_ID + ":" + map.get(d.id).getRight().getRight() + "_type");
         d.data.put("generator", map.get(d.id).getLeft());
         return true;
+    }
+
+    public boolean isEaster(long d) {
+        return map.containsKey(d);
+    }
+
+    public String keyOf(long d) {
+        if (!isEaster(d)) return "generated_" + d;
+        return map.get(d).getRight().getLeft();
     }
 }

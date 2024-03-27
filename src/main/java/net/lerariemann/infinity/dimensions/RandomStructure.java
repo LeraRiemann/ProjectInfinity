@@ -61,7 +61,7 @@ public class RandomStructure {
             case "shipwreck" -> data.putBoolean("is_beached", roll("shipwrecks_beach"));
             case "mineshaft" -> data.putString("mineshaft_type", roll("mineshafts_mesa") ? "mesa" : "normal");
         }
-        CommonIO.write(data, parent.parent.storagePath + "/worldgen/structure", name + ".json");
+        CommonIO.write(data, parent.parent.getStoragePath() + "/worldgen/structure", name + ".json");
         (new RandomStructureSet(this)).save();
     }
 

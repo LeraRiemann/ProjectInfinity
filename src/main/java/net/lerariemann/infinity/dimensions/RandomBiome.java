@@ -35,7 +35,7 @@ public class RandomBiome {
         data.put("spawn_costs", spawnCosts());
         data.put("features", (new RandomFeaturesList(this)).data);
         data.put("carvers", carvers());
-        CommonIO.write(data, dim.storagePath + "/worldgen/biome", name + ".json");
+        CommonIO.write(data, dim.getStoragePath() + "/worldgen/biome", name + ".json");
     }
 
     boolean roll(String key) {

@@ -23,6 +23,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
@@ -48,8 +49,13 @@ public class ModCommands {
         return (d == ModCommands.getDimensionSeed("abatised redivides", s));
     }
 
+    public static Identifier getIdentifier(long d, MinecraftServer s) {
+        String s1 = ((MinecraftServerAccess)s).getDimensionProvider().easterizer.keyOf(d);
+        return InfinityMod.getId(s1);
+    }
+
     public static RegistryKey<World> getKey(long d, MinecraftServer s) {
-        return checkEnd(d, s) ? World.END : RegistryKey.of(RegistryKeys.WORLD, InfinityMod.getId("generated_" + d));
+        return checkEnd(d, s) ? World.END : RegistryKey.of(RegistryKeys.WORLD, getIdentifier(d, s));
     }
 
     public static long getDimensionSeed(String text, MinecraftServer s) {

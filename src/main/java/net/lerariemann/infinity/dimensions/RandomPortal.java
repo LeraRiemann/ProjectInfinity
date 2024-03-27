@@ -35,7 +35,7 @@ public class RandomPortal {
     }
 
     void save() {
-        CommonIO.write(data, parent.parent.storagePath + "/worldgen/structure", name + ".json");
-        CommonIO.write(dataset, parent.parent.storagePath + "/worldgen/structure_set", name + ".json");
+        CommonIO.write(data, parent.parent.getStoragePath() + "/worldgen/structure", name + ".json");
+        CommonIO.write(dataset, parent.parent.getStoragePath() + "/worldgen/structure_set", name + ".json");
     }
 }

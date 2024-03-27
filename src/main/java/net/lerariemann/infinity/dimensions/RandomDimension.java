@@ -20,7 +20,6 @@ import java.util.*;
 
 public class RandomDimension {
     public final long id;
-    public final String rootPath, storagePath;
     public final RandomProvider PROVIDER;
     public String name, fullname;
     public final Random random;
@@ -47,10 +46,8 @@ public class RandomDimension {
         this.server = server;
         PROVIDER = ((MinecraftServerAccess)(server)).getDimensionProvider();
         id = i;
-        name = "generated_"+i;
+        name = PROVIDER.easterizer.keyOf(i);
         fullname = InfinityMod.MOD_ID + ":" + name;
-        rootPath = server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + name;
-        storagePath = rootPath + "/data/" + InfinityMod.MOD_ID;
         createDirectories();
         initializeStorage();
         if (Easterizer.easterize(this)) {
@@ -66,8 +63,16 @@ public class RandomDimension {
             random_biomes.add(b);
             addStructures(b);
         }
-        writeTags(rootPath);
+        writeTags(getRootPath());
         wrap_up();
+    }
+
+    public String getRootPath() {
+        return server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + name;
+    }
+
+    public String getStoragePath() {
+        return getRootPath() + "/data/" + InfinityMod.MOD_ID;
     }
 
     public void initializeStorage() {
@@ -103,8 +108,8 @@ public class RandomDimension {
     }
 
     void wrap_up() {
-        CommonIO.write(data, storagePath + "/dimension", name + ".json");
-        if (!(Paths.get(rootPath + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), rootPath, "pack.mcmeta");
+        CommonIO.write(data, getStoragePath() + "/dimension", name + ".json");
+        if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
     }
 
     String defaultblock(String s) {
@@ -143,7 +148,7 @@ public class RandomDimension {
         for (String s: new String[]{"dimension", "dimension_type", "worldgen/biome", "worldgen/configured_feature",
                 "worldgen/placed_feature", "worldgen/noise_settings", "worldgen/configured_carver", "worldgen/structure", "worldgen/structure_set"}) {
             try {
-                Files.createDirectories(Paths.get(storagePath + "/" + s));
+                Files.createDirectories(Paths.get(getStoragePath() + "/" + s));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

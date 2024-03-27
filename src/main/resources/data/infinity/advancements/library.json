@@ -3,19 +3,9 @@
   "criteria": {
     "library": {
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "infinity:library"
-              }
-            }
-          }
-        ]
+        "to": "infinity:library"
       },
-      "trigger": "minecraft:location"
+      "trigger": "minecraft:changed_dimension"
     }
   },
   "display": {
