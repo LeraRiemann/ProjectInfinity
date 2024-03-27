@@ -4,8 +4,10 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.access.MinecraftServerAccess;
 import net.lerariemann.access.ServerPlayerEntityAccess;
+import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -53,13 +55,18 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
         if (((MinecraftServerAccess)(serverWorld.getServer())).getDimensionProvider().rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = BlockPos.ofFloored(teleportTarget.position);
+            boolean bl = false;
             for (BlockPos pos2: new BlockPos[] {pos, pos.add(1, 0, 0), pos.add(0, 0, 1),
                     pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
+                bl = true;
                 String keystr = registryKey.getValue().getPath();
                 String is = keystr.substring(keystr.lastIndexOf("_") + 1);
                 long i = Long.parseLong(is);
                 NeitherPortalBlock.modifyPortal(destination, pos2, destination.getBlockState(pos), i, true);
                 break;
+            }
+            if (bl) {
+                ((PlayerEntity)(Object)this).increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
             }
         }
     }

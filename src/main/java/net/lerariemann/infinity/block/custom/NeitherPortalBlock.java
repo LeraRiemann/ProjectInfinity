@@ -12,14 +12,22 @@ import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.loading.DimensionGrabber;
+import net.lerariemann.infinity.var.ModCriteria;
+import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
@@ -28,6 +36,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -37,6 +47,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
@@ -59,15 +70,17 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         return new NeitherPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
     }
 
-    public static void open(MinecraftServer s, World world, BlockPos pos) {
+    public static boolean open(MinecraftServer s, World world, BlockPos pos, boolean countRepeats) {
         RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
         BlockEntity blockEntity = world.getBlockEntity(pos);
+        boolean bl = false;
         if (blockEntity instanceof NeitherPortalBlockEntity) {
             long i = ((NeitherPortalBlockEntity) blockEntity).getDimension();
-            addDimension(s, i, prov.rule("runtimeGenerationEnabled"));
+            bl = countRepeats || addDimension(s, i, prov.rule("runtimeGenerationEnabled"));
             modifyPortal(world, pos, world.getBlockState(pos), i, true);
             world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
         }
+        return bl;
     }
 
     private static void changeDim(World world, BlockPos pos, Direction.Axis axis, long i, boolean open) {
@@ -124,26 +137,33 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 if (((NeitherPortalBlockEntity)blockEntity).getOpen()) return ActionResult.SUCCESS;
                 RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
                 boolean bl = prov.portalKey.isBlank();
+                boolean bl2 = false;
                 if (bl) {
-                    open(s, world, pos);
-                    return ActionResult.SUCCESS;
+                    bl2 = open(s, world, pos, false);
                 }
-                ItemStack itemStack = player.getStackInHand(hand);
-                Item item = Registries.ITEM.get(new Identifier(prov.portalKey));
-                if (itemStack.isOf(item)) {
-                    if (!player.getAbilities().creativeMode) {
-                        itemStack.decrement(1);
+                else {
+                    ItemStack itemStack = player.getStackInHand(hand);
+                    Item item = Registries.ITEM.get(new Identifier(prov.portalKey));
+                    if (itemStack.isOf(item)) {
+                        if (!player.getAbilities().creativeMode) {
+                            itemStack.decrement(1);
+                        }
+                        bl2 = open(s, world, pos, false);
                     }
-                    open(s, world, pos);
                 }
+                if (bl2) {
+                    player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
+                    ModCriteria.DIMS_OPENED.trigger((ServerPlayerEntity)player);
+                }
+                player.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
             }
         }
         return ActionResult.SUCCESS;
     }
 
 
-    public static void addDimension(MinecraftServer server, long i, boolean bl) {
-        Identifier id = new Identifier(InfinityMod.MOD_ID, "generated_" + i);
+    public static boolean addDimension(MinecraftServer server, long i, boolean bl) {
+        Identifier id = InfinityMod.getId("generated_" + i);
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
         if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key))) {
             RandomDimension d = new RandomDimension(i, server);
@@ -152,8 +172,10 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 server.getPlayerManager().getPlayerList().forEach(a ->
                         ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(id, d)));
                 LogManager.getLogger().info("Packet sent");
+                return true;
             }
         }
+        return false;
     }
 
     static PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
@@ -162,7 +184,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         buf.writeNbt(d.type.data);
         buf.writeInt(d.random_biomes.size());
         d.random_biomes.forEach(b -> {
-            buf.writeIdentifier(new Identifier(InfinityMod.MOD_ID, b.name));
+            buf.writeIdentifier(InfinityMod.getId(b.name));
             buf.writeNbt(b.data);
         });
         return buf;
@@ -201,6 +223,41 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             }
 
             world.addParticle(eff, d, e, f, g, h, j);
+        }
+    }
+
+    @Override
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+        if (!world.isClient() && entity instanceof ItemEntity) {
+            ItemStack itemStack = ((ItemEntity)entity).getStack();
+            if (itemStack.getItem() == Items.BOOKSHELF) {
+                Vec3d v = entity.getVelocity();
+                ItemEntity bookbox = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(),
+                        new ItemStack(ModBlocks.BOOK_BOX_ITEM).copyWithCount(itemStack.getCount()),
+                        -v.x, -v.y, -v.z);
+                world.spawnEntity(bookbox);
+                entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+            }
+        }
+        super.onEntityCollision(state, world, pos, entity);
+    }
+
+    @Override
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        if (world.getDimension().natural() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
+            ChaosPawn entity;
+            while (world.getBlockState(pos).isOf(this)) {
+                pos = pos.down();
+            }
+            if (world.getBlockState(pos).allowsSpawning(world, pos, ModEntities.CHAOS_PAWN) && (entity = ModEntities.CHAOS_PAWN.spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
+                entity.resetPortalCooldown();
+                BlockEntity blockEntity = world.getBlockEntity(pos.up());
+                if (blockEntity instanceof NeitherPortalBlockEntity) {
+                    int dim = (int)((NeitherPortalBlockEntity)blockEntity).getDimension();
+                    Vec3d c = Vec3d.unpackRgb(dim);
+                    entity.setAllColors((int)(256 * c.z) + 256 * (int)(256 * c.y) + 65536 * (int)(256 * c.x));
+                }
+            }
         }
     }
 }

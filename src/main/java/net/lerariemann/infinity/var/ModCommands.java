@@ -31,10 +31,12 @@ public class ModCommands {
     static void warpId(CommandContext<ServerCommandSource> context, long value) {
         MinecraftServer s = context.getSource().getServer();
         boolean bl = ((MinecraftServerAccess)(s)).getDimensionProvider().rule("runtimeGenerationEnabled");
-        NeitherPortalBlock.addDimension(s, value, bl);
+        boolean bl2 = NeitherPortalBlock.addDimension(s, value, bl);
         if (!bl) throw new CommandException(Text.translatable("commands.warp.runtime_disabled"));
         final ServerPlayerEntity self = context.getSource().getPlayer();
         if (self == null) throw new CommandException(Text.translatable("commands.warp.not_a_player"));
+        if (bl2) self.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
+        self.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
         ((ServerPlayerEntityAccess)(self)).setWarpTimer(20, value);
     }
 

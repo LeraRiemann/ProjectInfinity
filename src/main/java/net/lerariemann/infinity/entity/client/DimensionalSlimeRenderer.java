@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 public class DimensionalSlimeRenderer extends MobEntityRenderer<DimensionalSlime, SlimeEntityModel<DimensionalSlime>> {
-    private static final Identifier TEXTURE = new Identifier(InfinityMod.MOD_ID, "textures/entity/slime.png");
+    private static final Identifier TEXTURE = InfinityMod.getId("textures/entity/slime.png");
 
     public DimensionalSlimeRenderer(EntityRendererFactory.Context context) {
         super(context, new SlimeEntityModel<>(context.getPart(EntityModelLayers.SLIME)), 0.25f);

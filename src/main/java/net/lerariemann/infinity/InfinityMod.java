@@ -14,8 +14,12 @@ import net.lerariemann.infinity.block.entity.ModBlockEntities;
 
 public class InfinityMod implements ModInitializer {
 	public static final String MOD_ID = "infinity";
-	public static final Identifier WORLD_ADD = new Identifier(MOD_ID, "reload_worlds");
+	public static final Identifier WORLD_ADD = getId("reload_worlds");
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+	public static Identifier getId(String value){
+		return new Identifier(MOD_ID, value);
+	}
 
 	@Override
 	public void onInitialize() {
@@ -32,5 +36,7 @@ public class InfinityMod implements ModInitializer {
 		ModStructureType.registerStructures();
 		ModSounds.registerSounds();
 		ModFeatures.registerFeatures();
+		ModStats.registerStats();
+		ModCriteria.registerCriteria();
 	}
 }

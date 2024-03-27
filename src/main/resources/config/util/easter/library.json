@@ -42,7 +42,7 @@
   },
   "biome_source": {
     "type": "fixed",
-    "biome": "infinity:default"
+    "biome": "infinity:library"
   },
   "easter-type": "library"
 }

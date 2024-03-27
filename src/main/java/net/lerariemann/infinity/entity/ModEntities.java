@@ -13,11 +13,10 @@ import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 
 public class ModEntities {
     public static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> type) {
-        return Registry.register(Registries.ENTITY_TYPE, new Identifier(InfinityMod.MOD_ID, id), type.build());
+        return Registry.register(Registries.ENTITY_TYPE, InfinityMod.getId(id), type.build());
     }
     public static final EntityType<DimensionalSlime> DIMENSIONAL_SLIME = register("dimensional_slime",
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, DimensionalSlime::new)

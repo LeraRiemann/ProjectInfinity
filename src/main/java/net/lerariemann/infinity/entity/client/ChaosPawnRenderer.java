@@ -9,7 +9,7 @@ import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.util.Identifier;
 
 public class ChaosPawnRenderer extends MobEntityRenderer<ChaosPawn, BipedEntityModel<ChaosPawn>> {
-    private static final Identifier TEXTURE = new Identifier(InfinityMod.MOD_ID, "textures/entity/empty.png");
+    private static final Identifier TEXTURE = InfinityMod.getId("textures/entity/empty.png");
     public ChaosPawnRenderer(EntityRendererFactory.Context context) {
         super(context, new BipedEntityModel<>(context.getPart(EntityModelLayers.PLAYER)), 0.25f);
         this.addFeature(new ChaosPawnTint(this, new BipedEntityModel<>(context.getModelLoader().getModelPart(EntityModelLayers.PLAYER))));

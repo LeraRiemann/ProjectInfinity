@@ -10,7 +10,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registry;
 
 public class ModBlocks {
@@ -18,10 +17,10 @@ public class ModBlocks {
     public static final Block BOOK_BOX = new BookBoxBlock(FabricBlockSettings.copy(Blocks.BOOKSHELF));
     public static final Item BOOK_BOX_ITEM = new BlockItem(BOOK_BOX, new FabricItemSettings());
     private static void registerBlock(String name, Block block) {
-        Registry.register(Registries.BLOCK, new Identifier(InfinityMod.MOD_ID, name), block);
+        Registry.register(Registries.BLOCK, InfinityMod.getId(name), block);
     }
     private static void registerItem(String name, Item item) {
-        Registry.register(Registries.ITEM, new Identifier(InfinityMod.MOD_ID, name), item);
+        Registry.register(Registries.ITEM, InfinityMod.getId(name), item);
     }
     public static void registerModBlocks() {
         registerBlock("neither_portal", NEITHER_PORTAL);

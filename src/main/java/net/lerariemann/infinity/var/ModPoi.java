@@ -7,7 +7,6 @@ import net.lerariemann.infinity.block.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.poi.PointOfInterestType;
 
 public class ModPoi {
@@ -15,11 +14,11 @@ public class ModPoi {
     public static RegistryKey<PointOfInterestType> NEITHER_PORTAL_KEY;
 
     public static PointOfInterestType register(String name, Block block) {
-        return PointOfInterestHelper.register(new Identifier(InfinityMod.MOD_ID, name), 0, 1, ImmutableSet.copyOf(block.getStateManager().getStates()));
+        return PointOfInterestHelper.register(InfinityMod.getId(name), 0, 1, ImmutableSet.copyOf(block.getStateManager().getStates()));
     }
     public static void registerPoi() {
         InfinityMod.LOGGER.debug("Registering POI for " + InfinityMod.MOD_ID);
         NEITHER_PORTAL = register("neither_portal", ModBlocks.NEITHER_PORTAL);
-        NEITHER_PORTAL_KEY = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, new Identifier(InfinityMod.MOD_ID, "neither_portal"));
+        NEITHER_PORTAL_KEY = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, InfinityMod.getId("neither_portal"));
     }
 }

@@ -1,0 +1,36 @@
+{
+  "parent": "infinity:book_box",
+  "criteria": {
+    "library": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "infinity:library"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.infinity.library.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "infinity:book_box"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.infinity.library.title"
+    }
+  }
+}

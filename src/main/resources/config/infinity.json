@@ -40,7 +40,7 @@
     "features_chances": {
       "end_island": 0.2,
       "shape": 0.5,
-      "text": 0.5,
+      "text": 0.2,
       "lake": 0.5,
       "iceberg": 0.33,
       "geode": 0.5,

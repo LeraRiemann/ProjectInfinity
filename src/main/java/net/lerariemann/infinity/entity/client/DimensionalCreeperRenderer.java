@@ -9,7 +9,7 @@ import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.util.Identifier;
 
 public class DimensionalCreeperRenderer extends CreeperEntityRenderer {
-    private static final Identifier TEXTURE2 = new Identifier(InfinityMod.MOD_ID, "textures/entity/creeper.png");
+    private static final Identifier TEXTURE2 = InfinityMod.getId("textures/entity/creeper.png");
 
     @Override
     public Identifier getTexture(CreeperEntity creeperEntity) {

@@ -9,7 +9,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import org.apache.logging.log4j.LogManager;
 
@@ -137,7 +136,7 @@ public class RandomDimension {
     }
 
     public <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key, String name) {
-        return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, new Identifier(InfinityMod.MOD_ID, name))));
+        return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMod.getId(name))));
     }
 
     void createDirectories() {
