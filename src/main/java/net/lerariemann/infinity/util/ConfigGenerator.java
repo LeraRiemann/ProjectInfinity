@@ -199,8 +199,8 @@ public class ConfigGenerator {
         m.keySet().forEach(a -> {
             if (!m.get(a).keys.isEmpty()) {
                 try {
-                    Files.createDirectories(Paths.get("config/" + InfinityMod.MOD_ID + "/gen/" + a + "/" + addpath));
-                    CommonIO.write(wsToCompound(m.get(a)), "config/" + InfinityMod.MOD_ID + "/gen/" + a + "/" + addpath, name + ".json");
+                    Files.createDirectories(Paths.get("config/" + InfinityMod.MOD_ID + "/modular/" + a + "/" + addpath));
+                    CommonIO.write(wsToCompound(m.get(a)), "config/" + InfinityMod.MOD_ID + "/modular/" + a + "/" + addpath, name + ".json");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

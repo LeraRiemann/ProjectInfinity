@@ -72,7 +72,7 @@ public class TransfiniteAltarBase extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(hand);
-        if (itemStack.isOf(Items.DIAMOND)) {
+        if (itemStack.isOf(Items.NETHER_STAR)) {
             boolean bl = testSpace(world, pos);
             if (!bl) {
                 return ActionResult.FAIL;
