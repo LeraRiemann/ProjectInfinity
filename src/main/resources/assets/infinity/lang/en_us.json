@@ -1,6 +1,8 @@
 {
   "block.infinity.neither_portal": "Infinity Portal",
   "block.infinity.book_box": "Box of Infinite Books",
+  "block.infinity.altar_lit": "Lit Transfinite Altar",
+  "block.infinity.altar": "Transfinite Altar",
   "subtitles.music.ivory.hope_instilled": "ivory - hope instilled",
   "commands.warp.runtime_disabled": "Runtime dimension generation is disabled",
   "commands.warp.not_a_player": "Only players can warp",

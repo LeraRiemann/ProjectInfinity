@@ -12,4 +12,5 @@ public interface MinecraftServerAccess {
     boolean hasToAdd(RegistryKey<World> key);
 
     RandomProvider getDimensionProvider();
+    void setDimensionProvider();
 }

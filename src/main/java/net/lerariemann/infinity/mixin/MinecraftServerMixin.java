@@ -65,13 +65,18 @@ public class MinecraftServerMixin implements MinecraftServerAccess {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(CallbackInfo info) {
         worldsToAdd = new HashMap<>();
-        dimensionProvider = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
-                getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
+        setDimensionProvider();
     }
 
     @Override
     public RandomProvider getDimensionProvider() {
         return dimensionProvider;
+    }
+
+    @Override
+    public void setDimensionProvider() {
+        dimensionProvider = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
+                getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
     }
 
     @Override

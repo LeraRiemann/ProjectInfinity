@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FallingBlock;
 import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -71,7 +72,7 @@ public class ConfigGenerator {
         return bs.canPlaceAt(w, onStone);
     }
     static boolean isFloat(BlockState bs, WorldView w, BlockPos inAir) {
-        return bs.canPlaceAt(w, inAir);
+        return bs.canPlaceAt(w, inAir) && !(bs.getBlock() instanceof FallingBlock);
     }
     static boolean isFull(BlockState bs, WorldView w, BlockPos inAir) {
         return bs.isFullCube(w, inAir);

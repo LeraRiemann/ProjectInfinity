@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "flower=true,color=0": { "model": "infinity:block/altar_flower/0" },
+    "flower=true,color=1": { "model": "infinity:block/altar_flower/1" },
+    "flower=true,color=2": { "model": "infinity:block/altar_flower/2" },
+    "flower=true,color=3": { "model": "infinity:block/altar_flower/3" },
+    "flower=true,color=4": { "model": "infinity:block/altar_flower/4" },
+    "flower=true,color=5": { "model": "infinity:block/altar_flower/5" },
+    "flower=true,color=6": { "model": "infinity:block/altar_flower/6" },
+    "flower=false,color=0": { "model": "infinity:block/altar/0" },
+    "flower=false,color=1": { "model": "infinity:block/altar/1" },
+    "flower=false,color=2": { "model": "infinity:block/altar/2" },
+    "flower=false,color=3": { "model": "infinity:block/altar/3" },
+    "flower=false,color=4": { "model": "infinity:block/altar/4" },
+    "flower=false,color=5": { "model": "infinity:block/altar/5" },
+    "flower=false,color=6": { "model": "infinity:block/altar/6" }
+  }
+}
