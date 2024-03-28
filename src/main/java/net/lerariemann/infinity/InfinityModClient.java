@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InfinityModClient implements ClientModInitializer {
-    final static DoublePerlinNoiseSampler sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -2, 1.0, 1.0, 1.0, 0.0);
+    final static DoublePerlinNoiseSampler sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -3, 1.0, 1.0, 1.0, 0.0);
 
     double sample(int x, int y, int z) {
         return sampler.sample(x, y, z);

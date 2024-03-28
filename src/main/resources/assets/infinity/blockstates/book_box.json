@@ -2,8 +2,8 @@
   "variants": {
     "": [
       { "model": "infinity:block/book_box/1" },
-      { "model": "infinity:block/book_box/3" },
-      { "model": "infinity:block/book_box/4" }
+      { "model": "infinity:block/book_box/2" },
+      { "model": "infinity:block/book_box/3" }
     ]
   }
 }
