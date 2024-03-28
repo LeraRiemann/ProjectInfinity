@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class CommonIO {
         File file = new File(path);
         try {
             String content = String.valueOf((new Formatter(Locale.US)).format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), args));
+            LogManager.getLogger().info(content);
             return StringNbtReader.parse(content);
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);

@@ -65,17 +65,17 @@ public class ConfigGenerator {
         return res;
     }
 
-    static boolean isLaggy(Block b) {
+    public static boolean isLaggy(Block b) {
         return (b.getDefaultState().hasBlockEntity());
     }
 
-    static boolean isTop(BlockState bs, WorldView w, BlockPos onStone) {
+    public static boolean isTop(BlockState bs, WorldView w, BlockPos onStone) {
         return bs.canPlaceAt(w, onStone);
     }
-    static boolean isFloat(BlockState bs, WorldView w, BlockPos inAir) {
+    public static boolean isFloat(BlockState bs, WorldView w, BlockPos inAir) {
         return bs.canPlaceAt(w, inAir) && !(bs.getBlock() instanceof FallingBlock);
     }
-    static boolean isFull(BlockState bs, WorldView w, BlockPos inAir) {
+    public static boolean isFull(BlockState bs, WorldView w, BlockPos inAir) {
         return bs.isFullCube(w, inAir);
     }
 

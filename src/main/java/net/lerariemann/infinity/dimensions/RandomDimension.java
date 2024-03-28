@@ -28,6 +28,7 @@ public class RandomDimension {
     public int sea_level;
     public boolean randomiseblocks;
     public NbtCompound default_block;
+    public NbtCompound deepslate;
     public NbtCompound default_fluid;
     public List<NbtCompound> additional_blocks;
     public List<String> vanilla_biomes;
@@ -105,6 +106,8 @@ public class RandomDimension {
         height = max_y - min_y;
         default_block = randomiseblocks ? PROVIDER.randomBlock(random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:stone"));
         default_fluid = randomiseblocks ? PROVIDER.randomFluid(random) : RandomProvider.Fluid(defaultfluid());
+        deepslate = Arrays.stream((new String[]{"minecraft:overworld", "minecraft:amplified", "infinity:whack"})).toList().contains(type_alike) ?
+                RandomProvider.Block("minecraft:deepslate") : default_block;
     }
 
     void wrap_up() {

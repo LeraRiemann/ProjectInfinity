@@ -3,6 +3,7 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.*;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -119,6 +120,8 @@ public class RandomNoisePreset {
     }
 
     NbtCompound buildSurfaceRule() {
+        parent.deepslate = parent.randomiseblocks ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") :
+                RandomProvider.Block("minecraft:deepslate");
         int i = 0;
         switch (surface_rule) {
             case "caves", "nether", "tangled" -> i=1;
@@ -135,10 +138,8 @@ public class RandomNoisePreset {
     }
 
     void addDeepslate(NbtList base) {
-        NbtCompound deepslate = parent.randomiseblocks ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") :
-                RandomProvider.Block("minecraft:deepslate");
-        base.add(CommonIO.readAndAddBlock(PROVIDER.configPath + "util/surface_rule/deepslate.json", deepslate));
-        parent.additional_blocks.add(deepslate);
+        base.add(CommonIO.readAndAddBlock(PROVIDER.configPath + "util/surface_rule/deepslate.json", parent.deepslate));
+        parent.additional_blocks.add(parent.deepslate);
     }
 
     NbtCompound startingRule(String str) {
@@ -158,6 +159,10 @@ public class RandomNoisePreset {
         NbtList sequence = biomeSequence();
         res.put("sequence", sequence);
         return res;
+    }
+
+    NbtCompound randomBlock(String s) {
+        return PROVIDER.randomBlock(parent.random, s);
     }
 
     NbtList biomeSequence() {
@@ -182,16 +187,37 @@ public class RandomNoisePreset {
         }
         for (long id: parent.random_biome_ids) {
             String biome = "infinity:biome_" + id;
+            String root = PROVIDER.configPath + "util/surface_rule/custom/";
             boolean useRandomBlock = parent.randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
-            NbtCompound top_block = useRandomBlock ? PROVIDER.randomBlock(parent.random, "top_blocks") :
+            NbtCompound top_block = useRandomBlock ? randomBlock("top_blocks") :
                     RandomProvider.Block(parent.defaultblock("minecraft:grass_block"));
             parent.top_blocks.put(biome, top_block);
-            NbtCompound block_underwater = useRandomBlock ? PROVIDER.randomBlock(parent.random, "full_blocks_worldgen") :
+            NbtCompound block_underwater = useRandomBlock ? randomBlock("full_blocks_worldgen") :
                     RandomProvider.Block(parent.defaultblock("minecraft:dirt"));
             parent.underwater.put(biome, block_underwater);
-            NbtCompound rule = CommonIO.readCarefully(PROVIDER.configPath + "util/surface_rule/custom.json",
-                    CommonIO.CompoundToString(top_block, 8), CommonIO.CompoundToString(block_underwater, 7), CommonIO.CompoundToString(block_underwater, 9),
-                    CommonIO.CompoundToString(parent.default_block, 7), CommonIO.CompoundToString(block_underwater, 6));
+            LogManager.getLogger().info("1");
+            NbtCompound beach = useRandomBlock ? randomBlock("full_blocks_worldgen") : top_block;
+            NbtCompound rule1 = CommonIO.readCarefully(root + "ceiling.json",
+                    CommonIO.CompoundToString(parent.deepslate, 5), CommonIO.CompoundToString(parent.default_block, 4));
+            LogManager.getLogger().info("2");
+            NbtCompound rule2 = CommonIO.readCarefully(root + "grass.json",
+                    parent.sea_level - 1, parent.sea_level, CommonIO.CompoundToString(beach, 10),
+                    CommonIO.CompoundToString(top_block, 8), CommonIO.CompoundToString(block_underwater, 5));
+            LogManager.getLogger().info("3");
+            NbtCompound rule3 = CommonIO.readCarefully(root + "dirt.json",
+                    CommonIO.CompoundToString(block_underwater, 7));
+            LogManager.getLogger().info("4");
+            NbtCompound rule4 = CommonIO.readCarefully(root + "final.json",
+                    CommonIO.CompoundToString(parent.deepslate, 5), CommonIO.CompoundToString(parent.default_block, 4));
+            LogManager.getLogger().info("5");
+            NbtCompound rule = startingRule("sequence");
+            NbtList sq = new NbtList();
+            sq.add(rule1);
+            sq.add(rule2);
+            sq.add(rule3);
+            sq.add(rule4);
+            rule.put("sequence", sq);
+            LogManager.getLogger().info("0");
             NbtList biomestoadd = new NbtList();
             biomestoadd.add(NbtString.of(biome));
             sequence.add(ruleWrap(biomestoadd, rule));

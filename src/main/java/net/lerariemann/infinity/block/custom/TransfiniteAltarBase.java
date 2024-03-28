@@ -90,6 +90,7 @@ public class TransfiniteAltarBase extends Block {
                 if (itemStack.isOf(Items.YELLOW_DYE)) i = 3;
                 if (itemStack.isOf(Items.GREEN_DYE)) i = 4;
                 if (itemStack.isOf(Items.BLUE_DYE)) i = 5;
+                if (itemStack.isOf(Items.PURPLE_DYE)) i = 6;
                 if (itemStack.isOf(Items.GRAY_DYE)) i = 0;
                 if (i>=0) {
                     setAge(world, pos, state, i);
