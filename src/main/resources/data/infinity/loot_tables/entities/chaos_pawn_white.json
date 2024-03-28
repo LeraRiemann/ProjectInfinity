@@ -17,7 +17,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:coal",
+          "name": "minecraft:bone_meal",
           "weight": 5
         },
         {
@@ -33,7 +33,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:black_dye",
+          "name": "minecraft:white_dye",
           "weight": 3
         },
         {
@@ -49,7 +49,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:black_candle",
+          "name": "minecraft:white_candle",
           "weight": 1
         },
         {
@@ -65,7 +65,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:black_wool",
+          "name": "minecraft:white_wool",
           "weight": 1
         },
         {
@@ -81,7 +81,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:black_concrete",
+          "name": "minecraft:white_concrete",
           "weight": 1
         },
         {
@@ -97,7 +97,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:black_stained_glass",
+          "name": "minecraft:white_stained_glass",
           "weight": 1
         },
         {
@@ -113,7 +113,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:black_stained_glass_pane",
+          "name": "minecraft:white_stained_glass_pane",
           "weight": 1
         },
         {
@@ -129,7 +129,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:black_terracota",
+          "name": "minecraft:white_terracota",
           "weight": 1
         },
         {
@@ -145,7 +145,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:black_glazed_terracota",
+          "name": "minecraft:white_glazed_terracota",
           "weight": 1
         },
         {
@@ -161,21 +161,21 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:black_concrete_powder",
+          "name": "minecraft:white_concrete_powder",
           "weight": 1
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:black_banner",
+          "name": "minecraft:white_banner",
           "weight": 1
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:black_bed",
+          "name": "minecraft:white_bed",
           "weight": 1
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ]
 }
