@@ -14,6 +14,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -208,8 +209,28 @@ public class ConfigGenerator {
         });
     }
 
+    public static void generateSounds() {
+        Registry<SoundEvent> r = Registries.SOUND_EVENT;
+        Map<String, WeighedStructure<String>> music = new HashMap<>();
+        Map<String, WeighedStructure<String>> sounds = new HashMap<>();
+        r.getKeys().forEach(a -> {
+            String b = a.getValue().toString();
+            String namespace = b.substring(0, b.lastIndexOf(":"));
+            if (b.contains("music")) {
+                checkAndAddWS(music, namespace);
+                music.get(namespace).add(b, 1.0);
+            }
+            else {
+                checkAndAddWS(sounds, namespace);
+                sounds.get(namespace).add(b, 1.0);
+            }
+        });
+        writeMap(sounds, "misc", "sounds");
+        writeMap(music, "misc", "music");
+    }
+
     public static void generateAll(WorldView w, BlockPos inAir, BlockPos onStone) {
-        generate(Registries.SOUND_EVENT, "misc", "sounds");
+        generateSounds();
         generate(Registries.ITEM, "misc", "items");
         generate(Registries.PARTICLE_TYPE, "misc", "particles");
         generateMobs();
