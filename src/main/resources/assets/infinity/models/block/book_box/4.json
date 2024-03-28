@@ -1,0 +1,7 @@
+{
+  "parent": "infinity:block/book_box/base",
+  "textures": {
+    "side": "infinity:block/book_box/side_4",
+    "overlay": "infinity:block/book_box/overlay_4"
+  }
+}

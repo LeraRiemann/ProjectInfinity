@@ -46,7 +46,7 @@ public class InfinityModClient implements ClientModInitializer {
             }
             return 16777215;
         }, ModBlocks.NEITHER_PORTAL);
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX, RenderLayer.getCutoutMipped());
         ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
             if (pos != null) {
                 return posToColor(pos);
