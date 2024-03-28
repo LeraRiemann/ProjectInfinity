@@ -6,10 +6,13 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -64,5 +67,18 @@ public class TransfiniteAltar extends BlockWithEntity {
 
     public static void bumpAge(World world, BlockPos pos, BlockState state) {
         world.setBlockState(pos, state.with(COLOR, state.get(COLOR) + 1));
+    }
+
+    static double next() {
+        return TransfiniteAltarEntity.r.nextDouble()-0.5;
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        if (state.get(COLOR) > 0) {
+            return;
+        }
+        Vec3d p = pos.toCenterPos();
+        world.addParticle(ParticleTypes.HEART, p.x + next(), p.y + next(), p.z + next(), next(), next(), next());
     }
 }

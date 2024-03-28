@@ -65,7 +65,7 @@ public class ConfigGenerator {
     }
 
     static boolean isLaggy(Block b) {
-        return b.getDefaultState().hasBlockEntity();
+        return (b.getDefaultState().hasBlockEntity());
     }
 
     static boolean isTop(BlockState bs, WorldView w, BlockPos onStone) {

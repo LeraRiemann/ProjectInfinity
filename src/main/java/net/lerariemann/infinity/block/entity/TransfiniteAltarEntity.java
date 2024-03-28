@@ -31,7 +31,7 @@ public class TransfiniteAltarEntity extends BlockEntity {
     public static int[] offsets = new int[]{-1, 0, 1};
     public static int[] offsets_y = new int[]{1, 2, 3};
     Map<String, BlockState> map;
-    static Random r = new Random();
+    public static Random r = new Random();
 
     public TransfiniteAltarEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ALTAR, pos, state);
@@ -66,8 +66,9 @@ public class TransfiniteAltarEntity extends BlockEntity {
             TransfiniteAltar.bumpAge(world, pos, state);
         }
         if (stage == 0) {
-            if(be.time == 0) for (int i : offsets) for (int k : offsets) {
-                for (int j : offsets_y) world.setBlockState(pos.add(i, j, k), Blocks.AIR.getDefaultState());
+            if(be.time == 0) {
+                for (int i : offsets) for (int j : offsets_y) for (int k : offsets)
+                    world.setBlockState(pos.add(i, j, k), Blocks.AIR.getDefaultState());
             }
             if(be.time == 10) {
                 ConfigGenerator.generateAll(world, pos.up(2), pos.up());

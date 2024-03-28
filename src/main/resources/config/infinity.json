@@ -5,6 +5,7 @@
     "longArithmeticEnabled": false
   },
   "portalKey": "",
+  "altarKey": "minecraft:diamond",
   "salt": "",
   "rootChances": {
     "dimension_type": {

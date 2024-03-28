@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.block.custom;
 
+import net.lerariemann.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
 import net.minecraft.block.*;
@@ -7,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -15,14 +16,14 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-import java.util.Random;
+import java.util.Objects;
 
 public class TransfiniteAltarBase extends Block {
     public static  final BooleanProperty FLOWER = TransfiniteAltar.FLOWER;
@@ -60,10 +61,6 @@ public class TransfiniteAltarBase extends Block {
         return true;
     }
 
-    static double next(Random r) {
-        return r.nextDouble()-0.5;
-    }
-
     public static void ignite(World world, BlockPos pos, BlockState state) {
         world.setBlockState(pos, ModBlocks.ALTAR_LIT.getDefaultState().with(FLOWER, state.get(FLOWER)));
         world.playSound(null, pos, SoundEvents.ITEM_TOTEM_USE, SoundCategory.BLOCKS, 1f, 1f);
@@ -72,27 +69,20 @@ public class TransfiniteAltarBase extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(hand);
-        if (itemStack.isOf(Items.NETHER_STAR)) {
-            boolean bl = testSpace(world, pos);
-            if (!bl) {
-                return ActionResult.FAIL;
-            }
-            if (!world.isClient) {
+        if (!world.isClient) {
+            String s = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer()))).getDimensionProvider().altarKey;
+            boolean bl0 = s.isBlank() ? itemStack.isEmpty() : itemStack.isOf(Registries.ITEM.get(new Identifier(s)));
+            if (bl0) {
+                boolean bl = testSpace(world, pos);
+                if (!bl) {
+                    return ActionResult.FAIL;
+                }
                 if (!player.getAbilities().creativeMode) {
                     itemStack.decrement(1);
                 }
                 ignite(world, pos, state);
+                return ActionResult.SUCCESS;
             }
-            else {
-                Random r = new Random();
-                Vec3d p = pos.toCenterPos();
-                for (int i = 0; i < 10; i++) {
-                    world.addParticle(ParticleTypes.HEART, p.x + next(r), p.y + next(r), p.z + next(r), next(r), next(r), next(r));
-                }
-            }
-            return ActionResult.SUCCESS;
-        }
-        if (!world.isClient) {
             if (itemStack.getItem() instanceof DyeItem) {
                 int i = -1;
                 if (itemStack.isOf(Items.RED_DYE)) i = 1;

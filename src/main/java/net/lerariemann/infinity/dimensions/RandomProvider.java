@@ -26,6 +26,8 @@ public class RandomProvider {
     public String configPath;
     public String savingPath;
     public String portalKey;
+    public String altarKey;
+
     public NbtCompound noise;
     public String salt;
     public Easterizer easterizer;
@@ -65,6 +67,7 @@ public class RandomProvider {
     void read_root_config() {
         NbtCompound rootConfig = CommonIO.read(configPath + "infinity.json");
         portalKey = rootConfig.getString("portalKey");
+        altarKey = rootConfig.getString("altarKey");
         salt = rootConfig.getString("salt");
         NbtCompound gamerules = rootConfig.getCompound("gameRules");
         for (String s: gamerules.getKeys()) {
