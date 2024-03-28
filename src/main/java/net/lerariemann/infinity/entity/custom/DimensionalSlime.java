@@ -39,6 +39,10 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     public DimensionalSlime(EntityType<? extends DimensionalSlime> entityType, World world) {
         super(entityType, world);
     }
+    @Override
+    public int getAge() {
+        return age;
+    }
 
     @Override
     protected void initDataTracker() {
@@ -75,6 +79,8 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     }
     @Override
     public Vector3f getColor() {
+        Vector3f v = getColorNamed();
+        if (v!=null) return v;
         return this.dataTracker.get(color);
     }
     @Override
@@ -112,9 +118,9 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putFloat("red", this.getColor().x);
-        nbt.putFloat("green", this.getColor().y);
-        nbt.putFloat("blue", this.getColor().z);
+        nbt.putFloat("red", this.dataTracker.get(color).x);
+        nbt.putFloat("green", this.dataTracker.get(color).y);
+        nbt.putFloat("blue", this.dataTracker.get(color).z);
         nbt.putString("core", Registries.BLOCK.getId(this.getCore().getBlock()).toString());
     }
 

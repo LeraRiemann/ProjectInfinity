@@ -74,6 +74,12 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
     public void setColor(int c) {
         this.dataTracker.set(color, c);
     }
+
+    @Override
+    public int getAge() {
+        return age;
+    }
+
     @Override
     public int getColorRaw() {
         return this.dataTracker.get(color);

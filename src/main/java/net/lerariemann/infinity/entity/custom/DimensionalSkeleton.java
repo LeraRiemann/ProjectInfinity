@@ -41,6 +41,10 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     public DimensionalSkeleton(EntityType<? extends SkeletonEntity> entityType, World world) {
         super(entityType, world);
     }
+    @Override
+    public int getAge() {
+        return age;
+    }
 
     @Override
     @Nullable

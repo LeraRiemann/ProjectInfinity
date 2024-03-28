@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static net.lerariemann.infinity.entity.custom.DimensionalSlime.color;
+
 @Mixin(SlimeEntity.class)
 public class SlimeEntityMixin {
     @Inject(method = "remove(Lnet/minecraft/entity/Entity$RemovalReason;)V", at = @At(value = "INVOKE",
@@ -19,7 +21,7 @@ public class SlimeEntityMixin {
             DimensionalSlime slime_mom = (DimensionalSlime)e;
             DimensionalSlime slime_son = (DimensionalSlime)slimeEntity;
             slime_son.setCore(slime_mom.getCore());
-            slime_son.setColor(slime_mom.getColor());
+            slime_son.setColor(slime_mom.getDataTracker().get(color));
         }
     }
 }

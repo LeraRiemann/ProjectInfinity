@@ -10,6 +10,9 @@ import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.util.DyeColor;
+import java.awt.Color;
 
 public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<ChaosPawn>> {
     private final BipedEntityModel<ChaosPawn> model;
@@ -19,10 +22,37 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
     }
 
     public void renderOneLayer(MatrixStack matrixStack, VertexConsumer vertexConsumer, int light, int overlay, ChaosPawn livingEntity, ModelPart part, String name) {
-        int color = livingEntity.getColors().getInt(name);
-        float f = (float)(color >> 16 & 0xFF) / 255.0f;
-        float g = (float)(color >> 8 & 0xFF) / 255.0f;
-        float h = (float)(color & 0xFF) / 255.0f;
+        int color;
+        float f = 0.0f, g = 0.0f, h = 0.0f;
+        boolean bl = false;
+        color = livingEntity.getColors().getInt(name);
+        if (livingEntity.hasCustomName()) {
+            String s = livingEntity.getName().getString();
+             if ("jeb_".equals(s)) {
+                int n = livingEntity.age / 25 + (name.equals("hat") ? 8 : 0) + livingEntity.getId();
+                int o = DyeColor.values().length;
+                int p = n % o;
+                int q = (n + 1) % o;
+                float r = (livingEntity.age % 25) / 25.0f;
+                float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
+                float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
+                f = fs[0] * (1.0f - r) + gs[0] * r;
+                g = fs[1] * (1.0f - r) + gs[1] * r;
+                h = fs[2] * (1.0f - r) + gs[2] * r;
+                bl = true;
+            }
+            if ("hue".equals(s)) {
+                int n = livingEntity.age + (name.equals("hat") ? 200 : 0) + livingEntity.getId();
+                float hue = n/400.f;
+                hue = hue - (int)hue;
+                color = Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
+            }
+        }
+        if (!bl) {
+            f = (float)(color >> 16 & 0xFF) / 255.0f;
+            g = (float)(color >> 8 & 0xFF) / 255.0f;
+            h = (float)(color & 0xFF) / 255.0f;
+        }
         part.render(matrixStack, vertexConsumer, light, overlay, f, g, h, 1.0f);
     }
 
