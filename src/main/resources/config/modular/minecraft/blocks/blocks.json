@@ -280,8 +280,8 @@
 			"weight": 1.0,
 			"key": {
 				"top": true,
-				"laggy": true,
-				"float": true,
+				"laggy": false,
+				"float": false,
 				"Name": "minecraft:anvil",
 				"full": false
 			}
@@ -883,7 +883,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:black_concrete_powder",
 				"full": true
 			}
@@ -1073,7 +1073,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:blue_concrete_powder",
 				"full": true
 			}
@@ -1193,39 +1193,9 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": false,
-				"Name": "minecraft:brain_coral",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
 				"float": true,
 				"Name": "minecraft:brain_coral_block",
 				"full": true
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:brain_coral_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:brain_coral_wall_fan",
-				"full": false
 			}
 		},
 		{
@@ -1343,7 +1313,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:brown_concrete_powder",
 				"full": true
 			}
@@ -1441,51 +1411,11 @@
 		{
 			"weight": 1.0,
 			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:bubble_column",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:bubble_coral",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
 				"top": true,
 				"laggy": false,
 				"float": true,
 				"Name": "minecraft:bubble_coral_block",
 				"full": true
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:bubble_coral_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:bubble_coral_wall_fan",
-				"full": false
 			}
 		},
 		{
@@ -1545,9 +1475,6 @@
 				"laggy": true,
 				"float": true,
 				"Name": "minecraft:campfire",
-				"Properties": {
-					"lit": "false"
-				},
 				"full": false
 			}
 		},
@@ -1851,8 +1778,8 @@
 			"weight": 1.0,
 			"key": {
 				"top": true,
-				"laggy": true,
-				"float": true,
+				"laggy": false,
+				"float": false,
 				"Name": "minecraft:chipped_anvil",
 				"full": false
 			}
@@ -2131,16 +2058,6 @@
 			"weight": 1.0,
 			"key": {
 				"top": true,
-				"laggy": true,
-				"float": true,
-				"Name": "minecraft:conduit",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
 				"laggy": false,
 				"float": true,
 				"Name": "minecraft:copper_block",
@@ -2221,7 +2138,7 @@
 			"weight": 1.0,
 			"key": {
 				"top": true,
-				"laggy": true,
+				"laggy": false,
 				"float": true,
 				"Name": "minecraft:crafting_table",
 				"full": true
@@ -2575,7 +2492,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:cyan_concrete_powder",
 				"full": true
 			}
@@ -2654,8 +2571,8 @@
 			"weight": 1.0,
 			"key": {
 				"top": true,
-				"laggy": true,
-				"float": true,
+				"laggy": false,
+				"float": false,
 				"Name": "minecraft:damaged_anvil",
 				"full": false
 			}
@@ -2891,49 +2808,9 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_brain_coral",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
 				"float": true,
 				"Name": "minecraft:dead_brain_coral_block",
 				"full": true
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_brain_coral_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_brain_coral_wall_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_bubble_coral",
-				"full": false
 			}
 		},
 		{
@@ -2949,40 +2826,10 @@
 		{
 			"weight": 1.0,
 			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_bubble_coral_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_bubble_coral_wall_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
 				"top": false,
 				"laggy": false,
 				"float": false,
 				"Name": "minecraft:dead_bush",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_fire_coral",
 				"full": false
 			}
 		},
@@ -3001,36 +2848,6 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_fire_coral_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_fire_coral_wall_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_horn_coral",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
 				"float": true,
 				"Name": "minecraft:dead_horn_coral_block",
 				"full": true
@@ -3041,59 +2858,9 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_horn_coral_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_horn_coral_wall_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_tube_coral",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
 				"float": true,
 				"Name": "minecraft:dead_tube_coral_block",
 				"full": true
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_tube_coral_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:dead_tube_coral_wall_fan",
-				"full": false
 			}
 		},
 		{
@@ -3380,8 +3147,8 @@
 			"weight": 1.0,
 			"key": {
 				"top": true,
-				"laggy": true,
-				"float": true,
+				"laggy": false,
+				"float": false,
 				"Name": "minecraft:dragon_egg",
 				"full": false
 			}
@@ -3641,16 +3408,6 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": false,
-				"Name": "minecraft:fire_coral",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
 				"float": true,
 				"Name": "minecraft:fire_coral_block",
 				"full": true
@@ -3661,26 +3418,6 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": false,
-				"Name": "minecraft:fire_coral_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:fire_coral_wall_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": true,
 				"float": true,
 				"Name": "minecraft:fletching_table",
 				"full": true
@@ -3884,7 +3621,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:gravel",
 				"full": true
 			}
@@ -3954,7 +3691,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:gray_concrete_powder",
 				"full": true
 			}
@@ -4094,7 +3831,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:green_concrete_powder",
 				"full": true
 			}
@@ -4247,39 +3984,9 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": false,
-				"Name": "minecraft:horn_coral",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
 				"float": true,
 				"Name": "minecraft:horn_coral_block",
 				"full": true
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:horn_coral_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:horn_coral_wall_fan",
-				"full": false
 			}
 		},
 		{
@@ -4621,26 +4328,6 @@
 		{
 			"weight": 1.0,
 			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:kelp",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:kelp_plant",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
 				"top": false,
 				"laggy": false,
 				"float": false,
@@ -4695,16 +4382,6 @@
 				"laggy": false,
 				"float": false,
 				"Name": "minecraft:large_fern",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": true,
-				"Name": "minecraft:lava",
 				"full": false
 			}
 		},
@@ -4816,7 +4493,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:light_blue_concrete_powder",
 				"full": true
 			}
@@ -4956,7 +4633,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:light_gray_concrete_powder",
 				"full": true
 			}
@@ -5146,7 +4823,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:lime_concrete_powder",
 				"full": true
 			}
@@ -5306,7 +4983,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:magenta_concrete_powder",
 				"full": true
 			}
@@ -6208,7 +5885,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:orange_concrete_powder",
 				"full": true
 			}
@@ -6478,7 +6155,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:pink_concrete_powder",
 				"full": true
 			}
@@ -7441,7 +7118,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:purple_concrete_powder",
 				"full": true
 			}
@@ -7711,7 +7388,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:red_concrete_powder",
 				"full": true
 			}
@@ -7791,7 +7468,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:red_sand",
 				"full": true
 			}
@@ -8031,7 +7708,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:sand",
 				"full": true
 			}
@@ -8151,26 +7828,6 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": false,
-				"Name": "minecraft:sea_pickle",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:seagrass",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
 				"float": true,
 				"Name": "minecraft:shroomlight",
 				"full": true
@@ -8240,7 +7897,7 @@
 			"weight": 1.0,
 			"key": {
 				"top": true,
-				"laggy": true,
+				"laggy": false,
 				"float": true,
 				"Name": "minecraft:smithing_table",
 				"full": true
@@ -9088,16 +8745,6 @@
 		{
 			"weight": 1.0,
 			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:tall_seagrass",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
 				"top": true,
 				"laggy": false,
 				"float": true,
@@ -9200,39 +8847,9 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": false,
-				"Name": "minecraft:tube_coral",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
 				"float": true,
 				"Name": "minecraft:tube_coral_block",
 				"full": true
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:tube_coral_fan",
-				"full": false
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": false,
-				"laggy": false,
-				"float": false,
-				"Name": "minecraft:tube_coral_wall_fan",
-				"full": false
 			}
 		},
 		{
@@ -9506,16 +9123,6 @@
 				"float": true,
 				"Name": "minecraft:warped_wart_block",
 				"full": true
-			}
-		},
-		{
-			"weight": 1.0,
-			"key": {
-				"top": true,
-				"laggy": false,
-				"float": true,
-				"Name": "minecraft:water",
-				"full": false
 			}
 		},
 		{
@@ -9833,7 +9440,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:white_concrete_powder",
 				"full": true
 			}
@@ -10013,7 +9620,7 @@
 			"key": {
 				"top": true,
 				"laggy": false,
-				"float": true,
+				"float": false,
 				"Name": "minecraft:yellow_concrete_powder",
 				"full": true
 			}
