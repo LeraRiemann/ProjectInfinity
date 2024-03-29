@@ -16,7 +16,8 @@
       "bed_works": 0.5,
       "respawn_anchor_works": 1.0,
       "has_raids": 0.5,
-      "fixed_time": 0.25
+      "fixed_time": 0.25,
+      "use_shaders": 0.15
     },
     "noise_settings": {
       "randomise_blocks": 0.75,

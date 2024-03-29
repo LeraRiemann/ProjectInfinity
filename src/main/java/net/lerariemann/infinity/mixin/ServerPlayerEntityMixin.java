@@ -1,9 +1,12 @@
 package net.lerariemann.infinity.mixin;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
-import net.lerariemann.access.MinecraftServerAccess;
-import net.lerariemann.access.ServerPlayerEntityAccess;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
+import net.lerariemann.infinity.client.ShaderTransiever;
 import net.lerariemann.infinity.var.ModCommands;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Blocks;
@@ -13,13 +16,16 @@ import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProperties;
 import net.minecraft.world.dimension.DimensionType;
+import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -39,6 +45,7 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
     @Shadow public abstract boolean teleport(ServerWorld world, double destX, double destY, double destZ, Set<PositionFlag> flags, float yaw, float pitch);
 
     @Shadow public abstract Entity getCameraEntity();
+    @Shadow public ServerPlayNetworkHandler networkHandler;
 
     @Unique
     private long ticksUntilWarp;
@@ -70,6 +77,14 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
         }
     }
 
+    @Inject(method = "moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerManager()Lnet/minecraft/server/PlayerManager;"))
+    private void injected3(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
+        ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.SHADER_RELOAD,
+                ShaderTransiever.buildPacket(destination));
+        LogManager.getLogger().info("Packet sent");
+    }
+
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {
         if (--this.ticksUntilWarp == 0L) {
@@ -80,7 +95,15 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
             Entity self = getCameraEntity();
             BlockPos blockPos2 = w.getWorldBorder().clamp(self.getX() * d, self.getY(), self.getZ() * d);
             this.teleport(w, blockPos2.getX(), blockPos2.getY(), blockPos2.getZ(), new HashSet<>(), self.getYaw(), self.getPitch());
+            ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.SHADER_RELOAD, ShaderTransiever.buildPacket(w));
+            LogManager.getLogger().info("Packet sent");
         }
+    }
+
+    @Inject(method = "changeGameMode", at = @At("RETURN"))
+    private void injected4(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValue()) ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.SHADER_RELOAD_SIMPLE, PacketByteBufs.create());
+        LogManager.getLogger().info("Packet sent");
     }
 
     @Override

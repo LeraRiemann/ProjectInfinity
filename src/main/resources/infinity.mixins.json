@@ -12,12 +12,14 @@
     "MinecraftServerMixin",
     "MobEntityMixin",
     "NetherPortalBlockMixin",
+    "PlayerManagerMixin",
     "PortalForcerMixin",
     "ServerPlayerEntityMixin",
     "SlimeEntityMixin",
     "WorldChunkMixin"
   ],
   "client": [
+    "GameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

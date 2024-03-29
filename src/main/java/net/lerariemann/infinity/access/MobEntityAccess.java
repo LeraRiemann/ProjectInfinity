@@ -1,4 +1,4 @@
-package net.lerariemann.access;
+package net.lerariemann.infinity.access;
 
 public interface MobEntityAccess {
     void setPersistent(boolean bl);

@@ -7,9 +7,10 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.access.MinecraftServerAccess;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.client.ShaderLoader;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
@@ -22,6 +23,7 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.SpawnReason;
@@ -50,11 +52,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.util.Objects;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
@@ -130,7 +130,6 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     public ActionResult onUse(BlockState state, World world, BlockPos pos,
                               PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
-            LogManager.getLogger().info(((NeitherPortalBlockEntity) Objects.requireNonNull(world.getBlockEntity(pos))).getDimension());
             MinecraftServer s = world.getServer();
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (s!=null && blockEntity instanceof NeitherPortalBlockEntity) {
@@ -158,6 +157,9 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 player.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
             }
         }
+        else {
+            ShaderLoader.reloadShaders(MinecraftClient.getInstance(), true);
+        }
         return ActionResult.SUCCESS;
     }
 
@@ -170,7 +172,6 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 ((MinecraftServerAccess) (server)).addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d));
                 server.getPlayerManager().getPlayerList().forEach(a ->
                         ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(ModCommands.getIdentifier(i, server), d)));
-                LogManager.getLogger().info("Packet sent");
                 return true;
             }
         }

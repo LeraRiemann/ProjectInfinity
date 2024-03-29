@@ -2,7 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.access.MinecraftServerAccess;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;

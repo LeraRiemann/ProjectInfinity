@@ -15,6 +15,18 @@ import java.util.*;
 
 public class CommonIO {
 
+    public static void write(NbtCompound base, Path dir, String filename) {
+        String source = CompoundToString(base, 0);
+        List<String> lines = Collections.singletonList(source);
+        try {
+            Files.createDirectories(dir);
+            Path file = dir.resolve(filename);
+            Files.write(file, lines, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void write(NbtCompound base, String path, String filename) {
         String source = CompoundToString(base, 0);
         List<String> lines = Collections.singletonList(source);

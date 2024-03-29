@@ -3,7 +3,6 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.*;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -195,21 +194,16 @@ public class RandomNoisePreset {
             NbtCompound block_underwater = useRandomBlock ? randomBlock("full_blocks_worldgen") :
                     RandomProvider.Block(parent.defaultblock("minecraft:dirt"));
             parent.underwater.put(biome, block_underwater);
-            LogManager.getLogger().info("1");
             NbtCompound beach = useRandomBlock ? randomBlock("full_blocks_worldgen") : top_block;
             NbtCompound rule1 = CommonIO.readCarefully(root + "ceiling.json",
                     CommonIO.CompoundToString(parent.deepslate, 5), CommonIO.CompoundToString(parent.default_block, 4));
-            LogManager.getLogger().info("2");
             NbtCompound rule2 = CommonIO.readCarefully(root + "grass.json",
                     parent.sea_level - 1, parent.sea_level, CommonIO.CompoundToString(beach, 10),
                     CommonIO.CompoundToString(top_block, 8), CommonIO.CompoundToString(block_underwater, 5));
-            LogManager.getLogger().info("3");
             NbtCompound rule3 = CommonIO.readCarefully(root + "dirt.json",
                     CommonIO.CompoundToString(block_underwater, 7));
-            LogManager.getLogger().info("4");
             NbtCompound rule4 = CommonIO.readCarefully(root + "final.json",
                     CommonIO.CompoundToString(parent.deepslate, 5), CommonIO.CompoundToString(parent.default_block, 4));
-            LogManager.getLogger().info("5");
             NbtCompound rule = startingRule("sequence");
             NbtList sq = new NbtList();
             sq.add(rule1);
@@ -217,7 +211,6 @@ public class RandomNoisePreset {
             sq.add(rule3);
             sq.add(rule4);
             rule.put("sequence", sq);
-            LogManager.getLogger().info("0");
             NbtList biomestoadd = new NbtList();
             biomestoadd.add(NbtString.of(biome));
             sequence.add(ruleWrap(biomestoadd, rule));

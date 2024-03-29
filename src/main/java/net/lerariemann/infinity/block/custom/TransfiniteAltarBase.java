@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.block.custom;
 
-import net.lerariemann.access.MinecraftServerAccess;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
 import net.minecraft.block.*;
