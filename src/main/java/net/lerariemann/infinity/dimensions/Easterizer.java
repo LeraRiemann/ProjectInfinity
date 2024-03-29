@@ -15,16 +15,17 @@ import static java.nio.file.Files.walk;
 
 
 public class Easterizer {
-    Map<Long, Pair<NbtCompound, Pair<String, String>>> map;
+    public Map<Long, Pair<NbtCompound, Pair<String, String>>> map;
+    public Map<String, NbtCompound> shadermap;
 
     public Easterizer(RandomProvider prov) {
         map = new HashMap<>();
+        shadermap = new HashMap<>();
         try {
             walk(Paths.get(prov.configPath + "util/easter")).forEach(p -> {
                 String fullname = p.toString();
                 if (p.toFile().isFile() && !fullname.endsWith("_type.json")) {
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
-                    String id = name;
                     String type = "default";
                     NbtCompound compound = CommonIO.read(p.toFile());
                     if (compound.contains("easter-name")) {
@@ -34,6 +35,10 @@ public class Easterizer {
                     if (compound.contains("easter-type")) {
                         type = compound.getString("easter-type");
                         compound.remove("easter-type");
+                    }
+                    if (compound.contains("easter-shader")) {
+                        shadermap.put("infinity:" + name, compound.getCompound("easter-shader"));
+                        compound.remove("easter-shader");
                     }
                     Long l = ModCommands.getDimensionSeed(name, prov);
                     Pair<NbtCompound, Pair<String, String>> easter_pair = new Pair<>(compound, new Pair<>(name, type));

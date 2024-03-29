@@ -36,17 +36,23 @@ public class ShaderTransiever {
         PacketByteBuf buf = PacketByteBufs.create();
         String s = destination.getRegistryKey().getValue().toString();
         boolean bl = destination.getRegistryKey().getValue().toString().contains("generated_");
-        buf.writeBoolean(bl);
+        RandomProvider prov = ((MinecraftServerAccess)destination.getServer()).getDimensionProvider();
         if(bl) {
+            buf.writeBoolean(true);
             long id = Long.parseLong(s.substring(s.lastIndexOf("generated_") + 10));
             Random r = new Random(id);
-            RandomProvider prov = ((MinecraftServerAccess)destination.getServer()).getDimensionProvider();
             if (prov.roll(r, "use_shaders")) {
                 Object[] lst = genMatrix(r);
                 NbtCompound c = CommonIO.readCarefully(prov.configPath + "util/shader.json", lst);
                 buf.writeNbt(c);
             }
         }
+        else if (prov.easterizer.shadermap.containsKey(s)) {
+            buf.writeBoolean(true);
+            NbtCompound c = prov.easterizer.shadermap.get(s);
+            buf.writeNbt(c);
+        }
+        buf.writeBoolean(false);
         return buf;
     }
 
