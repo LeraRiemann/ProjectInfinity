@@ -48,7 +48,12 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
 
     @Override
     public boolean hasCustomName() {
-        return false;
+        return super.hasCustomName();
+    }
+
+    @Override
+    public Text getName() {
+        return super.getName();
     }
 
     @Override

@@ -23,6 +23,7 @@ import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.LocalDifficulty;
@@ -47,7 +48,12 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     }
     @Override
     public boolean hasCustomName() {
-        return false;
+        return super.hasCustomName();
+    }
+
+    @Override
+    public Text getName() {
+        return super.getName();
     }
 
     @Override

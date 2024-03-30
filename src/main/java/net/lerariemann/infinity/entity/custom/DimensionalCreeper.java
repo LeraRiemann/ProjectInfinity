@@ -13,6 +13,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.world.LocalDifficulty;
@@ -81,7 +82,12 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
     }
     @Override
     public boolean hasCustomName() {
-        return false;
+        return super.hasCustomName();
+    }
+
+    @Override
+    public Text getName() {
+        return super.getName();
     }
 
     @Override
