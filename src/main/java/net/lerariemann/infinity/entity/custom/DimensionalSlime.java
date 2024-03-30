@@ -45,6 +45,11 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     }
 
     @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+
+    @Override
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(core, Blocks.STONE.getDefaultState());
