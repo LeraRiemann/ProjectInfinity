@@ -45,6 +45,10 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     public int getAge() {
         return age;
     }
+    @Override
+    public boolean hasCustomName() {
+        return false;
+    }
 
     @Override
     @Nullable

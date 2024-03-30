@@ -21,6 +21,7 @@ import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -43,6 +44,7 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     public int getAge() {
         return age;
     }
+
 
     @Override
     public boolean hasCustomName() {
