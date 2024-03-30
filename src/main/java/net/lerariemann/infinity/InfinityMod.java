@@ -17,7 +17,6 @@ public class InfinityMod implements ModInitializer {
 	public static final Identifier WORLD_ADD = getId("reload_worlds");
 	public static final Identifier SHADER_RELOAD = getId("reload_shader");
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final Identifier SHADER_RELOAD_SIMPLE = getId("reload_shader_simple");
 
     public static Identifier getId(String value){
 		return new Identifier(MOD_ID, value);

@@ -18,7 +18,7 @@ public class ModEntities {
     }
     public static final EntityType<DimensionalSlime> DIMENSIONAL_SLIME = register("dimensional_slime",
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, DimensionalSlime::new)
-                    .dimensions(EntityDimensions.fixed(2.04f, 2.04f)).trackRangeChunks(10));
+                    .dimensions(EntityDimensions.changing(2.04f, 2.04f)).trackRangeChunks(10));
     public static final EntityType<DimensionalSkeleton> DIMENSIONAL_SKELETON = register("dimensional_skeleton",
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, DimensionalSkeleton::new)
                     .dimensions(EntityDimensions.fixed(0.6f, 1.99f)).trackRangeChunks(8));

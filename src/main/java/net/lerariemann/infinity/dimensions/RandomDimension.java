@@ -52,7 +52,7 @@ public class RandomDimension {
         createDirectories();
         initializeStorage();
         if (Easterizer.easterize(this)) {
-            wrap_up();
+            wrap_up(true);
             return;
         }
         genBasics();
@@ -65,7 +65,7 @@ public class RandomDimension {
             addStructures(b);
         }
         writeTags(getRootPath());
-        wrap_up();
+        wrap_up(false);
     }
 
     public String getRootPath() {
@@ -110,7 +110,8 @@ public class RandomDimension {
                 RandomProvider.Block("minecraft:deepslate") : default_block;
     }
 
-    void wrap_up() {
+    void wrap_up(boolean bl) {
+        (new RandomInfinityOptions(this, bl)).save();
         CommonIO.write(data, getStoragePath() + "/dimension", name + ".json");
         if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
     }

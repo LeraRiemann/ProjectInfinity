@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.client.ShaderTransiever;
+import net.lerariemann.infinity.client.PacketTransiever;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.minecraft.block.entity.BlockEntity;
@@ -65,8 +65,7 @@ public class InfinityModClient implements ClientModInitializer {
             }
             client.execute(() -> (new DimensionGrabber(client.getNetworkHandler().getRegistryManager())).grab_for_client(id, optiondata, biomeids, biomes));
         });
-        ClientPlayNetworking.registerGlobalReceiver(InfinityMod.SHADER_RELOAD, ShaderTransiever::receive);
-        ClientPlayNetworking.registerGlobalReceiver(InfinityMod.SHADER_RELOAD_SIMPLE, ShaderTransiever::receive_simple);
+        ClientPlayNetworking.registerGlobalReceiver(InfinityMod.SHADER_RELOAD, PacketTransiever::receive);
         ModEntities.registerEntityRenderers();
     }
 }

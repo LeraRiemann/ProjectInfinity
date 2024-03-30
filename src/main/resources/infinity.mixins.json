@@ -15,11 +15,14 @@
     "PlayerManagerMixin",
     "PortalForcerMixin",
     "ServerPlayerEntityMixin",
+    "ServerWorldMixin",
     "SlimeEntityMixin",
     "WorldChunkMixin"
   ],
   "client": [
-    "GameRendererMixin"
+    "GameRendererMixin",
+    "MinecraftClientMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

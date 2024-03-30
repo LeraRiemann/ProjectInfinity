@@ -11,7 +11,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8.0,
+                "max": 5.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
@@ -27,7 +27,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8.0,
+                "max": 5.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
@@ -43,7 +43,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8.0,
+                "max": 5.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
@@ -59,7 +59,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8.0,
+                "max": 5.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
@@ -75,7 +75,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8.0,
+                "max": 5.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
@@ -91,7 +91,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8.0,
+                "max": 5.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
@@ -107,7 +107,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8.0,
+                "max": 5.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
@@ -123,13 +123,13 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8.0,
+                "max": 5.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:white_terracota",
+          "name": "minecraft:white_terracotta",
           "weight": 1
         },
         {
@@ -139,13 +139,13 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8.0,
+                "max": 5.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:white_glazed_terracota",
+          "name": "minecraft:white_glazed_terracotta",
           "weight": 1
         },
         {
@@ -155,7 +155,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8.0,
+                "max": 5.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"

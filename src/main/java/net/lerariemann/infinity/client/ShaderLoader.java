@@ -8,7 +8,6 @@ import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.resource.ResourcePackManager;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,12 +27,9 @@ public class ShaderLoader {
             throw new RuntimeException(e);
         }
         if(bl && shaderDir(client).resolve(FILENAME).toFile().exists()) {
-            LogManager.getLogger().info(1);
             ((GameRendererAccess)(client.gameRenderer)).loadPP(InfinityMod.getId("shaders/" + FILENAME));
-            LogManager.getLogger().info(2);
             return;
         }
-        LogManager.getLogger().info(3);
         client.gameRenderer.disablePostProcessor();
     }
     static void load(MinecraftClient client) throws IOException {
