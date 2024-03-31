@@ -1,0 +1,14 @@
+{
+  "type": "infinity:pyramid",
+  "biomes": "infinity:classic",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "top_y": 127,
+  "bottom_y": 50,
+  "block": {
+    "type": "simple_state_provider",
+    "state": {
+      "Name": "minecraft:bricks"
+    }
+  }
+}

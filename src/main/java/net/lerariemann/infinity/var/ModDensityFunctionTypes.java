@@ -7,6 +7,8 @@ import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.dynamic.CodecHolder;
+import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
+import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.world.gen.densityfunction.DensityFunction;
 
 public class ModDensityFunctionTypes {
@@ -255,6 +257,54 @@ public class ModDensityFunctionTypes {
         }
     }
 
+    final static DoublePerlinNoiseSampler sampler, sampler2;
+
+    static {
+        sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, gen(8));
+        sampler2 = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -6, gen(8));
+    }
+
+    static double[] gen(int octaves){
+        double[] a = new double[octaves];
+        for (int i = 0; i < octaves; i++) a[i] = 1;
+        return a;
+    }
+
+    public record Classic(int sealevel) implements DensityFunction.Base {
+        public static final CodecHolder<Classic> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.create(instance -> instance.group(
+                Codec.INT.fieldOf("sealevel").orElse(64).forGetter(a -> a.sealevel)).apply(
+                instance, Classic::new)));
+
+        @Override
+        public double sample(NoisePos pos) {
+            return pos.blockY() < sample(pos.blockX(), pos.blockZ()) ? 1 : -1;
+        }
+
+        int sample(int x, int z) {
+            double heightLow = sampler.sample(x * 1.3, 0, z * 1.3)*6 - 6;
+            double heightHigh = sampler.sample(x * 1.3, 200, z * 1.3)*7.2 + 6;
+            if (sampler2.sample(x, 0, z) > 0.0) {
+                heightHigh = heightLow;
+            }
+            double heightResult = Math.max(heightLow, heightHigh) / 2;
+
+            if (heightResult < 0.0) {
+                heightResult *= 0.8;
+            }
+
+            return sealevel + (int)heightResult;
+        }
+
+        @Override
+        public double minValue() {
+            return -1;
+        }
+        @Override
+        public double maxValue() { return 1; }
+        @Override
+        public CodecHolder<? extends DensityFunction> getCodecHolder() { return CODEC_HOLDER; }
+    }
+
     public static <T extends DensityFunction> void register(String name, CodecHolder<T> holder) {
         Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":" + name, holder.codec());
     }
@@ -267,5 +317,6 @@ public class ModDensityFunctionTypes {
         register("menger", Menger.CODEC_HOLDER);
         register("skygrid", Skygrid.CODEC_HOLDER);
         register("library", Library.CODEC_HOLDER);
+        register("classic", Classic.CODEC_HOLDER);
     }
 }
