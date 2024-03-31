@@ -1,4 +1,7 @@
 {
+  "easter-options": {
+    "time_scale": 100.0
+  },
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 25,

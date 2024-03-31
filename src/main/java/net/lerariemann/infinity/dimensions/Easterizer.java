@@ -5,6 +5,7 @@ import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.var.ModCommands;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Pair;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -28,17 +29,18 @@ public class Easterizer {
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
                     String type = "default";
                     NbtCompound compound = CommonIO.read(p.toFile());
-                    if (compound.contains("easter-name")) {
-                        name = compound.getString("easter-name");
-                        compound.remove("easter-name");
+                    if (compound.contains("easter_name")) {
+                        name = compound.getString("easter_name");
+                        compound.remove("easter_name");
                     }
-                    if (compound.contains("easter-type")) {
-                        type = compound.getString("easter-type");
-                        compound.remove("easter-type");
+                    if (compound.contains("easter_type")) {
+                        type = compound.getString("easter_type");
+                        compound.remove("easter_type");
                     }
-                    if (compound.contains("easter-options")) {
-                        optionmap.put("infinity:" + name, compound.getCompound("easter-options"));
-                        compound.remove("easter-options");
+                    if (compound.contains("easter_options")) {
+                        optionmap.put("infinity:" + name, compound.getCompound("easter_options"));
+                        LogManager.getLogger().info("infinity:" + name);
+                        compound.remove("easter_options");
                     }
                     Long l = ModCommands.getDimensionSeed(name, prov);
                     Pair<NbtCompound, Pair<String, String>> easter_pair = new Pair<>(compound, new Pair<>(name, type));

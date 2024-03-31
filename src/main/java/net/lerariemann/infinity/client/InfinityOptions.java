@@ -15,8 +15,8 @@ public record InfinityOptions(NbtCompound data) {
     }
     public static InfinityOptions generate(MinecraftServer server, RegistryKey<World> worldKey) {
         String s = worldKey.getValue().toString();
-        if (s.contains("generated_")) {
-            String name = s.substring(s.lastIndexOf("generated_"));
+        if (s.contains("infinity:")) {
+            String name = s.substring(s.lastIndexOf("infinity:") + 9);
             File f = server.getSavePath(WorldSavePath.DATAPACKS).resolve(name + "/data/infinity/options.json").toFile();
             if (f.exists()) {
                 return new InfinityOptions(CommonIO.read(f));
@@ -35,5 +35,9 @@ public record InfinityOptions(NbtCompound data) {
 
     public float getLunarSize() {
         return data.contains("lunar_size") ? data.getFloat("lunar_size") : 20.0f;
+    }
+
+    public double getTimeScale() {
+        return data.contains("time_scale") ? data.getDouble("time_scale") : 1.0;
     }
 }

@@ -7,6 +7,7 @@
     "AbstractFireBlockMixin",
     "ChunkRegionMixin",
     "CreeperEntityMixin",
+    "DimensionTypeMixin",
     "EntityMixin",
     "MaterialRuleContextAccess",
     "MinecraftServerMixin",

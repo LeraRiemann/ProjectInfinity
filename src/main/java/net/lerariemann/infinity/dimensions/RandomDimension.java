@@ -112,6 +112,7 @@ public class RandomDimension {
 
     void wrap_up(boolean bl) {
         (new RandomInfinityOptions(this, bl)).save();
+        LogManager.getLogger().info(3);
         CommonIO.write(data, getStoragePath() + "/dimension", name + ".json");
         if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
     }

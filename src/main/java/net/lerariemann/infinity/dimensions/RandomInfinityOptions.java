@@ -13,12 +13,13 @@ public class RandomInfinityOptions {
     String path;
     public RandomInfinityOptions(RandomDimension parent, boolean bl) {
         data = new NbtCompound();
+        path = parent.getStoragePath();
         RandomProvider prov = parent.PROVIDER;
         Random r = parent.random;
         if (bl && prov.easterizer.optionmap.containsKey(parent.fullname)) {
             data = prov.easterizer.optionmap.get(parent.fullname);
-            return;
         }
+        if (bl) return;
         NbtCompound shader = new NbtCompound();
         if (prov.roll(r, "use_shaders")) {
             Object[] lst = genMatrix(r);
@@ -27,7 +28,15 @@ public class RandomInfinityOptions {
         data.put("shader", shader);
         data.putFloat("solar_size", (float)(30*r.nextExponential()));
         data.putFloat("lunar_size", (float)(20*r.nextExponential()));
-        path = parent.getStoragePath();
+        data.putDouble("time_scale", timeScale(r));
+    }
+
+    public static double timeScale(Random r) {
+        double d = r.nextDouble();
+        if (d < 0.1) return r.nextDouble();
+        if (d < 0.5) return 1.0;
+        if (d < 0.8) return r.nextExponential()*3;
+        return r.nextExponential()*30;
     }
 
     public void save() {
