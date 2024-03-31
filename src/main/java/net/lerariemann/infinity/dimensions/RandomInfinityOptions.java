@@ -35,7 +35,7 @@ public class RandomInfinityOptions {
         double d = r.nextDouble();
         if (d < 0.1) return r.nextDouble();
         if (d < 0.5) return 1.0;
-        if (d < 0.8) return r.nextExponential()*3;
+        if (d < 0.95) return r.nextExponential()*3;
         return r.nextExponential()*30;
     }
 
