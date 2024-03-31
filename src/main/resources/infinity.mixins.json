@@ -21,6 +21,7 @@
     "WorldChunkMixin"
   ],
   "client": [
+    "ClientWorldMixin",
     "GameRendererMixin",
     "MinecraftClientMixin",
     "WorldRendererMixin"

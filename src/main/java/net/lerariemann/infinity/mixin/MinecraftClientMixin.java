@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin;
 
-import net.lerariemann.infinity.access.MinecraftClientAccess;
+import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.client.InfinityOptions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
-public class MinecraftClientMixin implements MinecraftClientAccess {
+public class MinecraftClientMixin implements InfinityOptionsAccess {
     @Unique
     public InfinityOptions infinityoptions;
 

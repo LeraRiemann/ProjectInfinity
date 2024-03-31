@@ -17,12 +17,8 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -68,6 +64,7 @@ public abstract class SimpleRegistryMixin<T> implements ExtendedRegistry<T>, Reg
     private List<RegistryEntry.Reference<T>> cachedEntries;
     @Shadow private int nextId;
 
+    @Unique
     @SuppressWarnings("unchecked") private final Event<RegistryEntryDeletedCallback<T>> dynreg$entryDeletedEvent = EventFactory.createArrayBacked(RegistryEntryDeletedCallback.class, callbacks -> (rawId, entry) -> {
         for (var callback : callbacks) {
             callback.onEntryDeleted(rawId, entry);
@@ -76,12 +73,15 @@ public abstract class SimpleRegistryMixin<T> implements ExtendedRegistry<T>, Reg
         if (entry.value() instanceof RegistryEntryDeletedCallback<?> callback)
             ((RegistryEntryDeletedCallback<T>) callback).onEntryDeleted(rawId, entry);
     });
+    @Unique
     private final Event<RegistryFrozenCallback<T>> dynreg$registryFrozenEvent = EventFactory.createArrayBacked(RegistryFrozenCallback.class, callbacks -> () -> {
         for (var callback : callbacks) {
             callback.onRegistryFrozen();
         }
     });
+    @Unique
     private final IntList dynreg$freeIds = new IntArrayList();
+    @Unique
     private boolean dynreg$intrusive;
 
     @Override

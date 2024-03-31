@@ -5,7 +5,6 @@ import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.var.ModCommands;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Pair;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -39,7 +38,6 @@ public class Easterizer {
                     }
                     if (compound.contains("easter_options")) {
                         optionmap.put("infinity:" + name, compound.getCompound("easter_options"));
-                        LogManager.getLogger().info("infinity:" + name);
                         compound.remove("easter_options");
                     }
                     Long l = ModCommands.getDimensionSeed(name, prov);
