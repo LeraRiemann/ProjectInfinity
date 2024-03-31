@@ -19,6 +19,12 @@
       },
       "trigger": "minecraft:changed_dimension"
     },
+    "classic": {
+      "conditions": {
+        "to": "infinity:classic"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
     "content": {
       "conditions": {
         "to": "infinity:content"
