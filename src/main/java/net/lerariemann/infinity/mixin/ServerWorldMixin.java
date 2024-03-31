@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.mixin;
 
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
-import net.lerariemann.infinity.access.ServerWorldAccessInf;
 import net.lerariemann.infinity.client.InfinityOptions;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
@@ -30,7 +29,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
 @Mixin(ServerWorld.class)
-public abstract class ServerWorldMixin extends World implements StructureWorldAccess, ServerWorldAccessInf {
+public abstract class ServerWorldMixin extends World implements StructureWorldAccess, InfinityOptionsAccess {
     @Unique
     public InfinityOptions infinityoptions;
 
@@ -45,7 +44,12 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
         ((InfinityOptionsAccess)(Object)t).setInfinityOptions(infinityoptions);
     }
 
+    @Override
     public InfinityOptions getInfinityOptions() {
         return infinityoptions;
+    }
+    @Override
+    public void setInfinityOptions(InfinityOptions options) {
+        infinityoptions = options;
     }
 }

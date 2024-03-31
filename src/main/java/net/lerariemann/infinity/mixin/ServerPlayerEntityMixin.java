@@ -65,7 +65,12 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
                 bl = true;
                 String keystr = registryKey.getValue().getPath();
                 String is = keystr.substring(keystr.lastIndexOf("_") + 1);
-                long i = Long.parseLong(is);
+                long i;
+                try {
+                    i = Long.parseLong(is);
+                } catch (Exception e) {
+                    i = ModCommands.getDimensionSeed(is, serverWorld.getServer());
+                }
                 NeitherPortalBlock.modifyPortal(destination, pos2, destination.getBlockState(pos), i, true);
                 break;
             }

@@ -10,7 +10,6 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.client.ShaderLoader;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
@@ -23,7 +22,6 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.SpawnReason;
@@ -156,9 +154,6 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 }
                 player.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
             }
-        }
-        else {
-            ShaderLoader.reloadShaders(MinecraftClient.getInstance(), true);
         }
         return ActionResult.SUCCESS;
     }
