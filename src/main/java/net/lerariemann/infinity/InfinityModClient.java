@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.client.PacketTransiever;
+import net.lerariemann.infinity.options.PacketTransiever;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.minecraft.block.entity.BlockEntity;

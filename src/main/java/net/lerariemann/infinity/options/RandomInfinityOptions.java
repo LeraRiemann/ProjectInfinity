@@ -1,5 +1,7 @@
-package net.lerariemann.infinity.dimensions;
+package net.lerariemann.infinity.options;
 
+import net.lerariemann.infinity.dimensions.RandomDimension;
+import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 
@@ -29,6 +31,7 @@ public class RandomInfinityOptions {
         data.putFloat("solar_size", (float)(30*r.nextExponential()));
         data.putFloat("lunar_size", (float)(20*r.nextExponential()));
         data.putDouble("time_scale", timeScale(r));
+        data.putDouble("mavity", mavity(r));
     }
 
     public static double timeScale(Random r) {
@@ -37,6 +40,13 @@ public class RandomInfinityOptions {
         if (d < 0.5) return 1.0;
         if (d < 0.95) return r.nextExponential()*3;
         return r.nextExponential()*30;
+    }
+
+    public static double mavity(Random r) {
+        double d = r.nextDouble();
+        if (d < 0.5) return 1.0;
+        if (d < 0.75) return r.nextDouble();
+        return 1 / (0.95*r.nextDouble() + 0.05);
     }
 
     public void save() {

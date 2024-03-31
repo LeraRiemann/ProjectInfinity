@@ -7,24 +7,29 @@
     "AbstractFireBlockMixin",
     "ChunkRegionMixin",
     "CreeperEntityMixin",
-    "DimensionTypeMixin",
     "EntityMixin",
     "MaterialRuleContextAccess",
     "MinecraftServerMixin",
     "MobEntityMixin",
     "NetherPortalBlockMixin",
-    "PlayerManagerMixin",
     "PortalForcerMixin",
     "ServerPlayerEntityMixin",
-    "ServerWorldMixin",
     "SlimeEntityMixin",
-    "WorldChunkMixin"
+    "WorldChunkMixin",
+    "mavity.BoatEntityMixin",
+    "mavity.LivingEntityMixin",
+    "mavity.PersistentProjectileEntityMixin",
+    "mavity.SeveralEntitiesMixin",
+    "mavity.ThrownEntityMixin",
+    "options.DimensionTypeMixin",
+    "options.PlayerManagerMixin",
+    "options.ServerWorldMixin"
   ],
   "client": [
-    "ClientWorldMixin",
-    "GameRendererMixin",
-    "MinecraftClientMixin",
-    "WorldRendererMixin"
+    "options.ClientWorldMixin",
+    "options.GameRendererMixin",
+    "options.MinecraftClientMixin",
+    "options.WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

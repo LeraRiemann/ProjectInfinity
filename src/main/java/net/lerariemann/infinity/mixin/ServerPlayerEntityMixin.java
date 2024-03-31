@@ -5,7 +5,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.client.PacketTransiever;
+import net.lerariemann.infinity.options.PacketTransiever;
 import net.lerariemann.infinity.var.ModCommands;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Blocks;
@@ -97,7 +97,6 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
             Entity self = getCameraEntity();
             BlockPos blockPos2 = w.getWorldBorder().clamp(self.getX() * d, self.getY(), self.getZ() * d);
             this.teleport(w, blockPos2.getX(), blockPos2.getY(), blockPos2.getZ(), new HashSet<>(), self.getYaw(), self.getPitch());
-            ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(w));
         }
     }
 
@@ -105,6 +104,12 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
     private void injected4(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(this.getServerWorld()));
     }
+
+    @Inject(method= "teleport(Lnet/minecraft/server/world/ServerWorld;DDDFF)V", at = @At(value="INVOKE", target ="Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
+    private void injected5(ServerWorld targetWorld, double x, double y, double z, float yaw, float pitch, CallbackInfo ci) {
+        ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(targetWorld));
+    }
+
 
     @Override
     public void setWarpTimer(long ticks, long dim) {

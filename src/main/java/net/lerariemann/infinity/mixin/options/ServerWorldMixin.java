@@ -1,7 +1,7 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.options;
 
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
-import net.lerariemann.infinity.client.InfinityOptions;
+import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;

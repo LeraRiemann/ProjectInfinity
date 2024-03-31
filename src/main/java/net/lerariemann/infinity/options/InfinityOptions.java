@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.client;
+package net.lerariemann.infinity.options;
 
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.NbtCompound;
@@ -39,5 +39,9 @@ public record InfinityOptions(NbtCompound data) {
 
     public double getTimeScale() {
         return data.contains("time_scale") ? data.getDouble("time_scale") : 1.0;
+    }
+
+    public double getMavity() {
+        return data.contains("mavity") ? data.getDouble("mavity") : 1.0;
     }
 }

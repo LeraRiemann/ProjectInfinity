@@ -1,9 +1,9 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.options;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.client.PacketTransiever;
+import net.lerariemann.infinity.options.PacketTransiever;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;

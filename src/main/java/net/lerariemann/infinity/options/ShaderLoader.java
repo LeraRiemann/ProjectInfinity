@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.client;
+package net.lerariemann.infinity.options;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

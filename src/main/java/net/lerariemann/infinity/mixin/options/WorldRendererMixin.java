@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.options;
 
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.minecraft.client.MinecraftClient;

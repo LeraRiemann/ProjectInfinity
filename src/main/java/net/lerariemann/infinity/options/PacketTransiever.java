@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.client;
+package net.lerariemann.infinity.options;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
