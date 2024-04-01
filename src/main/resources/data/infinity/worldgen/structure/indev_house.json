@@ -3,13 +3,13 @@
     "biomes": "infinity:classic",
     "step": "surface_structures",
     "spawn_overrides": {},
-    "terrain_adaptation": "none",
+    "terrain_adaptation": "beard_thin",
     "start_pool": "infinity:indev_house",
     "size": 1,
     "start_height": {
-      "absolute": 70
+      "absolute": 0
     },
-    "project_start_to_heightmap": "WORLD_SURFACE_WG",
+    "project_start_to_heightmap": "MOTION_BLOCKING",
     "max_distance_from_center": 16,
     "use_expansion_hack": false
-  }
+}
