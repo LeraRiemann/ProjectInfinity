@@ -1,0 +1,15 @@
+{
+    "structures": [
+      {
+        "structure": "infinity:indev_house",
+        "weight": 1
+      }
+    ],
+    "placement": {
+      "type": "minecraft:random_spread",
+      "spacing": 4096,
+      "separation": 4095,
+      "spread_type": "triangular",
+      "salt": 1646207470
+    }
+  }

@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:jigsaw",
+    "biomes": "infinity:classic",
+    "step": "surface_structures",
+    "spawn_overrides": {},
+    "terrain_adaptation": "none",
+    "start_pool": "infinity:indev_house",
+    "size": 1,
+    "start_height": {
+      "absolute": 70
+    },
+    "project_start_to_heightmap": "WORLD_SURFACE_WG",
+    "max_distance_from_center": 16,
+    "use_expansion_hack": false
+  }

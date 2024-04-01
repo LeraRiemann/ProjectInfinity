@@ -3,7 +3,9 @@ package net.lerariemann.infinity.access;
 import net.minecraft.world.World;
 
 public interface MavityInterface {
-    World getWorld();
+    default World getWorld() {
+        return null;
+    }
 
     default double getMavity() {
         double mavity;

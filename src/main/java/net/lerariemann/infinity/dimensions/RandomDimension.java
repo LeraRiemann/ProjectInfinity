@@ -69,11 +69,11 @@ public class RandomDimension {
     }
 
     public String getRootPath() {
-        return server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + name;
+        return server.getSavePath(WorldSavePath.DATAPACKS).resolve(name).toString();
     }
 
     public String getStoragePath() {
-        return getRootPath() + "/data/" + InfinityMod.MOD_ID;
+        return server.getSavePath(WorldSavePath.DATAPACKS).resolve(name).resolve("data").resolve(InfinityMod.MOD_ID).toString();
     }
 
     public void initializeStorage() {

@@ -22,10 +22,11 @@ public class Easterizer {
         map = new HashMap<>();
         optionmap = new HashMap<>();
         try {
-            walk(Paths.get(prov.configPath + "util/easter")).forEach(p -> {
+            walk(Paths.get(prov.configPath).resolve("util").resolve("easter")).forEach(p -> {
                 String fullname = p.toString();
                 if (p.toFile().isFile() && !fullname.endsWith("_type.json")) {
-                    String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
+                    String name = p.getFileName().toString();
+                    name = name.substring(0, name.length() - 5);
                     String type = "default";
                     NbtCompound compound = CommonIO.read(p.toFile());
                     if (compound.contains("easter-name")) {
