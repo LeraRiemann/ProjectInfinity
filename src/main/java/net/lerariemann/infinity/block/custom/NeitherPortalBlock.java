@@ -44,6 +44,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -122,6 +123,11 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (open) world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
     }
 
+    boolean world_exists(MinecraftServer s, long l) {
+        return s.getSavePath(WorldSavePath.DATAPACKS).resolve(ModCommands.getIdentifier(l, s).getPath()).toFile().exists() ||
+                s.getWorld(ModCommands.getKey(l, s)) != null;
+    }
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos,
                               PlayerEntity player, Hand hand, BlockHitResult hit) {
@@ -129,7 +135,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             MinecraftServer s = world.getServer();
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (s!=null && blockEntity instanceof NeitherPortalBlockEntity) {
-                if (((NeitherPortalBlockEntity)blockEntity).getOpen()) return ActionResult.SUCCESS;
+                if (((NeitherPortalBlockEntity)blockEntity).getOpen() && world_exists(s, ((NeitherPortalBlockEntity)blockEntity).getDimension()))
+                    return ActionResult.SUCCESS;
                 RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
                 boolean bl = prov.portalKey.isBlank();
                 boolean bl2 = false;
