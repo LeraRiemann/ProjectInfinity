@@ -53,9 +53,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.util.Queue;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
     private static final Random RANDOM = new Random();
@@ -221,16 +219,22 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         }
     }
 
+    static Map<Item, String> recipes = Map.ofEntries(
+            Map.entry(Items.BOOKSHELF, "infinity:book_box"),
+            Map.entry(Items.TNT, "infinity:timebomb"),
+            Map.entry(Items.LECTERN, "infinity:altar")
+    );
+
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (!world.isClient() && entity instanceof ItemEntity) {
-            ItemStack itemStack = ((ItemEntity)entity).getStack();
-            if (itemStack.getItem() == Items.BOOKSHELF) {
+        if (!world.isClient() && entity instanceof ItemEntity e && !e.isRemoved()) {
+            ItemStack itemStack = e.getStack();
+            if (recipes.containsKey(itemStack.getItem())) {
                 Vec3d v = entity.getVelocity();
-                ItemEntity bookbox = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(),
-                        new ItemStack(ModBlocks.BOOK_BOX_ITEM).copyWithCount(itemStack.getCount()),
+                ItemEntity result = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(),
+                        new ItemStack(Registries.ITEM.get(new Identifier(recipes.get(itemStack.getItem())))).copyWithCount(itemStack.getCount()),
                         -v.x, -v.y, -v.z);
-                world.spawnEntity(bookbox);
+                world.spawnEntity(result);
                 entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             }
         }
