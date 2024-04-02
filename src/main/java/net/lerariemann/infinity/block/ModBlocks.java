@@ -21,7 +21,7 @@ public class ModBlocks {
             luminance(state -> state.get(TransfiniteAltarBase.FLOWER) ? 15 : 0));
     public static final Item ALTAR_ITEM = new BlockItem(ALTAR, new FabricItemSettings());
     public static final Block TIME_BOMB = new TimeBombBlock(FabricBlockSettings.copy(Blocks.BEDROCK).nonOpaque().
-            luminance(state -> state.get(TimeBombBlock.ACTIVE) ? 15 : 0));
+            luminance(state -> 15));
     public static final Item TIME_BOMB_ITEM = new BlockItem(TIME_BOMB, new FabricItemSettings());
     private static void registerBlock(String name, Block block) {
         Registry.register(Registries.BLOCK, InfinityMod.getId(name), block);

@@ -83,15 +83,15 @@ public class TimeBombBlock extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient()) {
-            ServerWorld w = ((ServerPlayerEntity)player).getServerWorld();
-            if (((Timebombable)w).isTimebobmed() == 0) {
-                if (state.get(ACTIVE)) {
-                    world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                    world.getEntitiesByType(TypeFilter.instanceOf(AreaEffectCloudEntity.class), Box.of(pos.toCenterPos(), 1.0, 1.0, 1.0), Entity::isAlive).
-                            forEach(e -> e.remove(Entity.RemovalReason.DISCARDED));
-                    return ActionResult.SUCCESS;
-                }
-                if (world.getRegistryKey().getValue().toString().contains("infinity")) {
+            if (world.getRegistryKey().getValue().toString().contains("infinity")) {
+                ServerWorld w = ((ServerPlayerEntity)player).getServerWorld();
+                if (((Timebombable)w).isTimebobmed() == 0) {
+                    if (state.get(ACTIVE)) {
+                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                        world.getEntitiesByType(TypeFilter.instanceOf(AreaEffectCloudEntity.class), Box.of(pos.toCenterPos(), 1.0, 1.0, 1.0), Entity::isAlive).
+                                forEach(e -> e.remove(Entity.RemovalReason.DISCARDED));
+                        return ActionResult.SUCCESS;
+                    } //remove after regenerating a dimension
                     if (player.getStackInHand(hand).isEmpty() && player.isSneaking()) {
                         Path path = w.getServer().getSavePath(WorldSavePath.DATAPACKS).resolve(w.getRegistryKey().getValue().getPath());
                         activate(w, path);
@@ -101,13 +101,18 @@ public class TimeBombBlock extends Block {
                         world.setBlockState(pos, state.with(ACTIVE, true));
                         world.playSound(null, pos, ModSounds.IVORY_MUSIC_CHALLENGER_EVENT, SoundCategory.BLOCKS, 1f, 1f);
                         return ActionResult.SUCCESS;
-                    }
+                    } //activate
+                    if (!state.get(ACTIVE)) {
+                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                        player.getInventory().insertStack(ModBlocks.TIME_BOMB_ITEM.getDefaultStack());
+                        return ActionResult.SUCCESS;
+                    } //pick up
                 }
-                if (!state.get(ACTIVE)) {
-                    world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                    player.getInventory().insertStack(ModBlocks.TIME_BOMB_ITEM.getDefaultStack());
-                    return ActionResult.SUCCESS;
-                }
+            }
+            else if (player.getStackInHand(hand).isEmpty()) {
+                world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                player.getInventory().insertStack(ModBlocks.TIME_BOMB_ITEM.getDefaultStack());
+                return ActionResult.SUCCESS;
             }
         }
         return ActionResult.PASS;
