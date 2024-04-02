@@ -6,10 +6,13 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 public class ModSounds {
-    public static final Identifier MY_SOUND_ID = new Identifier("infinity:music.ivory.hope_instilled");
-    public static SoundEvent MY_SOUND_EVENT = SoundEvent.of(MY_SOUND_ID);
+    public static final Identifier IVORY_MUSIC_HOPE = new Identifier("infinity:music.ivory.hope_instilled");
+    public static final Identifier IVORY_MUSIC_CHALLENGER = new Identifier("infinity:music.ivory.challenger");
+    public static SoundEvent IVORY_MUSIC_HOPE_EVENT = SoundEvent.of(IVORY_MUSIC_HOPE);
+    public static SoundEvent IVORY_MUSIC_CHALLENGER_EVENT = SoundEvent.of(IVORY_MUSIC_CHALLENGER);
 
     public static void registerSounds(){
-        Registry.register(Registries.SOUND_EVENT, MY_SOUND_ID, MY_SOUND_EVENT);
+        Registry.register(Registries.SOUND_EVENT, IVORY_MUSIC_HOPE, IVORY_MUSIC_HOPE_EVENT);
+        Registry.register(Registries.SOUND_EVENT, IVORY_MUSIC_CHALLENGER, IVORY_MUSIC_CHALLENGER_EVENT);
     }
 }

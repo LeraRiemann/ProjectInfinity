@@ -12,6 +12,7 @@
     "MinecraftServerMixin",
     "MobEntityMixin",
     "NetherPortalBlockMixin",
+    "PlayerEntityMixin",
     "PortalForcerMixin",
     "ServerPlayerEntityMixin",
     "SlimeEntityMixin",

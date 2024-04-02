@@ -1,0 +1,74 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"textures": {
+		"frame": "infinity:block/timebomb/frame",
+		"glass": "infinity:block/timebomb/glass",
+		"inner": "infinity:block/timebomb/inner",
+		"pimp": "block/copper_block",
+		"particle": "block/copper_block"
+	},
+	"elements": [
+		{
+			"from": [3, 0, 3],
+			"to": [13, 2, 13],
+			"faces": {
+				"north": {"uv": [0, 0, 10, 2], "texture": "#frame"},
+				"east": {"uv": [0, 0, 10, 2], "texture": "#frame"},
+				"south": {"uv": [0, 0, 10, 2], "texture": "#frame"},
+				"west": {"uv": [0, 0, 10, 2], "texture": "#frame"},
+				"up": {"uv": [0, 0, 10, 10], "texture": "#frame"},
+				"down": {"uv": [0, 0, 10, 10], "texture": "#frame"}
+			}
+		},
+		{
+			"from": [3, 12, 3],
+			"to": [13, 14, 13],
+			"faces": {
+				"north": {"uv": [0, 0, 10, 2], "texture": "#frame"},
+				"east": {"uv": [0, 0, 10, 2], "texture": "#frame"},
+				"south": {"uv": [0, 0, 10, 2], "texture": "#frame"},
+				"west": {"uv": [0, 0, 10, 2], "texture": "#frame"},
+				"up": {"uv": [0, 0, 10, 10], "texture": "#frame"},
+				"down": {"uv": [0, 0, 10, 10], "texture": "#frame"}
+			}
+		},
+		{
+			"from": [4, 2, 4],
+			"to": [12, 12, 12],
+			"faces": {
+				"north": {"uv": [0, 0, 8, 10], "texture": "#glass"},
+				"east": {"uv": [0, 0, 8, 10], "texture": "#glass"},
+				"south": {"uv": [0, 0, 8, 10], "texture": "#glass"},
+				"west": {"uv": [0, 0, 8, 10], "texture": "#glass"}
+			}
+		},
+		{
+			"from": [5, 2, 5],
+			"to": [11, 12, 11],
+			"faces": {
+				"north": {"uv": [0, 0, 6, 10], "texture": "#inner"},
+				"east": {"uv": [0, 0, 6, 10], "texture": "#inner"},
+				"south": {"uv": [0, 0, 6, 10], "texture": "#inner"},
+				"west": {"uv": [0, 0, 6, 10], "texture": "#inner"}
+			}
+		},
+		{
+			"from": [7, 14, 7],
+			"to": [9, 16, 9],
+			"faces": {
+				"north": {"uv": [0, 0, 2, 2], "texture": "#pimp"},
+				"east": {"uv": [0, 0, 2, 2], "texture": "#pimp"},
+				"south": {"uv": [0, 0, 2, 2], "texture": "#pimp"},
+				"west": {"uv": [0, 0, 2, 2], "texture": "#pimp"},
+				"up": {"uv": [0, 0, 2, 2], "texture": "#pimp"}
+			}
+		}
+	],
+	"display": {
+		"firstperson_righthand": {
+			"rotation": [0, 135, 0],
+			"scale": [0.4, 0.4, 0.4]
+		}
+	}
+}

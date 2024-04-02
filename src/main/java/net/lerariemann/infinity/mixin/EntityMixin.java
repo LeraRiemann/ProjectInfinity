@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.mixin;
 
+import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.var.ModCommands;
@@ -34,7 +35,7 @@ public class EntityMixin {
             if (e == null) return serverWorld;
             long d = e.getDimension();
             serverWorld2 = serverWorld.getServer().getWorld(ModCommands.getKey(d, serverWorld.getServer()));
-            return (serverWorld2 != null && e.getOpen()) ? serverWorld2 : serverWorld;
+            return (serverWorld2 != null && e.getOpen() && ((Timebombable)serverWorld2).isTimebobmed() == 0) ? serverWorld2 : serverWorld;
         }
         return (serverWorld2 != null) ? serverWorld2 : serverWorld;
     }

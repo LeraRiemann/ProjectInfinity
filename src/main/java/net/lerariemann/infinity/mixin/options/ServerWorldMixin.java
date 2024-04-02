@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.mixin.options;
 
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
+import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
@@ -26,12 +27,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 @Mixin(ServerWorld.class)
-public abstract class ServerWorldMixin extends World implements StructureWorldAccess, InfinityOptionsAccess {
+public abstract class ServerWorldMixin extends World implements StructureWorldAccess, InfinityOptionsAccess, Timebombable {
     @Unique
     public InfinityOptions infinityoptions;
+    @Unique
+    public int timebombed;
 
     protected ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, DynamicRegistryManager registryManager, RegistryEntry<DimensionType> dimensionEntry, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long biomeAccess, int maxChainedNeighborUpdates) {
         super(properties, registryRef, registryManager, dimensionEntry, profiler, isClient, debugWorld, biomeAccess, maxChainedNeighborUpdates);
@@ -42,6 +46,22 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
         infinityoptions = InfinityOptions.generate(server, worldKey);
         DimensionType t = getDimension();
         ((InfinityOptionsAccess)(Object)t).setInfinityOptions(infinityoptions);
+        timebombed = 0;
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void injected2(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
+        if (getRegistryKey().getValue().toString().contains("infinity") && timebombed > 0) timebombed++;
+    }
+
+    @Override
+    public void timebomb(int i) {
+        if(getRegistryKey().getValue().toString().contains("infinity")) timebombed = i;
+    }
+
+    @Override
+    public int isTimebobmed() {
+        return timebombed;
     }
 
     @Override

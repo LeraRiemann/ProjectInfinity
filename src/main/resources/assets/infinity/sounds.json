@@ -4,5 +4,11 @@
     "sounds": [
       "infinity:ivory_hope_instilled"
     ]
+  },
+  "music.ivory.challenger": {
+    "subtitle": "subtitles.music.ivory.challenger",
+    "sounds": [
+      "infinity:ivory_challenger"
+    ]
   }
 }

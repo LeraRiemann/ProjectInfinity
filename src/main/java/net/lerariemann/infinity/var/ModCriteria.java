@@ -13,7 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 public class ModCriteria {
-    public static class DimensionOpenedCriterion extends AbstractCriterion<DimensionOpenedCriterion.Conditions> {
+    public static class DimensionOpenedCriterion extends AbstractCriterion<ScoredConditions> {
         static final Identifier ID = InfinityMod.getId("dims_open");
 
         public DimensionOpenedCriterion() {
@@ -25,42 +25,105 @@ public class ModCriteria {
         }
 
         @Override
-        public DimensionOpenedCriterion.Conditions conditionsFromJson(JsonObject jsonObject, LootContextPredicate lootContextPredicate, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
+        public ScoredConditions conditionsFromJson(JsonObject jsonObject, LootContextPredicate lootContextPredicate, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
             int score = jsonObject.getAsJsonPrimitive("amount").getAsInt();
-            return new DimensionOpenedCriterion.Conditions(lootContextPredicate, score);
+            return new ScoredConditions(lootContextPredicate, score, getId());
         }
 
         public void trigger(ServerPlayerEntity player) {
             this.trigger(player, (conditions) -> conditions.test(player.getStatHandler().getStat(ModStats.DIMS_OPENED_STAT)));
         }
+    }
 
-        public static class Conditions extends AbstractCriterionConditions {
-            private final int score;
+    public static class DimensionClosedCriterion extends AbstractCriterion<ScoredConditions> {
+        static final Identifier ID = InfinityMod.getId("dims_closed");
 
-            public Conditions(LootContextPredicate player, int score) {
-                super(DimensionOpenedCriterion.ID, player);
-                this.score = score;
-            }
+        public DimensionClosedCriterion() {
+            super();
+        }
 
-            public boolean test(int stat) {
-                return stat > this.score;
-            }
+        public Identifier getId() {
+            return ID;
+        }
 
-            public static DimensionOpenedCriterion.Conditions create(int i) {
-                return new DimensionOpenedCriterion.Conditions(LootContextPredicate.EMPTY, i);
-            }
+        @Override
+        public ScoredConditions conditionsFromJson(JsonObject jsonObject, LootContextPredicate lootContextPredicate, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
+            int score = jsonObject.getAsJsonPrimitive("amount").getAsInt();
+            return new ScoredConditions(lootContextPredicate, score, getId());
+        }
 
-            public JsonObject toJson(AdvancementEntityPredicateSerializer predicateSerializer) {
-                JsonObject jsonObject = super.toJson(predicateSerializer);
-                jsonObject.add("amount", new JsonPrimitive(this.score));
-                return jsonObject;
-            }
+        public void trigger(ServerPlayerEntity player) {
+            this.trigger(player, (conditions) -> conditions.test(player.getStatHandler().getStat(ModStats.WORLDS_DESTROYED_STAT)));
+        }
+    }
+
+
+    public static class WhoRemainsCriterion extends AbstractCriterion<EmptyConditions> {
+        static final Identifier ID = InfinityMod.getId("who_remains");
+
+        public WhoRemainsCriterion() {
+            super();
+        }
+
+        public Identifier getId() {
+            return ID;
+        }
+
+        @Override
+        public EmptyConditions conditionsFromJson(JsonObject jsonObject, LootContextPredicate lootContextPredicate, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
+            return new EmptyConditions(lootContextPredicate, ID);
+        }
+
+        public void trigger(ServerPlayerEntity player) {
+            this.trigger(player, (conditions) -> true);
+        }
+    }
+
+    public static class EmptyConditions extends AbstractCriterionConditions {
+
+        public EmptyConditions(LootContextPredicate player, Identifier ID) {
+            super(ID, player);
+        }
+
+        public static EmptyConditions create(Identifier ID) {
+            return new EmptyConditions(LootContextPredicate.EMPTY, ID);
+        }
+
+        public JsonObject toJson(AdvancementEntityPredicateSerializer predicateSerializer) {
+            return super.toJson(predicateSerializer);
+        }
+    }
+
+    public static class ScoredConditions extends AbstractCriterionConditions {
+        private final int score;
+
+        public ScoredConditions(LootContextPredicate player, int score, Identifier ID) {
+            super(ID, player);
+            this.score = score;
+        }
+
+        public boolean test(int stat) {
+            return stat >= this.score;
+        }
+
+        public static ScoredConditions create(int i, Identifier ID) {
+            return new ScoredConditions(LootContextPredicate.EMPTY, i, ID);
+        }
+
+        public JsonObject toJson(AdvancementEntityPredicateSerializer predicateSerializer) {
+            JsonObject jsonObject = super.toJson(predicateSerializer);
+            jsonObject.add("amount", new JsonPrimitive(this.score));
+            return jsonObject;
         }
     }
 
     public static DimensionOpenedCriterion DIMS_OPENED;
+    public static DimensionClosedCriterion DIMS_CLOSED;
+    public static WhoRemainsCriterion HE_WHO_REMAINS;
 
     public static void registerCriteria() {
         DIMS_OPENED = Criteria.register(new DimensionOpenedCriterion());
+        DIMS_CLOSED = Criteria.register(new DimensionClosedCriterion());
+        HE_WHO_REMAINS = Criteria.register(new WhoRemainsCriterion());
     }
 }

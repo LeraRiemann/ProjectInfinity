@@ -1,18 +1,27 @@
 package net.lerariemann.infinity.mixin;
 
+import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.PacketTransiever;
 import net.lerariemann.infinity.var.ModCommands;
+import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -37,18 +46,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAccess {
+public abstract class ServerPlayerEntityMixin extends PlayerEntity implements ServerPlayerEntityAccess {
+    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
+        super(world, pos, yaw, gameProfile);
+    }
+
     @Shadow public abstract ServerWorld getServerWorld();
 
     @Shadow public abstract boolean teleport(ServerWorld world, double destX, double destY, double destZ, Set<PositionFlag> flags, float yaw, float pitch);
 
     @Shadow public abstract Entity getCameraEntity();
-    @Shadow public ServerPlayNetworkHandler networkHandler;
 
-    @Unique
-    private long ticksUntilWarp;
-    @Unique
-    private long idForWarp;
+    @Shadow public abstract boolean damage(DamageSource source, float amount);
+    @Shadow public boolean notInAnyWorld;
+    @Shadow public ServerPlayNetworkHandler networkHandler;
+    @Unique private long ticksUntilWarp;
+    @Unique private long idForWarp;
 
 
     @Inject(method = "moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;",
@@ -75,7 +88,7 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
                 break;
             }
             if (bl) {
-                ((PlayerEntity)(Object)this).increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
+                this.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
             }
         }
     }
@@ -97,6 +110,23 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityAcces
             Entity self = getCameraEntity();
             BlockPos blockPos2 = w.getWorldBorder().clamp(self.getX() * d, self.getY(), self.getZ() * d);
             this.teleport(w, blockPos2.getX(), blockPos2.getY(), blockPos2.getZ(), new HashSet<>(), self.getYaw(), self.getPitch());
+        }
+        int i = ((Timebombable)(getServerWorld())).isTimebobmed();
+        if (i > 200) {
+            if (i%4 == 0) {
+                Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE);
+                RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMod.getId("world_ceased")));
+                damage(new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
+            }
+            if (i > 3500) ModCriteria.HE_WHO_REMAINS.trigger((ServerPlayerEntity)(Object)this);
+            if (i > 3540) {
+                this.detach();
+                this.getServerWorld().removePlayer((ServerPlayerEntity)(Object)this, Entity.RemovalReason.CHANGED_DIMENSION);
+                if (!this.notInAnyWorld) {
+                    this.notInAnyWorld = true;
+                    this.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.GAME_WON, 0));
+                }
+            }
         }
     }
 

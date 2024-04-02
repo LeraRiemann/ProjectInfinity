@@ -1,0 +1,23 @@
+{
+  "parent": "infinity:all_time",
+  "display": {
+    "icon": {
+      "item": "minecraft:enchanted_golden_apple"
+    },
+    "title": {
+      "translate": "advancements.infinity.who_remains.title"
+    },
+    "description": {
+      "translate": "advancements.infinity.who_remains.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "who_remains": {
+      "trigger": "infinity:who_remains"
+    }
+  }
+}

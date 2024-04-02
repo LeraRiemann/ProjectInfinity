@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.structure;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.structure.ShiftableStructurePiece;
@@ -37,7 +38,10 @@ public class PyramidGenerator extends ShiftableStructurePiece {
             for (int i = j; i <= 2*size - j; ++i) {
                 for (int k = j; k <= 2*size - j; ++k) {
                     if (this.getBlockAt(world, i, j, k, box).isAir() || this.getBlockAt(world, i, j, k, box).isOf(Blocks.WATER)) {
-                        this.addBlock(world, b.get(random, new BlockPos(i, j, k)), i, j, k, box);
+                        BlockState state;
+                        if (b == null) state = Blocks.BRICKS.getDefaultState();
+                        else state = b.get(random, new BlockPos(i, j, k));
+                        this.addBlock(world, state, i, j, k, box);
                     }
                 }
             }
