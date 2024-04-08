@@ -11,6 +11,7 @@ import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.RandomSequencesState;
 import net.minecraft.util.profiler.Profiler;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.MutableWorldProperties;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.World;
@@ -55,9 +56,9 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
         if (getRegistryKey().getValue().toString().contains("infinity") && timebombed > 0) timebombed++;
     }
 
-    @Redirect(method="tickWeather", at=@At(value="INVOKE", target="Lnet/minecraft/world/dimension/DimensionType;hasSkyLight()Z"))
-    private boolean injected3(DimensionType instance) {
-        return instance.hasSkyLight() && !getRegistryKey().getValue().toString().contains("infinity");
+    @Redirect(method="tickWeather", at=@At(value="INVOKE", target="Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
+    private boolean injected3(GameRules instance, GameRules.Key<GameRules.BooleanRule> rule) {
+        return instance.getBoolean(rule) && !getRegistryKey().getValue().toString().contains("infinity");
     }
 
     @Override
