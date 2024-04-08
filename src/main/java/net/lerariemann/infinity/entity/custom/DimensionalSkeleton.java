@@ -65,7 +65,9 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
         Registries.STATUS_EFFECT.stream().forEach(e -> {
             if (e.getCategory().equals(StatusEffectCategory.HARMFUL)) a.add(e);
         });
-        this.setEffect(a.get(r.nextInt(a.size())));
+        StatusEffect e = a.get(r.nextInt(a.size()));
+        this.setEffect(e);
+        this.setColorRaw(e.getColor());
         this.setDuration(r.nextInt(200));
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
@@ -121,7 +123,10 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
                     this.discard();
                     this.copySkeleton(newSkeleton);
                     newSkeleton.setDuration(this.getDuration());
-                    newSkeleton.setEffectRaw(effect_lookup.get(this.getEffectRaw()));
+                    int i = effect_lookup.get(this.getEffectRaw());
+                    StatusEffect e = StatusEffect.byRawId(i);
+                    newSkeleton.setEffectRaw(i);
+                    if (e!= null) newSkeleton.setColorRaw(e.getColor());
                     this.getWorld().spawnEntity(newSkeleton);
                     return ActionResult.SUCCESS;
                 }
@@ -146,7 +151,6 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
 
     public void setEffectRaw(int c) {
         this.dataTracker.set(effect, c);
-        this.dataTracker.set(color, Objects.requireNonNull(StatusEffect.byRawId(c)).getColor());
     }
     public void setColorRaw(int c) {
         this.dataTracker.set(color, c);
