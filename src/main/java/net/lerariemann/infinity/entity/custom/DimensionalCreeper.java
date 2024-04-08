@@ -50,9 +50,9 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
             if (!f.contains("biome_")) a.add(reg.get(e));
         });
         Biome b = a.get(r.nextInt(a.size()));
-        this.setBiome(reg.getRawId(b));
         this.setColor(b.getFoliageColor());
         this.setRange(8 + random.nextFloat()*24);
+        this.setBiome(reg.getRawId(b));
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
@@ -103,15 +103,15 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putInt("color", this.getColorRaw());
         nbt.putFloat("range", this.getRange());
+        nbt.putInt("color", this.getColorRaw());
         nbt.putInt("biome", this.getBiomeId());
     }
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.setColor(nbt.getInt("color"));
         this.setRange(nbt.getFloat("range"));
+        this.setColor(nbt.getInt("color"));
         this.setBiome(nbt.getInt("biome"));
     }
 

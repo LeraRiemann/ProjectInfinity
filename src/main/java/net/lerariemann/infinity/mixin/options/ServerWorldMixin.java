@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -52,6 +53,11 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     @Inject(method = "tick", at = @At("TAIL"))
     private void injected2(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if (getRegistryKey().getValue().toString().contains("infinity") && timebombed > 0) timebombed++;
+    }
+
+    @Redirect(method="tickWeather", at=@At(value="INVOKE", target="Lnet/minecraft/world/dimension/DimensionType;hasSkyLight()Z"))
+    private boolean injected3(DimensionType instance) {
+        return instance.hasSkyLight() && !getRegistryKey().getValue().toString().contains("infinity");
     }
 
     @Override
