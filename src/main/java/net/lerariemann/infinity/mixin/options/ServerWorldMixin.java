@@ -11,6 +11,7 @@ import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.RandomSequencesState;
 import net.minecraft.util.profiler.Profiler;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.MutableWorldProperties;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.World;
@@ -23,6 +24,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -52,6 +54,11 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     @Inject(method = "tick", at = @At("TAIL"))
     private void injected2(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if (getRegistryKey().getValue().toString().contains("infinity") && timebombed > 0) timebombed++;
+    }
+
+    @Redirect(method="tickWeather", at=@At(value="INVOKE", target="Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
+    private boolean injected3(GameRules instance, GameRules.Key<GameRules.BooleanRule> rule) {
+        return instance.getBoolean(rule) && !getRegistryKey().getValue().toString().contains("infinity");
     }
 
     @Override
