@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import static net.minecraft.server.command.CommandManager.*;
 
@@ -63,7 +64,12 @@ public class ModCommands {
     }
     public static long getDimensionSeed(NbtCompound compound, MinecraftServer s) {
         NbtList pages = compound.getList("pages", NbtElement.STRING_TYPE);
-        return getDimensionSeed(pages.get(0).asString(), ((MinecraftServerAccess)(s)).getDimensionProvider());
+        if (pages.isEmpty()) {
+            return getDimensionSeed("empty", ((MinecraftServerAccess)(s)).getDimensionProvider());
+        }
+        else {
+            return getDimensionSeed(pages.get(0).asString(), ((MinecraftServerAccess)(s)).getDimensionProvider());
+        }
     }
 
     public static long getDimensionSeed(String text, RandomProvider prov) {
