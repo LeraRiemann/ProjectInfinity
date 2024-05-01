@@ -33,7 +33,7 @@ public class NetherPortalBlockMixin {
 				NbtCompound compound = itemStack.getNbt();
 				MinecraftServer server = world.getServer();
 				if (compound != null && server != null) {
-					long i = ModCommands.getDimensionSeed(compound, server);
+					long i = ModCommands.getDimensionSeed(compound, server, itemStack.getItem());
 					boolean b = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, new Identifier("infinity:generated_" + i))) != null;
 					NeitherPortalBlock.modifyPortal(world, pos, state, i, b);
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);

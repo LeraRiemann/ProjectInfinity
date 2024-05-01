@@ -14,6 +14,8 @@ import net.lerariemann.infinity.util.ConfigGenerator;
 import net.lerariemann.infinity.util.RandomLootDrops;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.argument.BlockPosArgumentType;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -62,13 +64,18 @@ public class ModCommands {
     public static long getDimensionSeed(String text, MinecraftServer s) {
         return getDimensionSeed(text, ((MinecraftServerAccess)(s)).getDimensionProvider());
     }
-    public static long getDimensionSeed(NbtCompound compound, MinecraftServer s) {
+    public static long getDimensionSeed(NbtCompound compound, MinecraftServer s, Item item) {
         NbtList pages = compound.getList("pages", NbtElement.STRING_TYPE);
+        String pagesString = pages.get(0).asString();
         if (pages.isEmpty()) {
             return getDimensionSeed("empty", ((MinecraftServerAccess)(s)).getDimensionProvider());
         }
+        else if (item == Items.WRITTEN_BOOK) {
+            String parsedString = pagesString.substring(pagesString.indexOf(':')+2, pagesString.length()-2);
+            return getDimensionSeed(parsedString, ((MinecraftServerAccess)(s)).getDimensionProvider());
+        }
         else {
-            return getDimensionSeed(pages.get(0).asString(), ((MinecraftServerAccess)(s)).getDimensionProvider());
+            return getDimensionSeed(pagesString, ((MinecraftServerAccess)(s)).getDimensionProvider());
         }
     }
 
