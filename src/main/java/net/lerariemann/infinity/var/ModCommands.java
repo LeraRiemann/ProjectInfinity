@@ -66,15 +66,16 @@ public class ModCommands {
     }
     public static long getDimensionSeed(NbtCompound compound, MinecraftServer s, Item item) {
         NbtList pages = compound.getList("pages", NbtElement.STRING_TYPE);
-        String pagesString = pages.get(0).asString();
         if (pages.isEmpty()) {
             return getDimensionSeed("empty", ((MinecraftServerAccess)(s)).getDimensionProvider());
         }
         else if (item == Items.WRITTEN_BOOK) {
+            String pagesString = pages.get(0).asString();
             String parsedString = pagesString.substring(pagesString.indexOf(':')+2, pagesString.length()-2);
             return getDimensionSeed(parsedString, ((MinecraftServerAccess)(s)).getDimensionProvider());
         }
         else {
+            String pagesString = pages.get(0).asString();
             return getDimensionSeed(pagesString, ((MinecraftServerAccess)(s)).getDimensionProvider());
         }
     }
