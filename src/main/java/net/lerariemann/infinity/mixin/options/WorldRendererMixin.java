@@ -5,10 +5,13 @@ import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -18,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
+    @Shadow private ClientWorld world;
     @ModifyConstant(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", constant = @Constant(floatValue = 30.0f))
     private float injected(float constant) {
         return ((InfinityOptionsAccess)MinecraftClient.getInstance()).getInfinityOptions().getSolarSize();
@@ -32,20 +36,22 @@ public class WorldRendererMixin {
             at=@At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;enableBlend()V"))
     private void injected3(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
         if (((InfinityOptionsAccess)MinecraftClient.getInstance()).getInfinityOptions().getSkyType().contains("LSD")) {
-            renderCustomSky(matrices, LSD_SKY, 1.0f, 255, 255);
+            renderCustomSky(matrices, LSD_SKY, 1.0f, 255, 255, tickDelta, 0.1f);
         }
     }
     @Unique
     private static final Identifier LSD_SKY = new Identifier("infinity:textures/lsd.png");
     @Unique
-    private void renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int brightness, int alpha) {
-        renderCustomSky(matrices, texture, copies, brightness, brightness, brightness, alpha);
+    private void renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int brightness, int alpha, float tickDelta, float night) {
+        renderCustomSky(matrices, texture, copies, brightness, brightness, brightness, alpha, tickDelta, night);
     }
     @Unique
-    private void renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int r, int g, int b, int alpha) {
+    private void renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int r, int g, int b, int alpha, float tickDelta, float night) {
         RenderSystem.enableBlend();
         RenderSystem.depthMask(false);
         RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
+        float f = MathHelper.clamp(MathHelper.cos(world.getSkyAngle(tickDelta) * ((float)Math.PI * 2)) * 2.0f + 0.5f, night, 1.0f);
+        RenderSystem.setShaderColor(f, f, f, 1.0f);
         RenderSystem.setShaderTexture(0, texture);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
