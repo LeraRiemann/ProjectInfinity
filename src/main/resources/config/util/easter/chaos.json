@@ -1,6 +1,7 @@
 {
   "easter-options": {
-    "time_scale": 100.0
+    "time_scale": 100.0,
+    "sky_type": "LSD"
   },
   "type": "minecraft:noise",
   "settings": {

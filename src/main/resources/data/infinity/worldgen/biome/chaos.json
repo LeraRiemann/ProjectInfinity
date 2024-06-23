@@ -4,7 +4,7 @@
   "downfall": 0.8,
   "effects": {
     "fog_color": 16711680,
-    "sky_color": 65280,
+    "sky_color": 16777215,
     "water_color": 255,
     "water_fog_color": 65535,
     "foliage_color": 16776960,

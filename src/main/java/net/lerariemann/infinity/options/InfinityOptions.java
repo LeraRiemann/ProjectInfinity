@@ -29,6 +29,10 @@ public record InfinityOptions(NbtCompound data) {
         return data.contains("shader") ? data.getCompound("shader") : new NbtCompound();
     }
 
+    public String getSkyType() {
+        return data.contains("sky_type") ? data.getString("sky_type") : "empty";
+    }
+
     public float getSolarSize() {
         return data.contains("solar_size") ? data.getFloat("solar_size") : 30.0f;
     }
