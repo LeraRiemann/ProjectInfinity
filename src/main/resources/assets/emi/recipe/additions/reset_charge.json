@@ -1,0 +1,8 @@
+{
+    "type": "emi:info",
+    "stacks": [
+        "item:minecraft:tnt",
+      "item:infinity:timebomb"
+    ],
+    "text": "emi.info.reset_charge"
+  }
