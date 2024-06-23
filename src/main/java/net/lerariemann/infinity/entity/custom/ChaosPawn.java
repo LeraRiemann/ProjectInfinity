@@ -26,6 +26,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TimeHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -198,5 +199,9 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     protected void mobTick() {
         this.tickAngerLogic((ServerWorld)this.getWorld(), false);
         super.mobTick();
+    }
+
+    public static boolean canSpawn(EntityType<ChaosPawn> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        return world.getDifficulty() != Difficulty.PEACEFUL;
     }
 }

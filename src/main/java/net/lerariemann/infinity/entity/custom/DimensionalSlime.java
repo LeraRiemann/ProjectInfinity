@@ -23,10 +23,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -142,5 +140,15 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
         this.setColor(new Vector3f(nbt.getFloat("red"), nbt.getFloat("green"), nbt.getFloat("blue")));
         Block b = Registries.BLOCK.get(new Identifier(nbt.getString("core")));
         this.setCore(b.getDefaultState());
+    }
+
+    public static boolean canSpawn(EntityType<DimensionalSlime> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        if (world.getDifficulty() != Difficulty.PEACEFUL) {
+            if (!(world instanceof StructureWorldAccess)) {
+                return false;
+            }
+            return SlimeEntity.canMobSpawn(type, world, spawnReason, pos, random);
+        }
+        return false;
     }
 }

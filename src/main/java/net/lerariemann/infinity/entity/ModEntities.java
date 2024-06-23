@@ -9,8 +9,10 @@ import net.lerariemann.infinity.entity.client.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.CreeperEntity;
+import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.world.Heightmap;
 
 public class ModEntities {
     public static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> type) {
@@ -34,6 +36,13 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(DIMENSIONAL_SKELETON, AbstractSkeletonEntity.createAbstractSkeletonAttributes());
         FabricDefaultAttributeRegistry.register(DIMENSIONAL_CREEPER, CreeperEntity.createCreeperAttributes());
         FabricDefaultAttributeRegistry.register(CHAOS_PAWN, ChaosPawn.createAttributes());
+    }
+
+    public static void registerSpawnRestrictions() {
+        SpawnRestriction.register(DIMENSIONAL_SLIME, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, DimensionalSlime::canSpawn);
+        SpawnRestriction.register(DIMENSIONAL_SKELETON, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark);
+        SpawnRestriction.register(DIMENSIONAL_CREEPER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark);
+        SpawnRestriction.register(CHAOS_PAWN, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChaosPawn::canSpawn);
     }
 
     public static void registerEntityRenderers() {
