@@ -1,18 +1,24 @@
 package net.lerariemann.infinity.mixin;
 
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
+import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.var.ModCommands;
+import net.lerariemann.infinity.var.ModCriteria;
+import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -36,6 +42,18 @@ public class NetherPortalBlockMixin {
 					long i = ModCommands.getDimensionSeed(compound, server);
 					boolean b = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, new Identifier("infinity:generated_" + i))) != null;
 					NeitherPortalBlock.modifyPortal(world, pos, state, i, b);
+					MinecraftServer s = world.getServer();
+					RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
+					boolean bl = prov.portalKey.isBlank();
+					if (bl) {
+						NeitherPortalBlock.open(s, world, pos, false);
+						PlayerEntity player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
+                        if (player != null) {
+							player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
+							ModCriteria.DIMS_OPENED.trigger((ServerPlayerEntity)player);
+							player.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
+						}
+					}
 					entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
 				}
 			}
