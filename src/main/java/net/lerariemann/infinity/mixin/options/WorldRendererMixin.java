@@ -37,7 +37,7 @@ public class WorldRendererMixin {
     }
 
     @Unique
-    private static final Identifier LSD_SKY = new Identifier("infinity:textures/lsd.png");
+    private static final Identifier LSD_SKY = new Identifier("infinity:textures/LSD.png");
 
     @Unique
     private void renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int brightness, int alpha) {
