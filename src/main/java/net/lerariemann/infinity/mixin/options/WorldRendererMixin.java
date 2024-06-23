@@ -35,12 +35,14 @@ public class WorldRendererMixin {
             renderCustomSky(matrices, LSD_SKY, 1.0f, 255, 255);
         }
     }
-
     @Unique
-    private static final Identifier LSD_SKY = new Identifier("infinity:textures/LSD.png");
-
+    private static final Identifier LSD_SKY = new Identifier("infinity:textures/lsd.png");
     @Unique
     private void renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int brightness, int alpha) {
+        renderCustomSky(matrices, texture, copies, brightness, brightness, brightness, alpha);
+    }
+    @Unique
+    private void renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int r, int g, int b, int alpha) {
         RenderSystem.enableBlend();
         RenderSystem.depthMask(false);
         RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
@@ -66,10 +68,10 @@ public class WorldRendererMixin {
             }
             Matrix4f matrix4f = matrices.peek().getPositionMatrix();
             bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-            bufferBuilder.vertex(matrix4f, -100.0f, -100.0f, -100.0f).texture(0.0f, 0.0f).color(brightness, brightness, brightness, alpha).next();
-            bufferBuilder.vertex(matrix4f, -100.0f, -100.0f, 100.0f).texture(0.0f, copies).color(brightness, brightness, brightness, alpha).next();
-            bufferBuilder.vertex(matrix4f, 100.0f, -100.0f, 100.0f).texture(copies, copies).color(brightness, brightness, brightness, alpha).next();
-            bufferBuilder.vertex(matrix4f, 100.0f, -100.0f, -100.0f).texture(copies, 0.0f).color(brightness, brightness, brightness, alpha).next();
+            bufferBuilder.vertex(matrix4f, -100.0f, -100.0f, -100.0f).texture(0.0f, 0.0f).color(r, g, b, alpha).next();
+            bufferBuilder.vertex(matrix4f, -100.0f, -100.0f, 100.0f).texture(0.0f, copies).color(r, g, b, alpha).next();
+            bufferBuilder.vertex(matrix4f, 100.0f, -100.0f, 100.0f).texture(copies, copies).color(r, g, b, alpha).next();
+            bufferBuilder.vertex(matrix4f, 100.0f, -100.0f, -100.0f).texture(copies, 0.0f).color(r, g, b, alpha).next();
             tessellator.draw();
             matrices.pop();
         }
