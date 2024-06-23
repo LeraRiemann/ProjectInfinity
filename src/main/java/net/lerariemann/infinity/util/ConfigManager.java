@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 public class ConfigManager {
 
     static void registerConfig(Path path) {
@@ -23,6 +25,13 @@ public class ConfigManager {
                     Files.createDirectories(Paths.get("config/" + InfinityMod.MOD_ID + directory_name));
                 }
                 Files.copy(path, endfile);
+            }
+            if (endfile.toFile().exists() && fullname.endsWith(".json")) {
+                int version_old = CommonIO.getVersion(endfile.toFile());
+                int version_new = CommonIO.getVersion(path.toFile());
+                if (version_new > version_old) {
+                    Files.copy(path, endfile, REPLACE_EXISTING);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

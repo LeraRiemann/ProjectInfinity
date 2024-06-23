@@ -42,11 +42,25 @@ public class CommonIO {
         return read(new File(path));
     }
 
+    public static int getVersion(File file) {
+        String content;
+        try {
+            content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            if (!content.contains("infinity_version")) return 0;
+            int i = content.indexOf("infinity_version");
+            return Integer.parseInt(content.substring(content.indexOf(" ", i)+1, content.indexOf(",", i)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static NbtCompound read(File file) {
         String content;
         try {
             content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            return StringNbtReader.parse(content);
+            NbtCompound c = StringNbtReader.parse(content);
+            c.remove("infinity_version");
+            return c;
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -56,7 +70,9 @@ public class CommonIO {
         File file = new File(path);
         try {
             String content = String.valueOf((new Formatter(Locale.US)).format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), args));
-            return StringNbtReader.parse(content);
+            NbtCompound c = StringNbtReader.parse(content);
+            c.remove("infinity_version");
+            return c;
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -66,7 +82,9 @@ public class CommonIO {
         File file = new File(path);
         try {
             String content = String.valueOf((new Formatter(Locale.US)).format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), CompoundToString(block, 0)));
-            return StringNbtReader.parse(content);
+            NbtCompound c = StringNbtReader.parse(content);
+            c.remove("infinity_version");
+            return c;
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -75,7 +93,9 @@ public class CommonIO {
     public static NbtCompound readSurfaceRule(File file, int sealevel) {
         try {
             String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            return format(content, sealevel);
+            NbtCompound c = format(content, sealevel);
+            c.remove("infinity_version");
+            return c;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

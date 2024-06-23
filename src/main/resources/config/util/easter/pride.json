@@ -1,4 +1,5 @@
 {
+  "infinity_version": 1010006,
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 25,
