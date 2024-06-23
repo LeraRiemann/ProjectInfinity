@@ -90,6 +90,24 @@
         "to": "infinity:sponge"
       },
       "trigger": "minecraft:changed_dimension"
+    },
+    "red": {
+      "conditions": {
+        "to": "infinity:red"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "green": {
+      "conditions": {
+        "to": "infinity:green"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "blue": {
+      "conditions": {
+        "to": "infinity:blue"
+      },
+      "trigger": "minecraft:changed_dimension"
     }
   },
   "display": {
