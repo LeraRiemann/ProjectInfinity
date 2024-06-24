@@ -22,7 +22,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
@@ -37,7 +39,18 @@ public abstract class WorldRendererMixin {
     @Shadow private VertexBuffer starsBuffer;
 
     @Shadow protected abstract boolean hasBlindnessOrDarkness(Camera camera);
-
+    @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(intValue = 1500))
+    private int injected(int constant) {
+        return options().getNumStars();
+    }
+    @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(floatValue = 0.15f))
+    private float injected2(float constant) {
+        return options().getStarSizeBase();
+    }
+    @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(floatValue = 0.1f))
+    private float injected3(float constant) {
+        return options().getStarSizeModifier();
+    }
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
             at=@At("HEAD"), cancellable=true)
     private void injected4(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
@@ -90,16 +103,6 @@ public abstract class WorldRendererMixin {
         RenderSystem.disableBlend();
         RenderSystem.defaultBlendFunc();
         matrices.pop();
-
-        if (this.client.player != null) {
-            double d = this.client.player.getCameraPosVec(tickDelta).y - this.world.getLevelProperties().getSkyDarknessHeight(this.world);
-            if (d < 0.0) {
-                matrices.push();
-                matrices.translate(0.0f, 12.0f, 0.0f);
-                renderSingleColorSky(matrices, projectionMatrix, 0.0f, 0.0f, 0.0f, 1.0f);
-                matrices.pop();
-            }
-        }
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.depthMask(true);
@@ -198,8 +201,10 @@ public abstract class WorldRendererMixin {
     }
 
     @Unique
-    private static InfinityOptions options() {
-        return ((InfinityOptionsAccess)MinecraftClient.getInstance()).getInfinityOptions();
+    private InfinityOptions options() {
+        InfinityOptions options = ((InfinityOptionsAccess)client).getInfinityOptions();
+        if (options == null) options = InfinityOptions.empty();
+        return options;
     }
     @Unique
     private void renderRainbowSky(MatrixStack matrices, float tickDelta, Matrix4f projectionMatrix) {

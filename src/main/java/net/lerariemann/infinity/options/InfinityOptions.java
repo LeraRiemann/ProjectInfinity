@@ -96,6 +96,16 @@ public record InfinityOptions(NbtCompound data) {
         return data.contains("end_sky_like") && data.getBoolean("end_sky_like");
     }
 
+    public int getNumStars() {
+        return data.contains("num_stars") ? data.getInt("num_stars") : 1500;
+    }
+    public float getStarSizeBase() {
+        return data.contains("star_size_base") ? data.getFloat("star_size_base") : 0.15f;
+    }
+    public float getStarSizeModifier() {
+        return data.contains("star_size_modifier") ? data.getFloat("star_size_modifier") : 0.1f;
+    }
+
     public double getTimeScale() {
         return data.contains("time_scale") ? data.getDouble("time_scale") : 1.0;
     }
