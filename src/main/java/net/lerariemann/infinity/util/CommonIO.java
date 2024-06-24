@@ -54,6 +54,10 @@ public class CommonIO {
         }
     }
 
+    public static int getLatestVersion() {
+        return (int) 1.7;
+    }
+
     public static NbtCompound read(File file) {
         String content;
         try {
