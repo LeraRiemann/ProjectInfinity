@@ -92,21 +92,33 @@ public abstract class WorldRendererMixin {
         float rain_alpha = 1.0f - this.world.getRainGradient(tickDelta);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, rain_alpha);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(options().getSolarTilt()));
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(this.world.getSkyAngle(tickDelta) * 360.0f));
+        rotate_with_velocity(matrices, tickDelta, 1);
         Matrix4f matrix4f2 = matrices.peek().getPositionMatrix(); //creates the rotating layer for stellar bodies
 
-        renderSun(bufferBuilder, matrix4f2, options().getSolarTexture(), options().getSolarSize(), 100.0f);
-        renderMoon(bufferBuilder, matrix4f2, options().getLunarTexture(), options().getLunarSize(), -100.0f);
+        renderSun(bufferBuilder, matrix4f2, options().getSolarTexture(), options().getSolarSize(), 100.0f, options().getSolarTint());
+        for (int i = 0; i < options().getNumMoons(); i++) {
+            renderSingleMoon(matrices, bufferBuilder, tickDelta, options().getLunarSize(i), options().getLunarTiltY(i), options().getLunarTiltZ(i),
+                    options().getLunarVelocity(i), options().getLunarOffset(i), options().getLunarTint(i), options().getLunarTexture(i));
+        }
         renderStars(matrix4f2, tickDelta, projectionMatrix, fogCallback, rain_alpha);
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.disableBlend();
         RenderSystem.defaultBlendFunc();
         matrices.pop();
-
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.depthMask(true);
     }
+
+    @Unique
+    private void rotate_with_velocity(MatrixStack matrices, float tickDelta, float v, float offset) {
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees((this.world.getSkyAngle(tickDelta) + offset) * 360.0f * v));
+    }
+
+    @Unique
+    private void rotate_with_velocity(MatrixStack matrices, float tickDelta, float v) {
+        rotate_with_velocity(matrices, tickDelta, v, 0.0f);
+    }
+
     @Unique
     private void handleSkyBackground(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta) {
         String skyType = options().getSkyType();
@@ -120,7 +132,7 @@ public abstract class WorldRendererMixin {
         else {
             if (options().getCelestialVelocity() != 0.0f) {
                 matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(options().getCelestialTilt()));
-                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(this.world.getSkyAngle(tickDelta) * 360.0f * options().getCelestialVelocity()));
+                rotate_with_velocity(matrices, tickDelta, options().getCelestialVelocity());
             }
             boolean color = !options().endSkyLike();
             if (skyType.contains("textures")) {
@@ -133,7 +145,7 @@ public abstract class WorldRendererMixin {
                 renderCustomSky(matrices, LSD_SKY[0], 1.0f, 255, 255, tickDelta, color);
             }
             if (options().getCelestialVelocity() != 0.0f) {
-                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(this.world.getSkyAngle(tickDelta) * (-360.0f) * options().getCelestialVelocity()));
+                rotate_with_velocity(matrices, tickDelta, -1 * options().getCelestialVelocity());
                 matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-1 * options().getCelestialTilt()));
             }
         }
@@ -145,10 +157,12 @@ public abstract class WorldRendererMixin {
         lightSkyBuffer.draw(matrices.peek().getPositionMatrix(), projectionMatrix, RenderSystem.getShader());
         VertexBuffer.unbind();
     }
+
     @Unique
-    private void renderSun(BufferBuilder bufferBuilder, Matrix4f matrix4f2, Identifier texture, float k, float y) {
+    private void renderSun(BufferBuilder bufferBuilder, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
         bufferBuilder.vertex(matrix4f2, -k, y, -k).texture(0.0f, 0.0f).next();
         bufferBuilder.vertex(matrix4f2, k, y, -k).texture(1.0f, 0.0f).next();
@@ -156,10 +170,24 @@ public abstract class WorldRendererMixin {
         bufferBuilder.vertex(matrix4f2, -k, y, k).texture(0.0f, 1.0f).next();
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
     }
+
     @Unique
-    private void renderMoon(BufferBuilder bufferBuilder, Matrix4f matrix4f2, Identifier texture, float k, float y, float t, float q, float p, float o) {
+    private void renderSingleMoon(MatrixStack matrices, BufferBuilder bufferBuilder, float tickDelta, float size, float tilt_y, float tilt_z, float velocity, float offset, Vector3f tint, Identifier texture) {
+        float lunarv = (velocity != 1.0f) ? velocity - 1 : 0;
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(tilt_y));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(tilt_z));
+        rotate_with_velocity(matrices, tickDelta, lunarv, offset);
+        renderMoon(bufferBuilder, matrices.peek().getPositionMatrix(), texture, size, -100.0f, tint);
+        rotate_with_velocity(matrices, tickDelta, -1 * lunarv, offset);
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-tilt_z));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-tilt_y));
+    }
+
+    @Unique
+    private void renderMoon(BufferBuilder bufferBuilder, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint, float t, float q, float p, float o) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
         bufferBuilder.vertex(matrix4f2, -k, y, k).texture(p, q).next();
         bufferBuilder.vertex(matrix4f2, k, y, k).texture(t, q).next();
@@ -168,7 +196,7 @@ public abstract class WorldRendererMixin {
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
     }
     @Unique
-    private void renderMoon(BufferBuilder bufferBuilder, Matrix4f matrix4f2, Identifier texture, float k, float y) {
+    private void renderMoon(BufferBuilder bufferBuilder, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
         float t, q, p, o;
         if (!options().isMoonCustom()) {
             int r = this.world.getMoonPhase();
@@ -183,7 +211,7 @@ public abstract class WorldRendererMixin {
             t = q = 1.0f;
             p = o = 0.0f;
         }
-        renderMoon(bufferBuilder, matrix4f2, texture, k, y, t, q, p, o);
+        renderMoon(bufferBuilder, matrix4f2, texture, k, y, tint, t, q, p, o);
     }
 
     @Unique

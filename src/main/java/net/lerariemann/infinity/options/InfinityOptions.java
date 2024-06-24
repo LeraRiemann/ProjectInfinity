@@ -2,6 +2,7 @@ package net.lerariemann.infinity.options;
 
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
@@ -43,10 +44,6 @@ public record InfinityOptions(NbtCompound data) {
         return data.contains("solar_size") ? data.getFloat("solar_size") : 30.0f;
     }
 
-    public float getLunarSize() {
-        return data.contains("lunar_size") ? data.getFloat("lunar_size") : 20.0f;
-    }
-
     public float getCelestialTilt() {
         return data.contains("celestial_tilt") ? data.getFloat("celestial_tilt") : -90.0f;
     }
@@ -55,12 +52,13 @@ public record InfinityOptions(NbtCompound data) {
         return data.contains("solar_tilt") ? data.getFloat("solar_tilt") : -90.0f;
     }
 
-    public Identifier getSolarTexture() {
-        return new Identifier(data.contains("solar_texture") ? data.getString("solar_texture") : "textures/environment/sun.png");
+    public Vector3f getSolarTint() {
+        int color = data.contains("solar_tint") ? data.getInt("solar_tint") : 16777215;
+        return new Vector3f((float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f);
     }
 
-    public Identifier getLunarTexture() {
-        return new Identifier(data.contains("lunar_texture") ? data.getString("lunar_texture") : "textures/environment/moon_phases.png");
+    public Identifier getSolarTexture() {
+        return new Identifier(data.contains("solar_texture") ? data.getString("solar_texture") : "textures/environment/sun.png");
     }
 
     public Vector3f getStellarColor() {
@@ -112,5 +110,45 @@ public record InfinityOptions(NbtCompound data) {
 
     public double getMavity() {
         return data.contains("mavity") ? data.getDouble("mavity") : 1.0;
+    }
+
+    public int getNumMoons() {
+        return data.contains("moons") ? data.getList("moons", NbtElement.COMPOUND_TYPE).size() : 1;
+    }
+    public boolean lunarTest(String key, int i) {
+        return data.contains("moons") && ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).contains(key);
+    }
+    public float fullLunarTest(String key, int i, float def) {
+        return lunarTest(key, i) ? ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).getFloat(key) : def;
+    }
+
+    public float getLunarSize(int i) {
+        return fullLunarTest("lunar_size", i, 20.0f);
+    }
+
+    public float getLunarTiltY(int i) {
+        return fullLunarTest("lunar_tilt_y", i, 0.0f);
+    }
+
+    public float getLunarTiltZ(int i) {
+        return fullLunarTest("lunar_tilt_z", i, 0.0f);
+    }
+
+    public Vector3f getLunarTint(int i) {
+        int color = lunarTest("lunar_tint", i) ? ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).getInt("lunar_tint") : 16777215;
+        return new Vector3f((float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f);
+    }
+
+    public Identifier getLunarTexture(int i) {
+        return new Identifier(lunarTest("lunar_texture", i) ?
+                ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).getString("lunar_texture") : "textures/environment/moon_phases.png");
+    }
+
+    public float getLunarVelocity(int i) {
+        return fullLunarTest("lunar_velocity", i, 1.0f);
+    }
+
+    public float getLunarOffset(int i) {
+        return fullLunarTest("lunar_offset", i, 0.0f);
     }
 }

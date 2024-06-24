@@ -4,6 +4,7 @@ import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +30,20 @@ public class RandomInfinityOptions {
         }
         data.put("shader", shader);
         data.putFloat("solar_size", (float)(30*r.nextExponential()));
-        data.putFloat("lunar_size", (float)(20*r.nextExponential()));
+        data.putFloat("solar_tilt", (float)(360*r.nextDouble() - 180));
+        int moons = r.nextInt(1, 9);
+        NbtList moonslist = new NbtList();
+        for (int i = 0; i < moons; i++) {
+            NbtCompound moon = new NbtCompound();
+            moon.putFloat("lunar_size", (float)(20*r.nextExponential()));
+            moon.putFloat("lunar_offset", (float)(r.nextDouble()));
+            moon.putFloat("lunar_velocity", (float)(r.nextDouble() * 4 - 2));
+            moon.putFloat("lunar_tilt_y", (float)(r.nextDouble() * 180 - 90));
+            moon.putFloat("lunar_tilt_z", (float)(r.nextDouble() * 180 - 90));
+            moon.putInt("lunar_tint", r.nextInt(16777216));
+            moonslist.add(moon);
+        }
+        data.put("moons", moonslist);
         data.putDouble("time_scale", timeScale(r));
         data.putDouble("mavity", mavity(r));
     }
