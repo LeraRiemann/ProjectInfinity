@@ -15,6 +15,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
 
 public class ModMaterialRules {
@@ -22,9 +23,8 @@ public class ModMaterialRules {
     {
         @Override
         public BlockState tryApply(int i, int j, int k) {
-            long size = w.keys.size();
-            long seed = size * size * i + j + size * k;
-            double d = seed / Math.PI;
+            long seed = MathHelper.hashCode(i, j, k);
+            double d = (seed & 0xFFFL) / (double)0xFFFL;
             d = d - Math.floor(d);
             BlockState st = Registries.BLOCK.get(new Identifier(RandomProvider.blockElementToName(w.getElement(d)))).getDefaultState();
             if(st.contains(Properties.PERSISTENT)) st = st.with(Properties.PERSISTENT, Boolean.TRUE);
@@ -105,6 +105,72 @@ public class ModMaterialRules {
         }
     }
 
+    public static class Backrooms implements MaterialRules.BlockStateRule {
+        static final BlockState floor = Blocks.MUSHROOM_STEM.getDefaultState();
+        static final BlockState wall = Blocks.SMOOTH_SANDSTONE.getDefaultState();
+        static final BlockState light = Blocks.OCHRE_FROGLIGHT.getDefaultState();
+        static final BlockState ceiling = Blocks.SMOOTH_SANDSTONE.getDefaultState();
+        static final BlockState air = Blocks.AIR.getDefaultState();
+        static final BlockState filler = Blocks.OBSIDIAN.getDefaultState();
+        int normalize(int x, int size) {
+            int a = Math.abs(x < 0 ? x+1 : x) % size;
+            return (x < 0) ? size - 1 - a : a;
+        }
+        int anti_normalize(int x, int size) {
+            return Math.abs(x < 0 ? x+1 : x) / size;
+        }
+        @Override
+        public BlockState tryApply(int i, int j, int k) {
+            int size_xz = 15;
+            int halfsize_xz = 7;
+            int x = normalize(i, size_xz);
+            int y = normalize(j-1, 16);
+            int z = normalize(k, size_xz);
+            int xrel = Math.abs(halfsize_xz - x);
+            int zrel = Math.abs(halfsize_xz - z);
+            int max_xz = Math.max(xrel, zrel);
+            int min_xz = Math.min(xrel, zrel);
+            boolean isXMax = max_xz == xrel;
+            boolean isOpen = (max_xz >= 3) && (min_xz <= 3) && (y <= 6) && ((double) (MathHelper.hashCode(
+                    2*anti_normalize(i, size_xz) - MathHelper.sign(i)*MathHelper.sign(halfsize_xz - x)*(isXMax ? 1 : 0),
+                    anti_normalize(j-1, 16),
+                    2*anti_normalize(k, size_xz) - MathHelper.sign(k)*MathHelper.sign(halfsize_xz - z)*(isXMax ? 0 : 1))
+                    & 0xFL) / 15.0 > 0.3);
+            if (isOpen || (min_xz <=3 && y <= 6 && (i==0 || k==0))) {
+                if (min_xz == 3) return wall;
+                if (y == 0) return floor;
+                if (y == 6) {
+                    if (min_xz == 0 && max_xz%3 == 0) return light;
+                    return ceiling;
+                }
+                return air;
+            }
+            else if (max_xz <= 3 && y <= 6) {
+                if (max_xz == 3) return wall;
+                if (y == 0) return floor;
+                if (y == 6) {
+                    if (max_xz == 0) return light;
+                    return ceiling;
+                }
+                return air;
+            }
+            return filler;
+        }
+
+    }
+    enum BackroomsRule implements MaterialRules.MaterialRule {
+        INSTANCE;
+        static final CodecHolder<BackroomsRule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
+        @Override
+        public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
+            return CODEC;
+        }
+        @Override
+        public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
+            return new Backrooms();
+        }
+    }
+
     public static <T extends CodecHolder<? extends MaterialRules.MaterialRule>> void register(String name, T holder) {
         Registry.register(Registries.MATERIAL_RULE, InfinityMod.MOD_ID + ":" + name, holder.codec());
     }
@@ -112,5 +178,6 @@ public class ModMaterialRules {
     public static void registerRules() {
         register("chaos", RandomBlockMaterialRule.CODEC);
         register("library", LibraryRule.CODEC);
+        register("backrooms", BackroomsRule.CODEC);
     }
 }

@@ -1,6 +1,12 @@
 {
   "parent": "infinity:library",
   "criteria": {
+    "empty": {
+      "conditions": {
+        "to": "infinity:empty"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
     "debug": {
       "conditions": {
         "to": "infinity:debug"
