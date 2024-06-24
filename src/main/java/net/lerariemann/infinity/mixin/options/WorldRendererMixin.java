@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
+import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
@@ -31,7 +32,7 @@ import java.awt.*;
 
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
-public abstract class WorldRendererMixin {
+public abstract class WorldRendererMixin implements WorldRendererAccess {
     @Shadow private ClientWorld world;
     @Final
     @Shadow private MinecraftClient client;
@@ -39,6 +40,32 @@ public abstract class WorldRendererMixin {
     @Shadow private VertexBuffer starsBuffer;
 
     @Shadow protected abstract boolean hasBlindnessOrDarkness(Camera camera);
+
+    @Shadow protected abstract void renderStars();
+
+    @Unique
+    public boolean needsStars;
+
+    @Unique
+    public void testRerenderStars() {
+        if (needsStars) {
+            renderStars();
+            needsStars = false;
+        }
+    }
+    @Override
+    public void setNeedsStars(boolean b) {
+        needsStars = b;
+    }
+
+    @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+            at=@At("HEAD"), cancellable=true)
+    private void injected4(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
+        if (!options().isEmpty()) {
+            renderEntireSky(matrices, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
+            ci.cancel();
+        }
+    }
     @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(intValue = 1500))
     private int injected(int constant) {
         return options().getNumStars();
@@ -50,14 +77,6 @@ public abstract class WorldRendererMixin {
     @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(floatValue = 0.1f))
     private float injected3(float constant) {
         return options().getStarSizeModifier();
-    }
-    @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
-            at=@At("HEAD"), cancellable=true)
-    private void injected4(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
-        if (!options().isEmpty()) {
-            renderEntireSky(matrices, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
-            ci.cancel();
-        }
     }
 
     @Unique
@@ -100,6 +119,7 @@ public abstract class WorldRendererMixin {
             renderSingleMoon(matrices, bufferBuilder, tickDelta, options().getLunarSize(i), options().getLunarTiltY(i), options().getLunarTiltZ(i),
                     options().getLunarVelocity(i), options().getLunarOffset(i), options().getLunarTint(i), options().getLunarTexture(i));
         }
+        testRerenderStars();
         renderStars(matrix4f2, tickDelta, projectionMatrix, fogCallback, rain_alpha);
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);

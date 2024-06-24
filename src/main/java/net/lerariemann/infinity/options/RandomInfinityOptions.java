@@ -44,6 +44,9 @@ public class RandomInfinityOptions {
             moonslist.add(moon);
         }
         data.put("moons", moonslist);
+        data.putInt("num_stars", r.nextInt(1000, 4000));
+        data.putFloat("star_size_base", (float)(0.1 + r.nextDouble()*0.3));
+        data.putFloat("star_size_modifier", (float)(0.03*r.nextExponential()));
         data.putDouble("time_scale", timeScale(r));
         data.putDouble("mavity", mavity(r));
     }

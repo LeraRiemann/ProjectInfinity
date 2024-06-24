@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.mixin.options;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.PacketTransiever;
@@ -19,10 +20,12 @@ public class PlayerManagerMixin {
             target = "Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci, @Local(ordinal=0) ServerWorld serverWorld2) {
         ServerPlayNetworking.send(player, InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(serverWorld2));
+        ServerPlayNetworking.send(player, InfinityMod.STARS_RELOAD, PacketByteBufs.create());
     }
 
     @Inject(method="sendWorldInfo", at = @At("TAIL"))
     private void injected2(ServerPlayerEntity player, ServerWorld world, CallbackInfo ci) {
         ServerPlayNetworking.send(player, InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(world));
+        ServerPlayNetworking.send(player, InfinityMod.STARS_RELOAD, PacketByteBufs.create());
     }
 }

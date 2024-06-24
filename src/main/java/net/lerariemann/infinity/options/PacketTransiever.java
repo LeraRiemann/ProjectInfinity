@@ -3,6 +3,7 @@ package net.lerariemann.infinity.options;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
+import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -29,5 +30,9 @@ public class PacketTransiever {
                 ShaderLoader.reloadShaders(client, true);
             });
         }
+    }
+
+    public static void receiveStars(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        ((WorldRendererAccess)(client.worldRenderer)).setNeedsStars(true);
     }
 }

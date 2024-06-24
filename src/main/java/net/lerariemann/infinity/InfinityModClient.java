@@ -67,6 +67,7 @@ public class InfinityModClient implements ClientModInitializer {
             client.execute(() -> (new DimensionGrabber(client.getNetworkHandler().getRegistryManager())).grab_for_client(id, optiondata, biomeids, biomes));
         });
         ClientPlayNetworking.registerGlobalReceiver(InfinityMod.SHADER_RELOAD, PacketTransiever::receive);
+        ClientPlayNetworking.registerGlobalReceiver(InfinityMod.STARS_RELOAD, PacketTransiever::receiveStars);
         ModEntities.registerEntityRenderers();
     }
 }

@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.mixin;
 
 import com.mojang.authlib.GameProfile;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
@@ -98,6 +99,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     private void injected3(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
         ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.SHADER_RELOAD,
                 PacketTransiever.buildPacket(destination));
+        ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.STARS_RELOAD, PacketByteBufs.create());
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -138,6 +140,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Inject(method= "teleport(Lnet/minecraft/server/world/ServerWorld;DDDFF)V", at = @At(value="INVOKE", target ="Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected5(ServerWorld targetWorld, double x, double y, double z, float yaw, float pitch, CallbackInfo ci) {
         ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(targetWorld));
+        ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.STARS_RELOAD, PacketByteBufs.create());
     }
 
 
