@@ -26,9 +26,11 @@ public class ConfigManager {
                 }
                 Files.copy(path, endfile);
             }
+            Path tempfile = Paths.get("config/infinity-temp.json");
             if (endfile.toFile().exists() && fullname.endsWith(".json")) {
                 int version_old = CommonIO.getVersion(endfile.toFile());
-                int version_new = CommonIO.getVersion(path.toFile());
+                Files.copy(path, tempfile, REPLACE_EXISTING);
+                int version_new = CommonIO.getVersion(tempfile.toFile());
                 if (version_new > version_old) {
                     Files.copy(path, endfile, REPLACE_EXISTING);
                 }

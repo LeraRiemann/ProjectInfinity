@@ -4,8 +4,10 @@ import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.world.World;
+import org.joml.Vector3f;
 
 import java.io.File;
 
@@ -25,6 +27,10 @@ public record InfinityOptions(NbtCompound data) {
         return empty();
     }
 
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
     public NbtCompound getShader() {
         return data.contains("shader") ? data.getCompound("shader") : new NbtCompound();
     }
@@ -39,6 +45,55 @@ public record InfinityOptions(NbtCompound data) {
 
     public float getLunarSize() {
         return data.contains("lunar_size") ? data.getFloat("lunar_size") : 20.0f;
+    }
+
+    public float getCelestialTilt() {
+        return data.contains("celestial_tilt") ? data.getFloat("celestial_tilt") : -90.0f;
+    }
+
+    public float getSolarTilt() {
+        return data.contains("solar_tilt") ? data.getFloat("solar_tilt") : -90.0f;
+    }
+
+    public Identifier getSolarTexture() {
+        return new Identifier(data.contains("solar_texture") ? data.getString("solar_texture") : "textures/environment/sun.png");
+    }
+
+    public Identifier getLunarTexture() {
+        return new Identifier(data.contains("lunar_texture") ? data.getString("lunar_texture") : "textures/environment/moon_phases.png");
+    }
+
+    public Vector3f getStellarColor() {
+        int color = data.contains("stellar_color") ? data.getInt("stellar_color") : 16777215;
+        return new Vector3f((float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f);
+    }
+
+    public boolean isMoonCustom() {
+        return data.contains("lunar_texture");
+    }
+
+    public float getCelestialTilesAmount() {
+        return data.contains("celestial_tiles_amount") ? data.getFloat("celestial_tiles_amount") : 1.0f;
+    }
+
+    public float getCelestialNightBrightness() {
+        return data.contains("celestial_night_brightness") ? data.getFloat("celestial_night_brightness") : 0.0f;
+    }
+
+    public int getCelestialBrightness() {
+        return data.contains("celestial_brightness") ? data.getInt("celestial_brightness") : 255;
+    }
+
+    public int getCelestialAlpha() {
+        return data.contains("celestial_alpha") ? data.getInt("celestial_alpha") : 255;
+    }
+
+    public float getCelestialVelocity() {
+        return data.contains("celestial_velocity") ? data.getFloat("celestial_velocity") : 0.0f;
+    }
+
+    public boolean endSkyLike() {
+        return data.contains("end_sky_like") && data.getBoolean("end_sky_like");
     }
 
     public double getTimeScale() {
