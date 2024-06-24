@@ -28,7 +28,7 @@ public class ConfigManager {
             }
             if (endfile.toFile().exists() && fullname.endsWith(".json")) {
                 int version_old = CommonIO.getVersion(endfile.toFile());
-                int version_new = CommonIO.getVersion(path.toFile());
+                int version_new = (int) 1.7;
                 if (version_new > version_old) {
                     Files.copy(path, endfile, REPLACE_EXISTING);
                 }
