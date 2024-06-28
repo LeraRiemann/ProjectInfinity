@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.mixin.options;
 
 import net.lerariemann.infinity.access.GameRendererAccess;
+import net.lerariemann.infinity.access.InfinityOptionsAccess;
+import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.options.ShaderLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
@@ -21,9 +23,14 @@ public class GameRendererMixin implements GameRendererAccess {
         loadPostProcessor(id);
     }
 
-    @Inject(method = "onCameraEntitySet", at = @At("TAIL"))
+    @Inject(method = "onCameraEntitySet", at = @At("TAIL"), cancellable = true)
     private void preserveShaderThirdPerson(CallbackInfo ci) {
-        ShaderLoader.reloadShaders(MinecraftClient.getInstance(), true);
-
+        InfinityOptions options = ((InfinityOptionsAccess)MinecraftClient.getInstance()).getInfinityOptions();
+        if (options.getShader().isEmpty()) {
+            ci.cancel();
+        }
+        else {
+            ShaderLoader.reloadShaders(MinecraftClient.getInstance(), true);
+        }
     }
 }
