@@ -11,6 +11,9 @@ public interface MinecraftServerAccess {
 
     boolean hasToAdd(RegistryKey<World> key);
 
+    boolean needsInvocation();
+    void onInvocation();
+
     RandomProvider getDimensionProvider();
     void setDimensionProvider();
 }

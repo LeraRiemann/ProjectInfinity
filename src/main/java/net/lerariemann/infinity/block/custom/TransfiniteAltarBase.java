@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 import java.util.Objects;
 
 public class TransfiniteAltarBase extends Block {
-    public static  final BooleanProperty FLOWER = TransfiniteAltar.FLOWER;
+    public static final BooleanProperty FLOWER = TransfiniteAltar.FLOWER;
     public static final IntProperty COLOR = TransfiniteAltar.COLOR;
     public static final VoxelShape SHAPE = TransfiniteAltar.SHAPE;
 

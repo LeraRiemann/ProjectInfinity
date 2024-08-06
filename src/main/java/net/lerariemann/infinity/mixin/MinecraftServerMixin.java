@@ -68,13 +68,19 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
     public Map<RegistryKey<World>, ServerWorld> worldsToAdd;
     @Unique
     public RandomProvider dimensionProvider;
+    @Unique
+    public boolean needsInvocation;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(CallbackInfo info) {
         worldsToAdd = new HashMap<>();
+        needsInvocation = true;
         setDimensionProvider();
     }
-
+    @Override
+    public boolean needsInvocation() {return needsInvocation;}
+    @Override
+    public void onInvocation() {needsInvocation = false;}
     @Override
     public RandomProvider getDimensionProvider() {
         return dimensionProvider;

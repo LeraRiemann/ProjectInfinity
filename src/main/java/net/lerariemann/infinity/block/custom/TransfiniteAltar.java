@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class TransfiniteAltar extends BlockWithEntity {
-    public static  final BooleanProperty FLOWER = BooleanProperty.of("flower");
+    public static final BooleanProperty FLOWER = BooleanProperty.of("flower");
     public static final IntProperty COLOR = IntProperty.of("color", 0, 6);
     public static final VoxelShape BASE_SHAPE = Block.createCuboidShape(1.5, 0, 1.5, 14.5, 14, 14.5);
     public static final VoxelShape TOP_SHAPE = Block.createCuboidShape(0, 14, 0, 16, 16, 16);

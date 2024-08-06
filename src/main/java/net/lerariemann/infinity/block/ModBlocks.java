@@ -15,6 +15,7 @@ public class ModBlocks {
     public static final Block NEITHER_PORTAL = new NeitherPortalBlock(FabricBlockSettings.copy(Blocks.NETHER_PORTAL));
     public static final Block BOOK_BOX = new BookBoxBlock(FabricBlockSettings.copy(Blocks.BOOKSHELF));
     public static final Item BOOK_BOX_ITEM = new BlockItem(BOOK_BOX, new FabricItemSettings());
+    public static final Block ALTAR_COSMIC = new CosmicAltar(FabricBlockSettings.copy(Blocks.BEDROCK).nonOpaque());
     public static final Block ALTAR_LIT = new TransfiniteAltar(FabricBlockSettings.copy(Blocks.BEDROCK).nonOpaque().
             luminance(state -> state.get(TransfiniteAltar.FLOWER) ? 15 : 0));
     public static final Block ALTAR = new TransfiniteAltarBase(FabricBlockSettings.copy(Blocks.STONE).nonOpaque().
@@ -35,6 +36,7 @@ public class ModBlocks {
         registerItem("book_box", BOOK_BOX_ITEM);
         registerBlock("altar_lit", ALTAR_LIT);
         registerBlock("altar", ALTAR);
+        registerBlock("altar_cosmic", ALTAR_COSMIC);
         registerItem("altar", ALTAR_ITEM);
         registerBlock("timebomb", TIME_BOMB);
         registerItem("timebomb", TIME_BOMB_ITEM);
