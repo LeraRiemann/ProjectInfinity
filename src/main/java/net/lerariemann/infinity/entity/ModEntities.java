@@ -10,12 +10,30 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.util.Hand;
 import net.minecraft.world.Heightmap;
 
 public class ModEntities {
+    public static void copy(MobEntity from, MobEntity e) {
+        e.refreshPositionAndAngles(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch());
+        e.setHealth(from.getHealth());
+        e.bodyYaw = from.bodyYaw;
+        if (from.hasCustomName()) {
+            e.setCustomName(from.getCustomName());
+            e.setCustomNameVisible(from.isCustomNameVisible());
+        }
+        if (from.isPersistent()) {
+            e.setPersistent();
+        }
+        e.setInvulnerable(from.isInvulnerable());
+        e.setStackInHand(Hand.MAIN_HAND, from.getStackInHand(Hand.MAIN_HAND));
+        e.setStackInHand(Hand.OFF_HAND, from.getStackInHand(Hand.OFF_HAND));
+    }
+
     public static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> type) {
         return Registry.register(Registries.ENTITY_TYPE, InfinityMod.getId(id), type.build());
     }

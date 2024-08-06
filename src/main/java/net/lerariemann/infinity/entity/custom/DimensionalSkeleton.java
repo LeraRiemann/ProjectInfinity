@@ -92,22 +92,6 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
         return super.isAffectedByDaylight() && !isFriendly();
     }
 
-    public void copySkeleton(SkeletonEntity newSkeleton) {
-        newSkeleton.refreshPositionAndAngles(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch());
-        newSkeleton.setHealth(this.getHealth());
-        newSkeleton.bodyYaw = this.bodyYaw;
-        if (this.hasCustomName()) {
-            newSkeleton.setCustomName(this.getCustomName());
-            newSkeleton.setCustomNameVisible(this.isCustomNameVisible());
-        }
-        if (this.isPersistent()) {
-            newSkeleton.setPersistent();
-        }
-        newSkeleton.setInvulnerable(this.isInvulnerable());
-        newSkeleton.setStackInHand(Hand.MAIN_HAND, this.getStackInHand(Hand.MAIN_HAND));
-        newSkeleton.setStackInHand(Hand.OFF_HAND, this.getStackInHand(Hand.OFF_HAND));
-    }
-
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
@@ -121,7 +105,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
                 if (!this.getWorld().isClient() && (newSkeleton = ModEntities.DIMENSIONAL_SKELETON.create(this.getWorld())) != null) {
                     ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
                     this.discard();
-                    this.copySkeleton(newSkeleton);
+                    ModEntities.copy(this, newSkeleton);
                     newSkeleton.setDuration(this.getDuration());
                     int i = effect_lookup.get(this.getEffectRaw());
                     StatusEffect e = StatusEffect.byRawId(i);
@@ -140,7 +124,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
             SkeletonEntity newSkeleton;
             if (!this.getWorld().isClient() && (newSkeleton = EntityType.SKELETON.create(this.getWorld())) != null) {
                 this.discard();
-                this.copySkeleton(newSkeleton);
+                ModEntities.copy(this, newSkeleton);
                 this.getWorld().spawnEntity(newSkeleton);
                 return ActionResult.SUCCESS;
             }
