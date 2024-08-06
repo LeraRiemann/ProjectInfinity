@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -30,8 +29,6 @@ import net.minecraft.world.chunk.ChunkStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class DimensionalCreeper extends CreeperEntity implements TintableEntity {
     public static TrackedData<Integer> color = DataTracker.registerData(DimensionalCreeper.class, TrackedDataHandlerRegistry.INTEGER);

@@ -12,7 +12,6 @@ import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.ConfigGenerator;
 import net.lerariemann.infinity.util.RandomLootDrops;
-import net.lerariemann.infinity.util.SurfaceRuleScanner;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.item.Item;
@@ -30,10 +29,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 import static net.minecraft.server.command.CommandManager.*;
 
