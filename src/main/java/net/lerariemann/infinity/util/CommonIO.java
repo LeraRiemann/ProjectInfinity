@@ -27,7 +27,20 @@ public class CommonIO {
     }
 
     public static void write(NbtCompound base, String path, String filename) {
+        write(CompoundToString(base, 0), path, filename);
+    }
+
+    public static void writeSurfaceRule(NbtCompound base, String path, String filename) {
         String source = CompoundToString(base, 0);
+        source = source.replace(": Infinity", ": 2147483647");
+        for (int j: (new Integer[]{31, 62})) for (int i = -5; i < 6; i++) {
+            String z = Integer.toString(j+i);
+            source = source.replace("\"absolute\": "+z, "\"absolute\": "+(i==0 ? "%SL%" : "%SL" + (i>0 ? "+" : "") + i + "%"));
+        }
+        write(source, path, filename);
+    }
+
+    public static void write(String source, String path, String filename) {
         List<String> lines = Collections.singletonList(source);
         Path dir = Paths.get(path);
         Path file = Paths.get(path+"/"+filename);
@@ -38,6 +51,7 @@ public class CommonIO {
             throw new RuntimeException(e);
         }
     }
+
     public static NbtCompound read(String path) {
         return read(new File(path));
     }

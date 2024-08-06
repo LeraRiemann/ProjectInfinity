@@ -141,7 +141,7 @@ public class RandomNoisePreset {
         parent.additional_blocks.add(parent.deepslate);
     }
 
-    NbtCompound startingRule(String str) {
+    public static NbtCompound startingRule(String str) {
         NbtCompound res = new NbtCompound();
         res.putString("type", "minecraft:" + str);
         return res;

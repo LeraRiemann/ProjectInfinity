@@ -1,5 +1,7 @@
 package net.lerariemann.infinity.entity.custom;
 
+import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -14,6 +16,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.world.LocalDifficulty;
@@ -33,7 +36,7 @@ import java.util.Random;
 public class DimensionalCreeper extends CreeperEntity implements TintableEntity {
     public static TrackedData<Integer> color = DataTracker.registerData(DimensionalCreeper.class, TrackedDataHandlerRegistry.INTEGER);
     public static TrackedData<Float> range = DataTracker.registerData(DimensionalCreeper.class, TrackedDataHandlerRegistry.FLOAT);
-    public static TrackedData<Integer> biome = DataTracker.registerData(DimensionalCreeper.class, TrackedDataHandlerRegistry.INTEGER);
+    public static TrackedData<String> biome = DataTracker.registerData(DimensionalCreeper.class, TrackedDataHandlerRegistry.STRING);
     public Registry<Biome> reg;
 
     public DimensionalCreeper(EntityType<? extends CreeperEntity> entityType, World world) {
@@ -42,34 +45,30 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        Random r = new Random();
-        List<Biome> a = new ArrayList<>();
-        reg = world.toServerWorld().getServer().getRegistryManager().get(RegistryKeys.BIOME);
-        reg.getKeys().forEach(e -> {
-            String f = e.getValue().toString();
-            if (!f.contains("biome_")) a.add(reg.get(e));
-        });
-        Biome b = a.get(r.nextInt(a.size()));
-        this.setColor(b.getFoliageColor());
+        MinecraftServer s = world.toServerWorld().getServer();
+        reg = s.getRegistryManager().get(RegistryKeys.BIOME);
+        String biomename = ((MinecraftServerAccess)(s)).getDimensionProvider().registry.get("biomes").getElement(world.getRandom().nextDouble());
+        Biome b = reg.get(new Identifier(biomename));
+        this.setColor(b != null ? b.getFoliageColor() : 7842607);
         this.setRange(8 + random.nextFloat()*24);
-        this.setBiome(reg.getRawId(b));
+        this.setBiome(biomename);
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(color, 0);
+        this.dataTracker.startTracking(color, 7842607);
         this.dataTracker.startTracking(range, 16.0f);
-        this.dataTracker.startTracking(biome, 0);
+        this.dataTracker.startTracking(biome, "minecraft:plains");
     }
-    public void setBiome(int i) {
-        this.dataTracker.set(biome, i);
+    public void setBiome(String s) {
+        this.dataTracker.set(biome, s);
     }
     public Biome getBiome() {
-        return reg.get(getBiomeId());
+        return reg.get(new Identifier(getBiomeId()));
     }
-    public int getBiomeId() {
+    public String getBiomeId() {
         return this.dataTracker.get(biome);
     }
     public void setColor(int c) {
@@ -105,14 +104,14 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
         super.writeCustomDataToNbt(nbt);
         nbt.putFloat("range", this.getRange());
         nbt.putInt("color", this.getColorRaw());
-        nbt.putInt("biome", this.getBiomeId());
+        nbt.putString("biome", this.getBiomeId());
     }
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.setRange(nbt.getFloat("range"));
         this.setColor(nbt.getInt("color"));
-        this.setBiome(nbt.getInt("biome"));
+        this.setBiome(nbt.getString("biome"));
     }
 
     public void blow_up() {

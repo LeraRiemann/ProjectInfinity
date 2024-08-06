@@ -45,4 +45,10 @@ public class WeighedStructure<T> {
         for (i = 0; i < size() - 1; ++i) if (random.nextDouble() < weights.get(i)) res.add(keys.get(i));
         return res;
     }
+
+    public void kick(int i) {
+        statsum -= weights.get(i);
+        keys.remove(i);
+        weights.remove(i);
+    }
 }

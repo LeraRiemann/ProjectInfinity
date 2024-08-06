@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerTask;
@@ -37,7 +38,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 @Mixin(MinecraftServer.class)
-public class MinecraftServerMixin implements MinecraftServerAccess {
+public abstract class MinecraftServerMixin implements MinecraftServerAccess {
     @Final @Shadow
     private Map<RegistryKey<World>, ServerWorld> worlds;
     @Final @Shadow
@@ -61,6 +62,8 @@ public class MinecraftServerMixin implements MinecraftServerAccess {
         return null;
     }
 
+    @Shadow public abstract DynamicRegistryManager.Immutable getRegistryManager();
+
     @Unique
     public Map<RegistryKey<World>, ServerWorld> worldsToAdd;
     @Unique
@@ -79,8 +82,10 @@ public class MinecraftServerMixin implements MinecraftServerAccess {
 
     @Override
     public void setDimensionProvider() {
-        dimensionProvider = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
+        RandomProvider p = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
                 getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
+        p.kickGhostsOut(getRegistryManager());
+        dimensionProvider = p;
     }
 
     @Override

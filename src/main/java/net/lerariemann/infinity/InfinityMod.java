@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
 import net.lerariemann.infinity.structure.ModStructureType;
+import net.lerariemann.infinity.util.SurfaceRuleScanner;
 import net.lerariemann.infinity.var.*;
 import net.lerariemann.infinity.util.ConfigManager;
 import net.minecraft.util.Identifier;

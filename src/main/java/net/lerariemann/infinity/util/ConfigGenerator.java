@@ -14,10 +14,13 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 import java.io.IOException;
@@ -70,10 +73,20 @@ public class ConfigGenerator {
     }
 
     public static boolean isTop(BlockState bs, WorldView w, BlockPos onStone) {
-        return bs.canPlaceAt(w, onStone);
+        try {
+            return bs.canPlaceAt(w, onStone);
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
     public static boolean isFloat(BlockState bs, WorldView w, BlockPos inAir) {
-        return bs.canPlaceAt(w, inAir) && !(bs.getBlock() instanceof FallingBlock);
+        try {
+            return bs.canPlaceAt(w, inAir) && !(bs.getBlock() instanceof FallingBlock);
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
     public static boolean isFull(BlockState bs, WorldView w, BlockPos inAir) {
         return bs.isFullCube(w, inAir);
@@ -113,12 +126,18 @@ public class ConfigGenerator {
     }
 
     public static <T> void generate(Registry<T> r, String additionalPath, String name) {
+        generate(r, additionalPath, name, false);
+    }
+
+    public static <T> void generate(Registry<T> r, String additionalPath, String name, boolean excludeInfinity) {
         Map<String, WeighedStructure<String>> m = new HashMap<>();
         r.getKeys().forEach(a -> {
             String b = a.getValue().toString();
             String namespace = b.substring(0, b.lastIndexOf(":"));
-            checkAndAddWS(m, namespace);
-            m.get(namespace).add(b, 1.0);
+            if (!excludeInfinity && namespace.contains("infinity")) {
+                checkAndAddWS(m, namespace);
+                m.get(namespace).add(b, 1.0);
+            }
         });
         writeMap(m, additionalPath, name);
     }
@@ -229,12 +248,19 @@ public class ConfigGenerator {
         writeMap(music, "misc", "music");
     }
 
-    public static void generateAll(WorldView w, BlockPos inAir, BlockPos onStone) {
+    public static void generateAll(World w, BlockPos inAir, BlockPos onStone) {
+        generateAllNoWorld();
+        generateBlocks(w, inAir, onStone);
+        MinecraftServer s = Objects.requireNonNull(w.getServer());
+        SurfaceRuleScanner.scan(s);
+        generate(s.getRegistryManager().get(RegistryKeys.BIOME), "misc", "biomes", true);
+    }
+
+    public static void generateAllNoWorld() {
         generateSounds();
         generate(Registries.ITEM, "misc", "items");
         generate(Registries.PARTICLE_TYPE, "misc", "particles");
         generateMobs();
         generateFluids();
-        generateBlocks(w, inAir, onStone);
     }
 }

@@ -1,9 +1,17 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.*;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
+import net.minecraft.world.biome.Biome;
 
 import java.io.File;
 import java.io.IOException;
@@ -471,6 +479,19 @@ public class RandomProvider {
         }
         res.put("value", value);
         return res;
+    }
+
+    public void kickGhostsOut(DynamicRegistryManager s) {
+        Registry<Biome> reg = s.get(RegistryKeys.BIOME);
+        WeighedStructure<String> biomes = registry.get("biomes");
+        int i = 0;
+        while(i < biomes.keys.size()) {
+            if (!reg.containsId(new Identifier(biomes.keys.get(i)))) {
+                biomes.kick(i);
+            }
+            else i++;
+        }
+        registry.put("biomes", biomes);
     }
 }
 

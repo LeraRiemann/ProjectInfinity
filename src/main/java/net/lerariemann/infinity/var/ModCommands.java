@@ -12,6 +12,7 @@ import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.ConfigGenerator;
 import net.lerariemann.infinity.util.RandomLootDrops;
+import net.lerariemann.infinity.util.SurfaceRuleScanner;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.item.Item;
@@ -24,6 +25,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -106,7 +108,7 @@ public class ModCommands {
                 .then(argument("pos_stone", BlockPosArgumentType.blockPos()).executes(context -> {
                     BlockPos bp1 = BlockPosArgumentType.getBlockPos(context, "pos_air");
                     BlockPos bp2 = BlockPosArgumentType.getBlockPos(context, "pos_stone");
-                    WorldView w = context.getSource().getWorld();
+                    ServerWorld w = context.getSource().getWorld();
                     ConfigGenerator.generateAll(w, bp1, bp2);
                     return 1;
                 })))));
