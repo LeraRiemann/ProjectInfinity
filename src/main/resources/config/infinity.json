@@ -1,8 +1,10 @@
 {
+  "infinity_version": 1011001,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "returnPortalsEnabled": true,
-    "longArithmeticEnabled": false
+    "longArithmeticEnabled": false,
+    "maxBiomeCount": 6
   },
   "portalKey": "",
   "altarKey": "minecraft:diamond",
@@ -87,6 +89,5 @@
       "portal_blackstone": 0.5,
       "triangular_spread": 0.1
     }
-  },
-  "packVersion": 1.7
+  }
 }

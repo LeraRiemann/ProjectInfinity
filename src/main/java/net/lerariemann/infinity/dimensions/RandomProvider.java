@@ -51,6 +51,7 @@ public class RandomProvider {
         listRegistry = new HashMap<>();
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
+        gameRulesInt = new HashMap<>();
         register_all();
         easterizer = new Easterizer(this);
     }

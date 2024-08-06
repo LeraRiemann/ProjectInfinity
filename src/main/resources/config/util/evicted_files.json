@@ -1,0 +1,9 @@
+{
+  "infinity_version": 1011001,
+  "content": [
+    "modular/minecraft/surface_rule/beaches.json",
+    "modular/minecraft/surface_rule/frozen_oceans.json",
+    "modular/minecraft/surface_rule/lukewarm_oceans.json",
+    "modular/minecraft/surface_rule/old_taigas.json"
+  ]
+}

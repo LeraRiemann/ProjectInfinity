@@ -269,7 +269,7 @@ public class RandomDimension {
 
     NbtList randomBiomesCheckerboard() {
         NbtList res = new NbtList();
-        int biome_count = Math.min(64, 2 + (int) Math.floor(random.nextExponential()));
+        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.gameRulesInt.get("maxBiomeCount")));
         for (int i = 0; i < biome_count; i++) {
             res.add(NbtString.of(randomBiome()));
         }
@@ -278,7 +278,7 @@ public class RandomDimension {
 
     NbtList randomBiomes() {
         NbtList res = new NbtList();
-        int biome_count = Math.min(16, 2 + (int) Math.floor(random.nextExponential()));
+        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.gameRulesInt.get("maxBiomeCount")));
         for (int i = 0; i < biome_count; i++) {
             NbtCompound element = new NbtCompound();
             element.putString("biome", randomBiome());
@@ -303,13 +303,13 @@ public class RandomDimension {
     NbtElement randomMultiNoiseParameter() {
         if (random.nextBoolean()) {
             NbtCompound res = new NbtCompound();
-            double a = (random.nextFloat()-0.5)*4;
-            double b = (random.nextFloat()-0.5)*4;
+            double a = (random.nextFloat()-0.5)*2;
+            double b = (random.nextFloat()-0.5)*2;
             res.putFloat("min", (float)Math.min(a, b));
             res.putFloat("max", (float)Math.max(a, b));
             return res;
         }
-        return NbtDouble.of((random.nextDouble()-0.5)*4);
+        return NbtDouble.of((random.nextDouble()-0.5)*2);
     }
 
     String randomBiome() {

@@ -39,7 +39,9 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
         if (be.time >= 20) {
             if (stage == 6) {
                 for (int i : offsets) for (int k : offsets) {
-                    world.setBlockState(pos.add(i, -1, k), be.fromMap(i, -1, k));
+                    BlockState s = be.map.get(i + "," + k);
+                    if (s==null) s = Blocks.STONE.getDefaultState();
+                    world.setBlockState(pos.add(i, -1, k), s);
                 }
                 remove(world, pos, be);
                 return;
@@ -58,7 +60,7 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
             }
         }
         if(stage == 0 && be.time == 19) for (int i : offsets) for (int k : offsets)
-            be.map.put(i + ",-1," + k, world.getBlockState(pos.add(i, -1, k)));
+            be.map.put(i + "," + k, world.getBlockState(pos.add(i, -1, k)));
         if (stage > 0 && be.time % 3 == 0) {
             world.playSound(null, pos, SoundEvents.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS, 1f, 1f);
             for (int i : offsets) for (int k : offsets) {
