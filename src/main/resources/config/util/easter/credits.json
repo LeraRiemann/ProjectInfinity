@@ -1,4 +1,5 @@
 {
+  "infinity-version": 1011001,
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 0,
@@ -68,7 +69,7 @@
           "then_run": {
             "type": "minecraft:condition",
             "if_true": {
-              "text": "Acknowledgements$n----------------------$nMod by LeraRiemann, cassiancc$n$nMusic by ivory rosewood$n$nAdditional code by:$n* BasiqueEvangelist$n* unilock$n$nAlpha testers:$n* MamonaTheGreed$n* Mirakuzura$n* sweetbriar$n----------------------$nMay contain elephants",
+              "text": "Acknowledgements$n----------------------$nMod by LeraRiemann, cassiancc$n$nMusic by ivory rosewood$n$nAdditional code by:$n* BasiqueEvangelist$n* unilock$n$nAlpha testers:$n* MamonaTheGreed$n* Mirakuzura$n* sweetbriar$n$nBug catchers:$n* ezioishere$n* MommysDebitCard* 0tvechau$n* purplenathaniel$n* bravely-beep$n* tylerb153$n* Lord_Drakostar$n----------------------$nMay contain elephants",
               "type": "infinity:text"
             },
             "then_run": {
