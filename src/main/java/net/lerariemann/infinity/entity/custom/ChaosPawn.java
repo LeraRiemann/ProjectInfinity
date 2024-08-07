@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.MobEntityAccess;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -31,6 +32,7 @@ import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -189,7 +191,9 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         this.setHealth((float)i);
         int a;
         if ((a = (int)(0.1*i)) > 0) {
-            this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(r.nextInt(Registries.ITEM.size())).getDefaultStack().copyWithCount(a));
+            this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(new Identifier(
+                    ((MinecraftServerAccess)Objects.requireNonNull(world.getServer())).getDimensionProvider().randomName(r, "items")))
+                    .getDefaultStack().copyWithCount(a));
             ((MobEntityAccess)this).setPersistent(false);
         }
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);

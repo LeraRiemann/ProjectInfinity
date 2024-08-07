@@ -134,7 +134,7 @@ public class ConfigGenerator {
         r.getKeys().forEach(a -> {
             String b = a.getValue().toString();
             String namespace = b.substring(0, b.lastIndexOf(":"));
-            if (!excludeInfinity && namespace.contains("infinity")) {
+            if (!excludeInfinity || !(namespace.contains("infinity"))) {
                 checkAndAddWS(m, namespace);
                 m.get(namespace).add(b, 1.0);
             }
