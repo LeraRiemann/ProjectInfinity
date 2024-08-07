@@ -5,6 +5,7 @@
     "returnPortalsEnabled": true,
     "longArithmeticEnabled": false,
     "forceSolidSurface": false,
+    "chaosMobsEnabled": true,
     "maxBiomeCount": 6
   },
   "portalKey": "",

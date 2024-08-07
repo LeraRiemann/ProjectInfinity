@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.entity.custom.*;
 import net.lerariemann.infinity.entity.client.*;
 import net.minecraft.entity.*;
@@ -15,7 +16,10 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.ServerWorldAccess;
 
 public class ModEntities {
     public static void copy(MobEntity from, MobEntity e) {
@@ -57,10 +61,15 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(CHAOS_PAWN, ChaosPawn.createAttributes());
     }
 
+    public static boolean canSpawnInDark(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+        return HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random) &&
+                ((MinecraftServerAccess)world.toServerWorld().getServer()).getDimensionProvider().rule("chaosMobsEnabled");
+    }
+
     public static void registerSpawnRestrictions() {
         SpawnRestriction.register(DIMENSIONAL_SLIME, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, DimensionalSlime::canSpawn);
-        SpawnRestriction.register(DIMENSIONAL_SKELETON, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark);
-        SpawnRestriction.register(DIMENSIONAL_CREEPER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark);
+        SpawnRestriction.register(DIMENSIONAL_SKELETON, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canSpawnInDark);
+        SpawnRestriction.register(DIMENSIONAL_CREEPER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canSpawnInDark);
         SpawnRestriction.register(CHAOS_PAWN, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChaosPawn::canSpawn);
         SpawnRestriction.register(EntityType.SNIFFER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
         SpawnRestriction.register(EntityType.CAMEL, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);

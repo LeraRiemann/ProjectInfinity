@@ -143,7 +143,7 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     }
 
     public static boolean canSpawn(EntityType<DimensionalSlime> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        if (world.getDifficulty() != Difficulty.PEACEFUL) {
+        if (world.getDifficulty() != Difficulty.PEACEFUL && ((MinecraftServerAccess)world.toServerWorld().getServer()).getDimensionProvider().rule("chaosMobsEnabled")) {
             if (!(world instanceof StructureWorldAccess)) {
                 return false;
             }

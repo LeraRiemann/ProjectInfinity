@@ -205,7 +205,8 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         super.mobTick();
     }
 
-    public static boolean canSpawn(EntityType<ChaosPawn> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        return world.getDifficulty() != Difficulty.PEACEFUL;
+    public static boolean canSpawn(EntityType<ChaosPawn> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        return world.getDifficulty() != Difficulty.PEACEFUL &&
+                ((MinecraftServerAccess)world.toServerWorld().getServer()).getDimensionProvider().rule("chaosMobsEnabled");
     }
 }
