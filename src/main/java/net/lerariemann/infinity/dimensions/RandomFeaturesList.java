@@ -128,7 +128,7 @@ public class RandomFeaturesList {
         NbtList res = new NbtList();
         addRandomFeature("vegetation", res, RandomVegetation::new);
         res.addAll(getAllElements("vegetation_part1"));
-        if (!PROVIDER.roll(random, "random_flowers")) res.add(randomPlant("flowers"));
+        if (!PROVIDER.roll(random, "random_flowers")) res.add(randomPlant("flowers_legacy"));
         else addRandomFeature(res, RandomFlowerPatch::new);
         res.add(randomPlant("grass"));
         res.addAll(getAllElements("vegetation_part2"));
