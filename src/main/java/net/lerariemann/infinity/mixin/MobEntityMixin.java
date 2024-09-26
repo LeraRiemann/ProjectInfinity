@@ -10,7 +10,7 @@ public class MobEntityMixin implements MobEntityAccess {
     @Shadow
     private boolean persistent;
 
-    public void setPersistent(boolean bl) {
+    public void projectInfinity$setPersistent(boolean bl) {
         this.persistent = bl;
     }
 }

@@ -1,15 +1,16 @@
 package net.lerariemann.infinity.block.entity;
 
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
+import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class NeitherPortalBlockEntity extends BlockEntity implements RenderAttachmentBlockEntity {
+public class NeitherPortalBlockEntity extends BlockEntity implements RenderDataBlockEntity {
     private final PropertyDelegate propertyDelegate;
     private long dimension;
     private boolean isOpen;
@@ -56,14 +57,14 @@ public class NeitherPortalBlockEntity extends BlockEntity implements RenderAttac
     public void setOpen(boolean i) {
         this.isOpen = i;
     }
-    public void writeNbt(NbtCompound tag) {
-        super.writeNbt(tag);
+    public void writeNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+        super.writeNbt(tag, registryLookup);
         tag.putLong("Dimension", this.dimension);
         tag.putBoolean("Open", this.isOpen);
     }
 
-    public void readNbt(NbtCompound tag) {
-        super.readNbt(tag);
+    public void readNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(tag, registryLookup);
         this.dimension = tag.getLong("Dimension");
         this.isOpen = tag.getBoolean("Open");
     }
@@ -75,12 +76,12 @@ public class NeitherPortalBlockEntity extends BlockEntity implements RenderAttac
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt() {
-        return createNbt();
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
+        return createNbt(registryLookup);
     }
 
     @Override
-    public Object getRenderAttachmentData() {
-        return (int)dimension;
+    public Object getRenderData() {
+        return propertyDelegate.get(0);
     }
 }

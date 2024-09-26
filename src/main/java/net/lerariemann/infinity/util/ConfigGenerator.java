@@ -4,7 +4,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
-import net.minecraft.block.enums.WallMountLocation;
+import net.minecraft.block.enums.BlockFace;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.fluid.Fluid;
@@ -35,17 +35,17 @@ public class ConfigGenerator {
         NbtCompound res = new NbtCompound();
         NbtList elements = new NbtList();
         int cse = 0;
-        if (w.keys.get(0) instanceof String) cse = 1;
-        if (w.keys.get(0) instanceof NbtCompound) cse = 2;
-        if (w.keys.get(0) instanceof NbtList) cse = 3;
+        if (w.keys.getFirst() instanceof String) cse = 1;
+        if (w.keys.getFirst() instanceof NbtCompound) cse = 2;
+        if (w.keys.getFirst() instanceof NbtList) cse = 3;
         int finalCse = cse;
         List<Integer> range = new ArrayList<>(IntStream.rangeClosed(0, w.keys.size() - 1).boxed().toList());
         range.sort(new Comparator<Integer>() {
             public String extract(int i) {
                 return switch (finalCse) {
-                    default -> w.keys.get(i).toString();
                     case 2 -> ((NbtCompound)(w.keys.get(i))).getString("Name");
-                    case 3 -> ((NbtList)(w.keys.get(i))).get(0).toString();
+                    case 3 -> ((NbtList)(w.keys.get(i))).getFirst().toString();
+                    default -> w.keys.get(i).toString();
                 };
             }
             @Override
@@ -103,9 +103,9 @@ public class ConfigGenerator {
         res.putBoolean("float", isFloat(bs, w, inAir));
         NbtCompound properties = new NbtCompound();
         if (bs.contains(Properties.PERSISTENT)) properties.putString("persistent", "true");
-        if (bs.contains(Properties.WALL_MOUNT_LOCATION)) {
+        if (bs.contains(Properties.BLOCK_FACE)) {
             properties.putString("face", "floor");
-            bs = bs.with(Properties.WALL_MOUNT_LOCATION, WallMountLocation.FLOOR);
+            bs = bs.with(Properties.BLOCK_FACE, BlockFace.FLOOR);
         }
         res.putBoolean("top", isTop(bs, w, onStone));
         if (!properties.isEmpty()) res.put("Properties", properties);
@@ -205,7 +205,7 @@ public class ConfigGenerator {
         Arrays.stream(colors).forEach(color -> {
             int i = block.lastIndexOf("magenta");
             String blockColored = block.substring(0, i) + color + block.substring(i+7);
-            if (Registries.BLOCK.containsId(new Identifier(blockColored))) {
+            if (Registries.BLOCK.containsId(Identifier.of(blockColored))) {
                 successCounter.addAndGet(1);
                 NbtCompound c = new NbtCompound();
                 c.putString("Name", blockColored);

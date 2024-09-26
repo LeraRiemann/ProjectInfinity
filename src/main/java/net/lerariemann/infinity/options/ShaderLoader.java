@@ -15,8 +15,8 @@ import java.nio.file.Path;
 
 @Environment(EnvType.CLIENT)
 public class ShaderLoader {
-    static String FILENAME = "current.json";
-    static Path shaderDir(MinecraftClient client) {
+    public static String FILENAME = "current.json";
+    public static Path shaderDir(MinecraftClient client) {
         return client.getResourcePackDir().resolve("infinity/assets/infinity/shaders");
     }
 
@@ -27,7 +27,7 @@ public class ShaderLoader {
             throw new RuntimeException(e);
         }
         if(bl && shaderDir(client).resolve(FILENAME).toFile().exists()) {
-            ((GameRendererAccess)(client.gameRenderer)).loadPP(InfinityMod.getId("shaders/" + FILENAME));
+            ((GameRendererAccess)(client.gameRenderer)).projectInfinity$loadPP(InfinityMod.getId("shaders/" + FILENAME));
             return;
         }
         client.gameRenderer.disablePostProcessor();
@@ -45,7 +45,7 @@ public class ShaderLoader {
     private static NbtCompound packMcmeta() {
         NbtCompound res = new NbtCompound();
         NbtCompound pack = new NbtCompound();
-        pack.putInt("pack_format", 15);
+        pack.putInt("pack_format", 34);
         pack.putString("description", "Shader container");
         res.put("pack", pack);
         return res;

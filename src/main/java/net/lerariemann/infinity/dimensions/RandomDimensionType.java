@@ -41,7 +41,8 @@ public class RandomDimensionType {
         data.putInt("monster_spawn_block_light_limit", random.nextInt(16));
         NbtCompound lightLevel = new NbtCompound();
         lightLevel.putString("type", "uniform");
-        lightLevel.put("value", RandomProvider.genBounds(0, random.nextInt(16)));
+        lightLevel.putInt("min_inclusive", 0);
+        lightLevel.putInt("max_inclusive", random.nextInt(16));
         data.put("monster_spawn_light_level", lightLevel);
         data.putString("infiniburn", dim.PROVIDER.randomName(random, "tags"));
         String s = dim.PROVIDER.randomName(random, "effects");

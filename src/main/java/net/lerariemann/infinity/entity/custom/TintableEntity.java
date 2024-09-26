@@ -19,7 +19,7 @@ public interface TintableEntity {
         float h = (float)(i & 0xFF) / 255.0f;
         return new Vector3f(f, g, h);
     }
-    default Vector3f getColorNamed() {
+    default int getColorNamed() {
         if (hasCustomName()) {
             String s = getName().getString();
             if ("jeb_".equals(s)) {
@@ -28,32 +28,27 @@ public interface TintableEntity {
                 int p = n % o;
                 int q = (n + 1) % o;
                 float r = (getAge() % 25) / 25.0f;
-                float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
-                float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
-                float f = fs[0] * (1.0f - r) + gs[0] * r;
-                float g = fs[1] * (1.0f - r) + gs[1] * r;
-                float h = fs[2] * (1.0f - r) + gs[2] * r;
-                return new Vector3f(f, g, h);
+                int fs = SheepEntity.getRgbColor(DyeColor.byId(p));
+                int gs = SheepEntity.getRgbColor(DyeColor.byId(q));
+                float f = fs * (1.0f - r) + gs * r;
+                return (int)f;
             }
             if ("hue".equals(s)) {
                 int n = getAge() + getId();
                 float hue = n / 400.f;
                 hue = hue - (int) hue;
-                return colorFromInt(Color.getHSBColor(hue, 1.0f, 1.0f).getRGB());
+                return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
             }
         }
-        return null;
+        return -1;
+    }
+    default int getColor() {
+        int v = getColorNamed();
+        if (v!=-1) return v;
+        return this.getColorRaw();
     }
 
-    default Vector3f getColor() {
-        Vector3f v = getColorNamed();
-        if (v!=null) return v;
-        return colorFromInt(this.getColorRaw());
-    }
     default int getColorRaw() {
         return 0;
-    }
-    default float getAlpha() {
-        return 1.0f;
     }
 }

@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.var;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -14,8 +14,8 @@ import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
 
 public class ModPlacementModifiers {
     public static class CenterProximityPlacementModifier extends AbstractConditionalPlacementModifier {
-        public static final Codec<CenterProximityPlacementModifier> MODIFIER_CODEC = (Codecs.POSITIVE_INT.fieldOf("radius")).xmap(
-                CenterProximityPlacementModifier::new, a -> a.radius).codec();
+        public static final MapCodec<CenterProximityPlacementModifier> MODIFIER_CODEC = (Codecs.POSITIVE_INT.fieldOf("radius")).xmap(
+                CenterProximityPlacementModifier::new, a -> a.radius);
         private final int radius;
 
         private CenterProximityPlacementModifier(int radius) {
@@ -36,7 +36,7 @@ public class ModPlacementModifiers {
             return PlacementModifierType.RARITY_FILTER;
         }
     }
-    static <P extends PlacementModifier> PlacementModifierType<P> register(String id, Codec<P> codec) {
+    static <P extends PlacementModifier> PlacementModifierType<P> register(String id, MapCodec<P> codec) {
         return Registry.register(Registries.PLACEMENT_MODIFIER_TYPE, InfinityMod.getId(id), () -> codec);
     }
     public static void registerModifiers() {

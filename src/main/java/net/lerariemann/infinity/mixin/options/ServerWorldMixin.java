@@ -19,7 +19,7 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.level.ServerWorldProperties;
 import net.minecraft.world.level.storage.LevelStorage;
-import net.minecraft.world.spawner.Spawner;
+import net.minecraft.world.spawner.SpecialSpawner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -44,10 +44,10 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injected(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<Spawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
+    private void injected(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<SpecialSpawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
         infinityoptions = InfinityOptions.generate(server, worldKey);
         DimensionType t = getDimension();
-        ((InfinityOptionsAccess)(Object)t).setInfinityOptions(infinityoptions);
+        ((InfinityOptionsAccess)(Object)t).projectInfinity$setInfinityOptions(infinityoptions);
         timebombed = 0;
     }
 
@@ -62,21 +62,21 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     }
 
     @Override
-    public void timebomb(int i) {
+    public void projectInfinity$timebomb(int i) {
         if(getRegistryKey().getValue().toString().contains("infinity")) timebombed = i;
     }
 
     @Override
-    public int isTimebobmed() {
+    public int projectInfinity$isTimebobmed() {
         return timebombed;
     }
 
     @Override
-    public InfinityOptions getInfinityOptions() {
+    public InfinityOptions projectInfinity$getInfinityOptions() {
         return infinityoptions;
     }
     @Override
-    public void setInfinityOptions(InfinityOptions options) {
+    public void projectInfinity$setInfinityOptions(InfinityOptions options) {
         infinityoptions = options;
     }
 }

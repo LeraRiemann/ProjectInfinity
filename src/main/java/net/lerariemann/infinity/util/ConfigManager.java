@@ -6,7 +6,6 @@ import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,7 +65,7 @@ public class ConfigManager {
                 Files.createDirectories(path);
             }
 
-            Files.walk(modContainer.getRootPaths().get(0).resolve("config")).forEach(p -> {
+            Files.walk(modContainer.getRootPaths().getFirst().resolve("config")).forEach(p -> {
                 boolean bl = registerConfig(p);
                 if (bl && p.toString().contains("evicted_files.json")) bl2.set(true);
             });
@@ -76,13 +75,11 @@ public class ConfigManager {
         if (bl2.get()) evictOldFiles();
     }
     public static void evictOldFiles() {
-        LogManager.getLogger().info("1");
         NbtCompound c = CommonIO.read("config/infinity/util/evicted_files.json");
         NbtList l = c.getList("content", NbtElement.STRING_TYPE);
         try {
             for (NbtElement e : l) {
                 Path path1 = Paths.get("config/infinity/" + e.asString());
-                LogManager.getLogger().info("path1");
                 if (path1.toFile().exists()) {
                     Path path2 = Paths.get("config/infinity/evicted/" + e.asString());
                     Files.createDirectories(path2);

@@ -6,7 +6,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
@@ -17,6 +16,7 @@ import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.var.ModCommands;
 import net.lerariemann.infinity.var.ModCriteria;
+import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -30,6 +30,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
@@ -68,7 +69,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     }
 
     public static boolean open(MinecraftServer s, World world, BlockPos pos, boolean countRepeats) {
-        RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
+        RandomProvider prov = ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider();
         BlockEntity blockEntity = world.getBlockEntity(pos);
         boolean bl = false;
         if (blockEntity instanceof NeitherPortalBlockEntity) {
@@ -130,22 +131,22 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos,
-                              PlayerEntity player, Hand hand, BlockHitResult hit) {
+                              PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient) {
             MinecraftServer s = world.getServer();
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (s!=null && blockEntity instanceof NeitherPortalBlockEntity) {
                 if (((NeitherPortalBlockEntity)blockEntity).getOpen() && world_exists(s, ((NeitherPortalBlockEntity)blockEntity).getDimension()))
                     return ActionResult.SUCCESS;
-                RandomProvider prov = ((MinecraftServerAccess)(s)).getDimensionProvider();
+                RandomProvider prov = ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider();
                 boolean bl = prov.portalKey.isBlank();
                 boolean bl2 = false;
                 if (bl) {
                     bl2 = open(s, world, pos, false);
                 }
                 else {
-                    ItemStack itemStack = player.getStackInHand(hand);
-                    Item item = Registries.ITEM.get(new Identifier(prov.portalKey));
+                    ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
+                    Item item = Registries.ITEM.get(Identifier.of(prov.portalKey));
                     if (itemStack.isOf(item)) {
                         if (!player.getAbilities().creativeMode) {
                             itemStack.decrement(1);
@@ -163,31 +164,35 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         return ActionResult.SUCCESS;
     }
 
-
     public static boolean addDimension(MinecraftServer server, long i, boolean bl) {
         RegistryKey<World> key = ModCommands.getKey(i, server);
-        if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).hasToAdd(key)) && !ModCommands.checkEnd(i, server)) {
+        if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).projectInfinity$hasToAdd(key)) && !ModCommands.checkEnd(i, server)) {
             RandomDimension d = new RandomDimension(i, server);
             if (bl) {
-                ((MinecraftServerAccess) (server)).addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d));
+                ((MinecraftServerAccess) (server)).projectInfinity$addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d));
                 server.getPlayerManager().getPlayerList().forEach(a ->
-                        ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(ModCommands.getIdentifier(i, server), d)));
+                        ServerPlayNetworking.send(a, buildPayload(ModCommands.getIdentifier(i, server), d)));
                 return true;
             }
         }
         return false;
     }
 
-    static PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
+    static ModPayloads.WorldAddPayload buildPayload(Identifier id, RandomDimension d) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeIdentifier(id);
-        buf.writeNbt(d.type != null ? d.type.data : new NbtCompound());
-        buf.writeInt(d.random_biomes.size());
+        NbtCompound data = new NbtCompound();
+        NbtCompound dimdata = d.type != null ? d.type.data : new NbtCompound();
+        data.put("dimdata", dimdata);
+        NbtList biomes = new NbtList();
         d.random_biomes.forEach(b -> {
-            buf.writeIdentifier(InfinityMod.getId(b.name));
-            buf.writeNbt(b.data);
+            NbtCompound biome = new NbtCompound();
+            biome.putString("id", b.name);
+            biome.put("data", b.data);
+            biomes.add(biome);
         });
-        return buf;
+        data.put("biomes", biomes);
+        return new ModPayloads.WorldAddPayload(id, data);
     }
 
     @Environment(EnvType.CLIENT)
@@ -239,7 +244,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             if (recipes.containsKey(itemStack.getItem())) {
                 Vec3d v = entity.getVelocity();
                 ItemEntity result = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(),
-                        new ItemStack(Registries.ITEM.get(new Identifier(recipes.get(itemStack.getItem())))).copyWithCount(itemStack.getCount()),
+                        new ItemStack(Registries.ITEM.get(Identifier.of(recipes.get(itemStack.getItem())))).copyWithCount(itemStack.getCount()),
                         -v.x, -v.y, -v.z);
                 world.spawnEntity(result);
                 entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
@@ -256,7 +261,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 pos = pos.down();
             }
             if (world.getBlockState(pos).allowsSpawning(world, pos, ModEntities.CHAOS_PAWN) &&
-                    ((MinecraftServerAccess)world.getServer()).getDimensionProvider().rule("chaosMobsEnabled") &&
+                    ((MinecraftServerAccess)world.getServer()).projectInfinity$getDimensionProvider().rule("chaosMobsEnabled") &&
                     (entity = ModEntities.CHAOS_PAWN.spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());

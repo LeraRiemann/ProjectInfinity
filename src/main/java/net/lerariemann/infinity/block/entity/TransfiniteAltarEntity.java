@@ -56,7 +56,7 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
             }
             if(be.time == 10) {
                 ConfigGenerator.generateAll(world, pos.up(2), pos.up());
-                a.setDimensionProvider();
+                a.projectInfinity$setDimensionProvider();
             }
         }
         if(stage == 0 && be.time == 19) for (int i : offsets) for (int k : offsets)
@@ -65,8 +65,8 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
             world.playSound(null, pos, SoundEvents.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS, 1f, 1f);
             for (int i : offsets) for (int k : offsets) {
                 if (i == 0 && k == 0) world.setBlockState(pos.add(i, -1, k), Blocks.STONE.getDefaultState());
-                else world.setBlockState(pos.add(i, -1, k), Registries.BLOCK.get(new Identifier(
-                        a.getDimensionProvider().randomName(r, "full_blocks"))).getDefaultState());
+                else world.setBlockState(pos.add(i, -1, k), Registries.BLOCK.get(Identifier.of(
+                        a.projectInfinity$getDimensionProvider().randomName(r, "full_blocks"))).getDefaultState());
             }
         }
         be.time+=1;

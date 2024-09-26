@@ -11,8 +11,6 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.ConfigGenerator;
-import net.lerariemann.infinity.util.RandomLootDrops;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -25,7 +23,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -37,14 +34,12 @@ import static net.minecraft.server.command.CommandManager.*;
 public class ModCommands {
     static void warpId(CommandContext<ServerCommandSource> context, long value) {
         MinecraftServer s = context.getSource().getServer();
-        boolean bl = ((MinecraftServerAccess)(s)).getDimensionProvider().rule("runtimeGenerationEnabled");
+        boolean bl = ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider().rule("runtimeGenerationEnabled");
         boolean bl2 = NeitherPortalBlock.addDimension(s, value, bl);
-        if (!bl) throw new CommandException(Text.translatable("commands.warp.runtime_disabled"));
         final ServerPlayerEntity self = context.getSource().getPlayer();
-        if (self == null) throw new CommandException(Text.translatable("commands.warp.not_a_player"));
         if (bl2) self.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
         self.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
-        ((ServerPlayerEntityAccess)(self)).setWarpTimer(20, value);
+        ((ServerPlayerEntityAccess)(self)).projectInfinity$setWarpTimer(20, value);
     }
 
     public static boolean checkEnd(long d, MinecraftServer s) {
@@ -52,7 +47,7 @@ public class ModCommands {
     }
 
     public static Identifier getIdentifier(long d, MinecraftServer s) {
-        String s1 = ((MinecraftServerAccess)s).getDimensionProvider().easterizer.keyOf(d);
+        String s1 = ((MinecraftServerAccess)s).projectInfinity$getDimensionProvider().easterizer.keyOf(d);
         return InfinityMod.getId(s1);
     }
 
@@ -61,22 +56,7 @@ public class ModCommands {
     }
 
     public static long getDimensionSeed(String text, MinecraftServer s) {
-        return getDimensionSeed(text, ((MinecraftServerAccess)(s)).getDimensionProvider());
-    }
-    public static long getDimensionSeed(NbtCompound compound, MinecraftServer s, Item item) {
-        NbtList pages = compound.getList("pages", NbtElement.STRING_TYPE);
-        if (pages.isEmpty()) {
-            return getDimensionSeed("empty", ((MinecraftServerAccess)(s)).getDimensionProvider());
-        }
-        else if (item == Items.WRITTEN_BOOK) {
-            String pagesString = pages.get(0).asString();
-            String parsedString = pagesString.substring(pagesString.indexOf(':')+2, pagesString.length()-2);
-            return getDimensionSeed(parsedString, ((MinecraftServerAccess)(s)).getDimensionProvider());
-        }
-        else {
-            String pagesString = pages.get(0).asString();
-            return getDimensionSeed(pagesString, ((MinecraftServerAccess)(s)).getDimensionProvider());
-        }
+        return getDimensionSeed(text, ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider());
     }
 
     public static long getDimensionSeed(String text, RandomProvider prov) {
@@ -109,12 +89,5 @@ public class ModCommands {
                     ConfigGenerator.generateAll(w, bp1, bp2);
                     return 1;
                 })))));
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("generate_loot")
-                .requires(source -> source.hasPermissionLevel(2))
-                .then(argument("seed", IntegerArgumentType.integer()).executes(context -> {
-                    final int seed = IntegerArgumentType.getInteger(context, "seed");
-                    RandomLootDrops.genAll(seed, context.getSource().getServer());
-                    return 1;
-                })))); //experimental command, will likely get separated into its own mod
     }
 }

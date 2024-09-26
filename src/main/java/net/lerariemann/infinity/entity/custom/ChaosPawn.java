@@ -19,8 +19,11 @@ import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -88,10 +91,10 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(colors, new NbtCompound());
-        this.dataTracker.startTracking(special_case, -1);
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(colors, new NbtCompound());
+        builder.add(special_case, -1);
     }
     @Override
     protected void initGoals() {
@@ -127,12 +130,13 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     @Override
-    public Identifier getLootTableId() {
-        return switch (this.dataTracker.get(special_case)) {
-            case 0 -> new Identifier("infinity:entities/chaos_pawn_black");
-            case 1 -> new Identifier("infinity:entities/chaos_pawn_white");
-            default -> new Identifier("");
+    public RegistryKey<LootTable> getLootTableId() {
+        Identifier i = switch (this.dataTracker.get(special_case)) {
+            case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
+            case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
+            default -> Identifier.of("");
         };
+        return RegistryKey.of(RegistryKeys.LOOT_TABLE, i);
     }
 
     public void setAllColors(int color) {
@@ -183,20 +187,20 @@ public class ChaosPawn extends HostileEntity implements Angerable {
 
     @Override
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         Random r = new Random();
         setAllColors(r, world.getBlockState(this.getBlockPos().down(2)));
         double i = 15*r.nextExponential();
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(i);
+        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
         this.setHealth((float)i);
         int a;
         if ((a = (int)(0.1*i)) > 0) {
-            this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(new Identifier(
-                    ((MinecraftServerAccess)Objects.requireNonNull(world.getServer())).getDimensionProvider().randomName(r, "items")))
+            this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(Identifier.of(
+                    ((MinecraftServerAccess)Objects.requireNonNull(world.getServer())).projectInfinity$getDimensionProvider().randomName(r, "items")))
                     .getDefaultStack().copyWithCount(a));
-            ((MobEntityAccess)this).setPersistent(false);
+            ((MobEntityAccess)this).projectInfinity$setPersistent(false);
         }
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+        return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
     @Override
@@ -207,6 +211,6 @@ public class ChaosPawn extends HostileEntity implements Angerable {
 
     public static boolean canSpawn(EntityType<ChaosPawn> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
         return world.getDifficulty() != Difficulty.PEACEFUL &&
-                ((MinecraftServerAccess)world.toServerWorld().getServer()).getDimensionProvider().rule("chaosMobsEnabled");
+                ((MinecraftServerAccess)world.toServerWorld().getServer()).projectInfinity$getDimensionProvider().rule("chaosMobsEnabled");
     }
 }

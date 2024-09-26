@@ -11,6 +11,8 @@ import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.world.gen.densityfunction.DensityFunction;
 
+import java.util.Arrays;
+
 public class ModDensityFunctionTypes {
     interface Nonbinary extends DensityFunction {
         DensityFunction input();
@@ -85,7 +87,7 @@ public class ModDensityFunctionTypes {
     }
 
     record Coordinate(double scale, int axis) implements DensityFunction.Base {
-        public static final CodecHolder<Coordinate> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.create(instance -> instance.group(
+        public static final CodecHolder<Coordinate> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.DOUBLE.fieldOf("scale").orElse(1.0).forGetter(a -> a.scale),
                 Codec.INT.fieldOf("axis").forGetter(a -> a.axis)).apply(
                 instance, Coordinate::new)));
@@ -130,7 +132,7 @@ public class ModDensityFunctionTypes {
     }
 
     record Menger(double scale, int max_y) implements DensityFunction.Base {
-        public static final CodecHolder<Menger> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.create(instance -> instance.group(
+        public static final CodecHolder<Menger> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.DOUBLE.fieldOf("scale").orElse(1.0).forGetter(a -> a.scale),
                 Codec.INT.fieldOf("max_y").orElse(0).forGetter(a -> a.max_y)).apply(
                 instance, Menger::new)));
@@ -171,7 +173,7 @@ public class ModDensityFunctionTypes {
     }
 
     record Skygrid(double scale, int size, int separation) implements DensityFunction.Base {
-        public static final CodecHolder<Skygrid> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.create(instance -> instance.group(
+        public static final CodecHolder<Skygrid> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.DOUBLE.fieldOf("scale").orElse(1.0).forGetter(a -> a.scale),
                 Codec.INT.fieldOf("size").orElse(1).forGetter(a -> a.size),
                 Codec.INT.fieldOf("separation").orElse(3).forGetter(a -> a.separation)).apply(
@@ -266,12 +268,12 @@ public class ModDensityFunctionTypes {
 
     static double[] gen(int octaves){
         double[] a = new double[octaves];
-        for (int i = 0; i < octaves; i++) a[i] = 1;
+        Arrays.fill(a, 1);
         return a;
     }
 
     public record Classic(int sealevel) implements DensityFunction.Base {
-        public static final CodecHolder<Classic> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.create(instance -> instance.group(
+        public static final CodecHolder<Classic> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.INT.fieldOf("sealevel").orElse(64).forGetter(a -> a.sealevel)).apply(
                 instance, Classic::new)));
 

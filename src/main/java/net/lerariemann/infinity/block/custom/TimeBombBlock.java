@@ -63,7 +63,7 @@ public class TimeBombBlock extends Block {
     }
 
     void activate(ServerWorld world, Path path) {
-        ((Timebombable)world).timebomb(1);
+        ((Timebombable)world).projectInfinity$timebomb(1);
         try {
             FileUtils.deleteDirectory(path.toFile());
         } catch (IOException ignored) {
@@ -81,18 +81,18 @@ public class TimeBombBlock extends Block {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient()) {
             if (world.getRegistryKey().getValue().toString().contains("infinity")) {
                 ServerWorld w = ((ServerPlayerEntity)player).getServerWorld();
-                if (((Timebombable)w).isTimebobmed() == 0) {
+                if (((Timebombable)w).projectInfinity$isTimebobmed() == 0) {
                     if (state.get(ACTIVE)) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
                         world.getEntitiesByType(TypeFilter.instanceOf(AreaEffectCloudEntity.class), Box.of(pos.toCenterPos(), 1.0, 1.0, 1.0), Entity::isAlive).
                                 forEach(e -> e.remove(Entity.RemovalReason.DISCARDED));
                         return ActionResult.SUCCESS;
                     } //remove after regenerating a dimension
-                    if (player.getStackInHand(hand).isEmpty() && player.isSneaking()) {
+                    if (player.getStackInHand(Hand.MAIN_HAND).isEmpty() && player.isSneaking()) {
                         Path path = w.getServer().getSavePath(WorldSavePath.DATAPACKS).resolve(w.getRegistryKey().getValue().getPath());
                         activate(w, path);
                         world.spawnEntity(genCloud(world, pos));
@@ -109,7 +109,7 @@ public class TimeBombBlock extends Block {
                     } //pick up
                 }
             }
-            else if (player.getStackInHand(hand).isEmpty()) {
+            else if (player.getStackInHand(Hand.MAIN_HAND).isEmpty()) {
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
                 player.getInventory().insertStack(ModBlocks.TIME_BOMB_ITEM.getDefaultStack());
                 return ActionResult.SUCCESS;

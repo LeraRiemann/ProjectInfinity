@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.access;
 
 public interface Timebombable {
-    void timebomb(int i);
+    void projectInfinity$timebomb(int i);
 
-    int isTimebobmed();
+    int projectInfinity$isTimebobmed();
 }

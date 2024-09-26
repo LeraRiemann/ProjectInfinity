@@ -7,13 +7,13 @@ import net.minecraft.world.dimension.DimensionOptions;
 
 public interface MinecraftServerAccess {
 
-    void addWorld(RegistryKey<World> key, DimensionOptions options);
+    void projectInfinity$addWorld(RegistryKey<World> key, DimensionOptions options);
 
-    boolean hasToAdd(RegistryKey<World> key);
+    boolean projectInfinity$hasToAdd(RegistryKey<World> key);
 
-    boolean needsInvocation();
-    void onInvocation();
+    boolean projectInfinity$needsInvocation();
+    void projectInfinity$onInvocation();
 
-    RandomProvider getDimensionProvider();
-    void setDimensionProvider();
+    RandomProvider projectInfinity$getDimensionProvider();
+    void projectInfinity$setDimensionProvider();
 }

@@ -26,7 +26,7 @@ public class ModMaterialRules {
             long seed = MathHelper.hashCode(i, j, k);
             double d = (seed & 0xFFFL) / (double)0xFFFL;
             d = d - Math.floor(d);
-            BlockState st = Registries.BLOCK.get(new Identifier(RandomProvider.blockElementToName(w.getElement(d)))).getDefaultState();
+            BlockState st = Registries.BLOCK.get(Identifier.of(RandomProvider.blockElementToName(w.getElement(d)))).getDefaultState();
             if(st.contains(Properties.PERSISTENT)) st = st.with(Properties.PERSISTENT, Boolean.TRUE);
             return st;
         }

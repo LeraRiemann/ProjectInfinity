@@ -1,5 +1,5 @@
 package net.lerariemann.infinity.access;
 
 public interface WorldRendererAccess {
-    void setNeedsStars(boolean b);
+    void projectInfinity$setNeedsStars(boolean b);
 }

@@ -58,7 +58,7 @@ public record InfinityOptions(NbtCompound data) {
     }
 
     public Identifier getSolarTexture() {
-        return new Identifier(data.contains("solar_texture") ? data.getString("solar_texture") : "textures/environment/sun.png");
+        return Identifier.of(data.contains("solar_texture") ? data.getString("solar_texture") : "textures/environment/sun.png");
     }
 
     public Vector3f getStellarColor() {
@@ -140,7 +140,7 @@ public record InfinityOptions(NbtCompound data) {
     }
 
     public Identifier getLunarTexture(int i) {
-        return new Identifier(lunarTest("lunar_texture", i) ?
+        return Identifier.of(lunarTest("lunar_texture", i) ?
                 ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).getString("lunar_texture") : "textures/environment/moon_phases.png");
     }
 

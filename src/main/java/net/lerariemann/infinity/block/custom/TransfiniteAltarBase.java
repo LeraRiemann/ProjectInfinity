@@ -67,11 +67,11 @@ public class TransfiniteAltarBase extends Block {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        ItemStack itemStack = player.getStackInHand(hand);
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
         if (!world.isClient) {
-            String s = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer()))).getDimensionProvider().altarKey;
-            boolean bl0 = s.isBlank() ? itemStack.isEmpty() : itemStack.isOf(Registries.ITEM.get(new Identifier(s)));
+            String s = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer()))).projectInfinity$getDimensionProvider().altarKey;
+            boolean bl0 = s.isBlank() ? itemStack.isEmpty() : itemStack.isOf(Registries.ITEM.get(Identifier.of(s)));
             if (bl0) {
                 boolean bl = testSpace(world, pos);
                 if (!bl) {

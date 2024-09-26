@@ -1,10 +1,9 @@
 package net.lerariemann.infinity.block;
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.*;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
@@ -12,18 +11,18 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
 public class ModBlocks {
-    public static final Block NEITHER_PORTAL = new NeitherPortalBlock(FabricBlockSettings.copy(Blocks.NETHER_PORTAL));
-    public static final Block BOOK_BOX = new BookBoxBlock(FabricBlockSettings.copy(Blocks.BOOKSHELF));
-    public static final Item BOOK_BOX_ITEM = new BlockItem(BOOK_BOX, new FabricItemSettings());
-    public static final Block ALTAR_COSMIC = new CosmicAltar(FabricBlockSettings.copy(Blocks.BEDROCK).nonOpaque());
-    public static final Block ALTAR_LIT = new TransfiniteAltar(FabricBlockSettings.copy(Blocks.BEDROCK).nonOpaque().
+    public static final Block NEITHER_PORTAL = new NeitherPortalBlock(AbstractBlock.Settings.copy(Blocks.NETHER_PORTAL));
+    public static final Block BOOK_BOX = new BookBoxBlock(AbstractBlock.Settings.copy(Blocks.BOOKSHELF));
+    public static final Item BOOK_BOX_ITEM = new BlockItem(BOOK_BOX, new Item.Settings());
+    public static final Block ALTAR_COSMIC = new CosmicAltar(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque());
+    public static final Block ALTAR_LIT = new TransfiniteAltar(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().
             luminance(state -> state.get(TransfiniteAltar.FLOWER) ? 15 : 0));
-    public static final Block ALTAR = new TransfiniteAltarBase(FabricBlockSettings.copy(Blocks.STONE).nonOpaque().
+    public static final Block ALTAR = new TransfiniteAltarBase(AbstractBlock.Settings.copy(Blocks.STONE).nonOpaque().
             luminance(state -> state.get(TransfiniteAltarBase.FLOWER) ? 15 : 0));
-    public static final Item ALTAR_ITEM = new BlockItem(ALTAR, new FabricItemSettings());
-    public static final Block TIME_BOMB = new TimeBombBlock(FabricBlockSettings.copy(Blocks.BEDROCK).nonOpaque().
+    public static final Item ALTAR_ITEM = new BlockItem(ALTAR, new Item.Settings());
+    public static final Block TIME_BOMB = new TimeBombBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().
             luminance(state -> 15));
-    public static final Item TIME_BOMB_ITEM = new BlockItem(TIME_BOMB, new FabricItemSettings());
+    public static final Item TIME_BOMB_ITEM = new BlockItem(TIME_BOMB, new Item.Settings());
     private static void registerBlock(String name, Block block) {
         Registry.register(Registries.BLOCK, InfinityMod.getId(name), block);
     }

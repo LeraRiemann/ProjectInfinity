@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.structure;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.structure.StructurePiecesCollector;
 import net.minecraft.world.Heightmap;
@@ -11,7 +12,7 @@ import net.minecraft.world.gen.structure.StructureType;
 import java.util.Optional;
 
 public class PyramidStructure extends Structure {
-    public static final Codec<PyramidStructure> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<PyramidStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             PyramidStructure.configCodecBuilder(instance),
             (Codec.INT.fieldOf("top_y")).forGetter(a -> a.top_y),
             (Codec.INT.fieldOf("bottom_y")).forGetter(a -> a.top_y),

@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.dimensions;
 
-
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-
 
 public class RandomDimension {
     public final long id;
@@ -45,7 +43,7 @@ public class RandomDimension {
     public RandomDimension(long i, MinecraftServer server) {
         random = new Random(i);
         this.server = server;
-        PROVIDER = ((MinecraftServerAccess)(server)).getDimensionProvider();
+        PROVIDER = ((MinecraftServerAccess)(server)).projectInfinity$getDimensionProvider();
         id = i;
         name = PROVIDER.easterizer.keyOf(i);
         fullname = InfinityMod.MOD_ID + ":" + name;
@@ -171,7 +169,7 @@ public class RandomDimension {
     NbtCompound packMcmeta() {
         NbtCompound res = new NbtCompound();
         NbtCompound pack = new NbtCompound();
-        pack.putInt("pack_format", 10);
+        pack.putInt("pack_format", 34);
         pack.putString("description", "Dimension #" + id);
         res.put("pack", pack);
         return res;

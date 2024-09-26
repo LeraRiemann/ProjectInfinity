@@ -46,7 +46,7 @@ public class CosmicAltarEntity extends BlockEntity {
         }
         if(be.time == 1) {
             ConfigGenerator.generateAll(world, pos.up(2), pos.up());
-            a.setDimensionProvider();
+            a.projectInfinity$setDimensionProvider();
         }
         if(be.time == 2) {
             for (int i : offsets) for (int j : offsets_y) for (int k : offsets) {
@@ -69,8 +69,8 @@ public class CosmicAltarEntity extends BlockEntity {
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(nbt, registryLookup);
         if (nbt.contains("time", NbtElement.INT_TYPE)) {
             time = nbt.getInt("time");
         }
@@ -85,8 +85,8 @@ public class CosmicAltarEntity extends BlockEntity {
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt);
+    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.writeNbt(nbt, registryLookup);
         nbt.putInt("time", this.time);
         NbtCompound mapnbt = new NbtCompound();
         for (String s : map.keySet()) {

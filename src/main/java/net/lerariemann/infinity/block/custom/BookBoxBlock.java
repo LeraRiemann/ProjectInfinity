@@ -3,18 +3,20 @@ package net.lerariemann.infinity.block.custom;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
+import net.minecraft.text.RawFilteredPair;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BookBoxBlock extends Block {
@@ -37,15 +39,13 @@ public class BookBoxBlock extends Block {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient) {
             ItemStack itemStack1 = Items.WRITTEN_BOOK.getDefaultStack();
-            NbtCompound compound = itemStack1.getOrCreateNbt();
-            compound.putString("author", "§kLeraRiemann");
-            NbtList lst = new NbtList();
-            lst.add(NbtString.of(text(pos)));
-            compound.put("pages", lst);
-            compound.putString("title", title(pos));
+            List<RawFilteredPair<Text>> pages = new ArrayList<>();
+            pages.add(RawFilteredPair.of(Text.of(text(pos))));
+            WrittenBookContentComponent component = new WrittenBookContentComponent(RawFilteredPair.of(title(pos)), "§kLeraRiemann", 3, pages, false);
+            itemStack1.set(DataComponentTypes.WRITTEN_BOOK_CONTENT, component);
             player.getInventory().insertStack(itemStack1);
         }
         return ActionResult.SUCCESS;

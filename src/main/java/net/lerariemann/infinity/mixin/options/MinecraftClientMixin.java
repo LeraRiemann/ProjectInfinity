@@ -21,12 +21,12 @@ public class MinecraftClientMixin implements InfinityOptionsAccess {
     }
 
     @Unique
-    public InfinityOptions getInfinityOptions() {
+    public InfinityOptions projectInfinity$getInfinityOptions() {
         return infinityoptions;
     }
 
     @Unique
-    public void setInfinityOptions(InfinityOptions options) {
+    public void projectInfinity$setInfinityOptions(InfinityOptions options) {
         infinityoptions = options;
     }
 }

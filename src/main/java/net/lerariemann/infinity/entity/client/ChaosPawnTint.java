@@ -23,8 +23,6 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
 
     public void renderOneLayer(MatrixStack matrixStack, VertexConsumer vertexConsumer, int light, int overlay, ChaosPawn livingEntity, ModelPart part, String name) {
         int color;
-        float f = 0.0f, g = 0.0f, h = 0.0f;
-        boolean bl = false;
         color = livingEntity.getColors().getInt(name);
         if (livingEntity.hasCustomName()) {
             String s = livingEntity.getName().getString();
@@ -34,12 +32,9 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
                 int p = n % o;
                 int q = (n + 1) % o;
                 float r = (livingEntity.age % 25) / 25.0f;
-                float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
-                float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
-                f = fs[0] * (1.0f - r) + gs[0] * r;
-                g = fs[1] * (1.0f - r) + gs[1] * r;
-                h = fs[2] * (1.0f - r) + gs[2] * r;
-                bl = true;
+                int fs = SheepEntity.getRgbColor(DyeColor.byId(p));
+                int gs = SheepEntity.getRgbColor(DyeColor.byId(q));
+                color = (int)(fs * (1 - r) + gs * r);
             }
             if ("hue".equals(s)) {
                 int n = livingEntity.age + (name.equals("hat") ? 200 : 0) + livingEntity.getId();
@@ -48,12 +43,7 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
                 color = Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
             }
         }
-        if (!bl) {
-            f = (float)(color >> 16 & 0xFF) / 255.0f;
-            g = (float)(color >> 8 & 0xFF) / 255.0f;
-            h = (float)(color & 0xFF) / 255.0f;
-        }
-        part.render(matrixStack, vertexConsumer, light, overlay, f, g, h, 1.0f);
+        part.render(matrixStack, vertexConsumer, light, overlay, color);
     }
 
     @Override

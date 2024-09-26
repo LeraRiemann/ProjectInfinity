@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.block.entity;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.minecraft.block.entity.BlockEntityType;
@@ -15,13 +14,13 @@ public class ModBlockEntities {
     public static void registerBlockEntities() {
         NEITHER_PORTAL = Registry.register(Registries.BLOCK_ENTITY_TYPE,
                 InfinityMod.getId("neither_portal"),
-                FabricBlockEntityTypeBuilder.create(NeitherPortalBlockEntity::new,
+                BlockEntityType.Builder.create(NeitherPortalBlockEntity::new,
                         ModBlocks.NEITHER_PORTAL).build(null));
         ALTAR = Registry.register(Registries.BLOCK_ENTITY_TYPE,
                 InfinityMod.getId("altar_block_entity"),
-                FabricBlockEntityTypeBuilder.create(TransfiniteAltarEntity::new, ModBlocks.ALTAR_LIT).build());
+                BlockEntityType.Builder.create(TransfiniteAltarEntity::new, ModBlocks.ALTAR_LIT).build());
         ALTAR_COSMIC = Registry.register(Registries.BLOCK_ENTITY_TYPE,
                 InfinityMod.getId("cosmic_block_entity"),
-                FabricBlockEntityTypeBuilder.create(CosmicAltarEntity::new, ModBlocks.ALTAR_COSMIC).build());
+                BlockEntityType.Builder.create(CosmicAltarEntity::new, ModBlocks.ALTAR_COSMIC).build());
     }
 }

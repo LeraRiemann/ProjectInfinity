@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.block.custom;
 
+import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
 import net.minecraft.block.BlockRenderType;
@@ -13,9 +14,16 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class CosmicAltar extends BlockWithEntity {
+    public static final MapCodec<CosmicAltar> CODEC = createCodec(CosmicAltar::new);
     public CosmicAltar(Settings settings) {
         super(settings);
     }
+
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return CODEC;
+    }
+
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
@@ -27,7 +35,6 @@ public class CosmicAltar extends BlockWithEntity {
     }
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        if (!world.isClient) return checkType(type, ModBlockEntities.ALTAR_COSMIC, CosmicAltarEntity::serverTick);
-        return null;
+        return validateTicker(type, ModBlockEntities.ALTAR_COSMIC, world.isClient ? null : CosmicAltarEntity::serverTick);
     }
 }

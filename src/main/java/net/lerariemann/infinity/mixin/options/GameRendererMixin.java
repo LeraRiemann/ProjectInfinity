@@ -15,17 +15,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin implements GameRendererAccess {
-    @Shadow void loadPostProcessor(Identifier id) {
+    @Shadow
+    private void loadPostProcessor(Identifier id) {
     }
 
     @Override
-    public void loadPP(Identifier id) {
+    public void projectInfinity$loadPP(Identifier id) {
         loadPostProcessor(id);
     }
 
     @Inject(method = "onCameraEntitySet", at = @At("TAIL"), cancellable = true)
     private void preserveShaderThirdPerson(CallbackInfo ci) {
-        InfinityOptions options = ((InfinityOptionsAccess)MinecraftClient.getInstance()).getInfinityOptions();
+        InfinityOptions options = ((InfinityOptionsAccess)MinecraftClient.getInstance()).projectInfinity$getInfinityOptions();
         if (options.getShader().isEmpty()) {
             ci.cancel();
         }

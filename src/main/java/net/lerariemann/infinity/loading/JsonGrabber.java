@@ -5,13 +5,14 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.Lifecycle;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.*;
+import net.minecraft.registry.entry.RegistryEntryInfo;
 import net.minecraft.util.Identifier;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,9 +62,13 @@ public class JsonGrabber<E> {
     void grab(RegistryKey<E> key, JsonElement jsonElement, boolean bl) {
         RegistryOps<JsonElement> registryOps = RegistryOps.of(JsonOps.INSTANCE, registryInfoGetter);
         DataResult<E> dataResult = decoder.parse(registryOps, jsonElement);
-        E object = dataResult.getOrThrow(false, (error) -> {
-        });
-        if (bl || !registry.contains(key)) registry.add(key, object, Lifecycle.stable());
+        if(dataResult.result().isPresent()) {
+            E object = dataResult.result().get();
+            if (bl || !registry.contains(key)) registry.add(key, object, RegistryEntryInfo.DEFAULT);
+        }
+        else {
+            LogManager.getLogger().info(jsonElement);
+        }
     }
 
     void grab(String path, RegistryKey<E> registryKey, boolean bl) {
@@ -91,9 +96,8 @@ public class JsonGrabber<E> {
         JsonElement jsonElement = JsonParser.parseString(content);
         RegistryOps<JsonElement> registryOps = RegistryOps.of(JsonOps.INSTANCE, registryInfoGetter);
         DataResult<E> dataResult = decoder.parse(registryOps, jsonElement);
-        E object = dataResult.getOrThrow(false, (error) -> {
-        });
-        if (register) registry.add(key, object, Lifecycle.stable());
+        E object = dataResult.getOrThrow((error) -> null);
+        if (register) registry.add(key, object, RegistryEntryInfo.DEFAULT);
         return object;
     }
 }

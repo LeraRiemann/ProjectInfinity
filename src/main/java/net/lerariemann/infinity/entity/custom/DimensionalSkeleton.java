@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.entity.ModEntities;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -9,16 +11,14 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.potion.PotionUtil;
-import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.server.world.ServerWorld;
@@ -63,7 +63,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
 
     @Override
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         Random r = new Random();
         List<Identifier> a = new ArrayList<>();
         reg.getIds().forEach(i -> {
@@ -73,15 +73,15 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
         this.setEffect(e);
         this.setColorRaw(Objects.requireNonNull(reg.get(e)).getColor());
         this.setDuration(r.nextInt(200));
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+        return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(effect, "luck");
-        this.dataTracker.startTracking(duration, 200);
-        this.dataTracker.startTracking(color, 0);
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(effect, "luck");
+        builder.add(duration, 200);
+        builder.add(color, 0);
     }
 
     public boolean isFriendly() {
@@ -112,7 +112,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
                     ModEntities.copy(this, newSkeleton);
                     newSkeleton.setDuration(this.getDuration());
                     String i = effect_lookup.get(this.getEffectRaw());
-                    StatusEffect e = reg.get(new Identifier(i));
+                    StatusEffect e = reg.get(Identifier.of(i));
                     newSkeleton.setEffectRaw(i);
                     if (e!= null) newSkeleton.setColorRaw(e.getColor());
                     this.getWorld().spawnEntity(newSkeleton);
@@ -121,7 +121,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
             }
         }
         if (itemStack.isOf(Items.GLASS_BOTTLE)) {
-            ItemStack itemStack2 = setPotion(Items.LINGERING_POTION.getDefaultStack(), this.getEffectRawId(), this.getDuration() * 60);
+            ItemStack itemStack2 = setPotion(Items.LINGERING_POTION.getDefaultStack(), this.getColor(), this.getEffectRaw(), this.getDuration() * 60);
             ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
             player.setStackInHand(hand, itemStack3);
             this.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
@@ -136,7 +136,6 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
         return super.interactMob(player, hand);
     }
 
-
     public void setEffectRaw(String c) {
         this.dataTracker.set(effect, c);
     }
@@ -146,14 +145,11 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     public String getEffectRaw() {
         return this.dataTracker.get(effect);
     }
-    public int getEffectRawId() {
-        return reg.getRawId(getEffect());
-    }
     public void setEffect(Identifier i) {
         setEffectRaw(i.toString());
     }
     public StatusEffect getEffect() {
-        return reg.get(new Identifier(getEffectRaw()));
+        return reg.get(Identifier.of(getEffectRaw()));
     }
     public void setDuration(int i) {
         this.dataTracker.set(duration, i);
@@ -176,20 +172,19 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
         this.setColorRaw(nbt.getInt("color"));
     }
 
-    public static ItemStack setPotion(ItemStack stack, int effect, int duration) {
-        NbtList effects = new NbtList();
-        NbtCompound compound = new NbtCompound();
-        compound.putInt("Id", effect);
-        compound.putInt("Duration", duration);
-        effects.add(compound);
-        PotionUtil.setPotion(stack, Potions.WATER);
-        stack.getOrCreateNbt().put("CustomPotionEffects", effects);
+    public static ItemStack setPotion(ItemStack stack, int color, String effect, int duration) {
+        NbtCompound poteffect = new NbtCompound();
+        poteffect.putString("id", effect);
+        poteffect.putInt("duration", duration);
+        List<StatusEffectInstance> customEffects = new ArrayList<>();
+        customEffects.add(StatusEffectInstance.fromNbt(poteffect));
+        stack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Optional.empty(), Optional.of(color), customEffects));
         return stack;
     }
 
     @Override
     public ItemStack getProjectileType(ItemStack stack) {
-        return setPotion(Items.TIPPED_ARROW.getDefaultStack(), this.getEffectRawId(), this.getDuration());
+        return setPotion(Items.TIPPED_ARROW.getDefaultStack(), this.getColor(), this.getEffectRaw(), this.getDuration());
     }
 
     @Override

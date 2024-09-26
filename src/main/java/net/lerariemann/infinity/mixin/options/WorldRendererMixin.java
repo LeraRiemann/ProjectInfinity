@@ -4,9 +4,11 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
@@ -54,33 +56,33 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         }
     }
     @Override
-    public void setNeedsStars(boolean b) {
+    public void projectInfinity$setNeedsStars(boolean b) {
         needsStars = b;
     }
 
-    @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+    @Inject(method = "renderSky(Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
             at=@At("HEAD"), cancellable=true)
-    private void injected4(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
+    private void injected4(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
         if (!options().isEmpty()) {
-            renderEntireSky(matrices, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
+            renderEntireSky(matrix4f, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
             ci.cancel();
         }
     }
-    @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(intValue = 1500))
+    @ModifyConstant(method = "buildStarsBuffer(Lnet/minecraft/client/render/Tessellator;)Lnet/minecraft/client/render/BuiltBuffer;", constant = @Constant(intValue = 1500))
     private int injected(int constant) {
         return options().getNumStars();
     }
-    @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(floatValue = 0.15f))
+    @ModifyConstant(method = "buildStarsBuffer(Lnet/minecraft/client/render/Tessellator;)Lnet/minecraft/client/render/BuiltBuffer;", constant = @Constant(floatValue = 0.15f))
     private float injected2(float constant) {
         return options().getStarSizeBase();
     }
-    @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(floatValue = 0.1f))
+    @ModifyConstant(method = "buildStarsBuffer(Lnet/minecraft/client/render/Tessellator;)Lnet/minecraft/client/render/BuiltBuffer;", constant = @Constant(floatValue = 0.1f))
     private float injected3(float constant) {
         return options().getStarSizeModifier();
     }
 
     @Unique
-    private void renderEntireSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback) {
+    private void renderEntireSky(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback) {
         fogCallback.run();
         if (thickFog) {
             return;
@@ -89,8 +91,10 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         if (cameraSubmersionType == CameraSubmersionType.POWDER_SNOW || cameraSubmersionType == CameraSubmersionType.LAVA || hasBlindnessOrDarkness(camera)) {
             return;
         }
+        MatrixStack matrices = new MatrixStack();
+        matrices.multiplyPositionMatrix(matrix4f);
         if (client.world!=null && client.world.getDimensionEffects().getSkyType() == DimensionEffects.SkyType.END) {
-            this.renderCustomSky(matrices, new Identifier("textures/environment/end_sky.png"), 16.0f, 40, 255, tickDelta, false);
+            this.renderCustomSky(matrices, Identifier.of("textures/environment/end_sky.png"), 16.0f, 40, 255, tickDelta, false);
             return;
         }
         if (options().endSkyLike()) {
@@ -101,11 +105,11 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
             return;
         }
 
-        BackgroundRenderer.setFogBlack();
-        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        BackgroundRenderer.applyFogColor();
+        Tessellator tessellator = Tessellator.getInstance();
         RenderSystem.depthMask(false);
         handleSkyBackground(matrices, projectionMatrix, tickDelta);
-        handleFog(matrices, bufferBuilder, tickDelta);
+        handleFog(matrices, tessellator, tickDelta);
         matrices.push();
 
         float rain_alpha = 1.0f - this.world.getRainGradient(tickDelta);
@@ -114,9 +118,9 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         rotate_with_velocity(matrices, tickDelta, 1);
         Matrix4f matrix4f2 = matrices.peek().getPositionMatrix(); //creates the rotating layer for stellar bodies
 
-        renderSun(bufferBuilder, matrix4f2, options().getSolarTexture(), options().getSolarSize(), 100.0f, options().getSolarTint());
+        renderSun(tessellator, matrix4f2, options().getSolarTexture(), options().getSolarSize(), 100.0f, options().getSolarTint());
         for (int i = 0; i < options().getNumMoons(); i++) {
-            renderSingleMoon(matrices, bufferBuilder, tickDelta, options().getLunarSize(i), options().getLunarTiltY(i), options().getLunarTiltZ(i),
+            renderSingleMoon(matrices, tessellator, tickDelta, options().getLunarSize(i), options().getLunarTiltY(i), options().getLunarTiltZ(i),
                     options().getLunarVelocity(i), options().getLunarOffset(i), options().getLunarTint(i), options().getLunarTexture(i));
         }
         testRerenderStars();
@@ -156,7 +160,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
             }
             boolean color = !options().endSkyLike();
             if (skyType.contains("textures")) {
-                renderCustomSky(matrices, new Identifier(skyType), tickDelta, color);
+                renderCustomSky(matrices, Identifier.of(skyType), tickDelta, color);
             }
             else if (skyType.equals("LSD_rainbow")) {
                 renderLSDSky(matrices, tickDelta, color);
@@ -179,44 +183,31 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     }
 
     @Unique
-    private void renderSun(BufferBuilder bufferBuilder, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
+    private void renderSun(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        bufferBuilder.vertex(matrix4f2, -k, y, -k).texture(0.0f, 0.0f).next();
-        bufferBuilder.vertex(matrix4f2, k, y, -k).texture(1.0f, 0.0f).next();
-        bufferBuilder.vertex(matrix4f2, k, y, k).texture(1.0f, 1.0f).next();
-        bufferBuilder.vertex(matrix4f2, -k, y, k).texture(0.0f, 1.0f).next();
+        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder.vertex(matrix4f2, -k, y, -k).texture(0.0f, 0.0f);
+        bufferBuilder.vertex(matrix4f2, k, y, -k).texture(1.0f, 0.0f);
+        bufferBuilder.vertex(matrix4f2, k, y, k).texture(1.0f, 1.0f);
+        bufferBuilder.vertex(matrix4f2, -k, y, k).texture(0.0f, 1.0f);
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
     }
 
     @Unique
-    private void renderSingleMoon(MatrixStack matrices, BufferBuilder bufferBuilder, float tickDelta, float size, float tilt_y, float tilt_z, float velocity, float offset, Vector3f tint, Identifier texture) {
+    private void renderSingleMoon(MatrixStack matrices, Tessellator tessellator, float tickDelta, float size, float tilt_y, float tilt_z, float velocity, float offset, Vector3f tint, Identifier texture) {
         float lunarv = (velocity != 1.0f) ? velocity - 1 : 0;
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(tilt_y));
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(tilt_z));
         rotate_with_velocity(matrices, tickDelta, lunarv, offset);
-        renderMoon(bufferBuilder, matrices.peek().getPositionMatrix(), texture, size, -100.0f, tint);
+        renderMoon(tessellator, matrices.peek().getPositionMatrix(), texture, size, -100.0f, tint);
         rotate_with_velocity(matrices, tickDelta, -1 * lunarv, offset);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-tilt_z));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-tilt_y));
     }
-
     @Unique
-    private void renderMoon(BufferBuilder bufferBuilder, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint, float t, float q, float p, float o) {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderTexture(0, texture);
-        RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        bufferBuilder.vertex(matrix4f2, -k, y, k).texture(p, q).next();
-        bufferBuilder.vertex(matrix4f2, k, y, k).texture(t, q).next();
-        bufferBuilder.vertex(matrix4f2, k, y, -k).texture(t, o).next();
-        bufferBuilder.vertex(matrix4f2, -k, y, -k).texture(p, o).next();
-        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
-    }
-    @Unique
-    private void renderMoon(BufferBuilder bufferBuilder, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
+    private void renderMoon(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
         float t, q, p, o;
         if (!options().isMoonCustom()) {
             int r = this.world.getMoonPhase();
@@ -231,12 +222,24 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
             t = q = 1.0f;
             p = o = 0.0f;
         }
-        renderMoon(bufferBuilder, matrix4f2, texture, k, y, tint, t, q, p, o);
+        renderMoon(tessellator, matrix4f2, texture, k, y, tint, t, q, p, o);
+    }
+    @Unique
+    private void renderMoon(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint, float t, float q, float p, float o) {
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
+        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder.vertex(matrix4f2, -k, y, k).texture(p, q);
+        bufferBuilder.vertex(matrix4f2, k, y, k).texture(t, q);
+        bufferBuilder.vertex(matrix4f2, k, y, -k).texture(t, o);
+        bufferBuilder.vertex(matrix4f2, -k, y, -k).texture(p, o);
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
     }
 
     @Unique
     private void renderStars(Matrix4f matrix4f2, float tickDelta, Matrix4f projectionMatrix, Runnable fogCallback, float i) {
-        float u = world.method_23787(tickDelta) * i;
+        float u = world.getStarBrightness(tickDelta) * i;
         Vector3f color = options().getStellarColor();
         if (u > 0.0f) {
             RenderSystem.setShaderColor(u*color.x, u*color.y, u*color.z, u);
@@ -250,7 +253,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
 
     @Unique
     private InfinityOptions options() {
-        InfinityOptions options = ((InfinityOptionsAccess)client).getInfinityOptions();
+        InfinityOptions options = ((InfinityOptionsAccess)client).projectInfinity$getInfinityOptions();
         if (options == null) options = InfinityOptions.empty();
         return options;
     }
@@ -262,12 +265,12 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         renderSingleColorSky(matrices, projectionMatrix, f * (float)(color >> 16 & 0xFF) / 255.0f, f * (float)(color >> 8 & 0xFF) / 255.0f, f * (float)(color & 0xFF) / 255.0f, 1.0f);
     }
     @Unique
-    private static final Identifier[] LSD_SKY = new Identifier[]{new Identifier("infinity:textures/lsd.png"),
-            new Identifier("infinity:textures/lsd60.png"),
-            new Identifier("infinity:textures/lsd120.png"),
-            new Identifier("infinity:textures/lsd180.png"),
-            new Identifier("infinity:textures/lsd240.png"),
-            new Identifier("infinity:textures/lsd300.png")};
+    private static final Identifier[] LSD_SKY = new Identifier[]{InfinityMod.getId("textures/lsd.png"),
+            InfinityMod.getId("textures/lsd60.png"),
+            InfinityMod.getId("textures/lsd120.png"),
+            InfinityMod.getId("textures/lsd180.png"),
+            InfinityMod.getId("textures/lsd240.png"),
+            InfinityMod.getId("textures/lsd300.png")};
 
     @Unique
     private void renderLSDSky(MatrixStack matrices, float tickDelta, boolean color) {
@@ -299,7 +302,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         }
         RenderSystem.setShaderTexture(0, texture);
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
+
         for (int i = 0; i < 6; ++i) {
             matrices.push();
             if (i == 1) {
@@ -317,13 +320,14 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
             if (i == 5) {
                 matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-90.0f));
             }
+
             Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-            bufferBuilder.vertex(matrix4f, -100.0f, -100.0f, -100.0f).texture(0.0f, 0.0f).color(r, g, b, alpha).next();
-            bufferBuilder.vertex(matrix4f, -100.0f, -100.0f, 100.0f).texture(0.0f, copies).color(r, g, b, alpha).next();
-            bufferBuilder.vertex(matrix4f, 100.0f, -100.0f, 100.0f).texture(copies, copies).color(r, g, b, alpha).next();
-            bufferBuilder.vertex(matrix4f, 100.0f, -100.0f, -100.0f).texture(copies, 0.0f).color(r, g, b, alpha).next();
-            tessellator.draw();
+            BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+            bufferBuilder.vertex(matrix4f, -100.0f, -100.0f, -100.0f).texture(0.0f, 0.0f).color(r, g, b, alpha);
+            bufferBuilder.vertex(matrix4f, -100.0f, -100.0f, 100.0f).texture(0.0f, copies).color(r, g, b, alpha);
+            bufferBuilder.vertex(matrix4f, 100.0f, -100.0f, 100.0f).texture(copies, copies).color(r, g, b, alpha);
+            bufferBuilder.vertex(matrix4f, 100.0f, -100.0f, -100.0f).texture(copies, 0.0f).color(r, g, b, alpha);
+            BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
             matrices.pop();
         }
         RenderSystem.depthMask(true);
@@ -331,7 +335,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     }
 
     @Unique
-    private void handleFog(MatrixStack matrices, BufferBuilder bufferBuilder, float tickDelta) {
+    private void handleFog(MatrixStack matrices, Tessellator tessellator, float tickDelta) {
         RenderSystem.enableBlend();
         float[] fs = this.world.getDimensionEffects().getFogColorOverride(this.world.getSkyAngle(tickDelta), tickDelta);
         if (fs != null) {
@@ -346,13 +350,13 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
             float k = fs[1];
             float l = fs[2];
             Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-            bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
-            bufferBuilder.vertex(matrix4f, 0.0f, 100.0f, 0.0f).color(j, k, l, fs[3]).next();
+            BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+            bufferBuilder.vertex(matrix4f, 0.0f, 100.0f, 0.0f).color(j, k, l, fs[3]);
             for (int n = 0; n <= 16; ++n) {
                 float o = (float)n * ((float)Math.PI * 2) / 16.0f;
                 float p = MathHelper.sin(o);
                 float q = MathHelper.cos(o);
-                bufferBuilder.vertex(matrix4f, p * 120.0f, q * 120.0f, -q * 40.0f * fs[3]).color(fs[0], fs[1], fs[2], 0.0f).next();
+                bufferBuilder.vertex(matrix4f, p * 120.0f, q * 120.0f, -q * 40.0f * fs[3]).color(fs[0], fs[1], fs[2], 0.0f);
             }
             BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
             matrices.pop();
