@@ -2,7 +2,7 @@
   "parent": "infinity:multiverse_root",
   "display": {
     "icon": {
-      "item": "minecraft:written_book"
+      "id": "minecraft:written_book"
     },
     "title": {
       "translate": "advancements.infinity.multiverse.title"

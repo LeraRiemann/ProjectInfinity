@@ -2,7 +2,7 @@
   "parent": "infinity:multiverse_root",
   "display": {
     "icon": {
-      "item": "minecraft:clock"
+      "id": "minecraft:clock"
     },
     "title": {
       "translate": "advancements.infinity.all_time.title"
