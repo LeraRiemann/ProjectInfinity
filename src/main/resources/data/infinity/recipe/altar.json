@@ -15,7 +15,7 @@
     " S "
   ],
   "result": {
-    "item": "infinity:altar"
+    "id": "infinity:altar"
   },
   "show_notification": true
 }
