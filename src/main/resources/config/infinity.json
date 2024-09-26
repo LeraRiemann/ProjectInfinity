@@ -1,11 +1,12 @@
 {
-  "infinity_version": 1011002,
+  "infinity_version": 1012001,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "returnPortalsEnabled": true,
     "longArithmeticEnabled": false,
     "forceSolidSurface": false,
     "chaosMobsEnabled": true,
+    "consumePortalKey": true,
     "maxBiomeCount": 6
   },
   "portalKey": "",

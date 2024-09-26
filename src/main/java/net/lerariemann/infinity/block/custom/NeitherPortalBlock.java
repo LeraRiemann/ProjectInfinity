@@ -148,7 +148,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                     ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
                     Item item = Registries.ITEM.get(Identifier.of(prov.portalKey));
                     if (itemStack.isOf(item)) {
-                        if (!player.getAbilities().creativeMode) {
+                        if (!player.getAbilities().creativeMode && prov.rule("consumePortalKey")) {
                             itemStack.decrement(1);
                         }
                         bl2 = open(s, world, pos, false);
