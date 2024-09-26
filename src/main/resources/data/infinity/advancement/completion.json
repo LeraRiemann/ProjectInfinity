@@ -124,7 +124,7 @@
     "frame": "goal",
     "hidden": true,
     "icon": {
-      "item": "minecraft:nether_star"
+      "id": "minecraft:nether_star"
     },
     "show_toast": true,
     "title": {

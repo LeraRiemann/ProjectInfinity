@@ -16,7 +16,7 @@
     "frame": "task",
     "hidden": true,
     "icon": {
-      "item": "infinity:book_box"
+      "id": "infinity:book_box"
     },
     "show_toast": true,
     "title": {

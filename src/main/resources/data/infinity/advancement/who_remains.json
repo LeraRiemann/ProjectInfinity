@@ -2,7 +2,7 @@
   "parent": "infinity:all_time",
   "display": {
     "icon": {
-      "item": "minecraft:enchanted_golden_apple"
+      "id": "minecraft:enchanted_golden_apple"
     },
     "title": {
       "translate": "advancements.infinity.who_remains.title"

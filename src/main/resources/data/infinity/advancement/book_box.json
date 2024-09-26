@@ -22,7 +22,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "minecraft:bookshelf"
+      "id": "minecraft:bookshelf"
     },
     "show_toast": true,
     "title": {
