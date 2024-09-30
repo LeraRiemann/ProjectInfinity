@@ -11,8 +11,6 @@ import net.lerariemann.infinity.options.ShaderLoader;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
@@ -20,15 +18,14 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 public class ModPayloads {
-    public record WorldAddPayload(Identifier world_id, NbtCompound optiondata) implements CustomPayload {
-        public static final CustomPayload.Id<WorldAddPayload> ID = new CustomPayload.Id<>(InfinityMod.getId("reload_worlds"));
+    public record WorldAddPayload(Identifier world_id, NbtCompound world_data) implements CustomPayload {
+        public static final CustomPayload.Id<WorldAddPayload> ID = new CustomPayload.Id<>(InfinityMod.getId("add_world"));
         public static final PacketCodec<RegistryByteBuf, WorldAddPayload> CODEC = PacketCodec.tuple(
                 Identifier.PACKET_CODEC, WorldAddPayload::world_id,
-                PacketCodecs.NBT_COMPOUND, WorldAddPayload::optiondata,
+                PacketCodecs.NBT_COMPOUND, WorldAddPayload::world_data,
                 WorldAddPayload::new);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {
@@ -36,17 +33,26 @@ public class ModPayloads {
         }
     }
     public static void addWorld(WorldAddPayload payload, ClientPlayNetworking.Context context) {
-        Identifier id = payload.world_id;
-        NbtCompound optiondata = payload.optiondata;
-        NbtCompound dimdata = optiondata.getCompound("dimdata");
-        NbtList biomeslist = optiondata.getList("biomes", NbtElement.COMPOUND_TYPE);
-        List<Identifier> biomeids = new ArrayList<>();
-        List<NbtCompound> biomes = new ArrayList<>();
-        for (NbtElement e: biomeslist) if (e instanceof NbtCompound biome) {
-            biomeids.add(InfinityMod.getId(biome.getString("id")));
-            biomes.add(biome.getCompound("data"));
+        context.client().execute(() ->
+                (new DimensionGrabber(Objects.requireNonNull(context.client().getNetworkHandler()).getRegistryManager()))
+                        .grab_dim_for_client(payload.world_id, payload.world_data));
+    }
+
+    public record BiomeAddPayload(Identifier biome_id, NbtCompound biome_data) implements CustomPayload {
+        public static final CustomPayload.Id<BiomeAddPayload> ID = new CustomPayload.Id<>(InfinityMod.getId("add_biome"));
+        public static final PacketCodec<RegistryByteBuf, BiomeAddPayload> CODEC = PacketCodec.tuple(
+                Identifier.PACKET_CODEC, BiomeAddPayload::biome_id,
+                PacketCodecs.NBT_COMPOUND, BiomeAddPayload::biome_data,
+                BiomeAddPayload::new);
+        @Override
+        public CustomPayload.Id<? extends CustomPayload> getId() {
+            return ID;
         }
-        context.client().execute(() -> (new DimensionGrabber(context.client().getNetworkHandler().getRegistryManager())).grab_for_client(id, dimdata, biomeids, biomes));
+    }
+    public static void addBiome(BiomeAddPayload payload, ClientPlayNetworking.Context context) {
+        context.client().execute(() ->
+                (new DimensionGrabber(Objects.requireNonNull(context.client().getNetworkHandler()).getRegistryManager()))
+                        .grab_biome_for_client(payload.biome_id, payload.biome_data));
     }
 
     public record ShaderRePayload(NbtCompound shader_data) implements CustomPayload {
@@ -93,11 +99,13 @@ public class ModPayloads {
 
     public static void registerPayloadsServer() {
         PayloadTypeRegistry.playS2C().register(WorldAddPayload.ID, WorldAddPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(BiomeAddPayload.ID, BiomeAddPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ShaderRePayload.ID, ShaderRePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
     }
     public static void registerPayloadsClient() {
         ClientPlayNetworking.registerGlobalReceiver(ModPayloads.WorldAddPayload.ID, ModPayloads::addWorld);
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.BiomeAddPayload.ID, ModPayloads::addBiome);
         ClientPlayNetworking.registerGlobalReceiver(ModPayloads.ShaderRePayload.ID, ModPayloads::receiveShader);
         ClientPlayNetworking.registerGlobalReceiver(ModPayloads.StarsRePayLoad.ID, ModPayloads::receiveStars);
     }

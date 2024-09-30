@@ -4,8 +4,8 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
@@ -30,8 +30,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -170,29 +168,16 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             RandomDimension d = new RandomDimension(i, server);
             if (bl) {
                 ((MinecraftServerAccess) (server)).projectInfinity$addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d));
-                server.getPlayerManager().getPlayerList().forEach(a ->
-                        ServerPlayNetworking.send(a, buildPayload(ModCommands.getIdentifier(i, server), d)));
+                server.getPlayerManager().getPlayerList().forEach(a -> sendNewWorld(a, ModCommands.getIdentifier(i, server), d));
                 return true;
             }
         }
         return false;
     }
 
-    static ModPayloads.WorldAddPayload buildPayload(Identifier id, RandomDimension d) {
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeIdentifier(id);
-        NbtCompound data = new NbtCompound();
-        NbtCompound dimdata = d.type != null ? d.type.data : new NbtCompound();
-        data.put("dimdata", dimdata);
-        NbtList biomes = new NbtList();
-        d.random_biomes.forEach(b -> {
-            NbtCompound biome = new NbtCompound();
-            biome.putString("id", b.name);
-            biome.put("data", b.data);
-            biomes.add(biome);
-        });
-        data.put("biomes", biomes);
-        return new ModPayloads.WorldAddPayload(id, data);
+    public static void sendNewWorld(ServerPlayerEntity player, Identifier id, RandomDimension d) {
+        d.random_biomes.forEach(b -> ServerPlayNetworking.send(player, new ModPayloads.BiomeAddPayload(InfinityMod.getId(b.name), b.data)));
+        ServerPlayNetworking.send(player, new ModPayloads.WorldAddPayload(id, d.type != null ? d.type.data : new NbtCompound()));
     }
 
     @Environment(EnvType.CLIENT)
