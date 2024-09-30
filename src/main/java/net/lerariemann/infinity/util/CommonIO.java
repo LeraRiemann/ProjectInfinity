@@ -42,8 +42,8 @@ public class CommonIO {
 
     public static void write(String source, String path, String filename) {
         List<String> lines = Collections.singletonList(source);
-        Path dir = Paths.get(path);
-        Path file = Paths.get(path+"/"+filename);
+        Path file = Paths.get(path + File.separator + filename);
+        Path dir = file.getParent();
         try {
             Files.createDirectories(dir);
             Files.write(file, lines, StandardCharsets.UTF_8);
@@ -192,15 +192,15 @@ public class CommonIO {
     }
 
     public static String ElementToString(NbtElement base, int t) {
-        String str;
-        if (base == null) str = "!!NULL!!";
-        else if (base instanceof NbtCompound) str = CompoundToString((NbtCompound)base, t+1);
-        else if (base instanceof NbtList) str = ListToString((NbtList)base, t+1);
-        else if (base instanceof NbtByte) str = (((NbtByte)base).byteValue() != 0) ? "true" : "false";
-        else if (base instanceof NbtDouble) str = String.valueOf(((NbtDouble) base).floatValue());
-        else if (base instanceof NbtFloat) str = String.valueOf(((NbtFloat) base).floatValue());
-        else str = base.toString();
-        return str;
+        return switch (base) {
+            case null -> "!!NULL!!";
+            case NbtCompound nbtCompound -> CompoundToString(nbtCompound, t + 1);
+            case NbtList nbtElements -> ListToString(nbtElements, t + 1);
+            case NbtByte nbtByte -> (nbtByte.byteValue() != 0) ? "true" : "false";
+            case NbtDouble nbtDouble -> String.valueOf(nbtDouble.floatValue());
+            case NbtFloat nbtFloat -> String.valueOf(nbtFloat.floatValue());
+            default -> base.toString();
+        };
     }
 
     public static String CompoundToString(NbtCompound base, int t) {
