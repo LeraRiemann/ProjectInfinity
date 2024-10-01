@@ -18,7 +18,7 @@ public class ModPoi {
     }
     public static void registerPoi() {
         InfinityMod.LOGGER.debug("Registering POI for " + InfinityMod.MOD_ID);
-        NEITHER_PORTAL = register("neither_portal", ModBlocks.NEITHER_PORTAL);
+        NEITHER_PORTAL = register("neither_portal", ModBlocks.NEITHER_PORTAL.get());
         NEITHER_PORTAL_KEY = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, InfinityMod.getId("neither_portal"));
     }
 }

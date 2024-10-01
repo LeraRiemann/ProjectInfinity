@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.block;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.*;
 import net.minecraft.block.AbstractBlock;
@@ -10,39 +12,30 @@ import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+
+import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModBlocks {
-    public static final Block NEITHER_PORTAL = new NeitherPortalBlock(AbstractBlock.Settings.copy(Blocks.NETHER_PORTAL));
-    public static final Block BOOK_BOX = new BookBoxBlock(AbstractBlock.Settings.copy(Blocks.BOOKSHELF));
-    public static final Item BOOK_BOX_ITEM = new BlockItem(BOOK_BOX, new Item.Settings());
-    public static final Block ALTAR_COSMIC = new CosmicAltar(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque());
-    public static final Block ALTAR_LIT = new TransfiniteAltar(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().
-            luminance(state -> state.get(TransfiniteAltar.FLOWER) ? 15 : 0));
-    public static final Block ALTAR = new TransfiniteAltarBase(AbstractBlock.Settings.copy(Blocks.STONE).nonOpaque().
-            luminance(state -> state.get(TransfiniteAltarBase.FLOWER) ? 15 : 0));
-    public static final Item ALTAR_ITEM = new BlockItem(ALTAR, new Item.Settings());
-    public static final Block TIME_BOMB = new TimeBombBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().
-            luminance(state -> 15));
-    public static final Item TIME_BOMB_ITEM = new BlockItem(TIME_BOMB, new Item.Settings());
-    private static void registerBlock(String name, Block block) {
-        Registry.register(Registries.BLOCK, InfinityMod.getId(name), block);
-    }
-    private static void registerItem(String name, Item item) {
-        Registry.register(Registries.ITEM, InfinityMod.getId(name), item);
-    }
+    public static final DeferredRegister<Block> infinityBlocks = DeferredRegister.create(MOD_ID, RegistryKeys.BLOCK);
+    public static final DeferredRegister<Item> infinityItems = DeferredRegister.create(MOD_ID, RegistryKeys.ITEM);
+    public static final RegistrySupplier<Block> NEITHER_PORTAL = infinityBlocks.register("neither_portal", () -> new NeitherPortalBlock(AbstractBlock.Settings.copy(Blocks.NETHER_PORTAL)));
+    public static final RegistrySupplier<Block> BOOK_BOX = infinityBlocks.register("book_box", () -> new BookBoxBlock(AbstractBlock.Settings.copy(Blocks.BOOKSHELF)));
+    public static final RegistrySupplier<Item> BOOK_BOX_ITEM = infinityItems.register("book_box", () -> new BlockItem(BOOK_BOX.get(), new Item.Settings().arch$tab(ItemGroups.FUNCTIONAL)));
+
+    public static final RegistrySupplier<Block> ALTAR_COSMIC = infinityBlocks.register("altar_cosmic", () -> new CosmicAltar(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque()));
+    public static final RegistrySupplier<Block> ALTAR_LIT = infinityBlocks.register("altar_lit", () -> new TransfiniteAltar(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(state -> state.get(TransfiniteAltar.FLOWER) ? 15 : 0)));
+    public static final RegistrySupplier<Block> ALTAR = infinityBlocks.register("altar", () -> new TransfiniteAltar(AbstractBlock.Settings.copy(Blocks.STONE).nonOpaque().luminance(state -> state.get(TransfiniteAltar.FLOWER) ? 15 : 0)));
+    public static final RegistrySupplier<Item> ALTAR_ITEM = infinityItems.register("book_box", () -> new BlockItem(ALTAR.get(), new Item.Settings().arch$tab(ItemGroups.FUNCTIONAL)));
+
+    public static final RegistrySupplier<Block> TIME_BOMB = infinityBlocks.register("time_bomb", () -> new TimeBombBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(state -> 15)));
+    public static final RegistrySupplier<Item> TIME_BOMB_ITEM = infinityItems.register("time_bomb", () -> new BlockItem(TIME_BOMB.get(), new Item.Settings().arch$tab(ItemGroups.OPERATOR)));
+
+
+
     public static void registerModBlocks() {
-        registerBlock("neither_portal", NEITHER_PORTAL);
-        registerBlock("book_box", BOOK_BOX);
-        registerItem("book_box", BOOK_BOX_ITEM);
-        registerBlock("altar_lit", ALTAR_LIT);
-        registerBlock("altar", ALTAR);
-        registerBlock("altar_cosmic", ALTAR_COSMIC);
-        registerItem("altar", ALTAR_ITEM);
-        registerBlock("timebomb", TIME_BOMB);
-        registerItem("timebomb", TIME_BOMB_ITEM);
-        addAfter(ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF, ALTAR_ITEM);
-        addAfter(ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF, BOOK_BOX_ITEM);
-        add(ItemGroups.OPERATOR, TIME_BOMB_ITEM);
+        infinityBlocks.register();
+        infinityItems.register();
     }
 
     @ExpectPlatform

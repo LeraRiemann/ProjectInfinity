@@ -104,14 +104,14 @@ public class TimeBombBlock extends Block {
                     } //activate
                     if (!state.get(ACTIVE)) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                        player.getInventory().insertStack(ModBlocks.TIME_BOMB_ITEM.getDefaultStack());
+                        player.getInventory().insertStack(ModBlocks.TIME_BOMB_ITEM.get().getDefaultStack());
                         return ActionResult.SUCCESS;
                     } //pick up
                 }
             }
             else if (player.getStackInHand(Hand.MAIN_HAND).isEmpty()) {
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                player.getInventory().insertStack(ModBlocks.TIME_BOMB_ITEM.getDefaultStack());
+                player.getInventory().insertStack(ModBlocks.TIME_BOMB_ITEM.get().getDefaultStack());
                 return ActionResult.SUCCESS;
             }
         }

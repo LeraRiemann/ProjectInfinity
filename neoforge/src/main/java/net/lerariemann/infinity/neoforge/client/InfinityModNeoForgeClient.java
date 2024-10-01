@@ -26,25 +26,25 @@ public class InfinityModNeoForgeClient implements ClientModInitializer {
     }
     @Override
     public void onInitializeClient() {
-        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
-            if (world != null && pos != null) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity instanceof NeitherPortalBlockEntity) {
-                    Object j = ((NeitherPortalBlockEntity) blockEntity).getRenderData();
-                    if (j == null) return 0;
-                    return (int)j & 0xFFFFFF;
-                }
-            }
-            return 16777215;
-        }, ModBlocks.NEITHER_PORTAL);
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX, RenderLayer.getCutoutMipped());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_BOMB, RenderLayer.getTranslucent());
+//        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
+//            if (world != null && pos != null) {
+//                BlockEntity blockEntity = world.getBlockEntity(pos);
+//                if (blockEntity instanceof NeitherPortalBlockEntity) {
+//                    Object j = ((NeitherPortalBlockEntity) blockEntity).getRenderData();
+//                    if (j == null) return 0;
+//                    return (int)j & 0xFFFFFF;
+//                }
+//            }
+//            return 16777215;
+//        }, ModBlocks.NEITHER_PORTAL);
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX.get(), RenderLayer.getCutoutMipped());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_BOMB.get(), RenderLayer.getTranslucent());
         ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
             if (pos != null) {
                 return posToColor(pos);
             }
             return 16777215;
-        }, ModBlocks.BOOK_BOX);
+        }, ModBlocks.BOOK_BOX.get());
         InfinityModClient.init();
     }
 }
