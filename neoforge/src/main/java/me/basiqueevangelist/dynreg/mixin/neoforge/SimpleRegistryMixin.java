@@ -1,10 +1,10 @@
-package me.basiqueevangelist.dynreg.mixin;
+package me.basiqueevangelist.dynreg.mixin.neoforge;
 
 import com.mojang.serialization.Lifecycle;
 import me.basiqueevangelist.dynreg.access.ExtendedRegistry;
 import me.basiqueevangelist.dynreg.event.RegistryEntryDeletedCallback;
 import me.basiqueevangelist.dynreg.event.RegistryFrozenCallback;
-import me.basiqueevangelist.dynreg.util.fabric.StackTracingMap;
+import me.basiqueevangelist.dynreg.util.neoforge.StackTracingMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.fabricmc.fabric.api.event.Event;

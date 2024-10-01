@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.basiqueevangelist.dynreg.mixin.neoforge",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "SimpleRegistryMixin"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

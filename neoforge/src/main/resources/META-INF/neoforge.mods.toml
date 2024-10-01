@@ -7,9 +7,9 @@ license = "LGPL-3.0-or-later"
 modId = "infinity"
 version = "${version}"
 displayName = "Infinite Dimensions"
-authors = "Me!"
+authors = "Lera Riemann"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Inspired by 2020's April Fools' 20w14infinite Snapshot, this mod brings endless randomly generated dimensions into Minecraft.
 '''
 #logoFile = ""
 
@@ -36,3 +36,6 @@ side = "BOTH"
 
 [[mixins]]
 config = "infinity.mixins.json"
+
+[[mixins]]
+config = "neodynreg.mixins.json"
