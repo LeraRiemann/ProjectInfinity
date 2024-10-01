@@ -3,6 +3,7 @@ package net.lerariemann.infinity.mixin;
 import com.google.common.collect.ImmutableList;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.minecraft.network.QueryableServer;
@@ -115,15 +116,9 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
             worlds.put(key, world);
             worldsToAdd.clear();
         }));
-        var mixin = this;
-//        ServerWorldEvents.LOAD.invoker().onWorldLoad((MinecraftServer) (Object) this, world);
-        onWorldLoad(mixin, world);
+        PlatformMethods.onWorldLoad(this, world);
     }
 
-    @ExpectPlatform
-    public void onWorldLoad(Object mixin, ServerWorld world) {
-        throw new AssertionError();
-    }
 
     @Override
     public boolean projectInfinity$hasToAdd(RegistryKey<World> key) {

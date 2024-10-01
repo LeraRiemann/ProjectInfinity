@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "infinity",
-  "version": "1.12.1-1.21.1",
+  "version": "${version}",
   "name": "Infinite Dimensions",
   "description": "Inspired by 2020's April Fools' 20w14infinite Snapshot, this mod brings endless randomly generated dimensions into Minecraft.",
   "authors": [
