@@ -17,6 +17,7 @@
     "SlimeEntityMixin",
     "WorldChunkMixin",
     "mobs.EndermiteEntityMixin",
+    "mobs.LivingEntityMixin",
     "mobs.WaterCreaturesMixin",
     "mobs.passive.AnimalEntityMixin",
     "mobs.passive.FoxEntityMixin",
