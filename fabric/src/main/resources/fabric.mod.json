@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "infinity",
+  "version": "1.12.1-1.21.1",
+  "name": "Infinite Dimensions",
+  "description": "Inspired by 2020's April Fools' 20w14infinite Snapshot, this mod brings endless randomly generated dimensions into Minecraft.",
+  "authors": [
+    "Lera Riemann"
+  ],
+  "contact": {
+    "homepage": "https://github.com/LeraRiemann",
+    "sources": "https://github.com/LeraRiemann/ProjectInfinity"
+  },
+  "license": "GNU LGPLv3",
+  "icon": "assets/infinity/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.lerariemann.infinity.fabric.InfinityModFabric"
+    ],
+    "client": [
+      "net.lerariemann.infinity.fabric.client.InfinityModFabricClient"
+    ]
+  },
+  "mixins": [
+    "infinity.mixins.json",
+    "dynreg.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.5",
+    "fabric-api": "*",
+    "minecraft": "~1.21.1",
+    "java": ">=21"
+  },
+  "custom": {
+    "lithium:options": {
+      "mixin.ai.poi.fast_portals": false
+    }
+  }
+}
