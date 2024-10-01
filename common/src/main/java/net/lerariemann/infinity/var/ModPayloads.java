@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public class ModPayloads {
 
-
+    @ExpectPlatform
     public static MinecraftClient client(Object context) {
         throw new AssertionError();
     }

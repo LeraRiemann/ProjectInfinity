@@ -6,7 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 
 public class MinecraftServerMixinImpl {
-    public void onLoad(Object minecraftServerMixin, ServerWorld world) {
-        ServerWorldEvents.LOAD.invoker().onWorldLoad((MinecraftServer) (Object) this, world);
+    public void onWorldLoad(Object mixin, ServerWorld world) {
+        ServerWorldEvents.LOAD.invoker().onWorldLoad((MinecraftServer) mixin, world);
     }
 }
