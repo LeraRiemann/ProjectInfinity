@@ -2,7 +2,8 @@ package net.lerariemann.infinity.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import dan200.computercraft.shared.ModRegistry;
+import dan200.computercraft.shared.media.items.PrintoutData;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.Timebombable;
@@ -47,13 +48,17 @@ public class NetherPortalBlockMixin {
 			ItemStack itemStack = ((ItemEntity)entity).getStack();
 			WritableBookContentComponent comp1 = itemStack.getComponents().get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
 			WrittenBookContentComponent comp2 = itemStack.getComponents().get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
-			if (comp1 != null || comp2 != null) {
+            PrintoutData comp3 = itemStack.getComponents().get(ModRegistry.DataComponents.PRINTOUT.get());
+			if (comp1 != null || comp2 != null || (Objects.equals(itemStack.getTranslationKey(), "item.computercraft.printed_page"))) {
 				String content = "";
 				if (comp1 != null) {
 					content = comp1.pages().getFirst().raw();
 				}
 				if (comp2 != null) {
 					content = comp2.pages().getFirst().raw().getString();
+				}
+				if (comp3 != null) {
+					content = comp3.lines().getFirst().text();
 				}
 				if (Objects.equals(content, "")) {
 					content = "empty";
