@@ -9,7 +9,7 @@ public class ComputerCraftCompat {
         if (print != null) {
             String string = "";
             for (var l : print.lines()) {
-                string = string.concat(l.text());
+                string = string.concat(l.text().strip());
             }
             return string;
         }
