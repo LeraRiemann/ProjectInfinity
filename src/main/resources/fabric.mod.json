@@ -10,7 +10,9 @@
   ],
   "contact": {
     "homepage": "https://github.com/LeraRiemann",
-    "sources": "https://github.com/LeraRiemann/ProjectInfinity"
+    "sources": "https://github.com/LeraRiemann/ProjectInfinity",
+    "issues": "https://github.com/LeraRiemann/ProjectInfinity/issues"
+
   },
 
   "license": "GNU LGPLv3",
