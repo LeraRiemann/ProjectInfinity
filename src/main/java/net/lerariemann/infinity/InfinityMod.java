@@ -12,9 +12,12 @@ import org.slf4j.LoggerFactory;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
 
+import java.nio.file.Path;
+
 public class InfinityMod implements ModInitializer {
 	public static final String MOD_ID = "infinity";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
 
     public static Identifier getId(String value){
 		return Identifier.of(MOD_ID, value);
@@ -22,7 +25,7 @@ public class InfinityMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ConfigManager.registerAllConfigs();
+		ConfigManager.unpackDefaultConfigs();
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
 		ModEntities.registerEntities();

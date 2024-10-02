@@ -27,12 +27,12 @@ public class CosmicAltarEntity extends BlockEntity {
     public static int[] offsets_y = new int[]{1, 2, 3};
     public CosmicAltarEntity(BlockEntityType<? extends CosmicAltarEntity> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        time = 0;
+        time = -1; //not ticking when set improperly
         map = new HashMap<>();
     }
     public CosmicAltarEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ALTAR_COSMIC, pos, state);
-        time = 0;
+        time = -1;
         map = new HashMap<>();
     }
 
@@ -52,14 +52,21 @@ public class CosmicAltarEntity extends BlockEntity {
             for (int i : offsets) for (int j : offsets_y) for (int k : offsets) {
                 world.setBlockState(pos.add(i, j, k), be.fromMap(i, j, k));
             }
+            a.projectInfinity$onInvocation();
+        }
+        if(be.time > 2) {
             be.markRemoved();
             world.setBlockState(pos, be.fromMap(0, 0, 0));
         }
-        be.time+=1;
+        if (be.time >= 0) be.time+=1;
     }
 
     public void addNull(BlockState s) {
         map.put("0,0,0", s);
+    }
+
+    public void startTime() {
+        time = 0;
     }
 
     BlockState fromMap(int i, int j, int k) {

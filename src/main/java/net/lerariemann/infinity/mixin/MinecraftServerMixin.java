@@ -26,6 +26,7 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.level.ServerWorldProperties;
 import net.minecraft.world.level.storage.LevelStorage;
 import net.minecraft.world.spawner.SpecialSpawner;
+import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,6 +36,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -83,13 +86,27 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(CallbackInfo info) {
         worldsToAdd = new HashMap<>();
-        needsInvocation = true;
+        needsInvocation = !Files.exists(InfinityMod.invocationLock);
+        LogManager.getLogger().info("Invocation {}", needsInvocation ? "needed..." : "not needed");
         projectInfinity$setDimensionProvider();
     }
     @Override
     public boolean projectInfinity$needsInvocation() {return needsInvocation;}
     @Override
-    public void projectInfinity$onInvocation() {needsInvocation = false;}
+    public void projectInfinity$onInvocation() {
+        needsInvocation = false;
+        try {
+            Path p = InfinityMod.invocationLock;
+            if (!Files.exists(p)) {
+                Files.createDirectories(p.getParent());
+                Files.writeString(p, "Delete this file to regenerate modular configs automatically\n" +
+                        "(e.g. you may want to do this when adding new mods to the instance)");
+            }
+            LogManager.getLogger().info("Invocation complete");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Override
     public RandomProvider projectInfinity$getDimensionProvider() {
         return dimensionProvider;

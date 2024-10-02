@@ -56,7 +56,7 @@ public class ConfigManager {
         }
         return bl;
     }
-    public static void registerAllConfigs() {
+    public static void unpackDefaultConfigs() {
         AtomicBoolean bl2 = new AtomicBoolean(false);
         ModContainer modContainer = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
         try {

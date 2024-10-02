@@ -13,6 +13,7 @@ import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,8 +32,11 @@ public class PlayerManagerMixin {
             BlockPos pos = new BlockPos(player.getBlockX(), y, player.getBlockY());
             BlockState st = serverWorld2.getBlockState(pos);
             serverWorld2.setBlockState(pos, ModBlocks.ALTAR_COSMIC.getDefaultState());
-            serverWorld2.getBlockEntity(pos, ModBlockEntities.ALTAR_COSMIC).ifPresent(e -> e.addNull(st));
-            acc.projectInfinity$onInvocation();
+            serverWorld2.getBlockEntity(pos, ModBlockEntities.ALTAR_COSMIC).ifPresent(e -> {
+                LogManager.getLogger().info("Invoking the name of the Cosmic Altar...");
+                e.startTime();
+                e.addNull(st);
+            });
         }
     }
 
