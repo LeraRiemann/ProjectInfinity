@@ -2,7 +2,7 @@ package net.lerariemann.infinity.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.Timebombable;
@@ -39,21 +39,30 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 
+import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPage;
+
 @Mixin(NetherPortalBlock.class)
 public class NetherPortalBlockMixin {
 	@Inject(at = @At("HEAD"), method = "onEntityCollision(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V")
 	private void injected(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo info) {
 		if (!world.isClient() && entity instanceof ItemEntity) {
 			ItemStack itemStack = ((ItemEntity)entity).getStack();
-			WritableBookContentComponent comp1 = itemStack.getComponents().get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
-			WrittenBookContentComponent comp2 = itemStack.getComponents().get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
-			if (comp1 != null || comp2 != null) {
+			WritableBookContentComponent writableComponent = itemStack.getComponents().get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
+			WrittenBookContentComponent writtenComponent = itemStack.getComponents().get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
+			String printedComponent = null;
+			if (FabricLoader.getInstance().isModLoaded("computercraft")) {
+				printedComponent = checkPrintedPage(itemStack);
+			}
+			if (writableComponent != null || writtenComponent != null || printedComponent != null) {
 				String content = "";
-				if (comp1 != null) {
-					content = comp1.pages().getFirst().raw();
+				if (writableComponent != null) {
+					content = writableComponent.pages().getFirst().raw();
 				}
-				if (comp2 != null) {
-					content = comp2.pages().getFirst().raw().getString();
+				if (writtenComponent != null) {
+					content = writtenComponent.pages().getFirst().raw().getString();
+				}
+				if (printedComponent != null) {
+					content = printedComponent;
 				}
 				if (Objects.equals(content, "")) {
 					content = "empty";
