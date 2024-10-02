@@ -37,8 +37,7 @@ dependencies {
 // Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modCompileOnly("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cct_version")
-	modRuntimeOnly("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cct_version")
+	modImplementation("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cct_version")
 
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
