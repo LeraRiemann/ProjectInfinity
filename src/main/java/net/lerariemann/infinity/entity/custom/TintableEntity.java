@@ -3,6 +3,7 @@ package net.lerariemann.infinity.entity.custom;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.math.ColorHelper;
 import org.joml.Vector3f;
 
 import java.awt.*;
@@ -19,22 +20,26 @@ public interface TintableEntity {
         float h = (float)(i & 0xFF) / 255.0f;
         return new Vector3f(f, g, h);
     }
+
+    static int getColorJeb(int age, int id) {
+        int n = age / 25 + id;
+        int o = DyeColor.values().length;
+        int p = n % o;
+        int q = (n + 1) % o;
+        float r = (float)(age % 25) / 25.0F;
+        int s = SheepEntity.getRgbColor(DyeColor.byId(p));
+        int t = SheepEntity.getRgbColor(DyeColor.byId(q));
+        return ColorHelper.Argb.lerp(r, s, t);
+    }
+
     default int getColorNamed() {
         if (hasCustomName()) {
             String s = getName().getString();
             if ("jeb_".equals(s)) {
-                int n = getAge() / 25 + getId();
-                int o = DyeColor.values().length;
-                int p = n % o;
-                int q = (n + 1) % o;
-                float r = (getAge() % 25) / 25.0f;
-                int fs = SheepEntity.getRgbColor(DyeColor.byId(p));
-                int gs = SheepEntity.getRgbColor(DyeColor.byId(q));
-                float f = fs * (1.0f - r) + gs * r;
-                return (int)f;
+                return TintableEntity.getColorJeb(getAge(), getId());
             }
             if ("hue".equals(s)) {
-                int n = getAge() + getId();
+                int n = getAge() + 400*getId();
                 float hue = n / 400.f;
                 hue = hue - (int) hue;
                 return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
@@ -42,10 +47,10 @@ public interface TintableEntity {
         }
         return -1;
     }
-    default int getColor() {
+    default int getColorForRender() {
         int v = getColorNamed();
         if (v!=-1) return v;
-        return this.getColorRaw();
+        return ColorHelper.Argb.fullAlpha(this.getColorRaw());
     }
 
     default int getColorRaw() {

@@ -81,7 +81,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
         super.initDataTracker(builder);
         builder.add(effect, "luck");
         builder.add(duration, 200);
-        builder.add(color, 0);
+        builder.add(color, 255);
     }
 
     public boolean isFriendly() {
@@ -106,7 +106,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
             Random r = new Random();
             if (r.nextFloat() < 0.5) {
                 DimensionalSkeleton newSkeleton;
-                if (!this.getWorld().isClient() && (newSkeleton = ModEntities.DIMENSIONAL_SKELETON.create(this.getWorld())) != null) {
+                if (!this.getWorld().isClient() && (newSkeleton = ModEntities.CHAOS_SKELETON.create(this.getWorld())) != null) {
                     ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
                     this.discard();
                     ModEntities.copy(this, newSkeleton);
@@ -121,7 +121,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
             }
         }
         if (itemStack.isOf(Items.GLASS_BOTTLE)) {
-            ItemStack itemStack2 = setPotion(Items.LINGERING_POTION.getDefaultStack(), this.getColor(), this.getEffectRaw(), this.getDuration() * 60);
+            ItemStack itemStack2 = setPotion(Items.LINGERING_POTION.getDefaultStack(), this.getColorForRender(), this.getEffectRaw(), this.getDuration() * 60);
             ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
             player.setStackInHand(hand, itemStack3);
             this.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
@@ -136,21 +136,22 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
         return super.interactMob(player, hand);
     }
 
+    public void setEffect(Identifier i) {
+        setEffectRaw(i.toString());
+    }
     public void setEffectRaw(String c) {
         this.dataTracker.set(effect, c);
-    }
-    public void setColorRaw(int c) {
-        this.dataTracker.set(color, c);
     }
     public String getEffectRaw() {
         return this.dataTracker.get(effect);
     }
-    public void setEffect(Identifier i) {
-        setEffectRaw(i.toString());
-    }
     public StatusEffect getEffect() {
         return reg.get(Identifier.of(getEffectRaw()));
     }
+    public void setColorRaw(int c) {
+        this.dataTracker.set(color, c);
+    }
+
     public void setDuration(int i) {
         this.dataTracker.set(duration, i);
     }
@@ -184,7 +185,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
 
     @Override
     public ItemStack getProjectileType(ItemStack stack) {
-        return setPotion(Items.TIPPED_ARROW.getDefaultStack(), this.getColor(), this.getEffectRaw(), this.getDuration());
+        return setPotion(Items.TIPPED_ARROW.getDefaultStack(), this.getColorRaw(), this.getEffectRaw(), this.getDuration());
     }
 
     @Override

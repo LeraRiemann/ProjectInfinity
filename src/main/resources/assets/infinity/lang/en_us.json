@@ -42,6 +42,10 @@
   "entity.infinity.dimensional_skeleton": "Chaos Skeleton",
   "entity.infinity.dimensional_creeper": "Chaos Creeper",
   "entity.infinity.chaos_pawn": "Chaos Pawn",
+  "item.infinity.chaos_skeleton_spawn_egg": "Chaos Skeleton Spawn Egg",
+  "item.infinity.chaos_slime_spawn_egg": "Chaos Slime Spawn Egg",
+  "item.infinity.chaos_pawn_spawn_egg": "Chaos Pawn Spawn Egg",
+  "item.infinity.chaos_creeper_spawn_egg": "Chaos Creeper Spawn Egg",
   "emi.info.book_box": "You can create a Box of Infinite Books by throwing a bookshelf into an Infinity Portal.",
   "emi.info.altar": "You can create a Transfinite Altar by throwing a lectern into an Infinity Portal.",
   "emi.info.reset_charge": "You can create a Reset Charge by throwing TNT into an Infinity Portal"

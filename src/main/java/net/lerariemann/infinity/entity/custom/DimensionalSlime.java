@@ -26,6 +26,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,10 +89,10 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
         this.dataTracker.set(core, c);
     }
     @Override
-    public int getColor() {
+    public int getColorForRender() {
         int v = getColorNamed();
         if (v!=-1) return v;
-        return this.dataTracker.get(color);
+        return ColorHelper.Argb.fullAlpha(this.dataTracker.get(color));
     }
 
     public BlockState getCore() {
@@ -100,7 +101,7 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
 
     @Override
     protected ParticleEffect getParticles() {
-        return new DustParticleEffect(colorFromInt(this.getColor()), 1.0f);
+        return new DustParticleEffect(colorFromInt(this.getColorForRender()), 1.0f);
     }
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
