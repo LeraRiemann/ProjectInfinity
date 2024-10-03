@@ -37,6 +37,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPage;
@@ -55,12 +56,18 @@ public class NetherPortalBlockMixin {
 			}
 			if (writableComponent != null || writtenComponent != null || printedComponent != null) {
 				String content = "";
-				if (writableComponent != null) {
-					content = writableComponent.pages().getFirst().raw();
+				try {
+					if (writableComponent != null) {
+						content = writableComponent.pages().getFirst().raw();
+					}
+					if (writtenComponent != null) {
+						content = writtenComponent.pages().getFirst().raw().getString();
+					}
 				}
-				if (writtenComponent != null) {
-					content = writtenComponent.pages().getFirst().raw().getString();
+				catch (NoSuchElementException e) {
+					content = "empty";
 				}
+
 				if (printedComponent != null) {
 					content = printedComponent;
 				}
