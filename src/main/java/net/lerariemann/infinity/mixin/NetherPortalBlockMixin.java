@@ -56,10 +56,10 @@ public class NetherPortalBlockMixin {
 			if (writableComponent != null || writtenComponent != null || printedComponent != null) {
 				String content = "";
 				if (writableComponent != null) {
-					content = writableComponent.pages().getFirst().raw();
+					content = writableComponent.pages().isEmpty() ? "empty" : writableComponent.pages().getFirst().raw();
 				}
 				if (writtenComponent != null) {
-					content = writtenComponent.pages().getFirst().raw().getString();
+					content = writtenComponent.pages().isEmpty() ? "empty" : writtenComponent.pages().getFirst().raw().getString();
 				}
 				if (printedComponent != null) {
 					content = printedComponent;

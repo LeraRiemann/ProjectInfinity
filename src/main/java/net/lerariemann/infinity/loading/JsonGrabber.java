@@ -61,13 +61,19 @@ public class JsonGrabber<E> {
 
     void grab(RegistryKey<E> key, JsonElement jsonElement, boolean bl) {
         RegistryOps<JsonElement> registryOps = RegistryOps.of(JsonOps.INSTANCE, registryInfoGetter);
-        DataResult<E> dataResult = decoder.parse(registryOps, jsonElement);
-        if(dataResult.result().isPresent()) {
-            E object = dataResult.result().get();
-            if (bl || !registry.contains(key)) registry.add(key, object, RegistryEntryInfo.DEFAULT);
+        try {
+            DataResult<E> dataResult = decoder.parse(registryOps, jsonElement);
+            if(dataResult.result().isPresent()) {
+                E object = dataResult.result().get();
+                if (bl || !registry.contains(key)) registry.add(key, object, RegistryEntryInfo.DEFAULT);
+            }
+            else {
+                LogManager.getLogger().info(jsonElement);
+            }
         }
-        else {
+        catch (Exception e) {
             LogManager.getLogger().info(jsonElement);
+            throw new RuntimeException(e.getMessage() + " Element affected: " + jsonElement.toString());
         }
     }
 
