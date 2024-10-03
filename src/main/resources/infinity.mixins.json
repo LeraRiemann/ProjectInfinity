@@ -16,6 +16,7 @@
     "ServerPlayerEntityMixin",
     "SlimeEntityMixin",
     "WorldChunkMixin",
+    "mobs.ElderGuardianEntityMixin",
     "mobs.EndermiteEntityMixin",
     "mobs.LivingEntityMixin",
     "mobs.WaterCreaturesMixin",
