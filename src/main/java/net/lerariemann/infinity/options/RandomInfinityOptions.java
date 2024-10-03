@@ -61,8 +61,8 @@ public class RandomInfinityOptions {
 
     public static double mavity(Random r) {
         double d = r.nextDouble();
-        if (d < 0.5) return 1.0;
-        if (d < 0.75) return r.nextDouble();
+        if (d < 0.75) return 1.0;
+        if (d < 0.95) return r.nextDouble();
         return 1 / (0.95*r.nextDouble() + 0.05);
     }
 
