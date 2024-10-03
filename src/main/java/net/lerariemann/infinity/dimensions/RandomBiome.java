@@ -52,6 +52,11 @@ public class RandomBiome {
         res.add(NbtDouble.of(random.nextDouble()));
         return res;
     }
+    public NbtList randomEntityEffectColor() {
+        NbtList res = randomDustColor();
+        res.add(NbtDouble.of(random.nextDouble()));
+        return res;
+    }
 
     NbtString randomSound(){
         return NbtString.of(PROVIDER.randomName(random, "sounds"));
@@ -116,13 +121,13 @@ public class RandomBiome {
             case "minecraft:block", "minecraft:block_marker", "minecraft:dust_pillar", "minecraft:falling_dust" -> {
                 NbtCompound value = new NbtCompound();
                 value.putString("Name", PROVIDER.randomName(random, "all_blocks"));
-                res.put("value", value);
+                res.put("block_state", value);
                 return res;
             }
             case "minecraft:item" -> {
                 NbtCompound value = new NbtCompound();
                 value.putString("Name", PROVIDER.randomName(random, "items"));
-                res.put("value", value);
+                res.put("item", value);
                 return res;
             }
             case "minecraft:dust" -> {
@@ -137,7 +142,7 @@ public class RandomBiome {
                 return res;
             }
             case "minecraft:entity_effect" -> {
-                res.putInt("color", random.nextInt(16777216));
+                res.put("color", randomEntityEffectColor());
                 return res;
             }
             case "minecraft:sculk_charge" -> {
