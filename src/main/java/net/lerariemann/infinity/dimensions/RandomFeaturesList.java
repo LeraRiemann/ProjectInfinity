@@ -75,9 +75,8 @@ public class RandomFeaturesList {
     }
 
     NbtList lakes() {
-        NbtList res = getAllElements("lakes");
-        addRandomFeature("lake", res, RandomLake::new);
-        return res;
+        //addRandomFeature("lake", res, RandomLake::new);
+        return getAllElements("lakes");
     }
 
     NbtList localModifications() {
