@@ -25,6 +25,9 @@
     ],
     "client": [
       "net.lerariemann.infinity.InfinityModClient"
+    ],
+    "modmenu": [
+      "net.lerariemann.infinity.config.ModMenuCompat"
     ]
   },
   "mixins": [

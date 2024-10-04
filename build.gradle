@@ -26,6 +26,12 @@ repositories {
 			includeGroup("cc.tweaked")
 		}
 	}
+	maven {
+		name = "Terraformers"
+		url = "https://maven.terraformersmc.com/"
+	}
+	maven { url "https://maven.shedaniel.me/" }
+
 }
 
 dependencies {
@@ -34,9 +40,16 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-// Fabric API. This is technically optional, but you probably want it anyway.
+	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+	//Cloth Config - Optional for Mod config.
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+
+	//CC-Tweaked - Optional Compat
 	modImplementation("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cct_version")
 
 	// Uncomment the following line to enable the deprecated Fabric API modules. 

@@ -1,4 +1,8 @@
 {
+  "config.infinity.title": "Infinite Dimensions",
+  "config.infinity.gamerules_chaosMobsEnabled": "Enable Chaos Mobs",
+  "config.infinity.gamerules_forceSolidSurface": "Force solid surface",
+  "config.infinity.gamerules_consumePortalKey": "Consume Portal Key",
   "block.infinity.neither_portal": "Infinity Portal",
   "block.infinity.book_box": "Box of Infinite Books",
   "block.infinity.altar_lit": "Lit Transfinite Altar",

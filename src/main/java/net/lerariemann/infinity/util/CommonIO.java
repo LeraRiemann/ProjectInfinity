@@ -63,7 +63,11 @@ public class CommonIO {
             content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             if (!content.contains("infinity_version")) return 0;
             int i = content.indexOf("infinity_version");
-            return Integer.parseInt(content.substring(content.indexOf(" ", i)+1, content.indexOf(",", i)));
+            int end = content.indexOf(",", i);
+            if (end == -1) {
+                end = content.indexOf("}", i);
+            }
+            return Integer.parseInt(content.substring(content.indexOf(" ", i)+1, end).trim());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
