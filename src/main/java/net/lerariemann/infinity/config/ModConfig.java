@@ -16,8 +16,16 @@ public class ModConfig {
     private static ModConfig INSTANCE = new ModConfig();
     //General settings
     public boolean gamerules_consumePortalKey = true;
+    public boolean gamerules_longArithmeticEnabled = false;
+    public int gamerules_maxBiomeCount = 6;
     public boolean gamerules_chaosMobsEnabled = true;
+    public boolean gamerules_returnPortalsEnabled = true;
+    public boolean gamerules_runtimeGenerationEnabled = true;
     public boolean gamerules_forceSolidSurface = false;
+    public String salt = "";
+    public String altarKey = "minecraft:diamond";
+    public String portalKey = "";
+
 
 
     public static void load() {
@@ -25,6 +33,13 @@ public class ModConfig {
         ModConfig.get().gamerules_chaosMobsEnabled = getBoolean(rootConfig, "gameRules", "chaosMobsEnabled");
         ModConfig.get().gamerules_forceSolidSurface = getBoolean(rootConfig, "gameRules", "forceSolidSurface");
         ModConfig.get().gamerules_consumePortalKey = getBoolean(rootConfig, "gameRules", "consumePortalKey");
+        ModConfig.get().gamerules_longArithmeticEnabled = getBoolean(rootConfig, "gameRules", "longArithmeticEnabled");
+        ModConfig.get().gamerules_runtimeGenerationEnabled = getBoolean(rootConfig, "gameRules", "runtimeGenerationEnabled");
+        ModConfig.get().gamerules_returnPortalsEnabled = getBoolean(rootConfig, "gameRules", "returnPortalsEnabled");
+        ModConfig.get().salt = getString(rootConfig, "salt");
+        ModConfig.get().altarKey = getString(rootConfig, "altarKey");
+        ModConfig.get().portalKey = getString(rootConfig, "portalKey");
+        ModConfig.get().gamerules_maxBiomeCount = getInt(rootConfig, "gameRules", "maxBiomeCount");
     }
 
     public static void save() {
@@ -32,6 +47,14 @@ public class ModConfig {
         putBoolean(rootConfig, "gameRules", "chaosMobsEnabled", ModConfig.get().gamerules_chaosMobsEnabled);
         putBoolean(rootConfig, "gameRules", "forceSolidSurface", ModConfig.get().gamerules_forceSolidSurface);
         putBoolean(rootConfig, "gameRules", "consumePortalKey", ModConfig.get().gamerules_consumePortalKey);
+        putBoolean(rootConfig, "gameRules", "longArithmeticEnabled", ModConfig.get().gamerules_longArithmeticEnabled);
+        putBoolean(rootConfig, "gameRules", "runtimeGenerationEnabled", ModConfig.get().gamerules_runtimeGenerationEnabled);
+        putBoolean(rootConfig, "gameRules", "returnPortalsEnabled", ModConfig.get().gamerules_returnPortalsEnabled);
+        putString(rootConfig,  "salt", ModConfig.get().salt);
+        putString(rootConfig, "altarKey", ModConfig.get().altarKey);
+        putString(rootConfig, "portalKey", ModConfig.get().portalKey);
+        putInt(rootConfig, "gameRules", "maxBiomeCount", ModConfig.get().gamerules_maxBiomeCount);
+
         CommonIO.write(rootConfig, configPath(), "infinity.json");
     }
 
@@ -43,20 +66,28 @@ public class ModConfig {
         rootConfig.getCompound(compound).putBoolean(bool, data);
     }
 
+    public static int getInt(NbtCompound rootConfig, String compound, String key) {
+        return rootConfig.getCompound(compound).getInt(key);
+    }
+
+    public static void putInt(NbtCompound rootConfig, String compound, String key, int data) {
+        rootConfig.getCompound(compound).putInt(key, data);
+    }
+
     public static String getString(NbtCompound rootConfig, String compound, String string) {
         return rootConfig.getCompound(compound).getString(string);
     }
 
-    public static void putString(NbtCompound rootConfig, String compound, String bool, String data) {
-        rootConfig.getCompound(compound).putString(bool, data);
+    public static void putString(NbtCompound rootConfig, String compound, String key, String data) {
+        rootConfig.getCompound(compound).putString(key, data);
     }
 
     public static String getString(NbtCompound rootConfig, String string) {
         return rootConfig.getString(string);
     }
 
-    public static void putString(NbtCompound rootConfig, String bool, String data) {
-        rootConfig.putString(bool, data);
+    public static void putString(NbtCompound rootConfig, String key, String data) {
+        rootConfig.putString(key, data);
     }
 
     public static ModConfig get() {

@@ -4,6 +4,7 @@ package net.lerariemann.infinity.config;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.item.Item;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.Field;
@@ -22,23 +23,28 @@ public class ClothConfigFactory {
 
         final var entryBuilder = builder.entryBuilder();
         final var configInstance = ModConfig.get();
-        final var generalCategory = builder.getOrCreateCategory(Text.translatable("config.infinity.title"));
+        final var generalCategory = builder.getOrCreateCategory(Text.translatable("config.infinity.title.general"));
+        final var gamerulesCategory = builder.getOrCreateCategory(Text.translatable("config.infinity.title.gamerules"));
+
 
         for (var field : ModConfig.class.getFields()) {
+            ConfigCategory category;
+            if (field.getName().contains("gamerules_")) category = gamerulesCategory;
+            else category = generalCategory;
 
             if (field.getType() == boolean.class) {
-                generalCategory.addEntry(entryBuilder.startBooleanToggle(fieldName(field), fieldGet(configInstance, field))
+                category.addEntry(entryBuilder.startBooleanToggle(fieldName(field), fieldGet(configInstance, field))
                         .setSaveConsumer(fieldSetter(configInstance, field))
                         .setDefaultValue((boolean) fieldGet(DEFAULT_VALUES, field)).build());
 
             }
             else if (field.getType() == String.class) {
-                generalCategory.addEntry(entryBuilder.startStrField(fieldName(field), fieldGet(configInstance, field))
+                category.addEntry(entryBuilder.startStrField(fieldName(field), fieldGet(configInstance, field))
                         .setSaveConsumer(fieldSetter(configInstance, field))
                         .setDefaultValue((String) fieldGet(DEFAULT_VALUES, field)).build());
             }
             else if (field.getType() == int.class) {
-                generalCategory.addEntry(entryBuilder.startIntField(fieldName(field), fieldGet(configInstance, field))
+                category.addEntry(entryBuilder.startIntField(fieldName(field), fieldGet(configInstance, field))
                         .setSaveConsumer(fieldSetter(configInstance, field))
                         .setDefaultValue((int) fieldGet(DEFAULT_VALUES, field)).build());
             }
