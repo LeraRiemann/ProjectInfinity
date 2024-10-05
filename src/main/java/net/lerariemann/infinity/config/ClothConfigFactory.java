@@ -42,20 +42,24 @@ public class ClothConfigFactory {
         }
 
         if (value.isString()) {
-            category.addEntry(entryBuilder.startStrField(fieldName(field, currentCategory), value.getAsString()).setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+            category.addEntry(entryBuilder.startStrField(fieldName(field, currentCategory), value.getAsString())
+                    .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                     .build());
         }
         else if (value.isBoolean()) {
             category.addEntry(entryBuilder.startBooleanToggle(fieldName(field, currentCategory), value.getAsBoolean())
+                    .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                     .build());
         }
         else if (value.isNumber()) {
             if (value.getAsString().contains(".")) {
                 category.addEntry(entryBuilder.startFloatField(fieldName(field, currentCategory), value.getAsFloat())
+                        .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                         .build());
             }
             else {
                 category.addEntry(entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
+                        .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                         .build());
             }
         }
@@ -129,12 +133,19 @@ public class ClothConfigFactory {
                 if (t instanceof String) {
                     rootConfig.putString(field.getKey(), (String) t);
                 }
-                if (t instanceof Boolean) {
+                else if (t instanceof Boolean) {
                     rootConfig.putBoolean(field.getKey(), (boolean) t);
                 }
-                if (t instanceof Integer) {
+                else if (t.toString().contains(".")) {
+                    if (t instanceof Float) {
+                        rootConfig.putFloat(field.getKey(), (float) t);
+                    }
+                }
+                else if (t instanceof Integer) {
                     rootConfig.putInt(field.getKey(), (int) t);
                 }
+
+
                 CommonIO.write(rootConfig, configPath(), "infinity.json");
             }
         };
