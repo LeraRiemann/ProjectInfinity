@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.function.Consumer;
 
 public class ModConfig {
     private static ModConfig INSTANCE = new ModConfig();
@@ -75,6 +77,14 @@ public class ModConfig {
         }
 
         CommonIO.write(rootConfig, configPath(), "infinity.json");
+    }
+
+    // Enable and disable Easter Egg dimensions.
+    public static <T> Consumer<T> mapSetter(HashMap.Entry<String, Boolean> field) {
+        return t -> {
+            boolean b = (Boolean)t;
+            field.setValue(b);
+        };
     }
 
     public static boolean getBoolean(NbtCompound rootConfig, String compound, String bool) {
