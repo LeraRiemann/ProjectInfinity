@@ -2,6 +2,7 @@
   "config.infinity.title": "Infinite Dimensions",
   "config.infinity.title.general": "General",
   "config.infinity.title.gamerules": "Gamerules",
+  "config.infinity.invocationLock": "Disable automatic config generation.",
   "config.infinity.salt": "Salt",
   "config.infinity.altarKey": "Altar Key",
   "config.infinity.portalKey": "Portal Key",

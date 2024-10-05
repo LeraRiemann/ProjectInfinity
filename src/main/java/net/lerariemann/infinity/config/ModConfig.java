@@ -2,6 +2,7 @@ package net.lerariemann.infinity.config;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.loader.api.FabricLoader;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
@@ -10,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ModConfig {
@@ -25,35 +27,52 @@ public class ModConfig {
     public String salt = "";
     public String altarKey = "minecraft:diamond";
     public String portalKey = "";
+    public boolean invocationLock = false;
+
 
 
 
     public static void load() {
         NbtCompound rootConfig = readRootConfig();
-        ModConfig.get().gamerules_chaosMobsEnabled = getBoolean(rootConfig, "gameRules", "chaosMobsEnabled");
-        ModConfig.get().gamerules_forceSolidSurface = getBoolean(rootConfig, "gameRules", "forceSolidSurface");
-        ModConfig.get().gamerules_consumePortalKey = getBoolean(rootConfig, "gameRules", "consumePortalKey");
-        ModConfig.get().gamerules_longArithmeticEnabled = getBoolean(rootConfig, "gameRules", "longArithmeticEnabled");
-        ModConfig.get().gamerules_runtimeGenerationEnabled = getBoolean(rootConfig, "gameRules", "runtimeGenerationEnabled");
-        ModConfig.get().gamerules_returnPortalsEnabled = getBoolean(rootConfig, "gameRules", "returnPortalsEnabled");
-        ModConfig.get().salt = getString(rootConfig, "salt");
-        ModConfig.get().altarKey = getString(rootConfig, "altarKey");
-        ModConfig.get().portalKey = getString(rootConfig, "portalKey");
-        ModConfig.get().gamerules_maxBiomeCount = getInt(rootConfig, "gameRules", "maxBiomeCount");
+        var config = ModConfig.get();
+        config.gamerules_chaosMobsEnabled = getBoolean(rootConfig, "gameRules", "chaosMobsEnabled");
+        config.gamerules_forceSolidSurface = getBoolean(rootConfig, "gameRules", "forceSolidSurface");
+        config.gamerules_consumePortalKey = getBoolean(rootConfig, "gameRules", "consumePortalKey");
+        config.gamerules_longArithmeticEnabled = getBoolean(rootConfig, "gameRules", "longArithmeticEnabled");
+        config.gamerules_runtimeGenerationEnabled = getBoolean(rootConfig, "gameRules", "runtimeGenerationEnabled");
+        config.gamerules_returnPortalsEnabled = getBoolean(rootConfig, "gameRules", "returnPortalsEnabled");
+        config.salt = getString(rootConfig, "salt");
+        config.altarKey = getString(rootConfig, "altarKey");
+        config.portalKey = getString(rootConfig, "portalKey");
+        config.gamerules_maxBiomeCount = getInt(rootConfig, "gameRules", "maxBiomeCount");
+        config.invocationLock = Files.exists(Path.of(configPath() + "/modular/invocation.lock"));
     }
 
     public static void save() {
         NbtCompound rootConfig = readRootConfig();
-        putBoolean(rootConfig, "gameRules", "chaosMobsEnabled", ModConfig.get().gamerules_chaosMobsEnabled);
-        putBoolean(rootConfig, "gameRules", "forceSolidSurface", ModConfig.get().gamerules_forceSolidSurface);
-        putBoolean(rootConfig, "gameRules", "consumePortalKey", ModConfig.get().gamerules_consumePortalKey);
-        putBoolean(rootConfig, "gameRules", "longArithmeticEnabled", ModConfig.get().gamerules_longArithmeticEnabled);
-        putBoolean(rootConfig, "gameRules", "runtimeGenerationEnabled", ModConfig.get().gamerules_runtimeGenerationEnabled);
-        putBoolean(rootConfig, "gameRules", "returnPortalsEnabled", ModConfig.get().gamerules_returnPortalsEnabled);
-        putString(rootConfig,  "salt", ModConfig.get().salt);
-        putString(rootConfig, "altarKey", ModConfig.get().altarKey);
-        putString(rootConfig, "portalKey", ModConfig.get().portalKey);
-        putInt(rootConfig, "gameRules", "maxBiomeCount", ModConfig.get().gamerules_maxBiomeCount);
+        var config = ModConfig.get();
+        putBoolean(rootConfig, "gameRules", "chaosMobsEnabled", config.gamerules_chaosMobsEnabled);
+        putBoolean(rootConfig, "gameRules", "forceSolidSurface", config.gamerules_forceSolidSurface);
+        putBoolean(rootConfig, "gameRules", "consumePortalKey", config.gamerules_consumePortalKey);
+        putBoolean(rootConfig, "gameRules", "longArithmeticEnabled", config.gamerules_longArithmeticEnabled);
+        putBoolean(rootConfig, "gameRules", "runtimeGenerationEnabled", config.gamerules_runtimeGenerationEnabled);
+        putBoolean(rootConfig, "gameRules", "returnPortalsEnabled", config.gamerules_returnPortalsEnabled);
+        putString(rootConfig,  "salt", config.salt);
+        putString(rootConfig, "altarKey", config.altarKey);
+        putString(rootConfig, "portalKey", config.portalKey);
+        putInt(rootConfig, "gameRules", "maxBiomeCount", config.gamerules_maxBiomeCount);
+
+        if (!config.invocationLock) {
+            try {
+                if (Files.exists(Path.of(configPath() + "/modular/invocation.lock"))) {
+                    Files.delete(Path.of(configPath() + "/modular/invocation.lock"));
+                }
+                else config.invocationLock = true;
+            } catch (IOException e) {
+               InfinityMod.LOGGER.error("Unable to delete invocation.lock!");
+               config.invocationLock = true;
+            }
+        }
 
         CommonIO.write(rootConfig, configPath(), "infinity.json");
     }
