@@ -122,27 +122,28 @@ public class ClothConfigFactory {
     // Enable and disable Easter Egg dimensions.
     public static <T> Consumer<T> mapSetter(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField) {
         return t -> {
+            NbtCompound rootConfig = readRootConfig();
+            NbtCompound configPath = rootConfig;
             if (t != field.getValue()) {
-                NbtCompound rootConfig = readRootConfig();
                 if (prevField != null) {
-                    rootConfig = rootConfig.getCompound(prevField);
+                    configPath = rootConfig.getCompound(prevField);
                 }
                 if (prevPrevField != null) {
-                    rootConfig = rootConfig.getCompound(prevPrevField);
+                    configPath = rootConfig.getCompound(prevPrevField);
                 }
                 if (t instanceof String) {
-                    rootConfig.putString(field.getKey(), (String) t);
+                    configPath.putString(field.getKey(), (String) t);
                 }
                 else if (t instanceof Boolean) {
-                    rootConfig.putBoolean(field.getKey(), (boolean) t);
+                    configPath.putBoolean(field.getKey(), (boolean) t);
                 }
                 else if (t.toString().contains(".")) {
                     if (t instanceof Float) {
-                        rootConfig.putFloat(field.getKey(), (float) t);
+                        configPath.putFloat(field.getKey(), (float) t);
                     }
                 }
                 else if (t instanceof Integer) {
-                    rootConfig.putInt(field.getKey(), (int) t);
+                    configPath.putInt(field.getKey(), (int) t);
                 }
 
 
