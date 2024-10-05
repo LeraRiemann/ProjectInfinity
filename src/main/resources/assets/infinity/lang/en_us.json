@@ -8,7 +8,7 @@
   "config.infinity.title.structures": "Structures",
   "config.infinity.title.noise_settings": "Noise Settings",
   "config.infinity.title.features_chances": "Feature Chances",
-
+  "config.infinity.title.rootChances": "Root Chances",
   "config.infinity.invocationLock": "Disable automatic config generation.",
   "config.infinity.salt": "Salt",
   "config.infinity.altarKey": "Altar Key",
