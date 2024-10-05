@@ -35,23 +35,8 @@ public class ModConfig {
     }
 
     public static void save() {
-        NbtCompound rootConfig = readRootConfig();
-        var config = ModConfig.get();
 
 
-        if (!config.invocationLock) {
-            try {
-                if (Files.exists(Path.of(configPath() + "/modular/invocation.lock"))) {
-                    Files.delete(Path.of(configPath() + "/modular/invocation.lock"));
-                }
-                else config.invocationLock = true;
-            } catch (IOException e) {
-               InfinityMod.LOGGER.error("Unable to delete invocation.lock!");
-               config.invocationLock = true;
-            }
-        }
-
-        CommonIO.write(rootConfig, configPath(), "infinity.json");
     }
 
 

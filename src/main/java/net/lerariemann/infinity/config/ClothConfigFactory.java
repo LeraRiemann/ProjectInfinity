@@ -3,7 +3,10 @@ package net.lerariemann.infinity.config;
 
 import com.google.gson.JsonElement;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.Field;
@@ -26,25 +29,26 @@ public class ClothConfigFactory {
         String currentCategory;
         if (prevField == null) currentCategory = "general";
         else currentCategory = prevField.getKey();
+        var value = field.getValue().getAsJsonPrimitive();
 
         var category = builder.getOrCreateCategory(Text.translatable("config.infinity.title." + currentCategory));
         var entryBuilder = builder.entryBuilder();
 
-        if (field.getValue().getAsJsonPrimitive().isString()) {
-            category.addEntry(entryBuilder.startStrField(fieldName(field, currentCategory), field.getValue().getAsString())
+        if (value.isString()) {
+            category.addEntry(entryBuilder.startStrField(fieldName(field, currentCategory), value.getAsString()).setSaveConsumer(mapSetter(field))
                     .build());
         }
-        else if (field.getValue().getAsJsonPrimitive().isBoolean()) {
-            category.addEntry(entryBuilder.startBooleanToggle(fieldName(field, currentCategory), field.getValue().getAsBoolean())
+        else if (value.isBoolean()) {
+            category.addEntry(entryBuilder.startBooleanToggle(fieldName(field, currentCategory), value.getAsBoolean())
                     .build());
         }
-        else if (field.getValue().getAsJsonPrimitive().isNumber()) {
-            if (field.getValue().getAsJsonPrimitive().getAsString().contains(".")) {
-                category.addEntry(entryBuilder.startFloatField(fieldName(field, currentCategory), field.getValue().getAsFloat())
+        else if (value.isNumber()) {
+            if (value.getAsString().contains(".")) {
+                category.addEntry(entryBuilder.startFloatField(fieldName(field, currentCategory), value.getAsFloat())
                         .build());
             }
             else {
-                category.addEntry(entryBuilder.startIntField(fieldName(field, currentCategory), field.getValue().getAsInt())
+                category.addEntry(entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
                         .build());
             }
         }
@@ -105,10 +109,21 @@ public class ClothConfigFactory {
     }
 
     // Enable and disable Easter Egg dimensions.
-    public static <T> Consumer<T> mapSetter(Map.Entry<String, Object> field) {
+    public static <T> Consumer<T> mapSetter(Map.Entry<String, JsonElement> field) {
         return t -> {
-            String b = (String)t;
-            field.setValue(b);
+            if (t != field.getValue()) {
+                NbtCompound rootConfig = readRootConfig();
+                if (t instanceof String) {
+                    rootConfig.putString(field.getKey(), (String) t);
+                }
+                if (t instanceof Boolean) {
+                    rootConfig.putBoolean(field.getKey(), (boolean) t);
+                }
+                if (t instanceof Integer) {
+                    rootConfig.putInt(field.getKey(), (int) t);
+                }
+                CommonIO.write(rootConfig, configPath(), "infinity.json");
+            }
         };
     }
 
