@@ -15,7 +15,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Map;
@@ -45,22 +44,26 @@ public class ClothConfigFactory {
         if (value.isString()) {
             category.addEntry(entryBuilder.startStrField(fieldName(field, currentCategory), value.getAsString())
                     .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+                    .setDefaultValue((String) getDefaultValue(field, prevKey, prevPrevKey, "string"))
                     .build());
         }
         else if (value.isBoolean()) {
             category.addEntry(entryBuilder.startBooleanToggle(fieldName(field, currentCategory), value.getAsBoolean())
                     .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+                    .setDefaultValue((boolean) getDefaultValue(field, prevKey, prevPrevKey, "boolean"))
                     .build());
         }
         else if (value.isNumber()) {
             if (value.getAsString().contains(".")) {
                 category.addEntry(entryBuilder.startFloatField(fieldName(field, currentCategory), value.getAsFloat())
                         .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+                        .setDefaultValue((float) getDefaultValue(field, prevKey, prevPrevKey, "float"))
                         .build());
             }
             else {
                 category.addEntry(entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
                         .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+                        .setDefaultValue((int) getDefaultValue(field, prevKey, prevPrevKey, "int"))
                         .build());
             }
         }
@@ -108,11 +111,11 @@ public class ClothConfigFactory {
             NbtCompound rootConfig = readRootConfig();
             NbtCompound configPath = rootConfig;
             if (t != field.getValue()) {
+                if (prevPrevField != null) {
+                    configPath = configPath.getCompound(prevPrevField);
+                }
                 if (prevField != null) {
                     configPath = rootConfig.getCompound(prevField);
-                }
-                if (prevPrevField != null) {
-                    configPath = rootConfig.getCompound(prevPrevField);
                 }
                 if (t instanceof String) {
                     configPath.putString(field.getKey(), (String) t);
@@ -133,6 +136,31 @@ public class ClothConfigFactory {
                 CommonIO.write(rootConfig, configPath(), "infinity.json");
             }
         };
+    }
+
+    public static Object getDefaultValue(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField, String type) {
+        NbtCompound rootConfig = readDefaultConfig();
+        NbtCompound configPath = rootConfig;
+        if (prevPrevField != null) {
+            configPath = configPath.getCompound(prevPrevField);
+        }
+        if (prevField != null) {
+            configPath = rootConfig.getCompound(prevField);
+        }
+
+        if (Objects.equals(type, "string")) {
+            return configPath.getString(field.getKey());
+        }
+        else if (Objects.equals(type, "boolean")) {
+            return configPath.getBoolean(field.getKey());
+        }
+        else if (Objects.equals(type, "float")) {
+            return configPath.getFloat(field.getKey());
+        }
+        else if (Objects.equals(type, "int")) {
+            return configPath.getInt(field.getKey());
+        }
+        return false;
     }
 
 
@@ -168,6 +196,10 @@ public class ClothConfigFactory {
         return readJSON(configPath() + "/infinity.json");
     }
 
+    public static NbtCompound readDefaultConfig() {
+        return read(FabricLoader.getInstance().getModContainer(MOD_ID).orElse(null).getRootPaths().getFirst().resolve("config/infinity.json"));
+    }
+
     public static NbtCompound read(String file) {
         File newFile = new File(file);
         String content;
@@ -178,6 +210,17 @@ public class ClothConfigFactory {
             throw new RuntimeException(e);
         }
     }
+
+    public static NbtCompound read(Path file) {
+        String content;
+        try {
+            content = FileUtils.readFileToString(file.toFile(), StandardCharsets.UTF_8);
+            return StringNbtReader.parse(content);
+        } catch (IOException | CommandSyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static JsonElement readJSON(String file) {
 
         File newFile = new File(file);
