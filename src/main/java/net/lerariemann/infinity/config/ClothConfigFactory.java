@@ -55,10 +55,19 @@ public class ClothConfigFactory {
         }
         else if (value.isNumber()) {
             if (value.getAsString().contains(".")) {
-                category.addEntry(entryBuilder.startFloatField(fieldName(field, currentCategory), value.getAsFloat())
-                        .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
-                        .setDefaultValue((float) getDefaultValue(field, prevKey, prevPrevKey, "float"))
-                        .build());
+                float defaultValue = (float) getDefaultValue(field, prevKey, prevPrevKey, "float");
+                //Some root chances do not exist in the JAR.
+                if (defaultValue != 0.0f) {
+                    category.addEntry(entryBuilder.startFloatField(fieldName(field, currentCategory), value.getAsFloat())
+                            .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+                            .setDefaultValue(defaultValue)
+                            .build());
+                }
+                else {
+                    category.addEntry(entryBuilder.startFloatField(fieldName(field, currentCategory), value.getAsFloat())
+                            .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+                            .build());
+                }
             }
             else {
                 category.addEntry(entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
