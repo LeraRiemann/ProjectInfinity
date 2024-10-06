@@ -3,7 +3,6 @@ package net.lerariemann.infinity.mixin;
 import com.google.common.collect.ImmutableList;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.config.ModConfig;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.minecraft.network.QueryableServer;
@@ -104,7 +103,6 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
                         "(e.g. you may want to do this when adding new mods to the instance)");
             }
             LogManager.getLogger().info("Invocation complete");
-            ModConfig.get().invocationLock = true;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -2,28 +2,29 @@ package net.lerariemann.infinity.config;
 
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.text.Text;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
-import static net.lerariemann.infinity.config.ModConfig.*;
 
 public class ClothConfigFactory {
-
-    private static final ModConfig DEFAULT_VALUES = new ModConfig();
-
-    public static void addString(Map.Entry<String, JsonElement> field) {
-
-    }
-
     public static void addElement(Map.Entry<String, JsonElement> field, Map.Entry<String, JsonElement> prevField, ConfigBuilder builder, Map.Entry<String, JsonElement> prevPrevField) {
         String currentCategory;
         if (prevField == null) currentCategory = "general";
@@ -90,27 +91,9 @@ public class ClothConfigFactory {
                 }
             }
         }
-
-
-
-        builder.setSavingRunnable(ModConfig::save);
         return builder.build();
     }
-    // Set a config field.
-    public static <T> Consumer<T> fieldSetter(Object instance, Field field) {
-        return t -> {
-            try {
-                field.set(instance, t);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        };
-    }
 
-    // Automatically generate translation keys for config options.
-    public static Text fieldName(Field field) {
-        return Text.translatable("config."+MOD_ID + "." + field.getName());
-    }
     public static Text fieldName(Map.Entry field, String category) {
         if (Objects.equals(category, "general")) {
             category = "";
@@ -172,13 +155,42 @@ public class ClothConfigFactory {
         return newText.toString();
     }
 
-    // Get the current value of a config field.
-    @SuppressWarnings("unchecked")
-    public static <T> T fieldGet(Object instance, Field field) {
+
+    static Path configPath() {
+        return Path.of(FabricLoader.getInstance().getConfigDir() + "/infinity");
+    }
+
+    public static NbtCompound readRootConfig() {
+        return read(configPath() + "/infinity.json");
+    }
+
+    public static JsonElement readRootConfigJSON() {
+        return readJSON(configPath() + "/infinity.json");
+    }
+
+    public static NbtCompound read(String file) {
+        File newFile = new File(file);
+        String content;
         try {
-            return (T) field.get(instance);
-        } catch (IllegalAccessException e) {
+            content = FileUtils.readFileToString(newFile, StandardCharsets.UTF_8);
+
+            NbtCompound c = StringNbtReader.parse(content);
+            return c;
+        } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
     }
+    public static JsonElement readJSON(String file) {
+
+        File newFile = new File(file);
+        String content;
+        try {
+            content = FileUtils.readFileToString(newFile, StandardCharsets.UTF_8);
+            var c = JsonParser.parseString(content);
+            return c;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
