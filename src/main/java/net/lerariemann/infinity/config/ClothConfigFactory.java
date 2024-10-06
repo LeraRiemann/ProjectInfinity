@@ -58,16 +58,16 @@ public class ClothConfigFactory {
         }
         else if (value.isNumber()) {
             if (value.getAsString().contains(".")) {
-                float defaultValue = (float) getDefaultValue(field, prevKey, prevPrevKey, "float");
+                double defaultValue = (double) getDefaultValue(field, prevKey, prevPrevKey, "double");
                 //Some root chances do not exist in the JAR.
                 if (defaultValue != 0.0f) {
-                    category.addEntry(entryBuilder.startFloatField(fieldName(field, currentCategory), value.getAsFloat())
+                    category.addEntry(entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .setDefaultValue(defaultValue)
                             .build());
                 }
                 else {
-                    category.addEntry(entryBuilder.startFloatField(fieldName(field, currentCategory), value.getAsFloat())
+                    category.addEntry(entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .build());
                 }
@@ -139,8 +139,8 @@ public class ClothConfigFactory {
                     configPath.putBoolean(field.getKey(), (boolean) t);
                 }
                 else if (t.toString().contains(".")) {
-                    if (t instanceof Float) {
-                        configPath.putFloat(field.getKey(), (float) t);
+                    if (t instanceof Double) {
+                        configPath.putDouble(field.getKey(), (double) t);
                     }
                 }
                 else if (t instanceof Integer) {
@@ -170,8 +170,8 @@ public class ClothConfigFactory {
         else if (Objects.equals(type, "boolean")) {
             return configPath.getBoolean(field.getKey());
         }
-        else if (Objects.equals(type, "float")) {
-            return configPath.getFloat(field.getKey());
+        else if (Objects.equals(type, "double")) {
+            return configPath.getDouble(field.getKey());
         }
         else if (Objects.equals(type, "int")) {
             return configPath.getInt(field.getKey());
