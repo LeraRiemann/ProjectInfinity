@@ -6,7 +6,8 @@
   "name": "Infinite Dimensions 1.21.1",
   "description": "Inspired by 2020's April Fools' 20w14infinite Snapshot, this mod brings endless randomly generated dimensions into Minecraft.",
   "authors": [
-    "Lera Riemann"
+    "Lera Riemann",
+    "cassiancc"
   ],
   "contact": {
     "homepage": "https://github.com/LeraRiemann",
@@ -37,13 +38,14 @@
   "accessWidener" : "infinity.accesswidener",
 
   "depends": {
-    "fabricloader": ">=0.14.11",
+    "fabricloader": ">=0.15.11",
     "fabric-api": "*",
     "minecraft": "~1.21.1",
     "java": ">=21"
   },
   "suggests": {
-    "another-mod": "*"
+    "cloth-config": "*",
+    "modmenu": "*"
   },
   "custom": {
     "lithium:options": {
