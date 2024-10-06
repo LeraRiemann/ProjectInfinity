@@ -9,7 +9,6 @@ import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.gui.entries.StringListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.util.CommonIO;
@@ -50,13 +49,16 @@ public class ClothConfigFactory {
         if (prevPrevField != null) currentCategory = prevPrevField.getKey();
 
         JsonPrimitive value = field.getValue().getAsJsonPrimitive();
-
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
         String prevKey = null;
         String prevPrevKey = null;
         if (prevField != null) {
             prevKey = prevField.getKey();
         }
+        if (prevPrevField != null) {
+            prevPrevKey = prevPrevField.getKey();
+        }
+
 
         if (value.isString()) {
             var newOption = entryBuilder.startStrField(fieldName(field, currentCategory), value.getAsString())
