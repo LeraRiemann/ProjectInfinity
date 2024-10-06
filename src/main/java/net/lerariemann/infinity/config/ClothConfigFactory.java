@@ -106,12 +106,12 @@ public class ClothConfigFactory {
         return builder.build();
     }
 
-    public static Text fieldName(Map.Entry field, String category) {
+    public static Text fieldName(Map.Entry<String, JsonElement> field, String category) {
         if (Objects.equals(category, "general")) {
             category = "";
         }
         else category = category + ".";
-        return Text.translatableWithFallback("config."+MOD_ID + "." + category + field.getKey(), fallback(field.getKey().toString()));
+        return Text.translatableWithFallback("config."+MOD_ID + "." + category + field.getKey(), fallback(field.getKey()));
     }
 
     // Enable and disable Easter Egg dimensions.
