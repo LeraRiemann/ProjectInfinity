@@ -5,9 +5,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.gui.entries.StringListEntry;
+import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.gui.screen.Screen;
@@ -30,8 +33,16 @@ import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ClothConfigFactory {
 
+    public static void addEntry(AbstractConfigListEntry<?> newOption, Object category) {
+        if (category instanceof ConfigCategory configCategory) {
+            configCategory.addEntry(newOption);
+        }
+        else if (category instanceof SubCategoryBuilder subCategoryBuilder) {
+            subCategoryBuilder.add(newOption);
+        }
+    }
 
-    public static void addElement(Map.Entry<String, JsonElement> field, Map.Entry<String, JsonElement> prevField, ConfigBuilder builder, Map.Entry<String, JsonElement> prevPrevField, ConfigCategory category) {
+    public static void addElement(Map.Entry<String, JsonElement> field, Map.Entry<String, JsonElement> prevField, ConfigBuilder builder, Map.Entry<String, JsonElement> prevPrevField, Object category) {
         String currentCategory;
         if (prevField == null) currentCategory = "general";
         else currentCategory = prevField.getKey();
@@ -52,14 +63,15 @@ public class ClothConfigFactory {
                     .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                     .setDefaultValue((String) getDefaultValue(field, prevKey, prevPrevKey, "string"))
                     .build();
-                category.addEntry(newOption);
+            addEntry(newOption, category);
+
         }
         else if (value.isBoolean()) {
             var newOption = entryBuilder.startBooleanToggle(fieldName(field, currentCategory), value.getAsBoolean())
                     .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                     .setDefaultValue((boolean) getDefaultValue(field, prevKey, prevPrevKey, "boolean"))
                     .build();
-            category.addEntry(newOption);
+            addEntry(newOption, category);
         }
         else if (value.isNumber()) {
             if (value.getAsString().contains(".")) {
@@ -70,13 +82,13 @@ public class ClothConfigFactory {
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .setDefaultValue(defaultValue)
                             .build();
-                    category.addEntry(newOption);
+                    addEntry(newOption, category);
                 }
                 else {
                     var newOption = entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .build();
-                    category.addEntry(newOption);
+                    addEntry(newOption, category);
                 }
 
             }
@@ -86,7 +98,7 @@ public class ClothConfigFactory {
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .setDefaultValue((int) getDefaultValue(field, prevKey, prevPrevKey, "int"))
                             .build();
-                    category.addEntry(newOption);
+                    addEntry(newOption, category);
                 }
             }
         }
@@ -112,13 +124,14 @@ public class ClothConfigFactory {
                     }
                     else {
                         ConfigCategory category = builder.getOrCreateCategory(Text.translatable("config.infinity.title."+field.getKey()));
-                        ConfigCategory subCategory = category.addEntry(builder.entryBuilder().startSubCategory(Text.translatable("config.infinity.title."+field2.getKey())).build());
+                        SubCategoryBuilder subCategory = builder.entryBuilder().startSubCategory(Text.translatable("config.infinity.title."+field2.getKey()));
 
                         for (var field3 : field2.getValue().getAsJsonObject().entrySet()) {
                             if (field3.getValue().isJsonPrimitive()) {
                                 addElement(field3, field2, builder, field, subCategory);
                             }
                         }
+                        category.addEntry(subCategory.build());
                     }
                 }
             }
@@ -133,6 +146,7 @@ public class ClothConfigFactory {
         else category = category + ".";
         return Text.translatableWithFallback("config."+MOD_ID + "." + category + field.getKey(), fallback(field.getKey()));
     }
+
 
     // Enable and disable Easter Egg dimensions.
     public static <T> Consumer<T> mapSetter(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField) {
