@@ -173,9 +173,7 @@ public class ClothConfigFactory {
         String content;
         try {
             content = FileUtils.readFileToString(newFile, StandardCharsets.UTF_8);
-
-            NbtCompound c = StringNbtReader.parse(content);
-            return c;
+            return StringNbtReader.parse(content);
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -186,8 +184,7 @@ public class ClothConfigFactory {
         String content;
         try {
             content = FileUtils.readFileToString(newFile, StandardCharsets.UTF_8);
-            var c = JsonParser.parseString(content);
-            return c;
+            return JsonParser.parseString(content);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
