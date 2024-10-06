@@ -16,11 +16,14 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ClothConfigFactory {
@@ -208,7 +211,15 @@ public class ClothConfigFactory {
     }
 
     public static NbtCompound readDefaultConfig() {
-        return read(FabricLoader.getInstance().getModContainer(MOD_ID).orElse(null).getRootPaths().getFirst().resolve("config/infinity.json"));
+        Path tempfile = FabricLoader.getInstance().getModContainer(MOD_ID).orElse(null).getRootPaths().getFirst().resolve("config/infinity.json");
+            try {
+                Files.copy(tempfile, Path.of(configPath() + "/infinity-default.json"), REPLACE_EXISTING);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        return read(configPath()+("/infinity-default.json"));
     }
 
     public static NbtCompound read(String file) {
