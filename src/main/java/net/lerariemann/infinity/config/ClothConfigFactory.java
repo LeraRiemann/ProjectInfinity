@@ -73,10 +73,12 @@ public class ClothConfigFactory {
                 }
             }
             else {
-                category.addEntry(entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
-                        .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
-                        .setDefaultValue((int) getDefaultValue(field, prevKey, prevPrevKey, "int"))
-                        .build());
+                if (!Objects.equals(field.getKey(), "infinity_version")) {
+                    category.addEntry(entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
+                            .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+                            .setDefaultValue((int) getDefaultValue(field, prevKey, prevPrevKey, "int"))
+                            .build());
+                }
             }
         }
     }
