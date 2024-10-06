@@ -10,9 +10,12 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.text.Text;
@@ -23,12 +26,15 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
+import static net.minecraft.client.resource.language.I18n.hasTranslation;
 
 public class ClothConfigFactory {
 
@@ -63,6 +69,7 @@ public class ClothConfigFactory {
         if (value.isString()) {
             var newOption = entryBuilder.startStrField(fieldName(field, currentCategory), value.getAsString())
                     .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+                    .setTooltip(fieldTooltip(field, currentCategory))
                     .setDefaultValue((String) getDefaultValue(field, prevKey, prevPrevKey, "string"))
                     .build();
             addEntry(newOption, category);
@@ -83,12 +90,14 @@ public class ClothConfigFactory {
                     var newOption = entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .setDefaultValue(defaultValue)
+                            .setTooltip(fieldTooltip(field, currentCategory))
                             .build();
                     addEntry(newOption, category);
                 }
                 else {
                     var newOption = entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+                            .setTooltip(fieldTooltip(field, currentCategory))
                             .build();
                     addEntry(newOption, category);
                 }
@@ -98,6 +107,7 @@ public class ClothConfigFactory {
                 if (!Objects.equals(field.getKey(), "infinity_version")) {
                     var newOption = entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
+                            .setTooltip(fieldTooltip(field, currentCategory))
                             .setDefaultValue((int) getDefaultValue(field, prevKey, prevPrevKey, "int"))
                             .build();
                     addEntry(newOption, category);
@@ -149,6 +159,56 @@ public class ClothConfigFactory {
         return Text.translatableWithFallback("config."+MOD_ID + "." + category + field.getKey(), fallback(field.getKey()));
     }
 
+    @Environment(EnvType.CLIENT)
+    public static Text[] fieldTooltip(Map.Entry<String, JsonElement> field, String category) {
+        if (Objects.equals(category, "general")) {
+            category = "";
+        }
+        else category = category + ".";
+        var translationKey = "config."+MOD_ID + "." + category + field.getKey() + ".description";
+        return createTooltip(translationKey).toArray(new Text[0]);
+    }
+
+    // Create a custom, potentially multi-line tooltip.
+    @Environment(EnvType.CLIENT)
+    public static List<Text> createTooltip(String loreKey) {
+        //Setup list to store (potentially multi-line) tooltip.
+        ArrayList<Text> lines = new ArrayList<>();
+        int maxLength = 40;
+        //Check if the key exists.
+        if (!loreKey.isEmpty()) {
+            //Translate the lore key.
+            String translatedKey = I18n.translate(loreKey);
+            //Check if the translated key exists.
+            if (hasTranslation(loreKey)) {
+                //Check if custom wrapping should be used.
+                //Any tooltip longer than XX characters should be shortened.
+                while (translatedKey.length() >= maxLength) {
+                    //Find how much to shorten the tooltip by.
+                    int index = getIndex(translatedKey, maxLength);
+                    //Add a shortened tooltip.
+                    lines.add(Text.literal(translatedKey.substring(0, index)));
+                    //Remove the shortened tooltip substring from the tooltip. Repeat.
+                    translatedKey = translatedKey.substring(index);
+                }
+                //Add the final tooltip.
+                lines.add(Text.literal(translatedKey));
+            }
+        }
+        return lines;
+    }
+
+    //Handles detection of when a line break should be added in a tooltip.
+    public static int getIndex(String translatedKey, int maxLength) {
+        String subKey = translatedKey.substring(0, maxLength);
+        int index;
+        //Find the last space character in the substring, if not, default to the length of the substring.
+        if (subKey.contains(" ")) {
+            index = subKey.lastIndexOf(" ")+1;
+        }
+        else index = maxLength;
+        return index;
+    }
 
     // Enable and disable Easter Egg dimensions.
     public static <T> Consumer<T> mapSetter(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField) {
