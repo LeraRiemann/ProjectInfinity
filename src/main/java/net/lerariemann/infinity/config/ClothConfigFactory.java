@@ -79,6 +79,7 @@ public class ClothConfigFactory {
             var newOption = entryBuilder.startBooleanToggle(fieldName(field, currentCategory), value.getAsBoolean())
                     .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                     .setDefaultValue((boolean) getDefaultValue(field, prevKey, prevPrevKey, "boolean"))
+                    .setTooltip(fieldTooltip(field, currentCategory))
                     .build();
             addEntry(newOption, category);
         }
