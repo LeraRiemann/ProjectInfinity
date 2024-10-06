@@ -3,8 +3,11 @@ package net.lerariemann.infinity.config;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import me.shedaniel.clothconfig2.api.ConfigCategory;
+import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.gui.screen.Screen;
@@ -18,7 +21,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -27,60 +29,68 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ClothConfigFactory {
-    public static void addElement(Map.Entry<String, JsonElement> field, Map.Entry<String, JsonElement> prevField, ConfigBuilder builder, Map.Entry<String, JsonElement> prevPrevField) {
+
+
+    public static void addElement(Map.Entry<String, JsonElement> field, Map.Entry<String, JsonElement> prevField, ConfigBuilder builder, Map.Entry<String, JsonElement> prevPrevField, ConfigCategory category) {
         String currentCategory;
         if (prevField == null) currentCategory = "general";
         else currentCategory = prevField.getKey();
-        var value = field.getValue().getAsJsonPrimitive();
 
-        var category = builder.getOrCreateCategory(Text.translatable("config.infinity.title." + currentCategory));
-        var entryBuilder = builder.entryBuilder();
+        if (prevPrevField != null) currentCategory = prevPrevField.getKey();
+
+        JsonPrimitive value = field.getValue().getAsJsonPrimitive();
+
+        ConfigEntryBuilder entryBuilder = builder.entryBuilder();
         String prevKey = null;
         String prevPrevKey = null;
         if (prevField != null) {
             prevKey = prevField.getKey();
         }
-        if (prevPrevField != null) {
-            prevPrevKey = prevPrevField.getKey();
-        }
 
         if (value.isString()) {
-            category.addEntry(entryBuilder.startStrField(fieldName(field, currentCategory), value.getAsString())
+            var newOption = entryBuilder.startStrField(fieldName(field, currentCategory), value.getAsString())
                     .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                     .setDefaultValue((String) getDefaultValue(field, prevKey, prevPrevKey, "string"))
-                    .build());
+                    .build();
+                category.addEntry(newOption);
         }
         else if (value.isBoolean()) {
-            category.addEntry(entryBuilder.startBooleanToggle(fieldName(field, currentCategory), value.getAsBoolean())
+            var newOption = entryBuilder.startBooleanToggle(fieldName(field, currentCategory), value.getAsBoolean())
                     .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                     .setDefaultValue((boolean) getDefaultValue(field, prevKey, prevPrevKey, "boolean"))
-                    .build());
+                    .build();
+            category.addEntry(newOption);
         }
         else if (value.isNumber()) {
             if (value.getAsString().contains(".")) {
                 double defaultValue = (double) getDefaultValue(field, prevKey, prevPrevKey, "double");
                 //Some root chances do not exist in the JAR.
                 if (defaultValue != 0.0f) {
-                    category.addEntry(entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
+                    var newOption = entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .setDefaultValue(defaultValue)
-                            .build());
+                            .build();
+                    category.addEntry(newOption);
                 }
                 else {
-                    category.addEntry(entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
+                    var newOption = entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
-                            .build());
+                            .build();
+                    category.addEntry(newOption);
                 }
+
             }
             else {
                 if (!Objects.equals(field.getKey(), "infinity_version")) {
-                    category.addEntry(entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
+                    var newOption = entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .setDefaultValue((int) getDefaultValue(field, prevKey, prevPrevKey, "int"))
-                            .build());
+                            .build();
+                    category.addEntry(newOption);
                 }
             }
         }
+
     }
 
     public static Screen create(Screen parent) {
@@ -90,18 +100,23 @@ public class ClothConfigFactory {
 
         for (var field : readRootConfigJSON().getAsJsonObject().entrySet()) {
             if (field.getValue().isJsonPrimitive()) {
-                addElement(field, null, builder, null);
+                ConfigCategory category = builder.getOrCreateCategory(Text.translatable("config.infinity.title.general"));
+                addElement(field, null, builder, null, category);
             }
             else {
                 for (var field2 : field.getValue().getAsJsonObject().entrySet()) {
                     if (field2.getValue().isJsonPrimitive()) {
-                        addElement(field2, field, builder, null);
+                        ConfigCategory category = builder.getOrCreateCategory(Text.translatable("config.infinity.title." + field.getKey()));
+                        addElement(field2, field, builder, null, category);
 
                     }
                     else {
+                        ConfigCategory category = builder.getOrCreateCategory(Text.translatable("config.infinity.title."+field.getKey()));
+                        ConfigCategory subCategory = category.addEntry(builder.entryBuilder().startSubCategory(Text.translatable("config.infinity.title."+field2.getKey())).build());
+
                         for (var field3 : field2.getValue().getAsJsonObject().entrySet()) {
                             if (field3.getValue().isJsonPrimitive()) {
-                                addElement(field3, field2, builder, field);
+                                addElement(field3, field2, builder, field, subCategory);
                             }
                         }
                     }
