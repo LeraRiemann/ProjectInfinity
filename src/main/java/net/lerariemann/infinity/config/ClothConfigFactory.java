@@ -111,12 +111,13 @@ public class ClothConfigFactory {
             NbtCompound rootConfig = readRootConfig();
             NbtCompound configPath = rootConfig;
             if (t != field.getValue()) {
-                if (prevPrevField != null) {
-                    configPath = configPath.getCompound(prevPrevField);
-                }
                 if (prevField != null) {
                     configPath = rootConfig.getCompound(prevField);
                 }
+                if (prevPrevField != null) {
+                    configPath = rootConfig.getCompound(prevPrevField).getCompound(prevField);
+                }
+
                 if (t instanceof String) {
                     configPath.putString(field.getKey(), (String) t);
                 }
@@ -141,12 +142,13 @@ public class ClothConfigFactory {
     public static Object getDefaultValue(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField, String type) {
         NbtCompound rootConfig = readDefaultConfig();
         NbtCompound configPath = rootConfig;
-        if (prevPrevField != null) {
-            configPath = configPath.getCompound(prevPrevField);
-        }
         if (prevField != null) {
             configPath = rootConfig.getCompound(prevField);
         }
+        if (prevPrevField != null) {
+            configPath = rootConfig.getCompound(prevPrevField).getCompound(prevField);
+        }
+
 
         if (Objects.equals(type, "string")) {
             return configPath.getString(field.getKey());
