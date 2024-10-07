@@ -14,6 +14,9 @@ import net.minecraft.world.gen.placementmodifier.AbstractConditionalPlacementMod
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
 
+import static net.lerariemann.infinity.PlatformMethods.freeze;
+import static net.lerariemann.infinity.PlatformMethods.unfreeze;
+
 public class ModPlacementModifiers {
     public static class CenterProximityPlacementModifier extends AbstractConditionalPlacementModifier {
         public static final MapCodec<CenterProximityPlacementModifier> MODIFIER_CODEC = (Codecs.POSITIVE_INT.fieldOf("radius")).xmap(
@@ -38,13 +41,14 @@ public class ModPlacementModifiers {
             return PlacementModifierType.RARITY_FILTER;
         }
     }
-    @ExpectPlatform
+
     static <P extends PlacementModifier> PlacementModifierType<P> register(String id, MapCodec<P> codec) {
-        throw new AssertionError();
+        return Registry.register(Registries.PLACEMENT_MODIFIER_TYPE, InfinityMod.getId(id), () -> codec);
     }
 
-    @ExpectPlatform
     public static void registerModifiers() {
-        throw new AssertionError();
+        unfreeze(Registries.PLACEMENT_MODIFIER_TYPE);
+        register("center_proximity", ModPlacementModifiers.CenterProximityPlacementModifier.MODIFIER_CODEC);
+        freeze(Registries.PLACEMENT_MODIFIER_TYPE);
     }
 }

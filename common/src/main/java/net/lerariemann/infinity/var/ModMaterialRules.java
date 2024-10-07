@@ -19,6 +19,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
 
+import static net.lerariemann.infinity.PlatformMethods.freeze;
+import static net.lerariemann.infinity.PlatformMethods.unfreeze;
 import static net.lerariemann.infinity.util.ConfigManager.getConfigDir;
 
 public class ModMaterialRules {
@@ -174,14 +176,16 @@ public class ModMaterialRules {
         }
     }
 
-    @ExpectPlatform
     public static <T extends CodecHolder<? extends MaterialRules.MaterialRule>> void register(String name, T holder) {
-        throw new AssertionError();
+        Registry.register(Registries.MATERIAL_RULE, InfinityMod.MOD_ID + ":" + name, holder.codec());
     }
 
     public static void registerRules() {
+        unfreeze(Registries.MATERIAL_RULE);
         register("chaos", RandomBlockMaterialRule.CODEC);
         register("library", LibraryRule.CODEC);
         register("backrooms", BackroomsRule.CODEC);
+        freeze(Registries.MATERIAL_RULE);
+
     }
 }

@@ -14,6 +14,9 @@ import net.minecraft.world.gen.densityfunction.DensityFunction;
 
 import java.util.Arrays;
 
+import static net.lerariemann.infinity.PlatformMethods.freeze;
+import static net.lerariemann.infinity.PlatformMethods.unfreeze;
+
 public class ModDensityFunctionTypes {
     interface Nonbinary extends DensityFunction {
         DensityFunction input();
@@ -308,12 +311,12 @@ public class ModDensityFunctionTypes {
         public CodecHolder<? extends DensityFunction> getCodecHolder() { return CODEC_HOLDER; }
     }
 
-    @ExpectPlatform
     public static <T extends DensityFunction> void register(String name, CodecHolder<T> holder) {
-        throw new AssertionError();
+        Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":" + name, holder.codec());
     }
 
     public static void registerFunctions() {
+        unfreeze(Registries.DENSITY_FUNCTION_TYPE);
         for (NonbinaryOperation.Type enum_ : NonbinaryOperation.Type.values()) {
             register(enum_.name, enum_.codecHolder);
         }
@@ -322,5 +325,7 @@ public class ModDensityFunctionTypes {
         register("skygrid", Skygrid.CODEC_HOLDER);
         register("library", Library.CODEC_HOLDER);
         register("classic", Classic.CODEC_HOLDER);
+        freeze(Registries.DENSITY_FUNCTION_TYPE);
     }
+
 }

@@ -12,6 +12,9 @@ import net.lerariemann.infinity.mixin.MaterialRuleContextAccess;
 
 import java.util.*;
 
+import static net.lerariemann.infinity.PlatformMethods.freeze;
+import static net.lerariemann.infinity.PlatformMethods.unfreeze;
+
 public class ModMaterialConditions {
     public record LinearCondition(double k_x, double k_y, double k_z, double min, double max, int separation) implements MaterialRules.MaterialCondition
     {
@@ -292,8 +295,11 @@ public class ModMaterialConditions {
         }
     }
 
-    @ExpectPlatform
     public static void registerConditions() {
-        throw new AssertionError();
+        unfreeze(Registries.MATERIAL_CONDITION);
+        Registry.register(Registries.MATERIAL_CONDITION, "infinity:linear", net.lerariemann.infinity.var.ModMaterialConditions.LinearCondition.CODEC.codec());
+        Registry.register(Registries.MATERIAL_CONDITION, "infinity:checkerboard", net.lerariemann.infinity.var.ModMaterialConditions.CheckerboardCondition.CODEC.codec());
+        Registry.register(Registries.MATERIAL_CONDITION, "infinity:text", net.lerariemann.infinity.var.ModMaterialConditions.TextCondition.CODEC.codec());
+        freeze(Registries.MATERIAL_CONDITION);
     }
 }
