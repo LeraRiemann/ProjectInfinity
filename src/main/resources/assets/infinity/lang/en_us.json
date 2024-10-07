@@ -44,7 +44,7 @@
   "config.infinity.rootChances.features_rules.banded_shapes.description": "This setting controls whether large balls made of coloured blocks are arranged in a perlin noise map or in diagonal bands.",
   "config.infinity.rootChances.dimension_type.piglin_safe.description": "This setting controls the percentage of dimensions where Piglins are not converted into Zombie Piglins.",
   "config.infinity.rootChances.dimension_type.bed_works.description": "This setting controls the percentage of dimensions where beds do not explode.",
-  "config.infinity.rootChances.dimension_type.natural.description": "",
+  "config.infinity.rootChances.dimension_type.natural.description": "This setting controls the percentage of dimensions that are considered natural. In unnatural dimensions, compasses spin randomly and beds explode. In natural dimensions, Nether Portals can spawn Zombified Piglins.",
   "config.infinity.rootChances.dimension_type.fixed_time.description": "This setting controls the percentage of dimensions where time does not pass.",
   "config.infinity.rootChances.dimension_type.has_raids.description": "This setting controls the percentage of dimensions where raids can take place.",
   "config.infinity.rootChances.dimension_type.uses_shaders.description": "This setting controls the percentage of dimensions where the camera is affected by a custom shader.",
