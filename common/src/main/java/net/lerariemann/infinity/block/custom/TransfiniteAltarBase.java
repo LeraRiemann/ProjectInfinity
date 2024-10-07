@@ -62,7 +62,7 @@ public class TransfiniteAltarBase extends Block {
     }
 
     public static void ignite(World world, BlockPos pos, BlockState state) {
-        world.setBlockState(pos, ModBlocks.ALTAR_LIT.get().getDefaultState().with(FLOWER, state.get(FLOWER)));
+        world.setBlockState(pos, ModBlocks.ALTAR_LIT.getDefaultState().with(FLOWER, state.get(FLOWER)));
         world.playSound(null, pos, SoundEvents.ITEM_TOTEM_USE, SoundCategory.BLOCKS, 1f, 1f);
     }
 

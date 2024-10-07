@@ -56,7 +56,7 @@ public class ModMaterialRules {
     public static class Library implements MaterialRules.BlockStateRule
     {
         static final BlockState floor = Blocks.OAK_SLAB.getDefaultState();
-        static final BlockState wall = ModBlocks.BOOK_BOX.get().getDefaultState();
+        static final BlockState wall = ModBlocks.BOOK_BOX.getDefaultState();
         static final BlockState decor = Blocks.GLOWSTONE.getDefaultState();
         static final BlockState glass = Blocks.OAK_TRAPDOOR.getDefaultState();
         static final BlockState column = Blocks.OAK_PLANKS.getDefaultState();

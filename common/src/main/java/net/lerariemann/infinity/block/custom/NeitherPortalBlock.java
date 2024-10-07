@@ -80,7 +80,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     }
 
     private static void changeDim(World world, BlockPos pos, Direction.Axis axis, long i, boolean open) {
-        world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.get().getDefaultState().with(AXIS, axis));
+        world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.getDefaultState().with(AXIS, axis));
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity != null) {
             ((NeitherPortalBlockEntity)blockEntity).setDimension(i);

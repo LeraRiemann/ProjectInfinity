@@ -36,6 +36,11 @@ public class CosmicAltarEntity extends BlockEntity {
         map = new HashMap<>();
     }
 
+    @Override
+    public boolean supports(BlockState state) {
+        return true;
+    }
+
     public static void serverTick(World world, BlockPos pos, BlockState state, CosmicAltarEntity be) {
         MinecraftServerAccess a = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer())));
         if(be.time == 0) {

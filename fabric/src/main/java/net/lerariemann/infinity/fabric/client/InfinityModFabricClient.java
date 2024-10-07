@@ -37,7 +37,7 @@ public class InfinityModFabricClient implements ClientModInitializer {
 //            }
 //            return 16777215;
 //        }, ModBlocks.NEITHER_PORTAL.get());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX.value(), RenderLayer.getCutoutMipped());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX, RenderLayer.getCutoutMipped());
 //        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_BOMB, RenderLayer.getTranslucent());
 //        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
 //            if (pos != null) {

@@ -30,7 +30,7 @@ public class PlayerManagerMixin {
             int y = serverWorld2.getTopY() - 10;
             BlockPos pos = new BlockPos(player.getBlockX(), y, player.getBlockY());
             BlockState st = serverWorld2.getBlockState(pos);
-            serverWorld2.setBlockState(pos, ModBlocks.ALTAR_COSMIC.get().getDefaultState());
+            serverWorld2.setBlockState(pos, ModBlocks.ALTAR_COSMIC.getDefaultState());
             serverWorld2.getBlockEntity(pos, ModBlockEntities.ALTAR_COSMIC).ifPresent(e -> e.addNull(st));
             acc.projectInfinity$onInvocation();
         }
