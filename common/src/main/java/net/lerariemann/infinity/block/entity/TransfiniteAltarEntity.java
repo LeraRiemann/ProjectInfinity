@@ -21,7 +21,7 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
     public static Random r = new Random();
 
     public TransfiniteAltarEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.ALTAR, pos, state);
+        super(ModBlockEntities.ALTAR.get(), pos, state);
     }
 
     public static void remove(World world, BlockPos pos, TransfiniteAltarEntity be) {

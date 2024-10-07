@@ -15,7 +15,7 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     private boolean isOpen;
 
     public NeitherPortalBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.NEITHER_PORTAL, pos, state);
+        super(ModBlockEntities.NEITHER_PORTAL.get(), pos, state);
         this.propertyDelegate = new PropertyDelegate() {
             public int get(int index) {
                 if (index == 0) {
@@ -41,6 +41,7 @@ public class NeitherPortalBlockEntity extends BlockEntity {
         this.dimension = i;
         this.isOpen = false;
     }
+
 
     public long getDimension() {
         return this.dimension;

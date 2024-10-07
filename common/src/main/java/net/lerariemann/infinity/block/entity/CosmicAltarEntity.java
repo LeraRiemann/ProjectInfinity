@@ -31,7 +31,7 @@ public class CosmicAltarEntity extends BlockEntity {
         map = new HashMap<>();
     }
     public CosmicAltarEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.ALTAR_COSMIC, pos, state);
+        super(ModBlockEntities.ALTAR_COSMIC.get(), pos, state);
         time = 0;
         map = new HashMap<>();
     }
