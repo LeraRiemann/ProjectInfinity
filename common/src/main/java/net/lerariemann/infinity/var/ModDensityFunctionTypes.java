@@ -3,6 +3,7 @@ package net.lerariemann.infinity.var;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -307,8 +308,9 @@ public class ModDensityFunctionTypes {
         public CodecHolder<? extends DensityFunction> getCodecHolder() { return CODEC_HOLDER; }
     }
 
+    @ExpectPlatform
     public static <T extends DensityFunction> void register(String name, CodecHolder<T> holder) {
-        Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":" + name, holder.codec());
+        throw new AssertionError();
     }
 
     public static void registerFunctions() {

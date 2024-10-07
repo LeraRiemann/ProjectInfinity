@@ -7,7 +7,8 @@ import net.minecraft.block.Block;
 import net.minecraft.world.poi.PointOfInterestType;
 
 public class ModPoiImpl {
-    public static PointOfInterestType register(String name, Block block) {
-        return PointOfInterestHelper.register(InfinityMod.getId(name), 0, 1, ImmutableSet.copyOf(block.getStateManager().getStates()));
-    }
+    //TODO reimplement
+//    public static PointOfInterestType register(String name, Block block) {
+//        return PointOfInterestHelper.register(InfinityMod.getId(name), 0, 1, ImmutableSet.copyOf(block.getStateManager().getStates()));
+//    }
 }

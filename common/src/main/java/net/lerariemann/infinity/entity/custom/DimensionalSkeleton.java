@@ -104,21 +104,22 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
                 itemStack.decrement(1);
             }
             Random r = new Random();
-            if (r.nextFloat() < 0.5) {
-                DimensionalSkeleton newSkeleton;
-                if (!this.getWorld().isClient() && (newSkeleton = ModEntities.DIMENSIONAL_SKELETON.create(this.getWorld())) != null) {
-                    ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
-                    this.discard();
-                    ModEntities.copy(this, newSkeleton);
-                    newSkeleton.setDuration(this.getDuration());
-                    String i = effect_lookup.get(this.getEffectRaw());
-                    StatusEffect e = reg.get(Identifier.of(i));
-                    newSkeleton.setEffectRaw(i);
-                    if (e!= null) newSkeleton.setColorRaw(e.getColor());
-                    this.getWorld().spawnEntity(newSkeleton);
-                    return ActionResult.SUCCESS;
-                }
-            }
+            //TODO reimplement
+//            if (r.nextFloat() < 0.5) {
+//                DimensionalSkeleton newSkeleton;
+//                if (!this.getWorld().isClient() && (newSkeleton = ModEntities.DIMENSIONAL_SKELETON.create(this.getWorld())) != null) {
+//                    ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+//                    this.discard();
+//                    ModEntities.copy(this, newSkeleton);
+//                    newSkeleton.setDuration(this.getDuration());
+//                    String i = effect_lookup.get(this.getEffectRaw());
+//                    StatusEffect e = reg.get(Identifier.of(i));
+//                    newSkeleton.setEffectRaw(i);
+//                    if (e!= null) newSkeleton.setColorRaw(e.getColor());
+//                    this.getWorld().spawnEntity(newSkeleton);
+//                    return ActionResult.SUCCESS;
+//                }
+//            }
         }
         if (itemStack.isOf(Items.GLASS_BOTTLE)) {
             ItemStack itemStack2 = setPotion(Items.LINGERING_POTION.getDefaultStack(), this.getColor(), this.getEffectRaw(), this.getDuration() * 60);
