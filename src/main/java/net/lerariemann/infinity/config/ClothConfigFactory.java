@@ -49,10 +49,20 @@ public class ClothConfigFactory {
 
     public static void addElement(Map.Entry<String, JsonElement> field, Map.Entry<String, JsonElement> prevField, ConfigBuilder builder, Map.Entry<String, JsonElement> prevPrevField, Object category) {
         String currentCategory;
-        if (prevField == null) currentCategory = "general";
-        else currentCategory = prevField.getKey();
+        String nestedCurrentCategory = "";
+        if (prevField == null) {
+            currentCategory = "general";
+        }
+        else {
+            currentCategory = prevField.getKey();
+            nestedCurrentCategory = "";
+        }
 
-        if (prevPrevField != null) currentCategory = prevPrevField.getKey();
+        if (prevPrevField != null) {
+            currentCategory = prevPrevField.getKey();
+            assert prevField != null;
+            nestedCurrentCategory = prevField.getKey();
+        }
 
         JsonPrimitive value = field.getValue().getAsJsonPrimitive();
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
@@ -69,7 +79,7 @@ public class ClothConfigFactory {
         if (value.isString()) {
             var newOption = entryBuilder.startStrField(fieldName(field, currentCategory), value.getAsString())
                     .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
-                    .setTooltip(fieldTooltip(field, currentCategory))
+                    .setTooltip(fieldTooltip(field, currentCategory, nestedCurrentCategory))
                     .setDefaultValue((String) getDefaultValue(field, prevKey, prevPrevKey, "string"))
                     .build();
             addEntry(newOption, category);
@@ -79,7 +89,7 @@ public class ClothConfigFactory {
             var newOption = entryBuilder.startBooleanToggle(fieldName(field, currentCategory), value.getAsBoolean())
                     .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                     .setDefaultValue((boolean) getDefaultValue(field, prevKey, prevPrevKey, "boolean"))
-                    .setTooltip(fieldTooltip(field, currentCategory))
+                    .setTooltip(fieldTooltip(field, currentCategory, nestedCurrentCategory))
                     .build();
             addEntry(newOption, category);
         }
@@ -91,14 +101,14 @@ public class ClothConfigFactory {
                     var newOption = entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .setDefaultValue(defaultValue)
-                            .setTooltip(fieldTooltip(field, currentCategory))
+                            .setTooltip(fieldTooltip(field, currentCategory, nestedCurrentCategory))
                             .build();
                     addEntry(newOption, category);
                 }
                 else {
                     var newOption = entryBuilder.startDoubleField(fieldName(field, currentCategory), value.getAsDouble())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
-                            .setTooltip(fieldTooltip(field, currentCategory))
+                            .setTooltip(fieldTooltip(field, currentCategory, nestedCurrentCategory))
                             .build();
                     addEntry(newOption, category);
                 }
@@ -108,7 +118,7 @@ public class ClothConfigFactory {
                 if (!Objects.equals(field.getKey(), "infinity_version")) {
                     var newOption = entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
-                            .setTooltip(fieldTooltip(field, currentCategory))
+                            .setTooltip(fieldTooltip(field, currentCategory, nestedCurrentCategory))
                             .setDefaultValue((int) getDefaultValue(field, prevKey, prevPrevKey, "int"))
                             .build();
                     addEntry(newOption, category);
@@ -161,12 +171,17 @@ public class ClothConfigFactory {
     }
 
     @Environment(EnvType.CLIENT)
-    public static Text[] fieldTooltip(Map.Entry<String, JsonElement> field, String category) {
+    public static Text[] fieldTooltip(Map.Entry<String, JsonElement> field, String category, String nested) {
         if (Objects.equals(category, "general")) {
             category = "";
         }
         else category = category + ".";
-        var translationKey = "config."+MOD_ID + "." + category + field.getKey() + ".description";
+        if (!Objects.equals(nested, "")) {
+            nested += ".";
+        }
+        var translationKey = "config."+MOD_ID + "." + category + nested + field.getKey() + ".description";
+        if (!I18n.hasTranslation(translationKey))
+            return new Text[]{Text.of(translationKey)};
         return createTooltip(translationKey).toArray(new Text[0]);
     }
 
