@@ -42,7 +42,6 @@
   "config.infinity.rootChances.features_rules.exact_gateways.description": "This setting controls the chance that an End Gateway will teleport you to exact coordinates without regards to if you'll get stuck in a wall there. Otherwise, it will at least try to find a safe spot nearby.",
   "config.infinity.rootChances.features_rules.colourful_shapes.description": "This setting controls whether the large balls that spawn being of one random block or of a bunch of colored blocks.",
   "config.infinity.rootChances.features_rules.banded_shapes.description": "This setting controls whether large balls made of coloured blocks are arranged in a perlin noise map or in diagonal bands.",
-
   "config.infinity.rootChances.dimension_type.piglin_safe.description": "This setting controls the percentage of dimensions where Piglins are not converted into Zombie Piglins.",
   "config.infinity.rootChances.dimension_type.bed_works.description": "This setting controls the percentage of dimensions where beds do not explode.",
   "config.infinity.rootChances.dimension_type.natural.description": "",
@@ -52,7 +51,6 @@
   "config.infinity.rootChances.dimension_type.ultrawarm.description": "This setting controls the percentage of dimensions where water cannot be placed.",
   "config.infinity.rootChances.dimension_type.respawn_anchor_works.description": "This setting controls the percentage of dimensions where Respawn Anchors will not explode.",
   "config.infinity.rootChances.dimension_type.has_skylight.description": "This setting controls the percentage of dimensions where sunlight is applied.",
-
   "config.infinity.rootChances.biome.has_precipitation.description": "",
   "config.infinity.rootChances.biome.use_random_biome.description": "This setting controls the percentage chance to make a new random biome instead of choosing one from /modular/.../misc/biomes.json.",
   "config.infinity.rootChances.biome.use_sparse_vegetation.description": "This setting controls the percentage chance for a random biome to have individually standing sparse trees instead of being densely forested.",
@@ -64,8 +62,16 @@
   "config.infinity.rootChances.biome.temperature_modifier_frozen.description": "",
   "config.infinity.rootChances.biome.use_random_cave.description": "This setting controls the percentage chance the mod will try to generate a random cave carver utility. These behave like legacy noodle caves from before 1.18, however the mod can throw in such wild values that the world becomes shredded.",
   "config.infinity.rootChances.biome.use_random_canyon.description": "This setting controls the percentage chance the mod will try to generate a random canyon carver utility. These behave like legacy noodle ravines from before 1.18, however the mod can throw in such wild values that the world becomes shredded.",
-
-
+  "config.infinity.rootChances.structures.full_box.description": "This setting controls the percentage that spawn_override settings are applied to the entire structure, or to parts of it.",
+  "config.infinity.rootChances.structures.mineshafts_mesa.description": "This setting controls the percentage that Mineshafts spawn with the Dark Oak variant.",
+  "config.infinity.rootChances.structures.triangular_spread.description": "This setting controls the percentage that structure positions have smaller offsets than the usual uniformly distributed offsets from the points on a large grid.",
+  "config.infinity.rootChances.structures.ruins_warm.description": "This setting controls the percentage that ocean ruins spawn with the sandstone variant.",
+  "config.infinity.rootChances.structures.shipwrecks_beach.description": "This setting controls the percentage that shipwrecks to spawn with the beached variant.",
+  "config.infinity.rootChances.structures.portal_blackstone.description": "This setting controls the percentage that ruined Portals to spawn with the blackstone variant.",
+  "config.infinity.rootChances.structures.portal_overgrown.description": "This setting controls the percentage that ruined Portals to spawn with the overgrown variant.",
+  "config.infinity.rootChances.structures.spawn_override.description": "This setting controls the percentage that structures like Nether Fortresses spawn regular mobs instead of Blazes and Wither Skeletons.",
+  "config.infinity.rootChances.structures.portal_vines.description": "This setting controls the percentage that ruined Portals to spawn with the vines variant.",
+  "config.infinity.rootChances.structures.portal_cold.description": "This setting controls the percentage that ruined Portals to spawn with the cold variant.",
   "block.infinity.neither_portal": "Infinity Portal",
   "block.infinity.book_box": "Box of Infinite Books",
   "block.infinity.altar_lit": "Lit Transfinite Altar",
