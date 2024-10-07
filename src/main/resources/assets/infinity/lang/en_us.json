@@ -43,6 +43,17 @@
   "config.infinity.rootChances.features_rules.colourful_shapes.description": "This setting controls whether the large balls that spawn being of one random block or of a bunch of colored blocks.",
   "config.infinity.rootChances.features_rules.banded_shapes.description": "This setting controls whether large balls made of coloured blocks are arranged in a perlin noise map or in diagonal bands.",
 
+  "config.infinity.rootChances.dimension_type.piglin_safe.description": "This setting controls the percentage of dimensions where Piglins are not converted into Zombie Piglins.",
+  "config.infinity.rootChances.dimension_type.bed_works.description": "This setting controls the percentage of dimensions where beds do not explode.",
+  "config.infinity.rootChances.dimension_type.natural.description": "",
+  "config.infinity.rootChances.dimension_type.fixed_time.description": "This setting controls the percentage of dimensions where time does not pass.",
+  "config.infinity.rootChances.dimension_type.has_raids.description": "This setting controls the percentage of dimensions where raids can take place.",
+  "config.infinity.rootChances.dimension_type.uses_shaders.description": "This setting controls the percentage of dimensions where the camera is affected by a custom shader.",
+  "config.infinity.rootChances.dimension_type.ultrawarm.description": "This setting controls the percentage of dimensions where water cannot be placed.",
+  "config.infinity.rootChances.dimension_type.respawn_anchor_works.description": "This setting controls the percentage of dimensions where Respawn Anchors will not explode.",
+  "config.infinity.rootChances.dimension_type.has_skylight.description": "This setting controls the percentage of dimensions where sunlight is applied.",
+
+
   "block.infinity.neither_portal": "Infinity Portal",
   "block.infinity.book_box": "Box of Infinite Books",
   "block.infinity.altar_lit": "Lit Transfinite Altar",

@@ -180,8 +180,8 @@ public class ClothConfigFactory {
             nested += ".";
         }
         var translationKey = "config."+MOD_ID + "." + category + nested + field.getKey() + ".description";
-        if (!I18n.hasTranslation(translationKey))
-            return new Text[]{Text.of(translationKey)};
+//        if (!I18n.hasTranslation(translationKey))
+//            return new Text[]{Text.of(translationKey)};
         return createTooltip(translationKey).toArray(new Text[0]);
     }
 
