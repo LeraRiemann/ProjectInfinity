@@ -1,10 +1,10 @@
-package me.basiqueevangelist.dynreg.util.neoforge;
+package me.basiqueevangelist.dynreg.util;
 
 import me.basiqueevangelist.dynreg.access.ExtendedRegistry;
 import net.minecraft.registry.Registry;
 
-public final class RegistryUtilsImpl {
-    private RegistryUtilsImpl() {
+public final class RegistryUtils {
+    private RegistryUtils() {
 
     }
     public static void unfreeze(Registry<?> registry) {

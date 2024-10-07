@@ -9,8 +9,12 @@ import net.minecraft.structure.StructurePieceType;
 import net.minecraft.world.gen.structure.StructureType;
 
 public class ModStructureTypeImpl {
+    private static StructurePieceType register(StructurePieceType.Simple type, String id) {
+        return register((StructurePieceType)type, id);
+    }
+
     public static StructurePieceType register(StructurePieceType type, String id) {
-        ((BaseMappedRegistryAccessor) Registries.STRUCTURE_TYPE).invokeUnfreeze();
+        ((BaseMappedRegistryAccessor) Registries.STRUCTURE_PIECE).invokeUnfreeze();
 
         return Registry.register(Registries.STRUCTURE_PIECE, id, type);
     }

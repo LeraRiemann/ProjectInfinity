@@ -31,5 +31,7 @@ public class ModStructureType {
         PYRAMID = registerPyramid("pyramid");
         PYRAMID_PIECE = register(PyramidGenerator::new, "infinity:pypiece");
         Registries.STRUCTURE_TYPE.freeze();
+        Registries.STRUCTURE_PIECE.freeze();
+
     }
 }

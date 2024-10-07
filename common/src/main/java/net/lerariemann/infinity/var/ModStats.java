@@ -7,6 +7,8 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 
 import static net.lerariemann.infinity.InfinityMod.getId;
+import static net.lerariemann.infinity.PlatformMethods.freeze;
+import static net.lerariemann.infinity.PlatformMethods.unfreeze;
 
 public class ModStats {
     public static Identifier DIMS_OPENED = getId("dimensions_opened_stat");
@@ -23,10 +25,12 @@ public class ModStats {
     }
 
     public static void registerStats() {
+        unfreeze(Registries.CUSTOM_STAT);
         Registry.register(Registries.CUSTOM_STAT, DIMS_OPENED, DIMS_OPENED);
         Registry.register(Registries.CUSTOM_STAT, PORTALS_OPENED, PORTALS_OPENED);
         Registry.register(Registries.CUSTOM_STAT, WORLDS_DESTROYED, WORLDS_DESTROYED);
         ModStats.load();
+        freeze(Registries.CUSTOM_STAT);
     }
 }
 

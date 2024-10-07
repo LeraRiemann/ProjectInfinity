@@ -7,6 +7,9 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.SingleStateFeatureConfig;
 
+import static net.lerariemann.infinity.PlatformMethods.freeze;
+import static net.lerariemann.infinity.PlatformMethods.unfreeze;
+
 public class ModFeatures {
     public static Feature<SingleStateFeatureConfig> RANDOM_END_ISLAND;
     public static Feature<RandomDungeonFeatureConfig> RANDOM_DUNGEON;
@@ -24,6 +27,7 @@ public class ModFeatures {
 
     public static void registerFeatures() {
         InfinityMod.LOGGER.debug("Registering features for " + InfinityMod.MOD_ID);
+        unfreeze(Registries.FEATURE);
         RANDOM_END_ISLAND = register("random_end_island", new RandomEndIslandFeature(SingleStateFeatureConfig.CODEC));
         RANDOM_DUNGEON = register("random_dungeon", new RandomDungeonFeature(RandomDungeonFeatureConfig.CODEC));
         RANDOM_COLUMNS = register("random_columns", new RandomColumnsFeature(RandomColumnsFeatureConfig.CODEC));
@@ -33,5 +37,6 @@ public class ModFeatures {
         RANDOM_CUBE = register("random_cube", new RandomCubeFeature(RandomCubeFeatureConfig.CODEC));
         RANDOM_STAR = register("random_shape", new RandomShapeFeature(RandomShapeFeatureConfig.CODEC));
         RANDOM_TEXT = register("random_text", new TextFeature(TextFeatureConfig.CODEC));
+        freeze(Registries.FEATURE);
     }
 }

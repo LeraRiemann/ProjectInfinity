@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -26,6 +27,16 @@ public class PlatformMethods {
 
     @ExpectPlatform
     public static void onWorldLoad(Object mixin, ServerWorld world) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static void unfreeze(Registry<?> registry) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static void freeze(Registry<?> registry) {
         throw new AssertionError();
     }
 }

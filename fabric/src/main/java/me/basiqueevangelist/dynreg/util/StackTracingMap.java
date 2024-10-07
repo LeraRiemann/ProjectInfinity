@@ -1,4 +1,4 @@
-package me.basiqueevangelist.dynreg.util.neoforge;
+package me.basiqueevangelist.dynreg.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

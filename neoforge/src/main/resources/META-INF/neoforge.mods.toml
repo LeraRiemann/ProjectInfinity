@@ -36,6 +36,3 @@ side = "BOTH"
 
 [[mixins]]
 config = "infinity.mixins.json"
-
-[[mixins]]
-config = "neodynreg.mixins.json"

@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.loading;
 
 import com.mojang.serialization.Codec;
-import me.basiqueevangelist.dynreg.util.RegistryUtils;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.*;
@@ -20,6 +19,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static net.lerariemann.infinity.PlatformMethods.unfreeze;
+
 public class DimensionGrabber {
     RegistryOps.RegistryInfoGetter registryInfoGetter;
     DynamicRegistryManager baseRegistryManager;
@@ -27,12 +28,14 @@ public class DimensionGrabber {
     public DimensionGrabber(DynamicRegistryManager brm) {
         baseRegistryManager = brm;
         List<MutableRegistry<?>> entries = new ArrayList<>();
-        baseRegistryManager.streamAllRegistries().forEach((entry) -> {
-            RegistryUtils.unfreeze(entry.value());
-            entries.add((MutableRegistry<?>)entry.value());
-        });
+//        baseRegistryManager.streamAllRegistries().forEach((entry) -> {
+//            unfreeze(entry.value());
+//            entries.add((MutableRegistry<?>)entry.value());
+//        });
         registryInfoGetter = getGetter(entries);
     }
+
+
 
     public DimensionOptions grab_all(RandomDimension d) {
         Path rootdir = Paths.get(d.getStoragePath());

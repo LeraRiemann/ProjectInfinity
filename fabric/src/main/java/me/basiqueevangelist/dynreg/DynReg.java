@@ -1,4 +1,4 @@
-package me.basiqueevangelist.dynreg.util.neoforge;
+package me.basiqueevangelist.dynreg;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -14,6 +14,7 @@ public class DynReg implements ModInitializer {
         return Identifier.of(MODID, path);
     }
 
+    @Override
     public void onInitialize() {
         LoggerFactory.getLogger("DynReg").info("I have become DynReg, destroyer of immutability");
         ServerLifecycleEvents.SERVER_STARTING.register(server -> SERVER = server);

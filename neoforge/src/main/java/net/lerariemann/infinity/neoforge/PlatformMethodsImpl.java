@@ -2,8 +2,11 @@ package net.lerariemann.infinity.neoforge;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.mixin.registry.sync.BaseMappedRegistryAccessor;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -19,6 +22,16 @@ public class PlatformMethodsImpl {
 
     public static void onWorldLoad(Object mixin, ServerWorld world) {
         ServerWorldEvents.LOAD.invoker().onWorldLoad((MinecraftServer) mixin, world);
+    }
+
+    public static void unfreeze(Registry<?> registry) {
+        ((BaseMappedRegistryAccessor) registry).invokeUnfreeze();
+
+    }
+
+    public static void freeze(Registry<?> registry) {
+        registry.freeze();
+
     }
 
 }

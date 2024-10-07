@@ -12,6 +12,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Optional;
 
+import static net.lerariemann.infinity.PlatformMethods.freeze;
+import static net.lerariemann.infinity.PlatformMethods.unfreeze;
+
 public class ModCriteria {
     public static class DimensionOpenedCriterion extends AbstractCriterion<ScoredConditions> {
         @Override
@@ -74,8 +77,10 @@ public class ModCriteria {
     public static WhoRemainsCriterion WHO_REMAINS;
 
     public static void registerCriteria() {
+        unfreeze(Registries.CRITERION);
         DIMS_OPENED = Registry.register(Registries.CRITERION, InfinityMod.getId("dims_open"), new DimensionOpenedCriterion());
         DIMS_CLOSED = Registry.register(Registries.CRITERION, InfinityMod.getId("dims_closed"), new DimensionClosedCriterion());
         WHO_REMAINS = Registry.register(Registries.CRITERION, InfinityMod.getId("who_remains"), new WhoRemainsCriterion());
+        freeze(Registries.CRITERION);
     }
 }
