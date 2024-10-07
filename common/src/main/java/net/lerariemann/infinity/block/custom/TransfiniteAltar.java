@@ -68,7 +68,7 @@ public class TransfiniteAltar extends BlockWithEntity {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, ModBlockEntities.ALTAR, world.isClient ? null : TransfiniteAltarEntity::serverTick);
+        return validateTicker(type, ModBlockEntities.ALTAR.get(), world.isClient ? null : TransfiniteAltarEntity::serverTick);
     }
 
     public static void bumpAge(World world, BlockPos pos, BlockState state) {
