@@ -14,8 +14,8 @@ public class ModStructureTypeImpl {
 
         return Registry.register(Registries.STRUCTURE_PIECE, id, type);
     }
-    public static StructureType<PyramidStructure> registerPyramid() {
+    public static StructureType<PyramidStructure> registerPyramid(String id) {
         ((BaseMappedRegistryAccessor) Registries.STRUCTURE_TYPE).invokeUnfreeze();
-        return Registry.register(Registries.STRUCTURE_TYPE, InfinityMod.getId("pyramid"), () -> PyramidStructure.CODEC);
+        return Registry.register(Registries.STRUCTURE_TYPE, InfinityMod.getId(id), () -> PyramidStructure.CODEC);
     }
 }

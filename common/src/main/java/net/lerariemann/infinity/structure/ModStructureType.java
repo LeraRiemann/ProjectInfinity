@@ -22,13 +22,13 @@ public class ModStructureType {
     }
 
     @ExpectPlatform
-    public static StructureType<PyramidStructure> registerPyramid() {
+    public static StructureType<PyramidStructure> registerPyramid(String id) {
         throw new AssertionError();
     }
 
     public static void registerStructures() {
         InfinityMod.LOGGER.debug("Registering processors for " + InfinityMod.MOD_ID);
-        PYRAMID = registerPyramid();
+        PYRAMID = registerPyramid("pyramid");
         PYRAMID_PIECE = register(PyramidGenerator::new, "infinity:pypiece");
         Registries.STRUCTURE_TYPE.freeze();
     }
