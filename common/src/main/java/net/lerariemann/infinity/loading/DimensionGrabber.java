@@ -28,10 +28,10 @@ public class DimensionGrabber {
     public DimensionGrabber(DynamicRegistryManager brm) {
         baseRegistryManager = brm;
         List<MutableRegistry<?>> entries = new ArrayList<>();
-//        baseRegistryManager.streamAllRegistries().forEach((entry) -> {
-//            unfreeze(entry.value());
-//            entries.add((MutableRegistry<?>)entry.value());
-//        });
+        // baseRegistryManager.streamAllRegistries().forEach((entry) -> {
+        //     unfreeze(entry.value());
+        //     entries.add((MutableRegistry<?>)entry.value());
+        // });
         registryInfoGetter = getGetter(entries);
     }
 
@@ -67,6 +67,10 @@ public class DimensionGrabber {
     }
 
     DimensionOptions grab_dimension(Path rootdir, String i) {
+        unfreeze(RegistryKeys.DIMENSION);
+        unfreeze(RegistryKeys.DIMENSION_TYPE);
+        unfreeze(RegistryKeys.WORLD);
+
         DimensionOptions ret = buildGrabber(DimensionOptions.CODEC, RegistryKeys.DIMENSION).grab_with_return(rootdir.toString()+"/dimension", i, false);
         close();
         return ret;

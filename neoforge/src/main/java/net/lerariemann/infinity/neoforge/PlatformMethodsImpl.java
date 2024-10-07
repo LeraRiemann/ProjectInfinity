@@ -7,6 +7,8 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -29,8 +31,14 @@ public class PlatformMethodsImpl {
 
     }
 
+    public static void unfreeze(RegistryKey<?> registry) {
+        ((BaseMappedRegistryAccessor) registry.getRegistryRef()).invokeUnfreeze();
+
+    }
+
+
     public static void freeze(Registry<?> registry) {
-        registry.freeze();
+//        registry.freeze();
 
     }
 

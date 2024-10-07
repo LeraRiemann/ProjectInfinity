@@ -31,7 +31,6 @@ public class ModBlockEntities {
 
 
     public static void registerBlockEntities() {
-        unfreeze(Registries.BLOCK_ENTITY_TYPE);
         BLOCK_ENTITY_TYPES.register();
     }
 }
