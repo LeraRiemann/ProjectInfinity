@@ -37,14 +37,14 @@ public class InfinityModNeoForgeClient implements ClientModInitializer {
 //            }
 //            return 16777215;
 //        }, ModBlocks.NEITHER_PORTAL);
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX, RenderLayer.getCutoutMipped());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_BOMB, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX.get(), RenderLayer.getCutoutMipped());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_BOMB.get(), RenderLayer.getTranslucent());
         ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
             if (pos != null) {
                 return posToColor(pos);
             }
             return 16777215;
-        }, ModBlocks.BOOK_BOX);
+        }, ModBlocks.BOOK_BOX.get());
         InfinityModClient.init();
     }
 }

@@ -84,7 +84,7 @@ public class NetherPortalBlockMixin {
 			target = "Lnet/minecraft/server/MinecraftServer;getWorld(Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/server/world/ServerWorld;"))
 	private @Nullable ServerWorld injected(@Nullable ServerWorld original,
 										   @Local(argsOnly = true) ServerWorld world, @Local(argsOnly = true) BlockPos pos) {
-		if (!world.getBlockState(pos).isOf(ModBlocks.NEITHER_PORTAL)) {
+		if (!world.getBlockState(pos).isOf(ModBlocks.NEITHER_PORTAL.get())) {
 			if (!world.getRegistryKey().getValue().getNamespace().contains("infinity")) {
 				return original; //when teleportation should not be redirected
 			}

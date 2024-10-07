@@ -18,9 +18,9 @@ public class ModBlockEntities {
         return Util.getChoiceType(TypeReferences.BLOCK_ENTITY, id);
     }
 
-    public static BlockEntityType<NeitherPortalBlockEntity> NEITHER_PORTAL = BlockEntityType.Builder.create(NeitherPortalBlockEntity::new, ModBlocks.NEITHER_PORTAL).build(type("neither_portal"));
-    public static BlockEntityType<TransfiniteAltarEntity> ALTAR = BlockEntityType.Builder.create(TransfiniteAltarEntity::new, ModBlocks.ALTAR_LIT).build(type("altar_block_entity"));
-    public static BlockEntityType<CosmicAltarEntity> ALTAR_COSMIC = BlockEntityType.Builder.create(CosmicAltarEntity::new, ModBlocks.ALTAR_COSMIC).build(type("cosmic_block_entity"));
+    public static BlockEntityType<NeitherPortalBlockEntity> NEITHER_PORTAL = BlockEntityType.Builder.create(NeitherPortalBlockEntity::new, ModBlocks.NEITHER_PORTAL.get()).build(type("neither_portal"));
+    public static BlockEntityType<TransfiniteAltarEntity> ALTAR = BlockEntityType.Builder.create(TransfiniteAltarEntity::new, ModBlocks.ALTAR_LIT.get()).build(type("altar_block_entity"));
+    public static BlockEntityType<CosmicAltarEntity> ALTAR_COSMIC = BlockEntityType.Builder.create(CosmicAltarEntity::new, ModBlocks.ALTAR_COSMIC.get()).build(type("cosmic_block_entity"));
 
     public static void registerBlockEntities() {
         unfreeze(Registries.BLOCK_ENTITY_TYPE);
