@@ -2,6 +2,7 @@ package net.lerariemann.infinity.var;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Pair;
@@ -12,9 +13,9 @@ import net.lerariemann.infinity.mixin.MaterialRuleContextAccess;
 import java.util.*;
 
 public class ModMaterialConditions {
-    record LinearCondition(double k_x, double k_y, double k_z, double min, double max, int separation) implements MaterialRules.MaterialCondition
+    public record LinearCondition(double k_x, double k_y, double k_z, double min, double max, int separation) implements MaterialRules.MaterialCondition
     {
-        static final CodecHolder<LinearCondition> CODEC = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
+        public static final CodecHolder<LinearCondition> CODEC = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
                 (Codec.DOUBLE.fieldOf("k_x").orElse(1.0).forGetter(a -> a.k_x)),
                 (Codec.DOUBLE.fieldOf("k_y").orElse(0.0).forGetter(a -> a.k_y)),
                 (Codec.DOUBLE.fieldOf("k_z").orElse(1.0).forGetter(a -> a.k_z)),
@@ -51,9 +52,9 @@ public class ModMaterialConditions {
         }
     }
 
-    record CheckerboardCondition(int size) implements MaterialRules.MaterialCondition
+    public record CheckerboardCondition(int size) implements MaterialRules.MaterialCondition
     {
-        static final CodecHolder<CheckerboardCondition> CODEC = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
+        public static final CodecHolder<CheckerboardCondition> CODEC = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
                 (Codec.INT.fieldOf("size").orElse(1).forGetter(a -> a.size))
         ).apply(instance, CheckerboardCondition::new)));
 
@@ -86,7 +87,7 @@ public class ModMaterialConditions {
 
     public record TextCondition(int font_size, int char_spacing, int line_spacing, int max_width, String text, Pair<Integer, Pair<List<List<Integer>>, List<List<Character>>>> data) implements MaterialRules.MaterialCondition
     {
-        static final CodecHolder<TextCondition> CODEC = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
+        public static final CodecHolder<TextCondition> CODEC = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
                 (Codec.INT.fieldOf("font_size").orElse(1).forGetter(a -> a.font_size)),
                 (Codec.INT.fieldOf("char_spacing").orElse(1).forGetter(a -> a.char_spacing)),
                 (Codec.INT.fieldOf("line_spacing").orElse(1).forGetter(a -> a.line_spacing)),
@@ -291,9 +292,8 @@ public class ModMaterialConditions {
         }
     }
 
+    @ExpectPlatform
     public static void registerConditions() {
-        Registry.register(Registries.MATERIAL_CONDITION, "infinity:linear", LinearCondition.CODEC.codec());
-        Registry.register(Registries.MATERIAL_CONDITION, "infinity:checkerboard", CheckerboardCondition.CODEC.codec());
-        Registry.register(Registries.MATERIAL_CONDITION, "infinity:text", TextCondition.CODEC.codec());
+        throw new AssertionError();
     }
 }

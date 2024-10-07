@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.structure;
 
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -14,13 +15,21 @@ public class ModStructureType {
     private static StructurePieceType register(StructurePieceType.Simple type, String id) {
         return register((StructurePieceType)type, id);
     }
-    private static StructurePieceType register(StructurePieceType type, String id) {
-        return Registry.register(Registries.STRUCTURE_PIECE, id, type);
+
+    @ExpectPlatform
+    public static StructurePieceType register(StructurePieceType type, String id) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static StructureType<PyramidStructure> registerPyramid() {
+        throw new AssertionError();
     }
 
     public static void registerStructures() {
         InfinityMod.LOGGER.debug("Registering processors for " + InfinityMod.MOD_ID);
-        PYRAMID = Registry.register(Registries.STRUCTURE_TYPE, InfinityMod.getId("pyramid"), () -> PyramidStructure.CODEC);
+        PYRAMID = registerPyramid();
         PYRAMID_PIECE = register(PyramidGenerator::new, "infinity:pypiece");
+        Registries.STRUCTURE_TYPE.freeze();
     }
 }

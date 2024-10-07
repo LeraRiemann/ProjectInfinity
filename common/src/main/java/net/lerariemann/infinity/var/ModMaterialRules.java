@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.var;
 
 import com.mojang.serialization.MapCodec;
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.dimensions.RandomProvider;
@@ -173,8 +174,9 @@ public class ModMaterialRules {
         }
     }
 
+    @ExpectPlatform
     public static <T extends CodecHolder<? extends MaterialRules.MaterialRule>> void register(String name, T holder) {
-        Registry.register(Registries.MATERIAL_RULE, InfinityMod.MOD_ID + ":" + name, holder.codec());
+        throw new AssertionError();
     }
 
     public static void registerRules() {

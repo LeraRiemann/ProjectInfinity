@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.var;
 
 import com.mojang.serialization.MapCodec;
+import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -36,10 +38,13 @@ public class ModPlacementModifiers {
             return PlacementModifierType.RARITY_FILTER;
         }
     }
+    @ExpectPlatform
     static <P extends PlacementModifier> PlacementModifierType<P> register(String id, MapCodec<P> codec) {
-        return Registry.register(Registries.PLACEMENT_MODIFIER_TYPE, InfinityMod.getId(id), () -> codec);
+        throw new AssertionError();
     }
+
+    @ExpectPlatform
     public static void registerModifiers() {
-        register("center_proximity", CenterProximityPlacementModifier.MODIFIER_CODEC);
+        throw new AssertionError();
     }
 }
