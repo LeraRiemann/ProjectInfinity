@@ -53,6 +53,18 @@
   "config.infinity.rootChances.dimension_type.respawn_anchor_works.description": "This setting controls the percentage of dimensions where Respawn Anchors will not explode.",
   "config.infinity.rootChances.dimension_type.has_skylight.description": "This setting controls the percentage of dimensions where sunlight is applied.",
 
+  "config.infinity.rootChances.biome.has_precipitation.description": "",
+  "config.infinity.rootChances.biome.use_random_biome.description": "This setting controls the percentage chance to make a new random biome instead of choosing one from /modular/.../misc/biomes.json.",
+  "config.infinity.rootChances.biome.use_sparse_vegetation.description": "This setting controls the percentage chance for a random biome to have individually standing sparse trees instead of being densely forested.",
+  "config.infinity.rootChances.biome.use_particles.description": "This setting controls the percentage for biomes to have particles flying in the air, like in warped forests!",
+  "config.infinity.rootChances.biome.ambient_sound.description": "This setting controls the percentage for biomes to play ambient sound, constantly.",
+  "config.infinity.rootChances.biome.mood_sound.description": "This setting controls the percentage for biomes to play ambient sound, randomly (e.g. cave noises).",
+  "config.infinity.rootChances.biome.additions_sound.description": "This setting controls the percentage for biomes to play ambient sound, randomly.",
+  "config.infinity.rootChances.biome.music.description": "This setting controls the percentage for biomes to play music, including custom music.",
+  "config.infinity.rootChances.biome.temperature_modifier_frozen.description": "",
+  "config.infinity.rootChances.biome.use_random_cave.description": "This setting controls the percentage chance the mod will try to generate a random cave carver utility. These behave like legacy noodle caves from before 1.18, however the mod can throw in such wild values that the world becomes shredded.",
+  "config.infinity.rootChances.biome.use_random_canyon.description": "This setting controls the percentage chance the mod will try to generate a random canyon carver utility. These behave like legacy noodle ravines from before 1.18, however the mod can throw in such wild values that the world becomes shredded.",
+
 
   "block.infinity.neither_portal": "Infinity Portal",
   "block.infinity.book_box": "Box of Infinite Books",
