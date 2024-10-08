@@ -22,6 +22,9 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.SpawnReason;
@@ -40,6 +43,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.RawFilteredPair;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -219,7 +224,9 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     static Map<Item, String> recipes = Map.ofEntries(
             Map.entry(Items.BOOKSHELF, "infinity:book_box"),
             Map.entry(Items.TNT, "infinity:timebomb"),
-            Map.entry(Items.LECTERN, "infinity:altar")
+            Map.entry(Items.LECTERN, "infinity:altar"),
+            Map.entry(Items.BOOK, "minecraft:written_book")
+
     );
 
     @Override
@@ -231,6 +238,14 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 ItemEntity result = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(),
                         new ItemStack(Registries.ITEM.get(Identifier.of(recipes.get(itemStack.getItem())))).copyWithCount(itemStack.getCount()),
                         -v.x, -v.y, -v.z);
+                if (result.getStack().getItem() == Items.WRITTEN_BOOK) {
+                    ItemStack itemStack1 = result.getStack();
+                    List<RawFilteredPair<Text>> pages = new ArrayList<>();
+                    String seed = String.valueOf(((NeitherPortalBlockEntity)world.getBlockEntity(pos)).getDimension());
+                    pages.add(RawFilteredPair.of(Text.of(seed)));
+                    WrittenBookContentComponent component = new WrittenBookContentComponent(RawFilteredPair.of("Retrieved Book"), "§kcassiancc", 3, pages, false);
+                    itemStack1.set(DataComponentTypes.WRITTEN_BOOK_CONTENT, component);
+                }
                 world.spawnEntity(result);
                 entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             }

@@ -56,7 +56,11 @@ public class ModCommands {
     }
 
     public static long getDimensionSeed(String text, MinecraftServer s) {
-        return getDimensionSeed(text, ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider());
+        try {
+            return Long.parseLong(text);
+        } catch (NumberFormatException ex) {
+            return getDimensionSeed(text, ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider());
+        }
     }
 
     public static long getDimensionSeed(String text, RandomProvider prov) {
