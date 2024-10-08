@@ -124,8 +124,14 @@
   "item.infinity.chaos_slime_spawn_egg": "Chaos Slime Spawn Egg",
   "item.infinity.chaos_pawn_spawn_egg": "Chaos Pawn Spawn Egg",
   "item.infinity.chaos_creeper_spawn_egg": "Chaos Creeper Spawn Egg",
-  "emi.info.book_box": "You can create a Box of Infinite Books by throwing a bookshelf into an Infinity Portal.",
-  "emi.info.altar": "You can create a Transfinite Altar by throwing a lectern into an Infinity Portal.",
-  "emi.info.reset_charge": "You can create a Reset Charge by throwing TNT into an Infinity Portal"
-
+  "emi.info.book_box": "You can create a Box of Infinite Books by throwing a Bookshelf into an Infinity Portal.",
+  "emi.info.altar": "You can create a Transfinite Altar by throwing a Lectern into an Infinity Portal.",
+  "emi.info.reset_charge": "You can create a Reset Charge by throwing TNT into an Infinity Portal.",
+  "lore.infinity.book_box": "This block can be found in the Infinite Library. Using it will give you a randomly generated book based on the block's position.",
+  "lore.infinity.altar": "This block can be crafted by throwing a Lectern into an Infinity Portal. Using a diamond on it will play a fun animation!",
+  "lore.infinity.timebomb": "This block can be created by throwing TNT into an Infinity Portal. Using it inside an Infinite Dimension will slowly destroy it.",
+  "entity.infinity.dimensional_slime.description": "These hostile mobs can be found hopping around the Slime dimension. When killed, they drop the item seen inside.",
+  "entity.infinity.dimensional_skeleton.description": "These hostile mobs shoot tipped arrows. Their potion effects can be extracted with a bottle.",
+  "entity.infinity.dimensional_creeper.description": "These hostile mobs will change the biome when they explode. They can be washed with a Water Bucket to change the stored dimension.",
+  "entity.infinity.chaos_pawn.description": "These neutral mobs can be found in Infinity Portals and the Checkerboard dimension. They'll drop a random item when killed."
 }
