@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class CommonIO {
-
     public static void write(NbtCompound base, Path dir, String filename) {
         String source = CompoundToString(base, 0);
         List<String> lines = Collections.singletonList(source);
@@ -212,10 +211,19 @@ public class CommonIO {
             case NbtCompound nbtCompound -> CompoundToString(nbtCompound, t + 1);
             case NbtList nbtElements -> ListToString(nbtElements, t + 1);
             case NbtByte nbtByte -> (nbtByte.byteValue() != 0) ? "true" : "false";
-            case NbtDouble nbtDouble -> String.valueOf(nbtDouble.floatValue());
-            case NbtFloat nbtFloat -> String.valueOf(nbtFloat.floatValue());
+            case NbtDouble nbtDouble -> String.valueOf(boundsCheck(nbtDouble.floatValue()));
+            case NbtFloat nbtFloat -> String.valueOf(boundsCheck(nbtFloat.floatValue()));
+            case NbtLong nbtLong -> String.valueOf(boundsCheck(nbtLong.longValue()));
             default -> base.toString();
         };
+    }
+
+    static float boundsCheck(float base) {
+        return Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, base));
+    }
+
+    static long boundsCheck(long base) {
+        return Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, base));
     }
 
     public static String CompoundToString(NbtCompound base, int t) {
