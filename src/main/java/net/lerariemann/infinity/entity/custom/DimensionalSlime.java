@@ -99,6 +99,10 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
         return this.dataTracker.get(core);
     }
 
+    public BlockState getCoreForChild() {
+        return Blocks.AIR.getDefaultState();
+    }
+
     @Override
     protected ParticleEffect getParticles() {
         return new DustParticleEffect(colorFromInt(this.getColorForRender()), 1.0f);
