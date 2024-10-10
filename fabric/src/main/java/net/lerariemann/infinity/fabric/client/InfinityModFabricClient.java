@@ -45,6 +45,6 @@ public class InfinityModFabricClient implements ClientModInitializer {
 //            }
 //            return 16777215;
 //        }, ModBlocks.BOOK_BOX.get());
-        InfinityModClient.init();
+        InfinityModClient.initializeClient();
     }
 }

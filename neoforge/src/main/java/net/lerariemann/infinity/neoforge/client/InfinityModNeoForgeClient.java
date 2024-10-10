@@ -11,8 +11,9 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.math.BlockPos;
 
 import static net.lerariemann.infinity.InfinityModClient.sampler;
+import static net.lerariemann.infinity.entity.ModEntities.registerEntityRenderers;
 
-public class InfinityModNeoForgeClient implements ClientModInitializer {
+public class InfinityModNeoForgeClient {
 
     double sample(int x, int y, int z) {
         return sampler.sample(x, y, z);
@@ -24,7 +25,6 @@ public class InfinityModNeoForgeClient implements ClientModInitializer {
         double b = sample(pos.getX(), pos.getY() + 10000, pos.getZ());
         return (int)(256 * ((r + 1)/2)) + 256*((int)(256 * ((g + 1)/2)) + 256*(int)(256 * ((b + 1)/2)));
     }
-    @Override
     public void onInitializeClient() {
 //        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
 //            if (world != null && pos != null) {
@@ -45,6 +45,6 @@ public class InfinityModNeoForgeClient implements ClientModInitializer {
             }
             return 16777215;
         }, ModBlocks.BOOK_BOX.get());
-        InfinityModClient.init();
+        InfinityModClient.initializeClient();
     }
 }

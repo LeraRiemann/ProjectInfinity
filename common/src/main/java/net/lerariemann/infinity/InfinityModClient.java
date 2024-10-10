@@ -11,7 +11,7 @@ public class InfinityModClient {
 
 
 
-    public static void init() {
+    public static void initializeClient() {
         ModPayloads.registerPayloadsClient();
         ModEntities.registerEntityRenderers();
     }
