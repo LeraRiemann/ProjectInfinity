@@ -25,7 +25,6 @@ public class InfinityMod {
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
 		ModEntities.registerEntities();
-		ModEntities.registerSpawnRestrictions();
 //		ModPoi.registerPoi();
 		ModCommands.registerCommands();
 		ModDensityFunctionTypes.registerFunctions();

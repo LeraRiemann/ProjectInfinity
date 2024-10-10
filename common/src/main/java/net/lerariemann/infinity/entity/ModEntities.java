@@ -2,21 +2,28 @@ package net.lerariemann.infinity.entity;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
-import net.lerariemann.infinity.InfinityMod;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.entity.client.ChaosPawnRenderer;
+import net.lerariemann.infinity.entity.client.DimensionalCreeperRenderer;
+import net.lerariemann.infinity.entity.client.DimensionalSkeletonRenderer;
+import net.lerariemann.infinity.entity.client.DimensionalSlimeRenderer;
 import net.lerariemann.infinity.entity.custom.*;
-import net.lerariemann.infinity.entity.client.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.Heightmap;
 import net.minecraft.world.ServerWorldAccess;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModEntities {
     public static void copy(MobEntity from, MobEntity e) {
@@ -34,27 +41,31 @@ public class ModEntities {
         e.setStackInHand(Hand.MAIN_HAND, from.getStackInHand(Hand.MAIN_HAND));
         e.setStackInHand(Hand.OFF_HAND, from.getStackInHand(Hand.OFF_HAND));
     }
+    public static final DeferredRegister<EntityType<?>> INFINITY_ENTITIES = DeferredRegister.create(MOD_ID, RegistryKeys.ENTITY_TYPE);
+    public static final HashMap<EntityType<? extends MobEntity>, String> entityMap = new HashMap<>();
 
-    @ExpectPlatform
-    public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> type) {
-        throw new AssertionError();
-    }
-    //TODO reimplement
-//    public static final EntityType<DimensionalSlime> DIMENSIONAL_SLIME = register("dimensional_slime",
-//            EntityType.Builder.create(DimensionalSlime::new, SpawnGroup.MONSTER)
-//                    .dimensions(0.52f, 0.52f).maxTrackingRange(10));
-//    public static final EntityType<DimensionalSkeleton> DIMENSIONAL_SKELETON = register("dimensional_skeleton",
-//            EntityType.Builder.create(DimensionalSkeleton::new, SpawnGroup.MONSTER)
-//                    .dimensions(0.6f, 1.99f).maxTrackingRange(8));
-//    public static final EntityType<DimensionalCreeper> DIMENSIONAL_CREEPER = register("dimensional_creeper",
-//            EntityType.Builder.create(DimensionalCreeper::new, SpawnGroup.MONSTER)
-//                    .dimensions(0.6f, 1.7f).maxTrackingRange(8));
-//    public static final EntityType<ChaosPawn> CHAOS_PAWN = register("chaos_pawn",
-//            EntityType.Builder.create(ChaosPawn::new, SpawnGroup.MONSTER)
-//                    .dimensions(0.6f, 1.8f).maxTrackingRange(10));
+    public static final RegistrySupplier<EntityType<DimensionalSlime>> DIMENSIONAL_SLIME = INFINITY_ENTITIES.register("dimensional_slime", () -> EntityType.Builder.create(DimensionalSlime::new, SpawnGroup.MONSTER).dimensions(0.52f, 0.52f).maxTrackingRange(10).build(null));
+    public static final RegistrySupplier<EntityType<DimensionalSkeleton>> DIMENSIONAL_SKELETON = INFINITY_ENTITIES.register("dimensional_skeleton", () -> EntityType.Builder.create(DimensionalSkeleton::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.99f).maxTrackingRange(8).build(null));
+    public static final RegistrySupplier<EntityType<DimensionalCreeper>> DIMENSIONAL_CREEPER = INFINITY_ENTITIES.register("dimensional_creeper", () -> EntityType.Builder.create(DimensionalCreeper::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.7f).maxTrackingRange(8).build(null));
+    public static final RegistrySupplier<EntityType<ChaosPawn>> CHAOS_PAWN = INFINITY_ENTITIES.register("chaos_pawn", () -> EntityType.Builder.create(ChaosPawn::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.8f).maxTrackingRange(10).build(null));
 
-    @ExpectPlatform
     public static void registerEntities() {
+        INFINITY_ENTITIES.register();
+        entityMap.put(DIMENSIONAL_SLIME.get(), "dimensional_slime");
+        entityMap.put(DIMENSIONAL_CREEPER.get(), "dimensional_creeper");
+        entityMap.put(DIMENSIONAL_SKELETON.get(), "dimensional_skeleton");
+        entityMap.put(CHAOS_PAWN.get(), "chaos_pawn");
+
+        for (Map.Entry<EntityType<? extends MobEntity>, String> set : entityMap.entrySet()) {
+            registerEntityAttributes(set.getKey(), set.getValue());
+        }
+        registerOtherSpawnRestrictions();
+    }
+
+
+
+    @ExpectPlatform
+    public static void registerEntityAttributes(EntityType<? extends MobEntity> entityType, String value) {
         throw new AssertionError();
     }
 
@@ -64,13 +75,15 @@ public class ModEntities {
     }
 
     @ExpectPlatform
-    public static void registerSpawnRestrictions() {
+    public static void registerOtherSpawnRestrictions() {
         throw new AssertionError();
 
     }
 
-    @ExpectPlatform
     public static void registerEntityRenderers() {
-        throw new AssertionError();
+        EntityRendererRegistry.register(DIMENSIONAL_SLIME, DimensionalSlimeRenderer::new);
+        EntityRendererRegistry.register(DIMENSIONAL_SKELETON, DimensionalSkeletonRenderer::new);
+        EntityRendererRegistry.register(DIMENSIONAL_CREEPER, DimensionalCreeperRenderer::new);
+        EntityRendererRegistry.register(CHAOS_PAWN, ChaosPawnRenderer::new);
     }
 }
