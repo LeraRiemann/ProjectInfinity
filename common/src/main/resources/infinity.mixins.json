@@ -16,7 +16,9 @@
     "ServerPlayerEntityMixin",
     "SlimeEntityMixin",
     "WorldChunkMixin",
+    "mobs.ElderGuardianEntityMixin",
     "mobs.EndermiteEntityMixin",
+    "mobs.LivingEntityMixin",
     "mobs.WaterCreaturesMixin",
     "mobs.passive.AnimalEntityMixin",
     "mobs.passive.FoxEntityMixin",
@@ -30,6 +32,7 @@
     "mobs.passive.TurtleEntityMixin",
     "mobs.passive.WolfEntityMixin",
     "options.DimensionTypeMixin",
+    "options.EntityMixin",
     "options.PlayerManagerMixin",
     "options.ServerWorldMixin"
   ],

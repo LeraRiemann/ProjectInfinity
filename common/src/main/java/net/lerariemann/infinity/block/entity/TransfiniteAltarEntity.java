@@ -69,6 +69,6 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
                         a.projectInfinity$getDimensionProvider().randomName(r, "full_blocks"))).getDefaultState());
             }
         }
-        be.time+=1;
+        if (be.time >= 0) be.time+=1;
     }
 }

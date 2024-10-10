@@ -17,7 +17,7 @@ public class SlimeEntityMixin {
         SlimeEntity e = ((SlimeEntity)(Object)(this));
         if (e instanceof DimensionalSlime slime_mom) {
             DimensionalSlime slime_son = (DimensionalSlime)instance;
-            slime_son.setCore(slime_mom.getCore());
+            slime_son.setCore(slime_mom.getCoreForChild());
             slime_son.setColor(slime_mom.getDataTracker().get(color));
         }
     }

@@ -52,6 +52,11 @@ public class RandomBiome {
         res.add(NbtDouble.of(random.nextDouble()));
         return res;
     }
+    public NbtList randomEntityEffectColor() {
+        NbtList res = randomDustColor();
+        res.add(NbtDouble.of(random.nextDouble()));
+        return res;
+    }
 
     NbtString randomSound(){
         return NbtString.of(PROVIDER.randomName(random, "sounds"));
@@ -113,16 +118,16 @@ public class RandomBiome {
         String particle = PROVIDER.randomName(random, "particles");
         res.putString("type", particle);
         switch(particle) {
-            case "minecraft:block", "minecraft:block_marker", "minecraft:falling_dust" -> {
+            case "minecraft:block", "minecraft:block_marker", "minecraft:dust_pillar", "minecraft:falling_dust" -> {
                 NbtCompound value = new NbtCompound();
                 value.putString("Name", PROVIDER.randomName(random, "all_blocks"));
-                res.put("value", value);
+                res.put("block_state", value);
                 return res;
             }
             case "minecraft:item" -> {
                 NbtCompound value = new NbtCompound();
                 value.putString("Name", PROVIDER.randomName(random, "items"));
-                res.put("value", value);
+                res.put("item", value);
                 return res;
             }
             case "minecraft:dust" -> {
@@ -136,12 +141,26 @@ public class RandomBiome {
                 res.putFloat("scale", random.nextFloat());
                 return res;
             }
+            case "minecraft:entity_effect" -> {
+                res.put("color", randomEntityEffectColor());
+                return res;
+            }
             case "minecraft:sculk_charge" -> {
                 res.putFloat("roll", (float)(random.nextFloat()*Math.PI));
                 return res;
             }
             case "minecraft:shriek" -> {
                 res.putInt("delay", random.nextInt(500));
+                return res;
+            }
+            case "minecraft:vibration" -> {
+                NbtCompound destination = new NbtCompound();
+                destination.putString("type", "block");
+                NbtList pos = new NbtList();
+                for (int ii = 0; ii < 3; ii+=1) pos.add(NbtInt.of(random.nextInt(20000)));
+                destination.put("pos", pos);
+                res.put("destination", destination);
+                res.putInt("arrival_in_ticks", random.nextInt(20000));
                 return res;
             }
         }

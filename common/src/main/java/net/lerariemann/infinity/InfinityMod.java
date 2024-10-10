@@ -17,13 +17,15 @@ import net.lerariemann.infinity.block.entity.ModBlockEntities;
 public class InfinityMod {
 	public static final String MOD_ID = "infinity";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
 
     public static Identifier getId(String value){
 		return Identifier.of(MOD_ID, value);
 	}
 
+
 	public static void init() {
-		ConfigManager.registerAllConfigs();
+		ConfigManager.unpackDefaultConfigs();
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
 		ModEntities.registerEntities();

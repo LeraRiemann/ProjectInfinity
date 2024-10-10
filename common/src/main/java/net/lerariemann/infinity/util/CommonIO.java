@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.util;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.*;
 import org.apache.commons.io.FileUtils;
 
@@ -13,7 +14,6 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class CommonIO {
-
     public static void write(NbtCompound base, Path dir, String filename) {
         String source = CompoundToString(base, 0);
         List<String> lines = Collections.singletonList(source);
@@ -62,7 +62,11 @@ public class CommonIO {
             content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             if (!content.contains("infinity_version")) return 0;
             int i = content.indexOf("infinity_version");
-            return Integer.parseInt(content.substring(content.indexOf(" ", i)+1, content.indexOf(",", i)));
+            int end = content.indexOf(",", i);
+            if (end == -1) {
+                end = content.indexOf("}", i);
+            }
+            return Integer.parseInt(content.substring(content.indexOf(" ", i)+1, end).trim());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -143,17 +147,29 @@ public class CommonIO {
         return res;
     }
 
+    private static boolean _checkIfModLoaded(File path1) {
+        String modname = path1.toPath().getName(path1.toPath().getNameCount() - 1).toString();
+        return FabricLoader.getInstance().isModLoaded(modname);
+    }
+
+    private static NbtList _extractElements(File path1, String subpath) {
+        if (_checkIfModLoaded(path1)) {
+            File file = path1.toPath().resolve(subpath).toFile();
+            if (file.exists()) {
+                NbtCompound base = read(file);
+                return base.getList("elements", NbtElement.COMPOUND_TYPE);
+            }
+        }
+        return new NbtList();
+    }
+
     public static WeighedStructure<String> weighedListReader(String path, String subpath) {
         WeighedStructure<String> res = new WeighedStructure<>();
         for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
-            File readingthis = path1.toPath().resolve(subpath).toFile();
-            if (readingthis.exists()) {
-                NbtCompound base = read(readingthis);
-                NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
-                for(int i = 0; i < list.size(); i++) {
-                    NbtCompound a = list.getCompound(i);
-                    res.add(a.getString("key"), a.getDouble("weight"));
-                }
+            NbtList list = _extractElements(path1, subpath);
+            for(int i = 0; i < list.size(); i++) {
+                NbtCompound a = list.getCompound(i);
+                res.add(a.getString("key"), a.getDouble("weight"));
             }
         }
         return res;
@@ -162,14 +178,10 @@ public class CommonIO {
     public static WeighedStructure<NbtElement> blockListReader(String path, String subpath) {
         WeighedStructure<NbtElement> res = new WeighedStructure<>();
         for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
-            File file = path1.toPath().resolve(subpath).toFile();
-            if (file.exists()) {
-                NbtCompound base = read(file);
-                NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
-                for(int i = 0; i < list.size(); i++) {
-                    NbtCompound a = list.getCompound(i);
-                    res.add(a.get("key"), a.getDouble("weight"));
-                }
+            NbtList list = _extractElements(path1, subpath);
+            for(int i = 0; i < list.size(); i++) {
+                NbtCompound a = list.getCompound(i);
+                res.add(a.get("key"), a.getDouble("weight"));
             }
         }
         return res;
@@ -178,10 +190,12 @@ public class CommonIO {
     public static NbtList nbtListReader(String path, String subpath) {
         NbtList res = new NbtList();
         for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
-            File readingthis = new File(path1.getPath() + "/" + subpath);
-            if (readingthis.exists()) {
-                NbtList add = read(path1.getPath() + "/" + subpath).getList("elements", NbtElement.STRING_TYPE);
-                res.addAll(add);
+            if (_checkIfModLoaded(path1)) {
+                File readingthis = new File(path1.getPath() + "/" + subpath);
+                if (readingthis.exists()) {
+                    NbtList add = read(path1.getPath() + "/" + subpath).getList("elements", NbtElement.STRING_TYPE);
+                    res.addAll(add);
+                }
             }
         }
         return res;
@@ -197,10 +211,19 @@ public class CommonIO {
             case NbtCompound nbtCompound -> CompoundToString(nbtCompound, t + 1);
             case NbtList nbtElements -> ListToString(nbtElements, t + 1);
             case NbtByte nbtByte -> (nbtByte.byteValue() != 0) ? "true" : "false";
-            case NbtDouble nbtDouble -> String.valueOf(nbtDouble.floatValue());
-            case NbtFloat nbtFloat -> String.valueOf(nbtFloat.floatValue());
+            case NbtDouble nbtDouble -> String.valueOf(boundsCheck(nbtDouble.floatValue()));
+            case NbtFloat nbtFloat -> String.valueOf(boundsCheck(nbtFloat.floatValue()));
+            case NbtLong nbtLong -> String.valueOf(boundsCheck(nbtLong.longValue()));
             default -> base.toString();
         };
+    }
+
+    static float boundsCheck(float base) {
+        return Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, base));
+    }
+
+    static long boundsCheck(long base) {
+        return Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, base));
     }
 
     public static String CompoundToString(NbtCompound base, int t) {

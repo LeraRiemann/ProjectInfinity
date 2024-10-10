@@ -31,8 +31,8 @@ public class TintedLayerRenderer<T extends MobEntity, S extends EntityModel<T>> 
         this.model.animateModel(livingEntity, f, g, h);
         this.model.setAngles(livingEntity, f, g, j, k, l);
         int color = 16777215;
-        if (livingEntity instanceof TintableEntity) {
-            color = ((TintableEntity)livingEntity).getColor();
+        if (livingEntity instanceof TintableEntity ent) {
+            color = ent.getColorForRender();
         }
         this.model.render(matrixStack, vertexConsumer, i, LivingEntityRenderer.getOverlay(livingEntity, 0.0f), color);
     }

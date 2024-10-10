@@ -18,7 +18,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
@@ -163,11 +162,6 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         c.putInt("head", i);
         c.putInt("hat", i ^ 0xFFFFFF);
         this.setColors(c);
-    }
-
-    @Override
-    public boolean canPickupItem(ItemStack stack) {
-        return true;
     }
 
     @Override

@@ -441,14 +441,16 @@ public class RandomProvider {
     public void kickGhostsOut(DynamicRegistryManager s) {
         Registry<Biome> reg = s.get(RegistryKeys.BIOME);
         WeighedStructure<String> biomes = registry.get("biomes");
-        int i = 0;
-        while(i < biomes.keys.size()) {
-            if (!reg.containsId(Identifier.of(biomes.keys.get(i)))) {
-                biomes.kick(i);
+        if (biomes != null) {
+            int i = 0;
+            while(i < biomes.keys.size()) {
+                if (!reg.containsId(Identifier.of(biomes.keys.get(i)))) {
+                    biomes.kick(i);
+                }
+                else i++;
             }
-            else i++;
+            registry.put("biomes", biomes);
         }
-        registry.put("biomes", biomes);
     }
 }
 

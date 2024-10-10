@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.entity.client;
 
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
+import net.lerariemann.infinity.entity.custom.TintableEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
@@ -10,8 +11,8 @@ import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.util.DyeColor;
+import net.minecraft.util.math.ColorHelper;
+
 import java.awt.Color;
 
 public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<ChaosPawn>> {
@@ -27,14 +28,7 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
         if (livingEntity.hasCustomName()) {
             String s = livingEntity.getName().getString();
              if ("jeb_".equals(s)) {
-                int n = livingEntity.age / 25 + (name.equals("hat") ? 8 : 0) + livingEntity.getId();
-                int o = DyeColor.values().length;
-                int p = n % o;
-                int q = (n + 1) % o;
-                float r = (livingEntity.age % 25) / 25.0f;
-                int fs = SheepEntity.getRgbColor(DyeColor.byId(p));
-                int gs = SheepEntity.getRgbColor(DyeColor.byId(q));
-                color = (int)(fs * (1 - r) + gs * r);
+                 color = TintableEntity.getColorJeb(livingEntity.age + (name.equals("hat") ? 200 : 0), livingEntity.getId());
             }
             if ("hue".equals(s)) {
                 int n = livingEntity.age + (name.equals("hat") ? 200 : 0) + livingEntity.getId();
@@ -42,6 +36,9 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
                 hue = hue - (int)hue;
                 color = Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
             }
+        }
+        else {
+            color = ColorHelper.Argb.fullAlpha(color);
         }
         part.render(matrixStack, vertexConsumer, light, overlay, color);
     }
