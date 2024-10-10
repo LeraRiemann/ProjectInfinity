@@ -2,6 +2,7 @@ package net.lerariemann.infinity.entity;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
+import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
@@ -11,17 +12,15 @@ import net.lerariemann.infinity.entity.client.DimensionalSkeletonRenderer;
 import net.lerariemann.infinity.entity.client.DimensionalSlimeRenderer;
 import net.lerariemann.infinity.entity.custom.*;
 import net.minecraft.entity.*;
+import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.ServerWorldAccess;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
@@ -42,7 +41,6 @@ public class ModEntities {
         e.setStackInHand(Hand.OFF_HAND, from.getStackInHand(Hand.OFF_HAND));
     }
     public static final DeferredRegister<EntityType<?>> INFINITY_ENTITIES = DeferredRegister.create(MOD_ID, RegistryKeys.ENTITY_TYPE);
-    public static final HashMap<EntityType<? extends MobEntity>, String> entityMap = new HashMap<>();
 
     public static final RegistrySupplier<EntityType<DimensionalSlime>> DIMENSIONAL_SLIME = INFINITY_ENTITIES.register("dimensional_slime", () -> EntityType.Builder.create(DimensionalSlime::new, SpawnGroup.MONSTER).dimensions(0.52f, 0.52f).maxTrackingRange(10).build(null));
     public static final RegistrySupplier<EntityType<DimensionalSkeleton>> DIMENSIONAL_SKELETON = INFINITY_ENTITIES.register("dimensional_skeleton", () -> EntityType.Builder.create(DimensionalSkeleton::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.99f).maxTrackingRange(8).build(null));
@@ -51,23 +49,28 @@ public class ModEntities {
 
     public static void registerEntities() {
         INFINITY_ENTITIES.register();
-        entityMap.put(DIMENSIONAL_SLIME.get(), "dimensional_slime");
-        entityMap.put(DIMENSIONAL_CREEPER.get(), "dimensional_creeper");
-        entityMap.put(DIMENSIONAL_SKELETON.get(), "dimensional_skeleton");
-        entityMap.put(CHAOS_PAWN.get(), "chaos_pawn");
+        registerAttributes();
 
-        for (Map.Entry<EntityType<? extends MobEntity>, String> set : entityMap.entrySet()) {
-            registerEntityAttributes(set.getKey(), set.getValue());
-        }
-        registerOtherSpawnRestrictions();
+
+
+    }
+
+    public static void registerAttributes() {
+        EntityAttributeRegistry.register(DIMENSIONAL_SLIME, DimensionalSlime::createAttributes);
+        EntityAttributeRegistry.register(DIMENSIONAL_SKELETON, AbstractSkeletonEntity::createAbstractSkeletonAttributes);
+        EntityAttributeRegistry.register(DIMENSIONAL_CREEPER, DimensionalCreeper::createCreeperAttributes);
+        EntityAttributeRegistry.register(CHAOS_PAWN, ChaosPawn::createAttributes);
     }
 
 
+    public static void registerSpawnRestrictions() {
+        SpawnRestriction.register(DIMENSIONAL_SLIME.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, DimensionalSlime::canSpawn);
+        SpawnRestriction.register(DIMENSIONAL_SKELETON.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canSpawnInDark);
+        SpawnRestriction.register(DIMENSIONAL_CREEPER.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canSpawnInDark);
+        SpawnRestriction.register(CHAOS_PAWN.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChaosPawn::canSpawn);
 
-    @ExpectPlatform
-    public static void registerEntityAttributes(EntityType<? extends MobEntity> entityType, String value) {
-        throw new AssertionError();
     }
+
 
     public static boolean canSpawnInDark(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         return HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random) &&

@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.entity.neoforge;
 
+import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.lerariemann.infinity.InfinityMod;
@@ -16,6 +17,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnLocationTypes;
 import net.minecraft.entity.SpawnRestriction;
+import net.minecraft.entity.attribute.DefaultAttributeRegistry;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
@@ -33,26 +36,6 @@ import java.util.Objects;
 import static net.lerariemann.infinity.entity.ModEntities.*;
 
 public class ModEntitiesImpl {
-    public static void registerEntityAttributes(EntityType<? extends MobEntity> entityType, String id) {
-        if (Objects.equals(id, "dimensional_slime")) {
-            FabricDefaultAttributeRegistry.register(entityType, DimensionalSlime.createAttributes());
-            SpawnRestriction.register((EntityType<DimensionalSlime>) entityType, SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, DimensionalSlime::canSpawn);
-        }
-        else if (Objects.equals(id, "dimensional_skeleton")) {
-            FabricDefaultAttributeRegistry.register(entityType, AbstractSkeletonEntity.createAbstractSkeletonAttributes());
-            SpawnRestriction.register((EntityType<HostileEntity>) entityType, SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canSpawnInDark);
-        }
-        else if (Objects.equals(id, "dimensional_creeper")) {
-            FabricDefaultAttributeRegistry.register(entityType, CreeperEntity.createCreeperAttributes());
-            SpawnRestriction.register((EntityType<HostileEntity>) entityType, SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canSpawnInDark);
-
-        }
-        else if (Objects.equals(id, "chaos_pawn")) {
-            FabricDefaultAttributeRegistry.register(entityType, ChaosPawn.createAttributes());
-            SpawnRestriction.register((EntityType<ChaosPawn>)entityType, SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChaosPawn::canSpawn);
-
-        }
-    }
 
     public static void registerOtherSpawnRestrictions() {
         SpawnRestriction.register(EntityType.SNIFFER, SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
