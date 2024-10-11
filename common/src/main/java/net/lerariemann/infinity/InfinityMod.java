@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
 
+import java.nio.file.Path;
+
 public class InfinityMod {
 	public static final String MOD_ID = "infinity";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);

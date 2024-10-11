@@ -6,9 +6,13 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.config.neoforge.ModConfigFactory;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.math.BlockPos;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 import static net.lerariemann.infinity.InfinityModClient.sampler;
 import static net.lerariemann.infinity.entity.ModEntities.registerEntityRenderers;
@@ -45,6 +49,16 @@ public class InfinityModNeoForgeClient {
             }
             return 16777215;
         }, ModBlocks.BOOK_BOX.get());
+        registerModsPage();
         InfinityModClient.initializeClient();
+    }
+
+    //Integrate Cloth Config screen (if mod present) with NeoForge mod menu.
+    public void registerModsPage() {
+        if (clothConfigInstalled()) ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, ModConfigFactory::new);
+    }
+
+    private boolean clothConfigInstalled() {
+        return true;
     }
 }

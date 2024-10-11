@@ -41,6 +41,8 @@ dependencies {
     modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"
     modImplementation "org.sinytra.forgified-fabric-api:forgified-fabric-api:0.104.0+2.0.14+1.21.1"
 
+    modApi "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_version}"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 }
