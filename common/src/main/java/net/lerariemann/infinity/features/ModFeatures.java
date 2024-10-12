@@ -33,5 +33,6 @@ public class ModFeatures {
         RANDOM_CUBE = FEATURES.register("random_cube",() -> new RandomCubeFeature(RandomCubeFeatureConfig.CODEC));
         RANDOM_STAR = FEATURES.register("random_shape",() -> new RandomShapeFeature(RandomShapeFeatureConfig.CODEC));
         RANDOM_TEXT = FEATURES.register("random_text",() -> new TextFeature(TextFeatureConfig.CODEC));
+        FEATURES.register();
     }
 }

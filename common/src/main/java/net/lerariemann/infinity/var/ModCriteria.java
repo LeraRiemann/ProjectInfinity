@@ -3,6 +3,7 @@ package net.lerariemann.infinity.var;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.Criterion;
@@ -76,15 +77,16 @@ public class ModCriteria {
         }
     }
 
-    public static DimensionOpenedCriterion DIMS_OPENED;
-    public static DimensionClosedCriterion DIMS_CLOSED;
-    public static WhoRemainsCriterion WHO_REMAINS;
+    public static RegistrySupplier<DimensionOpenedCriterion> DIMS_OPENED;
+    public static RegistrySupplier<DimensionClosedCriterion> DIMS_CLOSED;
+    public static RegistrySupplier<WhoRemainsCriterion> WHO_REMAINS;
 
     public static final DeferredRegister<Criterion<?>> CRITERIONS = DeferredRegister.create(MOD_ID, RegistryKeys.CRITERION);
 
     public static void registerCriteria() {
-        CRITERIONS.register("dims_open", DimensionOpenedCriterion::new);
-        CRITERIONS.register("dims_closed", DimensionClosedCriterion::new);
-        CRITERIONS.register("who_remains", WhoRemainsCriterion::new);
+        DIMS_OPENED = CRITERIONS.register("dims_open", DimensionOpenedCriterion::new);
+        DIMS_CLOSED = CRITERIONS.register("dims_closed", DimensionClosedCriterion::new);
+        WHO_REMAINS = CRITERIONS.register("who_remains", WhoRemainsCriterion::new);
+        CRITERIONS.register();
     }
 }

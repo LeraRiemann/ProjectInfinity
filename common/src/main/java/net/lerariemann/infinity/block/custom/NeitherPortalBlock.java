@@ -154,7 +154,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 }
                 if (bl2) {
                     player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
-                    ModCriteria.DIMS_OPENED.trigger((ServerPlayerEntity)player);
+                    ModCriteria.DIMS_OPENED.get().trigger((ServerPlayerEntity)player);
                 }
                 player.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
             }

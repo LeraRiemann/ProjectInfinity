@@ -97,7 +97,7 @@ public class TimeBombBlock extends Block {
                         activate(w, path);
                         world.spawnEntity(genCloud(world, pos));
                         player.increaseStat(ModStats.WORLDS_DESTROYED_STAT, 1);
-                        ModCriteria.DIMS_CLOSED.trigger((ServerPlayerEntity)player);
+                        ModCriteria.DIMS_CLOSED.get().trigger((ServerPlayerEntity)player);
                         world.setBlockState(pos, state.with(ACTIVE, true));
                         world.playSound(null, pos, ModSounds.IVORY_MUSIC_CHALLENGER_EVENT, SoundCategory.BLOCKS, 1f, 1f);
                         return ActionResult.SUCCESS;

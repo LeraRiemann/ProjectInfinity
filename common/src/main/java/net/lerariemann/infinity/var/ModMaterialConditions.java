@@ -301,5 +301,6 @@ public class ModMaterialConditions {
         MATERIAL_CONDITIONS.register("linear", LinearCondition.CODEC::codec);
         MATERIAL_CONDITIONS.register("checkerboard", CheckerboardCondition.CODEC::codec);
         MATERIAL_CONDITIONS.register("text", TextCondition.CODEC::codec);
+        MATERIAL_CONDITIONS.register();
     }
 }

@@ -128,7 +128,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
                 damage(new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
             }
             if (i > 3500) {
-                ModCriteria.WHO_REMAINS.trigger((ServerPlayerEntity)(Object)this);
+                ModCriteria.WHO_REMAINS.get().trigger((ServerPlayerEntity)(Object)this);
             }
             if (i > 3540) {
                 this.detach();

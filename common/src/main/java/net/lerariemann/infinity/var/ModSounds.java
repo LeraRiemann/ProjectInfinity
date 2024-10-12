@@ -18,5 +18,6 @@ public class ModSounds {
     public static void registerSounds(){
         SOUNDS.register(IVORY_MUSIC_HOPE, () -> IVORY_MUSIC_HOPE_EVENT);
         SOUNDS.register(IVORY_MUSIC_CHALLENGER, () -> IVORY_MUSIC_CHALLENGER_EVENT);
+        SOUNDS.register();
     }
 }

@@ -73,7 +73,7 @@ public class DimensionGrabber {
     }
 
     void close() {
-        baseRegistryManager.streamAllRegistries().forEach((entry) -> entry.value().freeze());
+//        baseRegistryManager.streamAllRegistries().forEach((entry) -> entry.value().freeze());
     }
 
     public RegistryOps.RegistryInfoGetter getGetter(List<MutableRegistry<?>> additionalRegistries) {
