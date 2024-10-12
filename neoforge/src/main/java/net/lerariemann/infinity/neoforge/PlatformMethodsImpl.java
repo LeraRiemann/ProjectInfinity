@@ -21,6 +21,9 @@ public class PlatformMethodsImpl {
     }
 
     public static void onWorldLoad(Object mixin, ServerWorld world) {
+        MinecraftServer server = world.getServer();
+        server.forgeGetWorldMap().put(world.getRegistryKey(),world);
+        server.markWorldsDirty();
         ServerWorldEvents.LOAD.invoker().onWorldLoad((MinecraftServer) mixin, world);
     }
 
