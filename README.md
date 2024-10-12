@@ -1,4 +1,4 @@
-## Infinite Dimensions
+# Infinite Dimensions
 
 **Infinite Dimensions** is a mod that reworks and reimagines 20w14infinite - the April Fools' snapshot of 2020 - in Minecraft 1.21.1.
 
