@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.neoforge.client;
 
+import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.config.neoforge.ModConfigFactory;
@@ -53,6 +54,6 @@ public class InfinityModNeoForgeClient {
     }
 
     private static boolean clothConfigInstalled() {
-        return true;
+        return PlatformMethods.isModLoaded("cloth_config");
     }
 }
