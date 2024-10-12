@@ -32,7 +32,6 @@
     "mobs.passive.TurtleEntityMixin",
     "mobs.passive.WolfEntityMixin",
     "options.DimensionTypeMixin",
-    "options.EntityMixin",
     "options.PlayerManagerMixin",
     "options.ServerWorldMixin"
   ],
@@ -40,7 +39,11 @@
     "options.ClientWorldMixin",
     "options.GameRendererMixin",
     "options.MinecraftClientMixin",
-    "options.WorldRendererMixin"
+    "options.WorldRendererMixin",
+    "client.EntityMixin"
+  ],
+  "server": [
+    "options.EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

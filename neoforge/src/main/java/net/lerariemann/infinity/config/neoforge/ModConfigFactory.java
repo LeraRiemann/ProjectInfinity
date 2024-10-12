@@ -2,7 +2,6 @@ package net.lerariemann.infinity.config.neoforge;
 
 
 import net.lerariemann.infinity.config.ClothConfigFactory;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;

@@ -245,18 +245,17 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             while (world.getBlockState(pos).isOf(this)) {
                 pos = pos.down();
             }
-            //TODO reimplement
-//            if (world.getBlockState(pos).allowsSpawning(world, pos, ModEntities.CHAOS_PAWN) &&
-//                    ((MinecraftServerAccess)world.getServer()).projectInfinity$getDimensionProvider().rule("chaosMobsEnabled") &&
-//                    (entity = ModEntities.CHAOS_PAWN.spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
-//                entity.resetPortalCooldown();
-//                BlockEntity blockEntity = world.getBlockEntity(pos.up());
-//                if (blockEntity instanceof NeitherPortalBlockEntity) {
-//                    int dim = (int)((NeitherPortalBlockEntity)blockEntity).getDimension();
-//                    Vec3d c = Vec3d.unpackRgb(dim);
-//                    entity.setAllColors((int)(256 * c.z) + 256 * (int)(256 * c.y) + 65536 * (int)(256 * c.x));
-//                }
-//            }
+            if (world.getBlockState(pos).allowsSpawning(world, pos, ModEntities.CHAOS_PAWN.get()) &&
+                    ((MinecraftServerAccess)world.getServer()).projectInfinity$getDimensionProvider().rule("chaosMobsEnabled") &&
+                    (entity = ModEntities.CHAOS_PAWN.get().spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
+                entity.resetPortalCooldown();
+                BlockEntity blockEntity = world.getBlockEntity(pos.up());
+                if (blockEntity instanceof NeitherPortalBlockEntity) {
+                    int dim = (int)((NeitherPortalBlockEntity)blockEntity).getDimension();
+                    Vec3d c = Vec3d.unpackRgb(dim);
+                    entity.setAllColors((int)(256 * c.z) + 256 * (int)(256 * c.y) + 65536 * (int)(256 * c.x));
+                }
+            }
         }
     }
 }

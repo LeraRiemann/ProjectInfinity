@@ -3,5 +3,6 @@
   "textures": {
     "side": "infinity:block/book_box/side_2",
     "overlay": "infinity:block/book_box/overlay_2"
-  }
+  },
+  "render_type": "minecraft:cutout_mipped"
 }
