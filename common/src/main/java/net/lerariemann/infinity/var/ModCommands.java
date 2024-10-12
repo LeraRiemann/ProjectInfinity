@@ -25,9 +25,11 @@ public class ModCommands {
         boolean bl = ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider().rule("runtimeGenerationEnabled");
         boolean bl2 = NeitherPortalBlock.addDimension(s, value, bl);
         final ServerPlayerEntity self = context.getSource().getPlayer();
-        if (bl2) self.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
-        self.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
-        ((ServerPlayerEntityAccess)(self)).projectInfinity$setWarpTimer(20, value);
+        if (self != null) {
+            if (bl2) self.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
+            self.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
+            ((ServerPlayerEntityAccess)(self)).projectInfinity$setWarpTimer(20, value);
+        }
     }
 
     public static boolean checkEnd(long d, MinecraftServer s) {
