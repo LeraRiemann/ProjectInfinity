@@ -82,7 +82,7 @@ public class ConfigManager {
     }
 
     public static Path getConfigDir() {
-        return Path.of(getBaseConfigDir().toString(), InfinityMod.MOD_ID);
+        return Path.of("config", InfinityMod.MOD_ID);
     }
 
     public static void evictOldFiles() {
