@@ -1,11 +1,9 @@
 package net.lerariemann.infinity.neoforge.client;
 
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.config.neoforge.ModConfigFactory;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
@@ -46,9 +44,6 @@ public class InfinityModNeoForgeClient {
             }
             return 16777215;
                 },    ModBlocks.NEITHER_PORTAL.get());
-
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_BOMB.get(), RenderLayer.getTranslucent());
-
         event.register((state, world, pos, tintIndex) -> {
             if (pos != null) {
                 return posToColor(pos);

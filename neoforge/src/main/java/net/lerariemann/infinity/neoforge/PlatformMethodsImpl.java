@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.neoforge;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.mixin.registry.sync.BaseMappedRegistryAccessor;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
@@ -19,7 +18,7 @@ public class PlatformMethodsImpl {
     }
 
     public static PacketByteBuf createPacketByteBufs() {
-        return PacketByteBufs.create();
+        return new PacketByteBuf(Unpooled.buffer());
     }
 
     public static void onWorldLoad(Object mixin, ServerWorld world) {
