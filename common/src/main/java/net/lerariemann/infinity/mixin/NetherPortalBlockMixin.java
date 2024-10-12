@@ -2,8 +2,8 @@ package net.lerariemann.infinity.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.ModBlocks;
@@ -51,7 +51,7 @@ public class NetherPortalBlockMixin {
 			WritableBookContentComponent writableComponent = itemStack.getComponents().get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
 			WrittenBookContentComponent writtenComponent = itemStack.getComponents().get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
 			String printedComponent = null;
-			if (FabricLoader.getInstance().isModLoaded("computercraft")) {
+			if (PlatformMethods.isModLoaded("computercraft")) {
 				printedComponent = checkPrintedPage(itemStack);
 			}
 			if (writableComponent != null || writtenComponent != null || printedComponent != null) {

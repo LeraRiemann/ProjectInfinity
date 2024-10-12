@@ -13,9 +13,15 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 public class PlatformMethods {
     @ExpectPlatform
+    public static boolean isModLoaded(String modID) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
     public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {
         throw new AssertionError();
     }
+
     @ExpectPlatform
     public static PacketByteBuf createPacketByteBufs() {
         throw new AssertionError();

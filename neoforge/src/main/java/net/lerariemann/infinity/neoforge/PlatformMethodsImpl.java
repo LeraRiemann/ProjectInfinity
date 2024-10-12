@@ -9,10 +9,16 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
 
 public class PlatformMethodsImpl {
+    public static boolean isModLoaded(String modID) {
+       return ModList.get().isLoaded(modID);
+    }
+
     public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {
         net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(entity, payload);
     }
