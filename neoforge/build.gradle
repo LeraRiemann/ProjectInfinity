@@ -32,6 +32,16 @@ repositories {
     maven {
         url "https://maven.su5ed.dev/releases"
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -41,6 +51,8 @@ dependencies {
     modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"
     //Forgified Fabric API. Where possible, work will be done to migrate away from this and rely on Arch API.
     modImplementation "org.sinytra.forgified-fabric-api:forgified-fabric-api:${forgified_fabric_api_version}"
+    modImplementation "curse.maven:catalogue-459701:${catalogue_version}"
+
 
 //    modImplementation "org.sinytra.forgified-fabric-api:fabric-api-base:${forgified_fabric_api_base_version}"
 //    modImplementation "org.sinytra.forgified-fabric-api:fabric-registry-sync-v0:${forgified_fabric_api_sync_version}"

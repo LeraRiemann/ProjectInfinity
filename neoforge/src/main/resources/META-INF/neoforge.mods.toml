@@ -1,6 +1,5 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-#issueTrackerURL = ""
 license = "LGPL-3.0-or-later"
 
 [[mods]]
@@ -11,7 +10,9 @@ authors = "Lera Riemann"
 description = '''
 Inspired by 2020's April Fools' 20w14infinite Snapshot, this mod brings endless randomly generated dimensions into Minecraft.
 '''
-#logoFile = ""
+logoFile = "assets/infinity/icon.png"
+issueTrackerURL = "https://github.com/LeraRiemann/ProjectInfinity/issues"
+displayURL = "https://modrinth.com/mod/infinite-dimensions"
 
 [[dependencies.infinity]]
 modId = "neoforge"
@@ -36,3 +37,7 @@ side = "BOTH"
 
 [[mixins]]
 config = "infinity.mixins.json"
+
+[modproperties.infinity]
+catalogueItemIcon="infinity:book_box"
+catalogueBackground="background.png"
