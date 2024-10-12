@@ -1,10 +1,14 @@
 package net.lerariemann.infinity.var;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.registry.registries.DeferredRegister;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Pair;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
@@ -12,6 +16,7 @@ import net.lerariemann.infinity.mixin.MaterialRuleContextAccess;
 
 import java.util.*;
 
+import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.PlatformMethods.freeze;
 import static net.lerariemann.infinity.PlatformMethods.unfreeze;
 
@@ -295,11 +300,12 @@ public class ModMaterialConditions {
         }
     }
 
+    public static final DeferredRegister<MapCodec<? extends MaterialRules.MaterialCondition>> MATERIAL_CONDITIONS = DeferredRegister.create(MOD_ID, RegistryKeys.MATERIAL_CONDITION);
+
+
     public static void registerConditions() {
-        unfreeze(Registries.MATERIAL_CONDITION);
-        Registry.register(Registries.MATERIAL_CONDITION, "infinity:linear", net.lerariemann.infinity.var.ModMaterialConditions.LinearCondition.CODEC.codec());
-        Registry.register(Registries.MATERIAL_CONDITION, "infinity:checkerboard", net.lerariemann.infinity.var.ModMaterialConditions.CheckerboardCondition.CODEC.codec());
-        Registry.register(Registries.MATERIAL_CONDITION, "infinity:text", net.lerariemann.infinity.var.ModMaterialConditions.TextCondition.CODEC.codec());
-        freeze(Registries.MATERIAL_CONDITION);
+        MATERIAL_CONDITIONS.register("linear", LinearCondition.CODEC::codec);
+        MATERIAL_CONDITIONS.register("checkerboard", CheckerboardCondition.CODEC::codec);
+        MATERIAL_CONDITIONS.register("text", TextCondition.CODEC::codec);
     }
 }
