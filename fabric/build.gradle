@@ -7,6 +7,12 @@ architectury {
     fabric()
 }
 
+processResources {
+    from(rootProject.file("common/src/main/resources")) {
+        include("config/*/")
+    }
+}
+
 configurations {
     common {
         canBeResolved = true
