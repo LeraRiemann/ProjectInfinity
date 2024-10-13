@@ -2,10 +2,16 @@ plugins {
     id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id "io.github.pacifistmc.forgix" version "1.2.9"
 }
 
 architectury {
     minecraft = project.minecraft_version
+}
+
+forgix {
+    group = "net.lerariemann.infinity"
+    mergedJarName = "infinite-dimensions-${mod_version}.jar"
 }
 
 allprojects {
@@ -70,4 +76,6 @@ subprojects {
             // retrieving dependencies.
         }
     }
+    build.finalizedBy(mergeJars)
+    assemble.finalizedBy(mergeJars)
 }
