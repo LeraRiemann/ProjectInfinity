@@ -21,7 +21,7 @@ public final class InfinityModNeoForge {
             InfinityModNeoForgeClient.registerModsPage();
             eventBus.addListener(InfinityModNeoForgeClient::registerBlockColorHandlers);
         }
-
+        eventBus.addListener(InfinityModNeoForge::registerSpawns);
     }
 
     @SubscribeEvent
