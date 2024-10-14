@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.entity;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -15,6 +14,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -50,9 +50,6 @@ public class ModEntities {
     public static void registerEntities() {
         INFINITY_ENTITIES.register();
         registerAttributes();
-
-
-
     }
 
     public static void registerAttributes() {
@@ -62,25 +59,21 @@ public class ModEntities {
         EntityAttributeRegistry.register(CHAOS_PAWN, ChaosPawn::createAttributes);
     }
 
-
     public static void registerSpawnRestrictions() {
         SpawnRestriction.register(DIMENSIONAL_SLIME.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, DimensionalSlime::canSpawn);
         SpawnRestriction.register(DIMENSIONAL_SKELETON.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canSpawnInDark);
         SpawnRestriction.register(DIMENSIONAL_CREEPER.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canSpawnInDark);
         SpawnRestriction.register(CHAOS_PAWN.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChaosPawn::canSpawn);
-
     }
-
 
     public static boolean canSpawnInDark(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         return HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random) &&
                 ((MinecraftServerAccess)world.toServerWorld().getServer()).projectInfinity$getDimensionProvider().rule("chaosMobsEnabled");
     }
 
-    @ExpectPlatform
     public static void registerOtherSpawnRestrictions() {
-        throw new AssertionError();
-
+        SpawnRestriction.register(EntityType.SNIFFER, SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
+        SpawnRestriction.register(EntityType.CAMEL, SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
     }
 
     public static void registerEntityRenderers() {
