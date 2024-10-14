@@ -18,11 +18,9 @@ public final class InfinityModNeoForge {
     public InfinityModNeoForge(IEventBus eventBus, ModContainer container) {
         // Run our common setup.
         InfinityMod.init();
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            InfinityModClient.initializeClient();
-            InfinityModNeoForgeClient.registerModsPage();
-            eventBus.addListener(InfinityModNeoForgeClient::registerBlockColorHandlers);
-        }
+        // Run our client setup.
+        if (FMLEnvironment.dist == Dist.CLIENT) InfinityModNeoForgeClient.initializeClient(eventBus);
+        // Run any remaining NeoForge specific tasks.
         eventBus.addListener(InfinityModNeoForge::registerSpawns);
     }
 

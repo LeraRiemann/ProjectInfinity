@@ -1,14 +1,22 @@
 package net.lerariemann.infinity.neoforge.client;
 
+import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.config.neoforge.ModConfigFactory;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 public class InfinityModNeoForgeClient {
+
+    public static void initializeClient(IEventBus eventBus) {
+        InfinityModClient.initializeClient();
+        InfinityModNeoForgeClient.registerModsPage();
+        eventBus.addListener(InfinityModNeoForgeClient::registerBlockColorHandlers);
+    }
 
     //Integrate Cloth Config screen (if mod present) with NeoForge mod menu.
     public static void registerModsPage() {
