@@ -43,7 +43,6 @@ public class InfinityMod {
 		ModStats.registerStats();
 		ModCriteria.registerCriteria();
 		ModPayloads.registerPayloadsServer();
-		EnvExecutor.runInEnv(Env.CLIENT, () -> InfinityModClient::initializeClient);
 
 	}
 }

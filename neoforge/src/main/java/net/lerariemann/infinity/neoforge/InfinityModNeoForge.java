@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.neoforge;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.neoforge.client.InfinityModNeoForgeClient;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -18,6 +19,7 @@ public final class InfinityModNeoForge {
         // Run our common setup.
         InfinityMod.init();
         if (FMLEnvironment.dist == Dist.CLIENT) {
+            InfinityModClient.initializeClient();
             InfinityModNeoForgeClient.registerModsPage();
             eventBus.addListener(InfinityModNeoForgeClient::registerBlockColorHandlers);
         }
