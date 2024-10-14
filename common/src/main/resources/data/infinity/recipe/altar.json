@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "B": {
-      "item": "infinity:book_box"
-    },
-    "S": {
-      "item": "minecraft:stone_slab"
-    }
+    "B": "infinity:book_box",
+    "S": "minecraft:stone_slab"
   },
   "pattern": [
     "SSS",
