@@ -8,6 +8,10 @@ import net.minecraft.registry.Registry;
 import net.minecraft.structure.StructurePieceType;
 import net.minecraft.world.gen.structure.StructureType;
 
+/**
+ * See {@link net.lerariemann.infinity.structure.ModStructureType} for usages.
+ */
+@SuppressWarnings("unused")
 public class ModStructureTypeImpl {
     private static StructurePieceType register(StructurePieceType.Simple type, String id) {
         return register((StructurePieceType)type, id);

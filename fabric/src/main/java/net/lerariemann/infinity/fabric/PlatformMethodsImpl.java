@@ -11,7 +11,10 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-
+/**
+ * See {@link net.lerariemann.infinity.PlatformMethods} for usages.
+ */
+@SuppressWarnings("unused")
 public class PlatformMethodsImpl {
     public static boolean isModLoaded(String modID) {
         return FabricLoader.getInstance().isModLoaded(modID);

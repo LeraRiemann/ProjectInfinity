@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.lerariemann.infinity.util.ConfigGenerator;
+import net.lerariemann.infinity.var.ModCommands;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -12,7 +13,10 @@ import static net.lerariemann.infinity.var.ModCommands.getDimensionSeed;
 import static net.lerariemann.infinity.var.ModCommands.warpId;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
-
+/**
+ * See {@link ModCommands} for usages.
+ */
+@SuppressWarnings("unused")
 public class ModCommandsImpl {
     public static void registerCommands() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("warp-id")

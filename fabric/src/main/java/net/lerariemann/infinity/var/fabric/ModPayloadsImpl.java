@@ -4,7 +4,10 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.client.MinecraftClient;
-
+/**
+ * See {@link ModPayloads} for usages.
+ */
+@SuppressWarnings("unused")
 public class ModPayloadsImpl {
     public static MinecraftClient client(Object context) {
         ClientPlayNetworking.Context clientContext = (ClientPlayNetworking.Context) context;

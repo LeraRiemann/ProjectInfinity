@@ -10,10 +10,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
-
+/**
+ * See {@link net.lerariemann.infinity.PlatformMethods} for usages.
+ */
+@SuppressWarnings("unused")
 public class PlatformMethodsImpl {
     public static boolean isModLoaded(String modID) {
        return ModList.get().isLoaded(modID);
