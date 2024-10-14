@@ -86,7 +86,7 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
-        return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0);
+        return HostileEntity.createHostileAttributes().add(EntityAttributes.ATTACK_DAMAGE, 5.0).add(EntityAttributes.FOLLOW_RANGE, 35.0);
     }
 
     @Override
@@ -185,7 +185,7 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         Random r = new Random();
         setAllColors(r, world.getBlockState(this.getBlockPos().down(2)));
         double i = 15*r.nextExponential();
-        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
+        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.MAX_HEALTH)).setBaseValue(i);
         this.setHealth((float)i);
         int a;
         if ((a = (int)(0.1*i)) > 0) {

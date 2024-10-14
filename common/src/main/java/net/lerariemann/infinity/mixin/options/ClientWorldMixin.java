@@ -26,11 +26,11 @@ public abstract class ClientWorldMixin extends World implements InfinityOptionsA
     public InfinityOptions infinityoptions;
 
     protected ClientWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, DynamicRegistryManager registryManager, RegistryEntry<DimensionType> dimensionEntry, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long biomeAccess, int maxChainedNeighborUpdates) {
-        super(properties, registryRef, registryManager, dimensionEntry, profiler, isClient, debugWorld, biomeAccess, maxChainedNeighborUpdates);
+        super(properties, registryRef, registryManager, dimensionEntry, isClient, debugWorld, biomeAccess, maxChainedNeighborUpdates);
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injected(ClientPlayNetworkHandler networkHandler, ClientWorld.Properties properties, RegistryKey<World> registryRef, RegistryEntry<DimensionType> dimensionTypeEntry, int loadDistance, int simulationDistance, Supplier<Profiler> profiler, WorldRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
+    private void injected(ClientPlayNetworkHandler networkHandler, ClientWorld.Properties properties, RegistryKey registryRef, RegistryEntry dimensionType, int loadDistance, int simulationDistance, WorldRenderer worldRenderer, boolean debugWorld, long seed, int seaLevel, CallbackInfo ci) {
         DimensionType t = getDimension();
         infinityoptions = ((InfinityOptionsAccess)MinecraftClient.getInstance()).projectInfinity$getInfinityOptions();
         ((InfinityOptionsAccess)(Object)t).projectInfinity$setInfinityOptions(infinityoptions);

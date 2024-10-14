@@ -79,7 +79,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     private void injected2(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir, @Local(ordinal = 0) ServerWorld serverWorld, @Local RegistryKey<World> registryKey) {
         if (((MinecraftServerAccess)(serverWorld.getServer())).projectInfinity$getDimensionProvider().rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
-            BlockPos pos = BlockPos.ofFloored(teleportTarget.pos());
+            BlockPos pos = BlockPos.ofFloored(teleportTarget.position());
             ServerWorld destination = teleportTarget.world();
             boolean bl = false;
             for (BlockPos pos2: new BlockPos[] {pos, pos.add(1, 0, 0), pos.add(0, 0, 1),
@@ -117,13 +117,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             if (w==null) return;
             double d = DimensionType.getCoordinateScaleFactor(this.getServerWorld().getDimension(), w.getDimension());
             Entity self = getCameraEntity();
-            BlockPos blockPos2 = w.getWorldBorder().clamp(self.getX() * d, self.getY(), self.getZ() * d);
+            BlockPos blockPos2 = BlockPos.ofFloored(w.getWorldBorder().clamp(self.getX() * d, self.getY(), self.getZ() * d));
             this.teleport(w, blockPos2.getX(), blockPos2.getY(), blockPos2.getZ(), new HashSet<>(), self.getYaw(), self.getPitch());
         }
         int i = ((Timebombable)(getServerWorld())).projectInfinity$isTimebobmed();
         if (i > 200) {
             if (i%4 == 0) {
-                Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE);
+                Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().getOrThrow(RegistryKeys.DAMAGE_TYPE);
                 RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMod.getId("world_ceased")));
                 damage(new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
             }

@@ -13,10 +13,10 @@ import java.util.*;
 public class SurfaceRuleScanner {
     public static void scan(MinecraftServer server) {
         Map<String, NbtCompound> map = new HashMap<>();
-        Registry<ChunkGeneratorSettings> registry = server.getRegistryManager().get(RegistryKeys.CHUNK_GENERATOR_SETTINGS);
+        Registry<ChunkGeneratorSettings> registry = server.getRegistryManager().getOrThrow(RegistryKeys.CHUNK_GENERATOR_SETTINGS);
         registry.getKeys().forEach(key -> {
             if (!key.getValue().getNamespace().contains("infinity")) {
-                Optional<ChunkGeneratorSettings> o = registry.getOrEmpty(key);
+                Optional<ChunkGeneratorSettings> o = registry.getOptionalValue(key);
                 o.ifPresent(settings -> {
                     Optional<NbtElement> c = ChunkGeneratorSettings.CODEC.encodeStart(NbtOps.INSTANCE, settings).result();
                     c.ifPresent(e -> {

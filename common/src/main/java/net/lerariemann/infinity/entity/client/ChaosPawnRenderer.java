@@ -6,6 +6,8 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.render.entity.state.EntityRenderState;
+import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Identifier;
 
 public class ChaosPawnRenderer extends MobEntityRenderer<ChaosPawn, BipedEntityModel<ChaosPawn>> {
@@ -14,8 +16,14 @@ public class ChaosPawnRenderer extends MobEntityRenderer<ChaosPawn, BipedEntityM
         super(context, new BipedEntityModel<>(context.getPart(EntityModelLayers.PLAYER)), 0.25f);
         this.addFeature(new ChaosPawnTint(this, new BipedEntityModel<>(context.getModelLoader().getModelPart(EntityModelLayers.PLAYER))));
     }
+
     @Override
-    public Identifier getTexture(ChaosPawn e) {
+    public EntityRenderState getRenderState() {
+        return null;
+    }
+
+    @Override
+    public Identifier getTexture(LivingEntityRenderState state) {
         return TEXTURE;
     }
 }

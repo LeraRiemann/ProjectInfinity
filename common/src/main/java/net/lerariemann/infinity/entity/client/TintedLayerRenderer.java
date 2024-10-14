@@ -20,20 +20,21 @@ public class TintedLayerRenderer<T extends MobEntity, S extends EntityModel<T>> 
         this.model = model;
     }
 
+//    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
     @Override
-    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
+    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, T livingEntity, float limbAngle, float limbDistance) {
         boolean bl = MinecraftClient.getInstance().hasOutline(livingEntity) && livingEntity.isInvisible();
         if (livingEntity.isInvisible() && !bl) {
             return;
         }
         VertexConsumer vertexConsumer = bl ? vertexConsumerProvider.getBuffer(RenderLayer.getOutline(this.getTexture(livingEntity))) : vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(livingEntity)));
         (this.getContextModel()).copyStateTo(this.model);
-        this.model.animateModel(livingEntity, f, g, h);
-        this.model.setAngles(livingEntity, f, g, j, k, l);
+//        this.model.animateModel(livingEntity, f, g, h);
+        this.model.setAngles(livingEntity);
         int color = 16777215;
         if (livingEntity instanceof TintableEntity ent) {
             color = ent.getColorForRender();
         }
-        this.model.render(matrixStack, vertexConsumer, i, LivingEntityRenderer.getOverlay(livingEntity, 0.0f), color);
+        this.model.render(matrixStack, vertexConsumer, light, LivingEntityRenderer.getOverlay(livingEntity, 0.0f), color);
     }
 }

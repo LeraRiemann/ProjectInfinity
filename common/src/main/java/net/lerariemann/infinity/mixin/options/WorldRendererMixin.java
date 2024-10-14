@@ -45,6 +45,9 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
 
     @Shadow protected abstract void renderStars();
 
+    @Shadow public abstract void tick();
+
+    @Shadow private int viewDistance;
     @Unique
     public boolean needsStars;
 
@@ -60,9 +63,9 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         needsStars = b;
     }
 
-    @Inject(method = "renderSky(Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+    @Inject(method = "renderSky",
             at=@At("HEAD"), cancellable=true)
-    private void injected4(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
+    private void injected4(FrameGraphBuilder frameGraphBuilder, Camera camera, float tickDelta, Fog fog, CallbackInfo ci) {
         if (!options().isEmpty()) {
             renderEntireSky(matrix4f, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
             ci.cancel();
@@ -105,7 +108,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
             return;
         }
 
-        BackgroundRenderer.applyFogColor();
+        BackgroundRenderer.applyFog(camera, BackgroundRenderer.FogType.FOG_SKY, null, viewDistance, false, tickDelta);
         Tessellator tessellator = Tessellator.getInstance();
         RenderSystem.depthMask(false);
         handleSkyBackground(matrices, projectionMatrix, tickDelta);
@@ -147,7 +150,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     private void handleSkyBackground(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta) {
         String skyType = options().getSkyType();
         if (skyType.equals("empty")) {
-            Vec3d vec3d = this.world.getSkyColor(this.client.gameRenderer.getCamera().getPos(), tickDelta);
+            Vec3d vec3d = Vec3d.unpackRgb(this.world.getSkyColor(this.client.gameRenderer.getCamera().getPos(), tickDelta));
             renderSingleColorSky(matrices, projectionMatrix, (float)vec3d.x, (float)vec3d.y, (float)vec3d.z, 1.0f);
         }
         else if (skyType.equals("rainbow")) {

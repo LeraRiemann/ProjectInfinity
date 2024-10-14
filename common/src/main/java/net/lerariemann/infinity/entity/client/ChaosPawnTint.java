@@ -43,8 +43,10 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
         part.render(matrixStack, vertexConsumer, light, overlay, color);
     }
 
+
     @Override
-    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, ChaosPawn e, float f, float g, float h, float j, float k, float l) {
+    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, ChaosPawn e, float f, float g) {
+//    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, ChaosPawn e, float f, float g, float h, float j, float k, float l) {
         boolean bl = MinecraftClient.getInstance().hasOutline(e) && e.isInvisible();
         if (e.isInvisible() && !bl) {
             return;
@@ -62,4 +64,6 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
         renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.leftLeg, "left_leg");
         renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.rightLeg, "right_leg");
     }
+
+
 }

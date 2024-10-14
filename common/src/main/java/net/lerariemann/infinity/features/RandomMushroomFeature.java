@@ -20,7 +20,7 @@ public abstract class RandomMushroomFeature
     protected void generateStem(WorldAccess world, Random random, BlockPos pos, RandomMushroomFeatureConfig config, int height, BlockPos.Mutable mutablePos) {
         for (int i = 0; i < height; ++i) {
             mutablePos.set(pos).move(Direction.UP, i);
-            if (world.getBlockState(mutablePos).isOpaqueFullCube(world, mutablePos)) continue;
+            if (world.getBlockState(mutablePos).isOpaqueFullCube()) continue;
             this.setBlockState(world, mutablePos, config.stemProvider().get(random, pos));
         }
     }
@@ -35,7 +35,7 @@ public abstract class RandomMushroomFeature
 
     protected boolean canGenerate(WorldAccess world, BlockPos pos, int height, BlockPos.Mutable mutablePos, RandomMushroomFeatureConfig config) {
         int i = pos.getY();
-        if (i < world.getBottomY() + 1 || i + height + 1 >= world.getTopY()) {
+        if (i < world.getBottomY() + 1 || i + height + 1 >= world.getTopYInclusive()) {
             return false;
         }
         BlockState blockState = world.getBlockState(pos.down());

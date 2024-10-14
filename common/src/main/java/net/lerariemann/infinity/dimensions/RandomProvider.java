@@ -439,7 +439,7 @@ public class RandomProvider {
     }
 
     public void kickGhostsOut(DynamicRegistryManager s) {
-        Registry<Biome> reg = s.get(RegistryKeys.BIOME);
+        Registry<Biome> reg = s.getOrThrow(RegistryKeys.BIOME);
         WeighedStructure<String> biomes = registry.get("biomes");
         if (biomes != null) {
             int i = 0;

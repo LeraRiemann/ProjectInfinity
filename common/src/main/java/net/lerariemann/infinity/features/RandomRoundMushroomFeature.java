@@ -25,7 +25,7 @@ public class RandomRoundMushroomFeature extends RandomMushroomFeature {
                     boolean bl6 = bl3 || bl4;
                     if (i < y && bl5 == bl6) continue;
                     mutable.set(start, l, i, m);
-                    if (world.getBlockState(mutable).isOpaqueFullCube(world, mutable)) continue;
+                    if (world.getBlockState(mutable).isOpaqueFullCube()) continue;
                     BlockState blockState = config.capProvider().get(random, start);
                     this.setBlockState(world, mutable, blockState);
                 }

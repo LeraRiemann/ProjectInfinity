@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -27,7 +28,7 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
     public static void remove(World world, BlockPos pos, TransfiniteAltarEntity be) {
         be.markRemoved();
         world.setBlockState(pos, Blocks.AIR.getDefaultState());
-        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world);
+        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world, SpawnReason.TRIGGERED);
         if (lightningEntity != null) {
             lightningEntity.setPosition(pos.toCenterPos());
             world.spawnEntity(lightningEntity);

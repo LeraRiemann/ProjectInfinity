@@ -28,7 +28,7 @@ public class PlayerManagerMixin {
         PlatformMethods.sendServerPlayerEntity(player, ModPayloads.StarsRePayLoad.INSTANCE);
         MinecraftServerAccess acc = ((MinecraftServerAccess)(serverWorld2.getServer()));
         if (acc.projectInfinity$needsInvocation()) {
-            int y = serverWorld2.getTopY() - 10;
+            int y = serverWorld2.getTopYInclusive() - 10;
             BlockPos pos = new BlockPos(player.getBlockX(), y, player.getBlockY());
             BlockState st = serverWorld2.getBlockState(pos);
             serverWorld2.setBlockState(pos, ModBlocks.ALTAR_COSMIC.get().getDefaultState());

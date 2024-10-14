@@ -7,6 +7,8 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.SlimeEntityModel;
+import net.minecraft.client.render.entity.state.EntityRenderState;
+import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -19,10 +21,17 @@ public class DimensionalSlimeRenderer extends MobEntityRenderer<DimensionalSlime
         this.addFeature(new DimensionalSlimeCoreRenderer(this, context.getBlockRenderManager()));
         this.addFeature(new TintedLayerRenderer<>(this, new SlimeEntityModel<>(context.getModelLoader().getModelPart(EntityModelLayers.SLIME_OUTER))));
     }
+
     @Override
-    public Identifier getTexture(DimensionalSlime slimeEntity) {
+    public EntityRenderState getRenderState() {
+        return null;
+    }
+    
+    @Override
+    public Identifier getTexture(LivingEntityRenderState state) {
         return TEXTURE;
     }
+
     @Override
     public void render(DimensionalSlime slimeEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
         this.shadowRadius = 0.25f * (float)slimeEntity.getSize();
@@ -38,4 +47,6 @@ public class DimensionalSlimeRenderer extends MobEntityRenderer<DimensionalSlime
         float j = 1.0f / (i + 1.0f);
         matrixStack.scale(j * h, 1.0f / j * h, j * h);
     }
+
+
 }

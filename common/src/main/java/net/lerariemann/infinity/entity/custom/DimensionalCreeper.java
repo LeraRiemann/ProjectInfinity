@@ -54,7 +54,7 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         MinecraftServer s = world.toServerWorld().getServer();
-        reg = s.getRegistryManager().get(RegistryKeys.BIOME);
+        reg = s.getRegistryManager().getOrThrow(RegistryKeys.BIOME);
         WeighedStructure<String> biomes = ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider().registry.get("biomes");
         String biomename = biomes != null ? biomes.getElement(world.getRandom().nextDouble()) : "minecraft:plains";
         Biome b = reg.get(Identifier.of(biomename));
@@ -130,7 +130,7 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
                 this.ignite_backwards();
                 if (!player.getAbilities().creativeMode) player.setStackInHand(hand, new ItemStack(Items.BUCKET, itemStack.getCount()));
             }
-            return ActionResult.success(this.getWorld().isClient);
+            return ActionResult.SUCCESS;
         }
         return super.interactMob(player, hand);
     }
@@ -160,7 +160,7 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
         if (s != null) {
             ServerWorld serverWorld = s.getWorld(this.getWorld().getRegistryKey());
             if (serverWorld != null) {
-                reg = s.getRegistryManager().get(RegistryKeys.BIOME);
+                reg = s.getRegistryManager().getOrThrow(RegistryKeys.BIOME);
                 BlockBox blockBox = new BlockBox(getBlockX() - r, getBlockY() - r, getBlockZ() - r,
                         getBlockX() + r, getBlockY() + r, getBlockZ() + r);
                 ArrayList<Chunk> list = new ArrayList<>();

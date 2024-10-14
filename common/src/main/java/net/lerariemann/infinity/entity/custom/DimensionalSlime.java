@@ -27,6 +27,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +65,7 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
-        return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f);
+        return HostileEntity.createHostileAttributes().add(EntityAttributes.MOVEMENT_SPEED, 0.2f);
     }
 
     @Override
@@ -92,7 +93,7 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     public int getColorForRender() {
         int v = getColorNamed();
         if (v!=-1) return v;
-        return ColorHelper.Argb.fullAlpha(this.dataTracker.get(color));
+        return ColorHelper.getArgb(Vec3d.unpackRgb(this.dataTracker.get(color)));
     }
 
     public BlockState getCore() {

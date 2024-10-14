@@ -51,11 +51,11 @@ public class DimensionGrabber {
     }
 
     <T> JsonGrabber<T> buildGrabber(Codec<T> codec, RegistryKey<Registry<T>> key) {
-        return (new JsonGrabber<>(registryInfoGetter, codec, (MutableRegistry<T>) (baseRegistryManager.get(key))));
+        return (new JsonGrabber<>(registryInfoGetter, codec, (MutableRegistry<T>) (baseRegistryManager.getOrThrow(key))));
     }
 
     <T> void grab_one_for_client(Codec<T> codec, RegistryKey<Registry<T>> key, Identifier id, NbtCompound optiondata) {
-        if (!(baseRegistryManager.get(key).contains(RegistryKey.of(key, id)))) buildGrabber(codec, key).grab(id, optiondata, false);
+        if (!(baseRegistryManager.getOrThrow(key).contains(RegistryKey.of(key, id)))) buildGrabber(codec, key).grab(id, optiondata, false);
     }
 
     public void grab_dim_for_client(Identifier id, NbtCompound dimdata) {
@@ -88,6 +88,6 @@ public class DimensionGrabber {
     }
 
     public static <T> RegistryOps.RegistryInfo<T> createInfo(MutableRegistry<T> registry) {
-        return new RegistryOps.RegistryInfo<>(registry.getReadOnlyWrapper(), registry.createMutableEntryLookup(), registry.getLifecycle());
+        return new RegistryOps.RegistryInfo<>(registry.getReadOnlyWrapper(), registry.createMutableRegistryLookup(), registry.getLifecycle());
     }
 }

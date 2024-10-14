@@ -30,7 +30,7 @@ public class ShaderLoader {
             ((GameRendererAccess)(client.gameRenderer)).projectInfinity$loadPP(InfinityMod.getId("shaders/" + FILENAME));
             return;
         }
-        client.gameRenderer.disablePostProcessor();
+        client.gameRenderer.clearPostProcessor();
     }
     static void load(MinecraftClient client) throws IOException {
         ResourcePackManager m = client.getResourcePackManager();

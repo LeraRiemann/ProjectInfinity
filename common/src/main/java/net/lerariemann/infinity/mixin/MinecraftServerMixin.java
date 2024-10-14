@@ -67,7 +67,7 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
         return null;
     }
     @Shadow
-    protected ServerTask createTask(Runnable runnable) {
+    public ServerTask createTask(Runnable runnable) {
         return null;
     }
     @Shadow
