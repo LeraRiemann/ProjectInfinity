@@ -104,7 +104,7 @@ public class ModPayloads {
     }
 
     public static void registerPayloadsServer() {
-        NetworkManager.registerReceiver(ModPayloads.WorldAddPayload.ID, ModPayloads.WorldAddPayload.CODEC);
+        NetworkManager.registerS2CPayloadType(ModPayloads.WorldAddPayload.ID, ModPayloads.WorldAddPayload.CODEC);
         NetworkManager.registerS2CPayloadType(ModPayloads.BiomeAddPayload.ID, ModPayloads.BiomeAddPayload.CODEC);
         NetworkManager.registerS2CPayloadType(ModPayloads.ShaderRePayload.ID, ModPayloads.ShaderRePayload.CODEC);
         NetworkManager.registerS2CPayloadType(ModPayloads.StarsRePayLoad.ID, ModPayloads.StarsRePayLoad.CODEC);
@@ -112,7 +112,6 @@ public class ModPayloads {
     }
 
     public static void registerPayloadsClient() {
-        NetworkManager.registerReceiver(NetworkManager.Side.S2C, );
         ClientPlayNetworking.registerGlobalReceiver(ModPayloads.WorldAddPayload.ID, ModPayloads::addWorld);
         ClientPlayNetworking.registerGlobalReceiver(ModPayloads.BiomeAddPayload.ID, ModPayloads::addBiome);
         ClientPlayNetworking.registerGlobalReceiver(ModPayloads.ShaderRePayload.ID, ModPayloads::receiveShader);
