@@ -2,7 +2,7 @@ package net.lerariemann.infinity;
 
 import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import dev.architectury.networking.NetworkManager;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -15,7 +15,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
-import net.minecraft.world.World;
 import net.minecraft.world.poi.PointOfInterestType;
 
 import static net.lerariemann.infinity.InfinityModClient.sampler;
@@ -28,7 +27,7 @@ public class PlatformMethods {
     }
 
     public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {
-        NetworkManager.sendToPlayer(entity, payload);
+        ServerPlayNetworking.send(entity, payload);
     }
 
     @ExpectPlatform

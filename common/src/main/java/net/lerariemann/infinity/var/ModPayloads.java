@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.var;
 
-import dev.architectury.networking.NetworkManager;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
@@ -104,10 +104,10 @@ public class ModPayloads {
     }
 
     public static void registerPayloadsServer() {
-        NetworkManager.registerS2CPayloadType(ModPayloads.WorldAddPayload.ID, ModPayloads.WorldAddPayload.CODEC);
-        NetworkManager.registerS2CPayloadType(ModPayloads.BiomeAddPayload.ID, ModPayloads.BiomeAddPayload.CODEC);
-        NetworkManager.registerS2CPayloadType(ModPayloads.ShaderRePayload.ID, ModPayloads.ShaderRePayload.CODEC);
-        NetworkManager.registerS2CPayloadType(ModPayloads.StarsRePayLoad.ID, ModPayloads.StarsRePayLoad.CODEC);
+        PayloadTypeRegistry.playS2C().register(WorldAddPayload.ID, WorldAddPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(BiomeAddPayload.ID, BiomeAddPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ShaderRePayload.ID, ShaderRePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
 
     }
 
