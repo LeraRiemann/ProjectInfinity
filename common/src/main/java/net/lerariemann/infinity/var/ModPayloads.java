@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.var;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.networking.NetworkManager;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
@@ -21,9 +22,9 @@ import java.util.Objects;
 
 public class ModPayloads {
 
-    @ExpectPlatform
     public static MinecraftClient client(Object context) {
-        throw new AssertionError();
+        ClientPlayNetworking.Context clientContext = (ClientPlayNetworking.Context) context;
+        return clientContext.client();
     }
 
     public record WorldAddPayload(Identifier world_id, NbtCompound world_data) implements CustomPayload {
@@ -102,12 +103,19 @@ public class ModPayloads {
         return new ShaderRePayload(((InfinityOptionsAccess)(destination)).projectInfinity$getInfinityOptions().data());
     }
 
-    @ExpectPlatform
     public static void registerPayloadsServer() {
-        throw new AssertionError();
+        NetworkManager.registerReceiver(ModPayloads.WorldAddPayload.ID, ModPayloads.WorldAddPayload.CODEC);
+        NetworkManager.registerS2CPayloadType(ModPayloads.BiomeAddPayload.ID, ModPayloads.BiomeAddPayload.CODEC);
+        NetworkManager.registerS2CPayloadType(ModPayloads.ShaderRePayload.ID, ModPayloads.ShaderRePayload.CODEC);
+        NetworkManager.registerS2CPayloadType(ModPayloads.StarsRePayLoad.ID, ModPayloads.StarsRePayLoad.CODEC);
+
     }
-    @ExpectPlatform
+
     public static void registerPayloadsClient() {
-       throw new AssertionError();
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, );
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.WorldAddPayload.ID, ModPayloads::addWorld);
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.BiomeAddPayload.ID, ModPayloads::addBiome);
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.ShaderRePayload.ID, ModPayloads::receiveShader);
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.StarsRePayLoad.ID, ModPayloads::receiveStars);
     }
 }

@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.neoforge;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.neoforge.client.InfinityModNeoForgeClient;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;

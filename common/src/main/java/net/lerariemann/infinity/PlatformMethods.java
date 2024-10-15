@@ -2,6 +2,7 @@ package net.lerariemann.infinity;
 
 import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.networking.NetworkManager;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,9 +27,8 @@ public class PlatformMethods {
         throw new AssertionError();
     }
 
-    @ExpectPlatform
     public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {
-        throw new AssertionError();
+        NetworkManager.sendToPlayer(entity, payload);
     }
 
     @ExpectPlatform

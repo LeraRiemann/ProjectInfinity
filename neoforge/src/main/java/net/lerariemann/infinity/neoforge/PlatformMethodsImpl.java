@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.neoforge;
 
+import dev.architectury.networking.NetworkManager;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.mixin.registry.sync.BaseMappedRegistryAccessor;
 import net.minecraft.network.PacketByteBuf;
@@ -19,10 +20,6 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 public class PlatformMethodsImpl {
     public static boolean isModLoaded(String modID) {
        return ModList.get().isLoaded(modID);
-    }
-
-    public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {
-        net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(entity, payload);
     }
 
     public static PacketByteBuf createPacketByteBufs() {

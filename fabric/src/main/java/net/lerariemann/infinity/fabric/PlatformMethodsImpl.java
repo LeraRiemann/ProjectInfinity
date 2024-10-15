@@ -20,10 +20,6 @@ public class PlatformMethodsImpl {
         return FabricLoader.getInstance().isModLoaded(modID);
     }
 
-    public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {
-        net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(entity, payload);
-    }
-
     public static PacketByteBuf createPacketByteBufs() {
         return PacketByteBufs.create();
     }
