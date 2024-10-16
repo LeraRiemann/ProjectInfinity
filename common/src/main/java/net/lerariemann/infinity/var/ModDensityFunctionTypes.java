@@ -4,9 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
-import net.lerariemann.infinity.InfinityMod;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
@@ -16,8 +13,6 @@ import net.minecraft.world.gen.densityfunction.DensityFunction;
 import java.util.Arrays;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
-import static net.lerariemann.infinity.PlatformMethods.freeze;
-import static net.lerariemann.infinity.PlatformMethods.unfreeze;
 
 public class ModDensityFunctionTypes {
     interface Nonbinary extends DensityFunction {
@@ -329,6 +324,7 @@ public class ModDensityFunctionTypes {
         register("skygrid", Skygrid.CODEC_HOLDER);
         register("library", Library.CODEC_HOLDER);
         register("classic", Classic.CODEC_HOLDER);
+        DENSITY_FUNCTION_TYPES.register();
     }
 
 }
