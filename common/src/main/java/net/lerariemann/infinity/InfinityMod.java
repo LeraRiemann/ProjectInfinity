@@ -27,6 +27,7 @@ public class InfinityMod {
 		ConfigManager.unpackDefaultConfigs();
 		ModComponentTypes.registerComponentTypes();
 		ModBlocks.registerModBlocks();
+		ModItems.registerModItems();
 		ModBlockEntities.registerBlockEntities();
 		ModEntities.registerEntities();
 		ModPoi.registerPoi();

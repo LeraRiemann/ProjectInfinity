@@ -1,9 +1,11 @@
 package net.lerariemann.infinity.var;
 
+import com.mojang.serialization.Codec;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.component.ComponentType;
+import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
@@ -13,6 +15,7 @@ import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModComponentTypes {
     public static RegistrySupplier<ComponentType<Identifier>> KEY_DESTINATION;
+    public static RegistrySupplier<ComponentType<Integer>> KEY_COLOR;
     public static final DeferredRegister<ComponentType<?>> COMPONENT_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.DATA_COMPONENT_TYPE);
 
@@ -20,6 +23,8 @@ public class ModComponentTypes {
         InfinityMod.LOGGER.debug("Registering component types for " + InfinityMod.MOD_ID);
         KEY_DESTINATION = register("key_destination",
                 (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
+        KEY_COLOR = register("key_color",
+                (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
         COMPONENT_TYPES.register();
     }
 

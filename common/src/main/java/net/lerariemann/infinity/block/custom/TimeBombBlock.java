@@ -1,8 +1,8 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.access.Timebombable;
-import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.var.ModCriteria;
+import net.lerariemann.infinity.var.ModItems;
 import net.lerariemann.infinity.var.ModSounds;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.*;
@@ -104,14 +104,14 @@ public class TimeBombBlock extends Block {
                     } //activate
                     if (!state.get(ACTIVE)) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                        player.getInventory().insertStack(ModBlocks.TIME_BOMB_ITEM.get().getDefaultStack());
+                        player.getInventory().insertStack(ModItems.TIME_BOMB_ITEM.get().getDefaultStack());
                         return ActionResult.SUCCESS;
                     } //pick up
                 }
             }
             else if (player.getStackInHand(Hand.MAIN_HAND).isEmpty()) {
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                player.getInventory().insertStack(ModBlocks.TIME_BOMB_ITEM.get().getDefaultStack());
+                player.getInventory().insertStack(ModItems.TIME_BOMB_ITEM.get().getDefaultStack());
                 return ActionResult.SUCCESS;
             }
         }

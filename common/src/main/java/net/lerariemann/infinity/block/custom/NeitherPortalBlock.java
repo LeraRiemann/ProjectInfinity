@@ -19,6 +19,7 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.WritableBookContentComponent;
 import net.minecraft.component.type.WrittenBookContentComponent;
@@ -47,6 +48,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
@@ -142,6 +144,10 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     * Statistics for opening the portal are attributed to the nearest player. */
     public static void modifyOnInitialCollision(Identifier dimName, World world, BlockPos pos, BlockState state) {
         MinecraftServer server = world.getServer();
+        if (dimName.toString().equals("minecraft:random")) {
+            dimName = InfinityMod.getId("generated_" + (RandomProvider.getProvider(server).rule("longArithmeticEnabled") ?
+                    world.getRandom().nextLong() : world.getRandom().nextInt()));
+        }
         if (server != null) {
             PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
 
@@ -245,24 +251,15 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             BlockState blockState = world.getBlockState(blockPos);
             if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof NeitherPortalBlock) {
                 modifyPortalBlock(world, blockPos, axis, id, color, open);
-                BlockPos blockPos2 = blockPos.offset(Direction.UP);
-                if (!set.contains(blockPos2))
-                    queue.add(blockPos2);
-                blockPos2 = blockPos.offset(Direction.DOWN);
-                if (!set.contains(blockPos2))
-                    queue.add(blockPos2);
-                blockPos2 = blockPos.offset(Direction.NORTH);
-                if (!set.contains(blockPos2))
-                    queue.add(blockPos2);
-                blockPos2 = blockPos.offset(Direction.SOUTH);
-                if (!set.contains(blockPos2))
-                    queue.add(blockPos2);
-                blockPos2 = blockPos.offset(Direction.WEST);
-                if (!set.contains(blockPos2))
-                    queue.add(blockPos2);
-                blockPos2 = blockPos.offset(Direction.EAST);
-                if (!set.contains(blockPos2))
-                    queue.add(blockPos2);
+                Set<Direction> toCheck = (axis == Direction.Axis.Z) ?
+                        Set.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH) :
+                        Set.of(Direction.UP, Direction.DOWN, Direction.EAST, Direction.WEST);
+                BlockPos blockPos2;
+                for (Direction dir : toCheck) {
+                    blockPos2 = blockPos.offset(dir);
+                    if (!set.contains(blockPos2))
+                        queue.add(blockPos2);
+                }
             }
         }
     }
@@ -347,7 +344,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     static Map<Item, String> recipes = Map.ofEntries(
             Map.entry(Items.BOOKSHELF, "infinity:book_box"),
             Map.entry(Items.TNT, "infinity:timebomb"),
-            Map.entry(Items.LECTERN, "infinity:altar")
+            Map.entry(Items.LECTERN, "infinity:altar"),
+            Map.entry(Items.AMETHYST_SHARD, "infinity:key")
     );
 
     /* Adds logic for portal-based recipes. */
@@ -357,8 +355,19 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             ItemStack itemStack = e.getStack();
             if (recipes.containsKey(itemStack.getItem())) {
                 Vec3d v = entity.getVelocity();
+                ItemStack resStack = new ItemStack(Registries.ITEM.get(Identifier.of(recipes.get(itemStack.getItem()))));
+                if (resStack.isOf(ModItems.TRANSFINITE_KEY.get())) {
+                    BlockEntity blockEntity = world.getBlockEntity(pos);
+                    if (blockEntity instanceof NeitherPortalBlockEntity portal) {
+                        Integer keycolor = ColorHelper.Argb.fullAlpha(
+                                (int)getNumericFromId(portal.getDimension(), world.getServer()) & 0xFFFFFF);
+                        ComponentMap newMap = (ComponentMap.builder().add(ModComponentTypes.KEY_DESTINATION.get(), portal.getDimension())
+                                .add(ModComponentTypes.KEY_COLOR.get(), keycolor)).build();
+                        resStack.applyComponentsFrom(newMap);
+                    }
+                }
                 ItemEntity result = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(),
-                        new ItemStack(Registries.ITEM.get(Identifier.of(recipes.get(itemStack.getItem())))).copyWithCount(itemStack.getCount()),
+                        resStack.copyWithCount(itemStack.getCount()),
                         -v.x, -v.y, -v.z);
                 world.spawnEntity(result);
                 entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);

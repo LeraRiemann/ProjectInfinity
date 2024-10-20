@@ -4,8 +4,10 @@ import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.var.ModComponentTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registry;
@@ -14,6 +16,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.poi.PointOfInterestType;
 
@@ -78,11 +81,32 @@ public class PlatformMethods {
             return 16777215;
     }
 
+    public static int getKeyColor(ItemStack stack, int layer) {
+        if (layer == 1) {
+            Identifier dim = stack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
+            if (dim != null) {
+                if (dim.toString().equals("minecraft:random")) {
+                    /*IntegratedServer cl = MinecraftClient.getInstance().getServer();
+                    if (cl != null) {
+                        return ColorHelper.Argb.fullAlpha(Color.HSBtoRGB(((int)(cl.getTicks())%255)/255.0f, 1.0f, 1.0f));
+                    }*/
+                    return 0;
+                }
+                if (dim.toString().equals("minecraft:none")) {
+                    return ColorHelper.Argb.fullAlpha(0xFFFFFF);
+                }
+            }
+            Integer color = stack.getComponents().get(ModComponentTypes.KEY_COLOR.get());
+            return (color == null) ? 0 : color;
+        }
+        return ColorHelper.Argb.fullAlpha(0xFFFFFF);
+    }
+
     public static int getNeitherPortalColour(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
         if (world != null && pos != null) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof NeitherPortalBlockEntity) {
-                Object j = ((NeitherPortalBlockEntity) blockEntity).getRenderData();
+            if (blockEntity instanceof NeitherPortalBlockEntity be) {
+                Object j = be.getRenderData();
                 if (j == null) return 0;
                 return (int)j & 0xFFFFFF;
             }
