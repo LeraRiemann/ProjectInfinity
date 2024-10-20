@@ -3,10 +3,8 @@ package net.lerariemann.infinity.var;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.lerariemann.infinity.InfinityMod;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import dev.architectury.registry.registries.DeferredRegister;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.random.CheckedRandom;
@@ -14,8 +12,7 @@ import net.minecraft.world.gen.densityfunction.DensityFunction;
 
 import java.util.Arrays;
 
-import static net.lerariemann.infinity.PlatformMethods.freeze;
-import static net.lerariemann.infinity.PlatformMethods.unfreeze;
+import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModDensityFunctionTypes {
     interface Nonbinary extends DensityFunction {
@@ -311,12 +308,14 @@ public class ModDensityFunctionTypes {
         public CodecHolder<? extends DensityFunction> getCodecHolder() { return CODEC_HOLDER; }
     }
 
+
+    public static final DeferredRegister<MapCodec<? extends DensityFunction>> DENSITY_FUNCTION_TYPES = DeferredRegister.create(MOD_ID, RegistryKeys.DENSITY_FUNCTION_TYPE);
+
     public static <T extends DensityFunction> void register(String name, CodecHolder<T> holder) {
-        Registry.register(Registries.DENSITY_FUNCTION_TYPE, InfinityMod.MOD_ID + ":" + name, holder.codec());
+        DENSITY_FUNCTION_TYPES.register(name, holder::codec);
     }
 
     public static void registerFunctions() {
-        unfreeze(Registries.DENSITY_FUNCTION_TYPE);
         for (NonbinaryOperation.Type enum_ : NonbinaryOperation.Type.values()) {
             register(enum_.name, enum_.codecHolder);
         }
@@ -325,7 +324,7 @@ public class ModDensityFunctionTypes {
         register("skygrid", Skygrid.CODEC_HOLDER);
         register("library", Library.CODEC_HOLDER);
         register("classic", Classic.CODEC_HOLDER);
-        freeze(Registries.DENSITY_FUNCTION_TYPE);
+        DENSITY_FUNCTION_TYPES.register();
     }
 
 }

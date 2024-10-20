@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.var;
 
 import com.mojang.serialization.MapCodec;
-import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.registry.registries.DeferredRegister;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.dimensions.RandomProvider;
@@ -12,6 +12,7 @@ import net.minecraft.block.LadderBlock;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.CodecHolder;
@@ -19,6 +20,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
 
+import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.PlatformMethods.freeze;
 import static net.lerariemann.infinity.PlatformMethods.unfreeze;
 import static net.lerariemann.infinity.util.ConfigManager.getConfigDir;
@@ -176,16 +178,18 @@ public class ModMaterialRules {
         }
     }
 
+    public static final DeferredRegister<MapCodec<? extends MaterialRules.MaterialRule>> MATERIAL_RULES = DeferredRegister.create(MOD_ID, RegistryKeys.MATERIAL_RULE);
+
+
     public static <T extends CodecHolder<? extends MaterialRules.MaterialRule>> void register(String name, T holder) {
-        Registry.register(Registries.MATERIAL_RULE, InfinityMod.MOD_ID + ":" + name, holder.codec());
+        MATERIAL_RULES.register(name, () -> holder.codec());
     }
 
     public static void registerRules() {
-        unfreeze(Registries.MATERIAL_RULE);
         register("chaos", RandomBlockMaterialRule.CODEC);
         register("library", LibraryRule.CODEC);
         register("backrooms", BackroomsRule.CODEC);
-        freeze(Registries.MATERIAL_RULE);
+        MATERIAL_RULES.register();
 
     }
 }

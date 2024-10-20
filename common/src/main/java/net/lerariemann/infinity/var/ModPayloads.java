@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.var;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
@@ -21,9 +22,9 @@ import java.util.Objects;
 
 public class ModPayloads {
 
-    @ExpectPlatform
     public static MinecraftClient client(Object context) {
-        throw new AssertionError();
+        ClientPlayNetworking.Context clientContext = (ClientPlayNetworking.Context) context;
+        return clientContext.client();
     }
 
     public record WorldAddPayload(Identifier world_id, NbtCompound world_data) implements CustomPayload {
@@ -102,12 +103,18 @@ public class ModPayloads {
         return new ShaderRePayload(((InfinityOptionsAccess)(destination)).projectInfinity$getInfinityOptions().data());
     }
 
-    @ExpectPlatform
     public static void registerPayloadsServer() {
-        throw new AssertionError();
+        PayloadTypeRegistry.playS2C().register(WorldAddPayload.ID, WorldAddPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(BiomeAddPayload.ID, BiomeAddPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ShaderRePayload.ID, ShaderRePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
+
     }
-    @ExpectPlatform
+
     public static void registerPayloadsClient() {
-       throw new AssertionError();
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.WorldAddPayload.ID, ModPayloads::addWorld);
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.BiomeAddPayload.ID, ModPayloads::addBiome);
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.ShaderRePayload.ID, ModPayloads::receiveShader);
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.StarsRePayLoad.ID, ModPayloads::receiveStars);
     }
 }
