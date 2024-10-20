@@ -136,8 +136,8 @@ public class RandomBiome {
                 return res;
             }
             case "minecraft:dust_color_transition" -> {
-                res.put("fromColor", randomDustColor());
-                res.put("toColor", randomDustColor());
+                res.put("from_color", randomDustColor());
+                res.put("to_color", randomDustColor());
                 res.putFloat("scale", random.nextFloat());
                 return res;
             }

@@ -14,10 +14,7 @@ import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.loading.DimensionGrabber;
-import net.lerariemann.infinity.var.ModCommands;
-import net.lerariemann.infinity.var.ModCriteria;
-import net.lerariemann.infinity.var.ModPayloads;
-import net.lerariemann.infinity.var.ModStats;
+import net.lerariemann.infinity.var.*;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
@@ -74,6 +71,17 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     public static void tryCreatePortalFromItem(BlockState state, World world, BlockPos pos, ItemEntity entity) {
         ItemStack itemStack = entity.getStack();
+
+        /* Check if the item provided is a transfinite key. */
+        Identifier key_dest = itemStack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
+        if (key_dest != null) {
+            MinecraftServer server = world.getServer();
+            if (server != null) {
+                NeitherPortalBlock.modifyOnInitialCollision(key_dest, world, pos, state);
+                entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                return;
+            }
+        }
 
         /* Check if the item provided is a book of some kind. */
         WritableBookContentComponent writableComponent = itemStack.getComponents().get(DataComponentTypes.WRITABLE_BOOK_CONTENT);

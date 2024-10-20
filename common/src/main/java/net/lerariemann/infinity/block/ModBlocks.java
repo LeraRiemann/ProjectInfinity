@@ -3,16 +3,15 @@ package net.lerariemann.infinity.block;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.*;
+import net.lerariemann.infinity.var.ModComponentTypes;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.world.World;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
@@ -31,7 +30,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_BOMB = infinityBlocks.register("timebomb", () -> new TimeBombBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(state -> 15)));
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM = infinityItems.register("timebomb", () -> new BlockItem(TIME_BOMB.get(), new Item.Settings().arch$tab(ItemGroups.OPERATOR)));
 
-
+    public static final RegistrySupplier<Item> TRANSFINITE_KEY = infinityItems.register("key", () -> new Item(new Item.Settings().component(ModComponentTypes.KEY_DESTINATION.get(), World.END.getValue()).arch$tab(ItemGroups.INGREDIENTS)));
 
     public static void registerModBlocks() {
         infinityBlocks.register();
@@ -45,6 +44,4 @@ public class ModBlocks {
     @ExpectPlatform
     public static void add(RegistryKey<ItemGroup> functional, Item item) {
     }
-
-
 }
