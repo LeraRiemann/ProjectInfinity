@@ -6,12 +6,10 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
-import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.var.ModCommands;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
-import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
@@ -27,6 +25,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
@@ -64,8 +63,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Shadow public abstract @Nullable Entity teleportTo(TeleportTarget teleportTarget);
 
-    @Unique private long ticksUntilWarp;
-    @Unique private long idForWarp;
+    @Unique private long infinity$ticksUntilWarp;
+    @Unique private long infinity$idForWarp;
 
 
     @Inject(method="findRespawnPosition", at = @At("HEAD"), cancellable = true)
@@ -73,19 +72,21 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
         if (((Timebombable)world).projectInfinity$isTimebobmed() > 0) cir.setReturnValue(Optional.empty());
     }
 
+    /* When the player is using the Infinity portal, this modifies the portal on the other side if needed. */
     @Inject(method = "teleportTo",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V")
     )
     private void injected2(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir, @Local(ordinal = 0) ServerWorld serverWorld, @Local RegistryKey<World> registryKey) {
-        if (((MinecraftServerAccess)(serverWorld.getServer())).projectInfinity$getDimensionProvider().rule("returnPortalsEnabled") &&
+        if (NeitherPortalBlock.getProvider(serverWorld.getServer()).rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = BlockPos.ofFloored(teleportTarget.pos());
             ServerWorld destination = teleportTarget.world();
-            boolean bl = false;
             for (BlockPos pos2: new BlockPos[] {pos, pos.add(1, 0, 0), pos.add(0, 0, 1),
                     pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
-                bl = true;
-                String keystr = registryKey.getValue().getPath();
+                Identifier dimensionName = registryKey.getValue();
+
+                /* Parse the identifier to figure out the color of the portal. */
+                String keystr = dimensionName.getPath();
                 String is = keystr.substring(keystr.lastIndexOf("_") + 1);
                 long i;
                 try {
@@ -93,11 +94,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
                 } catch (Exception e) {
                     i = ModCommands.getDimensionSeed(is, serverWorld.getServer());
                 }
-                NeitherPortalBlock.modifyPortal(destination, pos2, destination.getBlockState(pos), i, true);
+
+                NeitherPortalBlock.modifyPortalRecursive(destination, pos2, destination.getBlockState(pos), dimensionName, i, true);
                 break;
-            }
-            if (bl) {
-                this.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
             }
         }
     }
@@ -111,9 +110,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {
-        if (--this.ticksUntilWarp == 0L) {
+        if (--this.infinity$ticksUntilWarp == 0L) {
             MinecraftServer s = this.getServerWorld().getServer();
-            ServerWorld w = s.getWorld(ModCommands.getKey(this.idForWarp, s));
+            ServerWorld w = s.getWorld(ModCommands.getKey(this.infinity$idForWarp, s));
             if (w==null) return;
             double d = DimensionType.getCoordinateScaleFactor(this.getServerWorld().getDimension(), w.getDimension());
             Entity self = getCameraEntity();
@@ -148,7 +147,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Override
     public void projectInfinity$setWarpTimer(long ticks, long dim) {
-        this.ticksUntilWarp = ticks;
-        this.idForWarp = dim;
+        this.infinity$ticksUntilWarp = ticks;
+        this.infinity$idForWarp = dim;
     }
 }

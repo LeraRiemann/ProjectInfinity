@@ -4,6 +4,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.var.ModCommands;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
 import java.io.IOException;
@@ -62,8 +63,8 @@ public class Easterizer {
         return map.containsKey(d);
     }
 
-    public String keyOf(long d) {
-        if (!isEaster(d)) return "generated_" + d;
-        return map.get(d).getRight().getLeft();
+    public Identifier keyOf(long d) {
+        if (!isEaster(d)) return InfinityMod.getId("generated_" + d);
+        return InfinityMod.getId(map.get(d).getRight().getLeft());
     }
 }

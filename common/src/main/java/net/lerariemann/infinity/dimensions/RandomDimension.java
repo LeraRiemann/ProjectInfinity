@@ -9,6 +9,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ import java.util.*;
 public class RandomDimension {
     public final long id;
     public final RandomProvider PROVIDER;
-    public String name, fullname;
+    public Identifier identifier;
     public final Random random;
     public int height;
     public int min_y;
@@ -45,8 +46,7 @@ public class RandomDimension {
         this.server = server;
         PROVIDER = ((MinecraftServerAccess)(server)).projectInfinity$getDimensionProvider();
         id = i;
-        name = PROVIDER.easterizer.keyOf(i);
-        fullname = InfinityMod.MOD_ID + ":" + name;
+        identifier = PROVIDER.easterizer.keyOf(i);
         createDirectories();
         initializeStorage();
         if (Easterizer.easterize(this)) {
@@ -66,12 +66,20 @@ public class RandomDimension {
         wrap_up(false);
     }
 
+    public String getName() {
+        return identifier.getPath();
+    }
+
+    public String getFullName() {
+        return identifier.toString();
+    }
+
     public String getRootPath() {
-        return server.getSavePath(WorldSavePath.DATAPACKS).resolve(name).toString();
+        return server.getSavePath(WorldSavePath.DATAPACKS).resolve(getName()).toString();
     }
 
     public String getStoragePath() {
-        return server.getSavePath(WorldSavePath.DATAPACKS).resolve(name).resolve("data").resolve(InfinityMod.MOD_ID).toString();
+        return server.getSavePath(WorldSavePath.DATAPACKS).resolve(getName()).resolve("data").resolve(InfinityMod.MOD_ID).toString();
     }
 
     public void initializeStorage() {
@@ -110,7 +118,7 @@ public class RandomDimension {
 
     void wrap_up(boolean bl) {
         (new RandomInfinityOptions(this, bl)).save();
-        CommonIO.write(data, getStoragePath() + "/dimension", name + ".json");
+        CommonIO.write(data, getStoragePath() + "/dimension", getName() + ".json");
         if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
     }
 

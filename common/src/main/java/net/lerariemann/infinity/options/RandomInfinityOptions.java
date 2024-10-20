@@ -19,8 +19,8 @@ public class RandomInfinityOptions {
         path = parent.getStoragePath();
         RandomProvider prov = parent.PROVIDER;
         Random r = parent.random;
-        if (bl && prov.easterizer.optionmap.containsKey(parent.fullname)) {
-            data = prov.easterizer.optionmap.get(parent.fullname);
+        if (bl && prov.easterizer.optionmap.containsKey(parent.getFullName())) {
+            data = prov.easterizer.optionmap.get(parent.getFullName());
         }
         if (bl) return;
         NbtCompound shader = new NbtCompound();

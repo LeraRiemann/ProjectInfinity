@@ -22,6 +22,8 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.component.type.WritableBookContentComponent;
+import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.SpawnReason;
@@ -35,6 +37,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -66,29 +69,131 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         return new NeitherPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
     }
 
-    public static boolean open(MinecraftServer s, World world, BlockPos pos, boolean countRepeats) {
-        RandomProvider prov = ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider();
+    /* Extracts the string used to generate the dimension ID from component content. */
+    public static String parseComponents(WritableBookContentComponent writableComponent, WrittenBookContentComponent writtenComponent, String printedComponent) {
+        String content = "";
+        try {
+            if (writableComponent != null) {
+                content = writableComponent.pages().getFirst().raw();
+            }
+            if (writtenComponent != null) {
+                content = writtenComponent.pages().getFirst().raw().getString();
+            }
+        }
+        catch (NoSuchElementException e) {
+            content = "empty";
+        }
+
+        if (printedComponent != null) {
+            content = printedComponent;
+        }
+        if (Objects.equals(content, "")) {
+            content = "empty";
+        }
+        return content;
+    }
+
+    /* Sets the portal color and destination and calls to open the portal immediately if the portal key is blank.
+    * This is what is being called initially on book collision.
+    * Statistics for opening the portal are attributed to the nearest player. */
+    public static void modifyPortalOnCollision(long dimId, Identifier dimName, World world, BlockPos pos, BlockState state) {
+        MinecraftServer server = world.getServer();
+        if (server != null) {
+            PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
+
+            /* Set color and destination. Open status = the world that is being accessed exists already. */
+            boolean dimensionExistsAlready = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, dimName)) != null;
+            NeitherPortalBlock.modifyPortalRecursive(world, pos, state, dimName, dimId, dimensionExistsAlready);
+
+            if (dimensionExistsAlready) {
+                if (nearestPlayer != null) nearestPlayer.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
+                runAfterEffects(world, pos);
+            }
+
+            /* If the portal key is blank, open the portal immediately. */
+            else if (getProvider(server).portalKey.isBlank()) {
+                NeitherPortalBlock.openWithStatIncrease(nearestPlayer, server, world, pos);
+            }
+        }
+    }
+
+    /* This is being called when the portal is right-clicked. */
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos,
+                              PlayerEntity player, BlockHitResult hit) {
+        if (!world.isClient) {
+            MinecraftServer s = world.getServer();
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (s!=null && blockEntity instanceof NeitherPortalBlockEntity) {
+                /* If the portal is open already, nothing should happen. */
+                if (((NeitherPortalBlockEntity)blockEntity).getOpen() &&
+                        world_exists(s, ((NeitherPortalBlockEntity)blockEntity).getDimension()))
+                    return ActionResult.SUCCESS;
+
+                /* If the portal key is blank, open the portal on any right-click. */
+                RandomProvider prov = getProvider(s);
+                if (prov.portalKey.isBlank()) {
+                    openWithStatIncrease(player, s, world, pos);
+                }
+
+                /* Otherwise check if we're using the correct key. If so, open. */
+                else {
+                    ItemStack usedKey = player.getStackInHand(Hand.MAIN_HAND);
+                    Item correctKey = Registries.ITEM.get(Identifier.of(prov.portalKey));
+                    if (usedKey.isOf(correctKey)) {
+                        if (!player.getAbilities().creativeMode && prov.rule("consumePortalKey")) {
+                            usedKey.decrement(1); // Consume the key if needed
+                        }
+                        openWithStatIncrease(player, s, world, pos);
+                    }
+                }
+            }
+        }
+        return ActionResult.SUCCESS;
+    }
+
+    /* Jingle signaling the portal is now usable. */
+    public static void runAfterEffects(World world, BlockPos pos) {
+        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
+    }
+
+    public static RandomProvider getProvider(MinecraftServer server) {
+        return ((MinecraftServerAccess)(server)).projectInfinity$getDimensionProvider();
+    }
+
+    /* Calls to open the portal and attributes the relevant statistics to a player provided. */
+    public static void openWithStatIncrease(PlayerEntity player, MinecraftServer s, World world, BlockPos pos) {
+        boolean isDimensionNew = NeitherPortalBlock.open(s, world, pos);
+        if (player != null) {
+            if (isDimensionNew) {
+                player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
+                ModCriteria.DIMS_OPENED.get().trigger((ServerPlayerEntity)player);
+            }
+            player.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
+        }
+    }
+
+    /* Opens the portal by trying to make it usable, including a call to generate a dimension if needed. */
+    public static boolean open(MinecraftServer s, World world, BlockPos pos) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         boolean bl = false;
         if (blockEntity instanceof NeitherPortalBlockEntity) {
-            long i = ((NeitherPortalBlockEntity) blockEntity).getDimension();
-            bl = countRepeats || addDimension(s, i, prov.rule("runtimeGenerationEnabled"));
-            modifyPortal(world, pos, world.getBlockState(pos), i, true);
-            world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
+            /* Call dimension creation. */
+            Identifier i = ((NeitherPortalBlockEntity) blockEntity).getDimension();
+            long l = ((NeitherPortalBlockEntity) blockEntity).getDimensionId();
+            if (i.getNamespace().equals(InfinityMod.MOD_ID)) {
+                bl = addInfinityDimension(s, l);
+            }
+
+            /* Set the portal's open status making it usable. */
+            modifyPortalRecursive(world, pos, world.getBlockState(pos), i, l, true);
+            runAfterEffects(world, pos);
         }
         return bl;
     }
 
-    private static void changeDim(World world, BlockPos pos, Direction.Axis axis, long i, boolean open) {
-        world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.get().getDefaultState().with(AXIS, axis));
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity != null) {
-            ((NeitherPortalBlockEntity)blockEntity).setDimension(i);
-            ((NeitherPortalBlockEntity)blockEntity).setOpen(open);
-        }
-    }
-
-    public static void modifyPortal(World world, BlockPos pos, BlockState state, long i, boolean open) {
+    /* Sets the portal color, destination and open status. Calls itself recursively for neighbouring blocks. */
+    public static void modifyPortalRecursive(World world, BlockPos pos, BlockState state, Identifier id, long i, boolean open) {
         Set<BlockPos> set = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
         queue.add(pos);
@@ -98,7 +203,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             set.add(blockPos);
             BlockState blockState = world.getBlockState(blockPos);
             if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof NeitherPortalBlock) {
-                changeDim(world, blockPos, axis, i, open);
+                modifyPortalBlock(world, blockPos, axis, id, i, open);
                 BlockPos blockPos2 = blockPos.offset(Direction.UP);
                 if (!set.contains(blockPos2))
                     queue.add(blockPos2);
@@ -119,67 +224,48 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                     queue.add(blockPos2);
             }
         }
-        if (open) world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
     }
 
-    boolean world_exists(MinecraftServer s, long l) {
-        return s.getSavePath(WorldSavePath.DATAPACKS).resolve(ModCommands.getIdentifier(l, s).getPath()).toFile().exists() ||
-                s.getWorld(ModCommands.getKey(l, s)) != null;
-    }
-
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos,
-                              PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient) {
-            MinecraftServer s = world.getServer();
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (s!=null && blockEntity instanceof NeitherPortalBlockEntity) {
-                if (((NeitherPortalBlockEntity)blockEntity).getOpen() && world_exists(s, ((NeitherPortalBlockEntity)blockEntity).getDimension()))
-                    return ActionResult.SUCCESS;
-                RandomProvider prov = ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider();
-                boolean bl = prov.portalKey.isBlank();
-                boolean bl2 = false;
-                if (bl) {
-                    bl2 = open(s, world, pos, false);
-                }
-                else {
-                    ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
-                    Item item = Registries.ITEM.get(Identifier.of(prov.portalKey));
-                    if (itemStack.isOf(item)) {
-                        if (!player.getAbilities().creativeMode && prov.rule("consumePortalKey")) {
-                            itemStack.decrement(1);
-                        }
-                        bl2 = open(s, world, pos, false);
-                    }
-                }
-                if (bl2) {
-                    player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
-                    ModCriteria.DIMS_OPENED.get().trigger((ServerPlayerEntity)player);
-                }
-                player.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
-            }
+    /* Sets the portal color, destination and open status for one portal block. */
+    private static void modifyPortalBlock(World world, BlockPos pos, Direction.Axis axis, Identifier id, long i, boolean open) {
+        world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.get().getDefaultState().with(AXIS, axis));
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity != null) {
+            ((NeitherPortalBlockEntity)blockEntity).setDimension(i, id);
+            ((NeitherPortalBlockEntity)blockEntity).setOpen(open);
         }
-        return ActionResult.SUCCESS;
     }
 
-    public static boolean addDimension(MinecraftServer server, long i, boolean bl) {
+    boolean world_exists(MinecraftServer s, Identifier l) {
+        return (!l.getNamespace().equals(InfinityMod.MOD_ID)) ||
+                s.getSavePath(WorldSavePath.DATAPACKS).resolve(l.getPath()).toFile().exists() ||
+                s.getWorld(RegistryKey.of(RegistryKeys.WORLD, l)) != null;
+    }
+
+    /* Calls to create the dimension based on its ID. Returns true if the dimension being opened is indeed brand new. */
+    public static boolean addInfinityDimension(MinecraftServer server, long i) {
         RegistryKey<World> key = ModCommands.getKey(i, server);
-        if ((server.getWorld(key) == null) && (!((MinecraftServerAccess)(server)).projectInfinity$hasToAdd(key)) && !ModCommands.checkEnd(i, server)) {
-            RandomDimension d = new RandomDimension(i, server);
-            if (bl) {
-                ((MinecraftServerAccess) (server)).projectInfinity$addWorld(key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d));
-                server.getPlayerManager().getPlayerList().forEach(a -> sendNewWorld(a, ModCommands.getIdentifier(i, server), d));
+        if ((server.getWorld(key) == null) && // if the dimension does not yet exist
+                (!((MinecraftServerAccess)(server)).projectInfinity$hasToAdd(key))) { //and is not scheduled to be added
+            RandomDimension d = new RandomDimension(i, server); // then create the dimension datapack
+            if (getProvider(server).rule("runtimeGenerationEnabled")) {
+                ((MinecraftServerAccess)(server)).projectInfinity$addWorld(
+                        key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d)); // create the dimension
+                server.getPlayerManager().getPlayerList().forEach(
+                        a -> sendNewWorld(a, ModCommands.getIdentifier(i, server), d)); //and send everyone its data for clientside updating
                 return true;
             }
         }
         return false;
     }
 
+    /* Create and send S2C packets neseccary for the client to process a freshly added dimension. */
     public static void sendNewWorld(ServerPlayerEntity player, Identifier id, RandomDimension d) {
         d.random_biomes.forEach(b -> PlatformMethods.sendServerPlayerEntity(player, new ModPayloads.BiomeAddPayload(InfinityMod.getId(b.name), b.data)));
         PlatformMethods.sendServerPlayerEntity(player, new ModPayloads.WorldAddPayload(id, d.type != null ? d.type.data : new NbtCompound()));
     }
 
+    /* Spawns colourful particles. */
     @Environment(EnvType.CLIENT)
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, net.minecraft.util.math.random.Random random) {
@@ -206,7 +292,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             ParticleEffect eff = ParticleTypes.PORTAL;
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof NeitherPortalBlockEntity) {
-                long dim = ((NeitherPortalBlockEntity)blockEntity).getDimension();
+                long dim = ((NeitherPortalBlockEntity)blockEntity).getDimensionId();
                 Vec3d vec3d = Vec3d.unpackRgb((int)dim);
                 double color = 1.0D + (dim >> 16 & 0xFF) / 255.0D;
                 eff = new DustParticleEffect(new Vector3f((float)vec3d.x, (float)vec3d.y, (float)vec3d.z), (float)color);
@@ -222,6 +308,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             Map.entry(Items.LECTERN, "infinity:altar")
     );
 
+    /* Adds logic for portal-based recipes. */
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (!world.isClient() && entity instanceof ItemEntity e && !e.isRemoved()) {
@@ -238,20 +325,22 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         super.onEntityCollision(state, world, pos, entity);
     }
 
+    /* Spawns chaos pawns in the portal. */
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        if (world.getDimension().natural() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
+        if (world.getDimension().natural() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)
+                && random.nextInt(2000) < world.getDifficulty().getId()) {
             ChaosPawn entity;
             while (world.getBlockState(pos).isOf(this)) {
                 pos = pos.down();
             }
             if (world.getBlockState(pos).allowsSpawning(world, pos, ModEntities.CHAOS_PAWN.get()) &&
-                    ((MinecraftServerAccess)world.getServer()).projectInfinity$getDimensionProvider().rule("chaosMobsEnabled") &&
+                    getProvider(world.getServer()).rule("chaosMobsEnabled") &&
                     (entity = ModEntities.CHAOS_PAWN.get().spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());
                 if (blockEntity instanceof NeitherPortalBlockEntity) {
-                    int dim = (int)((NeitherPortalBlockEntity)blockEntity).getDimension();
+                    int dim = (int)((NeitherPortalBlockEntity)blockEntity).getDimensionId();
                     Vec3d c = Vec3d.unpackRgb(dim);
                     entity.setAllColors((int)(256 * c.z) + 256 * (int)(256 * c.y) + 65536 * (int)(256 * c.x));
                 }
