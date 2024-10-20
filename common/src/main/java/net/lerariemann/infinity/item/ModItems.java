@@ -1,9 +1,10 @@
-package net.lerariemann.infinity.var;
+package net.lerariemann.infinity.item;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.var.ModComponentTypes;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -23,7 +24,8 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM = infinityItems.register("timebomb", () ->
             new BlockItem(ModBlocks.TIME_BOMB.get(), new Item.Settings().arch$tab(ItemGroups.OPERATOR)));
     public static final RegistrySupplier<Item> TRANSFINITE_KEY = infinityItems.register("key", () ->
-            new Item(new Item.Settings().component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))
+            new TransfiniteKeyItem(new Item.Settings()
+                    .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))
                     .arch$tab(ItemGroups.INGREDIENTS)));
     public static void registerModItems() {
         infinityItems.register();

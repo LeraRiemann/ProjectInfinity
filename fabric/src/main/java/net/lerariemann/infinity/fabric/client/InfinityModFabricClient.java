@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.var.ModItems;
+import net.lerariemann.infinity.item.ModItems;
 import net.minecraft.client.render.RenderLayer;
 
 public class InfinityModFabricClient implements ClientModInitializer {

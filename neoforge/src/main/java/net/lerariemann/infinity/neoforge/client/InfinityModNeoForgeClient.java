@@ -4,7 +4,7 @@ import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.config.neoforge.ModConfigFactory;
-import net.lerariemann.infinity.var.ModItems;
+import net.lerariemann.infinity.item.ModItems;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;

@@ -2,7 +2,7 @@ package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.var.ModCriteria;
-import net.lerariemann.infinity.var.ModItems;
+import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.var.ModSounds;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.*;

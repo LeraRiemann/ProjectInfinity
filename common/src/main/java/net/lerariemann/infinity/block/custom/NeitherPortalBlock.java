@@ -13,6 +13,7 @@ import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
+import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.var.*;
 import net.minecraft.block.BlockEntityProvider;
@@ -134,10 +135,16 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         try {
             i = Long.parseLong(numericId);
         } catch (Exception e) {
-            /* Simply hash the name if it isn't of "generated_..." format. Probably will reimplement later */
+            /* Simply hash the name if it isn't of "generated_..." format. */
             i = ModCommands.getDimensionSeed(numericId, server);
         }
         return i;
+    }
+
+    public static int getKeyColorFromId(Identifier id, MinecraftServer server) {
+        if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
+            return ColorHelper.Argb.fullAlpha((int)getNumericFromId(id, server) & 0xFFFFFF);
+        return 0;
     }
 
     /* Sets the portal color and destination and calls to open the portal immediately if the portal key is blank.
@@ -359,8 +366,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 if (resStack.isOf(ModItems.TRANSFINITE_KEY.get())) {
                     BlockEntity blockEntity = world.getBlockEntity(pos);
                     if (blockEntity instanceof NeitherPortalBlockEntity portal) {
-                        Integer keycolor = ColorHelper.Argb.fullAlpha(
-                                (int)getNumericFromId(portal.getDimension(), world.getServer()) & 0xFFFFFF);
+                        Integer keycolor = getKeyColorFromId(portal.getDimension(), world.getServer());
                         ComponentMap newMap = (ComponentMap.builder().add(ModComponentTypes.KEY_DESTINATION.get(), portal.getDimension())
                                 .add(ModComponentTypes.KEY_COLOR.get(), keycolor)).build();
                         resStack.applyComponentsFrom(newMap);
