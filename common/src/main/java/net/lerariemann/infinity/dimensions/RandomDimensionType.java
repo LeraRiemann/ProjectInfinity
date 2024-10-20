@@ -18,7 +18,7 @@ public class RandomDimensionType {
     RandomDimensionType(RandomDimension dim) {
         parent = dim;
         random = dim.random;
-        name = "generated_" +dim.id;
+        name = "generated_" +dim.numericId;
         fullname = InfinityMod.MOD_ID + ":" + name;
         data = new NbtCompound();
         ultrawarm = roll("ultrawarm");

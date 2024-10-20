@@ -14,15 +14,16 @@ import java.util.Random;
 public class RandomInfinityOptions {
     NbtCompound data;
     String path;
-    public RandomInfinityOptions(RandomDimension parent, boolean bl) {
+    public RandomInfinityOptions(RandomDimension parent, boolean isEasterDim) {
         data = new NbtCompound();
         path = parent.getStoragePath();
         RandomProvider prov = parent.PROVIDER;
-        Random r = parent.random;
-        if (bl && prov.easterizer.optionmap.containsKey(parent.getFullName())) {
-            data = prov.easterizer.optionmap.get(parent.getFullName());
+        if (isEasterDim && prov.easterizer.optionmap.containsKey(parent.getName())) {
+            data = prov.easterizer.optionmap.get(parent.getName());
         }
-        if (bl) return;
+        if (isEasterDim) return;
+
+        Random r = parent.random;
         NbtCompound shader = new NbtCompound();
         if (prov.roll(r, "use_shaders")) {
             Object[] lst = genMatrix(r);

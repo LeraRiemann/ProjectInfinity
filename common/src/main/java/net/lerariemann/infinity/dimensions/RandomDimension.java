@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.*;
@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class RandomDimension {
-    public final long id;
+    public final long numericId;
     public final RandomProvider PROVIDER;
     public Identifier identifier;
     public final Random random;
@@ -41,24 +41,26 @@ public class RandomDimension {
     public NbtCompound data;
     public RandomDimensionType type;
 
-    public RandomDimension(long i, MinecraftServer server) {
-        random = new Random(i);
+    public RandomDimension(Identifier id, MinecraftServer server) {
         this.server = server;
-        PROVIDER = ((MinecraftServerAccess)(server)).projectInfinity$getDimensionProvider();
-        id = i;
-        identifier = PROVIDER.easterizer.keyOf(i);
+        PROVIDER = RandomProvider.getProvider(server);
+        identifier = id;
+        numericId = NeitherPortalBlock.getNumericFromId(identifier, server);
+        random = new Random(numericId);
         createDirectories();
         initializeStorage();
+        /* Code for easter dimensions */
         if (Easterizer.easterize(this)) {
             wrap_up(true);
             return;
         }
+        /* Code for procedurally generated dimensions */
         genBasics();
         type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
         data.put("generator", randomDimensionGenerator());
-        for (Long id: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+id)) {
-            RandomBiome b = new RandomBiome(id, this);
+        for (Long l: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+l)) {
+            RandomBiome b = new RandomBiome(l, this);
             random_biomes.add(b);
             addStructures(b);
         }
@@ -68,10 +70,6 @@ public class RandomDimension {
 
     public String getName() {
         return identifier.getPath();
-    }
-
-    public String getFullName() {
-        return identifier.toString();
     }
 
     public String getRootPath() {
@@ -116,8 +114,8 @@ public class RandomDimension {
                 RandomProvider.Block("minecraft:deepslate") : default_block;
     }
 
-    void wrap_up(boolean bl) {
-        (new RandomInfinityOptions(this, bl)).save();
+    void wrap_up(boolean isEasterDim) {
+        (new RandomInfinityOptions(this, isEasterDim)).save();
         CommonIO.write(data, getStoragePath() + "/dimension", getName() + ".json");
         if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
     }
@@ -178,7 +176,7 @@ public class RandomDimension {
         NbtCompound res = new NbtCompound();
         NbtCompound pack = new NbtCompound();
         pack.putInt("pack_format", 34);
-        pack.putString("description", "Dimension #" + id);
+        pack.putString("description", "Dimension #" + numericId);
         res.put("pack", pack);
         return res;
     }

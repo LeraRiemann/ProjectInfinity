@@ -2,9 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.var.ModCommands;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
 import java.io.IOException;
@@ -16,7 +14,7 @@ import static java.nio.file.Files.walk;
 
 
 public class Easterizer {
-    public Map<Long, Pair<NbtCompound, Pair<String, String>>> map;
+    public Map<String, Pair<NbtCompound, String>> map;
     public Map<String, NbtCompound> optionmap;
 
     public Easterizer(RandomProvider prov) {
@@ -39,12 +37,10 @@ public class Easterizer {
                         compound.remove("easter-type");
                     }
                     if (compound.contains("easter-options")) {
-                        optionmap.put("infinity:" + name, compound.getCompound("easter-options"));
+                        optionmap.put(name, compound.getCompound("easter-options"));
                         compound.remove("easter-options");
                     }
-                    Long l = ModCommands.getDimensionSeed(name, prov);
-                    Pair<NbtCompound, Pair<String, String>> easter_pair = new Pair<>(compound, new Pair<>(name, type));
-                    map.put(l, easter_pair);
+                    map.put(name, new Pair<>(compound, type));
                 }});
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -52,19 +48,15 @@ public class Easterizer {
     }
 
     public static boolean easterize(RandomDimension d) {
-        Map<Long, Pair<NbtCompound, Pair<String, String>>> map = d.PROVIDER.easterizer.map;
-        if (!map.containsKey(d.id)) return false;
-        d.data.putString("type", InfinityMod.MOD_ID + ":" + map.get(d.id).getRight().getRight() + "_type");
-        d.data.put("generator", map.get(d.id).getLeft());
+        Map<String, Pair<NbtCompound, String>> map = d.PROVIDER.easterizer.map;
+        String name = d.getName();
+        if (!map.containsKey(d.getName())) return false;
+        d.data.putString("type", InfinityMod.MOD_ID + ":" + map.get(name).getRight() + "_type");
+        d.data.put("generator", map.get(name).getLeft());
         return true;
     }
 
-    public boolean isEaster(long d) {
-        return map.containsKey(d);
-    }
-
-    public Identifier keyOf(long d) {
-        if (!isEaster(d)) return InfinityMod.getId("generated_" + d);
-        return InfinityMod.getId(map.get(d).getRight().getLeft());
+    public boolean isEaster(String name) {
+        return map.containsKey(name);
     }
 }

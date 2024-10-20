@@ -5,14 +5,13 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.ConfigGenerator;
 import net.minecraft.command.argument.BlockPosArgumentType;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -29,23 +28,23 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class ModCommands {
     public static void warpId(CommandContext<ServerCommandSource> context, long value) {
+        warp(context, InfinityMod.getId("generated_" + value));
+    }
+
+    public static void warp(CommandContext<ServerCommandSource> context, Identifier value) {
         MinecraftServer s = context.getSource().getServer();
         boolean isThisANewDimension = NeitherPortalBlock.addInfinityDimension(s, value);
         final ServerPlayerEntity self = context.getSource().getPlayer();
         if (self != null) {
             if (isThisANewDimension) self.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
-            self.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
             ((ServerPlayerEntityAccess)(self)).projectInfinity$setWarpTimer(20, value);
         }
     }
 
-    public static RegistryKey<World> getKey(long d, MinecraftServer s) {
-        return RegistryKey.of(RegistryKeys.WORLD, getIdentifier(d, s));
-    }
-
-    public static Identifier getIdentifier(long d, MinecraftServer s) {
-        if (d == ModCommands.getDimensionSeed("abatised redivides", s)) return World.END.getValue();
-        return ((MinecraftServerAccess)s).projectInfinity$getDimensionProvider().easterizer.keyOf(d);
+    public static Identifier getIdentifier(String text, MinecraftServer s) {
+        if (text.equals("abatised redivides")) return World.END.getValue();
+        if (RandomProvider.getProvider(s).easterizer.isEaster(text)) return InfinityMod.getId(text);
+        return InfinityMod.getId("generated_" + getDimensionSeed(text, s));
     }
 
     public static long getDimensionSeed(String text, MinecraftServer s) {
@@ -70,7 +69,7 @@ public class ModCommands {
                 .requires(source -> source.hasPermissionLevel(2))
                 .then(argument("text", StringArgumentType.string()).executes(context -> {
                     final String text = StringArgumentType.getString(context, "text");
-                    warpId(context, getDimensionSeed(text, context.getSource().getServer()));
+                    warp(context, getIdentifier(text, context.getSource().getServer()));
                     return 1;
                 }))));
         CommandRegistrationEvent.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("generate_configs")

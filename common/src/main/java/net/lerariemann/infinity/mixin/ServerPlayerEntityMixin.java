@@ -7,7 +7,7 @@ import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.var.ModCommands;
+import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.block.Blocks;
@@ -64,7 +64,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Shadow public abstract @Nullable Entity teleportTo(TeleportTarget teleportTarget);
 
     @Unique private long infinity$ticksUntilWarp;
-    @Unique private long infinity$idForWarp;
+    @Unique private Identifier infinity$idForWarp;
 
 
     @Inject(method="findRespawnPosition", at = @At("HEAD"), cancellable = true)
@@ -77,7 +77,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V")
     )
     private void injected2(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir, @Local(ordinal = 0) ServerWorld serverWorld, @Local RegistryKey<World> registryKey) {
-        if (NeitherPortalBlock.getProvider(serverWorld.getServer()).rule("returnPortalsEnabled") &&
+        if (RandomProvider.getProvider(serverWorld.getServer()).rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = BlockPos.ofFloored(teleportTarget.pos());
             ServerWorld destination = teleportTarget.world();
@@ -86,14 +86,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
                 Identifier dimensionName = registryKey.getValue();
 
                 /* Parse the identifier to figure out the color of the portal. */
-                String keystr = dimensionName.getPath();
-                String is = keystr.substring(keystr.lastIndexOf("_") + 1);
-                long i;
-                try {
-                    i = Long.parseLong(is);
-                } catch (Exception e) {
-                    i = ModCommands.getDimensionSeed(is, serverWorld.getServer());
-                }
+                long i = NeitherPortalBlock.getNumericFromId(dimensionName, serverWorld.getServer());
 
                 NeitherPortalBlock.modifyPortalRecursive(destination, pos2, destination.getBlockState(pos), dimensionName, i, true);
                 break;
@@ -110,15 +103,18 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {
+        /* Handle the warp command */
         if (--this.infinity$ticksUntilWarp == 0L) {
             MinecraftServer s = this.getServerWorld().getServer();
-            ServerWorld w = s.getWorld(ModCommands.getKey(this.infinity$idForWarp, s));
+            ServerWorld w = s.getWorld(RegistryKey.of(RegistryKeys.WORLD, this.infinity$idForWarp));
             if (w==null) return;
             double d = DimensionType.getCoordinateScaleFactor(this.getServerWorld().getDimension(), w.getDimension());
             Entity self = getCameraEntity();
             BlockPos blockPos2 = w.getWorldBorder().clamp(self.getX() * d, self.getY(), self.getZ() * d);
             this.teleport(w, blockPos2.getX(), blockPos2.getY(), blockPos2.getZ(), new HashSet<>(), self.getYaw(), self.getPitch());
         }
+
+        /* Handle effects from dimension deletion */
         int i = ((Timebombable)(getServerWorld())).projectInfinity$isTimebobmed();
         if (i > 200) {
             if (i%4 == 0) {
@@ -146,7 +142,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     }
 
     @Override
-    public void projectInfinity$setWarpTimer(long ticks, long dim) {
+    public void projectInfinity$setWarpTimer(long ticks, Identifier dim) {
         this.infinity$ticksUntilWarp = ticks;
         this.infinity$idForWarp = dim;
     }

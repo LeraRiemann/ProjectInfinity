@@ -1,12 +1,14 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 
@@ -32,6 +34,10 @@ public class RandomProvider {
     public NbtCompound noise;
     public String salt;
     public Easterizer easterizer;
+
+    public static RandomProvider getProvider(MinecraftServer server) {
+        return ((MinecraftServerAccess)(server)).projectInfinity$getDimensionProvider();
+    }
 
     public RandomProvider(String configpath, String savingpath) {
         this(configpath);
