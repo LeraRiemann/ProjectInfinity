@@ -2,6 +2,7 @@ package net.lerariemann.infinity.var;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
@@ -18,6 +19,7 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class ModPayloads {
@@ -82,9 +84,15 @@ public class ModPayloads {
             client.execute(() -> {
                 CommonIO.write(shader, ShaderLoader.shaderDir(client), ShaderLoader.FILENAME);
                 ShaderLoader.reloadShaders(client, true);
+                if (!resourcesReloaded) {
+                    client.reloadResources();
+                    resourcesReloaded = true;
+                }
             });
         }
     }
+    
+    public static boolean resourcesReloaded = Path.of(FabricLoader.getInstance().getGameDir() + "/resourcepacks/infinity/assets/infinity/shaders").toFile().exists();
 
     public record StarsRePayLoad() implements CustomPayload {
         public static final StarsRePayLoad INSTANCE = new StarsRePayLoad();
