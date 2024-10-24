@@ -2,11 +2,14 @@ package net.lerariemann.infinity;
 
 import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.var.ModComponentTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
@@ -109,5 +112,10 @@ public class PlatformMethods {
             }
         }
         return 16777215;
+    }
+
+    @ExpectPlatform
+    public static void addAfter(RegistrySupplier<Item> blockItem, RegistryKey<ItemGroup> group, Item item) {
+        throw new AssertionError();
     }
 }
