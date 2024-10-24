@@ -8,7 +8,7 @@ import net.minecraft.nbt.NbtList;
 public class RandomEndIsland extends RandomisedFeature {
     public RandomEndIsland(RandomFeaturesList parent) {
         super(parent, "island");
-        id = "random_end_island";
+        id = "infinity:random_end_island";
         save_with_placement();
     }
 

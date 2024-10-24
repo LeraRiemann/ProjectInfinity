@@ -6,7 +6,7 @@ import net.minecraft.nbt.NbtCompound;
 public class RandomDungeon extends RandomisedFeature {
     public RandomDungeon(RandomFeaturesList parent) {
         super(parent, "dungeon");
-        id = "random_dungeon";
+        id = "infinity:random_dungeon";
         save_with_placement();
     }
 
