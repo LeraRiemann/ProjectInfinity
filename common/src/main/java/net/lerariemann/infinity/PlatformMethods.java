@@ -57,11 +57,6 @@ public class PlatformMethods {
     }
 
     @ExpectPlatform
-    public static void unfreeze(RegistryKey<?> registry) {
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
     public static void freeze(Registry<?> registry) {
         throw new AssertionError();
     }

@@ -39,11 +39,6 @@ public class PlatformMethodsImpl {
 
     }
 
-    public static void unfreeze(RegistryKey<?> registry) {
-//        RegistryUtils.unfreeze(registry.getRegistryRef().getRegistry());
-    }
-
-
     public static void freeze(Registry<?> registry) {
         registry.freeze();
 

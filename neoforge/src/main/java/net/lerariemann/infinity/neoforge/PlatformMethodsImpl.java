@@ -33,24 +33,14 @@ public class PlatformMethodsImpl {
         server.forgeGetWorldMap().put(world.getRegistryKey(),world);
         server.markWorldsDirty();
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(world));
-
-
     }
 
     public static void unfreeze(Registry<?> registry) {
         ((BaseMappedRegistryAccessor) registry).invokeUnfreeze();
-
     }
-
-    public static void unfreeze(RegistryKey<?> registry) {
-        ((BaseMappedRegistryAccessor) registry.getRegistryRef()).invokeUnfreeze();
-
-    }
-
 
     public static void freeze(Registry<?> registry) {
-//        registry.freeze();
-
+        registry.freeze();
     }
 
     //Optional, requires Item Group API.
