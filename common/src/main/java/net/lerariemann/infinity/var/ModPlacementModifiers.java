@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.var;
 
 import com.mojang.serialization.MapCodec;
-import net.lerariemann.infinity.InfinityMod;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -12,8 +12,7 @@ import net.minecraft.world.gen.placementmodifier.AbstractConditionalPlacementMod
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
 
-import static net.lerariemann.infinity.PlatformMethods.freeze;
-import static net.lerariemann.infinity.PlatformMethods.unfreeze;
+import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModPlacementModifiers {
     public static class CenterProximityPlacementModifier extends AbstractConditionalPlacementModifier {
@@ -40,13 +39,14 @@ public class ModPlacementModifiers {
         }
     }
 
-    static <P extends PlacementModifier> PlacementModifierType<P> register(String id, MapCodec<P> codec) {
-        return Registry.register(Registries.PLACEMENT_MODIFIER_TYPE, InfinityMod.getId(id), () -> codec);
+    public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIER_TYPES = DeferredRegister.create(MOD_ID, RegistryKeys.PLACEMENT_MODIFIER_TYPE);
+
+
+    static RegistrySupplier<PlacementModifierType<?>> register(String id, MapCodec<? extends PlacementModifier> codec) {
+            return PLACEMENT_MODIFIER_TYPES.register(id, () -> () -> (MapCodec<PlacementModifier>) codec);
     }
 
     public static void registerModifiers() {
-        unfreeze(Registries.PLACEMENT_MODIFIER_TYPE);
         register("center_proximity", ModPlacementModifiers.CenterProximityPlacementModifier.MODIFIER_CODEC);
-        freeze(Registries.PLACEMENT_MODIFIER_TYPE);
     }
 }
