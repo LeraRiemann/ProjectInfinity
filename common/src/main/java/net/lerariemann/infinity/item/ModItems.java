@@ -16,19 +16,19 @@ import net.minecraft.util.Identifier;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModItems {
-    public static final DeferredRegister<Item> infinityItems = DeferredRegister.create(MOD_ID, RegistryKeys.ITEM);
-    public static final RegistrySupplier<Item> BOOK_BOX_ITEM = infinityItems.register("book_box", () ->
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, RegistryKeys.ITEM);
+    public static final RegistrySupplier<Item> BOOK_BOX_ITEM = ITEMS.register("book_box", () ->
             new BlockItem(ModBlocks.BOOK_BOX.get(), new Item.Settings().arch$tab(ItemGroups.FUNCTIONAL)));
-    public static final RegistrySupplier<Item> ALTAR_ITEM = infinityItems.register("altar", () ->
+    public static final RegistrySupplier<Item> ALTAR_ITEM = ITEMS.register("altar", () ->
             new BlockItem(ModBlocks.ALTAR.get(), new Item.Settings().arch$tab(ItemGroups.FUNCTIONAL)));
-    public static final RegistrySupplier<Item> TIME_BOMB_ITEM = infinityItems.register("timebomb", () ->
+    public static final RegistrySupplier<Item> TIME_BOMB_ITEM = ITEMS.register("timebomb", () ->
             new BlockItem(ModBlocks.TIME_BOMB.get(), new Item.Settings().arch$tab(ItemGroups.OPERATOR)));
-    public static final RegistrySupplier<Item> TRANSFINITE_KEY = infinityItems.register("key", () ->
+    public static final RegistrySupplier<Item> TRANSFINITE_KEY = ITEMS.register("key", () ->
             new TransfiniteKeyItem(new Item.Settings()
                     .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))
                     .arch$tab(ItemGroups.INGREDIENTS)));
     public static void registerModItems() {
-        infinityItems.register();
+        ITEMS.register();
     }
 
     @ExpectPlatform

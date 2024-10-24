@@ -48,5 +48,6 @@ public class ModPlacementModifiers {
 
     public static void registerModifiers() {
         register("center_proximity", ModPlacementModifiers.CenterProximityPlacementModifier.MODIFIER_CODEC);
+        PLACEMENT_MODIFIER_TYPES.register();
     }
 }
