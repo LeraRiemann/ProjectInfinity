@@ -53,21 +53,20 @@ repositories {
 dependencies {
     neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
 
-    // Architectury API. This is optional, and you can comment it out if you don't need it.
+    // Architectury API.
     modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"
-    //Forgified Fabric API. Where possible, work will be done to migrate away from this and rely on Arch API.
-    modImplementation "org.sinytra.forgified-fabric-api:forgified-fabric-api:${forgified_fabric_api_version}"
+
+    // Catalogue - Optional dependency.
     modImplementation "curse.maven:catalogue-459701:${catalogue_version}"
 
+    // Forgified Fabric API modules. Where possible, work is being done to migrate these to Architectury API.
+    modImplementation "org.sinytra.forgified-fabric-api:fabric-api-base:${forgified_fabric_api_base_version}"
+    modImplementation "org.sinytra.forgified-fabric-api:fabric-registry-sync-v0:${forgified_fabric_api_sync_version}"
+    modImplementation "org.sinytra.forgified-fabric-api:fabric-networking-api-v1:${forgified_fabric_api_networking_version}"
+    modImplementation "org.sinytra.forgified-fabric-api:fabric-object-builder-api-v1:${forgified_fabric_api_object_builder_version}"
+    modImplementation "org.sinytra:forgified-fabric-loader:${forgified_fabric_loader_version}"
 
-//    modImplementation "org.sinytra.forgified-fabric-api:fabric-api-base:${forgified_fabric_api_base_version}"
-//    modImplementation "org.sinytra.forgified-fabric-api:fabric-registry-sync-v0:${forgified_fabric_api_sync_version}"
-//    modImplementation "org.sinytra.forgified-fabric-api:fabric-networking-api-v1:${forgified_fabric_api_networking_version}"
-//    modImplementation "org.sinytra.forgified-fabric-api:fabric-command-api-v2:${forgified_fabric_api_command_version}"
-//    modImplementation "org.sinytra:forgified-fabric-loader:${forgified_fabric_loader_version}"
-
-
-
+    // Cloth Config API - Optional dependency.
     modApi "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_version}"
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
