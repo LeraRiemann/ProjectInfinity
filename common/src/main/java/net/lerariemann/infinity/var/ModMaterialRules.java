@@ -2,7 +2,6 @@ package net.lerariemann.infinity.var;
 
 import com.mojang.serialization.MapCodec;
 import dev.architectury.registry.registries.DeferredRegister;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
@@ -11,7 +10,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.LadderBlock;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
@@ -21,8 +19,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
-import static net.lerariemann.infinity.PlatformMethods.freeze;
-import static net.lerariemann.infinity.PlatformMethods.unfreeze;
 import static net.lerariemann.infinity.util.ConfigManager.getConfigDir;
 
 public class ModMaterialRules {
