@@ -38,13 +38,13 @@ public class ModItems {
     }
 
     public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item) {
-        if (Platform.isForgeLike()) {
-            return registerSimpleBlockItem(block, group);
-        }
-        else {
+        if (isModLoaded("fabric_item_group_api_v1") || Platform.isFabric()) {
             var blockItem = registerSimpleBlockItem(block, new Item.Settings());
             addAfter(blockItem, group, item);
             return blockItem;
+        }
+        else {
+            return registerSimpleBlockItem(block, group);
         }
     }
 

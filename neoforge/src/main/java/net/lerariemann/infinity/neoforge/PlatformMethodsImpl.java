@@ -1,7 +1,12 @@
 package net.lerariemann.infinity.neoforge;
 
+import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.mixin.registry.sync.BaseMappedRegistryAccessor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -46,6 +51,11 @@ public class PlatformMethodsImpl {
     public static void freeze(Registry<?> registry) {
 //        registry.freeze();
 
+    }
+
+    //Optional, requires Item Group API.
+    public static void addAfter(RegistrySupplier<Item> blockItem, RegistryKey<ItemGroup> group, Item item) {
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(content -> content.addAfter(item, blockItem.get()));
     }
 
 }
