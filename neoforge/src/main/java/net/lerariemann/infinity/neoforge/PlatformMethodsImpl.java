@@ -1,14 +1,11 @@
 package net.lerariemann.infinity.neoforge;
 
-import dev.architectury.networking.NetworkManager;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.mixin.registry.sync.BaseMappedRegistryAccessor;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.NeoForge;
