@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "infinity:item/key/end"
+    "layer0": "infinity:item/key/pride"
   }
 }

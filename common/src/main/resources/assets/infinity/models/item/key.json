@@ -1,12 +1,13 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "infinity:item/key_golden"
+    "layer0": "infinity:item/key/golden"
   },
   "overrides": [
     { "predicate": { "time": 0 }, "model": "infinity:item/key" },
     { "predicate": { "infinity:key": 0.01 }, "model": "infinity:item/key/generated" },
     { "predicate": { "infinity:key": 0.02 }, "model": "infinity:item/key/random" },
-    { "predicate": { "infinity:key": 0.03 }, "model": "infinity:item/key/end" }
+    { "predicate": { "infinity:key": 0.03 }, "model": "infinity:item/key/end" },
+    { "predicate": { "infinity:key": 0.04 }, "model": "infinity:item/key/pride" }
     ]
 }

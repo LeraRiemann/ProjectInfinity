@@ -62,9 +62,12 @@ public class ModItems {
             if (id == null) return 0;
             String s = id.toString();
             if (s.contains("infinity:generated_")) return 0.01f;
-            if (s.equals("minecraft:random")) return 0.02f;
-            if (s.equals("minecraft:the_end")) return 0.03f;
-            return 0;
+            return switch(s) {
+                case "minecraft:random" -> 0.02f;
+                case "minecraft:the_end" -> 0.03f;
+                case "infinity:pride" -> 0.04f;
+                default -> 0;
+            };
         });
     }
 }

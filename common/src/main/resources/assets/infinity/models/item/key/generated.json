@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "infinity:item/key_generated",
-    "layer1": "infinity:item/key_overlay"
+    "layer0": "infinity:item/key/generated",
+    "layer1": "infinity:item/key/overlay"
   }
 }
