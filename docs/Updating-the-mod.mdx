@@ -1,0 +1,19 @@
+---
+title: Updating the Mod
+hide_meta: true
+---
+
+There are cases when you can't just delete the old version of the mod and add the new one - it will break, the game will spit bugs at you and you'll have no clue what the heck is going on. To prevent such misfortune from occurring, please read the following before you update the mod.
+
+## Major updates
+Major updates are signifies by changing the first or second version number (i.e. 1.5 to 1.6). These updates are *presumed by default* to rework the structure of *configs* in some way, and as such, old configs may be incomprehensible to new versions after such an update, resulting in unpredictable behaviour.
+
+If you modified the configs in any way, recall and save your modifications (for a guide on config modification, check [this wiki entry](/en/mod/infinite-dimensions/docs/Configuring-the-mod)). Then delete the folder `config/infinity` and boot the mod up. It will automatically restore the folder with all the modifications the update brought. After the folder has been restored, you can go ahead and reimplement your changes to new files. Don't just replace the files with old ones, especially the root `infinity.json`, instead edit them and reinstate the changes, as replacing the files might revert the changes brought by the update. I might implement some code to merge changes like that automatically in the future, but for now it is how it is.
+
+If you never modified any configs, you can just not bother - remove the `config/infinity`, let it reappear, job done.
+
+## Minor updates
+When the update only differs in the last version number (i.e. 1.5.3 to 1.5.4), you are completely safe from all the dangers above. *However*, even minor updates can alter generation of specific dimensions in such a way that old seeds (book texts) will lead to completely different generation after the update. This, however, won't break existing dimensions in your existing worlds, as all data for them is already generated; even new chunks generated in them will be consistent with old ones.
+
+## My world won't load!
+If your world won't load even after deleting your `config/infinity` files, you may need to manually clear out the old datapack files. With Minecraft open, select your world and choose Edit. Click "Open World Folder", and delete the `datapacks` folder. You should now be able to load into the world. If this does not work, please report it to the issue tracker.

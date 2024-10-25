@@ -3,6 +3,7 @@ plugins {
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
     id "io.github.pacifistmc.forgix" version "1.2.9"
+    id 'org.sinytra.wiki.toolkit' version '0.1.10'
 }
 
 architectury {
@@ -12,6 +13,16 @@ architectury {
 forgix {
     group = "net.lerariemann.infinity"
     mergedJarName = "infinite-dimensions-${mod_version}.jar"
+}
+
+wiki {
+    docs {
+        // The name of the object (examplemod) should match the registered wiki project ID (if it exists).
+        "infinite-dimensions" {
+            // The path to the folder containing the documentation metadata file (sinytra-wiki.json)
+            root = file('docs')
+        }
+    }
 }
 
 allprojects {
