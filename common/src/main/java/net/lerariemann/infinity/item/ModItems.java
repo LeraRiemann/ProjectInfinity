@@ -26,10 +26,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ALTAR_ITEM = registerSimpleBlockItem(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM = registerSimpleBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR);
 
-    public static final RegistrySupplier<Item> TRANSFINITE_KEY = ITEMS.register("key", () ->
-            new TransfiniteKeyItem(new Item.Settings()
-                    .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))
-                    .arch$tab(ItemGroups.INGREDIENTS)));
+    public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
 
 
     public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {
@@ -48,6 +45,21 @@ public class ModItems {
         }
         else {
             return registerSimpleBlockItem(block, group);
+        }
+    }
+
+    public static RegistrySupplier<Item> registerKeyItem() {
+        if (isModLoaded("fabric_item_group_api_v1") || Platform.isFabric()) {
+            RegistrySupplier<Item> registeredKey = ITEMS.register("key", () ->
+                    new TransfiniteKeyItem(new Item.Settings()
+                            .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))));
+            addAfter(registeredKey, ItemGroups.INGREDIENTS, Items.OMINOUS_TRIAL_KEY);
+            return registeredKey;
+        }
+        else {
+            return ITEMS.register("key", () ->
+                    new TransfiniteKeyItem(new Item.Settings()
+                         .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))));
         }
     }
 
