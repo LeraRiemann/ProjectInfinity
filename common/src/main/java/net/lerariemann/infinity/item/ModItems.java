@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.item;
 
 import dev.architectury.platform.Platform;
+import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.api.EnvType;
@@ -9,7 +10,6 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.var.ModComponentTypes;
 import net.minecraft.block.Block;
-import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -57,7 +57,7 @@ public class ModItems {
 
     @Environment(EnvType.CLIENT)
     public static void registerModelPredicates() {
-        ModelPredicateProviderRegistry.register(InfinityMod.getId("key"), (stack, world, entity, seed) -> {
+        ItemPropertiesRegistry.register(TRANSFINITE_KEY.get(), InfinityMod.getId("key"), (stack, world, entity, seed) -> {
             Identifier id = stack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
             if (id == null) return 0;
             String s = id.toString();
