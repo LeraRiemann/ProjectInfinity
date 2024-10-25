@@ -8,6 +8,7 @@ import net.lerariemann.infinity.item.ModItems;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
@@ -18,6 +19,7 @@ public class InfinityModNeoForgeClient {
         InfinityModNeoForgeClient.registerModsPage();
         eventBus.addListener(InfinityModNeoForgeClient::registerBlockColorHandlers);
         eventBus.addListener(InfinityModNeoForgeClient::registerItemColorHandlers);
+        eventBus.addListener(InfinityModNeoForgeClient::registerModelPredicates);
     }
 
     //Integrate Cloth Config screen (if mod present) with NeoForge mod menu.
@@ -34,6 +36,10 @@ public class InfinityModNeoForgeClient {
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
         event.register(PlatformMethods::getKeyColor, ModItems.TRANSFINITE_KEY.get());
+    }
+    @SubscribeEvent
+    public static void registerModelPredicates(FMLClientSetupEvent event) {
+        ModItems.registerModelPredicates();
     }
 
     private static boolean clothConfigInstalled() {

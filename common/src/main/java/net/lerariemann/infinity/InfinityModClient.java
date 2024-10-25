@@ -1,7 +1,6 @@
 package net.lerariemann.infinity;
 
 import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.random.CheckedRandom;
@@ -13,6 +12,5 @@ public class InfinityModClient {
     public static void initializeClient() {
         ModPayloads.registerPayloadsClient();
         ModEntities.registerEntityRenderers();
-        ModItems.registerModelPredicates();
     }
 }

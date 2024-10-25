@@ -20,5 +20,6 @@ public class InfinityModFabricClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX.get(), RenderLayer.getCutoutMipped());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_BOMB.get(), RenderLayer.getTranslucent());
         InfinityModClient.initializeClient();
+        ModItems.registerModelPredicates();
     }
 }
