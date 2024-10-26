@@ -81,7 +81,7 @@
       "banded_shapes": 0.5
     },
     "structures": {
-      "spawn_override": 0.5,
+      "spawn_override": 0.0,
       "full_box": 0.5,
       "ruins_warm": 0.5,
       "shipwrecks_beach": 0.5,

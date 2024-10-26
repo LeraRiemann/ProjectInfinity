@@ -17,10 +17,11 @@ The file `/config/infinity/infinity.json` is the master file for configuring gam
 * `longArithmeticEnabled` - setting this to true will expand the range in which dimension, biome and feature IDs generate from the integer limit (~2 billion) to the long limit (~9 quintillion). You know, if for some reason 2 billion dimensions is not enough for you :D
 * `forceSolidSurface` - setting this to true will disallow non-full blocks from being used as material for the surface of random biomes.
 * `chaosMobsEnabled` - a toggle to enable/disable custom mobs, added in the mod, from naturally spawning.
+* `consumePortalKey` - by default, if you introduce an item requirement to unlock new portals (see below), the item will be consumed on use. Setting this as false prevents this behaviour if you want to make a special portal-creating wand, for example.
 * `maxBiomeCount` - the largest amount of biomes that can be assigned to generate in any random dimension. 6 by default.
 
 ### Portal key
-The item required to open an Infinity portal for a brand new dimension. Right-click with the item on the portal, the item will be consumed and the portal will emit a beacon sound indicating you can now go through. (If there's no sound, you just encountered a bug you can report!)
+The item required to unlock an Infinity portal for a brand new dimension. Right-click with the item on the portal; it will emit a beacon sound indicating you can now go through. (If there's no sound, you just encountered a bug you can report!)
 
 You can change the item to whatever you want or leave it as the default blank string, which means you don't need a key - the portal will open with a beacon sound on its own without right-clicking.
 
@@ -63,7 +64,7 @@ The *root chances* control how likely it is for the dimension to possess a certa
     * `colourful_shapes`: you know these huge spheres and cubes and such in the sky? this is a toggle between them being of one random block or of a bunch of colored blocks.
     * `banded_shapes`: ...and if they choose colored blocks, this is a toggle between them being in a perlin noise map or in diagonal bands.
 * `structures` chances control how structures of a certain type in random biomes behave:
-    * `spawn_override`: with this chance, you can have a nether fortress spawn whatever the nether it wants instead of blazes and wither skeletons. or spawn nothing.
+    * `spawn_override`: with this chance, you can have a nether fortress spawn whatever the nether it wants instead of blazes and wither skeletons (which might turn out to be nothing).
     * `full_box`: if the spawn override applies to the entire bounding box of the structure or only to parts of it (you know how wither skeleton farms are always built on crossroads?)
     * `ruins_warm`: chance for ocean ruins to spawn in the sandstone variant.
     * `shipwrecks_beach`: ...shipwrecks to spawn in a beached variant.
@@ -85,10 +86,10 @@ This section lists all content that you can freely add entries from other mods t
 The Blocks category introduces one weighed list for all blocks in the game, but you may notice that some blocks have additional data assigned to them. This data is used to transform this master list into five - all of which have different purposes and exclude some blocks not fit for these purposes based on these additional properties.
 
 The properties are:
-* **`full`** - blocks that are, or at least appear to be, full cubes: stone, dirt, and sand are _full_, while slabs and doors aren't. By default set to false.
-* **`float`** - blocks that can exist suspended in the air. Stone, dirt and slabs are _float_, while sand and doors aren't. By default, set to true for full blocks and false for others.
-* **`top`** - blocks that can exist atop of a full block. Sand and doors are _top_, while saplings aren't (they need specifically dirt). By default, set to true for _full_ and/or _float_ blocks and false for others.
-* **`laggy`** is assigned to all blocks that have a block entity - since these frequently cause FPS and/or TPS lag, or stop rendering past a certain point, when present in really large amounts (say, ten thousand in render distance). Chests and hoppers are _laggy_ - chests use block entity models, hoppers require processing on each tick. You can assign the _laggy_ property manually if you find any other cases where the default values create lag which i haven't accounted for. By default, set to false.
+* **`full`** - blocks that are, or at least appear to be, full cubes: stone, dirt, and sand are _full_, while slabs and doors aren't. If not present, set to false.
+* **`float`** - blocks that can exist suspended in the air. Stone, dirt and slabs are _float_, while sand and doors aren't. If not present, set to true for full blocks and false for others.
+* **`top`** - blocks that can exist atop of a full block. Sand and doors are _top_, while saplings aren't (they need specifically dirt). If not present, set to true for _full_ and/or _float_ blocks and false for others.
+* **`laggy`** is assigned to all blocks that have a block entity - since these frequently cause FPS and/or TPS lag, or stop rendering past a certain point, when present in really large amounts (say, ten thousand in render distance). Chests and hoppers are _laggy_ - chests use block entity models, hoppers require processing on each tick. You can assign the _laggy_ property manually if you find any other cases where the default values create lag which i haven't accounted for. If not present, set to false.
 
 Here's how the properties are used on compilation:
 * Two lists are created - from all _float_ blocks and all _full_ blocks - that are used for creating most features (rocks, ores, floating islands, floors of dungeons etc).
@@ -97,16 +98,8 @@ Here's how the properties are used on compilation:
 
 Of course, some of these lists intersect or even fully include others.
 
-The default behaviour of unset properties is chosen in such a way that most blocks can be described by one or two properties, and the rest is correctly assumed by default. For example:
-* Not assiging any properties marks the block as _not full_, _not float_ and _not top_ - like a sapling. These blocks are almost never used in world generation, so why even bother marking their properties?
-* Marking the block as _"full": true_ and nothing else assumes it is _float_ (and _not laggy_ since all blocks are assumed so by default) and as such is fit for any purpose world generation wants - like stone (and most vanilla full blocks, really).
-* Marking the block as _"float": true_ and nothing else assumes it's _not full_ and covers most non-full vanilla blocks - including all slabs, stairs, fences, walls, trapdoors, panes etc.
-* Similarily, all doors, carpets, buttons, torches and pressure plates can be just marked as _"top": true_ - _"float": false_ and _"full": false_ are assumed by default.
-
-The only vanilla blocks that need marking with more than one property (not counting _laggy_) are gravity blocks: _"full": true, "float": false_.
-
 #### Fluids
-The list of fluids can also be found under the Blocks category. You can add a fluid with a single line like `"key: "minecraft:water"`, but some mods actually add fluids that use different names for the block (that's the name you can autocomplete from /setblock) and the fluid (that's the one you can see on the F3 screen under "Targeted fluid"). In that case, the entry is formatted like this:
+The list of fluids can also be found under the Blocks category. Though adding a fluid with a single line like `"key: "minecraft:water"` is supported, some mods actually add fluids that use different names for the block (that's the name you can autocomplete from /setblock) and the fluid (that's the one you can see on the F3 screen under "Targeted fluid"). For this reason the entries are formatted like this:
 ```json
 "key": {
         "Name": "milk:milk_fluid_block",
