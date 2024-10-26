@@ -137,7 +137,8 @@ public class RandomFeaturesList {
         res.addAll(getAllElements("vegetation_part3"));
         return res;
     }
-}
-interface FeatureRegistrar {
-    RandomisedFeature op(RandomFeaturesList parent);
+
+    interface FeatureRegistrar {
+        RandomisedFeature op(RandomFeaturesList parent);
+    }
 }

@@ -458,8 +458,8 @@ public class RandomProvider {
             registry.put("biomes", biomes);
         }
     }
-}
 
-interface ListReader<B>  {
-    B op(String path, String subpath);
+    interface ListReader<B>  {
+        B op(String path, String subpath);
+    }
 }
