@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.var;
 
+import dev.architectury.platform.Platform;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.stat.Stat;
@@ -25,12 +26,12 @@ public class ModStats {
     }
 
     public static void registerStats() {
-        unfreeze(Registries.CUSTOM_STAT);
+        if (Platform.isForgeLike()) unfreeze(Registries.CUSTOM_STAT);
         Registry.register(Registries.CUSTOM_STAT, DIMS_OPENED, DIMS_OPENED);
         Registry.register(Registries.CUSTOM_STAT, PORTALS_OPENED, PORTALS_OPENED);
         Registry.register(Registries.CUSTOM_STAT, WORLDS_DESTROYED, WORLDS_DESTROYED);
         ModStats.load();
-        freeze(Registries.CUSTOM_STAT);
+        if (Platform.isForgeLike()) freeze(Registries.CUSTOM_STAT);
     }
 }
 
