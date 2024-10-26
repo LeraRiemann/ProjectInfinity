@@ -8,8 +8,10 @@ import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.var.ModCommands;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
@@ -110,8 +112,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             if (w==null) return;
             double d = DimensionType.getCoordinateScaleFactor(this.getServerWorld().getDimension(), w.getDimension());
             Entity self = getCameraEntity();
-            BlockPos blockPos2 = w.getWorldBorder().clamp(self.getX() * d, self.getY(), self.getZ() * d);
-            this.teleport(w, blockPos2.getX(), blockPos2.getY(), blockPos2.getZ(), new HashSet<>(), self.getYaw(), self.getPitch());
+            BlockPos blockPos2 = ModCommands.getPosForWarp(w.getWorldBorder().clamp(self.getX() * d, self.getY(), self.getZ() * d), w);
+            BlockState state = w.getBlockState(blockPos2.down());
+            if (state.isAir() || state.isOf(Blocks.LAVA)) w.setBlockState(blockPos2.down(), Blocks.OBSIDIAN.getDefaultState());
+            this.teleport(w, blockPos2.getX() + 0.5, blockPos2.getY(), blockPos2.getZ() + 0.5, new HashSet<>(), self.getYaw(), self.getPitch());
         }
 
         /* Handle effects from dimension deletion */

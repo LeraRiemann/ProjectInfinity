@@ -18,6 +18,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 import java.nio.charset.StandardCharsets;
@@ -39,6 +40,28 @@ public class ModCommands {
             if (isThisANewDimension) self.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
             ((ServerPlayerEntityAccess)(self)).projectInfinity$setWarpTimer(20, value);
         }
+    }
+
+    public static BlockPos getPosForWarp(BlockPos orig, ServerWorld world) {
+        int x = orig.getX();
+        int y1 = orig.getY();
+        int z = orig.getZ();
+        if (isPosViable(x, y1, z, world)) return orig;
+        int y2 = y1;
+        while (y1 > world.getBottomY() || y2 < world.getTopY()) {
+            y1-=1;
+            if (isPosViable(x, y1, z, world)) return new BlockPos(x, y1, z);
+            y2+=1;
+            if (isPosViable(x, y2, z, world)) return new BlockPos(x, y2, z);
+        }
+        return orig;
+    }
+
+    public static boolean isPosViable(int x, int y, int z, BlockView w) {
+        boolean bl = w.getBlockState(new BlockPos(x, y+1, z)).isAir();
+        boolean bl2 = w.getBlockState(new BlockPos(x, y, z)).isAir();
+        boolean bl3 = w.getBlockState(new BlockPos(x, y-1, z)).isAir();
+        return (!bl3 && bl2 && bl);
     }
 
     public static Identifier getIdentifier(String text, MinecraftServer s) {

@@ -80,17 +80,7 @@ public class PlatformMethods {
     }
 
     public static int getKeyColor(ItemStack stack, int layer) {
-        Identifier dim = stack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
         Integer color = stack.getComponents().get(ModComponentTypes.KEY_COLOR.get());
-        if (layer == 3) {
-            if (dim != null && dim.toString().equals("minecraft:random")) return 0;
-            if (color == null || color == 0) return ColorHelper.Argb.fullAlpha(0xFFFFFF);
-            return 0;
-        }
-        if (layer == 2) {
-            if (dim != null && dim.toString().equals("minecraft:random")) return ColorHelper.Argb.fullAlpha(0xFFFFFF);
-            return 0;
-        }
         if (layer == 1) {
             return (color == null) ? 0 : color;
         }
