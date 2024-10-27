@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 @Mixin(ClientWorld.class)
 public abstract class ClientWorldMixin extends World implements InfinityOptionsAccess {
     @Unique
-    public InfinityOptions infinityoptions;
+    public InfinityOptions infinity$options;
 
     protected ClientWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, DynamicRegistryManager registryManager, RegistryEntry<DimensionType> dimensionEntry, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long biomeAccess, int maxChainedNeighborUpdates) {
         super(properties, registryRef, registryManager, dimensionEntry, profiler, isClient, debugWorld, biomeAccess, maxChainedNeighborUpdates);
@@ -31,17 +31,16 @@ public abstract class ClientWorldMixin extends World implements InfinityOptionsA
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(ClientPlayNetworkHandler networkHandler, ClientWorld.Properties properties, RegistryKey<World> registryRef, RegistryEntry<DimensionType> dimensionTypeEntry, int loadDistance, int simulationDistance, Supplier<Profiler> profiler, WorldRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
-        DimensionType t = getDimension();
-        infinityoptions = ((InfinityOptionsAccess)MinecraftClient.getInstance()).projectInfinity$getInfinityOptions();
-        ((InfinityOptionsAccess)(Object)t).projectInfinity$setInfinityOptions(infinityoptions);
+        projectInfinity$setInfinityOptions(((InfinityOptionsAccess)MinecraftClient.getInstance()).projectInfinity$getInfinityOptions());
     }
 
     @Override
     public InfinityOptions projectInfinity$getInfinityOptions() {
-        return infinityoptions;
+        return infinity$options;
     }
     @Override
     public void projectInfinity$setInfinityOptions(InfinityOptions options) {
-        infinityoptions = options;
+        infinity$options = options;
+        ((InfinityOptionsAccess)(Object) getDimension()).projectInfinity$setInfinityOptions(options);
     }
 }
