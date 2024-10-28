@@ -10,9 +10,9 @@ architectury {
 processResources {
     from(rootProject.file("common/src/main/resources")) {
         include("config/*/")
+        include("infinity.accesswidener")
     }
 }
-
 configurations {
     common {
         canBeResolved = true
@@ -92,6 +92,7 @@ shadowJar {
 
 remapJar {
     input.set shadowJar.archiveFile
+    atAccessWideners.add("infinity.accesswidener")
 }
 
 loom {
