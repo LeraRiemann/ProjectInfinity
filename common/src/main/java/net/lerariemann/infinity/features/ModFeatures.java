@@ -20,6 +20,7 @@ public class ModFeatures {
     public static RegistrySupplier<RandomCubeFeature> RANDOM_CUBE;
     public static RegistrySupplier<RandomShapeFeature> RANDOM_STAR;
     public static RegistrySupplier<TextFeature> RANDOM_TEXT;
+    public static RegistrySupplier<RandomPortalSetupper> PORTAL_SETUPPER;
 
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(MOD_ID, RegistryKeys.FEATURE);
 
@@ -40,6 +41,7 @@ public class ModFeatures {
         RANDOM_CUBE = register("random_cube", new RandomCubeFeature(RandomCubeFeatureConfig.CODEC));
         RANDOM_STAR = register("random_shape", new RandomShapeFeature(RandomShapeFeatureConfig.CODEC));
         RANDOM_TEXT = register("random_text", new TextFeature(TextFeatureConfig.CODEC));
+        PORTAL_SETUPPER = register("portal_setupper", new RandomPortalSetupper((RandomPortalSetupperConfig.CODEC)));
         FEATURES.register();
     }
 }

@@ -7,7 +7,6 @@ import com.mojang.brigadier.context.CommandContext;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.ConfigGenerator;
@@ -71,7 +70,7 @@ public class ModCommands {
     }
 
     public static long getDimensionSeed(String text, MinecraftServer s) {
-        return getDimensionSeed(text, ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider());
+        return getDimensionSeed(text, RandomProvider.getProvider(s));
     }
 
     /* Hashes text into dimension ID. */

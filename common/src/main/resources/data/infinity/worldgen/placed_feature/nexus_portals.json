@@ -1,0 +1,9 @@
+{
+  "feature": "infinity:nexus_portals",
+  "placement": [
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
+    }
+  ]
+}

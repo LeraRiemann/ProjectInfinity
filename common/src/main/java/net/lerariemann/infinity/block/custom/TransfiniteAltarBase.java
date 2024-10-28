@@ -1,10 +1,10 @@
 package net.lerariemann.infinity.block.custom;
 
-import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
+import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
@@ -73,7 +73,7 @@ public class TransfiniteAltarBase extends Block {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
         if (!world.isClient) {
-            String s = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer()))).projectInfinity$getDimensionProvider().altarKey;
+            String s = RandomProvider.getProvider(Objects.requireNonNull(world.getServer())).altarKey;
             boolean bl0 = s.isBlank() ? itemStack.isEmpty() : itemStack.isOf(Registries.ITEM.get(Identifier.of(s)));
             if (bl0) {
                 boolean bl = testSpace(world, pos);

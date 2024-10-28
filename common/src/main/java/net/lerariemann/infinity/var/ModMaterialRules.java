@@ -8,6 +8,7 @@ import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LadderBlock;
+import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
@@ -22,6 +23,11 @@ import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.util.ConfigManager.getConfigDir;
 
 public class ModMaterialRules {
+    static int normalize(int x, int size) {
+        int a = Math.abs(x < 0 ? x+1 : x) % size;
+        return (x < 0) ? size - 1 - a : a;
+    }
+
     public record RandomBlockStateRule(WeighedStructure<NbtElement> w) implements MaterialRules.BlockStateRule
     {
         @Override
@@ -59,10 +65,6 @@ public class ModMaterialRules {
         static final BlockState glass = Blocks.OAK_TRAPDOOR.getDefaultState();
         static final BlockState column = Blocks.OAK_PLANKS.getDefaultState();
         static final BlockState air = Blocks.AIR.getDefaultState();
-        int normalize(int x, int size) {
-            int a = Math.abs(x < 0 ? x+1 : x) % size;
-            return (x < 0) ? size - 1 - a : a;
-        }
         @Override
         public BlockState tryApply(int i, int j, int k) {
             int x = normalize(i, 15);
@@ -115,11 +117,7 @@ public class ModMaterialRules {
         static final BlockState ceiling = Blocks.SMOOTH_SANDSTONE.getDefaultState();
         static final BlockState air = Blocks.AIR.getDefaultState();
         static final BlockState filler = Blocks.OBSIDIAN.getDefaultState();
-        int normalize(int x, int size) {
-            int a = Math.abs(x < 0 ? x+1 : x) % size;
-            return (x < 0) ? size - 1 - a : a;
-        }
-        int anti_normalize(int x, int size) {
+        static int anti_normalize(int x, int size) {
             return Math.abs(x < 0 ? x+1 : x) / size;
         }
         @Override
@@ -174,8 +172,93 @@ public class ModMaterialRules {
         }
     }
 
-    public static final DeferredRegister<MapCodec<? extends MaterialRules.MaterialRule>> MATERIAL_RULES = DeferredRegister.create(MOD_ID, RegistryKeys.MATERIAL_RULE);
+    public static class Nexus implements MaterialRules.BlockStateRule
+    {
+        static final BlockState floor = Blocks.SMOOTH_STONE.getDefaultState();
+        static final BlockState wall = Blocks.OAK_PLANKS.getDefaultState();
+        static final BlockState column1 = Blocks.OAK_LOG.getDefaultState();
+        static final BlockState column2 = Blocks.OAK_LOG.getDefaultState().with(Properties.AXIS, Direction.Axis.X);
+        static final BlockState stair1 = Blocks.OAK_STAIRS.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
+        static final BlockState stair2 = Blocks.OAK_STAIRS.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH);
+        static final BlockState stair3 = Blocks.OAK_STAIRS.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH).with(Properties.BLOCK_HALF, BlockHalf.TOP);
+        static final BlockState stair4 = Blocks.OAK_STAIRS.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH).with(Properties.BLOCK_HALF, BlockHalf.TOP);
+        static final BlockState light1 = Blocks.JACK_O_LANTERN.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH);
+        static final BlockState light2 = Blocks.JACK_O_LANTERN.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
+        static final BlockState sign = Blocks.OAK_HANGING_SIGN.getDefaultState();
+        static final BlockState air = Blocks.AIR.getDefaultState();
+        static final BlockState stone = Blocks.STONE.getDefaultState();
+        @Override
+        public BlockState tryApply(int i, int j, int k) {
+            int x = normalize(i, 8);
+            int y = j - 48;
+            int z = normalize(k, 8);
+            if (j == 0) return Blocks.BEDROCK.getDefaultState();
+            if (y<-1) return stone;
+            if (z == 0 && y < 8) return wall;
+            switch (y) {
+                case -1, 8 -> {
+                    if (z == 4 && x == 2) return light1;
+                    return floor;
+                }
+                case 0 -> {
+                    return switch (z) {
+                        case 1, 7 -> wall;
+                        case 2 -> stair1;
+                        case 6 -> stair2;
+                        default -> air;
+                    };
+                }
+                case 1, 2, 3, 4 -> {
+                    if (z == 1 || z == 7) {
+                        if (y == 4 && x == 2) return sign;
+                        if (x == 5 || x == 7) return column1;
+                        if (x==6) {
+                            if (y != 2) return wall;
+                            return (z == 1) ? light1 : light2;
+                        }
+                    }
+                    return air;
+                }
+                case 5 -> {
+                    return (z == 1 || z == 7) ? column2 : air;
+                }
+                case 6 -> {
+                    return switch (z) {
+                        case 2 -> stair3;
+                        case 6 -> stair4;
+                        case 1, 7 -> wall;
+                        default -> air;
+                    };
+                }
+                case 7 -> {
+                    return switch (z) {
+                        case 3 -> stair3;
+                        case 4 -> air;
+                        case 5 -> stair4;
+                        default -> wall;
+                    };
+                }
+                default -> {
+                    return air;
+                }
+            }
+        }
+    }
+    enum NexusRule implements MaterialRules.MaterialRule {
+        INSTANCE;
+        static final CodecHolder<NexusRule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
+        @Override
+        public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
+            return CODEC;
+        }
+        @Override
+        public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
+            return new Nexus();
+        }
+    }
 
+    public static final DeferredRegister<MapCodec<? extends MaterialRules.MaterialRule>> MATERIAL_RULES =
+            DeferredRegister.create(MOD_ID, RegistryKeys.MATERIAL_RULE);
 
     public static <T extends CodecHolder<? extends MaterialRules.MaterialRule>> void register(String name, T holder) {
         MATERIAL_RULES.register(name, () -> holder.codec());
@@ -185,6 +268,7 @@ public class ModMaterialRules {
         register("chaos", RandomBlockMaterialRule.CODEC);
         register("library", LibraryRule.CODEC);
         register("backrooms", BackroomsRule.CODEC);
+        register("nexus", NexusRule.CODEC);
         MATERIAL_RULES.register();
 
     }

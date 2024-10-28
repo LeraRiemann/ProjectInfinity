@@ -379,6 +379,11 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             }
         }
+        if (!world.isClient() && entity instanceof PlayerEntity player &&
+                RandomProvider.getProvider(world.getServer()).portalKey.isBlank() &&
+                world.getBlockEntity(pos) instanceof NeitherPortalBlockEntity be && !be.getOpen()) {
+            openWithStatIncrease(player, world.getServer(), world, pos);
+        }
         super.onEntityCollision(state, world, pos, entity);
     }
 

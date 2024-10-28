@@ -60,6 +60,10 @@ public class NeitherPortalBlockEntity extends BlockEntity {
         return this.isOpen;
     }
 
+    public void setDimension(long c) {
+        setDimension(c, InfinityMod.getId("generated_"+c));
+    }
+
     public void setDimension(long c, Identifier i) {
         this.dimensionId = c;
         this.dimension = i;
