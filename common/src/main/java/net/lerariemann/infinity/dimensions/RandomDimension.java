@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.var.ModCommands;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -45,7 +45,7 @@ public class RandomDimension {
         this.server = server;
         PROVIDER = RandomProvider.getProvider(server);
         identifier = id;
-        numericId = NeitherPortalBlock.getNumericFromId(identifier, server);
+        numericId = ModCommands.getNumericFromId(identifier, server);
         random = new Random(numericId);
         createDirectories();
         initializeStorage();

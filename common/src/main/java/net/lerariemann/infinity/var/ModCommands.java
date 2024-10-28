@@ -20,10 +20,13 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
+import java.awt.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -52,6 +55,46 @@ public class ModCommands {
         if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"));
     }
 
+    public static int properMod(int a, int b) {
+        int res = a%b;
+        return (res >= 0) ? res : b + res;
+    }
+
+    public static long getPortalColorFromId(Identifier id, MinecraftServer server, BlockPos pos) {
+        return switch(id.toString()) {
+            case "minecraft:the_end" -> 0;
+            case "infinity:chaos" -> Color.HSBtoRGB(Objects.requireNonNull(server.getWorld(World.OVERWORLD)).getRandom().nextFloat(),
+                        1.0f, 1.0f);
+            case "infinity:checkerboard" -> (properMod(pos.getX() + pos.getY() + pos.getZ(), 2) == 0 ? 0 : 0xffffff);
+            case "infinity:pride" -> switch(properMod(pos.getX() + pos.getY() + pos.getZ(), 3)) {
+                    case 0 -> 0x77c1de;
+                    case 1 -> 0xdaadb5;
+                    default -> 0xffffff;
+                };
+            default -> RandomProvider.getProvider(server).easterizer.colormap.getOrDefault(
+                    id.getPath(), (int)getNumericFromId(id, server));
+        };
+    }
+
+    public static long getNumericFromId(Identifier id, MinecraftServer server) {
+        String dimensionName = id.getPath();
+        String numericId = dimensionName.substring(dimensionName.lastIndexOf("_") + 1);
+        long i;
+        try {
+            i = Long.parseLong(numericId);
+        } catch (Exception e) {
+            /* Simply hash the name if it isn't of "generated_..." format. */
+            i = ModCommands.getDimensionSeed(numericId, server);
+        }
+        return i;
+    }
+
+    public static int getKeyColorFromId(Identifier id, MinecraftServer server) {
+        if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
+            return ColorHelper.Argb.fullAlpha((int) getNumericFromId(id, server) & 0xFFFFFF);
+        return 0;
+    }
+
     public static BlockPos getPosForWarp(BlockPos orig, ServerWorld world) {
         int x = orig.getX();
         int y1 = orig.getY();
@@ -76,8 +119,8 @@ public class ModCommands {
 
     public static Identifier getIdentifier(String text, MinecraftServer s) {
         if (text.equals("abatised redivides")) return World.END.getValue();
-        if (text.isEmpty()) return InfinityMod.getId("empty");
-        if (!text.equals("empty") && RandomProvider.getProvider(s).easterizer.isEaster(text)) return InfinityMod.getId(text);
+        if (text.isEmpty()) return InfinityMod.getId("missingno");
+        if (!text.equals("missingno") && RandomProvider.getProvider(s).easterizer.isEaster(text)) return InfinityMod.getId(text);
         return InfinityMod.getId("generated_" + getDimensionSeed(text, s));
     }
 

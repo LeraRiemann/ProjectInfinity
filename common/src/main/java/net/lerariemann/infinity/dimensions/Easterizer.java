@@ -16,10 +16,12 @@ import static java.nio.file.Files.walk;
 public class Easterizer {
     public Map<String, Pair<NbtCompound, String>> map;
     public Map<String, NbtCompound> optionmap;
+    public Map<String, Integer> colormap;
 
     public Easterizer(RandomProvider prov) {
         map = new HashMap<>();
         optionmap = new HashMap<>();
+        colormap = new HashMap<>();
         try {
             walk(Paths.get(prov.configPath).resolve("util").resolve("easter")).forEach(p -> {
                 String fullname = p.toString();
@@ -35,6 +37,10 @@ public class Easterizer {
                     if (compound.contains("easter-type")) {
                         type = compound.getString("easter-type");
                         compound.remove("easter-type");
+                    }
+                    if (compound.contains("easter-color")) {
+                        colormap.put(name, compound.getInt("easter-color"));
+                        compound.remove("easter-color");
                     }
                     if (compound.contains("easter-options")) {
                         optionmap.put(name, compound.getCompound("easter-options"));

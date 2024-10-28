@@ -88,10 +88,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
                     pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
                 Identifier dimensionName = registryKey.getValue();
 
-                /* Parse the identifier to figure out the color of the portal. */
-                long i = NeitherPortalBlock.getNumericFromId(dimensionName, serverWorld.getServer());
-
-                NeitherPortalBlock.modifyPortalRecursive(destination, pos2, destination.getBlockState(pos), dimensionName, i, true);
+                NeitherPortalBlock.modifyPortalRecursive(destination, pos2, destination.getBlockState(pos), dimensionName, true);
                 break;
             }
         }

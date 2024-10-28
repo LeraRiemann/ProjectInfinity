@@ -49,7 +49,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
@@ -125,25 +124,6 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         return content;
     }
 
-    public static long getNumericFromId(Identifier id, MinecraftServer server) {
-        String dimensionName = id.getPath();
-        String numericId = dimensionName.substring(dimensionName.lastIndexOf("_") + 1);
-        long i;
-        try {
-            i = Long.parseLong(numericId);
-        } catch (Exception e) {
-            /* Simply hash the name if it isn't of "generated_..." format. */
-            i = ModCommands.getDimensionSeed(numericId, server);
-        }
-        return i;
-    }
-
-    public static int getKeyColorFromId(Identifier id, MinecraftServer server) {
-        if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
-            return ColorHelper.Argb.fullAlpha((int)getNumericFromId(id, server) & 0xFFFFFF);
-        return 0;
-    }
-
     /* Sets the portal color and destination and calls to open the portal immediately if the portal key is blank.
     * Statistics for opening the portal are attributed to the nearest player. */
     public static boolean modifyOnInitialCollision(Identifier dimName, World world, BlockPos pos, BlockState state) {
@@ -162,12 +142,11 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
             /* Set color and destination. Open status = the world that is being accessed exists already. */
             boolean dimensionExistsAlready = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, dimName)) != null;
-            long color = getNumericFromId(dimName, server);
-            NeitherPortalBlock.modifyPortalRecursive(world, pos, state, dimName, color, dimensionExistsAlready);
+            NeitherPortalBlock.modifyPortalRecursive(world, pos, state, dimName, dimensionExistsAlready);
 
             if (dimensionExistsAlready) {
                 if (nearestPlayer != null) nearestPlayer.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
-                runAfterEffects(world, pos);
+                runAfterEffects(world, pos, false);
             }
 
             /* If the portal key is blank, open the portal immediately. */
@@ -214,7 +193,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     }
 
     /* Jingle signaling the portal is now usable. */
-    public static void runAfterEffects(World world, BlockPos pos) {
+    public static void runAfterEffects(World world, BlockPos pos, boolean dimensionIsNew) {
+        if (dimensionIsNew) world.playSound(null, pos, SoundEvents.BLOCK_VAULT_OPEN_SHUTTER, SoundCategory.BLOCKS, 1f, 1f);
         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
     }
 
@@ -241,20 +221,19 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (blockEntity instanceof NeitherPortalBlockEntity) {
             /* Call dimension creation. */
             Identifier i = ((NeitherPortalBlockEntity) blockEntity).getDimension();
-            long l = ((NeitherPortalBlockEntity) blockEntity).getDimensionId();
             if (i.getNamespace().equals(InfinityMod.MOD_ID)) {
                 bl = addInfinityDimension(s, i);
             }
 
             /* Set the portal's open status making it usable. */
-            modifyPortalRecursive(world, pos, world.getBlockState(pos), i, l, true);
-            runAfterEffects(world, pos);
+            modifyPortalRecursive(world, pos, world.getBlockState(pos), i, true);
+            runAfterEffects(world, pos, bl);
         }
         return bl;
     }
 
     /* Sets the portal color, destination and open status. Calls itself recursively for neighbouring blocks. */
-    public static void modifyPortalRecursive(World world, BlockPos pos, BlockState state, Identifier id, long color, boolean open) {
+    public static void modifyPortalRecursive(World world, BlockPos pos, BlockState state, Identifier id, boolean open) {
         Set<BlockPos> set = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
         queue.add(pos);
@@ -264,7 +243,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             set.add(blockPos);
             BlockState blockState = world.getBlockState(blockPos);
             if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof NeitherPortalBlock) {
-                modifyPortalBlock(world, blockPos, axis, id, color, open);
+                modifyPortalBlock(world, blockPos, axis, id, open);
                 Set<Direction> toCheck = (axis == Direction.Axis.Z) ?
                         Set.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH) :
                         Set.of(Direction.UP, Direction.DOWN, Direction.EAST, Direction.WEST);
@@ -279,11 +258,12 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     }
 
     /* Sets the portal color, destination and open status for one portal block. */
-    private static void modifyPortalBlock(World world, BlockPos pos, Direction.Axis axis, Identifier id, long i, boolean open) {
+    private static void modifyPortalBlock(World world, BlockPos pos, Direction.Axis axis, Identifier id, boolean open) {
+        long color = ModCommands.getPortalColorFromId(id, world.getServer(), pos);
         world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.get().getDefaultState().with(AXIS, axis));
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity != null) {
-            ((NeitherPortalBlockEntity)blockEntity).setDimension(i, id);
+            ((NeitherPortalBlockEntity)blockEntity).setDimension(color, id);
             ((NeitherPortalBlockEntity)blockEntity).setOpen(open);
         }
     }
@@ -345,7 +325,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             ParticleEffect eff = ParticleTypes.PORTAL;
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof NeitherPortalBlockEntity) {
-                long dim = ((NeitherPortalBlockEntity)blockEntity).getDimensionId();
+                long dim = ((NeitherPortalBlockEntity)blockEntity).getPortalColor();
                 Vec3d vec3d = Vec3d.unpackRgb((int)dim);
                 double color = 1.0D + (dim >> 16 & 0xFF) / 255.0D;
                 eff = new DustParticleEffect(new Vector3f((float)vec3d.x, (float)vec3d.y, (float)vec3d.z), (float)color);
@@ -373,7 +353,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 if (resStack.isOf(ModItems.TRANSFINITE_KEY.get())) {
                     BlockEntity blockEntity = world.getBlockEntity(pos);
                     if (blockEntity instanceof NeitherPortalBlockEntity portal) {
-                        Integer keycolor = getKeyColorFromId(portal.getDimension(), world.getServer());
+                        Integer keycolor = ModCommands.getKeyColorFromId(portal.getDimension(), world.getServer());
                         ComponentMap newMap = (ComponentMap.builder().add(ModComponentTypes.KEY_DESTINATION.get(), portal.getDimension())
                                 .add(ModComponentTypes.KEY_COLOR.get(), keycolor)).build();
                         resStack.applyComponentsFrom(newMap);
@@ -409,7 +389,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());
                 if (blockEntity instanceof NeitherPortalBlockEntity) {
-                    int dim = (int)((NeitherPortalBlockEntity)blockEntity).getDimensionId();
+                    int dim = (int)((NeitherPortalBlockEntity)blockEntity).getPortalColor();
                     Vec3d c = Vec3d.unpackRgb(dim);
                     entity.setAllColors((int)(256 * c.z) + 256 * (int)(256 * c.y) + 65536 * (int)(256 * c.x));
                 }

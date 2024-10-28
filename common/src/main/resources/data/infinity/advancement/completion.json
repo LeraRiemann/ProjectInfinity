@@ -1,9 +1,9 @@
 {
   "parent": "infinity:library",
   "criteria": {
-    "empty": {
+    "missingno": {
       "conditions": {
-        "to": "infinity:empty"
+        "to": "infinity:missingno"
       },
       "trigger": "minecraft:changed_dimension"
     },
