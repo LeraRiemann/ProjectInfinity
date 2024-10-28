@@ -80,8 +80,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (key_dest != null) {
             MinecraftServer server = world.getServer();
             if (server != null) {
-                NeitherPortalBlock.modifyOnInitialCollision(key_dest, world, pos, state);
-                entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                boolean bl = NeitherPortalBlock.modifyOnInitialCollision(key_dest, world, pos, state);
+                if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
                 return;
             }
         }
@@ -98,8 +98,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             MinecraftServer server = world.getServer();
             if (server != null) {
                 Identifier id = ModCommands.getIdentifier(content, server);
-                NeitherPortalBlock.modifyOnInitialCollision(id, world, pos, state);
-                entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                boolean bl = NeitherPortalBlock.modifyOnInitialCollision(id, world, pos, state);
+                if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             }
         }
     }
@@ -116,14 +116,11 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             }
         }
         catch (NoSuchElementException e) {
-            content = "empty";
+            content = "";
         }
 
         if (printedComponent != null) {
             content = printedComponent;
-        }
-        if (Objects.equals(content, "")) {
-            content = "empty";
         }
         return content;
     }
@@ -149,7 +146,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     /* Sets the portal color and destination and calls to open the portal immediately if the portal key is blank.
     * Statistics for opening the portal are attributed to the nearest player. */
-    public static void modifyOnInitialCollision(Identifier dimName, World world, BlockPos pos, BlockState state) {
+    public static boolean modifyOnInitialCollision(Identifier dimName, World world, BlockPos pos, BlockState state) {
         MinecraftServer server = world.getServer();
         if (dimName.toString().equals("minecraft:random")) {
             dimName = InfinityMod.getId("generated_" + (RandomProvider.getProvider(server).rule("longArithmeticEnabled") ?
@@ -157,6 +154,11 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         }
         if (server != null) {
             PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
+
+            if (((MinecraftServerAccess)server).projectInfinity$needsInvocation()) {
+                ModCommands.onInvocationNeedDetected(nearestPlayer);
+                return false;
+            }
 
             /* Set color and destination. Open status = the world that is being accessed exists already. */
             boolean dimensionExistsAlready = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, dimName)) != null;
@@ -173,6 +175,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 NeitherPortalBlock.openWithStatIncrease(nearestPlayer, server, world, pos);
             }
         }
+        return true;
     }
 
     /* This is being called when the portal is right-clicked. */
@@ -217,6 +220,10 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     /* Calls to open the portal and attributes the relevant statistics to a player provided. */
     public static void openWithStatIncrease(PlayerEntity player, MinecraftServer s, World world, BlockPos pos) {
+        if (((MinecraftServerAccess)s).projectInfinity$needsInvocation()) {
+            ModCommands.onInvocationNeedDetected(player);
+            return;
+        }
         boolean isDimensionNew = NeitherPortalBlock.open(s, world, pos);
         if (player != null) {
             if (isDimensionNew) {

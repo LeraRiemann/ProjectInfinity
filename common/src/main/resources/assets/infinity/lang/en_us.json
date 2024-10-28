@@ -86,6 +86,7 @@
   "subtitles.music.ivory.challenger": "ivory - challenger",
   "commands.warp.runtime_disabled": "Runtime dimension generation is disabled",
   "commands.warp.not_a_player": "Only players can warp",
+  "error.infinity.invocation_needed": "This multiverse still needs invocation. This is a bug, please contact Lera",
   "biome.infinity.slime_plains": "Slimy Plains",
   "biome.infinity.chaos": "Abode of Chaos",
   "biome.infinity.checkerboard": "Chess Battle Advanced",

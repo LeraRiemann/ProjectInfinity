@@ -6,15 +6,18 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.util.ConfigGenerator;
 import net.minecraft.command.argument.BlockPosArgumentType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
@@ -33,12 +36,20 @@ public class ModCommands {
 
     public static void warp(CommandContext<ServerCommandSource> context, Identifier value) {
         MinecraftServer s = context.getSource().getServer();
+        if (((MinecraftServerAccess)s).projectInfinity$needsInvocation()) {
+            onInvocationNeedDetected(context.getSource().getPlayer());
+            return;
+        }
         boolean isThisANewDimension = NeitherPortalBlock.addInfinityDimension(s, value);
         final ServerPlayerEntity self = context.getSource().getPlayer();
         if (self != null) {
             if (isThisANewDimension) self.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
             ((ServerPlayerEntityAccess)(self)).projectInfinity$setWarpTimer(20, value);
         }
+    }
+
+    public static void onInvocationNeedDetected(PlayerEntity player) {
+        if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"));
     }
 
     public static BlockPos getPosForWarp(BlockPos orig, ServerWorld world) {
@@ -65,7 +76,8 @@ public class ModCommands {
 
     public static Identifier getIdentifier(String text, MinecraftServer s) {
         if (text.equals("abatised redivides")) return World.END.getValue();
-        if (RandomProvider.getProvider(s).easterizer.isEaster(text)) return InfinityMod.getId(text);
+        if (text.isEmpty()) return InfinityMod.getId("empty");
+        if (!text.equals("empty") && RandomProvider.getProvider(s).easterizer.isEaster(text)) return InfinityMod.getId(text);
         return InfinityMod.getId("generated_" + getDimensionSeed(text, s));
     }
 
