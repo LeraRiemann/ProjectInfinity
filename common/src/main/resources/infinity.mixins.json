@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AbstractFireBlockMixin",
-    "AqifierSamplerImplMixin",
+    "AquifierSamplerImplMixin",
     "ChunkRegionMixin",
     "CreeperEntityMixin",
     "MaterialRuleContextAccess",

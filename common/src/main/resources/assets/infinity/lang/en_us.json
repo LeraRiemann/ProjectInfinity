@@ -96,6 +96,7 @@
   "biome.infinity.default": "Default Void",
   "biome.infinity.library": "Library of Babel",
   "biome.infinity.classic": "Primordial Valley",
+  "biome.infinity.nexus": "Humming Hallways",
   "death.attack.infinity.world_ceased": "%1$s was sent to the end of time",
   "death.attack.infinity.world_ceased.player": "%1$s was sent to the end of time by %2$s",
   "stat.infinity.portals_opened_stat": "Infinity portals opened",

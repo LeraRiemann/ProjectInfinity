@@ -10,12 +10,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AquiferSampler.Impl.class)
-public class AqifierSamplerImplMixin {
+public class AquifierSamplerImplMixin {
     @Mutable
     @Final
     @Shadow
     private long[] blockPositions;
 
+    /* for some reason minecraft's own code can fail with an array out of bounds exception if i don't clamp this */
     @Inject(method = "index(III)I", at = @At("RETURN"), cancellable = true)
     void inj2(int x, int y, int z, CallbackInfoReturnable<Integer> cir) {
         int i = cir.getReturnValue();

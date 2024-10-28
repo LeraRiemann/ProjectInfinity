@@ -114,6 +114,12 @@
         "to": "infinity:blue"
       },
       "trigger": "minecraft:changed_dimension"
+    },
+    "nexus": {
+      "conditions": {
+        "to": "infinity:nexus"
+      },
+      "trigger": "minecraft:changed_dimension"
     }
   },
   "display": {
