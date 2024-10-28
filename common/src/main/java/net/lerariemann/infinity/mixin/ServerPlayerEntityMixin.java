@@ -29,6 +29,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
@@ -112,7 +113,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             if (w==null) return;
             double d = DimensionType.getCoordinateScaleFactor(this.getServerWorld().getDimension(), w.getDimension());
             Entity self = getCameraEntity();
-            BlockPos blockPos2 = ModCommands.getPosForWarp(w.getWorldBorder().clamp(self.getX() * d, self.getY(), self.getZ() * d), w);
+            double y = MathHelper.clamp(self.getY(), w.getBottomY(), w.getTopY());
+            BlockPos blockPos2 = ModCommands.getPosForWarp(w.getWorldBorder().clamp(self.getX() * d, y, self.getZ() * d), w);
             BlockState state = w.getBlockState(blockPos2.down());
             if (state.isAir() || state.isOf(Blocks.LAVA)) w.setBlockState(blockPos2.down(), Blocks.OBSIDIAN.getDefaultState());
             this.teleport(w, blockPos2.getX() + 0.5, blockPos2.getY(), blockPos2.getZ() + 0.5, new HashSet<>(), self.getYaw(), self.getPitch());

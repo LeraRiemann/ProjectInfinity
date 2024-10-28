@@ -184,56 +184,56 @@ public class ModMaterialRules {
         static final BlockState stair4 = Blocks.OAK_STAIRS.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH).with(Properties.BLOCK_HALF, BlockHalf.TOP);
         static final BlockState light1 = Blocks.JACK_O_LANTERN.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH);
         static final BlockState light2 = Blocks.JACK_O_LANTERN.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
+        static final BlockState light3 = Blocks.OCHRE_FROGLIGHT.getDefaultState();
         static final BlockState air = Blocks.AIR.getDefaultState();
-        static final BlockState stone = Blocks.STONE.getDefaultState();
         @Override
         public BlockState tryApply(int i, int j, int k) {
             int x = normalize(i, 8);
-            int y = j - 48;
-            int z = normalize(k, 8);
-            if (j == 0) return Blocks.BEDROCK.getDefaultState();
-            if (y<-1) return stone;
-            if (z == 0 && y < 8) return wall;
+            int y = j - 50;
+            int z = normalize(k, 16);
+            if (y==-2) return Blocks.BEDROCK.getDefaultState();
             switch (y) {
-                case -1, 8 -> {
-                    if (z == 4 && x == 2) return light1;
-                    return floor;
+                case -1, 9 -> {
+                    if ((z == 10 || z == 6) && (x == 0 || x == 4)) return light3;
+                    return (y == -1) ? floor : wall;
                 }
                 case 0 -> {
                     return switch (z) {
-                        case 1, 7 -> wall;
-                        case 2 -> stair1;
-                        case 6 -> stair2;
+                        case 0, 1, 2, 14, 15 -> wall;
+                        case 3 -> stair1;
+                        case 13 -> stair2;
                         default -> air;
                     };
                 }
-                case 1, 2, 3, 4 -> {
-                    if (z == 1 || z == 7) {
+                case 1, 2, 3, 4, 5 -> {
+                    if (z == 0) return wall;
+                    if (z == 1 || z == 15) {
                         if (x == 5 || x == 7) return column1;
                         if (x==6) {
-                            if (y != 2) return wall;
+                            if (y != 3) return wall;
                             return (z == 1) ? light1 : light2;
                         }
                     }
                     return air;
                 }
-                case 5 -> {
-                    return (z == 1 || z == 7) ? column2 : air;
-                }
                 case 6 -> {
-                    return switch (z) {
-                        case 2 -> stair3;
-                        case 6 -> stair4;
-                        case 1, 7 -> wall;
-                        default -> air;
-                    };
+                    if (z == 0) return wall;
+                    return (z == 1 || z == 15) ? column2 : air;
                 }
                 case 7 -> {
                     return switch (z) {
-                        case 3 -> stair3;
-                        case 4 -> air;
-                        case 5 -> stair4;
-                        default -> wall;
+                        case 2 -> stair3;
+                        case 14 -> stair4;
+                        case 0, 1, 15 -> wall;
+                        default -> air;
+                    };
+                }
+                case 8 -> {
+                    return switch (z) {
+                        case 0, 1, 2, 3, 13, 14, 15 -> wall;
+                        case 4 -> stair3;
+                        case 12 -> stair4;
+                        default -> air;
                     };
                 }
                 default -> {
