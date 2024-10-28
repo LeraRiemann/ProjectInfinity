@@ -184,7 +184,6 @@ public class ModMaterialRules {
         static final BlockState stair4 = Blocks.OAK_STAIRS.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH).with(Properties.BLOCK_HALF, BlockHalf.TOP);
         static final BlockState light1 = Blocks.JACK_O_LANTERN.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH);
         static final BlockState light2 = Blocks.JACK_O_LANTERN.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
-        static final BlockState sign = Blocks.OAK_HANGING_SIGN.getDefaultState();
         static final BlockState air = Blocks.AIR.getDefaultState();
         static final BlockState stone = Blocks.STONE.getDefaultState();
         @Override
@@ -210,7 +209,6 @@ public class ModMaterialRules {
                 }
                 case 1, 2, 3, 4 -> {
                     if (z == 1 || z == 7) {
-                        if (y == 4 && x == 2) return sign;
                         if (x == 5 || x == 7) return column1;
                         if (x==6) {
                             if (y != 2) return wall;
