@@ -32,6 +32,7 @@
     "infinity.mixins.json",
     "dynreg.mixins.json"
   ],
+  "accessWidener" : "infinity.accesswidener",
   "depends": {
     "fabricloader": ">=0.15.11",
     "fabric-api": "*",
