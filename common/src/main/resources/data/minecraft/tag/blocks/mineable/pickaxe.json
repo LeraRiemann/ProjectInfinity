@@ -1,0 +1,10 @@
+{
+    "replace": false,
+    "values": [
+      "infinity:netherite_stairs",
+      "infinity:netherite_slab",
+      "infinity:cursor"
+
+
+    ]
+  }

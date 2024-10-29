@@ -25,12 +25,25 @@ public class ModItems {
     public static final RegistrySupplier<Item> BOOK_BOX_ITEM = registerSimpleBlockItem(ModBlocks.BOOK_BOX, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
     public static final RegistrySupplier<Item> ALTAR_ITEM = registerSimpleBlockItem(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM = registerSimpleBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR);
-
+    public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM  = registerSimpleBlockItem(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
+    public static final RegistrySupplier<Item> NETHERITE_SLAB_ITEM  = registerSimpleBlockItem(ModBlocks.NETHERITE_SLAB, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
+    public static final RegistrySupplier<Item> ANT_ITEM  = registerSimpleBlockItem(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE);
+    public static final RegistrySupplier<Item> CURSOR_ITEM  = registerSimpleBlockItem(ModBlocks.CURSOR, ItemGroups.COLORED_BLOCKS, Items.PINK_TERRACOTTA);
+    public static final RegistrySupplier<Item> FOOTPRINT = registerSimpleItem("footprint", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
+    public static final RegistrySupplier<Item> FINE_ITEM = registerSimpleItem("fine_item", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
     public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
 
 
     public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {
         return ITEMS.register(block.getId(), () -> new BlockItem(block.get(), settings));
+    }
+
+    public static RegistrySupplier<Item> registerSimpleItem(String item, Item.Settings settings) {
+        return ITEMS.register(item, () -> new Item(settings));
+    }
+
+    public static RegistrySupplier<Item> registerSimpleItem(String block, RegistryKey<ItemGroup> group) {
+        return registerSimpleItem(block, new Item.Settings().arch$tab(group));
     }
 
     public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group) {
@@ -45,6 +58,17 @@ public class ModItems {
         }
         else {
             return registerSimpleBlockItem(block, group);
+        }
+    }
+
+    public static RegistrySupplier<Item> registerSimpleItem(String id, RegistryKey<ItemGroup> group, Item item) {
+        if (isModLoaded("fabric_item_group_api_v1") || Platform.isFabric()) {
+            var blockItem = registerSimpleItem(id, new Item.Settings());
+            addAfter(blockItem, group, item);
+            return blockItem;
+        }
+        else {
+            return registerSimpleItem(id, group);
         }
     }
 
