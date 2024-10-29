@@ -123,6 +123,6 @@
   },
   "biome_source": {
     "type": "fixed",
-    "biome": "infinity:checkerboard"
+    "biome": "infinity:chess"
   }
 }

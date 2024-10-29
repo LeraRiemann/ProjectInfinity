@@ -184,7 +184,7 @@ public class ModMaterialRules {
         static final BlockState stair4 = Blocks.OAK_STAIRS.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH).with(Properties.BLOCK_HALF, BlockHalf.TOP);
         static final BlockState light1 = Blocks.JACK_O_LANTERN.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH);
         static final BlockState light2 = Blocks.JACK_O_LANTERN.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
-        static final BlockState light3 = Blocks.OCHRE_FROGLIGHT.getDefaultState();
+        static final BlockState light3 = Blocks.GLOWSTONE.getDefaultState();
         static final BlockState air = Blocks.AIR.getDefaultState();
         @Override
         public BlockState tryApply(int i, int j, int k) {

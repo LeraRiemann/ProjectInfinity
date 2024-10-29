@@ -65,7 +65,7 @@ public class ModCommands {
             case "minecraft:the_end" -> 0;
             case "infinity:chaos" -> Color.HSBtoRGB(Objects.requireNonNull(server.getWorld(World.OVERWORLD)).getRandom().nextFloat(),
                         1.0f, 1.0f);
-            case "infinity:checkerboard" -> (properMod(pos.getX() + pos.getY() + pos.getZ(), 2) == 0 ? 0 : 0xffffff);
+            case "infinity:chess" -> (properMod(pos.getX() + pos.getY() + pos.getZ(), 2) == 0 ? 0 : 0xffffff);
             case "infinity:pride" -> switch(properMod(pos.getX() + pos.getY() + pos.getZ(), 3)) {
                     case 0 -> 0x77c1de;
                     case 1 -> 0xdaadb5;

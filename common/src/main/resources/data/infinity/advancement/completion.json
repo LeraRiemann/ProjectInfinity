@@ -19,9 +19,9 @@
       },
       "trigger": "minecraft:changed_dimension"
     },
-    "checkerboard": {
+    "chess": {
       "conditions": {
-        "to": "infinity:checkerboard"
+        "to": "infinity:chess"
       },
       "trigger": "minecraft:changed_dimension"
     },
