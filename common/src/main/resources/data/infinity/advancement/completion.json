@@ -7,6 +7,12 @@
       },
       "trigger": "minecraft:changed_dimension"
     },
+    "blue": {
+      "conditions": {
+        "to": "infinity:blue"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
     "debug": {
       "conditions": {
         "to": "infinity:debug"
@@ -43,9 +49,21 @@
       },
       "trigger": "minecraft:changed_dimension"
     },
+    "custom": {
+      "conditions": {
+        "to": "infinity:custom"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
     "elephants": {
       "conditions": {
         "to": "infinity:elephants"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "green": {
+      "conditions": {
+        "to": "infinity:green"
       },
       "trigger": "minecraft:changed_dimension"
     },
@@ -55,9 +73,27 @@
       },
       "trigger": "minecraft:changed_dimension"
     },
+    "isolation": {
+      "conditions": {
+        "to": "infinity:isolation"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
     "library": {
       "conditions": {
         "to": "infinity:library"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "missing": {
+      "conditions": {
+        "to": "infinity:missing"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "nexus": {
+      "conditions": {
+        "to": "infinity:nexus"
       },
       "trigger": "minecraft:changed_dimension"
     },
@@ -70,6 +106,12 @@
     "random_forest": {
       "conditions": {
         "to": "infinity:random_forest"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "red": {
+      "conditions": {
+        "to": "infinity:red"
       },
       "trigger": "minecraft:changed_dimension"
     },
@@ -97,27 +139,9 @@
       },
       "trigger": "minecraft:changed_dimension"
     },
-    "red": {
+    "terminal": {
       "conditions": {
-        "to": "infinity:red"
-      },
-      "trigger": "minecraft:changed_dimension"
-    },
-    "green": {
-      "conditions": {
-        "to": "infinity:green"
-      },
-      "trigger": "minecraft:changed_dimension"
-    },
-    "blue": {
-      "conditions": {
-        "to": "infinity:blue"
-      },
-      "trigger": "minecraft:changed_dimension"
-    },
-    "nexus": {
-      "conditions": {
-        "to": "infinity:nexus"
+        "to": "infinity:terminal"
       },
       "trigger": "minecraft:changed_dimension"
     }
