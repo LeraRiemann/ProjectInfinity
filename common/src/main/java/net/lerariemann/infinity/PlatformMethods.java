@@ -32,6 +32,11 @@ public class PlatformMethods {
         throw new AssertionError();
     }
 
+    @ExpectPlatform
+    public static boolean isFabricApiLoaded(String modID) {
+        throw new AssertionError();
+    }
+
     public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {
         ServerPlayNetworking.send(entity, payload);
     }

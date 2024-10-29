@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "infinity:altar"
+    "infinity:altar",
+    "infinity:cursor",
+    "infinity:netherite_slab",
+    "infinity:netherite_stairs"
   ]
 }

@@ -26,6 +26,10 @@ public class PlatformMethodsImpl {
         return FabricLoader.getInstance().isModLoaded(modID);
     }
 
+    public static boolean isFabricApiLoaded(String modID) {
+        return isModLoaded(modID.replace("_", "-"));
+    }
+
     public static PacketByteBuf createPacketByteBufs() {
         return PacketByteBufs.create();
     }
