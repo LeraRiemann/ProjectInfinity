@@ -2,9 +2,7 @@ package net.lerariemann.infinity.fabric;
 
 import net.fabricmc.api.ModInitializer;
 import net.lerariemann.infinity.InfinityMod;
-
-import static net.lerariemann.infinity.entity.ModEntities.registerOtherSpawnRestrictions;
-import static net.lerariemann.infinity.entity.ModEntities.registerSpawnRestrictions;
+import net.lerariemann.infinity.entity.ModEntities;
 
 public final class InfinityModFabric implements ModInitializer {
     @Override
@@ -15,7 +13,6 @@ public final class InfinityModFabric implements ModInitializer {
 
         // Run our common setup.
         InfinityMod.init();
-        registerSpawnRestrictions();
-        registerOtherSpawnRestrictions();
+        ModEntities.registerSpawnRestrictions();
     }
 }
