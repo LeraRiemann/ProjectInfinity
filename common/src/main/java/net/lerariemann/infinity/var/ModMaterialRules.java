@@ -255,6 +255,67 @@ public class ModMaterialRules {
         }
     }
 
+    public static class Perfection implements MaterialRules.BlockStateRule
+    {
+        static final BlockState floor = Blocks.COBBLESTONE.getDefaultState();
+        static final BlockState wall = floor;
+        static final BlockState column1 = Blocks.OAK_LOG.getDefaultState();
+        static final BlockState light1 = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH);
+        static final BlockState light2 = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
+        static final BlockState light3 = Blocks.GLASS.getDefaultState();
+        static final BlockState air = Blocks.AIR.getDefaultState();
+        @Override
+        public BlockState tryApply(int i, int j, int k) {
+            int x = normalize(i, 8);
+            int y = j - 50;
+            int z = normalize(k, 12);
+            if (y==-2) return Blocks.BEDROCK.getDefaultState();
+            switch (y) {
+                case -1 -> {
+                    return floor;
+                }
+                case 4 -> {
+                    //Skylights
+                    if ((z == 10 || z == 9 || z == 6 || z == 7) && (x == 0 || x == 1 || x == 4 || x == 5)) return light3;
+                    return wall;
+                }
+                // Crossroad overhang
+                case 3 -> {
+                    return switch (z) {
+                        case 2, 3, 4, 12, 13, 14, 15 -> wall;
+                        default -> air;
+                    };
+                }
+                case 0, 1, 2 -> {
+                    //Crossroad walls, North/South
+                    if (z == 2 || z == 3 || z == 4 || z == 12 || z == 13 || z == 14) {
+                        if (x == 0 || x == 2 || x == 1) {
+                            return air;
+                        }
+                        return wall;
+                    }
+
+                    return air;
+                }
+                default -> {
+                    return air;
+                }
+            }
+        }
+    }
+    enum PerfectionRule implements MaterialRules.MaterialRule {
+        INSTANCE;
+        static final CodecHolder<PerfectionRule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
+        @Override
+        public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
+            return CODEC;
+        }
+        @Override
+        public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
+            return new Perfection();
+        }
+    }
+
     public static final DeferredRegister<MapCodec<? extends MaterialRules.MaterialRule>> MATERIAL_RULES =
             DeferredRegister.create(MOD_ID, RegistryKeys.MATERIAL_RULE);
 
@@ -267,6 +328,7 @@ public class ModMaterialRules {
         register("library", LibraryRule.CODEC);
         register("backrooms", BackroomsRule.CODEC);
         register("nexus", NexusRule.CODEC);
+        register("perfection", PerfectionRule.CODEC);
         MATERIAL_RULES.register();
 
     }
