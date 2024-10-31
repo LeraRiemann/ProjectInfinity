@@ -260,9 +260,9 @@ public class ModMaterialRules {
         static final BlockState cobblestone = Blocks.COBBLESTONE.getDefaultState();
         static final BlockState lightNorth = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
         static final BlockState lightSouth = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH);
+        static final BlockState lightEast = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.EAST);
+        static final BlockState lightWest = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.WEST);
         static final BlockState glass = Blocks.GLASS.getDefaultState();
-        static final BlockState red = Blocks.RED_WOOL.getDefaultState();
-        static final BlockState blue = Blocks.BLUE_WOOL.getDefaultState();
         static final BlockState air = Blocks.AIR.getDefaultState();
         @Override
         public BlockState tryApply(int i, int j, int k) {
@@ -299,6 +299,18 @@ public class ModMaterialRules {
                     // Crossroad overhang, East/West
                     if (x == 7 || x == 6 || x == 5) {
                         return cobblestone;
+                    }
+                    //Crossroad torch - West (East facing)
+                    else if (x == 8) {
+                        if (z == 8) {
+                            return lightEast;
+                        }
+                    }
+                    //Crossroad torch - East (West facing)
+                    else if (x == 4) {
+                        if (z == 8) {
+                            return lightWest;
+                        }
                     }
                      return air;
                 }
