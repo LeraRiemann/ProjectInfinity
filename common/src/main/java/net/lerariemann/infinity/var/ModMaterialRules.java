@@ -257,12 +257,10 @@ public class ModMaterialRules {
 
     public static class Perfection implements MaterialRules.BlockStateRule
     {
-        static final BlockState floor = Blocks.COBBLESTONE.getDefaultState();
-        static final BlockState wall = floor;
-        static final BlockState column1 = Blocks.OAK_LOG.getDefaultState();
+        static final BlockState cobblestone = Blocks.COBBLESTONE.getDefaultState();
         static final BlockState light1 = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH);
         static final BlockState light2 = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
-        static final BlockState light3 = Blocks.GLASS.getDefaultState();
+        static final BlockState glass = Blocks.GLASS.getDefaultState();
         static final BlockState air = Blocks.AIR.getDefaultState();
         @Override
         public BlockState tryApply(int i, int j, int k) {
@@ -272,17 +270,17 @@ public class ModMaterialRules {
             if (y==-2) return Blocks.BEDROCK.getDefaultState();
             switch (y) {
                 case -1 -> {
-                    return floor;
+                    return cobblestone;
                 }
                 case 4 -> {
                     //Skylights
-                    if ((z == 7 || z == 6) && (x == 0 || x == 4)) return light3;
-                    return wall;
+                    if ((z == 7 || z == 6 || z == 0 || z == 9) && (x == 0 || x == 4)) return glass;
+                    return cobblestone;
                 }
                 // Crossroad overhang
                 case 3 -> {
                     return switch (z) {
-                        case 2, 3, 4, 12, 13, 14, 15 -> wall;
+                        case 2, 3, 4, 12, 13, 14, 15 -> cobblestone;
                         default -> air;
                     };
                 }
@@ -292,7 +290,7 @@ public class ModMaterialRules {
                         if (x == 0 || x == 2 || x == 1) {
                             return air;
                         }
-                        return wall;
+                        return cobblestone;
                     }
 
                     return air;
