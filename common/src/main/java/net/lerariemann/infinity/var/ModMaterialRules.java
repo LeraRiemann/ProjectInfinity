@@ -268,7 +268,7 @@ public class ModMaterialRules {
         public BlockState tryApply(int i, int j, int k) {
             int x = normalize(i, 8);
             int y = j - 50;
-            int z = normalize(k, 12);
+            int z = normalize(k, 10);
             if (y==-2) return Blocks.BEDROCK.getDefaultState();
             switch (y) {
                 case -1 -> {
@@ -276,7 +276,7 @@ public class ModMaterialRules {
                 }
                 case 4 -> {
                     //Skylights
-                    if ((z == 10 || z == 9 || z == 6 || z == 7) && (x == 0 || x == 1 || x == 4 || x == 5)) return light3;
+                    if ((z == 7 || z == 6) && (x == 0 || x == 4)) return light3;
                     return wall;
                 }
                 // Crossroad overhang
