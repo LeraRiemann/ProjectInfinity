@@ -264,7 +264,7 @@ public class ModMaterialRules {
         static final BlockState air = Blocks.AIR.getDefaultState();
         @Override
         public BlockState tryApply(int i, int j, int k) {
-            int x = normalize(i, 8);
+            int x = normalize(i, 10);
             int y = j - 50;
             int z = normalize(k, 10);
             if (y==-2) return Blocks.BEDROCK.getDefaultState();
@@ -274,17 +274,28 @@ public class ModMaterialRules {
                 }
                 case 4 -> {
                     //Skylights
-                    if ((z == 7 || z == 6 || z == 0 || z == 9) && (x == 0 || x == 7 || x == 2 || x == 3)) return glass;
+                    if ((z == 7 || z == 6 || z == 0 || z == 11) && (x == 0 || x == 7 || x == 2 || x == 3)) return glass;
                     return cobblestone;
                 }
-                // Crossroad overhang
                 case 3 -> {
+                    // Crossroad overhang, East/West
+                    if (x == 7 || x == 6 || x == 5) {
+                        return cobblestone;
+                    }
+                    // Crossroad overhang, North/South
                     return switch (z) {
                         case 2, 3, 4, 12, 13, 14, 15 -> cobblestone;
                         default -> air;
                     };
                 }
                 case 0, 1, 2 -> {
+                    //Crossroad walls, East/West
+                    if (x == 7 || x == 6 || x == 5) {
+                        if (z == 7 || z == 8 || z == 9) {
+                            return air;
+                        }
+                        return cobblestone;
+                    }
                     //Crossroad walls, North/South
                     if (z == 2 || z == 3 || z == 4 || z == 12 || z == 13 || z == 14) {
                         if (x == 0 || x == 2 || x == 1) {
