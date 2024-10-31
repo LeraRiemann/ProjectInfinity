@@ -263,6 +263,8 @@ public class ModMaterialRules {
         static final BlockState lightEast = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.EAST);
         static final BlockState lightWest = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.WEST);
         static final BlockState glass = Blocks.GLASS.getDefaultState();
+        static final BlockState red = Blocks.RED_STAINED_GLASS.getDefaultState();
+
         static final BlockState air = Blocks.AIR.getDefaultState();
         @Override
         public BlockState tryApply(int i, int j, int k) {
@@ -276,7 +278,7 @@ public class ModMaterialRules {
                 }
                 case 4 -> {
                     //Skylights
-                    if ((z == 7 || z == 6 || z == 0 || z == 11) && (x == 0 || x == 7 || x == 2 || x == 3)) return glass;
+                    if ((z == 7 || z == 6 || z == 0 || z == 9) && (x == 0 || x == 9 || x == 2 || x == 3)) return glass;
                     return cobblestone;
                 }
                 case 3 -> {
