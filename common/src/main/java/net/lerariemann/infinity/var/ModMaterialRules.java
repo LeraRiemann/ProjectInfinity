@@ -274,7 +274,7 @@ public class ModMaterialRules {
                 }
                 case 4 -> {
                     //Skylights
-                    if ((z == 7 || z == 6 || z == 0 || z == 9) && (x == 0 || x == 4)) return glass;
+                    if ((z == 7 || z == 6 || z == 0 || z == 9) && (x == 0 || x == 7 || x == 2 || x == 3)) return glass;
                     return cobblestone;
                 }
                 // Crossroad overhang
