@@ -258,9 +258,11 @@ public class ModMaterialRules {
     public static class Perfection implements MaterialRules.BlockStateRule
     {
         static final BlockState cobblestone = Blocks.COBBLESTONE.getDefaultState();
-        static final BlockState light1 = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH);
-        static final BlockState light2 = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
+        static final BlockState lightNorth = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
+        static final BlockState lightSouth = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.SOUTH);
         static final BlockState glass = Blocks.GLASS.getDefaultState();
+        static final BlockState red = Blocks.RED_WOOL.getDefaultState();
+        static final BlockState blue = Blocks.BLUE_WOOL.getDefaultState();
         static final BlockState air = Blocks.AIR.getDefaultState();
         @Override
         public BlockState tryApply(int i, int j, int k) {
@@ -278,15 +280,21 @@ public class ModMaterialRules {
                     return cobblestone;
                 }
                 case 3 -> {
+                    // Crossroad overhang, North/South
+                    if (z == 2 || z == 3 || z == 4 || z == 12 || z == 13 || z == 14 || z == 15) {
+                        return cobblestone;
+                    }
+                    //Crossroad torches
+                    else if (z == 1) {
+                        if (x == 1) {
+                            return lightNorth;
+                        }
+                    }
                     // Crossroad overhang, East/West
                     if (x == 7 || x == 6 || x == 5) {
                         return cobblestone;
                     }
-                    // Crossroad overhang, North/South
-                    return switch (z) {
-                        case 2, 3, 4, 12, 13, 14, 15 -> cobblestone;
-                        default -> air;
-                    };
+                     return air;
                 }
                 case 0, 1, 2 -> {
                     //Crossroad walls, East/West
