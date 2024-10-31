@@ -284,10 +284,16 @@ public class ModMaterialRules {
                     if (z == 2 || z == 3 || z == 4 || z == 12 || z == 13 || z == 14 || z == 15) {
                         return cobblestone;
                     }
-                    //Crossroad torches
+                    //Crossroad torch - South (North facing)
                     else if (z == 1) {
                         if (x == 1) {
                             return lightNorth;
+                        }
+                    }
+                    //Crossroad torch - North (South facing)
+                    else if (z == 5) {
+                        if (x == 1) {
+                            return lightSouth;
                         }
                     }
                     // Crossroad overhang, East/West
