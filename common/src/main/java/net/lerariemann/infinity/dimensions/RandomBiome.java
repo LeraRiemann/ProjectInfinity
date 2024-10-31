@@ -126,7 +126,7 @@ public class RandomBiome {
             }
             case "minecraft:item" -> {
                 NbtCompound value = new NbtCompound();
-                value.putString("Name", PROVIDER.randomName(random, "items"));
+                value.putString("id", PROVIDER.randomName(random, "items"));
                 res.put("item", value);
                 return res;
             }

@@ -120,7 +120,7 @@ public class ModCommands {
     public static Identifier getIdentifier(String text, MinecraftServer s) {
         if (text.equals("abatised redivides")) return World.END.getValue();
         if (text.isEmpty()) return InfinityMod.getId("missingno");
-        if (!text.equals("missingno") && RandomProvider.getProvider(s).easterizer.isEaster(text)) return InfinityMod.getId(text);
+        if (RandomProvider.getProvider(s).easterizer.isEaster(text) && !text.equals("missingno")) return InfinityMod.getId(text);
         return InfinityMod.getId("generated_" + getDimensionSeed(text, s));
     }
 
