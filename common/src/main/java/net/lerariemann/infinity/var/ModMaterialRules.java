@@ -263,8 +263,6 @@ public class ModMaterialRules {
         static final BlockState lightEast = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.EAST);
         static final BlockState lightWest = Blocks.WALL_TORCH.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.WEST);
         static final BlockState glass = Blocks.GLASS.getDefaultState();
-        static final BlockState red = Blocks.RED_STAINED_GLASS.getDefaultState();
-
         static final BlockState air = Blocks.AIR.getDefaultState();
         @Override
         public BlockState tryApply(int i, int j, int k) {
