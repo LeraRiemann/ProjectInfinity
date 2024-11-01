@@ -313,7 +313,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     private void infinity$handleFog(MatrixStack matrices, Tessellator tessellator, float tickDelta) {
         RenderSystem.enableBlend();
         float[] fs = this.world.getDimensionEffects().getFogColorOverride(this.world.getSkyAngle(tickDelta), tickDelta);
-        if (fs != null) {
+        if (fs != null && !infinity$options().getSkyType().equals("rainbow")) {
             RenderSystem.setShader(GameRenderer::getPositionColorProgram);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             matrices.push();

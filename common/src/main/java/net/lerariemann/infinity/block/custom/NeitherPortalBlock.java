@@ -270,7 +270,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         }
     }
 
-    boolean world_exists(MinecraftServer s, Identifier l) {
+    public static boolean world_exists(MinecraftServer s, Identifier l) {
         return (!l.getNamespace().equals(InfinityMod.MOD_ID)) ||
                 s.getSavePath(WorldSavePath.DATAPACKS).resolve(l.getPath()).toFile().exists() ||
                 s.getWorld(RegistryKey.of(RegistryKeys.WORLD, l)) != null;

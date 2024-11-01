@@ -38,7 +38,7 @@ public class JsonGrabber<E> {
 
     void grab_all(Path rootdir, boolean bl) {
         try {
-            walk(rootdir).forEach(a -> grab(a, bl));
+            if(rootdir.toFile().exists()) walk(rootdir).forEach(a -> grab(a, bl));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

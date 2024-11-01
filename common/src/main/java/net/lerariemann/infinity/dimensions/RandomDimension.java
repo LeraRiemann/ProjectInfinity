@@ -48,7 +48,6 @@ public class RandomDimension {
         identifier = id;
         numericId = WarpLogic.getNumericFromId(identifier, server);
         random = new Random(numericId);
-        createDirectories();
         initializeStorage();
         /* Code for easter dimensions */
         if (PROVIDER.easterizer.easterize(this)) {
@@ -151,17 +150,6 @@ public class RandomDimension {
 
     public <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key, String name) {
         return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMod.getId(name))));
-    }
-
-    void createDirectories() {
-        for (String s: new String[]{"dimension", "dimension_type", "worldgen/biome", "worldgen/configured_feature",
-                "worldgen/placed_feature", "worldgen/noise_settings", "worldgen/configured_carver", "worldgen/structure", "worldgen/structure_set"}) {
-            try {
-                Files.createDirectories(Paths.get(getStoragePath() + "/" + s));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     boolean isNotOverworld() {

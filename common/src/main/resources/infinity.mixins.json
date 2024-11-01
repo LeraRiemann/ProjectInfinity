@@ -39,6 +39,7 @@
   ],
   "client": [
     "client.EntityMixin",
+    "options.BackgroundRendererMixin",
     "options.ClientWorldMixin",
     "options.GameRendererMixin",
     "options.MinecraftClientMixin",
