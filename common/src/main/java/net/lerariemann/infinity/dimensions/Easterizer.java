@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static java.nio.file.Files.walk;
 
@@ -17,6 +18,8 @@ public class Easterizer {
     public Map<String, Pair<NbtCompound, String>> map;
     public Map<String, NbtCompound> optionmap;
     public Map<String, Integer> colormap;
+    public static final Set<String> disabledUntilReview = Set.of("ant", "bash", "checkerboard", "custom",
+            "isolation", "missing", "perfection", "terminal");
 
     public Easterizer(RandomProvider prov) {
         map = new HashMap<>();
@@ -53,16 +56,15 @@ public class Easterizer {
         }
     }
 
-    public static boolean easterize(RandomDimension d) {
-        Map<String, Pair<NbtCompound, String>> map = d.PROVIDER.easterizer.map;
+    public boolean easterize(RandomDimension d) {
         String name = d.getName();
-        if (!map.containsKey(d.getName())) return false;
+        if (!d.PROVIDER.easterizer.isEaster(d.getName())) return false;
         d.data.putString("type", InfinityMod.MOD_ID + ":" + map.get(name).getRight() + "_type");
         d.data.put("generator", map.get(name).getLeft());
         return true;
     }
 
     public boolean isEaster(String name) {
-        return map.containsKey(name);
+        return map.containsKey(name) && !disabledUntilReview.contains(name);
     }
 }

@@ -50,7 +50,7 @@ public class RandomDimension {
         createDirectories();
         initializeStorage();
         /* Code for easter dimensions */
-        if (Easterizer.easterize(this)) {
+        if (PROVIDER.easterizer.easterize(this)) {
             wrap_up(true);
             return;
         }

@@ -18,7 +18,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class ConfigManager {
-
     static boolean registerConfig(Path path) {
         boolean bl = false;
         String path1 = path.toString();
@@ -60,6 +59,7 @@ public class ConfigManager {
     public static void unpackDefaultConfigs() {
         AtomicBoolean bl2 = new AtomicBoolean(false);
         ModContainer modContainer = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
+        assert modContainer != null;
         try {
             Path path = getConfigDir();
             if (!path.toFile().exists()) {
