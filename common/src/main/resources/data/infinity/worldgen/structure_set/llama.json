@@ -1,0 +1,15 @@
+{
+    "structures": [
+      {
+        "structure": "infinity:llama",
+        "weight": 1
+      }
+    ],
+    "placement": {
+      "type": "minecraft:random_spread",
+      "spacing": 2,
+      "separation": 1,
+      "spread_type": "linear",
+      "salt": 1646207470
+    }
+  }

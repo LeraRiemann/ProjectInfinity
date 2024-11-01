@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:flat",
+  "settings": {
+    "biome": "infinity:llama",
+    "layers": [
+      {
+        "block": "minecraft:bedrock",
+        "height": 320
+      }
+    ],
+    "structure_overrides": "infinity:llama"
+  }
+}
