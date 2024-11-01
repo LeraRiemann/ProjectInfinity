@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.var;
+package net.lerariemann.infinity.item;
 
 import com.mojang.serialization.Codec;
 import dev.architectury.registry.registries.DeferredRegister;

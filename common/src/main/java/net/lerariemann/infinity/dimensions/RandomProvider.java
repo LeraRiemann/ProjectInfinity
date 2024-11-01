@@ -114,10 +114,6 @@ public class RandomProvider {
         c2.putString("type", "minecraft:random_selector");
         c2.put("config", c);
         CommonIO.write(c2, savingPath + "/data/" + InfinityMod.MOD_ID + "/worldgen/configured_feature", "all_trees.json");
-        CommonIO.write(CommonIO.read(configPath + "util/all_trees.json"),
-                savingPath + "/data/" + InfinityMod.MOD_ID + "/worldgen/placed_feature", "all_trees.json");
-        CommonIO.write(CommonIO.read(configPath + "util/random_forest.json"),
-                savingPath + "/data/" + InfinityMod.MOD_ID + "/worldgen/biome", "random_forest.json");
     }
 
     void genCorePack() {

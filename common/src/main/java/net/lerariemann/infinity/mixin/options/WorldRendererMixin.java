@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
@@ -46,43 +45,43 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     @Shadow protected abstract void renderStars();
 
     @Unique
-    public boolean needsStars;
+    public boolean infinity$needsStars;
 
     @Unique
-    public void testRerenderStars() {
-        if (needsStars) {
+    public void infinity$testRerenderStars() {
+        if (infinity$needsStars) {
             renderStars();
-            needsStars = false;
+            infinity$needsStars = false;
         }
     }
     @Override
     public void projectInfinity$setNeedsStars(boolean b) {
-        needsStars = b;
+        infinity$needsStars = b;
     }
 
     @Inject(method = "renderSky(Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
             at=@At("HEAD"), cancellable=true)
     private void injected4(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
-        if (!options().isEmpty()) {
-            renderEntireSky(matrix4f, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
+        if (!infinity$options().isEmpty()) {
+            infinity$renderEntireSky(matrix4f, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
             ci.cancel();
         }
     }
     @ModifyConstant(method = "buildStarsBuffer(Lnet/minecraft/client/render/Tessellator;)Lnet/minecraft/client/render/BuiltBuffer;", constant = @Constant(intValue = 1500))
     private int injected(int constant) {
-        return options().getNumStars();
+        return infinity$options().getNumStars();
     }
     @ModifyConstant(method = "buildStarsBuffer(Lnet/minecraft/client/render/Tessellator;)Lnet/minecraft/client/render/BuiltBuffer;", constant = @Constant(floatValue = 0.15f))
     private float injected2(float constant) {
-        return options().getStarSizeBase();
+        return infinity$options().getStarSizeBase();
     }
     @ModifyConstant(method = "buildStarsBuffer(Lnet/minecraft/client/render/Tessellator;)Lnet/minecraft/client/render/BuiltBuffer;", constant = @Constant(floatValue = 0.1f))
     private float injected3(float constant) {
-        return options().getStarSizeModifier();
+        return infinity$options().getStarSizeModifier();
     }
 
     @Unique
-    private void renderEntireSky(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback) {
+    private void infinity$renderEntireSky(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback) {
         fogCallback.run();
         if (thickFog) {
             return;
@@ -94,11 +93,11 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         MatrixStack matrices = new MatrixStack();
         matrices.multiplyPositionMatrix(matrix4f);
         if (client.world!=null && client.world.getDimensionEffects().getSkyType() == DimensionEffects.SkyType.END) {
-            this.renderCustomSky(matrices, Identifier.of("textures/environment/end_sky.png"), 16.0f, 40, 255, tickDelta, false);
+            this.infinity$renderCustomSky(matrices, Identifier.of("textures/environment/end_sky.png"), 16.0f, 40, 255, tickDelta, false);
             return;
         }
-        if (options().endSkyLike()) {
-            handleSkyBackground(matrices, projectionMatrix, tickDelta);
+        if (infinity$options().endSkyLike()) {
+            infinity$handleSkyBackground(matrices, projectionMatrix, tickDelta);
             return;
         }
         if (client.world!=null && client.world.getDimensionEffects().getSkyType() != DimensionEffects.SkyType.NORMAL) {
@@ -108,23 +107,23 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         BackgroundRenderer.applyFogColor();
         Tessellator tessellator = Tessellator.getInstance();
         RenderSystem.depthMask(false);
-        handleSkyBackground(matrices, projectionMatrix, tickDelta);
-        handleFog(matrices, tessellator, tickDelta);
+        infinity$handleSkyBackground(matrices, projectionMatrix, tickDelta);
+        infinity$handleFog(matrices, tessellator, tickDelta);
         matrices.push();
 
         float rain_alpha = 1.0f - this.world.getRainGradient(tickDelta);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, rain_alpha);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(options().getSolarTilt()));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(infinity$options().getSolarTilt()));
         rotate_with_velocity(matrices, tickDelta, 1);
         Matrix4f matrix4f2 = matrices.peek().getPositionMatrix(); //creates the rotating layer for stellar bodies
 
-        renderSun(tessellator, matrix4f2, options().getSolarTexture(), options().getSolarSize(), 100.0f, options().getSolarTint());
-        for (int i = 0; i < options().getNumMoons(); i++) {
-            renderSingleMoon(matrices, tessellator, tickDelta, options().getLunarSize(i), options().getLunarTiltY(i), options().getLunarTiltZ(i),
-                    options().getLunarVelocity(i), options().getLunarOffset(i), options().getLunarTint(i), options().getLunarTexture(i));
+        infinity$renderSun(tessellator, matrix4f2, infinity$options().getSolarTexture(), infinity$options().getSolarSize(), 100.0f, infinity$options().getSolarTint());
+        for (int i = 0; i < infinity$options().getNumMoons(); i++) {
+            infinity$renderSingleMoon(matrices, tessellator, tickDelta, infinity$options().getLunarSize(i), infinity$options().getLunarTiltY(i), infinity$options().getLunarTiltZ(i),
+                    infinity$options().getLunarVelocity(i), infinity$options().getLunarOffset(i), infinity$options().getLunarTint(i), infinity$options().getLunarTexture(i));
         }
-        testRerenderStars();
-        renderStars(matrix4f2, tickDelta, projectionMatrix, fogCallback, rain_alpha);
+        infinity$testRerenderStars();
+        infinity$renderStars(matrix4f2, tickDelta, projectionMatrix, fogCallback, rain_alpha);
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.disableBlend();
@@ -144,38 +143,32 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     }
 
     @Unique
-    private void handleSkyBackground(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta) {
-        String skyType = options().getSkyType();
+    private void infinity$handleSkyBackground(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta) {
+        String skyType = infinity$options().getSkyType();
         if (skyType.equals("empty")) {
             Vec3d vec3d = this.world.getSkyColor(this.client.gameRenderer.getCamera().getPos(), tickDelta);
-            renderSingleColorSky(matrices, projectionMatrix, (float)vec3d.x, (float)vec3d.y, (float)vec3d.z, 1.0f);
+            infinity$renderSingleColorSky(matrices, projectionMatrix, (float)vec3d.x, (float)vec3d.y, (float)vec3d.z, 1.0f);
         }
         else if (skyType.equals("rainbow")) {
-            renderRainbowSky(matrices, tickDelta, projectionMatrix);
+            infinity$renderRainbowSky(matrices, tickDelta, projectionMatrix);
         }
         else {
-            if (options().getCelestialVelocity() != 0.0f) {
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(options().getCelestialTilt()));
-                rotate_with_velocity(matrices, tickDelta, options().getCelestialVelocity());
+            if (infinity$options().getCelestialVelocity() != 0.0f) {
+                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(infinity$options().getCelestialTilt()));
+                rotate_with_velocity(matrices, tickDelta, infinity$options().getCelestialVelocity());
             }
-            boolean color = !options().endSkyLike();
+            boolean color = !infinity$options().endSkyLike();
             if (skyType.contains("textures")) {
-                renderCustomSky(matrices, Identifier.of(skyType), tickDelta, color);
+                infinity$renderCustomSky(matrices, Identifier.of(skyType), tickDelta, color);
             }
-            else if (skyType.equals("LSD_rainbow")) {
-                renderLSDSky(matrices, tickDelta, color);
-            }
-            else if (skyType.equals("LSD")) {
-                renderCustomSky(matrices, LSD_SKY[0], 1.0f, 255, 255, tickDelta, color);
-            }
-            if (options().getCelestialVelocity() != 0.0f) {
-                rotate_with_velocity(matrices, tickDelta, -1 * options().getCelestialVelocity());
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-1 * options().getCelestialTilt()));
+            if (infinity$options().getCelestialVelocity() != 0.0f) {
+                rotate_with_velocity(matrices, tickDelta, -1 * infinity$options().getCelestialVelocity());
+                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-1 * infinity$options().getCelestialTilt()));
             }
         }
     }
     @Unique
-    private void renderSingleColorSky(MatrixStack matrices, Matrix4f projectionMatrix, float f, float g, float h, float a) {
+    private void infinity$renderSingleColorSky(MatrixStack matrices, Matrix4f projectionMatrix, float f, float g, float h, float a) {
         RenderSystem.setShaderColor(f, g, h, a);
         lightSkyBuffer.bind();
         lightSkyBuffer.draw(matrices.peek().getPositionMatrix(), projectionMatrix, RenderSystem.getShader());
@@ -183,7 +176,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     }
 
     @Unique
-    private void renderSun(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
+    private void infinity$renderSun(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
@@ -196,20 +189,20 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     }
 
     @Unique
-    private void renderSingleMoon(MatrixStack matrices, Tessellator tessellator, float tickDelta, float size, float tilt_y, float tilt_z, float velocity, float offset, Vector3f tint, Identifier texture) {
+    private void infinity$renderSingleMoon(MatrixStack matrices, Tessellator tessellator, float tickDelta, float size, float tilt_y, float tilt_z, float velocity, float offset, Vector3f tint, Identifier texture) {
         float lunarv = (velocity != 1.0f) ? velocity - 1 : 0;
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(tilt_y));
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(tilt_z));
         rotate_with_velocity(matrices, tickDelta, lunarv, offset);
-        renderMoon(tessellator, matrices.peek().getPositionMatrix(), texture, size, -100.0f, tint);
+        infinity$renderMoon(tessellator, matrices.peek().getPositionMatrix(), texture, size, -100.0f, tint);
         rotate_with_velocity(matrices, tickDelta, -1 * lunarv, offset);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-tilt_z));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-tilt_y));
     }
     @Unique
-    private void renderMoon(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
+    private void infinity$renderMoon(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
         float t, q, p, o;
-        if (!options().isMoonCustom()) {
+        if (!infinity$options().isMoonCustom()) {
             int r = this.world.getMoonPhase();
             int s = r % 4;
             int m = r / 4 % 2;
@@ -222,10 +215,10 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
             t = q = 1.0f;
             p = o = 0.0f;
         }
-        renderMoon(tessellator, matrix4f2, texture, k, y, tint, t, q, p, o);
+        infinity$renderMoon(tessellator, matrix4f2, texture, k, y, tint, t, q, p, o);
     }
     @Unique
-    private void renderMoon(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint, float t, float q, float p, float o) {
+    private void infinity$renderMoon(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint, float t, float q, float p, float o) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
@@ -238,9 +231,9 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     }
 
     @Unique
-    private void renderStars(Matrix4f matrix4f2, float tickDelta, Matrix4f projectionMatrix, Runnable fogCallback, float i) {
+    private void infinity$renderStars(Matrix4f matrix4f2, float tickDelta, Matrix4f projectionMatrix, Runnable fogCallback, float i) {
         float u = world.getStarBrightness(tickDelta) * i;
-        Vector3f color = options().getStellarColor();
+        Vector3f color = infinity$options().getStellarColor();
         if (u > 0.0f) {
             RenderSystem.setShaderColor(u*color.x, u*color.y, u*color.z, u);
             BackgroundRenderer.clearFog();
@@ -252,52 +245,34 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     }
 
     @Unique
-    private InfinityOptions options() {
+    private InfinityOptions infinity$options() {
         InfinityOptions options = ((InfinityOptionsAccess)client).projectInfinity$getInfinityOptions();
         if (options == null) options = InfinityOptions.empty();
         return options;
     }
     @Unique
-    private void renderRainbowSky(MatrixStack matrices, float tickDelta, Matrix4f projectionMatrix) {
+    private void infinity$renderRainbowSky(MatrixStack matrices, float tickDelta, Matrix4f projectionMatrix) {
         float main = world.getSkyAngle(tickDelta) * 2;
         int color = Color.getHSBColor(main - (int)main, 1.0f, 1.0f).getRGB();
         float f = MathHelper.clamp(MathHelper.cos(world.getSkyAngle(tickDelta) * ((float)Math.PI * 2)) * 2.0f + 0.5f, 0.2f, 1.0f);
-        renderSingleColorSky(matrices, projectionMatrix, f * (float)(color >> 16 & 0xFF) / 255.0f, f * (float)(color >> 8 & 0xFF) / 255.0f, f * (float)(color & 0xFF) / 255.0f, 1.0f);
+        infinity$renderSingleColorSky(matrices, projectionMatrix, f * (float)(color >> 16 & 0xFF) / 255.0f, f * (float)(color >> 8 & 0xFF) / 255.0f, f * (float)(color & 0xFF) / 255.0f, 1.0f);
     }
-    @Unique
-    private static final Identifier[] LSD_SKY = new Identifier[]{InfinityMod.getId("textures/lsd.png"),
-            InfinityMod.getId("textures/lsd60.png"),
-            InfinityMod.getId("textures/lsd120.png"),
-            InfinityMod.getId("textures/lsd180.png"),
-            InfinityMod.getId("textures/lsd240.png"),
-            InfinityMod.getId("textures/lsd300.png")};
 
     @Unique
-    private void renderLSDSky(MatrixStack matrices, float tickDelta, boolean color) {
-        RenderSystem.enableBlend();
-        float main = world.getSkyAngle(tickDelta)*12;
-        int i = ((int)main)%6;
-        int j = ((int)main + 1)%6;
-        float alpha = main - (int)main;
-        renderCustomSky(matrices, LSD_SKY[i], 1.0f, 255, (int)(255*(1-alpha)), tickDelta, color);
-        renderCustomSky(matrices, LSD_SKY[j], 1.0f, 255, (int)(255*alpha), tickDelta, color);
-        RenderSystem.disableBlend();
+    private void infinity$renderCustomSky(MatrixStack matrices, Identifier texture, float tickDelta, boolean color) {
+        infinity$renderCustomSky(matrices, texture, infinity$options().getCelestialTilesAmount(), infinity$options().getCelestialBrightness(), infinity$options().getCelestialAlpha(), tickDelta, color);
     }
     @Unique
-    private void renderCustomSky(MatrixStack matrices, Identifier texture, float tickDelta, boolean color) {
-        renderCustomSky(matrices, texture, options().getCelestialTilesAmount(), options().getCelestialBrightness(), options().getCelestialAlpha(), tickDelta, color);
+    private void infinity$renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int brightness, int alpha, float tickDelta, boolean color) {
+        infinity$renderCustomSky(matrices, texture, copies, brightness, brightness, brightness, alpha, tickDelta, color);
     }
     @Unique
-    private void renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int brightness, int alpha, float tickDelta, boolean color) {
-        renderCustomSky(matrices, texture, copies, brightness, brightness, brightness, alpha, tickDelta, color);
-    }
-    @Unique
-    private void renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int r, int g, int b, int alpha, float tickDelta, boolean color) {
+    private void infinity$renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int r, int g, int b, int alpha, float tickDelta, boolean color) {
         RenderSystem.enableBlend();
         RenderSystem.depthMask(false);
         RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
         if (color) {
-            float f = MathHelper.clamp(MathHelper.cos(world.getSkyAngle(tickDelta) * ((float)Math.PI * 2)) * 2.0f + 0.5f, options().getCelestialNightBrightness(), 1.0f);
+            float f = MathHelper.clamp(MathHelper.cos(world.getSkyAngle(tickDelta) * ((float)Math.PI * 2)) * 2.0f + 0.5f, infinity$options().getCelestialNightBrightness(), 1.0f);
             RenderSystem.setShaderColor(f, f, f, 1.0f);
         }
         RenderSystem.setShaderTexture(0, texture);
@@ -335,7 +310,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     }
 
     @Unique
-    private void handleFog(MatrixStack matrices, Tessellator tessellator, float tickDelta) {
+    private void infinity$handleFog(MatrixStack matrices, Tessellator tessellator, float tickDelta) {
         RenderSystem.enableBlend();
         float[] fs = this.world.getDimensionEffects().getFogColorOverride(this.world.getSkyAngle(tickDelta), tickDelta);
         if (fs != null) {

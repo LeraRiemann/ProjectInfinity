@@ -3,7 +3,7 @@ package net.lerariemann.infinity.features;
 import com.mojang.serialization.Codec;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.var.ModCommands;
+import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
@@ -26,7 +26,7 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupperConfig> {
 
     public static Set<Integer> tileChunkPositions(int start, int offset) {
         Set<Integer> ls = new HashSet<>();
-        int mod = ModCommands.properMod(start, offset);
+        int mod = WarpLogic.properMod(start, offset);
         int d_start = mod == 0 ? 0 : offset - mod;
         for (int d_curr = d_start; d_curr < 16; d_curr += offset) ls.add(start + d_curr);
         return ls;

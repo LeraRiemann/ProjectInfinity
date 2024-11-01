@@ -3,7 +3,7 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.var.ModCommands;
+import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -45,7 +45,7 @@ public class RandomDimension {
         this.server = server;
         PROVIDER = RandomProvider.getProvider(server);
         identifier = id;
-        numericId = ModCommands.getNumericFromId(identifier, server);
+        numericId = WarpLogic.getNumericFromId(identifier, server);
         random = new Random(numericId);
         createDirectories();
         initializeStorage();
@@ -346,10 +346,6 @@ public class RandomDimension {
                 if (!structure_ids.containsKey(s.type)) structure_ids.put(s.type, new ArrayList<>());
                 structure_ids.get(s.type).add(s.fullname);
             }
-        }
-        if (PROVIDER.roll(random, "random_portal")) {
-            RandomPortal p = new RandomPortal(random.nextInt(), b);
-            p.save();
         }
     }
 

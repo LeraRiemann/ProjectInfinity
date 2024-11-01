@@ -2,8 +2,10 @@ package net.lerariemann.infinity;
 
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
+import net.lerariemann.infinity.item.ModComponentTypes;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.structure.ModStructureType;
+import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.*;
 import net.lerariemann.infinity.util.ConfigManager;
 import net.minecraft.util.Identifier;

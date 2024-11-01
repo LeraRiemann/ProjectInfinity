@@ -13,8 +13,10 @@ import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
+import net.lerariemann.infinity.item.ModComponentTypes;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.loading.DimensionGrabber;
+import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.*;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -96,7 +98,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             String content = NeitherPortalBlock.parseComponents(writableComponent, writtenComponent, printedComponent);
             MinecraftServer server = world.getServer();
             if (server != null) {
-                Identifier id = ModCommands.getIdentifier(content, server);
+                Identifier id = WarpLogic.getIdentifier(content, server);
                 boolean bl = NeitherPortalBlock.modifyOnInitialCollision(id, world, pos, state);
                 if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             }
@@ -136,7 +138,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
 
             if (((MinecraftServerAccess)server).projectInfinity$needsInvocation()) {
-                ModCommands.onInvocationNeedDetected(nearestPlayer);
+                WarpLogic.onInvocationNeedDetected(nearestPlayer);
                 return false;
             }
 
@@ -201,7 +203,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     /* Calls to open the portal and attributes the relevant statistics to a player provided. */
     public static void openWithStatIncrease(PlayerEntity player, MinecraftServer s, World world, BlockPos pos) {
         if (((MinecraftServerAccess)s).projectInfinity$needsInvocation()) {
-            ModCommands.onInvocationNeedDetected(player);
+            WarpLogic.onInvocationNeedDetected(player);
             return;
         }
         boolean isDimensionNew = NeitherPortalBlock.open(s, world, pos);
@@ -259,7 +261,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     /* Sets the portal color, destination and open status for one portal block. */
     private static void modifyPortalBlock(World world, BlockPos pos, Direction.Axis axis, Identifier id, boolean open) {
-        long color = ModCommands.getPortalColorFromId(id, world.getServer(), pos);
+        long color = WarpLogic.getPortalColorFromId(id, world.getServer(), pos);
         world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.get().getDefaultState().with(AXIS, axis));
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity != null) {
@@ -353,7 +355,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 if (resStack.isOf(ModItems.TRANSFINITE_KEY.get())) {
                     BlockEntity blockEntity = world.getBlockEntity(pos);
                     if (blockEntity instanceof NeitherPortalBlockEntity portal) {
-                        Integer keycolor = ModCommands.getKeyColorFromId(portal.getDimension(), world.getServer());
+                        Integer keycolor = WarpLogic.getKeyColorFromId(portal.getDimension(), world.getServer());
                         ComponentMap newMap = (ComponentMap.builder().add(ModComponentTypes.KEY_DESTINATION.get(), portal.getDimension())
                                 .add(ModComponentTypes.KEY_COLOR.get(), keycolor)).build();
                         resStack.applyComponentsFrom(newMap);

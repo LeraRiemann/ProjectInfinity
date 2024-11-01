@@ -11,6 +11,8 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.particle.ParticleType;
+import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -135,7 +137,7 @@ public class ConfigGenerator {
         Map<String, WeighedStructure<String>> m = new HashMap<>();
         r.getKeys().forEach(a -> {
             String b = a.getValue().toString();
-            String namespace = b.substring(0, b.lastIndexOf(":"));
+            String namespace = a.getValue().getNamespace();
             if (!excludeInfinity || !(namespace.contains("infinity"))) {
                 checkAndAddWS(m, namespace);
                 m.get(namespace).add(b, 1.0);
@@ -144,12 +146,26 @@ public class ConfigGenerator {
         writeMap(m, additionalPath, name);
     }
 
+    public static void generateParticles() {
+        Registry<ParticleType<?>> r = Registries.PARTICLE_TYPE;
+        Map<String, WeighedStructure<String>> m = new HashMap<>();
+        r.getKeys().forEach(a -> {
+            String b = a.getValue().toString();
+            String namespace = a.getValue().getNamespace();
+            if (namespace.equals("minecraft") || r.get(a.getValue()) instanceof SimpleParticleType) {
+                checkAndAddWS(m, namespace);
+                m.get(namespace).add(b, 1.0);
+            }
+        });
+        writeMap(m, "misc", "particles");
+    }
+
     public static void generateFluids() {
         Registry<Fluid> r = Registries.FLUID;
         Map<String, WeighedStructure<NbtCompound>> m = new HashMap<>();
         r.getKeys().forEach(a -> {
             String b = a.getValue().toString();
-            String namespace = b.substring(0, b.lastIndexOf(":"));
+            String namespace = a.getValue().getNamespace();
             checkAndAddWS(m, namespace);
             if (!a.getValue().toString().contains("flowing"))
                 m.get(namespace).add(fluid(a), 1.0);
@@ -163,7 +179,7 @@ public class ConfigGenerator {
         Map<String, WeighedStructure<String>> allMobs = new HashMap<>();
         r.getKeys().forEach(a -> {
             String b = a.getValue().toString();
-            String namespace = b.substring(0, b.lastIndexOf(":"));
+            String namespace = a.getValue().getNamespace();
             SpawnGroup sg = r.get(a.getValue()).getSpawnGroup();
             if (sg != SpawnGroup.MISC) {
                 if (!m.containsKey(sg.asString())) m.put(sg.asString(), new HashMap<>());
@@ -187,7 +203,7 @@ public class ConfigGenerator {
             assert block != null;
             if(block.getDefaultState().getFluidState().isOf(Fluids.EMPTY)) {
                 String b = a.getValue().toString();
-                String namespace = b.substring(0, b.lastIndexOf(":"));
+                String namespace = a.getValue().getNamespace();
                 checkAndAddWS(m, namespace);
                 checkAndAddWS(m2, namespace);
                 m.get(namespace).add(block(a, w, inAir, onStone), 1.0);
@@ -236,7 +252,7 @@ public class ConfigGenerator {
         Map<String, WeighedStructure<String>> sounds = new HashMap<>();
         r.getKeys().forEach(a -> {
             String b = a.getValue().toString();
-            String namespace = b.substring(0, b.lastIndexOf(":"));
+            String namespace = a.getValue().getNamespace();
             if (b.contains("music")) {
                 checkAndAddWS(music, namespace);
                 music.get(namespace).add(b, 1.0);
@@ -261,7 +277,7 @@ public class ConfigGenerator {
     public static void generateAllNoWorld() {
         generateSounds();
         generate(Registries.ITEM, "misc", "items");
-        generate(Registries.PARTICLE_TYPE, "misc", "particles");
+        generateParticles();
         generateMobs();
         generateFluids();
     }

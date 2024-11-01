@@ -1,5 +1,5 @@
 {
-  "infinity_version": 1012001,
+  "infinity_version": 2000003,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "returnPortalsEnabled": true,
@@ -63,7 +63,6 @@
       "vegetation": 1.0,
       "surface_patch": 0.5,
       "floating_patch": 0.1,
-      "random_portal": 0.0,
       "random_flowers": 1.0
     },
     "features_rules": {
