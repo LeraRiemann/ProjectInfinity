@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.util;
 
-import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
@@ -167,7 +166,7 @@ public class ConfigGenerator {
             String b = a.getValue().toString();
             String namespace = a.getValue().getNamespace();
             checkAndAddWS(m, namespace);
-            if (!a.getValue().toString().contains("flowing"))
+            if (!b.contains("flowing"))
                 m.get(namespace).add(fluid(a), 1.0);
         });
         writeMap(m, "blocks", "fluids");

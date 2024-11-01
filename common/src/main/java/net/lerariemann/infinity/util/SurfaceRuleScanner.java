@@ -81,7 +81,7 @@ public class SurfaceRuleScanner {
                     else {
                         TreeLeaf l = addOfRule(next, where, true);
                         if(Objects.requireNonNull(c.get("biome_is")).getNbtType().equals(NbtList.TYPE)) {
-                            c.getList("biome_is", NbtElement.STRING_TYPE).forEach(e -> addBiomeLoc(((NbtString)e).asString(), l.i));
+                            c.getList("biome_is", NbtElement.STRING_TYPE).forEach(e -> addBiomeLoc(e.asString(), l.i));
                         }
                     }
                 }
@@ -113,7 +113,7 @@ public class SurfaceRuleScanner {
 
         public NbtCompound extractRule(String biome) {
             if (!biomeLocations.containsKey(biome)) return null;
-            if (biomeLocations.get(biome).size() == 1) return extractRule(biomeLocations.get(biome).get(0));
+            if (biomeLocations.get(biome).size() == 1) return extractRule(biomeLocations.get(biome).getFirst());
             else {
                 NbtCompound comp = RandomNoisePreset.startingRule("sequence");
                 NbtList l = new NbtList();
