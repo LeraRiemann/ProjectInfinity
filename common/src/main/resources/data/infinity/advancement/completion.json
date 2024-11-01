@@ -97,6 +97,12 @@
       },
       "trigger": "minecraft:changed_dimension"
     },
+    "perfection": {
+      "conditions": {
+        "to": "infinity:perfection"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
     "pride": {
       "conditions": {
         "to": "infinity:pride"
