@@ -67,7 +67,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     }
 
     @Override
-    public int projectInfinity$isTimebobmed() {
+    public int projectInfinity$isTimebombed() {
         return timebombed;
     }
 
