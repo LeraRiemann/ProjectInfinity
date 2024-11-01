@@ -1,7 +1,7 @@
-package net.lerariemann.infinity.dimensions;
+package net.lerariemann.infinity.util;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Pair;
 

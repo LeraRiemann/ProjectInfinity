@@ -1,9 +1,7 @@
-package net.lerariemann.infinity.dimensions;
+package net.lerariemann.infinity.util;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
@@ -209,7 +207,7 @@ public class RandomProvider {
         }
     }
 
-    List<String> mobcategories() {
+    public List<String> mobcategories() {
         return registry.get("mob_categories").keys;
     }
 

@@ -7,7 +7,7 @@ import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;

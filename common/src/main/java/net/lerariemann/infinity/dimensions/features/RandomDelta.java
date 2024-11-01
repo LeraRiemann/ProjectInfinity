@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 
 public class RandomDelta extends RandomisedFeature {

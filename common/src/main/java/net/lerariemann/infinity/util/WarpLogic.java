@@ -6,7 +6,6 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
-import net.lerariemann.infinity.dimensions.RandomProvider;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;

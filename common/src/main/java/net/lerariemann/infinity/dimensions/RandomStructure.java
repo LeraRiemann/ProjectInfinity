@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -28,7 +29,7 @@ public class RandomStructure {
         if (name_raw.lastIndexOf(":") < 0) name = name_raw + "_" + i;
         else name = name_raw.substring(0, name_raw.lastIndexOf(":")) + "_" + name_raw.substring(name_raw.lastIndexOf(":") + 1) + "_" + i;
         type = rawdata.getString("type");
-        if (type.length() == 0) type = name_raw;
+        if (type.isEmpty()) type = name_raw;
     }
 
     void save() {

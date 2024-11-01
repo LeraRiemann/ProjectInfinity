@@ -4,7 +4,7 @@ import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.client.ChaosPawnRenderer;
 import net.lerariemann.infinity.entity.client.DimensionalCreeperRenderer;
 import net.lerariemann.infinity.entity.client.DimensionalSkeletonRenderer;

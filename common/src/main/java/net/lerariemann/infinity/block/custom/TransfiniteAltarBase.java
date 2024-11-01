@@ -4,7 +4,7 @@ import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
@@ -52,7 +52,7 @@ public class TransfiniteAltarBase extends Block {
         builder.add(FLOWER);
     }
 
-    public void setAge(World world, BlockPos pos, BlockState state, int i) {
+    public void setColor(World world, BlockPos pos, BlockState state, int i) {
         world.setBlockState(pos, state.with(COLOR, i));
     }
 
@@ -95,18 +95,14 @@ public class TransfiniteAltarBase extends Block {
                 if (itemStack.isOf(Items.BLUE_DYE)) i = 5;
                 if (itemStack.isOf(Items.PURPLE_DYE)) i = 6;
                 if (itemStack.isOf(Items.GRAY_DYE)) i = 0;
-                if (i>=0) {
-                    setAge(world, pos, state, i);
+                if (i>=0 && state.get(COLOR) != i) {
+                    setColor(world, pos, state, i);
                     world.playSound(null, pos, SoundEvents.ITEM_DYE_USE, SoundCategory.BLOCKS, 1f, 1f);
                 }
             }
             if (itemStack.isOf(Items.SUNFLOWER)) {
-                world.setBlockState(pos, state.with(FLOWER, true));
+                world.setBlockState(pos, state.with(FLOWER, !state.get(FLOWER)));
                 world.playSound(null, pos, SoundEvents.BLOCK_AZALEA_LEAVES_PLACE, SoundCategory.BLOCKS, 1f, 1f);
-            }
-            if (itemStack.isOf(Items.SHEARS)) {
-                world.setBlockState(pos, state.with(FLOWER, false));
-                world.playSound(null, pos, SoundEvents.ENTITY_SHEEP_SHEAR, SoundCategory.BLOCKS, 1f, 1f);
             }
         }
         return ActionResult.FAIL;

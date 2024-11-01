@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;

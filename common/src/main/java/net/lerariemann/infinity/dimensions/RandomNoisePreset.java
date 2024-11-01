@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.nbt.*;
 
 import java.io.IOException;

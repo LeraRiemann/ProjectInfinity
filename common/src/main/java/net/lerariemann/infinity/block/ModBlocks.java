@@ -17,7 +17,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> ALTAR_LIT = BLOCKS.register("altar_lit", () ->
             new TransfiniteAltar(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(state -> state.get(TransfiniteAltar.FLOWER) ? 15 : 0)));
     public static final RegistrySupplier<Block> ALTAR = BLOCKS.register("altar", () ->
-            new TransfiniteAltar(AbstractBlock.Settings.copy(Blocks.STONE).nonOpaque().luminance(state -> state.get(TransfiniteAltar.FLOWER) ? 15 : 0)));
+            new TransfiniteAltarBase(AbstractBlock.Settings.copy(Blocks.STONE).nonOpaque().luminance(state -> state.get(TransfiniteAltarBase.FLOWER) ? 15 : 0)));
     public static final RegistrySupplier<Block> ANT = BLOCKS.register("ant", () ->
             new AntBlock(AbstractBlock.Settings.create().strength(-1f, 3600000.0f).mapColor(MapColor.WHITE).sounds(BlockSoundGroup.METAL).dropsNothing()));
     public static final RegistrySupplier<Block> BOOK_BOX = BLOCKS.register("book_box", () ->

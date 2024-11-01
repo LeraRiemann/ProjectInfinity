@@ -3,7 +3,7 @@ package net.lerariemann.infinity.var;
 import com.mojang.serialization.MapCodec;
 import dev.architectury.registry.registries.DeferredRegister;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
