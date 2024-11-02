@@ -3,6 +3,7 @@ package net.lerariemann.infinity.fabric;
 import net.fabricmc.api.ModInitializer;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.var.ModStats;
 
 public final class InfinityModFabric implements ModInitializer {
     @Override
@@ -13,6 +14,8 @@ public final class InfinityModFabric implements ModInitializer {
 
         // Run our common setup.
         InfinityMod.init();
+        // Run any remaining tasks that require waiting for the registry to freeze on NeoForge.
         ModEntities.registerSpawnRestrictions();
+        ModStats.load();
     }
 }

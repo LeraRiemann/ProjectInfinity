@@ -85,7 +85,7 @@ public class TimeBombBlock extends Block {
         if (!world.isClient()) {
             if (world.getRegistryKey().getValue().toString().contains("infinity")) {
                 ServerWorld w = ((ServerPlayerEntity)player).getServerWorld();
-                if (((Timebombable)w).projectInfinity$isTimebobmed() == 0) {
+                if (((Timebombable)w).projectInfinity$isTimebombed() == 0) {
                     if (state.get(ACTIVE)) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
                         world.getEntitiesByType(TypeFilter.instanceOf(AreaEffectCloudEntity.class), Box.of(pos.toCenterPos(), 1.0, 1.0, 1.0), Entity::isAlive).

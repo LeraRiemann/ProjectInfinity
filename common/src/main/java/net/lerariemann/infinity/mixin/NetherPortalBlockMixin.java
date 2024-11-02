@@ -51,7 +51,7 @@ public class NetherPortalBlockMixin {
 		RegistryKey<World> key2 = RegistryKey.of(RegistryKeys.WORLD, id);
 		ServerWorld serverWorld2 = world.getServer().getWorld(key2);
 
-		if (serverWorld2 != null && e.getOpen() && ((Timebombable)serverWorld2).projectInfinity$isTimebobmed() == 0) {
+		if (serverWorld2 != null && e.getOpen() && ((Timebombable)serverWorld2).projectInfinity$isTimebombed() == 0) {
 			return serverWorld2;
 		}
 		return world;

@@ -19,7 +19,9 @@ public class InfinityModFabricClient implements ClientModInitializer {
         // On Fabric, render layer maps are also applied to Book Boxes and Time Bombs.
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX.get(), RenderLayer.getCutoutMipped());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_BOMB.get(), RenderLayer.getTranslucent());
+        // Common client setup tasks.
         InfinityModClient.initializeClient();
+        // Register model predicates for Transfinite Keys
         ModItems.registerModelPredicates();
     }
 }
