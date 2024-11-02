@@ -7,7 +7,7 @@ import net.minecraft.nbt.NbtList;
 public class RandomCeilingBlob extends RandomisedFeature {
     public RandomCeilingBlob(RandomFeaturesList parent) {
         super(parent, "ceilingblob");
-        id = "random_ceiling_blob";
+        id = "infinity:random_ceiling_blob";
         save_with_placement();
     }
 

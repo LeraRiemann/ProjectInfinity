@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(DimensionType.class)
-public class DimensionTypeMixin implements InfinityOptionsAccess {
+public abstract class DimensionTypeMixin implements InfinityOptionsAccess {
     @Unique
-    public InfinityOptions infinityoptions;
+    public InfinityOptions infinity$options;
 
     @ModifyArg(method = "getSkyAngle", at = @At(value="INVOKE", target="Lnet/minecraft/util/math/MathHelper;fractionalPart(D)D"), index = 0)
     private double injected(double value) {
@@ -23,10 +23,10 @@ public class DimensionTypeMixin implements InfinityOptionsAccess {
         }
     }
     public InfinityOptions projectInfinity$getInfinityOptions() {
-        return infinityoptions;
+        return infinity$options;
     }
     @Override
     public void projectInfinity$setInfinityOptions(InfinityOptions options) {
-        infinityoptions = options;
+        infinity$options = options;
     }
 }

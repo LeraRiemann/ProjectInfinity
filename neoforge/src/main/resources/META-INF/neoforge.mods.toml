@@ -36,7 +36,28 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.infinity]]
-modId = "fabric_api"
+modId = "fabric_api_base"
+type = "required"
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.infinity]]
+modId = "fabric_networking_api_v1"
+type = "required"
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.infinity]]
+modId = "fabric_object_builder_api_v1"
+type = "required"
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.infinity]]
+modId = "fabric_registry_sync_v0"
 type = "required"
 versionRange = "*"
 ordering = "AFTER"

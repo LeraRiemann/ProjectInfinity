@@ -14,8 +14,15 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class CommonIO {
+    public static void write(NbtCompound base, String path, String filename) {
+        write(CompoundToString(base, 0), Paths.get(path), filename);
+    }
+
     public static void write(NbtCompound base, Path dir, String filename) {
-        String source = CompoundToString(base, 0);
+        write(CompoundToString(base, 0), dir, filename);
+    }
+
+    public static void write(String source, Path dir, String filename) {
         List<String> lines = Collections.singletonList(source);
         try {
             Files.createDirectories(dir);
@@ -26,10 +33,6 @@ public class CommonIO {
         }
     }
 
-    public static void write(NbtCompound base, String path, String filename) {
-        write(CompoundToString(base, 0), path, filename);
-    }
-
     public static void writeSurfaceRule(NbtCompound base, String path, String filename) {
         String source = CompoundToString(base, 0);
         source = source.replace(": Infinity", ": 2147483647");
@@ -37,19 +40,7 @@ public class CommonIO {
             String z = Integer.toString(j+i);
             source = source.replace("\"absolute\": "+z, "\"absolute\": "+(i==0 ? "%SL%" : "%SL" + (i>0 ? "+" : "") + i + "%"));
         }
-        write(source, path, filename);
-    }
-
-    public static void write(String source, String path, String filename) {
-        List<String> lines = Collections.singletonList(source);
-        Path file = Paths.get(path + File.separator + filename);
-        Path dir = file.getParent();
-        try {
-            Files.createDirectories(dir);
-            Files.write(file, lines, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        write(source, Paths.get(path), filename);
     }
 
     public static NbtCompound read(String path) {

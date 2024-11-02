@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.options;
 
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -14,15 +14,16 @@ import java.util.Random;
 public class RandomInfinityOptions {
     NbtCompound data;
     String path;
-    public RandomInfinityOptions(RandomDimension parent, boolean bl) {
+    public RandomInfinityOptions(RandomDimension parent, boolean isEasterDim) {
         data = new NbtCompound();
         path = parent.getStoragePath();
         RandomProvider prov = parent.PROVIDER;
-        Random r = parent.random;
-        if (bl && prov.easterizer.optionmap.containsKey(parent.fullname)) {
-            data = prov.easterizer.optionmap.get(parent.fullname);
+        if (isEasterDim && prov.easterizer.optionmap.containsKey(parent.getName())) {
+            data = prov.easterizer.optionmap.get(parent.getName());
         }
-        if (bl) return;
+        if (isEasterDim) return;
+
+        Random r = parent.random;
         NbtCompound shader = new NbtCompound();
         if (prov.roll(r, "use_shaders")) {
             Object[] lst = genMatrix(r);

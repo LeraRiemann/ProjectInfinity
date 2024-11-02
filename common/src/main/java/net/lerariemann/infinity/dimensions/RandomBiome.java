@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.nbt.*;
 
@@ -126,7 +127,7 @@ public class RandomBiome {
             }
             case "minecraft:item" -> {
                 NbtCompound value = new NbtCompound();
-                value.putString("Name", PROVIDER.randomName(random, "items"));
+                value.putString("id", PROVIDER.randomName(random, "items"));
                 res.put("item", value);
                 return res;
             }
@@ -136,8 +137,8 @@ public class RandomBiome {
                 return res;
             }
             case "minecraft:dust_color_transition" -> {
-                res.put("fromColor", randomDustColor());
-                res.put("toColor", randomDustColor());
+                res.put("from_color", randomDustColor());
+                res.put("to_color", randomDustColor());
                 res.putFloat("scale", random.nextFloat());
                 return res;
             }

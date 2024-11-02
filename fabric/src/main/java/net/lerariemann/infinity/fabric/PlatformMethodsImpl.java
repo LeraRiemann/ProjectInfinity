@@ -1,9 +1,15 @@
 package net.lerariemann.infinity.fabric;
 
+import dev.architectury.registry.registries.RegistrySupplier;
 import me.basiqueevangelist.dynreg.util.RegistryUtils;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registry;
@@ -20,8 +26,8 @@ public class PlatformMethodsImpl {
         return FabricLoader.getInstance().isModLoaded(modID);
     }
 
-    public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {
-        net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(entity, payload);
+    public static boolean isFabricApiLoaded(String modID) {
+        return isModLoaded(modID.replace("_", "-"));
     }
 
     public static PacketByteBuf createPacketByteBufs() {
@@ -37,14 +43,13 @@ public class PlatformMethodsImpl {
 
     }
 
-    public static void unfreeze(RegistryKey<?> registry) {
-//        RegistryUtils.unfreeze(registry.getRegistryRef().getRegistry());
-    }
-
-
     public static void freeze(Registry<?> registry) {
         registry.freeze();
 
+    }
+
+    public static void addAfter(RegistrySupplier<Item> blockItem, RegistryKey<ItemGroup> group, Item item) {
+        ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, blockItem.get()));
     }
 
 }

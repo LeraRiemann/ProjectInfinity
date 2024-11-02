@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AbstractFireBlockMixin",
+    "AquifierSamplerImplMixin",
     "ChunkRegionMixin",
     "CreeperEntityMixin",
     "MaterialRuleContextAccess",
@@ -18,6 +19,7 @@
     "WorldChunkMixin",
     "mobs.ElderGuardianEntityMixin",
     "mobs.EndermiteEntityMixin",
+    "mobs.HoglinEntityMixin",
     "mobs.LivingEntityMixin",
     "mobs.WaterCreaturesMixin",
     "mobs.passive.AnimalEntityMixin",
@@ -36,11 +38,12 @@
     "options.ServerWorldMixin"
   ],
   "client": [
+    "client.EntityMixin",
+    "options.BackgroundRendererMixin",
     "options.ClientWorldMixin",
     "options.GameRendererMixin",
     "options.MinecraftClientMixin",
-    "options.WorldRendererMixin",
-    "client.EntityMixin"
+    "options.WorldRendererMixin"
   ],
   "server": [
     "options.EntityMixin"

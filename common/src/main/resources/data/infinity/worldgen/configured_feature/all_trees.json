@@ -1,0 +1,536 @@
+{
+	"type": "minecraft:random_selector",
+	"config": {
+		"features": [
+			{
+				"chance": 0.05263158,
+				"feature": {
+					"feature": "minecraft:azalea_tree",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.055555556,
+				"feature": {
+					"feature": "minecraft:birch",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.05882353,
+				"feature": {
+					"feature": "minecraft:birch_tall",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.0625,
+				"feature": {
+					"feature": "minecraft:cherry",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.06666667,
+				"feature": {
+					"feature": "minecraft:dark_oak",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.071428575,
+				"feature": {
+					"feature": "minecraft:fancy_oak",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.07692308,
+				"feature": {
+					"feature": "minecraft:jungle_tree",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.083333336,
+				"feature": {
+					"feature": "minecraft:mangrove",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.09090909,
+				"feature": {
+					"feature": "minecraft:mega_jungle_tree",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.1,
+				"feature": {
+					"feature": "minecraft:mega_pine",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.11111111,
+				"feature": {
+					"feature": "minecraft:mega_spruce",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.125,
+				"feature": {
+					"feature": "minecraft:oak",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.14285715,
+				"feature": {
+					"feature": "minecraft:pine",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.16666667,
+				"feature": {
+					"feature": "minecraft:spruce",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.2,
+				"feature": {
+					"feature": "minecraft:swamp_oak",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.25,
+				"feature": {
+					"feature": "minecraft:tall_mangrove",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.33333334,
+				"feature": {
+					"feature": "minecraft:huge_brown_mushroom",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			},
+			{
+				"chance": 0.5,
+				"feature": {
+					"feature": "minecraft:huge_red_mushroom",
+					"placement": [
+						{
+							"count": 1,
+							"type": "minecraft:count_on_every_layer"
+						},
+						{
+							"type": "minecraft:surface_water_depth_filter",
+							"max_water_depth": 8
+						},
+						{
+							"predicate": {
+								"offset": [
+									0,
+									-1,
+									0
+								],
+								"blocks": "minecraft:grass_block",
+								"type": "minecraft:matching_blocks"
+							},
+							"type": "minecraft:block_predicate_filter"
+						}
+					]
+				}
+			}
+		],
+		"default": {
+			"feature": "minecraft:acacia",
+			"placement": [
+				{
+					"count": 1,
+					"type": "minecraft:count_on_every_layer"
+				},
+				{
+					"type": "minecraft:surface_water_depth_filter",
+					"max_water_depth": 8
+				},
+				{
+					"predicate": {
+						"offset": [
+							0,
+							-1,
+							0
+						],
+						"blocks": "minecraft:grass_block",
+						"type": "minecraft:matching_blocks"
+					},
+					"type": "minecraft:block_predicate_filter"
+				}
+			]
+		}
+	}
+}

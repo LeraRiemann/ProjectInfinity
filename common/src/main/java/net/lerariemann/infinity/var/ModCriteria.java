@@ -4,21 +4,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.Criterion;
 import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LootContextPredicate;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Optional;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
-import static net.lerariemann.infinity.PlatformMethods.freeze;
-import static net.lerariemann.infinity.PlatformMethods.unfreeze;
 
 public class ModCriteria {
     public static class DimensionOpenedCriterion extends AbstractCriterion<ScoredConditions> {
@@ -81,12 +76,12 @@ public class ModCriteria {
     public static RegistrySupplier<DimensionClosedCriterion> DIMS_CLOSED;
     public static RegistrySupplier<WhoRemainsCriterion> WHO_REMAINS;
 
-    public static final DeferredRegister<Criterion<?>> CRITERIONS = DeferredRegister.create(MOD_ID, RegistryKeys.CRITERION);
+    public static final DeferredRegister<Criterion<?>> CRITERIA = DeferredRegister.create(MOD_ID, RegistryKeys.CRITERION);
 
     public static void registerCriteria() {
-        DIMS_OPENED = CRITERIONS.register("dims_open", DimensionOpenedCriterion::new);
-        DIMS_CLOSED = CRITERIONS.register("dims_closed", DimensionClosedCriterion::new);
-        WHO_REMAINS = CRITERIONS.register("who_remains", WhoRemainsCriterion::new);
-        CRITERIONS.register();
+        DIMS_OPENED = CRITERIA.register("dims_open", DimensionOpenedCriterion::new);
+        DIMS_CLOSED = CRITERIA.register("dims_closed", DimensionClosedCriterion::new);
+        WHO_REMAINS = CRITERIA.register("who_remains", WhoRemainsCriterion::new);
+        CRITERIA.register();
     }
 }

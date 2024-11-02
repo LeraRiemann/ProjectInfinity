@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -17,7 +17,7 @@ public class RandomShape extends RandomisedFeature {
         this.shape = shape;
         this.usePreset = parent.roll("colourful_shapes");
         this.useBands = parent.roll("banded_shapes");
-        id = (Objects.equals(shape, "cube")) ? "random_cube" : "random_shape";
+        id = (Objects.equals(shape, "cube")) ? "infinity:random_cube" : "infinity:random_shape";
         save_with_placement();
     }
 

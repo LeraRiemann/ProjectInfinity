@@ -40,6 +40,7 @@ public class ShaderLoader {
         if (!path.resolve("pack.mcmeta").toFile().exists()) CommonIO.write(packMcmeta(), path.toString(), "pack.mcmeta");
         m.scanPacks();
         m.enable(name);
+//        client.reloadResources();
     }
 
     private static NbtCompound packMcmeta() {

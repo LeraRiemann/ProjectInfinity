@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.dimensions.features.*;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
@@ -137,7 +138,8 @@ public class RandomFeaturesList {
         res.addAll(getAllElements("vegetation_part3"));
         return res;
     }
-}
-interface FeatureRegistrar {
-    RandomisedFeature op(RandomFeaturesList parent);
+
+    interface FeatureRegistrar {
+        RandomisedFeature op(RandomFeaturesList parent);
+    }
 }

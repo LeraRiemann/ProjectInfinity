@@ -1,14 +1,13 @@
 package net.lerariemann.infinity.var;
 
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import dev.architectury.registry.registries.DeferredRegister;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 
+import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.InfinityMod.getId;
-import static net.lerariemann.infinity.PlatformMethods.freeze;
-import static net.lerariemann.infinity.PlatformMethods.unfreeze;
 
 public class ModStats {
     public static Identifier DIMS_OPENED = getId("dimensions_opened_stat");
@@ -24,13 +23,14 @@ public class ModStats {
         WORLDS_DESTROYED_STAT = Stats.CUSTOM.getOrCreateStat(WORLDS_DESTROYED);
     }
 
+    public static final DeferredRegister<Identifier> STATS = DeferredRegister.create(MOD_ID, RegistryKeys.CUSTOM_STAT);
+
+
     public static void registerStats() {
-        unfreeze(Registries.CUSTOM_STAT);
-        Registry.register(Registries.CUSTOM_STAT, DIMS_OPENED, DIMS_OPENED);
-        Registry.register(Registries.CUSTOM_STAT, PORTALS_OPENED, PORTALS_OPENED);
-        Registry.register(Registries.CUSTOM_STAT, WORLDS_DESTROYED, WORLDS_DESTROYED);
-        ModStats.load();
-        freeze(Registries.CUSTOM_STAT);
+        STATS.register(DIMS_OPENED, () -> DIMS_OPENED);
+        STATS.register(PORTALS_OPENED, () -> PORTALS_OPENED);
+        STATS.register(WORLDS_DESTROYED, () -> WORLDS_DESTROYED);
+        STATS.register();
     }
 }
 

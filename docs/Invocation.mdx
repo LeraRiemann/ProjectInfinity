@@ -1,0 +1,49 @@
+---
+title: Cosmic Invocation
+hide_meta: true
+---
+
+Cosmic Invocation is the process of generating config files for all loaded mods. In the older versions,
+players had to construct and activate their own Transfinite Altar to enrich the multiverse with modded content;
+now this process is performed automatically by a special Cosmic Altar.
+
+In singleplayer, invocation happens on the first couple of ticks of the first world created on a new game instance
+(since config files are shared between all the worlds on an instance). On a server, it is performed the instant the first player
+joins the game.
+
+Currently, the config files and therefore types of modded content which the invocation is able to scan for and introduce to dimensions are:
+* blocks,
+* fluids,
+* mobs,
+* sounds,
+* items,
+* particles,
+* biomes and surface rules for them.
+
+Blocks are auto-assigned tags needed for the generator to know which parts of worldgen are they usable for ("full", "laggy" etc.,
+see the page on [configuring the mod](Configuring-the-mod)). Mobs are auto-sorted
+into sublists based on their spawn group (monsters, underwater creatures etc.). Music is also auto-chosen from the list of sounds,
+although the way the game checks for that is currently imperfect (it just checks if the ID of the sound event contains the
+substrings "music" or "disc"). When scanning for biomes, the game ignores all the ones from Infinite Dimensions itself as to not
+introduce mod-generated biomes into the pool of ones to choose from when you specifically want to _not_ generate one.
+
+All the entries in all these lists are assigned the default weight of 1.0. You're free to edit these weights as you wish after
+the invocation if you want to tweak the rarity of certain blocks/mobs/etc. or disable some of them from appearing in mod's dimensions
+altogether (set the weight to 0.0 for that).
+
+## Known issues with invocation
+* Invocation only happens once per game folder. As such, if you add new mods to the instance after you already loaded worlds on it once,
+invocation will not happen again. This especially stands for the default Minecraft launcher by Mojang, which by design only uses one.
+To force the invocation to happen again, you can either construct and activate the Transfinite Altar, or delete the file
+`config/infinity/modular/invocation.lock` and relaunch the game.
+    * Note that such reinvocation will not touch any of the existing files, only add new ones. As such, it is useful by itself only when
+    adding new mods to the instance. If you update one of the mods (including Infinite Dimensions!) to a newer version that brings
+    more content, or *especially* if you remove mods, you have to purge the `/config/modular` folder entirely to do a successful reinvocation.
+* Invocation takes time; it's only two game ticks, but using creative mode and saved hotbars / the warp command it is technically possible to
+ prompt the game to generate a dimension before the invocation completes (especially since during invocation the server can lag a bit
+ on larger modpacks). Please try to avoid that.
+* Particle types sometimes have additional configuration options required to use them. These options are accounted for when it comes
+to particles from vanilla Minecraft, but if another mod adds such a configurable particle, Infinite Dimensions will have no idea it is
+configurable - which can lead to creation of broken datapacks. I do not currently know of any mod which does add particles which require such
+configuration options and crash without them, which is why i left particles on the list; if it becomes a problem, i will remove them
+from it.

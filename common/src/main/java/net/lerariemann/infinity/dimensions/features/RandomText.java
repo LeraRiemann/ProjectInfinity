@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.var.ModMaterialConditions;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -18,7 +18,7 @@ import static java.nio.file.Files.walk;
 public class RandomText extends RandomisedFeature {
     public RandomText(RandomFeaturesList parent) {
         super(parent, "text");
-        id = "random_text";
+        id = "infinity:random_text";
         save_with_placement();
     }
 
@@ -77,7 +77,7 @@ public class RandomText extends RandomisedFeature {
                     if (!s.endsWith(".mca") && !s.endsWith(".png") && !s.endsWith(".gz")) lst.add(a.toFile());
                 }
             });
-            if (lst.size() == 0) throw new IOException();
+            if (lst.isEmpty()) throw new IOException();
             return genTextFromList(random, lst, trim);
         }
         catch (Exception e) {

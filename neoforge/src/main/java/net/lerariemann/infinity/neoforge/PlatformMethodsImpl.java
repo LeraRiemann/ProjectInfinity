@@ -1,13 +1,16 @@
 package net.lerariemann.infinity.neoforge;
 
+import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.mixin.registry.sync.BaseMappedRegistryAccessor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.NeoForge;
@@ -21,8 +24,8 @@ public class PlatformMethodsImpl {
        return ModList.get().isLoaded(modID);
     }
 
-    public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {
-        net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(entity, payload);
+    public static boolean isFabricApiLoaded(String modID) {
+        return isModLoaded(modID.replace("-", "_"));
     }
 
     public static PacketByteBuf createPacketByteBufs() {
@@ -34,24 +37,19 @@ public class PlatformMethodsImpl {
         server.forgeGetWorldMap().put(world.getRegistryKey(),world);
         server.markWorldsDirty();
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(world));
-
-
     }
 
     public static void unfreeze(Registry<?> registry) {
         ((BaseMappedRegistryAccessor) registry).invokeUnfreeze();
-
     }
-
-    public static void unfreeze(RegistryKey<?> registry) {
-        ((BaseMappedRegistryAccessor) registry.getRegistryRef()).invokeUnfreeze();
-
-    }
-
 
     public static void freeze(Registry<?> registry) {
-//        registry.freeze();
+        registry.freeze();
+    }
 
+    //Optional, requires Item Group API.
+    public static void addAfter(RegistrySupplier<Item> blockItem, RegistryKey<ItemGroup> group, Item item) {
+        ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, blockItem.get()));
     }
 
 }

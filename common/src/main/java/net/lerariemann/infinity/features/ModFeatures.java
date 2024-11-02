@@ -1,33 +1,37 @@
 package net.lerariemann.infinity.features;
 
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.SingleStateFeatureConfig;
 
-import static net.lerariemann.infinity.PlatformMethods.freeze;
-import static net.lerariemann.infinity.PlatformMethods.unfreeze;
+import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModFeatures {
-    public static Feature<SingleStateFeatureConfig> RANDOM_END_ISLAND;
-    public static Feature<RandomDungeonFeatureConfig> RANDOM_DUNGEON;
-    public static Feature<RandomColumnsFeatureConfig> RANDOM_COLUMNS;
-    public static Feature<RandomMushroomFeatureConfig> RANDOM_FLAT_MUSHROOM;
-    public static Feature<RandomMushroomFeatureConfig> RANDOM_ROUND_MUSHROOM;
-    public static Feature<RandomCeilingBlobFeatureConfig> RANDOM_CEILING_BLOB;
-    public static Feature<RandomCubeFeatureConfig> RANDOM_CUBE;
-    public static Feature<RandomShapeFeatureConfig> RANDOM_STAR;
-    public static Feature<TextFeatureConfig> RANDOM_TEXT;
+    public static RegistrySupplier<RandomEndIslandFeature> RANDOM_END_ISLAND;
+    public static RegistrySupplier<RandomDungeonFeature> RANDOM_DUNGEON;
+    public static RegistrySupplier<RandomColumnsFeature> RANDOM_COLUMNS;
+    public static RegistrySupplier<RandomFlatMushroomFeature> RANDOM_FLAT_MUSHROOM;
+    public static RegistrySupplier<RandomRoundMushroomFeature> RANDOM_ROUND_MUSHROOM;
+    public static RegistrySupplier<RandomCeilingBlobFeature> RANDOM_CEILING_BLOB;
+    public static RegistrySupplier<RandomCubeFeature> RANDOM_CUBE;
+    public static RegistrySupplier<RandomShapeFeature> RANDOM_STAR;
+    public static RegistrySupplier<TextFeature> RANDOM_TEXT;
+    public static RegistrySupplier<RandomPortalSetupper> PORTAL_SETUPPER;
 
-    public static <C extends FeatureConfig, F extends Feature<C>> F register(String name, F feature) {
-        return Registry.register(Registries.FEATURE, name, feature);
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(MOD_ID, RegistryKeys.FEATURE);
+
+
+    public static <C extends FeatureConfig, F extends Feature<C>> RegistrySupplier<F> register(String name, F feature) {
+        return FEATURES.register(name, () -> feature);
     }
+
 
     public static void registerFeatures() {
         InfinityMod.LOGGER.debug("Registering features for " + InfinityMod.MOD_ID);
-        unfreeze(Registries.FEATURE);
         RANDOM_END_ISLAND = register("random_end_island", new RandomEndIslandFeature(SingleStateFeatureConfig.CODEC));
         RANDOM_DUNGEON = register("random_dungeon", new RandomDungeonFeature(RandomDungeonFeatureConfig.CODEC));
         RANDOM_COLUMNS = register("random_columns", new RandomColumnsFeature(RandomColumnsFeatureConfig.CODEC));
@@ -37,6 +41,7 @@ public class ModFeatures {
         RANDOM_CUBE = register("random_cube", new RandomCubeFeature(RandomCubeFeatureConfig.CODEC));
         RANDOM_STAR = register("random_shape", new RandomShapeFeature(RandomShapeFeatureConfig.CODEC));
         RANDOM_TEXT = register("random_text", new TextFeature(TextFeatureConfig.CODEC));
-        freeze(Registries.FEATURE);
+        PORTAL_SETUPPER = register("portal_setupper", new RandomPortalSetupper((RandomPortalSetupperConfig.CODEC)));
+        FEATURES.register();
     }
 }

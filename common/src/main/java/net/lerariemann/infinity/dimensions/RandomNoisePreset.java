@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.nbt.*;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class RandomNoisePreset {
         parent = dim;
         biomeRegistry = new HashMap<>();
         PROVIDER = dim.PROVIDER;
-        name = "generated_" +dim.id;
+        name = "generated_" +dim.numericId;
         fullname = InfinityMod.MOD_ID + ":" + name;
         NbtCompound data = new NbtCompound();
         type_alike = dim.type_alike;
