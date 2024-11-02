@@ -31,6 +31,14 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM = registerSimpleBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR);
     public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
 
+    public static Item.Settings create(String id) {
+        return new Item.Settings().registryKey(registryKey(id));
+    }
+
+    public static RegistryKey<Item> registryKey(String s) {
+        Identifier id = InfinityMod.getId(s);
+        return RegistryKey.of(RegistryKeys.ITEM, id);
+    }
 
     public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {
         return ITEMS.register(block.getId(), () -> new BlockItem(block.get(), settings));
@@ -40,17 +48,17 @@ public class ModItems {
         return ITEMS.register(item, () -> new Item(settings));
     }
 
-    public static RegistrySupplier<Item> registerSimpleItem(String block, RegistryKey<ItemGroup> group) {
-        return registerSimpleItem(block, new Item.Settings().arch$tab(group));
+    public static RegistrySupplier<Item> registerSimpleItem(String id, RegistryKey<ItemGroup> group) {
+        return registerSimpleItem(id, create(id).arch$tab(group));
     }
 
     public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group) {
-       return registerSimpleBlockItem(block, new Item.Settings().arch$tab(group));
+       return registerSimpleBlockItem(block, create(block.getId().getPath()).useBlockPrefixedTranslationKey().arch$tab(group));
     }
 
     public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item) {
         if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
-            var blockItem = registerSimpleBlockItem(block, new Item.Settings());
+            var blockItem = registerSimpleBlockItem(block, create(block.getId().getPath()).useBlockPrefixedTranslationKey());
             addAfter(blockItem, group, item);
             return blockItem;
         }
@@ -61,7 +69,7 @@ public class ModItems {
 
     public static RegistrySupplier<Item> registerSimpleItem(String id, RegistryKey<ItemGroup> group, Item item) {
         if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
-            var blockItem = registerSimpleItem(id, new Item.Settings());
+            var blockItem = registerSimpleItem(id, create(id));
             addAfter(blockItem, group, item);
             return blockItem;
         }
@@ -73,14 +81,14 @@ public class ModItems {
     public static RegistrySupplier<Item> registerKeyItem() {
         if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
             RegistrySupplier<Item> registeredKey = ITEMS.register("key", () ->
-                    new TransfiniteKeyItem(new Item.Settings()
+                    new TransfiniteKeyItem(create("transfinite_key")
                             .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))));
             addAfter(registeredKey, ItemGroups.INGREDIENTS, Items.OMINOUS_TRIAL_KEY);
             return registeredKey;
         }
         else {
             return ITEMS.register("key", () ->
-                    new TransfiniteKeyItem(new Item.Settings()
+                    new TransfiniteKeyItem(create("transfinite_key")
                          .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))));
         }
     }
