@@ -71,17 +71,14 @@ public class ModItems {
     }
 
     public static RegistrySupplier<Item> registerKeyItem() {
+        Item.Settings keySettings = new Item.Settings().component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"));
         if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
-            RegistrySupplier<Item> registeredKey = ITEMS.register("key", () ->
-                    new TransfiniteKeyItem(new Item.Settings()
-                            .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))));
+            RegistrySupplier<Item> registeredKey = ITEMS.register("key", () -> new TransfiniteKeyItem(keySettings));
             addAfter(registeredKey, ItemGroups.INGREDIENTS, Items.OMINOUS_TRIAL_KEY);
             return registeredKey;
         }
         else {
-            return ITEMS.register("key", () ->
-                    new TransfiniteKeyItem(new Item.Settings()
-                         .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))));
+            return ITEMS.register("key", () -> new TransfiniteKeyItem(keySettings.arch$tab(ItemGroups.INGREDIENTS)));
         }
     }
 
