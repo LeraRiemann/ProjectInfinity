@@ -9,6 +9,8 @@ import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.gl.ShaderProgramKeys;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -180,7 +182,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
 
     @Unique
     private void infinity$renderSun(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint) {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShader(ShaderProgramKeys.POSITION_TEX);
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
         BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
@@ -222,7 +224,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     }
     @Unique
     private void infinity$renderMoon(Tessellator tessellator, Matrix4f matrix4f2, Identifier texture, float k, float y, Vector3f tint, float t, float q, float p, float o) {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShader(ShaderProgramKeys.POSITION_TEX);
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
         BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
@@ -241,7 +243,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
             RenderSystem.setShaderColor(u*color.x, u*color.y, u*color.z, u);
             BackgroundRenderer.toggleFog();
             starsBuffer.bind();
-            starsBuffer.draw(matrix4f2, projectionMatrix, GameRenderer.getPositionProgram());
+            starsBuffer.draw(matrix4f2, projectionMatrix, ShaderProgramKeys.POSITION_TEX_COLOR);
             VertexBuffer.unbind();
             fogCallback.run();
         }
@@ -273,7 +275,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     private void infinity$renderCustomSky(MatrixStack matrices, Identifier texture, float copies, int r, int g, int b, int alpha, float tickDelta, boolean color) {
         RenderSystem.enableBlend();
         RenderSystem.depthMask(false);
-        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
+        RenderSystem.setShader(ShaderProgramKeys.POSITION_TEX_COLOR);
         if (color) {
             float f = MathHelper.clamp(MathHelper.cos(world.getSkyAngle(tickDelta) * ((float)Math.PI * 2)) * 2.0f + 0.5f, infinity$options().getCelestialNightBrightness(), 1.0f);
             RenderSystem.setShaderColor(f, f, f, 1.0f);
@@ -317,7 +319,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         RenderSystem.enableBlend();
         float[] fs = this.world.getDimensionEffects().getFogColorOverride(this.world.getSkyAngle(tickDelta), tickDelta);
         if (fs != null && !infinity$options().getSkyType().equals("rainbow")) {
-            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+            RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             matrices.push();
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90.0f));
