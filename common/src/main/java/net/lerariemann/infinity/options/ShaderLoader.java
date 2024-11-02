@@ -2,6 +2,7 @@ package net.lerariemann.infinity.options;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.GameRendererAccess;
 import net.lerariemann.infinity.util.CommonIO;
@@ -31,7 +32,14 @@ public class ShaderLoader {
             return;
         }
         client.gameRenderer.disablePostProcessor();
+        if (!resourcesReloaded) {
+            client.reloadResources();
+            resourcesReloaded = true;
+        }
     }
+
+    public static boolean resourcesReloaded = Path.of(FabricLoader.getInstance().getGameDir() + "/resourcepacks/infinity/assets/infinity/shaders").toFile().exists();
+
     static void load(MinecraftClient client) throws IOException {
         ResourcePackManager m = client.getResourcePackManager();
         Path path = client.getResourcePackDir().resolve("infinity");
