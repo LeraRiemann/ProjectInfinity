@@ -115,7 +115,7 @@ public class ClothConfigFactory {
 
             }
             else {
-                if (!Objects.equals(field.getKey(), "infinity_version")) {
+                if (!field.getKey().equals("infinity_version")) {
                     var newOption = entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .setTooltip(fieldTooltip(field, currentCategory, nestedCurrentCategory))
@@ -163,7 +163,7 @@ public class ClothConfigFactory {
     }
 
     public static Text fieldName(Map.Entry<String, JsonElement> field, String category) {
-        if (Objects.equals(category, "general")) {
+        if (category.equals("general")) {
             category = "";
         }
         else category = category + ".";
@@ -172,16 +172,14 @@ public class ClothConfigFactory {
 
     @Environment(EnvType.CLIENT)
     public static Text[] fieldTooltip(Map.Entry<String, JsonElement> field, String category, String nested) {
-        if (Objects.equals(category, "general")) {
+        if (category.equals("general")) {
             category = "";
         }
         else category = category + ".";
-        if (!Objects.equals(nested, "")) {
+        if (!nested.isEmpty()) {
             nested += ".";
         }
         var translationKey = "config."+MOD_ID + "." + category + nested + field.getKey() + ".description";
-//        if (!I18n.hasTranslation(translationKey))
-//            return new Text[]{Text.of(translationKey)};
         return createTooltip(translationKey).toArray(new Text[0]);
     }
 
@@ -270,20 +268,13 @@ public class ClothConfigFactory {
             configPath = rootConfig.getCompound(prevPrevField).getCompound(prevField);
         }
 
-
-        if (Objects.equals(type, "string")) {
-            return configPath.getString(field.getKey());
-        }
-        else if (Objects.equals(type, "boolean")) {
-            return configPath.getBoolean(field.getKey());
-        }
-        else if (Objects.equals(type, "double")) {
-            return configPath.getDouble(field.getKey());
-        }
-        else if (Objects.equals(type, "int")) {
-            return configPath.getInt(field.getKey());
-        }
-        return false;
+        return switch (type) {
+            case "string" -> configPath.getString(field.getKey());
+            case "boolean" -> configPath.getBoolean(field.getKey());
+            case "double" -> configPath.getDouble(field.getKey());
+            case "int" -> configPath.getInt(field.getKey());
+            default -> false;
+        };
     }
 
 

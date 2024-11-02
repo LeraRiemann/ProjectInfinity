@@ -200,7 +200,7 @@ public class RandomProvider {
             blockRegistry.put("full_blocks_worldgen", fullblockswg);
             blockRegistry.put("top_blocks", topblocks);
             temp.keySet().forEach(a -> {
-                if (!Objects.equals(a, "blocks")) blockRegistry.put(a, temp.get(a));
+                if (!a.equals("blocks")) blockRegistry.put(a, temp.get(a));
             });
         }
     }
@@ -234,7 +234,7 @@ public class RandomProvider {
                 if (fullname.endsWith(".json")) {
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
                     name = name.substring(name.lastIndexOf('\\') + 1);
-                    if (!Objects.equals(name, "none")) registry.put(name, CommonIO.weighedListReader(fullname));
+                    if (!name.equals("none")) registry.put(name, CommonIO.weighedListReader(fullname));
                 }
             });
         } catch (IOException e) {

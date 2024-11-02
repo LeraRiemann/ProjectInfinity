@@ -154,12 +154,12 @@ public class RandomDimension {
     }
 
     boolean isNotOverworld() {
-        return (!Objects.equals(type_alike, "minecraft:overworld")) && (!Objects.equals(type_alike, "minecraft:large_biomes"))
-                && (!Objects.equals(type_alike, "minecraft:amplified")) && (!Objects.equals(type_alike, "infinity:whack"));
+        return (!type_alike.equals("minecraft:overworld")) && (!type_alike.equals("minecraft:large_biomes"))
+                && (!type_alike.equals("minecraft:amplified")) && (!type_alike.equals("infinity:whack"));
     }
 
     boolean hasCeiling() {
-        return ((Objects.equals(type_alike, "minecraft:nether")) || (Objects.equals(type_alike, "minecraft:caves")));
+        return ((type_alike.equals("minecraft:nether")) || (type_alike.equals("minecraft:caves")));
     }
 
     NbtCompound packMcmeta() {
@@ -242,7 +242,7 @@ public class RandomDimension {
             }
             case "minecraft:multi_noise" -> {
                 String preset = PROVIDER.randomName(random, "multinoise_presets");
-                if (Objects.equals(preset, "none")) res.put("biomes", randomBiomes());
+                if (preset.equals("none")) res.put("biomes", randomBiomes());
                 else {
                     res.putString("preset", preset.replace("_", ":"));
                     addPresetBiomes(preset);
