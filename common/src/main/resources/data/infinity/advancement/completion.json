@@ -85,6 +85,12 @@
       },
       "trigger": "minecraft:changed_dimension"
     },
+    "llama": {
+      "conditions": {
+        "to": "infinity:llama"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
     "missing": {
       "conditions": {
         "to": "infinity:missing"
