@@ -111,7 +111,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             double d = DimensionType.getCoordinateScaleFactor(this.getServerWorld().getDimension(), w.getDimension());
             Entity self = getCameraEntity();
             double y = MathHelper.clamp(self.getY(), w.getBottomY(), w.getTopY());
-            BlockPos blockPos2 = WarpLogic.getPosForWarp(w.getWorldBorder().clamp(self.getX() * d, y, self.getZ() * d), w);
+            BlockPos blockPos2 = WarpLogic.getPosForWarp(BlockPos.ofFloored(w.getWorldBorder().clamp(self.getX() * d, y, self.getZ() * d)), w);
             BlockState state = w.getBlockState(blockPos2.down());
             if (state.isAir() || state.isOf(Blocks.LAVA)) w.setBlockState(blockPos2.down(), Blocks.OBSIDIAN.getDefaultState());
             this.teleport(w, blockPos2.getX() + 0.5, blockPos2.getY(), blockPos2.getZ() + 0.5, new HashSet<>(), self.getYaw(), self.getPitch());

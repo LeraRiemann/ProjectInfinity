@@ -149,7 +149,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     private void infinity$handleSkyBackground(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta) {
         String skyType = infinity$options().getSkyType();
         if (skyType.equals("empty")) {
-            Vec3d vec3d = this.world.getSkyColor(this.client.gameRenderer.getCamera().getPos(), tickDelta);
+            Vec3d vec3d = Vec3d.unpackRgb(this.world.getSkyColor(this.client.gameRenderer.getCamera().getPos(), tickDelta));
             infinity$renderSingleColorSky(matrices, projectionMatrix, (float)vec3d.x, (float)vec3d.y, (float)vec3d.z, 1.0f);
         }
         else if (skyType.equals("rainbow")) {
@@ -239,7 +239,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         Vector3f color = infinity$options().getStellarColor();
         if (u > 0.0f) {
             RenderSystem.setShaderColor(u*color.x, u*color.y, u*color.z, u);
-            BackgroundRenderer.clearFog();
+            BackgroundRenderer.toggleFog();
             starsBuffer.bind();
             starsBuffer.draw(matrix4f2, projectionMatrix, GameRenderer.getPositionProgram());
             VertexBuffer.unbind();

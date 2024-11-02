@@ -27,6 +27,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.ChunkSectionPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -146,7 +147,7 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
             float b = (cl%256)/256.0f;
             float g = ((cl >> 8)%256)/256.0f;
             float r = ((cl >> 16)%256)/256.0f;
-            ((ServerWorld)w).spawnParticles(new DustParticleEffect(new Vector3f(r, g, b), 1.0f), this.getX(),
+            ((ServerWorld)w).spawnParticles(new DustParticleEffect(ColorHelper.getArgb((int) r,(int)  g,(int)  b), 1.0f), this.getX(),
                     this.getBodyY(0.5), this.getZ(), 30, 0.5, 0.5, 0.5, 0.2);
             this.playSound(SoundEvents.AMBIENT_UNDERWATER_EXIT, 1.0f, 0.5f);
         }

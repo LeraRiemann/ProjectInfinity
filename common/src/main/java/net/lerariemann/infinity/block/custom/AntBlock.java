@@ -51,7 +51,7 @@ public class AntBlock extends HorizontalFacingBlock {
         Direction direction = blockState.get(FACING);
         Direction direction2 = clockwiseness == Clockwiseness.CW ? direction.rotateYClockwise() : direction.rotateYCounterclockwise();
         BlockPos blockPos = pos.offset(direction2);
-        if (world.canSetBlock(blockPos)) {
+        if (world.canPlace(blockState, blockPos, ShapeContext.absent())) {
             switch (clockwiseness) {
                 case CW:
                     world.setBlockState(pos.down(), Blocks.BLACK_CONCRETE.getDefaultState(), 19);

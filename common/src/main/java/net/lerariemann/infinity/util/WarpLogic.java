@@ -44,7 +44,7 @@ public interface WarpLogic {
     }
 
     static void onInvocationNeedDetected(PlayerEntity player) {
-        if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"));
+        if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"), false);
     }
 
     static int properMod(int a, int b) {
@@ -83,7 +83,7 @@ public interface WarpLogic {
 
     static int getKeyColorFromId(Identifier id, MinecraftServer server) {
         if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
-            return ColorHelper.Argb.fullAlpha((int) getNumericFromId(id, server) & 0xFFFFFF);
+            return ColorHelper.fullAlpha((int) getNumericFromId(id, server) & 0xFFFFFF);
         return 0;
     }
 

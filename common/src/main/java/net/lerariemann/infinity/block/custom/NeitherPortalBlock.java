@@ -328,8 +328,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof NeitherPortalBlockEntity) {
                 long dim = ((NeitherPortalBlockEntity)blockEntity).getPortalColor();
-                Vec3d vec3d = Vec3d.unpackRgb((int)dim);
-                eff = new DustParticleEffect(vec3d.toVector3f(), 1.0F);
+                eff = new DustParticleEffect(((int)dim), 1.0F);
             }
 
             world.addParticle(eff, d, e, f, g, h, j);
