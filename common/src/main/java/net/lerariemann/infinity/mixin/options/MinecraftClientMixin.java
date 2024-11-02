@@ -4,29 +4,39 @@ import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
+import net.minecraft.client.world.ClientWorld;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
-public class MinecraftClientMixin implements InfinityOptionsAccess {
+public abstract class MinecraftClientMixin implements InfinityOptionsAccess {
+    @Shadow
+    public static MinecraftClient getInstance() {
+        return null;
+    }
+    @Shadow
+    public ClientWorld world;
+
     @Unique
-    public InfinityOptions infinityoptions;
+    public InfinityOptions infinity$options;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(RunArgs args, CallbackInfo ci) {
-        infinityoptions = InfinityOptions.empty();
+        infinity$options = InfinityOptions.empty();
     }
 
     @Unique
     public InfinityOptions projectInfinity$getInfinityOptions() {
-        return infinityoptions;
+        return infinity$options;
     }
 
     @Unique
     public void projectInfinity$setInfinityOptions(InfinityOptions options) {
-        infinityoptions = options;
+        infinity$options = options;
+        ((InfinityOptionsAccess) world).projectInfinity$setInfinityOptions(options);
     }
 }

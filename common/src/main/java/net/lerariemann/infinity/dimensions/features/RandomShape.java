@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -17,7 +17,7 @@ public class RandomShape extends RandomisedFeature {
         this.shape = shape;
         this.usePreset = parent.roll("colourful_shapes");
         this.useBands = parent.roll("banded_shapes");
-        id = (Objects.equals(shape, "cube")) ? "random_cube" : "random_shape";
+        id = (shape.equals("cube")) ? "infinity:random_cube" : "infinity:random_shape";
         save_with_placement();
     }
 
@@ -36,8 +36,8 @@ public class RandomShape extends RandomisedFeature {
         else config.put("block_provider", PROVIDER.randomPreset(random, useBands ? "weighted_state_provider" : "noise_provider"));
         config.put("radius", RandomProvider.floatProvider(random, 2.0f, 20.0f));
         config.putBoolean("use_bands", useBands);
-        if (!Objects.equals(shape, "cube")) config.putDouble("power", Objects.equals(shape, "sphere") ? 2.0 :
-                (Objects.equals(shape, "octahedron") ? 1.0 : random.nextDouble(2.0)));
+        if (!shape.equals("cube")) config.putDouble("power", shape.equals("sphere") ? 2.0 :
+                (shape.equals("octahedron") ? 1.0 : random.nextDouble(2.0)));
         return feature(config);
     }
 }

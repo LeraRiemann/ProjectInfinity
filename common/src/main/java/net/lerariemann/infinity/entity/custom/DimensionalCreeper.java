@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -54,8 +54,8 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         MinecraftServer s = world.toServerWorld().getServer();
-        reg = s.getRegistryManager().getOrThrow(RegistryKeys.BIOME);
-        WeighedStructure<String> biomes = ((MinecraftServerAccess)(s)).projectInfinity$getDimensionProvider().registry.get("biomes");
+        reg = s.getRegistryManager().get(RegistryKeys.BIOME);
+        WeighedStructure<String> biomes = RandomProvider.getProvider(s).registry.get("biomes");
         String biomename = biomes != null ? biomes.getElement(world.getRandom().nextDouble()) : "minecraft:plains";
         Biome b = reg.get(Identifier.of(biomename));
         this.setColor(b != null ? b.getFoliageColor() : 7842607);

@@ -1,10 +1,9 @@
 package net.lerariemann.infinity;
 
-import dev.architectury.utils.Env;
-import dev.architectury.utils.EnvExecutor;
-import net.fabricmc.api.ModInitializer;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
+import net.lerariemann.infinity.item.ModComponentTypes;
+import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.structure.ModStructureType;
 import net.lerariemann.infinity.var.*;
 import net.lerariemann.infinity.util.ConfigManager;
@@ -28,7 +27,9 @@ public class InfinityMod {
 
 	public static void init() {
 		ConfigManager.unpackDefaultConfigs();
+		ModComponentTypes.registerComponentTypes();
 		ModBlocks.registerModBlocks();
+		ModItems.registerModItems();
 		ModBlockEntities.registerBlockEntities();
 		ModEntities.registerEntities();
 		ModPoi.registerPoi();
@@ -43,6 +44,5 @@ public class InfinityMod {
 		ModStats.registerStats();
 		ModCriteria.registerCriteria();
 		ModPayloads.registerPayloadsServer();
-
 	}
 }

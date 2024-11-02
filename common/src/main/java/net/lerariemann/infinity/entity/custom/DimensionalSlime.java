@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -71,7 +70,7 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
-        RandomProvider p = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer()))).projectInfinity$getDimensionProvider();
+        RandomProvider p = RandomProvider.getProvider(Objects.requireNonNull(world.getServer()));
         Random r = new Random();
         this.dataTracker.set(core, Registries.BLOCK.get(Identifier.of(p.randomName(r, "all_blocks"))).getDefaultState());
         this.dataTracker.set(color, r.nextInt(16777216));
@@ -145,7 +144,7 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     }
 
     public static boolean canSpawn(EntityType<DimensionalSlime> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        if (world.getDifficulty() != Difficulty.PEACEFUL && ((MinecraftServerAccess)world.toServerWorld().getServer()).projectInfinity$getDimensionProvider().rule("chaosMobsEnabled")) {
+        if (world.getDifficulty() != Difficulty.PEACEFUL && RandomProvider.getProvider(world.toServerWorld().getServer()).rule("chaosMobsEnabled")) {
             if (!(world instanceof StructureWorldAccess)) {
                 return false;
             }

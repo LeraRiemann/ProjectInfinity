@@ -6,7 +6,7 @@ import net.minecraft.nbt.NbtCompound;
 public class RandomMushroom extends RandomisedFeature {
     public RandomMushroom(RandomFeaturesList parent) {
         super(parent, "mushroom");
-        id = random.nextBoolean() ? "random_flat_mushroom" : "random_round_mushroom";
+        id = random.nextBoolean() ? "infinity:random_flat_mushroom" : "infinity:random_round_mushroom";
         save_with_placement();
     }
 

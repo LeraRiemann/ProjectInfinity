@@ -1,10 +1,9 @@
 package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.ImmutableList;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
-import net.lerariemann.infinity.dimensions.RandomProvider;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.minecraft.network.QueryableServer;
 import net.minecraft.registry.DynamicRegistryManager;

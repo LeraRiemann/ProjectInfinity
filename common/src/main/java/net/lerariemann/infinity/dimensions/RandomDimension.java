@@ -1,14 +1,16 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 
 import java.io.IOException;
@@ -17,9 +19,9 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class RandomDimension {
-    public final long id;
+    public final long numericId;
     public final RandomProvider PROVIDER;
-    public String name, fullname;
+    public Identifier identifier;
     public final Random random;
     public int height;
     public int min_y;
@@ -40,25 +42,25 @@ public class RandomDimension {
     public NbtCompound data;
     public RandomDimensionType type;
 
-    public RandomDimension(long i, MinecraftServer server) {
-        random = new Random(i);
+    public RandomDimension(Identifier id, MinecraftServer server) {
         this.server = server;
-        PROVIDER = ((MinecraftServerAccess)(server)).projectInfinity$getDimensionProvider();
-        id = i;
-        name = PROVIDER.easterizer.keyOf(i);
-        fullname = InfinityMod.MOD_ID + ":" + name;
-        createDirectories();
+        PROVIDER = RandomProvider.getProvider(server);
+        identifier = id;
+        numericId = WarpLogic.getNumericFromId(identifier, server);
+        random = new Random(numericId);
         initializeStorage();
-        if (Easterizer.easterize(this)) {
+        /* Code for easter dimensions */
+        if (PROVIDER.easterizer.easterize(this)) {
             wrap_up(true);
             return;
         }
+        /* Code for procedurally generated dimensions */
         genBasics();
         type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
         data.put("generator", randomDimensionGenerator());
-        for (Long id: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+id)) {
-            RandomBiome b = new RandomBiome(id, this);
+        for (Long l: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+l)) {
+            RandomBiome b = new RandomBiome(l, this);
             random_biomes.add(b);
             addStructures(b);
         }
@@ -66,12 +68,16 @@ public class RandomDimension {
         wrap_up(false);
     }
 
+    public String getName() {
+        return identifier.getPath();
+    }
+
     public String getRootPath() {
-        return server.getSavePath(WorldSavePath.DATAPACKS).resolve(name).toString();
+        return server.getSavePath(WorldSavePath.DATAPACKS).resolve(getName()).toString();
     }
 
     public String getStoragePath() {
-        return server.getSavePath(WorldSavePath.DATAPACKS).resolve(name).resolve("data").resolve(InfinityMod.MOD_ID).toString();
+        return server.getSavePath(WorldSavePath.DATAPACKS).resolve(getName()).resolve("data").resolve(InfinityMod.MOD_ID).toString();
     }
 
     public void initializeStorage() {
@@ -108,9 +114,9 @@ public class RandomDimension {
                 RandomProvider.Block("minecraft:deepslate") : default_block;
     }
 
-    void wrap_up(boolean bl) {
-        (new RandomInfinityOptions(this, bl)).save();
-        CommonIO.write(data, getStoragePath() + "/dimension", name + ".json");
+    void wrap_up(boolean isEasterDim) {
+        (new RandomInfinityOptions(this, isEasterDim)).save();
+        CommonIO.write(data, getStoragePath() + "/dimension", getName() + ".json");
         if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
     }
 
@@ -146,31 +152,20 @@ public class RandomDimension {
         return !(server.getRegistryManager().getOrThrow(key).contains(RegistryKey.of(key, InfinityMod.getId(name))));
     }
 
-    void createDirectories() {
-        for (String s: new String[]{"dimension", "dimension_type", "worldgen/biome", "worldgen/configured_feature",
-                "worldgen/placed_feature", "worldgen/noise_settings", "worldgen/configured_carver", "worldgen/structure", "worldgen/structure_set"}) {
-            try {
-                Files.createDirectories(Paths.get(getStoragePath() + "/" + s));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     boolean isNotOverworld() {
-        return (!Objects.equals(type_alike, "minecraft:overworld")) && (!Objects.equals(type_alike, "minecraft:large_biomes"))
-                && (!Objects.equals(type_alike, "minecraft:amplified")) && (!Objects.equals(type_alike, "infinity:whack"));
+        return (!type_alike.equals("minecraft:overworld")) && (!type_alike.equals("minecraft:large_biomes"))
+                && (!type_alike.equals("minecraft:amplified")) && (!type_alike.equals("infinity:whack"));
     }
 
     boolean hasCeiling() {
-        return ((Objects.equals(type_alike, "minecraft:nether")) || (Objects.equals(type_alike, "minecraft:caves")));
+        return ((type_alike.equals("minecraft:nether")) || (type_alike.equals("minecraft:caves")));
     }
 
     NbtCompound packMcmeta() {
         NbtCompound res = new NbtCompound();
         NbtCompound pack = new NbtCompound();
         pack.putInt("pack_format", 34);
-        pack.putString("description", "Dimension #" + id);
+        pack.putString("description", "Dimension #" + numericId);
         res.put("pack", pack);
         return res;
     }
@@ -246,7 +241,7 @@ public class RandomDimension {
             }
             case "minecraft:multi_noise" -> {
                 String preset = PROVIDER.randomName(random, "multinoise_presets");
-                if (Objects.equals(preset, "none")) res.put("biomes", randomBiomes());
+                if (preset.equals("none")) res.put("biomes", randomBiomes());
                 else {
                     res.putString("preset", preset.replace("_", ":"));
                     addPresetBiomes(preset);
@@ -340,10 +335,6 @@ public class RandomDimension {
                 if (!structure_ids.containsKey(s.type)) structure_ids.put(s.type, new ArrayList<>());
                 structure_ids.get(s.type).add(s.fullname);
             }
-        }
-        if (PROVIDER.roll(random, "random_portal")) {
-            RandomPortal p = new RandomPortal(random.nextInt(), b);
-            p.save();
         }
     }
 

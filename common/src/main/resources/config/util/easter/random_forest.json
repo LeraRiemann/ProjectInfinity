@@ -1,4 +1,6 @@
 {
+  "infinity_version": 2000000,
+  "easter-name": "forest",
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 25,

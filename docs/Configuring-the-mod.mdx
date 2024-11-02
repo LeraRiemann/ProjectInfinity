@@ -1,0 +1,155 @@
+---
+title: Configuring the mod
+hide_meta: true
+---
+
+# Introduction
+Infinite Dimensions supports infinite configuration possibilities.
+
+The randomizer used for generating dimensions calls for configs almost constantly, whenever it needs to select a random block, mob, fluid, feature, biome, etc. By changing the configs, you can fine-tune the probability of selecting each block (mob, fluid etc.), as well as add your own options to the mix, including ones from other mods.
+
+## Core config options
+The file `/config/infinity/infinity.json` is the master file for configuring gamerules and root chances of generation. These settings can also be configured via Mod Menu on Fabric and the Mods menu on NeoForge. This page will walk you through them.
+
+### Gamerules
+* `runtimeGenerationEnabled` - setting this to false will disable registration of dimensions and features in runtime, meaning you need to quit to title and enter the world again to access dimensions after tossing the book. Included for compatibility reasons.
+* `returnPortalsEnabled` - leaving this as true means every time you go through a portal from a custom dimension and generate a new portal, it will link back to a dimension you came from. If changed to false, all portals created this way will be normal nether portals.
+* `longArithmeticEnabled` - setting this to true will expand the range in which dimension, biome and feature IDs generate from the integer limit (~2 billion) to the long limit (~9 quintillion). You know, if for some reason 2 billion dimensions is not enough for you :D
+* `forceSolidSurface` - setting this to true will disallow non-full blocks from being used as material for the surface of random biomes.
+* `chaosMobsEnabled` - a toggle to enable/disable custom mobs, added in the mod, from naturally spawning.
+* `consumePortalKey` - by default, if you introduce an item requirement to unlock new portals (see below), the item will be consumed on use. Setting this as false prevents this behaviour if you want to make a special portal-creating wand, for example.
+* `maxBiomeCount` - the largest amount of biomes that can be assigned to generate in any random dimension. 6 by default.
+
+### Portal key
+The item required to unlock an Infinity Portal for a brand new dimension. Right-click with the item on the portal; it will emit a beacon sound indicating you can now go through. (If there's no sound, you just encountered a bug you can report!)
+
+You can change the item to whatever you want or leave it as the default blank string, which means you don't need a key - the portal will open with a beacon sound on its own without right-clicking.
+
+### Altar key
+
+The same for the Transfinite Altar - a legacy block that was used in old versions of the mod to initiate generation of config files. Now they are generated automatically, but the block is still functional for debugging purposes or if you just want to watch a cool animation (cause it has a cool animation :3)
+
+### Salt
+This string, blank by default, will be added to the book text in the process of its conversion to the dimension ID, thus typing anything here will result in your dimensions differing from dimensions with the same book text that other users generate (by default they're the same for all users, no matter the world seed, and only dependent on the world seed). You can do this if you don't want to go into the mod already knowing "oh, the dimension 90 has diamonds" etc. Does not affect "easter egg"-type dimensions.
+
+### Root chances
+The *root chances* control how likely it is for the dimension to possess a certain property or generate a certain type of feature.
+
+* `dimension_type` chances control properties that are applied across the whole dimension, i.e. "ultrawarm" means water evaporates like in the Nether, "fixed_time" means if the Sun/Moon exist they won't move, etc. `"fixed_time": 0.25` means 25% of dimensions will have fixed time. You can learn more on the listed properties [here](https://minecraft.wiki/w/Custom_dimension#Dimension_type).
+    * use_shaders: some dimensions have custom shaders which recolor your entire vision for as long as you're in the dimension :D this is the chance they will have it
+* `noise_settings` chances control properties of the world shape and how the blocks are assigned to it.
+    * `randomise_blocks`: the chance to have a random block instead of stone.
+    * `randomise_biome_blocks`: the chance to have random blocks instead of dirt and grass.
+    * `solid_oceans`, solid_lakes: the chance for oceans/lakes to be filled with a random solid block instead of a random fluid. (Currently disabled)
+    * `rift_world_chance`: the chance to generate a rift world. Rift worlds have 4 block gaps to the void on every chunk border.
+* `biome` chances control properties that are applied inside a particular biome in a dimension.
+    * `use_random_biome`: the chance to make a new random biome instead of choosing one from /modular/.../misc/biomes.json.
+    * `use_sparse_vegetation`: the chance for a random biome to have individually standing sparse trees instead of being densely forested.
+    * `has_precipitation`: the chance a biome will have rain/snow (otherwise, when it rains, it will just darken the sky like in deserts)
+    * `use_particles`: for particles flying in the air, like in warped forests!
+    * `ambient_sound`, mood_sound, additions_sound, music: these are various sounds that can play in a biome. ambient_sound plays on constant loop, mood_sound behaves like cave noises, additions_sound has a chance to randomly play every tick - these three are sort of annoying (especially when it's a horse dying). And music is music! No dying horses there, it's picked from a separate list in which there really is only music.
+    * `use_random_cave`, use_random_canyon: a chance the mod will try to generate a random cave/canyon carver utility. These behave like legacy noodle caves and ravines from before 1.18, however the mod can throw in such wild values that the world becomes shredded.
+* `features_chances` chances control likelihood of generating a specific feature type. They are independent from one another, i.e. if "shape" and "lake" are both set to 0.5, it means half of all dimensions will have shapes; also half of all dimensions will have lakes; and since these halves are independent, a quarter of all dimensions will have both.
+* `features_rules` chances control properties applied to a specific feature:
+    * `generate_vanilla_features`: a master toggle to try generating vanilla stuff - regular ice icebergs, etc. - alongside the "any block the mod wants" icebergs, chances for which are defined in a previous category.
+    * `rotate_blocks`: if a block is rotatable like a log (or deepslate, etc.) and is set to generate within a feature, this is a chance it will get random rotation applied to it.
+    * `flood_geodes`: a chance for a geode to be filled with a random fluid instead of air.
+    * `use_vanilla_trees`: when the mod needs a tree, this is a chance to pull from existing trees instead of generating a random tree type.
+    * `huge_trees`: like, really huge. they like to spit warnings all over the logs so i soft-disabled them, but if you dare to try them out...
+    * `ores_spawn_everywhere`: normally, an ore checks if it's generating inside solid blocks. with this chance, it won't and you'll get them flying in the air.
+    * `scatter_ores`: toggle between "ore" and "scattered_ore" types of ore deposit generation.
+    * `scatter_end_spikes`: when you have end spikes in a random dimension, this is a chance they will be all over the place like in pre-1.9 and not in a perfect circle.
+    * `cage_crystals`: % of spikes that have their end crystal in a cage.
+    * `exact_gateways`: when you have an end gateway, this is a chance it will teleport you to exact coordinates without regards to if you'll get stuck in a wall there. otherwise it will at least try to find a safe spot nearby.
+    * `colourful_shapes`: you know these huge spheres and cubes and such in the sky? this is a toggle between them being of one random block or of a bunch of colored blocks.
+    * `banded_shapes`: ...and if they choose colored blocks, this is a toggle between them being in a perlin noise map or in diagonal bands.
+* `structures` chances control how structures of a certain type in random biomes behave:
+    * `spawn_override`: with this chance, you can have a Nether Fortress spawn whatever the Nether it wants instead of Blazes and Wither Skeletons (which might turn out to be nothing).
+    * `full_box`: if the spawn override applies to the entire bounding box of the structure or only to parts of it (you know how wither skeleton farms are always built on crossroads?)
+    * `ruins_warm`: chance for ocean ruins to spawn in the sandstone variant.
+    * `shipwrecks_beach`: ...shipwrecks to spawn in a beached variant.
+    * `mineshafts_mesa`: ...mineshafts in dark oak variant.
+    * `portal_overgrown`, `portal_vines`, `portal_cold`, `portal_blackstone`: ...ruined portals in different variants (not mutually exclusive).
+    * `triangular_spread`: usually structure positions have uniformly distributed offsets from the points on a large grid; this toggle makes these offsets more likely to be smaller.
+
+## Weighed lists
+Most config files you can edit come in the form of *weighed lists*. A weighed list is a pool of options for the generator to choose between, where each option is assigned a number called weight. The larger the weight is, the more likely it is for the generator to pick this option. The weight of 0.0 causes the option to be skipped entirely.
+
+Most types of weighed lists are generated by the game automatically during the process of [Cosmic Invocation](https://moddedmc.org/en/mod/infinite-dimensions/docs/Invocation) on first world load.
+
+### Reading and editing weighed lists
+In any weighed list you can safely change all weights, add and remove entries. Just make sure to format your entries uniformly with the rest of the file, and if you're adding content from other mods, don't forget about the mod's namespace in the key (i.e. it should be "key": `"create:andesite_casing"`, not "key": `"andesite_casing"`).
+
+## Usage of weighed lists and other configuration files
+### Modular
+This section lists all content that you can freely add entries from other mods to - and for most of it, the mod already does so automatically when performing the Cosmic Invocation. As such, it has subfolders for every mod it finds usable content in.
+
+#### Blocks
+The Blocks category introduces one weighed list for all blocks in the game, but you may notice that some blocks have additional data assigned to them. This data is used to transform this master list into five - all of which have different purposes and exclude some blocks not fit for these purposes based on these additional properties.
+
+The properties are:
+* **`full`** - blocks that are, or at least appear to be, full cubes: stone, dirt, and sand are _full_, while slabs and doors aren't. If not present, set to false.
+* **`float`** - blocks that can exist suspended in the air. Stone, dirt and slabs are _float_, while sand and doors aren't. If not present, set to true for full blocks and false for others.
+* **`top`** - blocks that can exist atop of a full block. Sand and doors are _top_, while saplings aren't (they need specifically dirt). If not present, set to true for _full_ and/or _float_ blocks and false for others.
+* **`laggy`** is assigned to all blocks that have a block entity - since these frequently cause FPS and/or TPS lag, or stop rendering past a certain point, when present in really large amounts (say, ten thousand in render distance). Chests and hoppers are _laggy_ - chests use block entity models, hoppers require processing on each tick. You can assign the _laggy_ property manually if you find any other cases where the default values create lag which i haven't accounted for. If not present, set to false.
+
+Here's how the properties are used on compilation:
+* Two lists are created - from all _float_ blocks and all _full_ blocks - that are used for creating most features (rocks, ores, floating islands, floors of dungeons etc).
+* Blocks that are _top_ and not _laggy_ are used for covering the top layer of the world.
+* Blocks that are _full_, _float_ and not _laggy_ are used for the bulk of world generation, for everything that can appear in tens of thousands and more: the "stone" of the dimension, tree caps, icebergs and other large features.
+
+Of course, some of these lists intersect or even fully include others.
+
+#### Fluids
+The list of fluids can also be found under the Blocks category. Though adding a fluid with a single line like `"key: "minecraft:water"` is supported, some mods actually add fluids that use different names for the block (that's the name you can autocomplete from /setblock) and the fluid (that's the one you can see on the F3 screen under "Targeted fluid"). For this reason the entries are formatted like this:
+```json
+"key": {
+        "Name": "milk:milk_fluid_block",
+        "fluidName": "milk:still_milk"
+      }
+```
+where Name is the block name.
+
+#### Mobs
+The mobs subdirectory contains the list of all mobs (mobs.json, used when setting the mob in dungeon spawners) and the smaller lists of mobs separated by category. The latter are used in regular mob spawning.
+
+In Minecraft, different groups of mobs are spawned by different algorithms and share different mob caps. For example, hostile mobs are spawned every tick, while passive mobs - much less frequently. The generator needs to know which mobs to spawn in which category, that's why the lists are separated.
+
+Don't be afraid about mobs that don't use the mobcap (i.e. shulkers) being in here, there are additional measures to control their population taken already.
+
+#### Features
+**Features** are things like trees, ore veins, underwater clay disks, flower patches, monster rooms etc. Infinite Dimensions can generate its own randomized features, but it can also use predefined features drawn from configs.
+
+These come split into several categories across two folders: `/modular/.../features` and `/modular/.../vegetation`. These categories are here because Minecraft itself splits features into categories to place them in the world in a predefined order. So the generator needs to know which feature belongs to which category.
+
+Unlike other weighed lists, non-vegetation and some vegetation features are selected with a different algorithm: the generator can select any amount of features from each category, with the chance of each to be selected equal to its weight in the list and the chances being independent. (Values above 1.0 are treated as 1.0).
+
+This does not apply to flowers, grass and seagrass: the generator picks one entry from each list under default weighed list rules to populate the biome. Same goes with trees: the generator picks 1-6 tree types, which, if it decides to use a predefined tree and not randomize a new one, are drawn from `.../vegetation/trees.json` under default weighed list rules.
+
+#### Extra
+**Color presets:** currently, these are only used to generate shapes (big floating cubes, spheres etc.). If a shape is decided to be coloured (infinity.json > rootChances > features_rules > colourful_shapes root chance), the colouring rules for it are generated based on a selection of blocks drawn randomly from `blockpresets/color_presets.json`.
+
+**Structures:** here is where the structure data is stored.
+
+#### Lists
+**Rotatable blocks:** when checking if a block can be rotated for infinity.json > rootChances > features_rules > rotate_blocks, the mod consults this list.
+
+#### Surface rules
+Rules for coloring the surface of every single biome with blocks - grass and dirt for plains, sand and sandstone for deserts, etc.
+
+#### Misc
+You can find all sorts of other configurable option pools here, including:
+* biomes,
+* sounds, music and particles for biome ambience,
+* carvers (caves and ravines),
+* items (currently only used for "item" type particle),
+* etc.
+
+### Hardcoded
+These are weighed lists you can change weights in, but you cannot add new entries to, either because processing all possible results of them is hardcoded within Infinite Dimensions (i.e. with shape types) or within Minecraft itself (i.e. with trunk placers).
+
+### Util
+This folder is mostly technical files the game reads and formats in some general cases, e.g. when assembling the noise router. It is not recommended to edit these files with one exception:
+
+#### Easter
+This is where the game stores data for easter egg dimensions! You can freely remove and add new files to here. The format for them is largely the same as vanilla's for custom noise settings, with the file name being the easter dimension's name. There is an additional optional field in the format - `easter-type` - for if you also want to specify the dimension type (as a reference to a dimension type file that you can put in a regular datapack).

@@ -48,22 +48,15 @@ public class CosmicAltarEntity extends BlockEntity {
                 be.map.put(i + "," + j + "," + k, world.getBlockState(pos.add(i, j, k)));
                 world.setBlockState(pos.add(i, j, k), Blocks.AIR.getDefaultState());
             }
-        }
-        if(be.time == 1) {
             ConfigGenerator.generateAll(world, pos.up(2), pos.up());
             a.projectInfinity$setDimensionProvider();
-        }
-        if(be.time == 2) {
             for (int i : offsets) for (int j : offsets_y) for (int k : offsets) {
                 world.setBlockState(pos.add(i, j, k), be.fromMap(i, j, k));
             }
             a.projectInfinity$onInvocation();
-        }
-        if(be.time > 2) {
             be.markRemoved();
             world.setBlockState(pos, be.fromMap(0, 0, 0));
         }
-        if (be.time >= 0) be.time+=1;
     }
 
     public void addNull(BlockState s) {

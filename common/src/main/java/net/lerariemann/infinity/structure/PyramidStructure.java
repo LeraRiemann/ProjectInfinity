@@ -39,6 +39,6 @@ public class PyramidStructure extends Structure {
 
     @Override
     public StructureType<?> getType() {
-        return ModStructureType.PYRAMID;
+        return ModStructureType.PYRAMID.get();
     }
 }

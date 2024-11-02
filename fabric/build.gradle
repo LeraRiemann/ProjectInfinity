@@ -10,6 +10,7 @@ architectury {
 processResources {
     from(rootProject.file("common/src/main/resources")) {
         include("config/*/")
+        include("infinity.accesswidener")
     }
 }
 

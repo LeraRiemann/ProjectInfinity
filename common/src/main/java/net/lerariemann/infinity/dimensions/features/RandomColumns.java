@@ -6,7 +6,7 @@ import net.minecraft.nbt.NbtCompound;
 public class RandomColumns extends RandomisedFeature {
     public RandomColumns(RandomFeaturesList parent) {
         super(parent, "columns");
-        id = "random_columns";
+        id = "infinity:random_columns";
         save_with_placement();
     }
 

@@ -1,17 +1,20 @@
 package net.lerariemann.infinity.block.entity;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class NeitherPortalBlockEntity extends BlockEntity {
     private final PropertyDelegate propertyDelegate;
-    private long dimension;
+    private Identifier dimension;
+    private long portalColor;
     private boolean isOpen;
 
     public NeitherPortalBlockEntity(BlockPos pos, BlockState state) {
@@ -19,14 +22,14 @@ public class NeitherPortalBlockEntity extends BlockEntity {
         this.propertyDelegate = new PropertyDelegate() {
             public int get(int index) {
                 if (index == 0) {
-                    return (int)(NeitherPortalBlockEntity.this.dimension);
+                    return (int)(NeitherPortalBlockEntity.this.portalColor);
                 }
                 return 0;
             }
 
             public void set(int index, int value) {
                 if (index == 0) {
-                    NeitherPortalBlockEntity.this.dimension = value;
+                    NeitherPortalBlockEntity.this.portalColor = value;
                 }
 
             }
@@ -37,20 +40,32 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     }
 
     public NeitherPortalBlockEntity(BlockPos pos, BlockState state, long i) {
+        this(pos, state, i, InfinityMod.getId("generated_"+i));
+    }
+
+    public NeitherPortalBlockEntity(BlockPos pos, BlockState state, long i, Identifier id) {
         this(pos, state);
-        this.dimension = i;
+        this.dimension = id;
+        this.portalColor = i;
         this.isOpen = false;
     }
 
-
-    public long getDimension() {
+    public Identifier getDimension() {
         return this.dimension;
+    }
+    public long getPortalColor() {
+        return this.portalColor;
     }
     public boolean getOpen() {
         return this.isOpen;
     }
 
-    public void setDimension(long i) {
+    public void setDimension(long c) {
+        setDimension(c, InfinityMod.getId("generated_"+c));
+    }
+
+    public void setDimension(long c, Identifier i) {
+        this.portalColor = c;
         this.dimension = i;
     }
 
@@ -59,13 +74,18 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     }
     public void writeNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(tag, registryLookup);
-        tag.putLong("Dimension", this.dimension);
+        tag.putLong("Dimension", this.portalColor);
+        tag.putString("DimensionName", this.dimension.toString());
         tag.putBoolean("Open", this.isOpen);
     }
 
     public void readNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(tag, registryLookup);
-        this.dimension = tag.getLong("Dimension");
+        this.portalColor = tag.getLong("Dimension");
+        if (tag.contains("DimensionName")) {
+            this.dimension = Identifier.of(tag.getString("DimensionName"));
+        }
+        else this.dimension = InfinityMod.getId("generated_" + this.portalColor);
         this.isOpen = tag.getBoolean("Open");
     }
 

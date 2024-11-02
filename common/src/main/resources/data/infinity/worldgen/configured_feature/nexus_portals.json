@@ -1,0 +1,12 @@
+{
+  "type": "infinity:portal_setupper",
+  "config": {
+    "width": 3,
+    "height": 4,
+    "offset_l": 8,
+    "offset_t": 16,
+    "y": 50,
+    "sign_offset_l": 2,
+    "sign_offset_y": 5
+  }
+}
