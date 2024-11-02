@@ -4,19 +4,23 @@ import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.client.ChaosPawnRenderer;
 import net.lerariemann.infinity.entity.client.DimensionalCreeperRenderer;
 import net.lerariemann.infinity.entity.client.DimensionalSkeletonRenderer;
 import net.lerariemann.infinity.entity.client.DimensionalSlimeRenderer;
 import net.lerariemann.infinity.entity.custom.*;
+import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
@@ -42,10 +46,15 @@ public class ModEntities {
     }
     public static final DeferredRegister<EntityType<?>> INFINITY_ENTITIES = DeferredRegister.create(MOD_ID, RegistryKeys.ENTITY_TYPE);
 
-    public static final RegistrySupplier<EntityType<DimensionalSlime>> DIMENSIONAL_SLIME = INFINITY_ENTITIES.register("dimensional_slime", () -> EntityType.Builder.create(DimensionalSlime::new, SpawnGroup.MONSTER).dimensions(0.52f, 0.52f).maxTrackingRange(10).build(null));
-    public static final RegistrySupplier<EntityType<DimensionalSkeleton>> DIMENSIONAL_SKELETON = INFINITY_ENTITIES.register("dimensional_skeleton", () -> EntityType.Builder.create(DimensionalSkeleton::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.99f).maxTrackingRange(8).build(null));
-    public static final RegistrySupplier<EntityType<DimensionalCreeper>> DIMENSIONAL_CREEPER = INFINITY_ENTITIES.register("dimensional_creeper", () -> EntityType.Builder.create(DimensionalCreeper::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.7f).maxTrackingRange(8).build(null));
-    public static final RegistrySupplier<EntityType<ChaosPawn>> CHAOS_PAWN = INFINITY_ENTITIES.register("chaos_pawn", () -> EntityType.Builder.create(ChaosPawn::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.8f).maxTrackingRange(10).build(null));
+    public static final RegistrySupplier<EntityType<DimensionalSlime>> DIMENSIONAL_SLIME = INFINITY_ENTITIES.register("dimensional_slime", () -> EntityType.Builder.create(DimensionalSlime::new, SpawnGroup.MONSTER).dimensions(0.52f, 0.52f).maxTrackingRange(10).build(registryKey("dimensional_slime")));
+    public static final RegistrySupplier<EntityType<DimensionalSkeleton>> DIMENSIONAL_SKELETON = INFINITY_ENTITIES.register("dimensional_skeleton", () -> EntityType.Builder.create(DimensionalSkeleton::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.99f).maxTrackingRange(8).build(registryKey("dimensional_skeleton")));
+    public static final RegistrySupplier<EntityType<DimensionalCreeper>> DIMENSIONAL_CREEPER = INFINITY_ENTITIES.register("dimensional_creeper", () -> EntityType.Builder.create(DimensionalCreeper::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.7f).maxTrackingRange(8).build(registryKey("dimensional_creeper")));
+    public static final RegistrySupplier<EntityType<ChaosPawn>> CHAOS_PAWN = INFINITY_ENTITIES.register("chaos_pawn", () -> EntityType.Builder.create(ChaosPawn::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.8f).maxTrackingRange(10).build(registryKey("chaos_pawn")));
+
+    public static RegistryKey<EntityType<?>> registryKey(String s) {
+        Identifier id = InfinityMod.getId(s);
+        return RegistryKey.of(RegistryKeys.ENTITY_TYPE, id);
+    }
 
     public static void registerEntities() {
         INFINITY_ENTITIES.register();
