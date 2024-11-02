@@ -124,7 +124,7 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
         return this.getCore().getSoundGroup().getFallSound();
     }
     @Override
-    public RegistryKey<LootTable> getLootTableId() {
+    public RegistryKey<LootTable> getLootTableKey() {
         return this.getCore().getBlock().getLootTableKey();
     }
 

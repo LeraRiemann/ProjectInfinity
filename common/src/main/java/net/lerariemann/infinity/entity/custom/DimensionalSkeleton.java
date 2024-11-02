@@ -106,7 +106,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
             Random r = new Random();
             if (r.nextFloat() < 0.5) {
                 DimensionalSkeleton newSkeleton;
-                if (!this.getWorld().isClient() && (newSkeleton = ModEntities.DIMENSIONAL_SKELETON.get().create(this.getWorld())) != null) {
+            if (!this.getWorld().isClient() && (newSkeleton = ModEntities.DIMENSIONAL_SKELETON.get().create(this.getWorld(), SpawnReason.SPAWN_ITEM_USE)) != null) {
                     ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
                     this.discard();
                     ModEntities.copy(this, newSkeleton);
@@ -126,7 +126,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
             player.setStackInHand(hand, itemStack3);
             this.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
             SkeletonEntity newSkeleton;
-            if (!this.getWorld().isClient() && (newSkeleton = EntityType.SKELETON.create(this.getWorld())) != null) {
+            if (!this.getWorld().isClient() && (newSkeleton = EntityType.SKELETON.create(this.getWorld(), SpawnReason.BUCKET)) != null) {
                 this.discard();
                 ModEntities.copy(this, newSkeleton);
                 this.getWorld().spawnEntity(newSkeleton);
@@ -179,7 +179,8 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
         poteffect.putInt("duration", duration);
         List<StatusEffectInstance> customEffects = new ArrayList<>();
         customEffects.add(StatusEffectInstance.fromNbt(poteffect));
-        stack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Optional.empty(), Optional.of(color), customEffects));
+        //TODO actually name this
+        stack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Optional.empty(), Optional.of(color), customEffects, Optional.of("Chaos Juice")));
         return stack;
     }
 

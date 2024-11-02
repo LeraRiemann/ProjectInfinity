@@ -129,7 +129,7 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     @Override
-    public RegistryKey<LootTable> getLootTableId() {
+    public RegistryKey<LootTable> getLootTableKey() {
         Identifier i = switch (this.dataTracker.get(special_case)) {
             case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
             case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
@@ -198,9 +198,9 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     @Override
-    protected void mobTick() {
-        this.tickAngerLogic((ServerWorld)this.getWorld(), false);
-        super.mobTick();
+    protected void mobTick(ServerWorld world) {
+        this.tickAngerLogic(world, false);
+        super.mobTick(world);
     }
 
     public static boolean canSpawn(EntityType<ChaosPawn> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
