@@ -15,8 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin implements GameRendererAccess {
-    @Shadow
-    private void loadPostProcessor(Identifier id) {
+    @Shadow void loadPostProcessor(Identifier id) {
     }
 
     @Override

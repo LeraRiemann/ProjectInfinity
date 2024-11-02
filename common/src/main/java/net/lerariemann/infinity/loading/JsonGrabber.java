@@ -5,14 +5,13 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.Lifecycle;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.*;
-import net.minecraft.registry.entry.RegistryEntryInfo;
 import net.minecraft.util.Identifier;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,20 +60,10 @@ public class JsonGrabber<E> {
 
     void grab(RegistryKey<E> key, JsonElement jsonElement, boolean bl) {
         RegistryOps<JsonElement> registryOps = RegistryOps.of(JsonOps.INSTANCE, registryInfoGetter);
-        try {
-            DataResult<E> dataResult = decoder.parse(registryOps, jsonElement);
-            if(dataResult.result().isPresent()) {
-                E object = dataResult.result().get();
-                if (bl || !registry.contains(key)) registry.add(key, object, RegistryEntryInfo.DEFAULT);
-            }
-            else {
-                LogManager.getLogger().info(jsonElement);
-            }
-        }
-        catch (Exception e) {
-            LogManager.getLogger().info(jsonElement);
-            throw new RuntimeException(e.getMessage() + " Element affected: " + jsonElement.toString());
-        }
+        DataResult<E> dataResult = decoder.parse(registryOps, jsonElement);
+        E object = dataResult.getOrThrow(false, (error) -> {
+        });
+        if (bl || !registry.contains(key)) registry.add(key, object, Lifecycle.stable());
     }
 
     void grab(String path, RegistryKey<E> registryKey, boolean bl) {
@@ -91,7 +80,7 @@ public class JsonGrabber<E> {
 
     E grab_with_return(String rootdir, String i, boolean register) {
         String path = rootdir + "/" + i + ".json";
-        RegistryKey<E> key = RegistryKey.of(registry.getKey(), InfinityMod.getId(i));
+        RegistryKey<E> key = RegistryKey.of(registry.getKey(), InfinityMod.getId("generated_"+i));
         File file = new File(path);
         String content;
         try {
@@ -102,8 +91,9 @@ public class JsonGrabber<E> {
         JsonElement jsonElement = JsonParser.parseString(content);
         RegistryOps<JsonElement> registryOps = RegistryOps.of(JsonOps.INSTANCE, registryInfoGetter);
         DataResult<E> dataResult = decoder.parse(registryOps, jsonElement);
-        E object = dataResult.getOrThrow((error) -> null);
-        if (register) registry.add(key, object, RegistryEntryInfo.DEFAULT);
+        E object = dataResult.getOrThrow(false, (error) -> {
+        });
+        if (register) registry.add(key, object, Lifecycle.stable());
         return object;
     }
 }

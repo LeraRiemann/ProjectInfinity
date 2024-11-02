@@ -15,7 +15,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -56,13 +55,13 @@ public interface WarpLogic {
         return switch(id.toString()) {
             case "minecraft:the_end" -> 0;
             case "infinity:chaos" -> Color.HSBtoRGB(Objects.requireNonNull(server.getWorld(World.OVERWORLD)).getRandom().nextFloat(),
-                        1.0f, 1.0f);
+                    1.0f, 1.0f);
             case "infinity:chess" -> (properMod(pos.getX() + pos.getY() + pos.getZ(), 2) == 0 ? 0 : 0xffffff);
             case "infinity:pride" -> switch(properMod(pos.getX() + pos.getY() + pos.getZ(), 3)) {
-                    case 0 -> 0x77c1de;
-                    case 1 -> 0xdaadb5;
-                    default -> 0xffffff;
-                };
+                case 0 -> 0x77c1de;
+                case 1 -> 0xdaadb5;
+                default -> 0xffffff;
+            };
             default -> RandomProvider.getProvider(server).easterizer.colormap.getOrDefault(
                     id.getPath(), (int)getNumericFromId(id, server));
         };
@@ -83,7 +82,7 @@ public interface WarpLogic {
 
     static int getKeyColorFromId(Identifier id, MinecraftServer server) {
         if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
-            return ColorHelper.Argb.fullAlpha((int) getNumericFromId(id, server) & 0xFFFFFF);
+            return Math.toIntExact(getNumericFromId(id, server) & 0xFFFFFF);
         return 0;
     }
 

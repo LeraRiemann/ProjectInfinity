@@ -1,0 +1,20 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:cod",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:pufferfish",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:salmon",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:tropical_fish",
+      "weight": 1.0
+    }
+  ]
+}

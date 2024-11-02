@@ -1,35 +1,35 @@
 {
-	"feature": "infinity:all_trees",
-	"placement": [
-		{
-			"count": {
-				"type": "minecraft:weighted_list",
-				"distribution": [
-					{
-						"data": 6,
-						"weight": 9
-					},
-					{
-						"data": 7,
-						"weight": 1
-					}
-				]
-			},
-			"type": "minecraft:count"
-		},
-		{
-			"type": "minecraft:in_square"
-		},
-		{
-			"type": "minecraft:surface_water_depth_filter",
-			"max_water_depth": 0
-		},
-		{
-			"heightmap": "OCEAN_FLOOR",
-			"type": "minecraft:heightmap"
-		},
-		{
-			"type": "minecraft:biome"
-		}
-	]
+  "feature": "infinity:all_trees",
+  "placement": [
+    {
+      "count": {
+        "type": "minecraft:weighted_list",
+        "distribution": [
+          {
+            "data": 6,
+            "weight": 9
+          },
+          {
+            "data": 7,
+            "weight": 1
+          }
+        ]
+      },
+      "type": "minecraft:count"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "heightmap": "OCEAN_FLOOR",
+      "type": "minecraft:heightmap"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
 }

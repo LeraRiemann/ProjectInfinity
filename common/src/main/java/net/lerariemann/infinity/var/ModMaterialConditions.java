@@ -294,7 +294,7 @@ public class ModMaterialConditions {
         }
     }
 
-    public static final DeferredRegister<MapCodec<? extends MaterialRules.MaterialCondition>> MATERIAL_CONDITIONS = DeferredRegister.create(MOD_ID, RegistryKeys.MATERIAL_CONDITION);
+    public static final DeferredRegister<Codec<? extends MaterialRules.MaterialCondition>> MATERIAL_CONDITIONS = DeferredRegister.create(MOD_ID, RegistryKeys.MATERIAL_CONDITION);
 
 
     public static void registerConditions() {

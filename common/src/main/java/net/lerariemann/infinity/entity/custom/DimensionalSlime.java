@@ -15,26 +15,24 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.SlimeEntity;
-import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.Objects;
 import java.util.Random;
 
 public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     public static final TrackedData<BlockState> core = DataTracker.registerData(DimensionalSlime.class, TrackedDataHandlerRegistry.BLOCK_STATE);
-    public static final TrackedData<Integer> color = DataTracker.registerData(DimensionalSlime.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final TrackedData<Vector3f> color = DataTracker.registerData(DimensionalSlime.class, TrackedDataHandlerRegistry.VECTOR3F);
 
     public DimensionalSlime(EntityType<? extends DimensionalSlime> entityType, World world) {
         super(entityType, world);
@@ -56,10 +54,10 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(core, Blocks.STONE.getDefaultState());
-        builder.add(color, 0);
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(core, Blocks.STONE.getDefaultState());
+        this.dataTracker.startTracking(color, new Vector3f(0.0f, 0.0f, 0.0f));
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
@@ -68,12 +66,13 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
 
     @Override
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         RandomProvider p = RandomProvider.getProvider(Objects.requireNonNull(world.getServer()));
         Random r = new Random();
-        this.dataTracker.set(core, Registries.BLOCK.get(Identifier.of(p.randomName(r, "all_blocks"))).getDefaultState());
-        this.dataTracker.set(color, r.nextInt(16777216));
-        return super.initialize(world, difficulty, spawnReason, entityData);
+        this.dataTracker.set(core, Registries.BLOCK.get(new Identifier(p.randomName(r, "all_blocks"))).getDefaultState());
+        Vector3f c = new Vector3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
+        this.dataTracker.set(color, c);
+        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override
@@ -81,18 +80,20 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
         return world.doesNotIntersectEntities(this);
     }
 
-    public void setColor(int c) {
+    public void setColor(Vector3f c) {
         this.dataTracker.set(color, c);
     }
     public void setCore(BlockState c) {
         this.dataTracker.set(core, c);
     }
     @Override
-    public int getColorForRender() {
-        int v = getColorNamed();
-        if (v!=-1) return v;
-        return ColorHelper.Argb.fullAlpha(this.dataTracker.get(color));
+    public Vector3f getColor() {
+        Vector3f v = getColorNamed();
+        if (v!=null) return v;
+        return this.dataTracker.get(color);
     }
+    @Override
+    public float getAlpha() {return 1.0f;}
 
     public BlockState getCore() {
         return this.dataTracker.get(core);
@@ -104,41 +105,43 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
 
     @Override
     protected ParticleEffect getParticles() {
-        return new DustParticleEffect(colorFromInt(this.getColorForRender()), 1.0f);
+        return new DustParticleEffect(this.getColor(), 1.0f);
     }
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return this.getCore().getSoundGroup().getHitSound();
+        return this.getCore().getBlock().getSoundGroup(this.getCore()).getHitSound();
     }
     @Override
     protected SoundEvent getDeathSound() {
-        return this.getCore().getSoundGroup().getBreakSound();
+        return this.getCore().getBlock().getSoundGroup(this.getCore()).getBreakSound();
     }
     @Override
     protected SoundEvent getSquishSound() {
-        return this.getCore().getSoundGroup().getStepSound();
+        return this.getCore().getBlock().getSoundGroup(this.getCore()).getStepSound();
     }
     @Override
     protected SoundEvent getJumpSound() {
-        return this.getCore().getSoundGroup().getFallSound();
+        return this.getCore().getBlock().getSoundGroup(this.getCore()).getFallSound();
     }
     @Override
-    public RegistryKey<LootTable> getLootTableId() {
-        return this.getCore().getBlock().getLootTableKey();
+    public Identifier getLootTableId() {
+        return this.getCore().getBlock().getLootTableId();
     }
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putInt("color", this.dataTracker.get(color));
+        nbt.putFloat("red", this.dataTracker.get(color).x);
+        nbt.putFloat("green", this.dataTracker.get(color).y);
+        nbt.putFloat("blue", this.dataTracker.get(color).z);
         nbt.putString("core", Registries.BLOCK.getId(this.getCore().getBlock()).toString());
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.setColor(nbt.getInt("color"));
-        Block b = Registries.BLOCK.get(Identifier.of(nbt.getString("core")));
+        this.setColor(new Vector3f(nbt.getFloat("red"), nbt.getFloat("green"), nbt.getFloat("blue")));
+        Block b = Registries.BLOCK.get(new Identifier(nbt.getString("core")));
         this.setCore(b.getDefaultState());
     }
 

@@ -11,7 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
@@ -27,7 +26,7 @@ public class PlatformMethodsImpl {
     }
 
     public static boolean isFabricApiLoaded(String modID) {
-        return isModLoaded(modID.replace("_", "-"));
+        return FabricLoader.getInstance().isModLoaded(modID.replace("_", "-"));
     }
 
     public static PacketByteBuf createPacketByteBufs() {

@@ -43,7 +43,7 @@ public class ModPlacementModifiers {
 
 
     static RegistrySupplier<PlacementModifierType<?>> register(String id, MapCodec<? extends PlacementModifier> codec) {
-            return PLACEMENT_MODIFIER_TYPES.register(id, () -> () -> (MapCodec<PlacementModifier>) codec);
+            return PLACEMENT_MODIFIER_TYPES.register(id, () -> () -> ((MapCodec<PlacementModifier>) codec).codec());
     }
 
     public static void registerModifiers() {

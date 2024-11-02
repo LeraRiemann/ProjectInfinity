@@ -10,7 +10,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -100,7 +104,7 @@ public class RandomProvider {
         double size = trees.size();
         NbtCompound c = new NbtCompound();
         NbtList l = new NbtList();
-        c.put("default", notRandomTree(trees.getFirst(), "minecraft:grass_block"));
+        c.put("default", notRandomTree(trees.get(0), "minecraft:grass_block"));
         for (int i = 1; i < size; i++) {
             NbtCompound c1 = new NbtCompound();
             c1.put("feature", notRandomTree(trees.get(i), "minecraft:grass_block"));
@@ -115,14 +119,45 @@ public class RandomProvider {
     }
 
     void genCorePack() {
+        extraRegistry.get("palettes").keys.forEach(e -> {
+            if (!(Paths.get(savingPath + "/data/" + InfinityMod.MOD_ID + "/structures/"
+                    + ((NbtCompound)e).getString("name") + ".nbt")).toFile().exists()) {
+                savePortalFromPalette((NbtCompound)e);
+            }
+        });
         saveTrees();
         if (!(Paths.get(savingPath + "/pack.mcmeta")).toFile().exists()) savePackMcmeta();
+    }
+
+    void savePortalFromPalette(NbtCompound rawdata) {
+        String name = rawdata.getString("name");
+        NbtCompound datanbt = CommonIO.read(configPath + "util/portal/main.json");
+        NbtCompound moredata = CommonIO.readCarefully(configPath +
+                        "util/portal/palette_" + (rawdata.getBoolean("properties") ? "wood" : "stone") + ".json",
+                rawdata.getString("plank"),
+                rawdata.getString("log"),
+                rawdata.getString("stair"),
+                rawdata.getString("stair"));
+        datanbt.put("palette", moredata.get("palette"));
+        String path = savingPath + "/data/" + InfinityMod.MOD_ID + "/structures";
+        Path dir = Paths.get(path);
+        Path file = Paths.get(path + "/" + name + ".nbt");
+        List<String> lines = new ArrayList<>();
+        try {
+            Files.createDirectories(dir);
+            Files.write(file, lines, StandardCharsets.UTF_8);
+            NbtIo.write(datanbt, new File(file.toUri()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        CommonIO.write(CommonIO.readCarefully(configPath + "util/portal/pool.json", name),
+                savingPath + "/data/" + InfinityMod.MOD_ID + "/worldgen/template_pool", name + ".json");
     }
 
     void savePackMcmeta() {
         NbtCompound res = new NbtCompound();
         NbtCompound pack = new NbtCompound();
-        pack.putInt("pack_format", 34);
+        pack.putInt("pack_format", 15);
         pack.putString("description", "Common template pools for Infinite Dimensions");
         res.put("pack", pack);
         CommonIO.write(res, savingPath, "pack.mcmeta");
@@ -301,15 +336,17 @@ public class RandomProvider {
         return res;
     }
 
-    static void addBounds(NbtCompound res, int lbound, int bound) {
-        res.putInt("min_inclusive", lbound);
-        res.putInt("max_inclusive", bound);
+    public static NbtCompound genBounds(int lbound, int bound) {
+        NbtCompound value = new NbtCompound();
+        value.putInt("min_inclusive", lbound);
+        value.putInt("max_inclusive", bound);
+        return value;
     }
 
-    static void addBounds(NbtCompound res, Random random, int lbound, int bound) {
+    public static NbtCompound genBounds(Random random, int lbound, int bound) {
         int a = random.nextInt(lbound, bound);
         int b = random.nextInt(lbound, bound);
-        addBounds(res, Math.min(a, b), Math.max(a, b));
+        return genBounds(Math.min(a, b), Math.max(a, b));
     }
 
     public static NbtElement intProvider(Random random, int bound, boolean acceptDistributions) {
@@ -327,20 +364,22 @@ public class RandomProvider {
             }
             case 1, 2 -> {
                 res.putString("type", i==1 ? "uniform" : "biased_to_bottom");
-                addBounds(res, random, lbound, bound);
+                res.put("value", genBounds(random, lbound, bound));
                 return res;
             }
             case 4 -> {
                 res.putString("type", "clamped");
-                addBounds(res, random, lbound, bound);
-                res.put("source", intProvider(random, lbound, bound, false));
+                NbtCompound value = genBounds(random, lbound, bound);
+                value.put("source", intProvider(random, lbound, bound, false));
+                res.put("value", value);
                 return res;
             }
             case 3 -> {
                 res.putString("type", "clamped_normal");
-                addBounds(res, random, lbound, bound);
-                res.putDouble("mean", lbound + random.nextDouble()*(bound-lbound));
-                res.putDouble("deviation", random.nextExponential());
+                NbtCompound value = genBounds(random, lbound, bound);
+                value.putDouble("mean", lbound + random.nextDouble()*(bound-lbound));
+                value.putDouble("deviation", random.nextExponential());
+                res.put("value", value);
                 return res;
             }
             case 5 -> {
@@ -414,46 +453,46 @@ public class RandomProvider {
         String[] types = new String[]{"uniform", "clamped_normal", "trapezoid"};
         NbtCompound res = new NbtCompound();
         res.putString("type", types[i]);
+        NbtCompound value = new NbtCompound();
         float a = random.nextFloat(lbound, bound);
         float b = random.nextFloat(lbound, bound);
         float min = Math.min(a, b);
         float max = Math.max(a, b);
         switch (i) {
             case 0 -> {
-                res.putFloat("max_exclusive", max);
-                res.putFloat("min_inclusive", min);
+                value.putFloat("max_exclusive", max);
+                value.putFloat("min_inclusive", min);
             }
             case 1 -> {
-                res.putFloat("max", max);
-                res.putFloat("min", min);
-                res.putFloat("mean", random.nextFloat(min, max));
-                res.putFloat("deviation", random.nextFloat(max - min));
+                value.putFloat("max", max);
+                value.putFloat("min", min);
+                value.putFloat("mean", random.nextFloat(min, max));
+                value.putFloat("deviation", random.nextFloat(max - min));
             }
             case 2 -> {
-                res.putFloat("max", max);
-                res.putFloat("min", min);
-                res.putFloat("plateau", random.nextFloat(max - min));
+                value.putFloat("max", max);
+                value.putFloat("min", min);
+                value.putFloat("plateau", random.nextFloat(max - min));
             }
         }
+        res.put("value", value);
         return res;
     }
 
     public void kickGhostsOut(DynamicRegistryManager s) {
         Registry<Biome> reg = s.get(RegistryKeys.BIOME);
         WeighedStructure<String> biomes = registry.get("biomes");
-        if (biomes != null) {
-            int i = 0;
-            while(i < biomes.keys.size()) {
-                if (!reg.containsId(Identifier.of(biomes.keys.get(i)))) {
-                    biomes.kick(i);
-                }
-                else i++;
+        int i = 0;
+        while(i < biomes.keys.size()) {
+            if (!reg.containsId(new Identifier(biomes.keys.get(i)))) {
+                biomes.kick(i);
             }
-            registry.put("biomes", biomes);
+            else i++;
         }
+        registry.put("biomes", biomes);
     }
+}
 
-    interface ListReader<B>  {
-        B op(String path, String subpath);
-    }
+interface ListReader<B>  {
+    B op(String path, String subpath);
 }

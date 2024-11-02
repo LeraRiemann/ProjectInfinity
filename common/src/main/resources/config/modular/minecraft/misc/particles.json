@@ -1,0 +1,336 @@
+{
+  "elements": [
+    {
+      "key": "minecraft:ambient_entity_effect",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:angry_villager",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:ash",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:block",
+      "weight": 5.0
+    },
+    {
+      "key": "minecraft:block_marker",
+      "weight": 5.0
+    },
+    {
+      "key": "minecraft:bubble",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bubble_pop",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:bubble_column_up",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:campfire_cosy_smoke",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:campfire_signal_smoke",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cherry_leaves",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:cloud",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:composter",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:crimson_spore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:crit",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:current_down",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:damage_indicator",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dolphin",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dragon_breath",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dripping_dripstone_lava",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dripping_dripstone_water",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dripping_lava",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dripping_obsidian_tear",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dripping_water",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:dust",
+      "weight": 10.0
+    },
+    {
+      "key": "minecraft:dust_color_transition",
+      "weight": 10.0
+    },
+    {
+      "key": "minecraft:effect",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:elder_guardian",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:electric_spark",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:enchant",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:enchanted_hit",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:end_rod",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:entity_effect",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:explosion_emitter",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:explosion",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:falling_dripstone_lava",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:falling_dripstone_water",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:falling_dust",
+      "weight": 5.0
+    },
+    {
+      "key": "minecraft:falling_lava",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:falling_obsidian_tear",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:falling_spore_blossom",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:falling_water",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:firework",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:fishing",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:flame",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:flash",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:glow",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:glow_squid_ink",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:happy_villager",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:heart",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:instant_effect",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:item",
+      "weight": 10.0
+    },
+    {
+      "key": "minecraft:item_slime",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:item_snowball",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:landing_lava",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:landing_obsidian_tear",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:large_smoke",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:lava",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:mycelium",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:nautilus",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:note",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:poof",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:portal",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:rain",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:scrape",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:smoke",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sneeze",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:snowflake",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:soul",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:soul_fire_flame",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spit",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:splash",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:spore_blossom_air",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:squid_ink",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:sweep_attack",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:totem_of_undying",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:underwater",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:vibration",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:warped_spore",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:wax_off",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:wax_on",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:white_ash",
+      "weight": 1.0
+    },
+    {
+      "key": "minecraft:witch",
+      "weight": 1.0
+    }
+  ]
+}

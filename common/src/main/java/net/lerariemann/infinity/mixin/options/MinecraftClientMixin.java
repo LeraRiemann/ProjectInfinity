@@ -20,7 +20,7 @@ public abstract class MinecraftClientMixin implements InfinityOptionsAccess {
     }
     @Shadow
     public ClientWorld world;
-
+    
     @Unique
     public InfinityOptions infinity$options;
 
@@ -37,6 +37,8 @@ public abstract class MinecraftClientMixin implements InfinityOptionsAccess {
     @Unique
     public void projectInfinity$setInfinityOptions(InfinityOptions options) {
         infinity$options = options;
-        ((InfinityOptionsAccess) world).projectInfinity$setInfinityOptions(options);
+        if (this.world != null) {
+            ((InfinityOptionsAccess) world).projectInfinity$setInfinityOptions(options);
+        }
     }
 }

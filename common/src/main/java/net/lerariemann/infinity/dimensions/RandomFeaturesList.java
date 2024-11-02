@@ -76,8 +76,9 @@ public class RandomFeaturesList {
     }
 
     NbtList lakes() {
-        //addRandomFeature("lake", res, RandomLake::new);
-        return getAllElements("lakes");
+        NbtList res = getAllElements("lakes");
+        addRandomFeature("lake", res, RandomLake::new);
+        return res;
     }
 
     NbtList localModifications() {
@@ -138,8 +139,7 @@ public class RandomFeaturesList {
         res.addAll(getAllElements("vegetation_part3"));
         return res;
     }
-
-    interface FeatureRegistrar {
-        RandomisedFeature op(RandomFeaturesList parent);
-    }
+}
+interface FeatureRegistrar {
+    RandomisedFeature op(RandomFeaturesList parent);
 }

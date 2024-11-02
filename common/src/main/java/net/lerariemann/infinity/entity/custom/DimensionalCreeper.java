@@ -52,30 +52,30 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
     }
     @Override
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         MinecraftServer s = world.toServerWorld().getServer();
         reg = s.getRegistryManager().get(RegistryKeys.BIOME);
         WeighedStructure<String> biomes = RandomProvider.getProvider(s).registry.get("biomes");
         String biomename = biomes != null ? biomes.getElement(world.getRandom().nextDouble()) : "minecraft:plains";
-        Biome b = reg.get(Identifier.of(biomename));
+        Biome b = reg.get(Identifier.tryParse(biomename));
         this.setColor(b != null ? b.getFoliageColor() : 7842607);
         this.setRange(8 + random.nextFloat()*24);
         this.setBiome(biomename);
-        return super.initialize(world, difficulty, spawnReason, entityData);
+        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(color, 7842607);
-        builder.add(range, 16.0f);
-        builder.add(biome, "minecraft:plains");
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(color, 7842607);
+        this.dataTracker.startTracking(range, 16.0f);
+        this.dataTracker.startTracking(biome, "minecraft:plains");
     }
     public void setBiome(String s) {
         this.dataTracker.set(biome, s);
     }
     public Biome getBiome() {
-        return reg.get(Identifier.of(getBiomeId()));
+        return reg.get(new Identifier(getBiomeId()));
     }
     public String getBiomeId() {
         return this.dataTracker.get(biome);
@@ -177,7 +177,7 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
                             serverWorld.getChunkManager().getNoiseConfig().getMultiNoiseSampler());
                     chunk.setNeedsSaving(true);
                 }
-                serverWorld.getChunkManager().chunkLoadingManager.sendChunkBiomePackets(list);
+                serverWorld.getChunkManager().threadedAnvilChunkStorage.sendChunkBiomePackets(list);
             }
         }
         this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), f, World.ExplosionSourceType.NONE);

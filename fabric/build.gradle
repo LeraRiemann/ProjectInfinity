@@ -31,12 +31,20 @@ configurations {
     }
 }
 
+
 repositories {
     maven {
         name = "Terraformers"
         url = "https://maven.terraformersmc.com/"
     }
+    maven {
+        url "https://maven.squiddev.cc"
+        content {
+            includeGroup("cc.tweaked")
+        }
+    }
 }
+
 
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
@@ -51,6 +59,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
+    modImplementation("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cct_version")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

@@ -1,11 +1,11 @@
 package net.lerariemann.infinity.block.entity;
 
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -53,9 +53,11 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     public Identifier getDimension() {
         return this.dimension;
     }
+
     public long getPortalColor() {
         return this.portalColor;
     }
+
     public boolean getOpen() {
         return this.isOpen;
     }
@@ -72,18 +74,18 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     public void setOpen(boolean i) {
         this.isOpen = i;
     }
-    public void writeNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(tag, registryLookup);
+    public void writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
         tag.putLong("Dimension", this.portalColor);
         tag.putString("DimensionName", this.dimension.toString());
         tag.putBoolean("Open", this.isOpen);
     }
 
-    public void readNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(tag, registryLookup);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         this.portalColor = tag.getLong("Dimension");
         if (tag.contains("DimensionName")) {
-            this.dimension = Identifier.of(tag.getString("DimensionName"));
+            this.dimension = Identifier.tryParse(tag.getString("DimensionName"));
         }
         else this.dimension = InfinityMod.getId("generated_" + this.portalColor);
         this.isOpen = tag.getBoolean("Open");
@@ -96,11 +98,11 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        return createNbt(registryLookup);
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
     }
 
-//    @Override
+    @Override
     public Object getRenderData() {
         return propertyDelegate.get(0);
     }

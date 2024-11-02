@@ -320,7 +320,7 @@ public class ClothConfigFactory {
     }
 
     public static NbtCompound readDefaultConfig() {
-        Path tempfile = FabricLoader.getInstance().getModContainer(MOD_ID).orElse(null).getRootPaths().getFirst().resolve("config/infinity.json");
+        Path tempfile = FabricLoader.getInstance().getModContainer(MOD_ID).orElse(null).getRootPaths().get(0).resolve("config/infinity.json");
             try {
                 Files.copy(tempfile, Path.of(configPath() + "/infinity-default.json"), REPLACE_EXISTING);
             } catch (IOException e) {

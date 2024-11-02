@@ -4,7 +4,9 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lerariemann.infinity.PlatformMethods;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
@@ -13,7 +15,6 @@ import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.item.ModComponentTypes;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.util.WarpLogic;
@@ -22,10 +23,6 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.WritableBookContentComponent;
-import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.SpawnReason;
@@ -34,6 +31,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -61,6 +61,7 @@ import org.joml.Vector3f;
 import java.util.*;
 
 import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPage;
+import static net.lerariemann.infinity.compat.ComputerCraftCompat.isPrintedPage;
 
 public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
     private static final Random RANDOM = new Random();
@@ -75,27 +76,29 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     public static void tryCreatePortalFromItem(BlockState state, World world, BlockPos pos, ItemEntity entity) {
         ItemStack itemStack = entity.getStack();
-
-        /* Check if the item provided is a transfinite key. */
-        Identifier key_dest = itemStack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
-        if (key_dest != null) {
-            MinecraftServer server = world.getServer();
-            if (server != null) {
-                boolean bl = NeitherPortalBlock.modifyOnInitialCollision(key_dest, world, pos, state);
-                if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-                return;
+        if (itemStack.getItem() == ModItems.TRANSFINITE_KEY.get()) {
+            Identifier key_dest;
+            if (itemStack.getNbt() != null) {
+                key_dest = Identifier.tryParse(itemStack.getNbt().getString("key_destination"));
+            }
+            else {
+                key_dest = InfinityMod.getId("random");
+            }
+            if (key_dest != null) {
+                MinecraftServer server = world.getServer();
+                if (server != null) {
+                    boolean bl = NeitherPortalBlock.modifyOnInitialCollision(key_dest, world, pos, state);
+                    if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                }
             }
         }
-
-        /* Check if the item provided is a book of some kind. */
-        WritableBookContentComponent writableComponent = itemStack.getComponents().get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
-        WrittenBookContentComponent writtenComponent = itemStack.getComponents().get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
-        String printedComponent = null;
-        if (PlatformMethods.isModLoaded("computercraft")) {
-            printedComponent = checkPrintedPage(itemStack);
-        }
-        if (writableComponent != null || writtenComponent != null || printedComponent != null) {
-            String content = NeitherPortalBlock.parseComponents(writableComponent, writtenComponent, printedComponent);
+        else if (itemStack.getItem() == Items.WRITTEN_BOOK || itemStack.getItem() == Items.WRITABLE_BOOK) {
+            NbtCompound compound = itemStack.getNbt();
+            String content;
+            if (compound != null) {
+                content = NeitherPortalBlock.parseComponents(compound, itemStack.getItem());
+            }
+            else content = "";
             MinecraftServer server = world.getServer();
             if (server != null) {
                 Identifier id = WarpLogic.getIdentifier(content, server);
@@ -103,31 +106,43 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             }
         }
+        else if (FabricLoader.getInstance().isModLoaded("computercraft")) {
+            if (isPrintedPage(itemStack.getItem())) {
+                NbtCompound compound = itemStack.getNbt();
+                String content;
+                if (compound != null) {
+                    content = checkPrintedPage(compound);
+                }
+                else content = "";
+                MinecraftServer server = world.getServer();
+                if (server != null) {
+                    Identifier id = WarpLogic.getIdentifier(content, server);
+                    boolean bl = NeitherPortalBlock.modifyOnInitialCollision(id, world, pos, state);
+                    if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                }
+            }
+        }
+
     }
 
     /* Extracts the string used to generate the dimension ID from component content. */
-    public static String parseComponents(WritableBookContentComponent writableComponent, WrittenBookContentComponent writtenComponent, String printedComponent) {
-        String content = "";
-        try {
-            if (writableComponent != null) {
-                content = writableComponent.pages().getFirst().raw();
-            }
-            if (writtenComponent != null) {
-                content = writtenComponent.pages().getFirst().raw().getString();
-            }
+    public static String parseComponents(NbtCompound compound, Item item) {
+        NbtList pages = compound.getList("pages", NbtElement.STRING_TYPE);
+        if (pages.isEmpty()) {
+            return "";
         }
-        catch (NoSuchElementException e) {
-            content = "";
+        else if (item == Items.WRITTEN_BOOK) {
+            String pagesString = pages.get(0).asString();
+            return pagesString.substring(pagesString.indexOf(':')+2, pagesString.length()-2);
         }
-
-        if (printedComponent != null) {
-            content = printedComponent;
+        else if (item == Items.WRITABLE_BOOK) {
+            return pages.get(0).asString();
         }
-        return content;
+        else return "";
     }
 
     /* Sets the portal color and destination and calls to open the portal immediately if the portal key is blank.
-    * Statistics for opening the portal are attributed to the nearest player. */
+     * Statistics for opening the portal are attributed to the nearest player. */
     public static boolean modifyOnInitialCollision(Identifier dimName, World world, BlockPos pos, BlockState state) {
         MinecraftServer server = world.getServer();
         if (dimName.toString().equals("minecraft:random")) {
@@ -161,8 +176,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     /* This is being called when the portal is right-clicked. */
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos,
-                              PlayerEntity player, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
             MinecraftServer s = world.getServer();
             BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -181,7 +195,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 /* Otherwise check if we're using the correct key. If so, open. */
                 else {
                     ItemStack usedKey = player.getStackInHand(Hand.MAIN_HAND);
-                    Item correctKey = Registries.ITEM.get(Identifier.of(prov.portalKey));
+                    Item correctKey = Registries.ITEM.get(Identifier.tryParse(prov.portalKey));
                     if (usedKey.isOf(correctKey)) {
                         if (!player.getAbilities().creativeMode && prov.rule("consumePortalKey")) {
                             usedKey.decrement(1); // Consume the key if needed
@@ -196,7 +210,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     /* Jingle signaling the portal is now usable. */
     public static void runAfterEffects(World world, BlockPos pos, boolean dimensionIsNew) {
-        if (dimensionIsNew) world.playSound(null, pos, SoundEvents.BLOCK_VAULT_OPEN_SHUTTER, SoundCategory.BLOCKS, 1f, 1f);
+        if (dimensionIsNew) world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
     }
 
@@ -210,7 +224,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (player != null) {
             if (isDimensionNew) {
                 player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
-                ModCriteria.DIMS_OPENED.get().trigger((ServerPlayerEntity)player);
+                ModCriteria.DIMS_OPENED.trigger((ServerPlayerEntity)player);
             }
             player.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
         }
@@ -289,15 +303,21 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (!RandomProvider.getProvider(server).rule("runtimeGenerationEnabled")) return false;
         ((MinecraftServerAccess)(server)).projectInfinity$addWorld(
                 key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d)); // create the dimension
-        server.getPlayerManager().getPlayerList().forEach(
-                a -> sendNewWorld(a, id, d)); //and send everyone its data for clientside updating
+        server.getPlayerManager().getPlayerList().forEach(a ->
+                ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(id, d)));
         return true;
     }
 
-    /* Create and send S2C packets neseccary for the client to process a freshly added dimension. */
-    public static void sendNewWorld(ServerPlayerEntity player, Identifier id, RandomDimension d) {
-        d.random_biomes.forEach(b -> PlatformMethods.sendServerPlayerEntity(player, new ModPayloads.BiomeAddPayload(InfinityMod.getId(b.name), b.data)));
-        PlatformMethods.sendServerPlayerEntity(player, new ModPayloads.WorldAddPayload(id, d.type != null ? d.type.data : new NbtCompound()));
+    static PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeIdentifier(id);
+        buf.writeNbt(d.type != null ? d.type.data : new NbtCompound());
+        buf.writeInt(d.random_biomes.size());
+        d.random_biomes.forEach(b -> {
+            buf.writeIdentifier(InfinityMod.getId(b.name));
+            buf.writeNbt(b.data);
+        });
+        return buf;
     }
 
     /* Spawns colourful particles. */
@@ -351,14 +371,16 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             ItemStack itemStack = e.getStack();
             if (recipes.containsKey(itemStack.getItem())) {
                 Vec3d v = entity.getVelocity();
-                ItemStack resStack = new ItemStack(Registries.ITEM.get(Identifier.of(recipes.get(itemStack.getItem()))));
+                ItemStack resStack = new ItemStack(Registries.ITEM.get(Identifier.tryParse(recipes.get(itemStack.getItem()))));
                 if (resStack.isOf(ModItems.TRANSFINITE_KEY.get())) {
                     BlockEntity blockEntity = world.getBlockEntity(pos);
                     if (blockEntity instanceof NeitherPortalBlockEntity portal) {
-                        Integer keycolor = WarpLogic.getKeyColorFromId(portal.getDimension(), world.getServer());
-                        ComponentMap newMap = (ComponentMap.builder().add(ModComponentTypes.KEY_DESTINATION.get(), portal.getDimension())
-                                .add(ModComponentTypes.KEY_COLOR.get(), keycolor)).build();
-                        resStack.applyComponentsFrom(newMap);
+                        int keycolor = WarpLogic.getKeyColorFromId(portal.getDimension(), world.getServer());
+                        NbtCompound newMap = new NbtCompound();
+                        newMap.putString("key_destination", portal.getDimension().toString());
+                        newMap.putInt("key_color", keycolor);
+                        resStack.setNbt(newMap);
+
                     }
                 }
                 ItemEntity result = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(),

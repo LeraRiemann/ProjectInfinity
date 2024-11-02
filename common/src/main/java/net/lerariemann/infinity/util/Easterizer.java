@@ -18,8 +18,6 @@ public class Easterizer {
     public Map<String, Pair<NbtCompound, String>> map;
     public Map<String, NbtCompound> optionmap;
     public Map<String, Integer> colormap;
-    public static final Set<String> disabledUntilReview = Set.of("ant", "bash", "checkerboard", "custom",
-            "isolation", "missing", "perfection", "terminal");
 
     public Easterizer(RandomProvider prov) {
         map = new HashMap<>();
@@ -65,6 +63,6 @@ public class Easterizer {
     }
 
     public boolean isEaster(String name) {
-        return map.containsKey(name) && !disabledUntilReview.contains(name);
+        return map.containsKey(name);
     }
 }

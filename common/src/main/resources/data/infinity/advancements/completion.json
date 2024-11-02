@@ -1,0 +1,143 @@
+{
+  "parent": "infinity:library",
+  "criteria": {
+    "empty": {
+      "conditions": {
+        "to": "infinity:empty"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "debug": {
+      "conditions": {
+        "to": "infinity:debug"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "chaos": {
+      "conditions": {
+        "to": "infinity:chaos"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "checkerboard": {
+      "conditions": {
+        "to": "infinity:checkerboard"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "classic": {
+      "conditions": {
+        "to": "infinity:classic"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "content": {
+      "conditions": {
+        "to": "infinity:content"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "credits": {
+      "conditions": {
+        "to": "infinity:credits"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "elephants": {
+      "conditions": {
+        "to": "infinity:elephants"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "hills": {
+      "conditions": {
+        "to": "infinity:hills"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "library": {
+      "conditions": {
+        "to": "infinity:library"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "perfection": {
+      "conditions": {
+        "to": "infinity:perfection"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "pride": {
+      "conditions": {
+        "to": "infinity:pride"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "random_forest": {
+      "conditions": {
+        "to": "infinity:random_forest"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "skygrid": {
+      "conditions": {
+        "to": "infinity:skygrid"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "slime": {
+      "conditions": {
+        "to": "infinity:slime"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "spiral": {
+      "conditions": {
+        "to": "infinity:spiral"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "sponge": {
+      "conditions": {
+        "to": "infinity:sponge"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "red": {
+      "conditions": {
+        "to": "infinity:red"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "green": {
+      "conditions": {
+        "to": "infinity:green"
+      },
+      "trigger": "minecraft:changed_dimension"
+    },
+    "blue": {
+      "conditions": {
+        "to": "infinity:blue"
+      },
+      "trigger": "minecraft:changed_dimension"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.infinity.completion.description"
+    },
+    "frame": "goal",
+    "hidden": true,
+    "icon": {
+      "item": "minecraft:nether_star"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.infinity.completion.title"
+    },
+    "rewards": {
+      "experience": 100
+    }
+  }
+}

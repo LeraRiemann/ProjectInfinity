@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.MobEntityAccess;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.BlockState;
@@ -18,11 +19,9 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.loot.LootTable;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -90,10 +89,10 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(colors, new NbtCompound());
-        builder.add(special_case, -1);
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(colors, new NbtCompound());
+        this.dataTracker.startTracking(special_case, -1);
     }
     @Override
     protected void initGoals() {
@@ -129,13 +128,12 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     @Override
-    public RegistryKey<LootTable> getLootTableId() {
-        Identifier i = switch (this.dataTracker.get(special_case)) {
-            case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
-            case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
-            default -> Identifier.of("");
+    public Identifier getLootTableId() {
+        return switch (this.dataTracker.get(special_case)) {
+            case 0 -> new Identifier("infinity:entities/chaos_pawn_black");
+            case 1 -> new Identifier("infinity:entities/chaos_pawn_white");
+            default -> new Identifier("");
         };
-        return RegistryKey.of(RegistryKeys.LOOT_TABLE, i);
     }
 
     public void setAllColors(int color) {
@@ -165,6 +163,11 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     @Override
+    public boolean canPickupItem(ItemStack stack) {
+        return true;
+    }
+
+    @Override
     protected SoundEvent getAmbientSound() {
         return SoundEvents.ENTITY_PLAYER_BREATH;
     }
@@ -181,20 +184,20 @@ public class ChaosPawn extends HostileEntity implements Angerable {
 
     @Override
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random r = new Random();
         setAllColors(r, world.getBlockState(this.getBlockPos().down(2)));
         double i = 15*r.nextExponential();
-        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(i);
         this.setHealth((float)i);
         int a;
         if ((a = (int)(0.1*i)) > 0) {
-            this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(Identifier.of(
-                    RandomProvider.getProvider(Objects.requireNonNull(world.getServer())).randomName(r, "items")))
+            this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(new Identifier(
+                    ((MinecraftServerAccess)Objects.requireNonNull(world.getServer())).projectInfinity$getDimensionProvider().randomName(r, "items")))
                     .getDefaultStack().copyWithCount(a));
             ((MobEntityAccess)this).projectInfinity$setPersistent(false);
         }
-        return super.initialize(world, difficulty, spawnReason, entityData);
+        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override

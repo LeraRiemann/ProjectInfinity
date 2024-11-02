@@ -309,7 +309,7 @@ public class ModDensityFunctionTypes {
     }
 
 
-    public static final DeferredRegister<MapCodec<? extends DensityFunction>> DENSITY_FUNCTION_TYPES = DeferredRegister.create(MOD_ID, RegistryKeys.DENSITY_FUNCTION_TYPE);
+    public static final DeferredRegister<Codec<? extends DensityFunction>> DENSITY_FUNCTION_TYPES = DeferredRegister.create(MOD_ID, RegistryKeys.DENSITY_FUNCTION_TYPE);
 
     public static <T extends DensityFunction> void register(String name, CodecHolder<T> holder) {
         DENSITY_FUNCTION_TYPES.register(name, holder::codec);

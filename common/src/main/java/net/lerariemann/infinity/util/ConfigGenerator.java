@@ -1,9 +1,10 @@
 package net.lerariemann.infinity.util;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
-import net.minecraft.block.enums.BlockFace;
+import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.fluid.Fluid;
@@ -11,7 +12,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.particle.ParticleType;
-import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -31,23 +31,21 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-import static net.lerariemann.infinity.util.ConfigManager.getConfigDir;
-
 public class ConfigGenerator {
     public static <T> NbtCompound wsToCompound(WeighedStructure<T> w) {
         NbtCompound res = new NbtCompound();
         NbtList elements = new NbtList();
         int cse = 0;
-        if (w.keys.getFirst() instanceof String) cse = 1;
-        if (w.keys.getFirst() instanceof NbtCompound) cse = 2;
-        if (w.keys.getFirst() instanceof NbtList) cse = 3;
+        if (w.keys.get(0) instanceof String) cse = 1;
+        if (w.keys.get(0) instanceof NbtCompound) cse = 2;
+        if (w.keys.get(0) instanceof NbtList) cse = 3;
         int finalCse = cse;
         List<Integer> range = new ArrayList<>(IntStream.rangeClosed(0, w.keys.size() - 1).boxed().toList());
         range.sort(new Comparator<Integer>() {
             public String extract(int i) {
                 return switch (finalCse) {
                     case 2 -> ((NbtCompound)(w.keys.get(i))).getString("Name");
-                    case 3 -> ((NbtList)(w.keys.get(i))).getFirst().toString();
+                    case 3 -> ((NbtList)(w.keys.get(i))).get(0).toString();
                     default -> w.keys.get(i).toString();
                 };
             }
@@ -106,9 +104,9 @@ public class ConfigGenerator {
         res.putBoolean("float", isFloat(bs, w, inAir));
         NbtCompound properties = new NbtCompound();
         if (bs.contains(Properties.PERSISTENT)) properties.putString("persistent", "true");
-        if (bs.contains(Properties.BLOCK_FACE)) {
+        if (bs.contains(Properties.WALL_MOUNT_LOCATION)) {
             properties.putString("face", "floor");
-            bs = bs.with(Properties.BLOCK_FACE, BlockFace.FLOOR);
+            bs = bs.with(Properties.WALL_MOUNT_LOCATION, WallMountLocation.FLOOR);
         }
         res.putBoolean("top", isTop(bs, w, onStone));
         if (!properties.isEmpty()) res.put("Properties", properties);
@@ -151,7 +149,8 @@ public class ConfigGenerator {
         r.getKeys().forEach(a -> {
             String b = a.getValue().toString();
             String namespace = a.getValue().getNamespace();
-            if (namespace.equals("minecraft") || r.get(a.getValue()) instanceof SimpleParticleType) {
+            //TODO fix SimpleParticleType check, linkie is down :(
+            if (namespace.equals("minecraft")) {
                 checkAndAddWS(m, namespace);
                 m.get(namespace).add(b, 1.0);
             }
@@ -222,7 +221,7 @@ public class ConfigGenerator {
         Arrays.stream(colors).forEach(color -> {
             int i = block.lastIndexOf("magenta");
             String blockColored = block.substring(0, i) + color + block.substring(i+7);
-            if (Registries.BLOCK.containsId(Identifier.of(blockColored))) {
+            if (Registries.BLOCK.containsId(new Identifier(blockColored))) {
                 successCounter.addAndGet(1);
                 NbtCompound c = new NbtCompound();
                 c.putString("Name", blockColored);
@@ -236,8 +235,8 @@ public class ConfigGenerator {
         m.keySet().forEach(a -> {
             if (!m.get(a).keys.isEmpty()) {
                 try {
-                    Files.createDirectories(Paths.get(getConfigDir()+ "/modular/" + a + "/" + addpath));
-                    CommonIO.write(wsToCompound(m.get(a)), getConfigDir()+ "/modular/" + a + "/" + addpath, name + ".json");
+                    Files.createDirectories(Paths.get("config/" + InfinityMod.MOD_ID + "/modular/" + a + "/" + addpath));
+                    CommonIO.write(wsToCompound(m.get(a)), "config/" + InfinityMod.MOD_ID + "/modular/" + a + "/" + addpath, name + ".json");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

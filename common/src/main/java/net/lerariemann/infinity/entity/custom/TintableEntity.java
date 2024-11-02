@@ -3,7 +3,6 @@ package net.lerariemann.infinity.entity.custom;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.math.ColorHelper;
 import org.joml.Vector3f;
 
 import java.awt.*;
@@ -20,40 +19,41 @@ public interface TintableEntity {
         float h = (float)(i & 0xFF) / 255.0f;
         return new Vector3f(f, g, h);
     }
-
-    static int getColorJeb(int age, int id) {
-        int n = age / 25 + id;
-        int o = DyeColor.values().length;
-        int p = n % o;
-        int q = (n + 1) % o;
-        float r = (float)(age % 25) / 25.0F;
-        int s = SheepEntity.getRgbColor(DyeColor.byId(p));
-        int t = SheepEntity.getRgbColor(DyeColor.byId(q));
-        return ColorHelper.Argb.lerp(r, s, t);
-    }
-
-    default int getColorNamed() {
+    default Vector3f getColorNamed() {
         if (hasCustomName()) {
             String s = getName().getString();
             if ("jeb_".equals(s)) {
-                return TintableEntity.getColorJeb(getAge(), getId());
+                int n = getAge() / 25 + getId();
+                int o = DyeColor.values().length;
+                int p = n % o;
+                int q = (n + 1) % o;
+                float r = (getAge() % 25) / 25.0f;
+                float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
+                float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
+                float f = fs[0] * (1.0f - r) + gs[0] * r;
+                float g = fs[1] * (1.0f - r) + gs[1] * r;
+                float h = fs[2] * (1.0f - r) + gs[2] * r;
+                return new Vector3f(f, g, h);
             }
             if ("hue".equals(s)) {
-                int n = getAge() + 400*getId();
+                int n = getAge() + getId();
                 float hue = n / 400.f;
                 hue = hue - (int) hue;
-                return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
+                return colorFromInt(Color.getHSBColor(hue, 1.0f, 1.0f).getRGB());
             }
         }
-        return -1;
-    }
-    default int getColorForRender() {
-        int v = getColorNamed();
-        if (v!=-1) return v;
-        return ColorHelper.Argb.fullAlpha(this.getColorRaw());
+        return null;
     }
 
+    default Vector3f getColor() {
+        Vector3f v = getColorNamed();
+        if (v!=null) return v;
+        return colorFromInt(this.getColorRaw());
+    }
     default int getColorRaw() {
         return 0;
+    }
+    default float getAlpha() {
+        return 1.0f;
     }
 }

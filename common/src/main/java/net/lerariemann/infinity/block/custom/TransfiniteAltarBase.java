@@ -1,8 +1,6 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
-import net.lerariemann.infinity.block.entity.ModBlockEntities;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.*;
@@ -24,8 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-
-import java.util.Objects;
 
 public class TransfiniteAltarBase extends Block {
     public static final BooleanProperty FLOWER = TransfiniteAltar.FLOWER;
@@ -65,16 +61,15 @@ public class TransfiniteAltarBase extends Block {
 
     public static void ignite(World world, BlockPos pos, BlockState state) {
         world.setBlockState(pos, ModBlocks.ALTAR_LIT.get().getDefaultState().with(FLOWER, state.get(FLOWER)));
-        world.getBlockEntity(pos, ModBlockEntities.ALTAR.get()).ifPresent(CosmicAltarEntity::startTime);
         world.playSound(null, pos, SoundEvents.ITEM_TOTEM_USE, SoundCategory.BLOCKS, 1f, 1f);
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack itemStack = player.getStackInHand(hand);
         if (!world.isClient) {
-            String s = RandomProvider.getProvider(Objects.requireNonNull(world.getServer())).altarKey;
-            boolean bl0 = s.isBlank() ? itemStack.isEmpty() : itemStack.isOf(Registries.ITEM.get(Identifier.of(s)));
+            String s = RandomProvider.getProvider(world.getServer()).altarKey;
+            boolean bl0 = s.isBlank() ? itemStack.isEmpty() : itemStack.isOf(Registries.ITEM.get(new Identifier(s)));
             if (bl0) {
                 boolean bl = testSpace(world, pos);
                 if (!bl) {

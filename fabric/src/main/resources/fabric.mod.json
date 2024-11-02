@@ -30,14 +30,16 @@
   },
   "mixins": [
     "infinity.mixins.json",
+    "infinity-fabric.mixins.json",
     "dynreg.mixins.json"
   ],
   "accessWidener" : "infinity.accesswidener",
+
   "depends": {
     "fabricloader": ">=0.15.11",
     "fabric-api": "*",
-    "minecraft": ["1.21.1", "1.21"],
-    "java": ">=21",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
     "architectury": "*"
   },
   "suggests": {

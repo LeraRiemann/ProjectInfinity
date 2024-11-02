@@ -1,42 +1,42 @@
 {
-	"features": [
-		[
-		],
-		[
-		],
-		[
-		],
-		[
-		],
-		[
-		],
-		[
-		],
-		[
-		],
-		[
-		],
-		[
-		],
-		[
-			"infinity:all_trees"
-		],
-		[
-		]
-	],
-	"effects": {
-		"sky_color": 7907327,
-		"water_fog_color": 329011,
-		"fog_color": 12638463,
-		"water_color": 4159204
-	},
-	"has_precipitation": false,
-	"temperature": 0.8,
-	"carvers": {
-	},
-	"downfall": 0.4,
-	"spawn_costs": {
-	},
-	"spawners": {
-	}
+  "features": [
+    [
+    ],
+    [
+    ],
+    [
+    ],
+    [
+    ],
+    [
+    ],
+    [
+    ],
+    [
+    ],
+    [
+    ],
+    [
+    ],
+    [
+      "infinity:all_trees"
+    ],
+    [
+    ]
+  ],
+  "effects": {
+    "sky_color": 7907327,
+    "water_fog_color": 329011,
+    "fog_color": 12638463,
+    "water_color": 4159204
+  },
+  "has_precipitation": false,
+  "temperature": 0.8,
+  "carvers": {
+  },
+  "downfall": 0.4,
+  "spawn_costs": {
+  },
+  "spawners": {
+  }
 }

@@ -12,7 +12,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.PlatformMethods.*;
@@ -71,18 +70,10 @@ public class ModItems {
     }
 
     public static RegistrySupplier<Item> registerKeyItem() {
-        if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
-            RegistrySupplier<Item> registeredKey = ITEMS.register("key", () ->
-                    new TransfiniteKeyItem(new Item.Settings()
-                            .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))));
-            addAfter(registeredKey, ItemGroups.INGREDIENTS, Items.OMINOUS_TRIAL_KEY);
-            return registeredKey;
-        }
-        else {
-            return ITEMS.register("key", () ->
-                    new TransfiniteKeyItem(new Item.Settings()
-                         .component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"))));
-        }
+        RegistrySupplier<Item> registeredKey = ITEMS.register("key", () ->
+                new TransfiniteKeyItem(new Item.Settings()));
+        addAfter(registeredKey, ItemGroups.INGREDIENTS, Items.AMETHYST_SHARD);
+        return registeredKey;
     }
 
     public static void registerModItems() {
@@ -92,11 +83,14 @@ public class ModItems {
     @Environment(EnvType.CLIENT)
     public static void registerModelPredicates() {
         ItemPropertiesRegistry.register(TRANSFINITE_KEY.get(), InfinityMod.getId("key"), (stack, world, entity, seed) -> {
-            Identifier id = stack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
+            String id;
+            if (stack.getNbt() != null) {
+                id = stack.getNbt().getString("key_destination");
+            }
+            else id = "minecraft:random";
             if (id == null) return 0;
-            String s = id.toString();
-            if (s.contains("infinity:generated_")) return 0.01f;
-            return switch(s) {
+            if (id.contains("infinity:generated_")) return 0.01f;
+            return switch(id) {
                 case "minecraft:random" -> 0.02f;
                 case "minecraft:the_end" -> 0.03f;
                 case "infinity:pride" -> 0.04f;

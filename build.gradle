@@ -2,27 +2,10 @@ plugins {
     id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
-    id "io.github.pacifistmc.forgix" version "1.2.9-local.7"
-    id 'org.sinytra.wiki.toolkit' version '0.1.16'
 }
 
 architectury {
     minecraft = project.minecraft_version
-}
-
-forgix {
-    group = "net.lerariemann.infinity"
-    mergedJarName = "infinite-dimensions-${mod_version}.jar"
-}
-
-wiki {
-    docs {
-        // The name of the object (examplemod) should match the registered wiki project ID (if it exists).
-        "infinite-dimensions" {
-            // The path to the folder containing the documentation metadata file (sinytra-wiki.json)
-            root = file('docs')
-        }
-    }
 }
 
 allprojects {
@@ -50,10 +33,7 @@ subprojects {
 
     dependencies {
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
-        mappings loom.layered {
-            it.mappings("net.fabricmc:yarn:$minecraft_version+build.$rootProject.yarn_mappings:v2")
-            it.mappings("dev.architectury:yarn-mappings-patch-neoforge:$rootProject.yarn_mappings_patch_neoforge_version")
-        }
+        it.mappings("net.fabricmc:yarn:$minecraft_version+build.$rootProject.yarn_mappings:v2")
     }
 
     java {
@@ -62,12 +42,12 @@ subprojects {
         // If you remove this line, sources will not be generated.
         withSourcesJar()
 
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     tasks.withType(JavaCompile).configureEach {
-        it.options.release = 21
+        it.options.release = 17
     }
 
     // Configure Maven publishing.
@@ -87,6 +67,4 @@ subprojects {
             // retrieving dependencies.
         }
     }
-    build.finalizedBy(mergeJars)
-    assemble.finalizedBy(mergeJars)
 }

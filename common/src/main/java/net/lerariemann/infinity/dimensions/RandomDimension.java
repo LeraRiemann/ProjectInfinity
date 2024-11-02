@@ -3,6 +3,7 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.Easterizer;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.*;
@@ -164,7 +165,7 @@ public class RandomDimension {
     NbtCompound packMcmeta() {
         NbtCompound res = new NbtCompound();
         NbtCompound pack = new NbtCompound();
-        pack.putInt("pack_format", 34);
+        pack.putInt("pack_format", 15);
         pack.putString("description", "Dimension #" + numericId);
         res.put("pack", pack);
         return res;

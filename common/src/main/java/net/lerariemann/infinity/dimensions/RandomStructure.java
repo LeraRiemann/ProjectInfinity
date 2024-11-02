@@ -29,7 +29,7 @@ public class RandomStructure {
         if (name_raw.lastIndexOf(":") < 0) name = name_raw + "_" + i;
         else name = name_raw.substring(0, name_raw.lastIndexOf(":")) + "_" + name_raw.substring(name_raw.lastIndexOf(":") + 1) + "_" + i;
         type = rawdata.getString("type");
-        if (type.isEmpty()) type = name_raw;
+        if (type.length() == 0) type = name_raw;
     }
 
     void save() {

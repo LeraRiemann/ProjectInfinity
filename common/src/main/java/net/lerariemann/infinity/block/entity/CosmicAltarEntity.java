@@ -36,11 +36,6 @@ public class CosmicAltarEntity extends BlockEntity {
         map = new HashMap<>();
     }
 
-    @Override
-    public boolean supports(BlockState state) {
-        return true;
-    }
-
     public static void serverTick(World world, BlockPos pos, BlockState state, CosmicAltarEntity be) {
         MinecraftServerAccess a = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer())));
         if(be.time == 0) {
@@ -74,8 +69,8 @@ public class CosmicAltarEntity extends BlockEntity {
     }
 
     @Override
-    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(nbt, registryLookup);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
         if (nbt.contains("time", NbtElement.INT_TYPE)) {
             time = nbt.getInt("time");
         }
@@ -90,8 +85,8 @@ public class CosmicAltarEntity extends BlockEntity {
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(nbt, registryLookup);
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
         nbt.putInt("time", this.time);
         NbtCompound mapnbt = new NbtCompound();
         for (String s : map.keySet()) {

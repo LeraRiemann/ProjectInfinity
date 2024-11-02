@@ -1,8 +1,8 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.access.Timebombable;
-import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModSounds;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.*;
@@ -81,7 +81,7 @@ public class TimeBombBlock extends Block {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient()) {
             if (world.getRegistryKey().getValue().toString().contains("infinity")) {
                 ServerWorld w = ((ServerPlayerEntity)player).getServerWorld();
@@ -92,12 +92,12 @@ public class TimeBombBlock extends Block {
                                 forEach(e -> e.remove(Entity.RemovalReason.DISCARDED));
                         return ActionResult.SUCCESS;
                     } //remove after regenerating a dimension
-                    if (player.getStackInHand(Hand.MAIN_HAND).isEmpty() && player.isSneaking()) {
+                    if (player.getStackInHand(hand).isEmpty() && player.isSneaking()) {
                         Path path = w.getServer().getSavePath(WorldSavePath.DATAPACKS).resolve(w.getRegistryKey().getValue().getPath());
                         activate(w, path);
                         world.spawnEntity(genCloud(world, pos));
                         player.increaseStat(ModStats.WORLDS_DESTROYED_STAT, 1);
-                        ModCriteria.DIMS_CLOSED.get().trigger((ServerPlayerEntity)player);
+                        ModCriteria.DIMS_CLOSED.trigger((ServerPlayerEntity)player);
                         world.setBlockState(pos, state.with(ACTIVE, true));
                         world.playSound(null, pos, ModSounds.IVORY_MUSIC_CHALLENGER_EVENT, SoundCategory.BLOCKS, 1f, 1f);
                         return ActionResult.SUCCESS;
@@ -109,7 +109,7 @@ public class TimeBombBlock extends Block {
                     } //pick up
                 }
             }
-            else if (player.getStackInHand(Hand.MAIN_HAND).isEmpty()) {
+            else if (player.getStackInHand(hand).isEmpty()) {
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
                 player.getInventory().insertStack(ModItems.TIME_BOMB_ITEM.get().getDefaultStack());
                 return ActionResult.SUCCESS;

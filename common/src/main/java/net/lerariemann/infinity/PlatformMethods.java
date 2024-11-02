@@ -3,19 +3,16 @@ package net.lerariemann.infinity;
 import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import me.basiqueevangelist.dynreg.util.RegistryUtils;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.item.ModComponentTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -37,10 +34,6 @@ public class PlatformMethods {
         throw new AssertionError();
     }
 
-    public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {
-        ServerPlayNetworking.send(entity, payload);
-    }
-
     @ExpectPlatform
     public static PacketByteBuf createPacketByteBufs() {
         throw new AssertionError();
@@ -58,7 +51,7 @@ public class PlatformMethods {
 
     @ExpectPlatform
     public static void unfreeze(Registry<?> registry) {
-        throw new AssertionError();
+        RegistryUtils.unfreeze(registry);
     }
 
     @ExpectPlatform
@@ -78,18 +71,20 @@ public class PlatformMethods {
     }
 
     public static int getBookBoxColour(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
-            if (pos != null) {
-                return posToColor(pos);
-            }
-            return 16777215;
+        if (pos != null) {
+            return posToColor(pos);
+        }
+        return 16777215;
     }
 
     public static int getKeyColor(ItemStack stack, int layer) {
-        Integer color = stack.getComponents().get(ModComponentTypes.KEY_COLOR.get());
-        if (layer == 1) {
-            return (color == null) ? 0 : color;
+        if (stack.getNbt() != null) {
+            int color = stack.getNbt().getInt("key_color");
+            if (layer == 1) {
+                return color;
+            }
         }
-        return ColorHelper.Argb.fullAlpha(0xFFFFFF);
+        return 0xFFFFFF;
     }
 
     public static int getNeitherPortalColour(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {

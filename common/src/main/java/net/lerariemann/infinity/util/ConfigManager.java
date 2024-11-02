@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.util;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
@@ -18,11 +17,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class ConfigManager {
+
     static boolean registerConfig(Path path) {
         boolean bl = false;
         String path1 = path.toString();
         String fullname = path1.substring(path1.lastIndexOf("config") + 6);
-        Path endfile = Paths.get(getConfigDir() + fullname);
+        Path endfile = Paths.get("config/" + InfinityMod.MOD_ID + fullname);
         try {
             if (!endfile.toFile().exists() && fullname.endsWith(".json")) {
                 String separator;
@@ -36,12 +36,12 @@ public class ConfigManager {
                 int i = fullname.lastIndexOf(separator);
                 if (i>0) {
                     String directory_name = fullname.substring(0, i);
-                    Files.createDirectories(Paths.get(getConfigDir()+ directory_name));
+                    Files.createDirectories(Paths.get("config/" + InfinityMod.MOD_ID + directory_name));
                 }
                 Files.copy(path, endfile);
                 bl = true;
             }
-            Path tempfile = Paths.get(getBaseConfigDir()+"infinity-temp.json");
+            Path tempfile = Paths.get("config/infinity-temp.json");
             if (endfile.toFile().exists() && fullname.endsWith(".json")) {
                 int version_old = CommonIO.getVersion(endfile.toFile());
                 Files.copy(path, tempfile, REPLACE_EXISTING);
@@ -61,12 +61,12 @@ public class ConfigManager {
         ModContainer modContainer = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
         assert modContainer != null;
         try {
-            Path path = getConfigDir();
+            Path path = Paths.get("config/" + InfinityMod.MOD_ID);
             if (!path.toFile().exists()) {
                 Files.createDirectories(path);
             }
 
-            Files.walk(modContainer.getRootPaths().getFirst().resolve("config")).forEach(p -> {
+            Files.walk(modContainer.getRootPaths().get(0).resolve("config")).forEach(p -> {
                 boolean bl = registerConfig(p);
                 if (bl && p.toString().contains("evicted_files.json")) bl2.set(true);
             });
@@ -75,24 +75,14 @@ public class ConfigManager {
         }
         if (bl2.get()) evictOldFiles();
     }
-
-    @ExpectPlatform
-    public static Path getBaseConfigDir() {
-        throw new AssertionError();
-    }
-
-    public static Path getConfigDir() {
-        return Path.of("config", InfinityMod.MOD_ID);
-    }
-
     public static void evictOldFiles() {
-        NbtCompound c = CommonIO.read(getConfigDir()+ "/util/evicted_files.json");
+        NbtCompound c = CommonIO.read("config/util/evicted_files.json");
         NbtList l = c.getList("content", NbtElement.STRING_TYPE);
         try {
             for (NbtElement e : l) {
-                Path path1 = Paths.get(getConfigDir() + e.asString());
+                Path path1 = Paths.get("config/infinity/" + e.asString());
                 if (path1.toFile().exists()) {
-                    Path path2 = Paths.get(getConfigDir() + "/evicted/" + e.asString());
+                    Path path2 = Paths.get("config/infinity/evicted/" + e.asString());
                     Files.createDirectories(path2);
                     Files.copy(path1, path2, REPLACE_EXISTING);
                     Files.delete(path1);

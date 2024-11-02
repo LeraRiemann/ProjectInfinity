@@ -53,11 +53,6 @@ public class RandomBiome {
         res.add(NbtDouble.of(random.nextDouble()));
         return res;
     }
-    public NbtList randomEntityEffectColor() {
-        NbtList res = randomDustColor();
-        res.add(NbtDouble.of(random.nextDouble()));
-        return res;
-    }
 
     NbtString randomSound(){
         return NbtString.of(PROVIDER.randomName(random, "sounds"));
@@ -119,16 +114,16 @@ public class RandomBiome {
         String particle = PROVIDER.randomName(random, "particles");
         res.putString("type", particle);
         switch(particle) {
-            case "minecraft:block", "minecraft:block_marker", "minecraft:dust_pillar", "minecraft:falling_dust" -> {
+            case "minecraft:block", "minecraft:block_marker", "minecraft:falling_dust" -> {
                 NbtCompound value = new NbtCompound();
                 value.putString("Name", PROVIDER.randomName(random, "all_blocks"));
-                res.put("block_state", value);
+                res.put("value", value);
                 return res;
             }
             case "minecraft:item" -> {
                 NbtCompound value = new NbtCompound();
-                value.putString("id", PROVIDER.randomName(random, "items"));
-                res.put("item", value);
+                value.putString("Name", PROVIDER.randomName(random, "items"));
+                res.put("value", value);
                 return res;
             }
             case "minecraft:dust" -> {
@@ -137,13 +132,9 @@ public class RandomBiome {
                 return res;
             }
             case "minecraft:dust_color_transition" -> {
-                res.put("from_color", randomDustColor());
-                res.put("to_color", randomDustColor());
+                res.put("fromColor", randomDustColor());
+                res.put("toColor", randomDustColor());
                 res.putFloat("scale", random.nextFloat());
-                return res;
-            }
-            case "minecraft:entity_effect" -> {
-                res.put("color", randomEntityEffectColor());
                 return res;
             }
             case "minecraft:sculk_charge" -> {
@@ -152,16 +143,6 @@ public class RandomBiome {
             }
             case "minecraft:shriek" -> {
                 res.putInt("delay", random.nextInt(500));
-                return res;
-            }
-            case "minecraft:vibration" -> {
-                NbtCompound destination = new NbtCompound();
-                destination.putString("type", "block");
-                NbtList pos = new NbtList();
-                for (int ii = 0; ii < 3; ii+=1) pos.add(NbtInt.of(random.nextInt(20000)));
-                destination.put("pos", pos);
-                res.put("destination", destination);
-                res.putInt("arrival_in_ticks", random.nextInt(20000));
                 return res;
             }
         }
