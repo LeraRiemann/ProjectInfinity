@@ -55,7 +55,7 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         MinecraftServer s = world.toServerWorld().getServer();
-        reg = s.getRegistryManager().get(RegistryKeys.BIOME);
+        reg = s.getRegistryManager().getOrThrow(RegistryKeys.BIOME);
         WeighedStructure<String> biomes = RandomProvider.getProvider(s).registry.get("biomes");
         String biomename = biomes != null ? biomes.getElement(world.getRandom().nextDouble()) : "minecraft:plains";
         Biome b = reg.get(Identifier.of(biomename));
@@ -176,7 +176,7 @@ public class DimensionalCreeper extends CreeperEntity implements TintableEntity 
                 for (Chunk chunk : list) {
                     chunk.populateBiomes(createBiomeSupplier(chunk, blockBox, reg.getEntry(this.getBiome())),
                             serverWorld.getChunkManager().getNoiseConfig().getMultiNoiseSampler());
-                    chunk.setNeedsSaving(true);
+                    chunk.markNeedsSaving();
                 }
                 serverWorld.getChunkManager().chunkLoadingManager.sendChunkBiomePackets(list);
             }

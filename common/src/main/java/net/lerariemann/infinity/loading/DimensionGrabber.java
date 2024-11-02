@@ -88,6 +88,7 @@ public class DimensionGrabber {
     }
 
     public static <T> RegistryOps.RegistryInfo<T> createInfo(MutableRegistry<T> registry) {
-        return new RegistryOps.RegistryInfo<>(registry.getReadOnlyWrapper(), registry.createMutableRegistryLookup(), registry.getLifecycle());
+        //TODO look into if read only wrapper can be found in 1.21.3+
+        return new RegistryOps.RegistryInfo<>(registry, registry.createMutableRegistryLookup(), registry.getLifecycle());
     }
 }
