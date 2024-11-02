@@ -93,7 +93,7 @@ public interface WarpLogic {
         int z = orig.getZ();
         if (isPosViable(x, y1, z, world)) return orig;
         int y2 = y1;
-        while (y1 > world.getBottomY() || y2 < world.getTopY()) {
+        while (y1 > world.getBottomY() || y2 < world.getTopYInclusive()) {
             y1-=1;
             if (isPosViable(x, y1, z, world)) return new BlockPos(x, y1, z);
             y2+=1;

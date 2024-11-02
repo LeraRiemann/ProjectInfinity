@@ -89,7 +89,7 @@ public class PlatformMethods {
         if (layer == 1) {
             return (color == null) ? 0 : color;
         }
-        return ColorHelper.Argb.fullAlpha(0xFFFFFF);
+        return ColorHelper.fullAlpha(0xFFFFFF);
     }
 
     public static int getNeitherPortalColour(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {

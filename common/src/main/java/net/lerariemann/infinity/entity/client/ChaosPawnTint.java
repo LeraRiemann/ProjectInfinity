@@ -38,7 +38,7 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
             }
         }
         else {
-            color = ColorHelper.Argb.fullAlpha(color);
+            color = ColorHelper.fullAlpha(color);
         }
         part.render(matrixStack, vertexConsumer, light, overlay, color);
     }
