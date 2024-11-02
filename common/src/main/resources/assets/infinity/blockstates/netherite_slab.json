@@ -4,7 +4,7 @@
       "model": "infinity:block/netherite_slab"
     },
     "type=double": {
-      "model": "infinity:block/netherite_block"
+      "model": "minecraft:block/netherite_block"
     },
     "type=top": {
       "model": "infinity:block/netherite_slab_top"
