@@ -41,13 +41,13 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class DimensionalCreeper extends CreeperEntity implements TintableEntity {
-    public static TrackedData<Integer> color = DataTracker.registerData(DimensionalCreeper.class, TrackedDataHandlerRegistry.INTEGER);
-    public static TrackedData<Float> range = DataTracker.registerData(DimensionalCreeper.class, TrackedDataHandlerRegistry.FLOAT);
-    public static TrackedData<String> biome = DataTracker.registerData(DimensionalCreeper.class, TrackedDataHandlerRegistry.STRING);
+public class ChaosCreeper extends CreeperEntity implements TintableEntity {
+    public static TrackedData<Integer> color = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.INTEGER);
+    public static TrackedData<Float> range = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.FLOAT);
+    public static TrackedData<String> biome = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.STRING);
     public Registry<Biome> reg;
 
-    public DimensionalCreeper(EntityType<? extends CreeperEntity> entityType, World world) {
+    public ChaosCreeper(EntityType<? extends CreeperEntity> entityType, World world) {
         super(entityType, world);
     }
     @Override

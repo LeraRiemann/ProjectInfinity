@@ -30,11 +30,11 @@ import org.joml.Vector3f;
 import java.util.Objects;
 import java.util.Random;
 
-public class DimensionalSlime extends SlimeEntity implements TintableEntity {
-    public static final TrackedData<BlockState> core = DataTracker.registerData(DimensionalSlime.class, TrackedDataHandlerRegistry.BLOCK_STATE);
-    public static final TrackedData<Vector3f> color = DataTracker.registerData(DimensionalSlime.class, TrackedDataHandlerRegistry.VECTOR3F);
+public class ChaosSlime extends SlimeEntity implements TintableEntity {
+    public static final TrackedData<BlockState> core = DataTracker.registerData(ChaosSlime.class, TrackedDataHandlerRegistry.BLOCK_STATE);
+    public static final TrackedData<Vector3f> color = DataTracker.registerData(ChaosSlime.class, TrackedDataHandlerRegistry.VECTOR3F);
 
-    public DimensionalSlime(EntityType<? extends DimensionalSlime> entityType, World world) {
+    public ChaosSlime(EntityType<? extends ChaosSlime> entityType, World world) {
         super(entityType, world);
     }
     @Override
@@ -145,7 +145,7 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
         this.setCore(b.getDefaultState());
     }
 
-    public static boolean canSpawn(EntityType<DimensionalSlime> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
+    public static boolean canSpawn(EntityType<ChaosSlime> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
         if (world.getDifficulty() != Difficulty.PEACEFUL && RandomProvider.getProvider(world.toServerWorld().getServer()).rule("chaosMobsEnabled")) {
             if (!(world instanceof StructureWorldAccess)) {
                 return false;

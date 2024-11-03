@@ -26,7 +26,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.LocalDifficulty;
@@ -36,11 +35,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class DimensionalSkeleton extends SkeletonEntity implements TintableEntity {
+public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     static Registry<StatusEffect> reg = Registries.STATUS_EFFECT;
-    private static final TrackedData<String> effect = DataTracker.registerData(DimensionalSkeleton.class, TrackedDataHandlerRegistry.STRING);
-    private static final TrackedData<Integer> color = DataTracker.registerData(DimensionalSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Integer> duration = DataTracker.registerData(DimensionalSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<String> effect = DataTracker.registerData(ChaosSkeleton.class, TrackedDataHandlerRegistry.STRING);
+    private static final TrackedData<Integer> color = DataTracker.registerData(ChaosSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> duration = DataTracker.registerData(ChaosSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
     public static Map<String, String> effect_lookup = Map.ofEntries(
             Map.entry("minecraft:bad_omen", "minecraft:hero_of_the_village"),
             Map.entry("minecraft:darkness", "minecraft:night_vision"),
@@ -66,7 +65,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
             Map.entry("minecraft:speed", "minecraft:slowness"),
             Map.entry("minecraft:strength", "minecraft:weakness"));
 
-    public DimensionalSkeleton(EntityType<? extends SkeletonEntity> entityType, World world) {
+    public ChaosSkeleton(EntityType<? extends SkeletonEntity> entityType, World world) {
         super(entityType, world);
     }
     @Override
@@ -119,8 +118,8 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
                 itemStack.decrement(1);
             }
             if (player.getWorld().getRandom().nextFloat() < 0.5) {
-                DimensionalSkeleton newSkeleton;
-                if (!this.getWorld().isClient() && (newSkeleton = ModEntities.DIMENSIONAL_SKELETON.get().create(this.getWorld())) != null) {
+                ChaosSkeleton newSkeleton;
+                if (!this.getWorld().isClient() && (newSkeleton = ModEntities.CHAOS_SKELETON.get().create(this.getWorld())) != null) {
                     ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
                     this.discard();
                     ModEntities.copy(this, newSkeleton);

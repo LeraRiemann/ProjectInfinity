@@ -99,7 +99,7 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         this.goalSelector.add(0, new SwimGoal(this));
         this.targetSelector.add(1, new RevengeGoal(this).setGroupRevenge());
         this.goalSelector.add(2, new MeleeAttackGoal(this, 1.0, false));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, DimensionalSlime.class, true));
+        this.targetSelector.add(3, new ActiveTargetGoal<>(this, ChaosSlime.class, true));
         this.targetSelector.add(3, new UniversalAngerGoal<>(this, true));
         this.goalSelector.add(5, new EatGrassGoal(this));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
