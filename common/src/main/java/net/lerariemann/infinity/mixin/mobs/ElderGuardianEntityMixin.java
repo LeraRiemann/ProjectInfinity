@@ -20,7 +20,7 @@ public class ElderGuardianEntityMixin extends GuardianEntity {
     @Inject(method = "<init>", at = @At("TAIL"))
     void injected(EntityType<? extends ElderGuardianEntity> entityType, World world, CallbackInfo ci) {
         if (InfinityMod.isInfinity(world)) {
-            ((MobEntityAccess)this).projectInfinity$setPersistent(false);
+            ((MobEntityAccess)this).infinity$setPersistent(false);
         }
     }
 }

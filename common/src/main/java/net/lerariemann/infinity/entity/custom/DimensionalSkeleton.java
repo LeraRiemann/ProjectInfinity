@@ -187,12 +187,13 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     }
 
     public static ItemStack setPotion(ItemStack stack, int color, String effect, int duration) {
-        NbtCompound poteffect = new NbtCompound();
-        poteffect.putString("id", effect);
-        poteffect.putInt("duration", duration);
+        NbtCompound potionEffect = new NbtCompound();
+        potionEffect.putString("id", effect);
+        potionEffect.putInt("duration", duration);
         List<StatusEffectInstance> customEffects = new ArrayList<>();
-        customEffects.add(StatusEffectInstance.fromNbt(poteffect));
+        customEffects.add(StatusEffectInstance.fromNbt(potionEffect));
         stack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Optional.empty(), Optional.of(color), customEffects));
+        stack.set(DataComponentTypes.ITEM_NAME, Text.translatable("potion.infinity.skeleton"));
         return stack;
     }
 
@@ -213,9 +214,9 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     @Override
     protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
         super.dropEquipment(world, source, causedByPlayer);
-        ItemStack w = source.getWeaponStack();
+        ItemStack weapon = source.getWeaponStack();
         RegistryEntry<Enchantment> looting = world.getServer().getRegistryManager().get(RegistryKeys.ENCHANTMENT).entryOf(Enchantments.LOOTING);
-        int lootingLevel = w == null ? 0 : w.getEnchantments().getLevel(looting);
+        int lootingLevel = weapon == null ? 0 : weapon.getEnchantments().getLevel(looting);
         int count = world.random.nextBetween(0, 2 + lootingLevel);
         this.dropStack(getProjectileType().copyWithCount(count));
     }
