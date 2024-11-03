@@ -10,11 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -22,8 +18,7 @@ import static java.nio.file.Files.walk;
 
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
-    public Map<String, WeighedStructure<NbtElement>> blockRegistry;
-    public Map<String, WeighedStructure<NbtElement>> extraRegistry;
+    public Map<String, WeighedStructure<NbtElement>> compoundRegistry;
     public Map<String, NbtList> listRegistry;
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
@@ -50,8 +45,7 @@ public class RandomProvider {
     public RandomProvider(String configpath) {
         configPath = configpath;
         registry = new HashMap<>();
-        blockRegistry = new HashMap<>();
-        extraRegistry = new HashMap<>();
+        compoundRegistry = new HashMap<>();
         listRegistry = new HashMap<>();
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
@@ -63,12 +57,12 @@ public class RandomProvider {
     void register_all() {
         read_root_config();
         String path = configPath + "modular";
-        register_category(registry, path, "misc", CommonIO::weighedListReader);
-        register_category(registry, path, "features", CommonIO::weighedListReader);
-        register_category(registry, path, "vegetation", CommonIO::weighedListReader);
+        register_category(registry, path, "misc", CommonIO::stringListReader);
+        register_category(registry, path, "features", CommonIO::stringListReader);
+        register_category(registry, path, "vegetation", CommonIO::stringListReader);
         register_blocks(path);
-        register_category(extraRegistry, path, "extra", CommonIO::blockListReader);
-        register_category(registry, path, "mobs", CommonIO::weighedListReader);
+        register_category(compoundRegistry, path, "extra", CommonIO::blockListReader);
+        register_category(registry, path, "mobs", CommonIO::stringListReader);
         register_category(listRegistry, path, "lists", CommonIO::nbtListReader);
         register_category_hardcoded(configPath + "hardcoded");
         noise = CommonIO.read(configPath + "util/noise.json");
@@ -119,39 +113,8 @@ public class RandomProvider {
     }
 
     void genCorePack() {
-        extraRegistry.get("palettes").keys.forEach(e -> {
-            if (!(Paths.get(savingPath + "/data/" + InfinityMod.MOD_ID + "/structures/"
-                    + ((NbtCompound)e).getString("name") + ".nbt")).toFile().exists()) {
-                savePortalFromPalette((NbtCompound)e);
-            }
-        });
         saveTrees();
         if (!(Paths.get(savingPath + "/pack.mcmeta")).toFile().exists()) savePackMcmeta();
-    }
-
-    void savePortalFromPalette(NbtCompound rawdata) {
-        String name = rawdata.getString("name");
-        NbtCompound datanbt = CommonIO.read(configPath + "util/portal/main.json");
-        NbtCompound moredata = CommonIO.readCarefully(configPath +
-                        "util/portal/palette_" + (rawdata.getBoolean("properties") ? "wood" : "stone") + ".json",
-                rawdata.getString("plank"),
-                rawdata.getString("log"),
-                rawdata.getString("stair"),
-                rawdata.getString("stair"));
-        datanbt.put("palette", moredata.get("palette"));
-        String path = savingPath + "/data/" + InfinityMod.MOD_ID + "/structures";
-        Path dir = Paths.get(path);
-        Path file = Paths.get(path + "/" + name + ".nbt");
-        List<String> lines = new ArrayList<>();
-        try {
-            Files.createDirectories(dir);
-            Files.write(file, lines, StandardCharsets.UTF_8);
-            NbtIo.write(datanbt, new File(file.toUri()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        CommonIO.write(CommonIO.readCarefully(configPath + "util/portal/pool.json", name),
-                savingPath + "/data/" + InfinityMod.MOD_ID + "/worldgen/template_pool", name + ".json");
     }
 
     void savePackMcmeta() {
@@ -174,11 +137,11 @@ public class RandomProvider {
         Map<String, WeighedStructure<NbtElement>> temp = new HashMap<>();
         register_category(temp, path, "blocks", CommonIO::blockListReader);
         if (temp.containsKey("blocks")) {
-            WeighedStructure<NbtElement> allblocks = new WeighedStructure<>();
-            WeighedStructure<NbtElement> blocksfeatures = new WeighedStructure<>();
-            WeighedStructure<NbtElement> topblocks = new WeighedStructure<>();
-            WeighedStructure<NbtElement> fullblocks = new WeighedStructure<>();
-            WeighedStructure<NbtElement> fullblockswg = new WeighedStructure<>();
+            WeighedStructure<NbtElement> allBlocks = new WeighedStructure<>();
+            WeighedStructure<NbtElement> blocksFeatures = new WeighedStructure<>();
+            WeighedStructure<NbtElement> topBlocks = new WeighedStructure<>();
+            WeighedStructure<NbtElement> fullBlocks = new WeighedStructure<>();
+            WeighedStructure<NbtElement> fullBlocksWG = new WeighedStructure<>();
             for (int i = 0; i < temp.get("blocks").keys.size(); i++) {
                 NbtCompound e = (NbtCompound)(temp.get("blocks").keys.get(i));
                 boolean isfull, istop, isfloat, islaggy;
@@ -188,19 +151,19 @@ public class RandomProvider {
                 istop = check(e, "top", isfull);
                 istop = istop || isfloat;
                 Double w = temp.get("blocks").weights.get(i);
-                allblocks.add(e, w);
-                if (isfull) fullblocks.add(e, w);
-                if (istop && !islaggy) topblocks.add(e, w);
-                if (isfloat) blocksfeatures.add(e, w);
-                if (isfull && isfloat && !islaggy) fullblockswg.add(e, w);
+                allBlocks.add(e, w);
+                if (isfull) fullBlocks.add(e, w);
+                if (istop && !islaggy) topBlocks.add(e, w);
+                if (isfloat) blocksFeatures.add(e, w);
+                if (isfull && isfloat && !islaggy) fullBlocksWG.add(e, w);
             }
-            blockRegistry.put("all_blocks", allblocks);
-            blockRegistry.put("blocks_features", blocksfeatures);
-            blockRegistry.put("full_blocks", fullblocks);
-            blockRegistry.put("full_blocks_worldgen", fullblockswg);
-            blockRegistry.put("top_blocks", topblocks);
+            compoundRegistry.put("all_blocks", allBlocks);
+            compoundRegistry.put("blocks_features", blocksFeatures);
+            compoundRegistry.put("full_blocks", fullBlocks);
+            compoundRegistry.put("full_blocks_worldgen", fullBlocksWG);
+            compoundRegistry.put("top_blocks", topBlocks);
             temp.keySet().forEach(a -> {
-                if (!a.equals("blocks")) blockRegistry.put(a, temp.get(a));
+                if (!a.equals("blocks")) compoundRegistry.put(a, temp.get(a));
             });
         }
     }
@@ -234,7 +197,7 @@ public class RandomProvider {
                 if (fullname.endsWith(".json")) {
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
                     name = name.substring(name.lastIndexOf('\\') + 1);
-                    if (!name.equals("none")) registry.put(name, CommonIO.weighedListReader(fullname));
+                    if (!name.equals("none")) registry.put(name, CommonIO.stringListReader(fullname));
                 }
             });
         } catch (IOException e) {
@@ -282,7 +245,7 @@ public class RandomProvider {
     public String randomName(Random random, String key) {
         switch (key) {
             case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
-                return blockElementToName(blockRegistry.get(key).getRandomElement(random));
+                return blockElementToName(compoundRegistry.get(key).getRandomElement(random));
             }
             default -> {
                 return registry.get(key).getRandomElement(random);
@@ -291,8 +254,8 @@ public class RandomProvider {
     }
 
     public NbtCompound randomBlock(Random random, String key) {
-        if (blockRegistry.containsKey(key)) {
-            NbtElement compound = blockRegistry.get(key).getRandomElement(random);
+        if (compoundRegistry.containsKey(key)) {
+            NbtElement compound = compoundRegistry.get(key).getRandomElement(random);
             if (compound instanceof NbtCompound) return ((NbtCompound)compound);
             else return Block(compound.asString());
         }
@@ -302,7 +265,7 @@ public class RandomProvider {
     }
 
     public NbtCompound randomFluid(Random random) {
-        NbtElement compound = blockRegistry.get("fluids").getRandomElement(random);
+        NbtElement compound = compoundRegistry.get("fluids").getRandomElement(random);
         if (compound instanceof NbtCompound) return ((NbtCompound)compound);
         else return Fluid(compound.asString());
     }
@@ -312,7 +275,7 @@ public class RandomProvider {
     }
 
     public NbtCompound randomPreset(Random random, String key) {
-        NbtElement list = extraRegistry.get("color_presets").getRandomElement(random);
+        NbtElement list = compoundRegistry.get("color_presets").getRandomElement(random);
         NbtCompound res = new NbtCompound();
         if (list instanceof NbtList lst) {
             res.putString("type", key);

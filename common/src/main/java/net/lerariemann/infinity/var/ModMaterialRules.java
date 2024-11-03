@@ -51,7 +51,7 @@ public class ModMaterialRules {
 
         @Override
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
-            return new RandomBlockStateRule(PROVIDER.blockRegistry.get("full_blocks_worldgen"));
+            return new RandomBlockStateRule(PROVIDER.compoundRegistry.get("full_blocks_worldgen"));
         }
     }
     public static class Library implements MaterialRules.BlockStateRule

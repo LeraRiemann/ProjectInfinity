@@ -127,7 +127,7 @@ public class CommonIO {
         }
     }
 
-    public static WeighedStructure<String> weighedListReader(String path) {
+    public static WeighedStructure<String> stringListReader(String path) {
         NbtCompound base = read(path);
         WeighedStructure<String> res = new WeighedStructure<>();
         NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
@@ -154,7 +154,7 @@ public class CommonIO {
         return new NbtList();
     }
 
-    public static WeighedStructure<String> weighedListReader(String path, String subpath) {
+    public static WeighedStructure<String> stringListReader(String path, String subpath) {
         WeighedStructure<String> res = new WeighedStructure<>();
         for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
             NbtList list = _extractElements(path1, subpath);
