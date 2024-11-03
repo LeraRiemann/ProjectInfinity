@@ -112,13 +112,6 @@ The list of fluids can also be found under the Blocks category. Though adding a 
 ```
 where Name is the block name.
 
-#### Mobs
-The mobs subdirectory contains the list of all mobs (mobs.json, used when setting the mob in dungeon spawners) and the smaller lists of mobs separated by category. The latter are used in regular mob spawning.
-
-In Minecraft, different groups of mobs are spawned by different algorithms and share different mob caps. For example, hostile mobs are spawned every tick, while passive mobs - much less frequently. The generator needs to know which mobs to spawn in which category, that's why the lists are separated.
-
-Don't be afraid about mobs that don't use the mobcap (i.e. shulkers) being in here, there are additional measures to control their population taken already.
-
 #### Features
 **Features** are things like trees, ore veins, underwater clay disks, flower patches, monster rooms etc. Infinite Dimensions can generate its own randomized features, but it can also use predefined features drawn from configs.
 
@@ -130,6 +123,10 @@ This does not apply to flowers, grass and seagrass: the generator picks one entr
 
 #### Extra
 **Color presets:** currently, these are only used to generate shapes (big floating cubes, spheres etc.). If a shape is decided to be coloured (infinity.json > rootChances > features_rules > colourful_shapes root chance), the colouring rules for it are generated based on a selection of blocks drawn randomly from `blockpresets/color_presets.json`.
+
+**Mobs:** the list of all mobs tagged with their spawn groups. In Minecraft, different groups of mobs are spawned by different algorithms
+and share different mob caps; the generator needs to know which mobs to spawn in which category, and that's what the tags are for.
+Don't be afraid about mobs that don't use the mob cap (i.e. shulkers) being in here, there are additional measures to control their population taken already.
 
 **Structures:** here is where the structure data is stored.
 

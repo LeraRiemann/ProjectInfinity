@@ -4,13 +4,16 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class AntBlock extends HorizontalFacingBlock {
     public static final MapCodec<AntBlock> CODEC = createCodec(AntBlock::new);
@@ -25,12 +28,46 @@ public class AntBlock extends HorizontalFacingBlock {
         return CODEC;
     }
 
+    boolean inverseExists(Block down) {
+        String s = Registries.BLOCK.getEntry(down).getIdAsString();
+        if (s.contains("black")) {
+            return Registries.BLOCK.containsId(Identifier.of(s.replace("black", "white")));
+        }
+        if (s.contains("white")) {
+            return Registries.BLOCK.containsId(Identifier.of(s.replace("white", "black")));
+        }
+        return false;
+    }
+
+    Block recolor(Block down, boolean toWhite) {
+        String s = Registries.BLOCK.getEntry(down).getIdAsString();
+        if (s.contains("black")) {
+            return toWhite ? Registries.BLOCK.get(Identifier.of(s.replace("black", "white"))) : down;
+        }
+        if (s.contains("white")) {
+            return toWhite ? down : Registries.BLOCK.get(Identifier.of(s.replace("white", "black")));
+        }
+        return null;
+    }
+
+    @Nullable
+    Clockwiseness getCW(Block down) {
+        String s = Registries.BLOCK.getEntry(down).getIdAsString();
+        if (s.contains("black")) {
+            return Clockwiseness.CCW;
+        }
+        if (s.contains("white")) {
+            return Clockwiseness.CW;
+        }
+        return null;
+    }
+
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random) {
         super.scheduledTick(state, world, pos, random);
         Block down = world.getBlockState(pos.down()).getBlock();
-        if ((down == Blocks.WHITE_CONCRETE) || (down == Blocks.BLACK_CONCRETE)) {
-            this.move(state, world, pos);
+        if (inverseExists(down)) {
+            this.safeMove(state, world, pos);
         }
     }
 
@@ -40,26 +77,26 @@ public class AntBlock extends HorizontalFacingBlock {
     }
 
     private ActionResult move(BlockState blockState, World world, BlockPos pos) {
-        Clockwiseness clockwiseness;
-        Block down = world.getBlockState(pos.down()).getBlock();
-        if (down == Blocks.WHITE_CONCRETE) {
-            clockwiseness = Clockwiseness.CW;
-        } else if (down == Blocks.BLACK_CONCRETE) {
-            clockwiseness = Clockwiseness.CCW;
-        }
-        else return ActionResult.FAIL;
+        if (inverseExists(world.getBlockState(pos.down()).getBlock())) return safeMove(blockState, world, pos);
+        return ActionResult.FAIL;
+    }
+
+    private ActionResult safeMove(BlockState blockState, World world, BlockPos pos) {
+        BlockState down = world.getBlockState(pos.down());
+        Clockwiseness clockwiseness = getCW(down.getBlock());
+        if (clockwiseness == null) return ActionResult.FAIL;
         Direction direction = blockState.get(FACING);
         Direction direction2 = clockwiseness == Clockwiseness.CW ? direction.rotateYClockwise() : direction.rotateYCounterclockwise();
         BlockPos blockPos = pos.offset(direction2);
         if (world.canSetBlock(blockPos)) {
             switch (clockwiseness) {
                 case CW:
-                    world.setBlockState(pos.down(), Blocks.BLACK_CONCRETE.getDefaultState(), 19);
+                    world.setBlockState(pos.down(), recolor(down.getBlock(), false).getStateWithProperties(down), 19);
                     world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
                     world.setBlockState(blockPos, blockState.with(FACING, direction2), 3);
                     break;
                 case CCW:
-                    world.setBlockState(pos.down(), Blocks.WHITE_CONCRETE.getDefaultState(), 19);
+                    world.setBlockState(pos.down(), recolor(down.getBlock(), true).getStateWithProperties(down), 19);
                     world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
                     world.setBlockState(blockPos, blockState.with(FACING, direction2), 3);
             }
