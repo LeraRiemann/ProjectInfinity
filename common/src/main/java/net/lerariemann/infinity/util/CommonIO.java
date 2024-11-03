@@ -55,7 +55,7 @@ public class CommonIO {
             int i = content.indexOf("infinity_version");
             int end = content.indexOf(",", i);
             if (end == -1) {
-                end = content.indexOf("}", i);
+                end = content.indexOf("\n", i);
             }
             return Integer.parseInt(content.substring(content.indexOf(" ", i)+1, end).trim());
         } catch (IOException e) {

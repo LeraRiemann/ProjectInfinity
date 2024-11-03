@@ -65,7 +65,7 @@ public class RandomProvider {
         register_category(registry, path, "mobs", CommonIO::stringListReader);
         register_category(listRegistry, path, "lists", CommonIO::nbtListReader);
         register_category_hardcoded(configPath + "hardcoded");
-        noise = CommonIO.read(configPath + "util/noise.json");
+        noise = CommonIO.read(InfinityMod.utilPath + "/noise.json");
     }
 
     void read_root_config() {
@@ -90,7 +90,7 @@ public class RandomProvider {
     }
 
     public NbtCompound notRandomTree(String tree, String block) {
-        return CommonIO.readCarefully(configPath + "/util/placements/tree_vanilla.json", tree, block);
+        return CommonIO.readCarefully(InfinityMod.utilPath + "/placements/tree_vanilla.json", tree, block);
     }
 
     void saveTrees() {

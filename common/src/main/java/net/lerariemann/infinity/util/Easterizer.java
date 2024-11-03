@@ -24,7 +24,7 @@ public class Easterizer {
         optionmap = new HashMap<>();
         colormap = new HashMap<>();
         try {
-            walk(Paths.get(prov.configPath).resolve("util").resolve("easter")).forEach(p -> {
+            walk(Paths.get(prov.configPath).resolve("easter")).forEach(p -> {
                 String fullname = p.toString();
                 if (p.toFile().isFile() && !fullname.endsWith("_type.json")) {
                     String name = p.getFileName().toString();
