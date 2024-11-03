@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.mixin.mobs.passive;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.SheepEntity;
@@ -22,7 +23,7 @@ public abstract class SheepEntityMixin {
         if (world.toServerWorld().getRegistryKey().getValue().toString().contains("infinity:classic")) {
             setColor(DyeColor.WHITE);
         }
-        else if (world.toServerWorld().getRegistryKey().getValue().toString().contains("infinity")) {
+        else if (InfinityMod.isInfinity(world.toServerWorld())) {
             setColor(DyeColor.byId(world.getRandom().nextInt(16)));
         }
     }
