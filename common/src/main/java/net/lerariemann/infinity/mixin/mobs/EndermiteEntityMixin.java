@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.mixin.mobs;
 
+import net.lerariemann.infinity.access.SpawnableInterface;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.*;
@@ -17,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EndermiteEntityMixin {
     @Inject(method = "canSpawn", at = @At("HEAD"), cancellable = true)
     private static void injected(EntityType<EndermiteEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
-        if (world.getBiome(pos).getKey().isPresent() && world.getBiome(pos).getKey().get().getValue().toString().contains("infinity")) {
+        if (SpawnableInterface.isBiomeInfinity(world, pos)) {
             cir.setReturnValue(HostileEntity.canMobSpawn(type, world, spawnReason, pos, random) && world.getDifficulty() != Difficulty.PEACEFUL && HostileEntity.isSpawnDark((ServerWorldAccess)world, pos, random));
         }
     }
