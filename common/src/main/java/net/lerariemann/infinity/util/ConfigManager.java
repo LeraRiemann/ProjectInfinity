@@ -18,11 +18,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class ConfigManager {
-    static boolean registerConfig(Path path) {
+    static boolean registerConfig(Path fromPath, Path toDirectory) {
         boolean bl = false;
-        String path1 = path.toString();
+        String path1 = fromPath.toString();
         String fullname = path1.substring(path1.lastIndexOf("config") + 6);
-        Path endfile = Paths.get(getConfigDir() + fullname);
+        Path endfile = Paths.get(toDirectory + fullname);
         try {
             if (!endfile.toFile().exists() && fullname.endsWith(".json")) {
                 String separator;
@@ -38,12 +38,12 @@ public class ConfigManager {
                     String directory_name = fullname.substring(0, i);
                     Files.createDirectories(Paths.get(getConfigDir()+ directory_name));
                 }
-                Files.copy(path, endfile);
+                Files.copy(fromPath, endfile);
                 bl = true;
             }
             if (endfile.toFile().exists() && fullname.endsWith(".json")) {
-                if (compareVersions(endfile, path)) {
-                    Files.copy(path, endfile, REPLACE_EXISTING);
+                if (compareVersions(endfile, fromPath)) {
+                    Files.copy(fromPath, endfile, REPLACE_EXISTING);
                     bl = true;
                 }
             }
@@ -70,10 +70,8 @@ public class ConfigManager {
             }
 
             Files.walk(InfinityMod.rootResPath.resolve("config")).forEach(p -> {
-                if (!p.toString().contains("util")) {
-                    boolean bl = registerConfig(p);
-                    if (bl && p.toString().contains("evicted_files.json")) bl2.set(true);
-                }
+                boolean bl = registerConfig(p, getConfigDir());
+                if (bl && p.toString().contains("evicted_files.json")) bl2.set(true);
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -85,7 +83,7 @@ public class ConfigManager {
         File invlock = InfinityMod.invocationLock.toFile();
         if (invlock.exists()) {
             try {
-                if (compareVersions(InfinityMod.invocationLock, InfinityMod.utilPath.resolve( "invocation.lock"))) {
+                if (compareVersions(InfinityMod.invocationLock, InfinityMod.rootResPath.resolve( "config/.util/invocation.lock"))) {
                     LogManager.getLogger().info("Deleting outdated modular configs");
                     Files.walk(getConfigDir().resolve("modular")).forEach(p -> {
                         if (p.toFile().isFile()) {
@@ -114,7 +112,7 @@ public class ConfigManager {
 
     public static void evictOldFiles() {
         LogManager.getLogger().info("Evicting old files");
-        NbtCompound c = CommonIO.read(getConfigDir() + "/hardcoded/evicted_files.json");
+        NbtCompound c = CommonIO.read(InfinityMod.utilPath + "/evicted_files.json");
         NbtList l = c.getList("content", NbtElement.STRING_TYPE);
         try {
             for (NbtElement e : l) {

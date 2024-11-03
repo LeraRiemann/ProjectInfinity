@@ -24,12 +24,11 @@ public class InfinityMod {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
 	public static Path rootResPath;
-	public static Path utilPath;
+	public static Path utilPath = Path.of("config/infinity/.util");
 	static {
 		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
 		assert mc != null;
 		rootResPath = mc.getRootPaths().getFirst();
-		utilPath = rootResPath.resolve("config/util");
 	}
 
     public static Identifier getId(String value){
