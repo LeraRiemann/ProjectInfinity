@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.item;
 
+import dev.architectury.core.item.ArchitecturySpawnEggItem;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -10,8 +11,6 @@ import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -33,12 +32,10 @@ public class ModItems {
     public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM  = registerSimpleBlockItem(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM = registerSimpleBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR);
     public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
-
-    public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = registerSpawnEgg("chaos_pawn_spawn_egg", ModEntities.CHAOS_PAWN.get(), 0, 0xFFFFFF);
-    public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = registerSpawnEgg("chaos_creeper_spawn_egg", ModEntities.CHAOS_CREEPER.get(), 0x91BD59, 0x78A7FF);
-    public static final RegistrySupplier<Item> CHAOS_SKELETON_SPAWN_EGG = registerSpawnEgg("chaos_skeleton_spawn_egg", ModEntities.CHAOS_SKELETON.get(), 0xF3CFB9, 0x87A363);
-    public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = registerSpawnEgg("chaos_slime_spawn_egg", ModEntities.CHAOS_SLIME.get(), 0xAA77DD, 0xFF66FF);
-
+    public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0, 0xFFFFFF, createSpawnEggSettings("chaos_pawn_spawn_egg")));
+    public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = ITEMS.register("chaos_creeper_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_CREEPER, 0x91BD59, 0x78A7FF, createSpawnEggSettings("chaos_creeper_spawn_egg")));
+    public static final RegistrySupplier<Item> CHAOS_SKELETON_SPAWN_EGG = ITEMS.register("chaos_skeleton_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_SKELETON, 0xF3CFB9, 0x87A363, createSpawnEggSettings("chaos_skeleton_spawn_egg")));
+    public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = ITEMS.register("chaos_slime_spawn_egg",  () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME, 0xAA77DD, 0xFF66FF, createSpawnEggSettings("chaos_slime_spawn_egg")));
 
     public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {
         return ITEMS.register(block.getId(), () -> new BlockItem(block.get(), settings));
@@ -90,12 +87,12 @@ public class ModItems {
         }
     }
 
-    public static RegistrySupplier<Item> registerSpawnEgg(String id, EntityType<? extends MobEntity> type, int primary, int secondary) {
-        Item.Settings settings = new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
-        return ITEMS.register(id, () -> new SpawnEggItem(type, primary, secondary, settings));
+    public static Item.Settings createSpawnEggSettings(String id) {
+        return new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
     }
 
     public static void registerModItems() {
+
         ITEMS.register();
     }
 
