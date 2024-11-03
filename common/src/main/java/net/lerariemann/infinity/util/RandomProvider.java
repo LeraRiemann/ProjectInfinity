@@ -4,9 +4,11 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 
@@ -20,7 +22,6 @@ public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
     public Map<String, WeighedStructure<NbtElement>> blockRegistry;
     public Map<String, WeighedStructure<NbtElement>> extraRegistry;
-    public Map<String, NbtList> listRegistry;
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
     public Map<String, Integer> gameRulesInt;
@@ -34,7 +35,7 @@ public class RandomProvider {
     public Easterizer easterizer;
 
     public static RandomProvider getProvider(MinecraftServer server) {
-        return ((MinecraftServerAccess)(server)).projectInfinity$getDimensionProvider();
+        return ((MinecraftServerAccess)(server)).infinity$getDimensionProvider();
     }
 
     public RandomProvider(String configpath, String savingpath) {
@@ -48,7 +49,6 @@ public class RandomProvider {
         registry = new HashMap<>();
         blockRegistry = new HashMap<>();
         extraRegistry = new HashMap<>();
-        listRegistry = new HashMap<>();
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
         gameRulesInt = new HashMap<>();
@@ -65,9 +65,8 @@ public class RandomProvider {
         register_blocks(path);
         register_category(extraRegistry, path, "extra", CommonIO::blockListReader);
         register_category(registry, path, "mobs", CommonIO::weighedListReader);
-        register_category(listRegistry, path, "lists", CommonIO::nbtListReader);
         register_category_hardcoded(configPath + "hardcoded");
-        noise = CommonIO.read(configPath + "util/noise.json");
+        noise = CommonIO.read(InfinityMod.utilPath + "/noise.json");
     }
 
     void read_root_config() {
@@ -92,7 +91,7 @@ public class RandomProvider {
     }
 
     public NbtCompound notRandomTree(String tree, String block) {
-        return CommonIO.readCarefully(configPath + "/util/placements/tree_vanilla.json", tree, block);
+        return CommonIO.readCarefully(InfinityMod.utilPath + "/placements/tree_vanilla.json", tree, block);
     }
 
     void saveTrees() {
@@ -226,8 +225,9 @@ public class RandomProvider {
 
     public NbtCompound blockToProvider(NbtCompound block, Random random) {
         NbtCompound res = new NbtCompound();
-        boolean bl = listRegistry.get("rotatable_blocks").contains(NbtString.of(block.getString("Name"))) && roll(random, "rotate_blocks");
-        res.putString("type", bl ? "minecraft:rotated_block_provider" : "minecraft:simple_state_provider");
+        boolean isRotatable = Registries.BLOCK.get(Identifier.of(block.getString("Name"))).getDefaultState().getProperties().contains(Properties.AXIS);
+        res.putString("type", isRotatable && roll(random, "rotate_blocks") ?
+                "minecraft:rotated_block_provider" : "minecraft:simple_state_provider");
         res.put("state", block);
         return res;
     }

@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.block.custom;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.item.ModItems;
@@ -63,7 +64,7 @@ public class TimeBombBlock extends Block {
     }
 
     void activate(ServerWorld world, Path path) {
-        ((Timebombable)world).projectInfinity$timebomb(1);
+        ((Timebombable)world).infinity$timebomb(1);
         try {
             FileUtils.deleteDirectory(path.toFile());
         } catch (IOException ignored) {
@@ -83,9 +84,9 @@ public class TimeBombBlock extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient()) {
-            if (world.getRegistryKey().getValue().toString().contains("infinity")) {
+            if (InfinityMod.isInfinity(world)) {
                 ServerWorld w = ((ServerPlayerEntity)player).getServerWorld();
-                if (((Timebombable)w).projectInfinity$isTimebombed() == 0) {
+                if (((Timebombable)w).infinity$isTimebombed() == 0) {
                     if (state.get(ACTIVE)) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
                         world.getEntitiesByType(TypeFilter.instanceOf(AreaEffectCloudEntity.class), Box.of(pos.toCenterPos(), 1.0, 1.0, 1.0), Entity::isAlive).

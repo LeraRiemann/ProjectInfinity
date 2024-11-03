@@ -1,6 +1,39 @@
 {
-  "infinity_version": 2000001,
-  "easter-color": 65280,
+  "infinity_version": 2000003,
+  "easter-options": {
+    "portal_color": 255,
+    "shader": {
+      "targets": [
+        "swap"
+      ],
+      "passes": [
+        {
+          "name": "color_convolve",
+          "intarget": "minecraft:main",
+          "outtarget": "swap",
+          "uniforms": [
+            {
+              "name": "RedMatrix",
+              "values": [ 0.0, 0.0, 0.0 ]
+            },
+            {
+              "name": "GreenMatrix",
+              "values": [ 0.0, 0.0, 0.0 ]
+            },
+            {
+              "name": "BlueMatrix",
+              "values": [ 1.0, 1.0, 1.0 ]
+            }
+          ]
+        },
+        {
+          "name": "blit",
+          "intarget": "swap",
+          "outtarget": "minecraft:main"
+        }
+      ]
+    }
+  },
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 25,
@@ -230,6 +263,6 @@
   },
   "biome_source": {
     "type": "fixed",
-    "biome": "infinity:slime_plains"
+    "biome": "minecraft:forest"
   }
 }

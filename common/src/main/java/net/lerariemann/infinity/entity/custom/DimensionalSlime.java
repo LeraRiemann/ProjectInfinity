@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
+import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -143,7 +144,7 @@ public class DimensionalSlime extends SlimeEntity implements TintableEntity {
     }
 
     public static boolean canSpawn(EntityType<DimensionalSlime> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        if (world.getDifficulty() != Difficulty.PEACEFUL && RandomProvider.getProvider(world.toServerWorld().getServer()).rule("chaosMobsEnabled")) {
+        if (world.getDifficulty() != Difficulty.PEACEFUL && ModEntities.chaosMobsEnabled(world)) {
             if (!(world instanceof StructureWorldAccess)) {
                 return false;
             }

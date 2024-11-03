@@ -16,17 +16,17 @@ public abstract class DimensionTypeMixin implements InfinityOptionsAccess {
     @ModifyArg(method = "getSkyAngle", at = @At(value="INVOKE", target="Lnet/minecraft/util/math/MathHelper;fractionalPart(D)D"), index = 0)
     private double injected(double value) {
         try {
-            double timescale = projectInfinity$getInfinityOptions().getTimeScale();
+            double timescale = infinity$getOptions().getTimeScale();
             return timescale*(value + 0.25) - 0.25;
         } catch (Exception e) {
             return value;
         }
     }
-    public InfinityOptions projectInfinity$getInfinityOptions() {
+    public InfinityOptions infinity$getOptions() {
         return infinity$options;
     }
     @Override
-    public void projectInfinity$setInfinityOptions(InfinityOptions options) {
+    public void infinity$setOptions(InfinityOptions options) {
         infinity$options = options;
     }
 }

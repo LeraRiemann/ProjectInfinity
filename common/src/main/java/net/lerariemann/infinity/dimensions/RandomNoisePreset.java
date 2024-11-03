@@ -28,7 +28,7 @@ public class RandomNoisePreset {
         NbtCompound data = new NbtCompound();
         type_alike = dim.type_alike;
         String typeshort = type_alike.substring(type_alike.lastIndexOf(":") + 1);
-        if (!dim.isNotOverworld()) {
+        if (dim.isOverworldLike()) {
             noise_router = typeshort;
             surface_rule = spawn_target = "overworld";
             data.putBoolean("aquifers_enabled", true);
@@ -49,7 +49,7 @@ public class RandomNoisePreset {
         data.putInt("sea_level", parent.sea_level);
         data.put("noise", noise(dim));
         data.put("noise_router", getRouter(noise_router));
-        data.put("spawn_target", CommonIO.read(PROVIDER.configPath + "util/spawn_target/" + spawn_target + ".json").get("spawn_target"));
+        data.put("spawn_target", CommonIO.read(InfinityMod.utilPath + "/spawn_target/" + spawn_target + ".json").get("spawn_target"));
         data.put("surface_rule", buildSurfaceRule());
         CommonIO.write(data, dim.getStoragePath() + "/worldgen/noise_settings", name + ".json");
     }
@@ -71,7 +71,7 @@ public class RandomNoisePreset {
     }
 
     NbtCompound getRouter(String router) {
-        String path = PROVIDER.configPath + "util/noise_router/" + router + ".json";
+        String path = InfinityMod.utilPath + "/noise_router/" + router + ".json";
         int min = parent.min_y;
         int max = parent.height + parent.min_y;
         int softmax = Math.min(max, 256);
@@ -129,8 +129,8 @@ public class RandomNoisePreset {
         }
         NbtCompound res = startingRule("sequence");
         NbtList sequence = new NbtList();
-        if (i!=2) sequence.add(CommonIO.read(PROVIDER.configPath + "util/surface_rule/bedrock_floor.json"));
-        if (i==1) sequence.add(CommonIO.read(PROVIDER.configPath + "util/surface_rule/bedrock_roof.json"));
+        if (i!=2) sequence.add(CommonIO.read(InfinityMod.utilPath + "/surface_rule/bedrock_floor.json"));
+        if (i==1) sequence.add(CommonIO.read(InfinityMod.utilPath + "/surface_rule/bedrock_roof.json"));
         sequence.add(getBiomes(i==0));
         if (i==0) addDeepslate(sequence);
         res.put("sequence", sequence);
@@ -138,7 +138,7 @@ public class RandomNoisePreset {
     }
 
     void addDeepslate(NbtList base) {
-        base.add(CommonIO.readAndAddBlock(PROVIDER.configPath + "util/surface_rule/deepslate.json", parent.deepslate));
+        base.add(CommonIO.readAndAddBlock(InfinityMod.utilPath + "/surface_rule/deepslate.json", parent.deepslate));
         parent.additional_blocks.add(parent.deepslate);
     }
 
@@ -187,7 +187,7 @@ public class RandomNoisePreset {
         }
         for (long id: parent.random_biome_ids) {
             String biome = "infinity:biome_" + id;
-            String root = PROVIDER.configPath + "util/surface_rule/custom/";
+            String root = InfinityMod.utilPath + "/surface_rule/custom/";
             boolean useRandomBlock = parent.randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
             NbtCompound top_block = useRandomBlock ? randomBlock(PROVIDER.rule("forceSolidSurface") ? "full_blocks_worldgen" : "top_blocks") :
                     RandomProvider.Block(parent.defaultblock("minecraft:grass_block"));

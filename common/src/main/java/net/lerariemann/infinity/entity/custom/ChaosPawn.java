@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.access.MobEntityAccess;
+import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -204,7 +205,6 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public static boolean canSpawn(EntityType<ChaosPawn> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        return world.getDifficulty() != Difficulty.PEACEFUL &&
-                RandomProvider.getProvider(world.toServerWorld().getServer()).rule("chaosMobsEnabled");
+        return world.getDifficulty() != Difficulty.PEACEFUL && ModEntities.chaosMobsEnabled(world);
     }
 }

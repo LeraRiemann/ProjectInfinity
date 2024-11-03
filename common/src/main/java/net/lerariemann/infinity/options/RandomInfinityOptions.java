@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.options;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.CommonIO;
@@ -27,7 +28,7 @@ public class RandomInfinityOptions {
         NbtCompound shader = new NbtCompound();
         if (prov.roll(r, "use_shaders")) {
             Object[] lst = genMatrix(r);
-            shader = CommonIO.readCarefully(prov.configPath + "util/shader.json", lst);
+            shader = CommonIO.readCarefully(InfinityMod.utilPath + "/shader.json", lst);
         }
         data.put("shader", shader);
         data.putFloat("solar_size", (float)(30*r.nextExponential()));

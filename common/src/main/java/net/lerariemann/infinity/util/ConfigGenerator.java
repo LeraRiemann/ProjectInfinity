@@ -16,6 +16,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
@@ -24,9 +25,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
@@ -128,18 +126,22 @@ public class ConfigGenerator {
         if (!m.containsKey(key)) m.put(key, new WeighedStructure<>());
     }
 
+    public static void checkAndAddElement(Map<String, WeighedStructure<String>> m, Identifier id) {
+        checkAndAddWS(m, id.getNamespace());
+        m.get(id.getNamespace()).add(id.toString(), 1.0);
+    }
+
     public static <T> void generate(Registry<T> r, String additionalPath, String name) {
         generate(r, additionalPath, name, false);
     }
 
     public static <T> void generate(Registry<T> r, String additionalPath, String name, boolean excludeInfinity) {
         Map<String, WeighedStructure<String>> m = new HashMap<>();
-        r.getKeys().forEach(a -> {
-            String b = a.getValue().toString();
-            String namespace = a.getValue().getNamespace();
+        r.getKeys().forEach(key -> {
+            String namespace = key.getValue().getNamespace();
             if (!excludeInfinity || !(namespace.contains("infinity"))) {
                 checkAndAddWS(m, namespace);
-                m.get(namespace).add(b, 1.0);
+                m.get(namespace).add(key.getValue().toString(), 1.0);
             }
         });
         writeMap(m, additionalPath, name);
@@ -149,14 +151,21 @@ public class ConfigGenerator {
         Registry<ParticleType<?>> r = Registries.PARTICLE_TYPE;
         Map<String, WeighedStructure<String>> m = new HashMap<>();
         r.getKeys().forEach(a -> {
-            String b = a.getValue().toString();
-            String namespace = a.getValue().getNamespace();
-            if (namespace.equals("minecraft") || r.get(a.getValue()) instanceof SimpleParticleType) {
-                checkAndAddWS(m, namespace);
-                m.get(namespace).add(b, 1.0);
+            Identifier id = a.getValue();
+            if (id.getNamespace().equals("minecraft") || r.get(id) instanceof SimpleParticleType) {
+                checkAndAddElement(m, id);
             }
         });
         writeMap(m, "misc", "particles");
+    }
+
+    public static void generateBlockTags() {
+        Map<String, WeighedStructure<String>> tagMap = new HashMap<>();
+        Registries.BLOCK.streamTags().forEach(tagKey -> {
+            checkAndAddWS(tagMap, tagKey.id().getNamespace());
+            tagMap.get(tagKey.id().getNamespace()).add("#" + tagKey.id().toString(), 1.0);
+        });
+        writeMap(tagMap, "misc", "tags");
     }
 
     public static void generateFluids() {
@@ -195,23 +204,26 @@ public class ConfigGenerator {
 
     public static void generateBlocks(WorldView w, BlockPos inAir, BlockPos onStone) {
         Registry<Block> r = Registries.BLOCK;
-        Map<String, WeighedStructure<NbtCompound>> m = new HashMap<>();
-        Map<String, WeighedStructure<NbtList>> m2 = new HashMap<>();
-        r.getKeys().forEach(a -> {
-            Block block = r.get(a);
+        Map<String, WeighedStructure<NbtCompound>> blockMap = new HashMap<>();
+        Map<String, WeighedStructure<NbtList>> colorPresetMap = new HashMap<>();
+        Map<String, WeighedStructure<String>> airMap = new HashMap<>();
+        r.getKeys().forEach(key -> {
+            Block block = r.get(key);
             assert block != null;
             if(block.getDefaultState().getFluidState().isOf(Fluids.EMPTY)) {
-                String b = a.getValue().toString();
-                String namespace = a.getValue().getNamespace();
-                checkAndAddWS(m, namespace);
-                checkAndAddWS(m2, namespace);
-                m.get(namespace).add(block(a, w, inAir, onStone), 1.0);
-                if (b.contains("magenta") && !isLaggy(block) && isFloat(block.getDefaultState(), w, inAir))
-                    checkColorSet(b, m2.get(namespace));
+                String blockName = key.getValue().toString();
+                String namespace = key.getValue().getNamespace();
+                checkAndAddWS(blockMap, namespace);
+                checkAndAddWS(colorPresetMap, namespace);
+                blockMap.get(namespace).add(block(key, w, inAir, onStone), 1.0);
+                if (blockName.contains("magenta") && !isLaggy(block) && isFloat(block.getDefaultState(), w, inAir))
+                    checkColorSet(blockName, colorPresetMap.get(namespace));
+                if (block.getDefaultState().isIn(BlockTags.AIR)) checkAndAddElement(airMap, key.getValue());
             }
         });
-        writeMap(m, "blocks", "blocks");
-        writeMap(m2, "extra", "color_presets");
+        writeMap(blockMap, "blocks", "blocks");
+        writeMap(colorPresetMap, "extra", "color_presets");
+        writeMap(airMap, "blocks", "airs");
     }
 
     public static void checkColorSet(String block, WeighedStructure<NbtList> w) {
@@ -233,14 +245,9 @@ public class ConfigGenerator {
     }
 
     public static <T> void writeMap(Map<String, WeighedStructure<T>> m, String addpath, String name) {
-        m.keySet().forEach(a -> {
-            if (!m.get(a).keys.isEmpty()) {
-                try {
-                    Files.createDirectories(Paths.get(getConfigDir()+ "/modular/" + a + "/" + addpath));
-                    CommonIO.write(wsToCompound(m.get(a)), getConfigDir()+ "/modular/" + a + "/" + addpath, name + ".json");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+        m.keySet().forEach(key -> {
+            if (!m.get(key).keys.isEmpty()) {
+                CommonIO.write(wsToCompound(m.get(key)), getConfigDir()+ "/modular/" + key + "/" + addpath, name + ".json");
             }
         });
     }
@@ -250,15 +257,12 @@ public class ConfigGenerator {
         Map<String, WeighedStructure<String>> music = new HashMap<>();
         Map<String, WeighedStructure<String>> sounds = new HashMap<>();
         r.getKeys().forEach(a -> {
-            String b = a.getValue().toString();
-            String namespace = a.getValue().getNamespace();
-            if (b.contains("music")) {
-                checkAndAddWS(music, namespace);
-                music.get(namespace).add(b, 1.0);
+            Identifier id = a.getValue();
+            if (id.toString().contains("music")) {
+                checkAndAddElement(music, id);
             }
             else {
-                checkAndAddWS(sounds, namespace);
-                sounds.get(namespace).add(b, 1.0);
+                checkAndAddElement(sounds, id);
             }
         });
         writeMap(sounds, "misc", "sounds");
@@ -279,5 +283,6 @@ public class ConfigGenerator {
         generateParticles();
         generateMobs();
         generateFluids();
+        generateBlockTags();
     }
 }

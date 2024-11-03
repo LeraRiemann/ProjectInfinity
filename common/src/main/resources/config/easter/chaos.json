@@ -4,6 +4,7 @@
     "time_scale": 50.0,
     "sky_type": "rainbow"
   },
+  "easter-type": "chaos",
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 25,

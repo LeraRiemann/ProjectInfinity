@@ -55,7 +55,7 @@ public class CommonIO {
             int i = content.indexOf("infinity_version");
             int end = content.indexOf(",", i);
             if (end == -1) {
-                end = content.indexOf("}", i);
+                end = content.indexOf("\n", i);
             }
             return Integer.parseInt(content.substring(content.indexOf(" ", i)+1, end).trim());
         } catch (IOException e) {
@@ -173,20 +173,6 @@ public class CommonIO {
             for(int i = 0; i < list.size(); i++) {
                 NbtCompound a = list.getCompound(i);
                 res.add(a.get("key"), a.getDouble("weight"));
-            }
-        }
-        return res;
-    }
-
-    public static NbtList nbtListReader(String path, String subpath) {
-        NbtList res = new NbtList();
-        for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
-            if (_checkIfModLoaded(path1)) {
-                File readingthis = new File(path1.getPath() + "/" + subpath);
-                if (readingthis.exists()) {
-                    NbtList add = read(path1.getPath() + "/" + subpath).getList("elements", NbtElement.STRING_TYPE);
-                    res.addAll(add);
-                }
             }
         }
         return res;

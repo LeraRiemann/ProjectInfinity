@@ -2,11 +2,11 @@ package net.lerariemann.infinity.util;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,12 +41,8 @@ public class ConfigManager {
                 Files.copy(path, endfile);
                 bl = true;
             }
-            Path tempfile = Paths.get(getBaseConfigDir()+"infinity-temp.json");
             if (endfile.toFile().exists() && fullname.endsWith(".json")) {
-                int version_old = CommonIO.getVersion(endfile.toFile());
-                Files.copy(path, tempfile, REPLACE_EXISTING);
-                int version_new = CommonIO.getVersion(tempfile.toFile());
-                if (version_new > version_old) {
+                if (compareVersions(endfile, path)) {
                     Files.copy(path, endfile, REPLACE_EXISTING);
                     bl = true;
                 }
@@ -56,24 +52,55 @@ public class ConfigManager {
         }
         return bl;
     }
+
+    public static boolean compareVersions(Path oldFile, Path newFile) throws IOException {
+        Path tempfile = Paths.get(getBaseConfigDir()+"infinity-temp.json");
+        int version_old = CommonIO.getVersion(oldFile.toFile());
+        Files.copy(newFile, tempfile, REPLACE_EXISTING);
+        int version_new = CommonIO.getVersion(tempfile.toFile());
+        return version_new > version_old;
+    }
+
     public static void unpackDefaultConfigs() {
         AtomicBoolean bl2 = new AtomicBoolean(false);
-        ModContainer modContainer = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
-        assert modContainer != null;
         try {
             Path path = getConfigDir();
             if (!path.toFile().exists()) {
                 Files.createDirectories(path);
             }
 
-            Files.walk(modContainer.getRootPaths().getFirst().resolve("config")).forEach(p -> {
-                boolean bl = registerConfig(p);
-                if (bl && p.toString().contains("evicted_files.json")) bl2.set(true);
+            Files.walk(InfinityMod.rootResPath.resolve("config")).forEach(p -> {
+                if (!p.toString().contains("util")) {
+                    boolean bl = registerConfig(p);
+                    if (bl && p.toString().contains("evicted_files.json")) bl2.set(true);
+                }
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         if (bl2.get()) evictOldFiles();
+    }
+
+    public static void updateInvocationLock() {
+        File invlock = InfinityMod.invocationLock.toFile();
+        if (invlock.exists()) {
+            try {
+                if (compareVersions(InfinityMod.invocationLock, InfinityMod.utilPath.resolve( "invocation.lock"))) {
+                    LogManager.getLogger().info("Deleting outdated modular configs");
+                    Files.walk(getConfigDir().resolve("modular")).forEach(p -> {
+                        if (p.toFile().isFile()) {
+                            try {
+                                Files.delete(p);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @ExpectPlatform
@@ -86,11 +113,13 @@ public class ConfigManager {
     }
 
     public static void evictOldFiles() {
-        NbtCompound c = CommonIO.read(getConfigDir()+ "/util/evicted_files.json");
+        LogManager.getLogger().info("Evicting old files");
+        NbtCompound c = CommonIO.read(getConfigDir() + "/hardcoded/evicted_files.json");
         NbtList l = c.getList("content", NbtElement.STRING_TYPE);
         try {
             for (NbtElement e : l) {
                 Path path1 = Paths.get(getConfigDir() + e.asString());
+                LogManager.getLogger().info(path1);
                 if (path1.toFile().exists()) {
                     Path path2 = Paths.get(getConfigDir() + "/evicted/" + e.asString());
                     Files.createDirectories(path2);

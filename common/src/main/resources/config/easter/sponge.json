@@ -1,15 +1,17 @@
 {
-  "infinity_version": 2000001,
-  "easter-color": 7907327,
+  "infinity_version": 2000003,
+  "easter-options": {
+    "portal_color": 16776960
+  },
   "type": "minecraft:noise",
   "settings": {
-    "sea_level": 16,
+    "sea_level": 0,
     "disable_mob_generation": false,
     "ore_veins_enabled": false,
     "aquifers_enabled": false,
     "legacy_random_source": false,
     "default_block": {
-      "Name": "minecraft:stone"
+      "Name": "minecraft:sponge"
     },
     "default_fluid": {
       "Name": "minecraft:air"
@@ -28,11 +30,7 @@
       "vein_gap": "infinity:vein_gap",
       "continents": "minecraft:overworld/continents",
       "initial_density_without_jaggedness": {
-        "to_y": 128,
-        "from_value": 1.0,
-        "to_value": -1.0,
-        "from_y": 0,
-        "type": "minecraft:y_clamped_gradient"
+        "type": "infinity:menger"
       },
       "lava": 0.0,
       "barrier": 0.0,
@@ -47,21 +45,22 @@
       "erosion": "minecraft:overworld/erosion",
       "temperature": "infinity:temperature",
       "final_density": {
-        "to_y": 256,
-        "from_value": 1.0,
-        "to_value": -1.0,
-        "from_y": 0,
-        "type": "minecraft:y_clamped_gradient"
+        "type": "infinity:menger",
+        "max_y": 242
       },
       "vein_toggle": "infinity:vein_toggle",
       "fluid_level_floodedness": 0.0
     },
     "surface_rule": {
-      "type": "infinity:perfection"
+      "type": "minecraft:block",
+      "result_state": {
+        "Name": "minecraft:sponge"
+      }
     }
   },
   "biome_source": {
     "type": "fixed",
-    "biome": "infinity:perfection"
-  }
+    "biome": "infinity:sponge"
+  },
+  "easter-type": "sponge"
 }

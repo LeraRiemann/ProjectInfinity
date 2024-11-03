@@ -1,0 +1,14 @@
+{
+  "infinity_version": 2000003,
+  "content": [
+    "/modular/minecraft/surface_rule/beaches.json",
+    "/modular/minecraft/surface_rule/frozen_oceans.json",
+    "/modular/minecraft/surface_rule/lukewarm_oceans.json",
+    "/modular/minecraft/surface_rule/old_taigas.json",
+    "/modular/minecraft/lists/minecraft_overworld.json",
+    "/modular/minecraft/lists/minecraft_nether.json",
+    "/modular/minecraft/lists/rotatable_blocks.json",
+    "/modular/minecraft/misc/multinoise_presets.json",
+    "/modular/minecraft/misc/airs.json"
+  ]
+}

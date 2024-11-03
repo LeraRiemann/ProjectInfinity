@@ -44,6 +44,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 @Mixin(MinecraftServer.class)
 public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<ServerTask> implements QueryableServer, ChunkErrorHandler, CommandOutput, AutoCloseable, MinecraftServerAccess {
     @Final @Shadow
@@ -77,30 +79,29 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
     @Shadow public abstract DynamicRegistryManager.Immutable getRegistryManager();
 
     @Unique
-    public Map<RegistryKey<World>, ServerWorld> worldsToAdd;
+    public Map<RegistryKey<World>, ServerWorld> infinity$worldsToAdd;
     @Unique
-    public RandomProvider dimensionProvider;
+    public RandomProvider infinity$dimensionProvider;
     @Unique
-    public boolean needsInvocation;
+    public boolean infinity$needsInvocation;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(CallbackInfo info) {
-        worldsToAdd = new HashMap<>();
-        needsInvocation = !Files.exists(InfinityMod.invocationLock);
-        LogManager.getLogger().info("Invocation {}", needsInvocation ? "needed..." : "not needed");
-        projectInfinity$setDimensionProvider();
+        infinity$worldsToAdd = new HashMap<>();
+        infinity$needsInvocation = !Files.exists(InfinityMod.invocationLock);
+        LogManager.getLogger().info("Invocation {}", infinity$needsInvocation ? "needed..." : "not needed");
+        infinity$setDimensionProvider();
     }
     @Override
-    public boolean projectInfinity$needsInvocation() {return needsInvocation;}
+    public boolean infinity$needsInvocation() {return infinity$needsInvocation;}
     @Override
-    public void projectInfinity$onInvocation() {
-        needsInvocation = false;
+    public void infinity$onInvocation() {
+        infinity$needsInvocation = false;
         try {
             Path p = InfinityMod.invocationLock;
             if (!Files.exists(p)) {
                 Files.createDirectories(p.getParent());
-                Files.writeString(p, "Delete this file to regenerate modular configs automatically\n" +
-                        "(e.g. you may want to do this when adding new mods to the instance)");
+                Files.copy(InfinityMod.utilPath.resolve("invocation.lock"), p, REPLACE_EXISTING);
             }
             LogManager.getLogger().info("Invocation complete");
         } catch (IOException e) {
@@ -108,37 +109,37 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
         }
     }
     @Override
-    public RandomProvider projectInfinity$getDimensionProvider() {
-        return dimensionProvider;
+    public RandomProvider infinity$getDimensionProvider() {
+        return infinity$dimensionProvider;
     }
 
     @Override
-    public void projectInfinity$setDimensionProvider() {
+    public void infinity$setDimensionProvider() {
         RandomProvider p = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
                 getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
         p.kickGhostsOut(getRegistryManager());
-        dimensionProvider = p;
+        infinity$dimensionProvider = p;
     }
 
     @Override
-    public void projectInfinity$addWorld(RegistryKey<World> key, DimensionOptions options) {
+    public void infinity$addWorld(RegistryKey<World> key, DimensionOptions options) {
         ServerWorldProperties serverWorldProperties = saveProperties.getMainWorldProperties();
         ServerWorld world = new ServerWorld(((MinecraftServer) (Object) this), workerExecutor, session, serverWorldProperties,
                 key, options, worldGenerationProgressListenerFactory.create(11), saveProperties.isDebugWorld(),
                 BiomeAccess.hashSeed(saveProperties.getGeneratorOptions().getSeed()), ImmutableList.of(), false, getWorld(World.OVERWORLD).getRandomSequences());
         getWorld(World.OVERWORLD).getWorldBorder().addListener(new WorldBorderListener.WorldBorderSyncer(world.getWorldBorder()));
-        worldsToAdd.put(key, world);
+        infinity$worldsToAdd.put(key, world);
         send(createTask(() -> {
             worlds.put(key, world);
-            worldsToAdd.clear();
+            infinity$worldsToAdd.clear();
         }));
         PlatformMethods.onWorldLoad(this, world);
     }
 
 
     @Override
-    public boolean projectInfinity$hasToAdd(RegistryKey<World> key) {
-        return (worldsToAdd.containsKey(key));
+    public boolean infinity$hasToAdd(RegistryKey<World> key) {
+        return (infinity$worldsToAdd.containsKey(key));
     }
 
     @Redirect(method="createWorlds", at=@At(value="NEW", target="(Lnet/minecraft/server/MinecraftServer;Ljava/util/concurrent/Executor;Lnet/minecraft/world/level/storage/LevelStorage$Session;Lnet/minecraft/world/level/ServerWorldProperties;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/world/dimension/DimensionOptions;Lnet/minecraft/server/WorldGenerationProgressListener;ZJLjava/util/List;ZLnet/minecraft/util/math/random/RandomSequencesState;)Lnet/minecraft/server/world/ServerWorld;"))
