@@ -45,7 +45,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     private static final TrackedData<String> effect = DataTracker.registerData(DimensionalSkeleton.class, TrackedDataHandlerRegistry.STRING);
     private static final TrackedData<Integer> color = DataTracker.registerData(DimensionalSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Integer> duration = DataTracker.registerData(DimensionalSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
-    public static Map<String, String> effect_lookup = Map.ofEntries(Map.entry("minecraft:unluck", "minecraft:luck"),
+    public static Map<String, String> effect_lookup = Map.ofEntries(
             Map.entry("minecraft:bad_omen", "minecraft:hero_of_the_village"),
             Map.entry("minecraft:darkness", "minecraft:night_vision"),
             Map.entry("minecraft:blindness", "minecraft:night_vision"),
