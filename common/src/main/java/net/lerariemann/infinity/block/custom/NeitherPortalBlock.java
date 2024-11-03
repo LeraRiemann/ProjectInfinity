@@ -78,7 +78,10 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
         /* Check if the item provided is a transfinite key. */
         Identifier key_dest = itemStack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
-        if (key_dest != null) {
+        if ((entity.getStack().getItem().equals(ModItems.TRANSFINITE_KEY.get())) && key_dest == null) {
+            key_dest = Identifier.of("minecraft:random");
+        }
+        if (key_dest != null)  {
             MinecraftServer server = world.getServer();
             if (server != null) {
                 boolean bl = NeitherPortalBlock.modifyOnInitialCollision(key_dest, world, pos, state);

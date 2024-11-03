@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.item;
 
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -76,7 +77,7 @@ public class ModItems {
     }
 
     public static RegistrySupplier<Item> registerKeyItem() {
-        Item.Settings keySettings = new Item.Settings().component(ModComponentTypes.KEY_DESTINATION.get(), Identifier.of("minecraft:random"));
+        Item.Settings keySettings = new Item.Settings();
         if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
             RegistrySupplier<Item> registeredKey = ITEMS.register("key", () -> new TransfiniteKeyItem(keySettings));
             addAfter(registeredKey, ItemGroups.INGREDIENTS, Items.OMINOUS_TRIAL_KEY);
@@ -100,7 +101,7 @@ public class ModItems {
     public static void registerModelPredicates() {
         ItemPropertiesRegistry.register(TRANSFINITE_KEY.get(), InfinityMod.getId("key"), (stack, world, entity, seed) -> {
             Identifier id = stack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
-            if (id == null) return 0;
+            if (id == null) return 0.02f;
             String s = id.toString();
             if (s.contains("infinity:generated_")) return 0.01f;
             return switch(s) {
