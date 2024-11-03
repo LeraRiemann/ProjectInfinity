@@ -1,16 +1,19 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,9 +21,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -39,11 +45,31 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     private static final TrackedData<String> effect = DataTracker.registerData(DimensionalSkeleton.class, TrackedDataHandlerRegistry.STRING);
     private static final TrackedData<Integer> color = DataTracker.registerData(DimensionalSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Integer> duration = DataTracker.registerData(DimensionalSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final Map<String, String> effect_lookup = Map.ofEntries(Map.entry("unluck", "luck"), Map.entry("bad_omen", "hero_of_the_village"),
-            Map.entry("blindness", "night_vision"), Map.entry("darkness", "night_vision"), Map.entry("glowing", "invisibility"),
-            Map.entry("hunger", "saturation"), Map.entry("levitation", "slow_falling"), Map.entry("mining_fatigue", "haste"),
-            Map.entry("poison", "regeneration"), Map.entry("slowness", "speed"), Map.entry("weakness", "strength"),
-            Map.entry("wither", "regeneration"));
+    public static Map<String, String> effect_lookup = Map.ofEntries(Map.entry("minecraft:unluck", "minecraft:luck"),
+            Map.entry("minecraft:bad_omen", "minecraft:hero_of_the_village"),
+            Map.entry("minecraft:darkness", "minecraft:night_vision"),
+            Map.entry("minecraft:blindness", "minecraft:night_vision"),
+            Map.entry("minecraft:glowing", "minecraft:invisibility"),
+            Map.entry("minecraft:hunger", "minecraft:saturation"),
+            Map.entry("minecraft:levitation", "minecraft:slow_falling"),
+            Map.entry("minecraft:mining_fatigue", "minecraft:haste"),
+            Map.entry("minecraft:poison", "minecraft:regeneration"),
+            Map.entry("minecraft:slowness", "minecraft:speed"),
+            Map.entry("minecraft:weakness", "minecraft:strength"),
+            Map.entry("minecraft:wither", "minecraft:regeneration"),
+            Map.entry("minecraft:instant_damage", "minecraft:instant_health"),
+            Map.entry("minecraft:instant_health", "minecraft:instant_damage"),
+            Map.entry("minecraft:luck", "minecraft:unluck"),
+            Map.entry("minecraft:hero_of_the_village", "minecraft:bad_omen"),
+            Map.entry("minecraft:night_vision", "minecraft:darkness"),
+            Map.entry("minecraft:invisibility", "minecraft:glowing"),
+            Map.entry("minecraft:saturation", "minecraft:hunger"),
+            Map.entry("minecraft:slow_falling", "minecraft:levitation"),
+            Map.entry("minecraft:haste", "minecraft:mining_fatigue"),
+            Map.entry("minecraft:regeneration", "minecraft:poison"),
+            Map.entry("minecraft:speed", "minecraft:slowness"),
+            Map.entry("minecraft:strength", "minecraft:weakness"));
+
     public DimensionalSkeleton(EntityType<? extends SkeletonEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -65,14 +91,11 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         Random r = new Random();
-        List<Identifier> a = new ArrayList<>();
-        reg.getIds().forEach(i -> {
-            if (Objects.requireNonNull(reg.get(i)).getCategory().equals(StatusEffectCategory.HARMFUL)) a.add(i);
-        });
-        Identifier e = a.get(r.nextInt(a.size()));
+        NbtElement effect = RandomProvider.getProvider(world.getServer()).compoundRegistry.get("effects").getRandomElement(world.getRandom());
+        Identifier e = Identifier.of(((NbtCompound)effect).getString("Name"));
         this.setEffect(e);
         this.setColorRaw(Objects.requireNonNull(reg.get(e)).getColor());
-        this.setDuration(r.nextInt(200));
+        this.setDuration(r.nextInt(600));
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
@@ -82,14 +105,6 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
         builder.add(effect, "luck");
         builder.add(duration, 200);
         builder.add(color, 255);
-    }
-
-    public boolean isFriendly() {
-        return !(getEffect().getCategory().equals(StatusEffectCategory.HARMFUL));
-    }
-    @Override
-    public boolean cannotDespawn() {
-        return super.cannotDespawn() || isFriendly();
     }
     @Override
     public boolean isAffectedByDaylight() {
@@ -103,25 +118,26 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
             if (!player.getAbilities().creativeMode) {
                 itemStack.decrement(1);
             }
-            Random r = new Random();
-            if (r.nextFloat() < 0.5) {
-                DimensionalSkeleton newSkeleton;
-                if (!this.getWorld().isClient() && (newSkeleton = ModEntities.DIMENSIONAL_SKELETON.get().create(this.getWorld())) != null) {
-                    ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
-                    this.discard();
-                    ModEntities.copy(this, newSkeleton);
-                    newSkeleton.setDuration(this.getDuration());
-                    String i = effect_lookup.get(this.getEffectRaw());
-                    StatusEffect e = reg.get(Identifier.of(i));
-                    newSkeleton.setEffectRaw(i);
-                    if (e!= null) newSkeleton.setColorRaw(e.getColor());
-                    this.getWorld().spawnEntity(newSkeleton);
-                    return ActionResult.SUCCESS;
+            if (player.getWorld().getRandom().nextFloat() < 0.5) {
+                String i = effect_lookup.get(this.getEffectRaw());
+                StatusEffect newEffect = reg.get(Identifier.of(i));
+                if (newEffect != null) {
+                    DimensionalSkeleton newSkeleton;
+                    if (!this.getWorld().isClient() && (newSkeleton = ModEntities.DIMENSIONAL_SKELETON.get().create(this.getWorld())) != null) {
+                        ((ServerWorld) this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+                        this.discard();
+                        ModEntities.copy(this, newSkeleton);
+                        newSkeleton.setDuration(this.getDuration());
+                        newSkeleton.setEffectRaw(i);
+                        newSkeleton.setColorRaw(newEffect.getColor());
+                        this.getWorld().spawnEntity(newSkeleton);
+                        return ActionResult.SUCCESS;
+                    }
                 }
             }
         }
         if (itemStack.isOf(Items.GLASS_BOTTLE)) {
-            ItemStack itemStack2 = setPotion(Items.LINGERING_POTION.getDefaultStack(), this.getColorForRender(), this.getEffectRaw(), this.getDuration() * 60);
+            ItemStack itemStack2 = setPotion(Items.POTION.getDefaultStack(), this.getColorForRender(), this.getEffectRaw(), this.getDuration() * 20);
             ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
             player.setStackInHand(hand, itemStack3);
             this.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
@@ -144,9 +160,6 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     }
     public String getEffectRaw() {
         return this.dataTracker.get(effect);
-    }
-    public StatusEffect getEffect() {
-        return reg.get(Identifier.of(getEffectRaw()));
     }
     public void setColorRaw(int c) {
         this.dataTracker.set(color, c);
@@ -185,11 +198,25 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
 
     @Override
     public ItemStack getProjectileType(ItemStack stack) {
+        return getProjectileType();
+    }
+
+    public ItemStack getProjectileType() {
         return setPotion(Items.TIPPED_ARROW.getDefaultStack(), this.getColorRaw(), this.getEffectRaw(), this.getDuration());
     }
 
     @Override
     public int getColorRaw() {
         return this.dataTracker.get(color);
+    }
+
+    @Override
+    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
+        super.dropEquipment(world, source, causedByPlayer);
+        ItemStack w = source.getWeaponStack();
+        RegistryEntry<Enchantment> looting = world.getServer().getRegistryManager().get(RegistryKeys.ENCHANTMENT).entryOf(Enchantments.LOOTING);
+        int lootingLevel = w == null ? 0 : w.getEnchantments().getLevel(looting);
+        int count = world.random.nextBetween(0, 2 + lootingLevel);
+        this.dropStack(getProjectileType().copyWithCount(count));
     }
 }

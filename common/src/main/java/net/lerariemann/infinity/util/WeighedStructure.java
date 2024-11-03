@@ -29,6 +29,10 @@ public class WeighedStructure<T> {
         return getElement(random.nextDouble());
     }
 
+    public T getRandomElement(net.minecraft.util.math.random.Random random) {
+        return getElement(random.nextDouble());
+    }
+
     public T getElement(double d) {
         int i;
         double r = d * statsum;

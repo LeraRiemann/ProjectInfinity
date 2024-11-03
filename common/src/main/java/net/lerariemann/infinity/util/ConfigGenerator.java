@@ -6,9 +6,12 @@ import net.minecraft.block.FallingBlock;
 import net.minecraft.block.enums.BlockFace;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.SimpleParticleType;
@@ -131,6 +134,11 @@ public class ConfigGenerator {
         m.get(id.getNamespace()).add(id.toString(), 1.0);
     }
 
+    public static <T extends NbtElement> void checkAndAddElement(Map<String, WeighedStructure<T>> m, String namespace, T elem) {
+        checkAndAddWS(m, namespace);
+        m.get(namespace).add(elem, 1.0);
+    }
+
     public static <T> void generate(Registry<T> r, String additionalPath, String name) {
         generate(r, additionalPath, name, false);
     }
@@ -140,8 +148,7 @@ public class ConfigGenerator {
         r.getKeys().forEach(key -> {
             String namespace = key.getValue().getNamespace();
             if (!excludeInfinity || !(namespace.contains("infinity"))) {
-                checkAndAddWS(m, namespace);
-                m.get(namespace).add(key.getValue().toString(), 1.0);
+                checkAndAddElement(m, key.getValue());
             }
         });
         writeMap(m, additionalPath, name);
@@ -186,9 +193,7 @@ public class ConfigGenerator {
         Registries.ENTITY_TYPE.getKeys().forEach(key -> {
             NbtCompound mob = mob(key);
             if (mob != null) {
-                String namespace = key.getValue().getNamespace();
-                checkAndAddWS(allMobs, namespace);
-                allMobs.get(namespace).add(mob, 1.0);
+                checkAndAddElement(allMobs, key.getValue().getNamespace(), mob);
             }
         });
         writeMap(allMobs, "extra", "mobs");
@@ -199,10 +204,28 @@ public class ConfigGenerator {
         if (sg != SpawnGroup.MISC) {
             NbtCompound mob = new NbtCompound();
             mob.putString("Name", key.getValue().toString());
-            mob.putString("group", sg.asString());
+            mob.putString("Category", sg.asString());
             return mob;
         }
         return null;
+    }
+
+    public static void generateEffects() {
+        Map<String, WeighedStructure<NbtCompound>> allEffects = new HashMap<>();
+        Registries.STATUS_EFFECT.getKeys().forEach(key -> checkAndAddElement(allEffects, key.getValue().getNamespace(), effect(key)));
+        writeMap(allEffects, "extra", "effects");
+    }
+
+    static NbtCompound effect(RegistryKey<StatusEffect> key) {
+        NbtCompound res = new NbtCompound();
+        StatusEffectCategory cat = Objects.requireNonNull(Registries.STATUS_EFFECT.get(key)).getCategory();
+        res.putString("Name", key.getValue().toString());
+        res.putString("Category", switch (cat) {
+            case HARMFUL -> "harmful";
+            case BENEFICIAL -> "beneficial";
+            case NEUTRAL -> "neutral";
+        });
+        return res;
     }
 
     public static void generateBlocks(WorldView w, BlockPos inAir, BlockPos onStone) {
@@ -287,5 +310,6 @@ public class ConfigGenerator {
         generateMobs();
         generateFluids();
         generateBlockTags();
+        generateEffects();
     }
 }

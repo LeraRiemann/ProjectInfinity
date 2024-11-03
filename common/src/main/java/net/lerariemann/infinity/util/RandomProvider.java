@@ -60,9 +60,10 @@ public class RandomProvider {
         register_category(registry, path, "misc", CommonIO::stringListReader);
         register_category(registry, path, "features", CommonIO::stringListReader);
         register_category(registry, path, "vegetation", CommonIO::stringListReader);
-        register_blocks(path);
+        register_category(compoundRegistry, path, "blocks", CommonIO::compoundListReader);
+        extract_blocks();
         register_category(compoundRegistry, path, "extra", CommonIO::compoundListReader);
-        register_mobs();
+        extract_mobs();
         register_category_hardcoded(configPath + "hardcoded");
         noise = CommonIO.read(InfinityMod.utilPath + "/noise.json");
     }
@@ -132,24 +133,23 @@ public class RandomProvider {
         return gameRules.get(key);
     }
 
-    void register_blocks(String path) {
-        Map<String, WeighedStructure<NbtElement>> temp = new HashMap<>();
-        register_category(temp, path, "blocks", CommonIO::compoundListReader);
-        if (temp.containsKey("blocks")) {
+    void extract_blocks() {
+        if (compoundRegistry.containsKey("blocks")) {
+            WeighedStructure<NbtElement> blocksSettings = compoundRegistry.get("blocks");
             WeighedStructure<NbtElement> allBlocks = new WeighedStructure<>();
             WeighedStructure<NbtElement> blocksFeatures = new WeighedStructure<>();
             WeighedStructure<NbtElement> topBlocks = new WeighedStructure<>();
             WeighedStructure<NbtElement> fullBlocks = new WeighedStructure<>();
             WeighedStructure<NbtElement> fullBlocksWG = new WeighedStructure<>();
-            for (int i = 0; i < temp.get("blocks").keys.size(); i++) {
-                NbtCompound e = (NbtCompound)(temp.get("blocks").keys.get(i));
+            for (int i = 0; i < blocksSettings.keys.size(); i++) {
+                NbtCompound e = (NbtCompound)(blocksSettings.keys.get(i));
                 boolean isfull, istop, isfloat, islaggy;
                 isfull = check(e, "full", false);
                 islaggy = check(e, "laggy", false);
                 isfloat = check(e, "float", isfull);
                 istop = check(e, "top", isfull);
                 istop = istop || isfloat;
-                Double w = temp.get("blocks").weights.get(i);
+                Double w = blocksSettings.weights.get(i);
                 allBlocks.add(e, w);
                 if (isfull) fullBlocks.add(e, w);
                 if (istop && !islaggy) topBlocks.add(e, w);
@@ -161,18 +161,16 @@ public class RandomProvider {
             compoundRegistry.put("full_blocks", fullBlocks);
             compoundRegistry.put("full_blocks_worldgen", fullBlocksWG);
             compoundRegistry.put("top_blocks", topBlocks);
-            temp.keySet().forEach(a -> {
-                if (!a.equals("blocks")) compoundRegistry.put(a, temp.get(a));
-            });
+            compoundRegistry.remove("blocks");
         }
     }
 
-    void register_mobs() {
+    void extract_mobs() {
         if (compoundRegistry.containsKey("mobs")) {
             WeighedStructure<NbtElement> allmobs = compoundRegistry.get("mobs");
             WeighedStructure<String> allMobNames = new WeighedStructure<>();
             for (int i = 0; i < allmobs.size(); i++) if (allmobs.keys.get(i) instanceof NbtCompound mob) {
-                String group = mob.getString("group");
+                String group = mob.getString("Category");
                 if (!registry.containsKey(group)) registry.put(group, new WeighedStructure<>());
                 registry.get(group).add(mob.getString("Name"), allmobs.weights.get(i));
                 allMobNames.add(mob.getString("Name"), allmobs.weights.get(i));
@@ -219,7 +217,7 @@ public class RandomProvider {
         }
     }
 
-    public List<String> mobcategories() {
+    public List<String> mob_categories() {
         return registry.get("mob_categories").keys;
     }
 
