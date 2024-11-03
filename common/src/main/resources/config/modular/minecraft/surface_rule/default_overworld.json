@@ -1,4 +1,5 @@
 {
+  "infinity_version": 2000003,
   "biomes": [
     "minecraft:bamboo_jungle",
     "minecraft:birch_forest",
@@ -10,6 +11,7 @@
     "minecraft:flower_forest",
     "minecraft:forest",
     "minecraft:frozen_river",
+    "minecraft:frozen_ocean",
     "minecraft:jungle",
     "minecraft:lush_caves",
     "minecraft:meadow",

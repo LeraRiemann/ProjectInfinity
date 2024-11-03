@@ -345,7 +345,7 @@ public class RandomDimension {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        NbtCompound dictionary = CommonIO.read(PROVIDER.configPath + "util/structure_tags.json");
+        NbtCompound dictionary = CommonIO.read(InfinityMod.utilPath + "/structure_tags.json");
         Map<String, NbtList> tags = new HashMap<>();
         for (String s : structure_ids.keySet()) if (dictionary.contains(s)) {
             for (NbtElement e : (NbtList) Objects.requireNonNull(dictionary.get(s))) {
