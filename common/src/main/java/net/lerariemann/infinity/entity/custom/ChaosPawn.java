@@ -148,12 +148,12 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public void setAllColors(Random r, BlockState state) {
-        if (state.isOf(Blocks.WHITE_WOOL)) {
+        if (state.isOf(Blocks.WHITE_WOOL) || state.isOf(Blocks.WHITE_CONCRETE)) {
             this.dataTracker.set(special_case, 1);
             setAllColors(0xFFFFFF);
             return;
         }
-        if (state.isOf(Blocks.BLACK_WOOL)) {
+        if (state.isOf(Blocks.BLACK_WOOL) || state.isOf(Blocks.BLACK_CONCRETE)) {
             this.dataTracker.set(special_case, 0);
             setAllColors(0);
             return;
