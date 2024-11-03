@@ -1,6 +1,6 @@
 {
-  "infinity_version": 2000003,
-  "easter-color": 0,
+  "infinity_version": 2000004,
+  "easter-type": "chess",
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 16,
