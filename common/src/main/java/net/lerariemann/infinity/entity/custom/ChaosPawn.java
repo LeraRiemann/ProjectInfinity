@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -16,6 +17,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.NbtCompound;
@@ -99,7 +101,8 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         this.goalSelector.add(0, new SwimGoal(this));
         this.targetSelector.add(1, new RevengeGoal(this).setGroupRevenge());
         this.goalSelector.add(2, new MeleeAttackGoal(this, 1.0, false));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, ChaosSlime.class, true));
+        this.targetSelector.add(3, new ChaosCleanseGoal<>(this, ChaosSlime.class, true));
+        this.targetSelector.add(3, new ChaosCleanseGoal<>(this, ChaosSkeleton.class, true));
         this.targetSelector.add(3, new UniversalAngerGoal<>(this, true));
         this.goalSelector.add(5, new EatGrassGoal(this));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
@@ -206,6 +209,18 @@ public class ChaosPawn extends HostileEntity implements Angerable {
             String s = RandomProvider.getProvider(Objects.requireNonNull(world.getServer())).registry.get("items").getRandomElement(world.random);
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
             this.dropStack(Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i)));
+        }
+    }
+
+    public static class ChaosCleanseGoal<T extends LivingEntity> extends ActiveTargetGoal<T> {
+        public ChaosCleanseGoal(MobEntity mob, Class<T> targetClass, boolean checkVisibility) {
+            super(mob, targetClass, checkVisibility);
+        }
+
+        @Override
+        public boolean canStart() {
+            if (mob instanceof ChaosPawn e && e.dataTracker.get(special_case) == -1) return false;
+            return super.canStart();
         }
     }
 }

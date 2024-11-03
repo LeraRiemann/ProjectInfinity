@@ -233,6 +233,7 @@ public class ConfigGenerator {
         Map<String, WeighedStructure<NbtCompound>> blockMap = new HashMap<>();
         Map<String, WeighedStructure<NbtList>> colorPresetMap = new HashMap<>();
         Map<String, WeighedStructure<String>> airMap = new HashMap<>();
+        Map<String, WeighedStructure<String>> flowerMap = new HashMap<>();
         r.getKeys().forEach(key -> {
             Block block = r.get(key);
             assert block != null;
@@ -245,11 +246,13 @@ public class ConfigGenerator {
                 if (blockName.contains("magenta") && !isLaggy(block) && isFloat(block.getDefaultState(), w, inAir))
                     checkColorSet(blockName, colorPresetMap.get(namespace));
                 if (block.getDefaultState().isIn(BlockTags.AIR)) checkAndAddElement(airMap, key.getValue());
+                if (block.getDefaultState().isIn(BlockTags.SMALL_FLOWERS)) checkAndAddElement(flowerMap, key.getValue());
             }
         });
         writeMap(blockMap, "blocks", "blocks");
         writeMap(colorPresetMap, "extra", "color_presets");
         writeMap(airMap, "blocks", "airs");
+        writeMap(flowerMap, "blocks", "flowers");
     }
 
     public static void checkColorSet(String block, WeighedStructure<NbtList> w) {
