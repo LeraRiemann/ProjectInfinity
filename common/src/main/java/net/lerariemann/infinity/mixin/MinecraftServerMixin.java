@@ -5,6 +5,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.var.ModMaterialRules;
 import net.minecraft.network.QueryableServer;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
@@ -103,6 +104,7 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
                 Files.createDirectories(p.getParent());
                 Files.copy(InfinityMod.utilPath.resolve("invocation.lock"), p, REPLACE_EXISTING);
             }
+            infinity$setDimensionProvider();
             LogManager.getLogger().info("Invocation complete");
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -119,6 +121,7 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
                 getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
         p.kickGhostsOut(getRegistryManager());
         infinity$dimensionProvider = p;
+        if (!infinity$needsInvocation) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
     }
 
     @Override

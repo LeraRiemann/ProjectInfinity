@@ -93,7 +93,7 @@ public class DimensionalSkeleton extends SkeletonEntity implements TintableEntit
     }
     @Override
     public boolean isAffectedByDaylight() {
-        return super.isAffectedByDaylight() && !isFriendly();
+        return false;
     }
 
     @Override

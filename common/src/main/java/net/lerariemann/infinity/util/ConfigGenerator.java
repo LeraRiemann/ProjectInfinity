@@ -182,24 +182,27 @@ public class ConfigGenerator {
     }
 
     public static void generateMobs() {
-        Registry<EntityType<?>> r = Registries.ENTITY_TYPE;
-        Map<String, Map<String, WeighedStructure<String>>> m = new HashMap<>();
-        Map<String, WeighedStructure<String>> allMobs = new HashMap<>();
-        r.getKeys().forEach(a -> {
-            String b = a.getValue().toString();
-            String namespace = a.getValue().getNamespace();
-            SpawnGroup sg = r.get(a.getValue()).getSpawnGroup();
-            if (sg != SpawnGroup.MISC) {
-                if (!m.containsKey(sg.asString())) m.put(sg.asString(), new HashMap<>());
-                Map<String, WeighedStructure<String>> m2 = m.get(sg.asString());
-                checkAndAddWS(m2, namespace);
+        Map<String, WeighedStructure<NbtCompound>> allMobs = new HashMap<>();
+        Registries.ENTITY_TYPE.getKeys().forEach(key -> {
+            NbtCompound mob = mob(key);
+            if (mob != null) {
+                String namespace = key.getValue().getNamespace();
                 checkAndAddWS(allMobs, namespace);
-                m2.get(namespace).add(b, 1.0);
-                allMobs.get(namespace).add(b, 1.0);
+                allMobs.get(namespace).add(mob, 1.0);
             }
         });
-        m.keySet().forEach(key -> writeMap(m.get(key), "mobs", key));
-        writeMap(allMobs, "mobs", "mobs");
+        writeMap(allMobs, "extra", "mobs");
+    }
+
+    static NbtCompound mob(RegistryKey<EntityType<?>> key) {
+        SpawnGroup sg = Registries.ENTITY_TYPE.get(key.getValue()).getSpawnGroup();
+        if (sg != SpawnGroup.MISC) {
+            NbtCompound mob = new NbtCompound();
+            mob.putString("Name", key.getValue().toString());
+            mob.putString("group", sg.asString());
+            return mob;
+        }
+        return null;
     }
 
     public static void generateBlocks(WorldView w, BlockPos inAir, BlockPos onStone) {
