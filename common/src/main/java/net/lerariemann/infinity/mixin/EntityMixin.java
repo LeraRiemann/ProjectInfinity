@@ -36,7 +36,7 @@ public class EntityMixin {
             if (e == null) return serverWorld;
             Identifier d = e.getDimension();
             serverWorld2 = serverWorld.getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD,d));
-            return (serverWorld2 != null && e.getOpen() && ((Timebombable)serverWorld2).projectInfinity$isTimebombed() == 0) ? serverWorld2 : serverWorld;
+            return (serverWorld2 != null && e.getOpen() && ((Timebombable)serverWorld2).infinity$isTimebombed() == 0) ? serverWorld2 : serverWorld;
         }
         return (serverWorld2 != null) ? serverWorld2 : serverWorld;
     }

@@ -3,7 +3,6 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.util.Easterizer;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.*;
@@ -95,12 +94,12 @@ public class RandomDimension {
     public void genBasics() {
         type_alike = PROVIDER.randomName(random, "noise_presets");
         min_y = 16*Math.min(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
-        if (isNotOverworld()) min_y = Math.max(min_y, -48);
+        if (!isOverworldLike()) min_y = Math.max(min_y, -48);
         int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
-        if (isNotOverworld()) max_y = Math.max(max_y, 80);
+        if (!isOverworldLike()) max_y = Math.max(max_y, 80);
         randomiseblocks = PROVIDER.roll(random, "randomise_blocks");
         int sea_level_default = 63;
-        if (isNotOverworld()) sea_level_default = switch(type_alike) {
+        if (!isOverworldLike()) sea_level_default = switch(type_alike) {
             case "minecraft:floating_islands" -> -64;
             case "minecraft:end" -> 0;
             case "minecraft:nether", "minecraft:caves" -> 32;
@@ -153,9 +152,9 @@ public class RandomDimension {
         return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMod.getId(name))));
     }
 
-    boolean isNotOverworld() {
-        return (!type_alike.equals("minecraft:overworld")) && (!type_alike.equals("minecraft:large_biomes"))
-                && (!type_alike.equals("minecraft:amplified")) && (!type_alike.equals("infinity:whack"));
+    boolean isOverworldLike() {
+        return (type_alike.equals("minecraft:overworld")) || (type_alike.equals("minecraft:large_biomes"))
+                || (type_alike.equals("minecraft:amplified")) || (type_alike.equals("infinity:whack"));
     }
 
     boolean hasCeiling() {

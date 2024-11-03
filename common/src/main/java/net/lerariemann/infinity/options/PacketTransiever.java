@@ -14,13 +14,13 @@ import net.minecraft.server.world.ServerWorld;
 public class PacketTransiever {
     public static PacketByteBuf buildPacket(ServerWorld destination) {
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeNbt(((InfinityOptionsAccess)(destination)).projectInfinity$getInfinityOptions().data());
+        buf.writeNbt(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
         return buf;
     }
 
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         InfinityOptions options = new InfinityOptions(buf.readNbt());
-        ((InfinityOptionsAccess)client).projectInfinity$setInfinityOptions(options);
+        ((InfinityOptionsAccess)client).infinity$setOptions(options);
         NbtCompound shader = options.getShader();
         boolean bl = shader.isEmpty();
         if (bl) client.execute(() -> ShaderLoader.reloadShaders(client, false));

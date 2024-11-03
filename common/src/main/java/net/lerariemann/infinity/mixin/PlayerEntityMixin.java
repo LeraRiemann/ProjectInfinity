@@ -16,6 +16,6 @@ import java.util.Optional;
 public class PlayerEntityMixin {
     @Inject(method="findRespawnPosition", at = @At("HEAD"), cancellable = true)
     private static void injected(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> cir) {
-        if (((Timebombable)world).projectInfinity$isTimebombed() > 0) cir.setReturnValue(Optional.empty());
+        if (((Timebombable)world).infinity$isTimebombed() > 0) cir.setReturnValue(Optional.empty());
     }
 }

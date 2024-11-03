@@ -47,7 +47,7 @@ public class BackgroundRendererMixin {
 
     @Unique
     private static InfinityOptions infinity$options(ClientWorld world) {
-        InfinityOptions options = ((InfinityOptionsAccess)world).projectInfinity$getInfinityOptions();
+        InfinityOptions options = ((InfinityOptionsAccess)world).infinity$getOptions();
         if (options == null) options = InfinityOptions.empty();
         return options;
     }

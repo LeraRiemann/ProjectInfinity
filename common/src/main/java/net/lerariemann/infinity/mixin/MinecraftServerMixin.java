@@ -79,12 +79,12 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
         worldsToAdd = new HashMap<>();
         needsInvocation = !Files.exists(InfinityMod.invocationLock);
         LogManager.getLogger().info("Invocation {}", needsInvocation ? "needed..." : "not needed");
-        projectInfinity$setDimensionProvider();
+        infinity$setDimensionProvider();
     }
     @Override
-    public boolean projectInfinity$needsInvocation() {return needsInvocation;}
+    public boolean infinity$needsInvocation() {return needsInvocation;}
     @Override
-    public void projectInfinity$onInvocation() {
+    public void infinity$onInvocation() {
         needsInvocation = false;
         try {
             Path p = InfinityMod.invocationLock;
@@ -99,12 +99,12 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
         }
     }
     @Override
-    public RandomProvider projectInfinity$getDimensionProvider() {
+    public RandomProvider infinity$getDimensionProvider() {
         return dimensionProvider;
     }
 
     @Override
-    public void projectInfinity$setDimensionProvider() {
+    public void infinity$setDimensionProvider() {
         RandomProvider p = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
                 getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
         p.kickGhostsOut(getRegistryManager());
@@ -112,7 +112,7 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
     }
 
     @Override
-    public void projectInfinity$addWorld(RegistryKey<World> key, DimensionOptions options) {
+    public void infinity$addWorld(RegistryKey<World> key, DimensionOptions options) {
         ServerWorldProperties serverWorldProperties = saveProperties.getMainWorldProperties();
         ServerWorld world = new ServerWorld(((MinecraftServer) (Object) this), workerExecutor, session, serverWorldProperties,
                 key, options, worldGenerationProgressListenerFactory.create(11), saveProperties.isDebugWorld(),
@@ -127,7 +127,7 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
     }
 
     @Override
-    public boolean projectInfinity$hasToAdd(RegistryKey<World> key) {
+    public boolean infinity$hasToAdd(RegistryKey<World> key) {
         return (worldsToAdd.containsKey(key));
     }
 

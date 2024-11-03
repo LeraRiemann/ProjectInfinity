@@ -47,7 +47,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     private void injected(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<Spawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
         infinityoptions = InfinityOptions.generate(server, worldKey);
         DimensionType t = getDimension();
-        ((InfinityOptionsAccess)(Object)t).projectInfinity$setInfinityOptions(infinityoptions);
+        ((InfinityOptionsAccess)(Object)t).infinity$setOptions(infinityoptions);
         timebombed = 0;
     }
 
@@ -62,21 +62,21 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     }
 
     @Override
-    public void projectInfinity$timebomb(int i) {
+    public void infinity$timebomb(int i) {
         if(getRegistryKey().getValue().toString().contains("infinity")) timebombed = i;
     }
 
     @Override
-    public int projectInfinity$isTimebombed() {
+    public int infinity$isTimebombed() {
         return timebombed;
     }
 
     @Override
-    public InfinityOptions projectInfinity$getInfinityOptions() {
+    public InfinityOptions infinity$getOptions() {
         return infinityoptions;
     }
     @Override
-    public void projectInfinity$setInfinityOptions(InfinityOptions options) {
+    public void infinity$setOptions(InfinityOptions options) {
         infinityoptions = options;
     }
 }

@@ -28,7 +28,7 @@ public class RandomNoisePreset {
         NbtCompound data = new NbtCompound();
         type_alike = dim.type_alike;
         String typeshort = type_alike.substring(type_alike.lastIndexOf(":") + 1);
-        if (!dim.isNotOverworld()) {
+        if (dim.isOverworldLike()) {
             noise_router = typeshort;
             surface_rule = spawn_target = "overworld";
             data.putBoolean("aquifers_enabled", true);

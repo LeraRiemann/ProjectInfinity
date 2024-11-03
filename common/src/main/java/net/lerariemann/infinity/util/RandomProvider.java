@@ -38,7 +38,7 @@ public class RandomProvider {
     public Easterizer easterizer;
 
     public static RandomProvider getProvider(MinecraftServer server) {
-        return ((MinecraftServerAccess)(server)).projectInfinity$getDimensionProvider();
+        return ((MinecraftServerAccess)(server)).infinity$getDimensionProvider();
     }
 
     public RandomProvider(String configpath, String savingpath) {

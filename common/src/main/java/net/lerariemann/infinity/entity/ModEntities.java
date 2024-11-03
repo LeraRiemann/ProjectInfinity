@@ -62,17 +62,20 @@ public class ModEntities {
 
     public static void registerSpawnRestrictions() {
         SpawnRestriction.register(DIMENSIONAL_SLIME.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, DimensionalSlime::canSpawn);
-        SpawnRestriction.register(DIMENSIONAL_SKELETON.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canSpawnInDark);
-        SpawnRestriction.register(DIMENSIONAL_CREEPER.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canSpawnInDark);
+        SpawnRestriction.register(DIMENSIONAL_SKELETON.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canChaosMonsterSpawn);
+        SpawnRestriction.register(DIMENSIONAL_CREEPER.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canChaosMonsterSpawn);
         SpawnRestriction.register(CHAOS_PAWN.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChaosPawn::canSpawn);
         SpawnRestriction.register(EntityType.SNIFFER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
         SpawnRestriction.register(EntityType.CAMEL, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
         SpawnRestriction.register(EntityType.ZOGLIN, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark);
     }
 
-    public static boolean canSpawnInDark(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random) &&
-                RandomProvider.getProvider(world.toServerWorld().getServer()).rule("chaosMobsEnabled");
+    public static boolean canChaosMonsterSpawn(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+        return HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random) && chaosMobsEnabled(world);
+    }
+
+    public static boolean chaosMobsEnabled(ServerWorldAccess world) {
+        return RandomProvider.getProvider(world.toServerWorld().getServer()).rule("chaosMobsEnabled");
     }
 
     public static void registerEntityRenderers() {

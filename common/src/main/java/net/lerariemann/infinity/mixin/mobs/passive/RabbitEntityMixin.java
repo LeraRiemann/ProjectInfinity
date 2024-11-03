@@ -21,7 +21,7 @@ public abstract class RabbitEntityMixin extends AnimalEntity {
 
     @Inject(method = "canSpawn", at = @At("HEAD"), cancellable = true)
     private static void injected(EntityType<? extends AnimalEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
-        if (SpawnableInterface.isInfinity(world, pos)) {
+        if (SpawnableInterface.isBiomeInfinity(world, pos)) {
             cir.setReturnValue(canMobSpawn(type, world, spawnReason, pos, random));
         }
     }

@@ -30,7 +30,7 @@ public interface WarpLogic {
 
     static void warp(CommandContext<ServerCommandSource> context, Identifier value) {
         MinecraftServer s = context.getSource().getServer();
-        if (((MinecraftServerAccess)s).projectInfinity$needsInvocation()) {
+        if (((MinecraftServerAccess)s).infinity$needsInvocation()) {
             onInvocationNeedDetected(context.getSource().getPlayer());
             return;
         }

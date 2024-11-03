@@ -8,7 +8,6 @@ import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.PacketTransiever;
 import net.lerariemann.infinity.util.WarpLogic;
-import net.lerariemann.infinity.var.ModCommands;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
@@ -73,7 +72,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             BlockPos blockPos2 = WarpLogic.getPosForWarp(w.getWorldBorder().clamp(self.getX() * d, y, self.getZ() * d), w);
             this.teleport(w, blockPos2.getX(), blockPos2.getY(), blockPos2.getZ(), new HashSet<>(), self.getYaw(), self.getPitch());
         }
-        int i = ((Timebombable)(getServerWorld())).projectInfinity$isTimebombed();
+        int i = ((Timebombable)(getServerWorld())).infinity$isTimebombed();
         if (i > 200) {
             if (i%4 == 0) {
                 Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE);

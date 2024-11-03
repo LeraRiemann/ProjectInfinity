@@ -27,13 +27,13 @@ public class PlayerManagerMixin {
         ServerPlayNetworking.send(player, InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(serverWorld2));
         ServerPlayNetworking.send(player, InfinityMod.STARS_RELOAD, PacketByteBufs.create());
         MinecraftServerAccess acc = ((MinecraftServerAccess)(serverWorld2.getServer()));
-        if (acc.projectInfinity$needsInvocation()) {
+        if (acc.infinity$needsInvocation()) {
             int y = serverWorld2.getTopY() - 10;
             BlockPos pos = new BlockPos(player.getBlockX(), y, player.getBlockY());
             BlockState st = serverWorld2.getBlockState(pos);
             serverWorld2.setBlockState(pos, ModBlocks.ALTAR_COSMIC.get().getDefaultState());
             serverWorld2.getBlockEntity(pos, ModBlockEntities.ALTAR_COSMIC.get()).ifPresent(e -> e.addNull(st));
-            acc.projectInfinity$onInvocation();
+            acc.infinity$onInvocation();
         }
     }
 

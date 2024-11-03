@@ -2,6 +2,7 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.MobEntityAccess;
+import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -193,7 +194,7 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         int a;
         if ((a = (int)(0.1*i)) > 0) {
             this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(new Identifier(
-                    ((MinecraftServerAccess)Objects.requireNonNull(world.getServer())).projectInfinity$getDimensionProvider().randomName(r, "items")))
+                    ((MinecraftServerAccess)Objects.requireNonNull(world.getServer())).infinity$getDimensionProvider().randomName(r, "items")))
                     .getDefaultStack().copyWithCount(a));
             ((MobEntityAccess)this).projectInfinity$setPersistent(false);
         }
@@ -207,7 +208,6 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public static boolean canSpawn(EntityType<ChaosPawn> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        return world.getDifficulty() != Difficulty.PEACEFUL &&
-                RandomProvider.getProvider(world.toServerWorld().getServer()).rule("chaosMobsEnabled");
+        return world.getDifficulty() != Difficulty.PEACEFUL && ModEntities.chaosMobsEnabled(world);
     }
 }

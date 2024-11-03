@@ -152,7 +152,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (server != null) {
             PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
 
-            if (((MinecraftServerAccess)server).projectInfinity$needsInvocation()) {
+            if (((MinecraftServerAccess)server).infinity$needsInvocation()) {
                 WarpLogic.onInvocationNeedDetected(nearestPlayer);
                 return false;
             }
@@ -216,7 +216,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     /* Calls to open the portal and attributes the relevant statistics to a player provided. */
     public static void openWithStatIncrease(PlayerEntity player, MinecraftServer s, World world, BlockPos pos) {
-        if (((MinecraftServerAccess)s).projectInfinity$needsInvocation()) {
+        if (((MinecraftServerAccess)s).infinity$needsInvocation()) {
             WarpLogic.onInvocationNeedDetected(player);
             return;
         }
@@ -295,13 +295,13 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         /* checks if the dimension requested is valid and does not already exist */
         if (!id.getNamespace().equals(InfinityMod.MOD_ID)) return false;
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
-        if ((server.getWorld(key) != null) || ((MinecraftServerAccess)(server)).projectInfinity$hasToAdd(key)) return false;
+        if ((server.getWorld(key) != null) || ((MinecraftServerAccess)(server)).infinity$hasToAdd(key)) return false;
 
         /* creates the dimension datapack */
         RandomDimension d = new RandomDimension(id, server);
 
         if (!RandomProvider.getProvider(server).rule("runtimeGenerationEnabled")) return false;
-        ((MinecraftServerAccess)(server)).projectInfinity$addWorld(
+        ((MinecraftServerAccess)(server)).infinity$addWorld(
                 key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d)); // create the dimension
         server.getPlayerManager().getPlayerList().forEach(a ->
                 ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(id, d)));

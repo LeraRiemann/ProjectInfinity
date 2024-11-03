@@ -10,7 +10,7 @@ public interface MavityInterface {
     default double getMavity() {
         double mavity;
         try {
-            mavity = ((InfinityOptionsAccess) getWorld()).projectInfinity$getInfinityOptions().getMavity();
+            mavity = ((InfinityOptionsAccess) getWorld()).infinity$getOptions().getMavity();
         } catch (Exception e) {
             mavity = 1.0;
         }
