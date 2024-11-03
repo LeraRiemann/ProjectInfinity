@@ -6,9 +6,9 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.client.ChaosPawnRenderer;
-import net.lerariemann.infinity.entity.client.DimensionalCreeperRenderer;
-import net.lerariemann.infinity.entity.client.DimensionalSkeletonRenderer;
-import net.lerariemann.infinity.entity.client.DimensionalSlimeRenderer;
+import net.lerariemann.infinity.entity.client.ChaosCreeperRenderer;
+import net.lerariemann.infinity.entity.client.ChaosSkeletonRenderer;
+import net.lerariemann.infinity.entity.client.ChaosSlimeRenderer;
 import net.lerariemann.infinity.entity.custom.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
@@ -42,9 +42,9 @@ public class ModEntities {
     }
     public static final DeferredRegister<EntityType<?>> INFINITY_ENTITIES = DeferredRegister.create(MOD_ID, RegistryKeys.ENTITY_TYPE);
 
-    public static final RegistrySupplier<EntityType<DimensionalSlime>> DIMENSIONAL_SLIME = INFINITY_ENTITIES.register("dimensional_slime", () -> EntityType.Builder.create(DimensionalSlime::new, SpawnGroup.MONSTER).dimensions(0.52f, 0.52f).maxTrackingRange(10).build(null));
-    public static final RegistrySupplier<EntityType<DimensionalSkeleton>> DIMENSIONAL_SKELETON = INFINITY_ENTITIES.register("dimensional_skeleton", () -> EntityType.Builder.create(DimensionalSkeleton::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.99f).maxTrackingRange(8).build(null));
-    public static final RegistrySupplier<EntityType<DimensionalCreeper>> DIMENSIONAL_CREEPER = INFINITY_ENTITIES.register("dimensional_creeper", () -> EntityType.Builder.create(DimensionalCreeper::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.7f).maxTrackingRange(8).build(null));
+    public static final RegistrySupplier<EntityType<ChaosSlime>> CHAOS_SLIME = INFINITY_ENTITIES.register("chaos_slime", () -> EntityType.Builder.create(ChaosSlime::new, SpawnGroup.MONSTER).dimensions(0.52f, 0.52f).maxTrackingRange(10).build(null));
+    public static final RegistrySupplier<EntityType<ChaosSkeleton>> CHAOS_SKELETON = INFINITY_ENTITIES.register("chaos_skeleton", () -> EntityType.Builder.create(ChaosSkeleton::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.99f).maxTrackingRange(8).build(null));
+    public static final RegistrySupplier<EntityType<ChaosCreeper>> CHAOS_CREEPER = INFINITY_ENTITIES.register("chaos_creeper", () -> EntityType.Builder.create(ChaosCreeper::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.7f).maxTrackingRange(8).build(null));
     public static final RegistrySupplier<EntityType<ChaosPawn>> CHAOS_PAWN = INFINITY_ENTITIES.register("chaos_pawn", () -> EntityType.Builder.create(ChaosPawn::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.8f).maxTrackingRange(10).build(null));
 
     public static void registerEntities() {
@@ -53,16 +53,16 @@ public class ModEntities {
     }
 
     public static void registerAttributes() {
-        EntityAttributeRegistry.register(DIMENSIONAL_SLIME, DimensionalSlime::createAttributes);
-        EntityAttributeRegistry.register(DIMENSIONAL_SKELETON, AbstractSkeletonEntity::createAbstractSkeletonAttributes);
-        EntityAttributeRegistry.register(DIMENSIONAL_CREEPER, DimensionalCreeper::createCreeperAttributes);
+        EntityAttributeRegistry.register(CHAOS_SLIME, ChaosSlime::createAttributes);
+        EntityAttributeRegistry.register(CHAOS_SKELETON, AbstractSkeletonEntity::createAbstractSkeletonAttributes);
+        EntityAttributeRegistry.register(CHAOS_CREEPER, ChaosCreeper::createCreeperAttributes);
         EntityAttributeRegistry.register(CHAOS_PAWN, ChaosPawn::createAttributes);
     }
 
     public static void registerSpawnRestrictions() {
-        SpawnRestriction.register(DIMENSIONAL_SLIME.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, DimensionalSlime::canSpawn);
-        SpawnRestriction.register(DIMENSIONAL_SKELETON.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canChaosMonsterSpawn);
-        SpawnRestriction.register(DIMENSIONAL_CREEPER.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canChaosMonsterSpawn);
+        SpawnRestriction.register(CHAOS_SLIME.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChaosSlime::canSpawn);
+        SpawnRestriction.register(CHAOS_SKELETON.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canChaosMonsterSpawn);
+        SpawnRestriction.register(CHAOS_CREEPER.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canChaosMonsterSpawn);
         SpawnRestriction.register(CHAOS_PAWN.get(), SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChaosPawn::canSpawn);
         SpawnRestriction.register(EntityType.SNIFFER, SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
         SpawnRestriction.register(EntityType.CAMEL, SpawnLocationTypes.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
@@ -79,9 +79,9 @@ public class ModEntities {
     }
 
     public static void registerEntityRenderers() {
-        EntityRendererRegistry.register(DIMENSIONAL_SLIME, DimensionalSlimeRenderer::new);
-        EntityRendererRegistry.register(DIMENSIONAL_SKELETON, DimensionalSkeletonRenderer::new);
-        EntityRendererRegistry.register(DIMENSIONAL_CREEPER, DimensionalCreeperRenderer::new);
+        EntityRendererRegistry.register(CHAOS_SLIME, ChaosSlimeRenderer::new);
+        EntityRendererRegistry.register(CHAOS_SKELETON, ChaosSkeletonRenderer::new);
+        EntityRendererRegistry.register(CHAOS_CREEPER, ChaosCreeperRenderer::new);
         EntityRendererRegistry.register(CHAOS_PAWN, ChaosPawnRenderer::new);
     }
 }

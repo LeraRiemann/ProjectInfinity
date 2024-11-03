@@ -8,7 +8,10 @@ import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.entity.ModEntities;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -30,6 +33,11 @@ public class ModItems {
     public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM  = registerSimpleBlockItem(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM = registerSimpleBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR);
     public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
+
+    public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = registerSpawnEgg("chaos_pawn_spawn_egg", ModEntities.CHAOS_PAWN.get(), 0, 0xFFFFFF);
+    public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = registerSpawnEgg("chaos_creeper_spawn_egg", ModEntities.CHAOS_CREEPER.get(), 0x91BD59, 0x78A7FF);
+    public static final RegistrySupplier<Item> CHAOS_SKELETON_SPAWN_EGG = registerSpawnEgg("chaos_skeleton_spawn_egg", ModEntities.CHAOS_SKELETON.get(), 0xF3CFB9, 0x87A363);
+    public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = registerSpawnEgg("chaos_slime_spawn_egg", ModEntities.CHAOS_SLIME.get(), 0xAA77DD, 0xFF66FF);
 
 
     public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {
@@ -80,6 +88,11 @@ public class ModItems {
         else {
             return ITEMS.register("key", () -> new TransfiniteKeyItem(keySettings.arch$tab(ItemGroups.INGREDIENTS)));
         }
+    }
+
+    public static RegistrySupplier<Item> registerSpawnEgg(String id, EntityType<? extends MobEntity> type, int primary, int secondary) {
+        Item.Settings settings = new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
+        return ITEMS.register(id, () -> new SpawnEggItem(type, primary, secondary, settings));
     }
 
     public static void registerModItems() {

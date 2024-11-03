@@ -8,7 +8,7 @@ import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.util.Identifier;
 
-public class DimensionalCreeperRenderer extends CreeperEntityRenderer {
+public class ChaosCreeperRenderer extends CreeperEntityRenderer {
     private static final Identifier TEXTURE2 = InfinityMod.getId("textures/entity/creeper.png");
 
     @Override
@@ -16,7 +16,7 @@ public class DimensionalCreeperRenderer extends CreeperEntityRenderer {
         return TEXTURE2;
     }
 
-    public DimensionalCreeperRenderer(EntityRendererFactory.Context context) {
+    public ChaosCreeperRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.addFeature(new TintedLayerRenderer<>(this, new CreeperEntityModel<>(context.getPart(EntityModelLayers.CREEPER))));
     }

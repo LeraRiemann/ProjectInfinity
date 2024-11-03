@@ -134,7 +134,7 @@
     "misc": [],
     "monster": [
       {
-        "type": "infinity:dimensional_slime",
+        "type": "infinity:chaos_slime",
         "maxCount": 4,
         "minCount": 4,
         "weight": 100

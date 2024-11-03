@@ -40,10 +40,10 @@ public class InfinityMod {
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
 		ModComponentTypes.registerComponentTypes();
+		ModEntities.registerEntities();
 		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
 		ModBlockEntities.registerBlockEntities();
-		ModEntities.registerEntities();
 		ModPoi.registerPoi();
 		ModCommands.registerCommands();
 		ModDensityFunctionTypes.registerFunctions();
