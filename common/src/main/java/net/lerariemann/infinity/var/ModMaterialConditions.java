@@ -116,13 +116,13 @@ public class ModMaterialConditions {
             while (i < text.length()) {
                 bl = false;
                 Character c = text.charAt(i);
-                if (Objects.equals(c, '$')) {
+                if (c.equals('$')) {
                     if (i+1 < text.length() && (Objects.equals(text.charAt(i+1), 'n'))) {
                         i+=1;
                         bl = true;
                     }
                 }
-                if (x == 0 && Objects.equals(c, ' ')) {
+                if (x == 0 && c.equals(' ')) {
                     i+=1;
                     continue;
                 }

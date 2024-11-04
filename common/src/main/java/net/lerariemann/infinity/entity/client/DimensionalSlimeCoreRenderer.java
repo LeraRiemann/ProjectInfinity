@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.entity.client;
 
-import net.lerariemann.infinity.entity.custom.DimensionalSlime;
+import net.lerariemann.infinity.entity.custom.ChaosSlime;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayers;
@@ -13,15 +13,15 @@ import net.minecraft.client.render.entity.model.SlimeEntityModel;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class DimensionalSlimeCoreRenderer extends FeatureRenderer<DimensionalSlime, SlimeEntityModel<DimensionalSlime>> {
+public class DimensionalSlimeCoreRenderer extends FeatureRenderer<ChaosSlime, SlimeEntityModel<ChaosSlime>> {
     private final BlockRenderManager blockRenderManager;
 
-    public DimensionalSlimeCoreRenderer(FeatureRendererContext<DimensionalSlime, SlimeEntityModel<DimensionalSlime>> context, BlockRenderManager blockRenderManager) {
+    public DimensionalSlimeCoreRenderer(FeatureRendererContext<ChaosSlime, SlimeEntityModel<ChaosSlime>> context, BlockRenderManager blockRenderManager) {
         super(context);
         this.blockRenderManager = blockRenderManager;
     }
     @Override
-    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, DimensionalSlime slime, float f, float g, float h, float j, float k, float l) {
+    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, ChaosSlime slime, float f, float g, float h, float j, float k, float l) {
         boolean bl = MinecraftClient.getInstance().hasOutline(slime) && slime.isInvisible();
         if (slime.isInvisible() && !bl) {
             return;

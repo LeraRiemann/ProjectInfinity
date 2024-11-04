@@ -20,7 +20,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
-import static net.lerariemann.infinity.util.ConfigManager.getConfigDir;
 
 public class ModMaterialRules {
     static int normalize(int x, int size) {
@@ -41,11 +40,14 @@ public class ModMaterialRules {
         }
     }
 
-    enum RandomBlockMaterialRule implements MaterialRules.MaterialRule
+    public enum RandomBlockMaterialRule implements MaterialRules.MaterialRule
     {
         INSTANCE;
         static final CodecHolder<RandomBlockMaterialRule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
-        static final RandomProvider PROVIDER = new RandomProvider(getConfigDir() + "/");
+        static RandomProvider PROVIDER;
+        public static void setProvider(RandomProvider p) {
+            PROVIDER = p;
+        }
 
         @Override
         public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
@@ -54,7 +56,7 @@ public class ModMaterialRules {
 
         @Override
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
-            return new RandomBlockStateRule(PROVIDER.blockRegistry.get("full_blocks_worldgen"));
+            return new RandomBlockStateRule(PROVIDER.compoundRegistry.get("full_blocks_worldgen"));
         }
     }
     public static class Library implements MaterialRules.BlockStateRule
@@ -365,6 +367,5 @@ public class ModMaterialRules {
         register("nexus", NexusRule.CODEC);
         register("perfection", PerfectionRule.CODEC);
         MATERIAL_RULES.register();
-
     }
 }

@@ -19,7 +19,7 @@ public class RandomMobsList {
         random = biome.random;
         PROVIDER = biome.PROVIDER;
         data = new HashMap<>();
-        for (String i : PROVIDER.mobcategories()) {
+        for (String i : PROVIDER.mob_categories()) {
             data.put(i, new NbtList());
         }
         int mobCount = random.nextInt(20);
@@ -32,7 +32,7 @@ public class RandomMobsList {
 
     NbtCompound asData() {
         NbtCompound res = new NbtCompound();
-        for (String i : PROVIDER.mobcategories()) res.put(i, data.get(i));
+        for (String i : PROVIDER.mob_categories()) res.put(i, data.get(i));
         return res;
     }
 }

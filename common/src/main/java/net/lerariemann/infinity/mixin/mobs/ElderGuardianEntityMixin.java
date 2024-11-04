@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.mixin.mobs;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MobEntityAccess;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.ElderGuardianEntity;
@@ -18,8 +19,8 @@ public class ElderGuardianEntityMixin extends GuardianEntity {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     void injected(EntityType<? extends ElderGuardianEntity> entityType, World world, CallbackInfo ci) {
-        if (world.getRegistryKey().getValue().getNamespace().contains("infinity")) {
-            ((MobEntityAccess)this).projectInfinity$setPersistent(false);
+        if (InfinityMod.isInfinity(world)) {
+            ((MobEntityAccess)this).infinity$setPersistent(false);
         }
     }
 }

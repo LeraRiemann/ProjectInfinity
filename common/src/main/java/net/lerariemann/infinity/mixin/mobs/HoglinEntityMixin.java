@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class HoglinEntityMixin {
     @Inject(method = "canSpawn", at = @At("HEAD"), cancellable = true)
     private static void injected(EntityType<HoglinEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
-        if (SpawnableInterface.isInfinity(world, pos)) {
+        if (SpawnableInterface.isBiomeInfinity(world, pos)) {
             cir.setReturnValue(AnimalEntity.canMobSpawn(type, world, spawnReason, pos, random) && world.getDifficulty() != Difficulty.PEACEFUL);
         }
     }

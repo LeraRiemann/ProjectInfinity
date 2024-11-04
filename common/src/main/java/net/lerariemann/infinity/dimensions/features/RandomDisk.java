@@ -20,7 +20,7 @@ public class RandomDisk extends RandomisedFeature {
         addInSquare();
         addHeightmap("OCEAN_FLOOR_WG");
         String s = daddy.default_fluid.getString("fluidName");
-        if (!Objects.equals(s, "minecraft:air")) addBlockPredicateFilter(matchingFluids(s));
+        if (!s.equals("minecraft:air")) addBlockPredicateFilter(matchingFluids(s));
         addBiome();
     }
 

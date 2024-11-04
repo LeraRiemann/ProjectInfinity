@@ -16,7 +16,7 @@ public class RandomCrop extends RandomisedFeature {
     public RandomCrop(RandomFeaturesList parent) {
         super(parent, "crop");
         id = "block_column";
-        NbtElement crop = PROVIDER.extraRegistry.get("crops").getRandomElement(random);
+        NbtElement crop = PROVIDER.compoundRegistry.get("crops").getRandomElement(random);
         cropp = (NbtCompound)crop;
         start = daddy.sea_level - (cropp.getKeys().contains("offset") ? cropp.getInt("offset") : 1);
         water = cropp.getBoolean("needsWater");

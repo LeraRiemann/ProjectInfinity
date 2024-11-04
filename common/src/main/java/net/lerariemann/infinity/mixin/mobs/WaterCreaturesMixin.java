@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class WaterCreaturesMixin {
     @Inject(method = "canSpawn(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/entity/SpawnReason;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/random/Random;)Z", at = @At("HEAD"), cancellable = true)
     private static void injected(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
-        if (SpawnableInterface.isInfinity(world, pos)) {
+        if (SpawnableInterface.isBiomeInfinity(world, pos)) {
             cir.setReturnValue(spawnReason == SpawnReason.SPAWNER || (MobEntity.canMobSpawn(type, world, spawnReason, pos, random) && world.getFluidState(pos).isIn(FluidTags.WATER) && world.getBlockState(pos.up()).isOf(Blocks.WATER)));
         }
     }

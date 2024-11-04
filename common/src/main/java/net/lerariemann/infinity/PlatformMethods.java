@@ -108,4 +108,14 @@ public class PlatformMethods {
     public static void addAfter(RegistrySupplier<Item> blockItem, RegistryKey<ItemGroup> group, Item item) {
         throw new AssertionError();
     }
+
+    @ExpectPlatform
+    public static boolean isInBlack(BlockState state) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static boolean isInWhite(BlockState state) {
+        throw new AssertionError();
+    }
 }

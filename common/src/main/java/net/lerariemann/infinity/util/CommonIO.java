@@ -55,7 +55,7 @@ public class CommonIO {
             int i = content.indexOf("infinity_version");
             int end = content.indexOf(",", i);
             if (end == -1) {
-                end = content.indexOf("}", i);
+                end = content.indexOf("\n", i);
             }
             return Integer.parseInt(content.substring(content.indexOf(" ", i)+1, end).trim());
         } catch (IOException e) {
@@ -127,7 +127,7 @@ public class CommonIO {
         }
     }
 
-    public static WeighedStructure<String> weighedListReader(String path) {
+    public static WeighedStructure<String> stringListReader(String path) {
         NbtCompound base = read(path);
         WeighedStructure<String> res = new WeighedStructure<>();
         NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
@@ -154,7 +154,7 @@ public class CommonIO {
         return new NbtList();
     }
 
-    public static WeighedStructure<String> weighedListReader(String path, String subpath) {
+    public static WeighedStructure<String> stringListReader(String path, String subpath) {
         WeighedStructure<String> res = new WeighedStructure<>();
         for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
             NbtList list = _extractElements(path1, subpath);
@@ -166,27 +166,13 @@ public class CommonIO {
         return res;
     }
 
-    public static WeighedStructure<NbtElement> blockListReader(String path, String subpath) {
+    public static WeighedStructure<NbtElement> compoundListReader(String path, String subpath) {
         WeighedStructure<NbtElement> res = new WeighedStructure<>();
         for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
             NbtList list = _extractElements(path1, subpath);
             for(int i = 0; i < list.size(); i++) {
                 NbtCompound a = list.getCompound(i);
                 res.add(a.get("key"), a.getDouble("weight"));
-            }
-        }
-        return res;
-    }
-
-    public static NbtList nbtListReader(String path, String subpath) {
-        NbtList res = new NbtList();
-        for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
-            if (_checkIfModLoaded(path1)) {
-                File readingthis = new File(path1.getPath() + "/" + subpath);
-                if (readingthis.exists()) {
-                    NbtList add = read(path1.getPath() + "/" + subpath).getList("elements", NbtElement.STRING_TYPE);
-                    res.addAll(add);
-                }
             }
         }
         return res;

@@ -9,9 +9,12 @@ import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.BiomeTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
+import net.minecraft.world.biome.Biome;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -94,12 +97,12 @@ public class RandomDimension {
     public void genBasics() {
         type_alike = PROVIDER.randomName(random, "noise_presets");
         min_y = 16*Math.min(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
-        if (isNotOverworld()) min_y = Math.max(min_y, -48);
+        if (!isOverworldLike()) min_y = Math.max(min_y, -48);
         int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
-        if (isNotOverworld()) max_y = Math.max(max_y, 80);
+        if (!isOverworldLike()) max_y = Math.max(max_y, 80);
         randomiseblocks = PROVIDER.roll(random, "randomise_blocks");
         int sea_level_default = 63;
-        if (isNotOverworld()) sea_level_default = switch(type_alike) {
+        if (!isOverworldLike()) sea_level_default = switch(type_alike) {
             case "minecraft:floating_islands" -> -64;
             case "minecraft:end" -> 0;
             case "minecraft:nether", "minecraft:caves" -> 32;
@@ -152,13 +155,13 @@ public class RandomDimension {
         return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMod.getId(name))));
     }
 
-    boolean isNotOverworld() {
-        return (!Objects.equals(type_alike, "minecraft:overworld")) && (!Objects.equals(type_alike, "minecraft:large_biomes"))
-                && (!Objects.equals(type_alike, "minecraft:amplified")) && (!Objects.equals(type_alike, "infinity:whack"));
+    boolean isOverworldLike() {
+        return (type_alike.equals("minecraft:overworld")) || (type_alike.equals("minecraft:large_biomes"))
+                || (type_alike.equals("minecraft:amplified")) || (type_alike.equals("infinity:whack"));
     }
 
     boolean hasCeiling() {
-        return ((Objects.equals(type_alike, "minecraft:nether")) || (Objects.equals(type_alike, "minecraft:caves")));
+        return ((type_alike.equals("minecraft:nether")) || (type_alike.equals("minecraft:caves")) || (type_alike.equals("infinity:tangled")));
     }
 
     NbtCompound packMcmeta() {
@@ -241,7 +244,7 @@ public class RandomDimension {
             }
             case "minecraft:multi_noise" -> {
                 String preset = PROVIDER.randomName(random, "multinoise_presets");
-                if (Objects.equals(preset, "none")) res.put("biomes", randomBiomes());
+                if (preset.equals("none") || hasCeiling()) res.put("biomes", randomBiomes());
                 else {
                     res.putString("preset", preset.replace("_", ":"));
                     addPresetBiomes(preset);
@@ -254,10 +257,13 @@ public class RandomDimension {
     }
 
     void addPresetBiomes(String preset) {
-        NbtList lst = PROVIDER.listRegistry.get(preset);
-        for (NbtElement i: lst) {
-            vanilla_biomes.add(i.asString());
-        }
+        TagKey<Biome> tag = preset.equals("overworld") ? BiomeTags.IS_OVERWORLD : BiomeTags.IS_NETHER;
+        Registry<Biome> r = server.getRegistryManager().get(RegistryKeys.BIOME);
+        r.getKeys().forEach(key -> {
+            if (!Objects.equals(key.getValue().getNamespace(), "infinity")) {
+                if (r.get(key) != null && r.getEntry(r.get(key)).isIn(tag)) vanilla_biomes.add(key.getValue().toString());
+            }
+        });
     }
 
     NbtList randomBiomesCheckerboard() {
@@ -307,7 +313,7 @@ public class RandomDimension {
 
     String randomBiome() {
         String biome;
-        if (!PROVIDER.roll(random, "use_random_biome")) {
+        if (!hasCeiling() && !PROVIDER.roll(random, "use_random_biome")) {
             biome = PROVIDER.randomName(random, "biomes");
             vanilla_biomes.add(biome);
         }
@@ -345,7 +351,7 @@ public class RandomDimension {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        NbtCompound dictionary = CommonIO.read(PROVIDER.configPath + "util/structure_tags.json");
+        NbtCompound dictionary = CommonIO.read(InfinityMod.utilPath + "/structure_tags.json");
         Map<String, NbtList> tags = new HashMap<>();
         for (String s : structure_ids.keySet()) if (dictionary.contains(s)) {
             for (NbtElement e : (NbtList) Objects.requireNonNull(dictionary.get(s))) {

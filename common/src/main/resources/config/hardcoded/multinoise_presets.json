@@ -1,0 +1,16 @@
+{
+  "elements": [
+    {
+      "key": "overworld",
+      "weight": 0.01
+    },
+    {
+      "key": "nether",
+      "weight": 0.01
+    },
+    {
+      "key": "none",
+      "weight": 0.89
+    }
+  ]
+}

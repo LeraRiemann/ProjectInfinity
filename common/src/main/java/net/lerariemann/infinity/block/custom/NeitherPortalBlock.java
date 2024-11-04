@@ -78,7 +78,10 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
         /* Check if the item provided is a transfinite key. */
         Identifier key_dest = itemStack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
-        if (key_dest != null) {
+        if ((entity.getStack().getItem().equals(ModItems.TRANSFINITE_KEY.get())) && key_dest == null) {
+            key_dest = Identifier.of("minecraft:random");
+        }
+        if (key_dest != null)  {
             MinecraftServer server = world.getServer();
             if (server != null) {
                 boolean bl = NeitherPortalBlock.modifyOnInitialCollision(key_dest, world, pos, state);
@@ -137,7 +140,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (server != null) {
             PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
 
-            if (((MinecraftServerAccess)server).projectInfinity$needsInvocation()) {
+            if (((MinecraftServerAccess)server).infinity$needsInvocation()) {
                 WarpLogic.onInvocationNeedDetected(nearestPlayer);
                 return false;
             }
@@ -202,7 +205,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     /* Calls to open the portal and attributes the relevant statistics to a player provided. */
     public static void openWithStatIncrease(PlayerEntity player, MinecraftServer s, World world, BlockPos pos) {
-        if (((MinecraftServerAccess)s).projectInfinity$needsInvocation()) {
+        if (((MinecraftServerAccess)s).infinity$needsInvocation()) {
             WarpLogic.onInvocationNeedDetected(player);
             return;
         }
@@ -281,13 +284,13 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         /* checks if the dimension requested is valid and does not already exist */
         if (!id.getNamespace().equals(InfinityMod.MOD_ID)) return false;
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
-        if ((server.getWorld(key) != null) || ((MinecraftServerAccess)(server)).projectInfinity$hasToAdd(key)) return false;
+        if ((server.getWorld(key) != null) || ((MinecraftServerAccess)(server)).infinity$hasToAdd(key)) return false;
 
         /* creates the dimension datapack */
         RandomDimension d = new RandomDimension(id, server);
 
         if (!RandomProvider.getProvider(server).rule("runtimeGenerationEnabled")) return false;
-        ((MinecraftServerAccess)(server)).projectInfinity$addWorld(
+        ((MinecraftServerAccess)(server)).infinity$addWorld(
                 key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d)); // create the dimension
         server.getPlayerManager().getPlayerList().forEach(
                 a -> sendNewWorld(a, id, d)); //and send everyone its data for clientside updating
@@ -386,7 +389,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 pos = pos.down();
             }
             if (world.getBlockState(pos).allowsSpawning(world, pos, ModEntities.CHAOS_PAWN.get()) &&
-                    RandomProvider.getProvider(world.getServer()).rule("chaosMobsEnabled") &&
+                    ModEntities.chaosMobsEnabled(world) &&
                     (entity = ModEntities.CHAOS_PAWN.get().spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());

@@ -76,7 +76,7 @@ public class ModPayloads {
     public static void receiveShader(ShaderRePayload payload, Object context) {
         InfinityOptions options = new InfinityOptions(payload.shader_data);
         MinecraftClient client = client(context);
-        ((InfinityOptionsAccess)client).projectInfinity$setInfinityOptions(options);
+        ((InfinityOptionsAccess)client).infinity$setOptions(options);
         NbtCompound shader = options.getShader();
         boolean bl = shader.isEmpty();
         if (bl) client.execute(() -> ShaderLoader.reloadShaders(client, false));
@@ -108,7 +108,7 @@ public class ModPayloads {
     }
 
     public static ShaderRePayload setShaderFromWorld(ServerWorld destination) {
-        return new ShaderRePayload(((InfinityOptionsAccess)(destination)).projectInfinity$getInfinityOptions().data());
+        return new ShaderRePayload(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
     }
 
     public static void registerPayloadsServer() {

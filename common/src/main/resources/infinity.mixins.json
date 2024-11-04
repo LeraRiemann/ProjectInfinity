@@ -8,6 +8,8 @@
     "AquifierSamplerImplMixin",
     "ChunkRegionMixin",
     "CreeperEntityMixin",
+    "FireBlockMixin",
+    "LavaFluidMixin",
     "MaterialRuleContextAccess",
     "MinecraftServerMixin",
     "MobEntityMixin",

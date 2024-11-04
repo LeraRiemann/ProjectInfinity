@@ -1,12 +1,12 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.access.MobEntityAccess;
+import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -17,6 +17,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.NbtCompound;
@@ -30,12 +31,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 
 public class ChaosPawn extends HostileEntity implements Angerable {
@@ -100,7 +101,8 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         this.goalSelector.add(0, new SwimGoal(this));
         this.targetSelector.add(1, new RevengeGoal(this).setGroupRevenge());
         this.goalSelector.add(2, new MeleeAttackGoal(this, 1.0, false));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, DimensionalSlime.class, true));
+        this.targetSelector.add(3, new ChaosCleanseGoal<>(this, ChaosSlime.class, true));
+        this.targetSelector.add(3, new ChaosCleanseGoal<>(this, ChaosSkeleton.class, true));
         this.targetSelector.add(3, new UniversalAngerGoal<>(this, true));
         this.goalSelector.add(5, new EatGrassGoal(this));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
@@ -146,12 +148,12 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public void setAllColors(Random r, BlockState state) {
-        if (state.isOf(Blocks.WHITE_WOOL)) {
+        if (state.isOf(Blocks.WHITE_WOOL) || state.isOf(Blocks.WHITE_CONCRETE)) {
             this.dataTracker.set(special_case, 1);
-            setAllColors(16777215);
+            setAllColors(0xFFFFFF);
             return;
         }
-        if (state.isOf(Blocks.BLACK_WOOL)) {
+        if (state.isOf(Blocks.BLACK_WOOL) || state.isOf(Blocks.BLACK_CONCRETE)) {
             this.dataTracker.set(special_case, 0);
             setAllColors(0);
             return;
@@ -182,18 +184,11 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
-        Random r = new Random();
+        Random r = world.getRandom();
         setAllColors(r, world.getBlockState(this.getBlockPos().down(2)));
-        double i = 15*r.nextExponential();
+        double i = r.nextDouble() * 40;
         Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
         this.setHealth((float)i);
-        int a;
-        if ((a = (int)(0.1*i)) > 0) {
-            this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(Identifier.of(
-                    RandomProvider.getProvider(Objects.requireNonNull(world.getServer())).randomName(r, "items")))
-                    .getDefaultStack().copyWithCount(a));
-            ((MobEntityAccess)this).projectInfinity$setPersistent(false);
-        }
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
@@ -204,7 +199,28 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public static boolean canSpawn(EntityType<ChaosPawn> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        return world.getDifficulty() != Difficulty.PEACEFUL &&
-                RandomProvider.getProvider(world.toServerWorld().getServer()).rule("chaosMobsEnabled");
+        return world.getDifficulty() != Difficulty.PEACEFUL && ModEntities.chaosMobsEnabled(world);
+    }
+
+    @Override
+    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
+        super.dropEquipment(world, source, causedByPlayer);
+        if (this.dataTracker.get(special_case) == -1) {
+            String s = RandomProvider.getProvider(Objects.requireNonNull(world.getServer())).registry.get("items").getRandomElement(world.random);
+            double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
+            this.dropStack(Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i)));
+        }
+    }
+
+    public static class ChaosCleanseGoal<T extends LivingEntity> extends ActiveTargetGoal<T> {
+        public ChaosCleanseGoal(MobEntity mob, Class<T> targetClass, boolean checkVisibility) {
+            super(mob, targetClass, checkVisibility);
+        }
+
+        @Override
+        public boolean canStart() {
+            if (mob instanceof ChaosPawn e && e.dataTracker.get(special_case) == -1) return false;
+            return super.canStart();
+        }
     }
 }

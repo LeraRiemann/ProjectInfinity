@@ -5,8 +5,11 @@ import me.basiqueevangelist.dynreg.util.RegistryUtils;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.fabricmc.loader.api.FabricLoader;
+import net.lerariemann.infinity.PlatformMethods;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
@@ -48,8 +51,18 @@ public class PlatformMethodsImpl {
 
     }
 
-    public static void addAfter(RegistrySupplier<Item> blockItem, RegistryKey<ItemGroup> group, Item item) {
-        ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, blockItem.get()));
+    public static void addAfter(RegistrySupplier<Item> supplier, RegistryKey<ItemGroup> group, Item item) {
+        if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
+            ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, supplier.get()));
+        }
+    }
+
+    public static boolean isInBlack(BlockState state) {
+        return state.isIn(ConventionalBlockTags.BLACK_DYED);
+    }
+
+    public static boolean isInWhite(BlockState state) {
+        return state.isIn(ConventionalBlockTags.WHITE_DYED);
     }
 
 }
