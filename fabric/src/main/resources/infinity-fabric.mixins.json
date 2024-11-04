@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "net.lerariemann.infinity.mixin.fabric",
   "compatibilityLevel": "JAVA_17",
+  "plugin": "net.lerariemann.infinity.mixin.fabric.InfinityMixinPlugin",
   "mixins": [
     "ServerPlayerEntityMixin",
     "mavity.LivingEntityMixin"
