@@ -132,7 +132,7 @@ public class ClothConfigFactory {
                 .setParentScreen(parent)
                 .setTitle(Text.translatable("config.infinity.title"));
 
-        for (var field : readRootConfigJSON().getAsJsonObject().entrySet()) {
+        for (var field : readRootConfigJson().getAsJsonObject().entrySet()) {
             if (field.getValue().isJsonPrimitive()) {
                 ConfigCategory category = builder.getOrCreateCategory(Text.translatable("config.infinity.title.general"));
                 addElement(field, null, builder, null, category);
@@ -226,7 +226,7 @@ public class ClothConfigFactory {
     // Enable and disable config elements.
     static <T> Consumer<T> mapSetter(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField) {
         return t -> {
-            NbtCompound rootConfig = readRootConfig();
+            NbtCompound rootConfig = readRootConfigNbt();
             NbtCompound configPath = rootConfig;
             if (t != field.getValue()) {
                 if (prevField != null) {
@@ -300,12 +300,12 @@ public class ClothConfigFactory {
         return Path.of(FabricLoader.getInstance().getConfigDir() + "/infinity");
     }
 
-    public static NbtCompound readRootConfig() {
+    public static NbtCompound readRootConfigNbt() {
         return readNbt(configPath() + "/infinity.json");
     }
 
-    public static JsonElement readRootConfigJSON() {
-        return readJSON(configPath() + "/infinity.json");
+    public static JsonElement readRootConfigJson() {
+        return readJson(configPath() + "/infinity.json");
     }
 
     public static NbtCompound readDefaultConfig() {
@@ -329,7 +329,7 @@ public class ClothConfigFactory {
         }
     }
 
-    public static JsonElement readJSON(String file) {
+    public static JsonElement readJson(String file) {
         File newFile = new File(file);
         String content;
         try {
