@@ -1,6 +1,8 @@
 {
-  "infinity_version": 2000001,
-  "easter-color": 16777215,
+  "infinity_version": 2000003,
+  "easter-options": {
+    "portal_color": 16777215
+  },
   "easter-name": "missingno",
   "type": "minecraft:noise",
   "settings": {

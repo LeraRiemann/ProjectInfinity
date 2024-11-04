@@ -19,6 +19,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
 
+import static net.lerariemann.infinity.InfinityMod.MOD_ID;
+
 public class ModMaterialRules {
     static int normalize(int x, int size) {
         int a = Math.abs(x < 0 ? x+1 : x) % size;
@@ -38,11 +40,14 @@ public class ModMaterialRules {
         }
     }
 
-    enum RandomBlockMaterialRule implements MaterialRules.MaterialRule
+    public enum RandomBlockMaterialRule implements MaterialRules.MaterialRule
     {
         INSTANCE;
         static final CodecHolder<RandomBlockMaterialRule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
-        static final RandomProvider PROVIDER = new RandomProvider("config/" + InfinityMod.MOD_ID + "/");
+        static RandomProvider PROVIDER;
+        public static void setProvider(RandomProvider p) {
+            PROVIDER = p;
+        }
 
         @Override
         public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
@@ -367,6 +372,5 @@ public class ModMaterialRules {
         register("backrooms", BackroomsRule.CODEC);
         register("nexus", NexusRule.CODEC);
         register("perfection", PerfectionRule.CODEC);
-
     }
 }

@@ -1,26 +1,34 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.util.RandomProvider;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
@@ -40,7 +48,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     private static final TrackedData<String> effect = DataTracker.registerData(ChaosSkeleton.class, TrackedDataHandlerRegistry.STRING);
     private static final TrackedData<Integer> color = DataTracker.registerData(ChaosSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Integer> duration = DataTracker.registerData(ChaosSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
-    public static Map<String, String> effect_lookup = Map.ofEntries(
+    public static Map<String, String> effect_lookup = Map.ofEntries(Map.entry(
             Map.entry("minecraft:bad_omen", "minecraft:hero_of_the_village"),
             Map.entry("minecraft:darkness", "minecraft:night_vision"),
             Map.entry("minecraft:blindness", "minecraft:night_vision"),
@@ -86,15 +94,12 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random r = new Random();
-        List<Identifier> a = new ArrayList<>();
-        reg.getIds().forEach(i -> {
-            if (Objects.requireNonNull(reg.get(i)).getCategory().equals(StatusEffectCategory.HARMFUL)) a.add(i);
-        });
-        Identifier e = a.get(r.nextInt(a.size()));
+        NbtElement effect = RandomProvider.getProvider(world.getServer()).compoundRegistry.get("effects").getRandomElement(world.getRandom());
+        Identifier e = Identifier.of(((NbtCompound)effect).getString("Name"));
         this.setEffect(e);
         this.setColorRaw(Objects.requireNonNull(reg.get(e)).getColor());
         this.setDuration(r.nextInt(600));
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+        return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
     @Override
@@ -104,7 +109,6 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
         this.dataTracker.startTracking(duration, 200);
         this.dataTracker.startTracking(color, 0);
     }
-
     @Override
     public boolean isAffectedByDaylight() {
         return false;
@@ -118,23 +122,25 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
                 itemStack.decrement(1);
             }
             if (player.getWorld().getRandom().nextFloat() < 0.5) {
-                ChaosSkeleton newSkeleton;
-                if (!this.getWorld().isClient() && (newSkeleton = ModEntities.CHAOS_SKELETON.get().create(this.getWorld())) != null) {
-                    ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
-                    this.discard();
-                    ModEntities.copy(this, newSkeleton);
-                    newSkeleton.setDuration(this.getDuration());
-                    String i = effect_lookup.get(this.getEffectRaw());
-                    StatusEffect e = reg.get(new Identifier(i));
-                    newSkeleton.setEffectRaw(i);
-                    if (e!= null) newSkeleton.setColorRaw(e.getColor());
-                    this.getWorld().spawnEntity(newSkeleton);
-                    return ActionResult.SUCCESS;
+                String i = effect_lookup.get(this.getEffectRaw());
+                StatusEffect newEffect = reg.get(Identifier.of(i));
+                if (newEffect != null) {
+                    ChaosSkeleton newSkeleton;
+                    if (!this.getWorld().isClient() && (newSkeleton = ModEntities.CHAOS_SKELETON.get().create(this.getWorld())) != null) {
+                        ((ServerWorld) this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+                        this.discard();
+                        ModEntities.copy(this, newSkeleton);
+                        newSkeleton.setDuration(this.getDuration());
+                        newSkeleton.setEffectRaw(i);
+                        newSkeleton.setColorRaw(newEffect.getColor());
+                        this.getWorld().spawnEntity(newSkeleton);
+                        return ActionResult.SUCCESS;
+                    }
                 }
             }
         }
         if (itemStack.isOf(Items.GLASS_BOTTLE)) {
-            ItemStack itemStack2 = setPotion(Items.POTION.getDefaultStack(), this.getEffectRawId(), this.getDuration() * 20);
+            ItemStack itemStack2 = setPotion(Items.POTION.getDefaultStack(), this.getColorForRender(), this.getEffectRaw(), this.getDuration() * 20);
             ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
             player.setStackInHand(hand, itemStack3);
             this.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
@@ -209,5 +215,15 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     @Override
     public int getColorRaw() {
         return this.dataTracker.get(color);
+    }
+
+    @Override
+    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
+        super.dropEquipment(world, source, causedByPlayer);
+        ItemStack weapon = source.getWeaponStack();
+        RegistryEntry<Enchantment> looting = world.getServer().getRegistryManager().get(RegistryKeys.ENCHANTMENT).entryOf(Enchantments.LOOTING);
+        int lootingLevel = weapon == null ? 0 : weapon.getEnchantments().getLevel(looting);
+        int count = world.random.nextBetween(0, 2 + lootingLevel);
+        this.dropStack(getProjectileType().copyWithCount(count));
     }
 }

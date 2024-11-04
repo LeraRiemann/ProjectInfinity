@@ -2,6 +2,7 @@ package net.lerariemann.infinity.var;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
+import net.lerariemann.infinity.util.WarpLogic;
 
 import static net.lerariemann.infinity.util.WarpLogic.*;
 import static net.minecraft.server.command.CommandManager.argument;

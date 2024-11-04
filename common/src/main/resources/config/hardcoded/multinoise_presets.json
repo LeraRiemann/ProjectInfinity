@@ -1,11 +1,11 @@
 {
   "elements": [
     {
-      "key": "minecraft_overworld",
+      "key": "overworld",
       "weight": 0.01
     },
     {
-      "key": "minecraft_nether",
+      "key": "nether",
       "weight": 0.01
     },
     {

@@ -45,7 +45,7 @@ public class RandomDimensionType {
         lightLevel.put("value", RandomProvider.genBounds(0, random.nextInt(16)));
         data.put("monster_spawn_light_level", lightLevel);
         data.putString("infiniburn", dim.PROVIDER.randomName(random, "tags"));
-        String s = dim.PROVIDER.randomName(random, "effects");
+        String s = dim.PROVIDER.randomName(random, "dimension_effects");
         foggy = s.equals("minecraft:the_nether");
         data.putString("effects", s);
         CommonIO.write(data, dim.getStoragePath() + "/dimension_type", name + ".json");

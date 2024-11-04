@@ -1,7 +1,7 @@
 {
-  "infinity_version": 2000001,
-  "easter-color": 16711680,
+  "infinity_version": 2000003,
   "easter-options": {
+    "portal_color": 16711680,
     "shader": {
       "targets": [
         "swap"

@@ -111,6 +111,7 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
                 getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
         p.kickGhostsOut(getRegistryManager());
         infinity$dimensionProvider = p;
+        if (!infinity$needsInvocation) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
     }
 
     @Override

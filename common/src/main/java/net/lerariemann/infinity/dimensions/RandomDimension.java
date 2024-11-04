@@ -9,9 +9,12 @@ import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.BiomeTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
+import net.minecraft.world.biome.Biome;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -158,7 +161,7 @@ public class RandomDimension {
     }
 
     boolean hasCeiling() {
-        return ((type_alike.equals("minecraft:nether")) || (type_alike.equals("minecraft:caves")));
+        return ((type_alike.equals("minecraft:nether")) || (type_alike.equals("minecraft:caves")) || (type_alike.equals("infinity:tangled")));
     }
 
     NbtCompound packMcmeta() {
@@ -241,7 +244,7 @@ public class RandomDimension {
             }
             case "minecraft:multi_noise" -> {
                 String preset = PROVIDER.randomName(random, "multinoise_presets");
-                if (preset.equals("none")) res.put("biomes", randomBiomes());
+                if (preset.equals("none") || hasCeiling()) res.put("biomes", randomBiomes());
                 else {
                     res.putString("preset", preset.replace("_", ":"));
                     addPresetBiomes(preset);
@@ -254,10 +257,13 @@ public class RandomDimension {
     }
 
     void addPresetBiomes(String preset) {
-        NbtList lst = PROVIDER.listRegistry.get(preset);
-        for (NbtElement i: lst) {
-            vanilla_biomes.add(i.asString());
-        }
+        TagKey<Biome> tag = preset.equals("overworld") ? BiomeTags.IS_OVERWORLD : BiomeTags.IS_NETHER;
+        Registry<Biome> r = server.getRegistryManager().get(RegistryKeys.BIOME);
+        r.getKeys().forEach(key -> {
+            if (!Objects.equals(key.getValue().getNamespace(), "infinity")) {
+                if (r.get(key) != null && r.getEntry(r.get(key)).isIn(tag)) vanilla_biomes.add(key.getValue().toString());
+            }
+        });
     }
 
     NbtList randomBiomesCheckerboard() {
@@ -307,7 +313,7 @@ public class RandomDimension {
 
     String randomBiome() {
         String biome;
-        if (!PROVIDER.roll(random, "use_random_biome")) {
+        if (!hasCeiling() && !PROVIDER.roll(random, "use_random_biome")) {
             biome = PROVIDER.randomName(random, "biomes");
             vanilla_biomes.add(biome);
         }

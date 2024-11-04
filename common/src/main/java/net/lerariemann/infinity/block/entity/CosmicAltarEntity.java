@@ -44,7 +44,6 @@ public class CosmicAltarEntity extends BlockEntity {
                 world.setBlockState(pos.add(i, j, k), Blocks.AIR.getDefaultState());
             }
             ConfigGenerator.generateAll(world, pos.up(2), pos.up());
-            a.infinity$setDimensionProvider();
             for (int i : offsets) for (int j : offsets_y) for (int k : offsets) {
                 world.setBlockState(pos.add(i, j, k), be.fromMap(i, j, k));
             }

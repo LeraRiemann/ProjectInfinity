@@ -151,4 +151,12 @@ public record InfinityOptions(NbtCompound data) {
     public float getLunarOffset(int i) {
         return fullLunarTest("lunar_offset", i, 0.0f);
     }
+
+    public float getHorizonShadingRatio() {
+        return data.contains("horizon_shading_ratio") ? data.getFloat("horizon_shading_ratio") : 1.0f;
+    }
+
+    public int getPortalColor() {
+        return data.contains("portal_color") ? data.getInt("portal_color") : -1;
+    }
 }

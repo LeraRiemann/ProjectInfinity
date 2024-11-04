@@ -1,6 +1,8 @@
 {
-  "infinity_version": 2000001,
-  "easter-color": 16776960,
+  "infinity_version": 2000003,
+  "easter-options": {
+    "portal_color": 16776960
+  },
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 0,

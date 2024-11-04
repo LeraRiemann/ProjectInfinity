@@ -6,8 +6,10 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
+import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -58,13 +60,18 @@ public interface WarpLogic {
                     1.0f, 1.0f);
             case "infinity:chess" -> (properMod(pos.getX() + pos.getY() + pos.getZ(), 2) == 0 ? 0 : 0xffffff);
             case "infinity:pride" -> switch(properMod(pos.getX() + pos.getY() + pos.getZ(), 3)) {
-                case 0 -> 0x77c1de;
-                case 1 -> 0xdaadb5;
-                default -> 0xffffff;
-            };
-            default -> RandomProvider.getProvider(server).easterizer.colormap.getOrDefault(
-                    id.getPath(), (int)getNumericFromId(id, server));
+                    case 0 -> 0x77c1de;
+                    case 1 -> 0xdaadb5;
+                    default -> 0xffffff;
+                };
+            default -> defaultColorLogic(id, server);
         };
+    }
+
+    static int defaultColorLogic(Identifier id, MinecraftServer server) {
+        NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.getOrDefault(id.getPath(), new NbtCompound());
+        int color = (new InfinityOptions(c)).getPortalColor();
+        return (color == -1) ? (int)getNumericFromId(id, server) : color;
     }
 
     static long getNumericFromId(Identifier id, MinecraftServer server) {

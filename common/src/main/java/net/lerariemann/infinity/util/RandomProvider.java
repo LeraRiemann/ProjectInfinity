@@ -4,9 +4,11 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 
@@ -19,7 +21,6 @@ import static java.nio.file.Files.walk;
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
     public Map<String, WeighedStructure<NbtElement>> compoundRegistry;
-    public Map<String, NbtList> listRegistry;
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
     public Map<String, Integer> gameRulesInt;
@@ -46,7 +47,6 @@ public class RandomProvider {
         configPath = configpath;
         registry = new HashMap<>();
         compoundRegistry = new HashMap<>();
-        listRegistry = new HashMap<>();
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
         gameRulesInt = new HashMap<>();
@@ -60,10 +60,10 @@ public class RandomProvider {
         register_category(registry, path, "misc", CommonIO::stringListReader);
         register_category(registry, path, "features", CommonIO::stringListReader);
         register_category(registry, path, "vegetation", CommonIO::stringListReader);
-        register_blocks(path);
-        register_category(compoundRegistry, path, "extra", CommonIO::blockListReader);
-        register_category(registry, path, "mobs", CommonIO::stringListReader);
-        register_category(listRegistry, path, "lists", CommonIO::nbtListReader);
+        register_category(compoundRegistry, path, "blocks", CommonIO::compoundListReader);
+        extract_blocks();
+        register_category(compoundRegistry, path, "extra", CommonIO::compoundListReader);
+        extract_mobs();
         register_category_hardcoded(configPath + "hardcoded");
         noise = CommonIO.read(InfinityMod.utilPath + "/noise.json");
     }
@@ -133,24 +133,23 @@ public class RandomProvider {
         return gameRules.get(key);
     }
 
-    void register_blocks(String path) {
-        Map<String, WeighedStructure<NbtElement>> temp = new HashMap<>();
-        register_category(temp, path, "blocks", CommonIO::blockListReader);
-        if (temp.containsKey("blocks")) {
+    void extract_blocks() {
+        if (compoundRegistry.containsKey("blocks")) {
+            WeighedStructure<NbtElement> blocksSettings = compoundRegistry.get("blocks");
             WeighedStructure<NbtElement> allBlocks = new WeighedStructure<>();
             WeighedStructure<NbtElement> blocksFeatures = new WeighedStructure<>();
             WeighedStructure<NbtElement> topBlocks = new WeighedStructure<>();
             WeighedStructure<NbtElement> fullBlocks = new WeighedStructure<>();
             WeighedStructure<NbtElement> fullBlocksWG = new WeighedStructure<>();
-            for (int i = 0; i < temp.get("blocks").keys.size(); i++) {
-                NbtCompound e = (NbtCompound)(temp.get("blocks").keys.get(i));
+            for (int i = 0; i < blocksSettings.keys.size(); i++) {
+                NbtCompound e = (NbtCompound)(blocksSettings.keys.get(i));
                 boolean isfull, istop, isfloat, islaggy;
                 isfull = check(e, "full", false);
                 islaggy = check(e, "laggy", false);
                 isfloat = check(e, "float", isfull);
                 istop = check(e, "top", isfull);
                 istop = istop || isfloat;
-                Double w = temp.get("blocks").weights.get(i);
+                Double w = blocksSettings.weights.get(i);
                 allBlocks.add(e, w);
                 if (isfull) fullBlocks.add(e, w);
                 if (istop && !islaggy) topBlocks.add(e, w);
@@ -162,9 +161,22 @@ public class RandomProvider {
             compoundRegistry.put("full_blocks", fullBlocks);
             compoundRegistry.put("full_blocks_worldgen", fullBlocksWG);
             compoundRegistry.put("top_blocks", topBlocks);
-            temp.keySet().forEach(a -> {
-                if (!a.equals("blocks")) compoundRegistry.put(a, temp.get(a));
-            });
+            compoundRegistry.remove("blocks");
+        }
+    }
+
+    void extract_mobs() {
+        if (compoundRegistry.containsKey("mobs")) {
+            WeighedStructure<NbtElement> allmobs = compoundRegistry.get("mobs");
+            WeighedStructure<String> allMobNames = new WeighedStructure<>();
+            for (int i = 0; i < allmobs.size(); i++) if (allmobs.keys.get(i) instanceof NbtCompound mob) {
+                String group = mob.getString("Category");
+                if (!registry.containsKey(group)) registry.put(group, new WeighedStructure<>());
+                registry.get(group).add(mob.getString("Name"), allmobs.weights.get(i));
+                allMobNames.add(mob.getString("Name"), allmobs.weights.get(i));
+            }
+            registry.put("mobs", allMobNames);
+            compoundRegistry.remove("mobs");
         }
     }
 
@@ -205,7 +217,7 @@ public class RandomProvider {
         }
     }
 
-    public List<String> mobcategories() {
+    public List<String> mob_categories() {
         return registry.get("mob_categories").keys;
     }
 
@@ -224,8 +236,9 @@ public class RandomProvider {
 
     public NbtCompound blockToProvider(NbtCompound block, Random random) {
         NbtCompound res = new NbtCompound();
-        boolean bl = listRegistry.get("rotatable_blocks").contains(NbtString.of(block.getString("Name"))) && roll(random, "rotate_blocks");
-        res.putString("type", bl ? "minecraft:rotated_block_provider" : "minecraft:simple_state_provider");
+        boolean isRotatable = Registries.BLOCK.get(Identifier.of(block.getString("Name"))).getDefaultState().getProperties().contains(Properties.AXIS);
+        res.putString("type", isRotatable && roll(random, "rotate_blocks") ?
+                "minecraft:rotated_block_provider" : "minecraft:simple_state_provider");
         res.put("state", block);
         return res;
     }

@@ -2,6 +2,7 @@ package net.lerariemann.infinity.mixin.options;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.client.render.BackgroundRenderer;
@@ -41,8 +42,8 @@ public class BackgroundRendererMixin {
     @ModifyExpressionValue(method = "render(Lnet/minecraft/client/render/Camera;FLnet/minecraft/client/world/ClientWorld;IF)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getHorizonShadingRatio()F"))
     private static float inj(float original, @Local(argsOnly = true) ClientWorld world) {
-        if (world.getRegistryKey().getValue().getNamespace().equals("infinity")) return 1.0f;
-        return original;
+        if (!InfinityMod.isInfinity(world)) return original;
+        return ((InfinityOptionsAccess)world).infinity$getOptions().getHorizonShadingRatio();
     }
 
     @Unique
