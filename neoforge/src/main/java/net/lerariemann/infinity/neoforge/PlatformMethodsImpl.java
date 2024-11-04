@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.mixin.registry.sync.BaseMappedRegistryAccessor;
+import net.lerariemann.infinity.PlatformMethods;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
@@ -48,8 +49,10 @@ public class PlatformMethodsImpl {
     }
 
     //Optional, requires Item Group API.
-    public static void addAfter(RegistrySupplier<Item> blockItem, RegistryKey<ItemGroup> group, Item item) {
-        ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, blockItem.get()));
+    public static void addAfter(RegistrySupplier<Item> supplier, RegistryKey<ItemGroup> group, Item item) {
+        if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
+            ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, supplier.get()));
+        }
     }
 
 }
