@@ -8,6 +8,8 @@
     "ChunkRegionMixin",
     "CreeperEntityMixin",
     "EntityMixin",
+    "FireBlockMixin",
+    "LavaFluidMixin",
     "MaterialRuleContextAccess",
     "MinecraftServerMixin",
     "MobEntityMixin",
