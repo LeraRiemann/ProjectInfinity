@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
@@ -29,11 +30,12 @@ public class AntBlock extends HorizontalFacingBlock {
     }
 
     boolean inverseExists(Block down) {
-        String s = Registries.BLOCK.getEntry(down).getIdAsString();
-        if (s.contains("black")) {
+        var s = Registries.BLOCK.getEntry(down).getIdAsString();
+        var state = down.getDefaultState();
+        if (state.isIn(ConventionalBlockTags.BLACK_DYED)) {
             return Registries.BLOCK.containsId(Identifier.of(s.replace("black", "white")));
         }
-        if (s.contains("white")) {
+        if (state.isIn(ConventionalBlockTags.WHITE_DYED)) {
             return Registries.BLOCK.containsId(Identifier.of(s.replace("white", "black")));
         }
         return false;
@@ -41,10 +43,11 @@ public class AntBlock extends HorizontalFacingBlock {
 
     Block recolor(Block down, boolean toWhite) {
         String s = Registries.BLOCK.getEntry(down).getIdAsString();
-        if (s.contains("black")) {
+        var state = down.getDefaultState();
+        if (state.isIn(ConventionalBlockTags.BLACK_DYED)) {
             return toWhite ? Registries.BLOCK.get(Identifier.of(s.replace("black", "white"))) : down;
         }
-        if (s.contains("white")) {
+        if (state.isIn(ConventionalBlockTags.WHITE_DYED)) {
             return toWhite ? down : Registries.BLOCK.get(Identifier.of(s.replace("white", "black")));
         }
         return null;
