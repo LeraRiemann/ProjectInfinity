@@ -22,7 +22,6 @@ public class InfinityMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if(mixinClassName.contains("net.lerariemann.infinity.mixin.mavity") && PlatformMethods.isModLoaded("gravity_changer_q")){
-            LogManager.getLogger().info("The mod \"Gravity Changer\" has been detected. This mod is not completely compatible with Infinite Dimensions. Mavity has been disabled.");
             return false;
         }
         return true;
