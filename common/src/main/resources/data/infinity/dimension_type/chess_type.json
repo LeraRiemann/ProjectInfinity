@@ -14,8 +14,10 @@
   "logical_height": 256,
   "monster_spawn_light_level": {
     "type": "uniform",
-    "min_inclusive": 0,
-    "max_inclusive": 15
+    "value": {
+      "min_inclusive": 0,
+      "max_inclusive": 7
+    }
   },
   "monster_spawn_block_light_limit": 0,
   "infiniburn": "#infiniburn_overworld",

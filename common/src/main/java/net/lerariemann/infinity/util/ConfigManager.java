@@ -102,28 +102,6 @@ public class ConfigManager {
         }
     }
 
-    public static void updateInvocationLock() {
-        File invlock = InfinityMod.invocationLock.toFile();
-        if (invlock.exists()) {
-            try {
-                if (compareVersions(InfinityMod.invocationLock, InfinityMod.rootResPath.resolve( "config/.util/invocation.lock"))) {
-                    LogManager.getLogger().info("Deleting outdated modular configs");
-                    Files.walk(getConfigDir().resolve("modular")).forEach(p -> {
-                        if (p.toFile().isFile()) {
-                            try {
-                                Files.delete(p);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    });
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     public static Path getBaseConfigDir() {
         return Path.of("config");
     }
