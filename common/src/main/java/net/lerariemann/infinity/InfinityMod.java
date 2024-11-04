@@ -30,7 +30,7 @@ public class InfinityMod {
 	static {
 		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
 		assert mc != null;
-		rootResPath = mc.getRootPaths().getFirst();
+		rootResPath = mc.getRootPaths().get(0);
 	}
 
 	public static Identifier getId(String value){
