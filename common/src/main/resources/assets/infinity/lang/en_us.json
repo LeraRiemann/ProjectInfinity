@@ -15,6 +15,8 @@
   "config.infinity.altarKey.description": "This item was used to activate the Transfinite Altar, which was originally required to access modded content. Now, using this item on the altar can be used to play a fun animation.",
   "config.infinity.portalKey": "Portal Key",
   "config.infinity.portalKey.description": "When set, this item is required to unlock Infinity Portals.",
+  "config.infinity.gameRules.disabledUntilReview": "Disable unfinished Easter Egg Dimensions",
+  "config.infinity.gameRules.disabledUntilReview.description": "When disabled, Infinite Dimensions will prevent you from accessing Easter Egg dimensions that have not yet been finished.",
   "config.infinity.gameRules.longArithmeticEnabled": "Enable Long Arithmetic",
   "config.infinity.gameRules.longArithmeticEnabled.description": "If enabled, this will expand the range in which dimension, biome and feature IDs generate from the integer limit (~2 billion) to the long limit (~9 quintillion). You know, if for some reason 2 billion dimensions is not enough for you :D",
   "config.infinity.gameRules.maxBiomeCount": "Maximum Biome Count",
