@@ -21,32 +21,29 @@ import java.nio.file.Path;
 public class InfinityMod {
 	public static final String MOD_ID = "infinity";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
-	public static Path rootResPath;
-	public static Path utilPath;
-	static {
-		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
-		assert mc != null;
-		rootResPath = mc.getRootPaths().get(0);
-		utilPath = rootResPath.resolve("config/util");
-	}
 	public static final Identifier WORLD_ADD = getId("reload_worlds");
 	public static final Identifier SHADER_RELOAD = getId("reload_shader");
 	public static final Identifier STARS_RELOAD = getId("reload_stars");
-
+	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
+	public static Path rootResPath;
+	public static Path utilPath = Path.of("config/infinity/.util");
+	static {
+		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
+		assert mc != null;
+		rootResPath = mc.getRootPaths().getFirst();
+	}
 
 	public static Identifier getId(String value){
 		return Identifier.of(MOD_ID, value);
 	}
 
-
 	public static void init() {
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
+		ModEntities.registerEntities();
 		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
 		ModBlockEntities.registerBlockEntities();
-		ModEntities.registerEntities();
 		ModPoi.registerPoi();
 		ModCommands.registerCommands();
 		ModDensityFunctionTypes.registerFunctions();

@@ -408,7 +408,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 pos = pos.down();
             }
             if (world.getBlockState(pos).allowsSpawning(world, pos, ModEntities.CHAOS_PAWN.get()) &&
-                    RandomProvider.getProvider(world.getServer()).rule("chaosMobsEnabled") &&
+                    ModEntities.chaosMobsEnabled(world) &&
                     (entity = ModEntities.CHAOS_PAWN.get().spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());

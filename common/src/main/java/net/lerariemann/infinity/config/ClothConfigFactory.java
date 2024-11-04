@@ -29,7 +29,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -38,7 +37,7 @@ import static net.minecraft.client.resource.language.I18n.hasTranslation;
 
 public class ClothConfigFactory {
 
-    public static void addEntry(AbstractConfigListEntry<?> newOption, Object category) {
+    static void addEntry(AbstractConfigListEntry<?> newOption, Object category) {
         if (category instanceof ConfigCategory configCategory) {
             configCategory.addEntry(newOption);
         }
@@ -47,7 +46,7 @@ public class ClothConfigFactory {
         }
     }
 
-    public static void addElement(Map.Entry<String, JsonElement> field, Map.Entry<String, JsonElement> prevField, ConfigBuilder builder, Map.Entry<String, JsonElement> prevPrevField, Object category) {
+    static void addElement(Map.Entry<String, JsonElement> field, Map.Entry<String, JsonElement> prevField, ConfigBuilder builder, Map.Entry<String, JsonElement> prevPrevField, Object category) {
         String currentCategory;
         String nestedCurrentCategory = "";
         if (prevField == null) {
@@ -133,7 +132,7 @@ public class ClothConfigFactory {
                 .setParentScreen(parent)
                 .setTitle(Text.translatable("config.infinity.title"));
 
-        for (var field : readRootConfigJSON().getAsJsonObject().entrySet()) {
+        for (var field : readRootConfigJson().getAsJsonObject().entrySet()) {
             if (field.getValue().isJsonPrimitive()) {
                 ConfigCategory category = builder.getOrCreateCategory(Text.translatable("config.infinity.title.general"));
                 addElement(field, null, builder, null, category);
@@ -162,7 +161,7 @@ public class ClothConfigFactory {
         return builder.build();
     }
 
-    public static Text fieldName(Map.Entry<String, JsonElement> field, String category) {
+    static Text fieldName(Map.Entry<String, JsonElement> field, String category) {
         if (category.equals("general")) {
             category = "";
         }
@@ -171,7 +170,7 @@ public class ClothConfigFactory {
     }
 
     @Environment(EnvType.CLIENT)
-    public static Text[] fieldTooltip(Map.Entry<String, JsonElement> field, String category, String nested) {
+    static Text[] fieldTooltip(Map.Entry<String, JsonElement> field, String category, String nested) {
         if (category.equals("general")) {
             category = "";
         }
@@ -224,10 +223,10 @@ public class ClothConfigFactory {
         return index;
     }
 
-    // Enable and disable Easter Egg dimensions.
-    public static <T> Consumer<T> mapSetter(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField) {
+    // Enable and disable config elements.
+    static <T> Consumer<T> mapSetter(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField) {
         return t -> {
-            NbtCompound rootConfig = readRootConfig();
+            NbtCompound rootConfig = readRootConfigNbt();
             NbtCompound configPath = rootConfig;
             if (t != field.getValue()) {
                 if (prevField != null) {
@@ -258,7 +257,7 @@ public class ClothConfigFactory {
         };
     }
 
-    public static Object getDefaultValue(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField, String type) {
+    static Object getDefaultValue(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField, String type) {
         NbtCompound rootConfig = readDefaultConfig();
         NbtCompound configPath = rootConfig;
         if (prevField != null) {
@@ -297,32 +296,29 @@ public class ClothConfigFactory {
         return newText.toString();
     }
 
-
     static Path configPath() {
         return Path.of(FabricLoader.getInstance().getConfigDir() + "/infinity");
     }
 
-    public static NbtCompound readRootConfig() {
-        return read(configPath() + "/infinity.json");
+    public static NbtCompound readRootConfigNbt() {
+        return readNbt(configPath() + "/infinity.json");
     }
 
-    public static JsonElement readRootConfigJSON() {
-        return readJSON(configPath() + "/infinity.json");
+    public static JsonElement readRootConfigJson() {
+        return readJson(configPath() + "/infinity.json");
     }
 
     public static NbtCompound readDefaultConfig() {
         Path tempfile = FabricLoader.getInstance().getModContainer(MOD_ID).orElse(null).getRootPaths().get(0).resolve("config/infinity.json");
-            try {
-                Files.copy(tempfile, Path.of(configPath() + "/infinity-default.json"), REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-
-        return read(configPath()+("/infinity-default.json"));
+        try {
+            Files.copy(tempfile, Path.of(configPath() + "/.infinity-default.json"), REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return readNbt(configPath()+("/.infinity-default.json"));
     }
 
-    public static NbtCompound read(String file) {
+    public static NbtCompound readNbt(String file) {
         File newFile = new File(file);
         String content;
         try {
@@ -333,18 +329,7 @@ public class ClothConfigFactory {
         }
     }
 
-    public static NbtCompound read(Path file) {
-        String content;
-        try {
-            content = FileUtils.readFileToString(file.toFile(), StandardCharsets.UTF_8);
-            return StringNbtReader.parse(content);
-        } catch (IOException | CommandSyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static JsonElement readJSON(String file) {
-
+    public static JsonElement readJson(String file) {
         File newFile = new File(file);
         String content;
         try {

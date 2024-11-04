@@ -53,7 +53,7 @@ public class ConfigManager {
     }
 
     public static boolean compareVersions(Path oldFile, Path newFile) throws IOException {
-        Path tempfile = Paths.get(getBaseConfigDir()+"/infinity-temp.json");
+        Path tempfile = Paths.get(getBaseConfigDir()+"/.infinity-temp.json");
         int version_old = CommonIO.getVersion(oldFile.toFile());
         Files.copy(newFile, tempfile, REPLACE_EXISTING);
         int version_new = CommonIO.getVersion(tempfile.toFile());

@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.item;
 
+import dev.architectury.core.item.ArchitecturySpawnEggItem;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -10,8 +11,6 @@ import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -22,58 +21,50 @@ import static net.lerariemann.infinity.PlatformMethods.*;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, RegistryKeys.ITEM);
 
-    public static final RegistrySupplier<Item> ALTAR_ITEM = registerSimpleBlockItem(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN);
-    public static final RegistrySupplier<Item> ANT_ITEM  = registerSimpleBlockItem(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE);
-    public static final RegistrySupplier<Item> BOOK_BOX_ITEM = registerSimpleBlockItem(ModBlocks.BOOK_BOX, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
-    public static final RegistrySupplier<Item> CURSOR_ITEM  = registerSimpleBlockItem(ModBlocks.CURSOR, ItemGroups.COLORED_BLOCKS, Items.PINK_TERRACOTTA);
-    public static final RegistrySupplier<Item> FOOTPRINT = registerSimpleItem("footprint", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
-    public static final RegistrySupplier<Item> FINE_ITEM = registerSimpleItem("fine_item", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
-    public static final RegistrySupplier<Item> NETHERITE_SLAB_ITEM  = registerSimpleBlockItem(ModBlocks.NETHERITE_SLAB, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
-    public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM  = registerSimpleBlockItem(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
-    public static final RegistrySupplier<Item> TIME_BOMB_ITEM = registerSimpleBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR);
+    public static final RegistrySupplier<Item> ALTAR_ITEM = registerBlockItem(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN);
+    public static final RegistrySupplier<Item> ANT_ITEM  = registerBlockItem(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE);
+    public static final RegistrySupplier<Item> BOOK_BOX_ITEM = registerBlockItem(ModBlocks.BOOK_BOX, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
+    public static final RegistrySupplier<Item> CURSOR_ITEM  = registerBlockItem(ModBlocks.CURSOR, ItemGroups.COLORED_BLOCKS, Items.PINK_TERRACOTTA);
+    public static final RegistrySupplier<Item> FOOTPRINT = registerItem("footprint", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
+    public static final RegistrySupplier<Item> FINE_ITEM = registerItem("fine_item", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
+    public static final RegistrySupplier<Item> NETHERITE_SLAB_ITEM  = registerBlockItem(ModBlocks.NETHERITE_SLAB, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
+    public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM  = registerBlockItem(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
+    public static final RegistrySupplier<Item> TIME_BOMB_ITEM = registerBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR);
     public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
-    public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = registerSpawnEgg("chaos_pawn_spawn_egg", ModEntities.CHAOS_PAWN.get(), 0, 0xFFFFFF);
-    public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = registerSpawnEgg("chaos_creeper_spawn_egg", ModEntities.CHAOS_CREEPER.get(), 0x91BD59, 0x78A7FF);
-    public static final RegistrySupplier<Item> CHAOS_SKELETON_SPAWN_EGG = registerSpawnEgg("chaos_skeleton_spawn_egg", ModEntities.CHAOS_SKELETON.get(), 0xF3CFB9, 0x87A363);
-    public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = registerSpawnEgg("chaos_slime_spawn_egg", ModEntities.CHAOS_SLIME.get(), 0xAA77DD, 0xFF66FF);
+    public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0, 0xFFFFFF, createSpawnEggSettings("chaos_pawn_spawn_egg")));
+    public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = ITEMS.register("chaos_creeper_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_CREEPER, 0x91BD59, 0x78A7FF, createSpawnEggSettings("chaos_creeper_spawn_egg")));
+    public static final RegistrySupplier<Item> CHAOS_SKELETON_SPAWN_EGG = ITEMS.register("chaos_skeleton_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_SKELETON, 0xF3CFB9, 0x87A363, createSpawnEggSettings("chaos_skeleton_spawn_egg")));
+    public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = ITEMS.register("chaos_slime_spawn_egg",  () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME, 0xAA77DD, 0xFF66FF, createSpawnEggSettings("chaos_slime_spawn_egg")));
 
 
-    public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {
+    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {
         return ITEMS.register(block.getId(), () -> new BlockItem(block.get(), settings));
     }
 
-    public static RegistrySupplier<Item> registerSimpleItem(String item, Item.Settings settings) {
+    public static RegistrySupplier<Item> register(String item, Item.Settings settings) {
         return ITEMS.register(item, () -> new Item(settings));
     }
 
-    public static RegistrySupplier<Item> registerSimpleItem(String block, RegistryKey<ItemGroup> group) {
-        return registerSimpleItem(block, new Item.Settings().arch$tab(group));
+    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group) {
+       return registerBlockItem(block, new Item.Settings().arch$tab(group));
     }
 
-    public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group) {
-       return registerSimpleBlockItem(block, new Item.Settings().arch$tab(group));
+    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item) {
+        Item.Settings settings = new Item.Settings();
+        if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
+            settings = settings.arch$tab(group);
+        RegistrySupplier<Item> registeredItem = registerBlockItem(block, settings);
+        addAfter(registeredItem, group, item);
+        return registeredItem;
     }
 
-    public static RegistrySupplier<Item> registerSimpleBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item) {
-        if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
-            var blockItem = registerSimpleBlockItem(block, new Item.Settings());
-            addAfter(blockItem, group, item);
-            return blockItem;
-        }
-        else {
-            return registerSimpleBlockItem(block, group);
-        }
-    }
-
-    public static RegistrySupplier<Item> registerSimpleItem(String id, RegistryKey<ItemGroup> group, Item item) {
-        if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
-            var blockItem = registerSimpleItem(id, new Item.Settings());
-            addAfter(blockItem, group, item);
-            return blockItem;
-        }
-        else {
-            return registerSimpleItem(id, group);
-        }
+    public static RegistrySupplier<Item> registerItem(String id, RegistryKey<ItemGroup> group, Item item) {
+        Item.Settings settings = new Item.Settings();
+        if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
+            settings = settings.arch$tab(group);
+        RegistrySupplier<Item> registeredItem = register(id, settings);
+        addAfter(registeredItem, group, item);
+        return registeredItem;
     }
 
     public static RegistrySupplier<Item> registerKeyItem() {
@@ -83,9 +74,8 @@ public class ModItems {
         return registeredKey;
     }
 
-    public static RegistrySupplier<Item> registerSpawnEgg(String id, EntityType<? extends MobEntity> type, int primary, int secondary) {
-        Item.Settings settings = new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
-        return ITEMS.register(id, () -> new SpawnEggItem(type, primary, secondary, settings));
+    public static Item.Settings createSpawnEggSettings(String id) {
+        return new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
     }
 
     public static void registerModItems() {

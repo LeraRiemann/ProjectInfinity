@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2000001,
+  "infinity_version": 2000003,
   "easter-color": 0,
   "type": "minecraft:noise",
   "settings": {
@@ -9,7 +9,7 @@
     "aquifers_enabled": false,
     "legacy_random_source": false,
     "default_block": {
-      "Name": "minecraft:black_wool"
+      "Name": "minecraft:black_concrete"
     },
     "default_fluid": {
       "Name": "minecraft:water"
@@ -28,24 +28,11 @@
       "vein_gap": "infinity:vein_gap",
       "continents": "minecraft:overworld/continents",
       "initial_density_without_jaggedness": {
-        "argument1": {
-          "to_y": 128,
-          "from_value": 1.0,
-          "to_value": -1.0,
-          "from_y": 0,
-          "type": "minecraft:y_clamped_gradient"
-        },
-        "argument2": {
-          "type": "minecraft:mul",
-          "argument1": 0.02,
-          "argument2": {
-            "type": "minecraft:noise",
-            "noise": "infinity:noise",
-            "xz_scale": 1.0,
-            "y_scale": 1.0
-          }
-        },
-        "type": "minecraft:add"
+        "to_y": 128,
+        "from_value": 1.0,
+        "to_value": -1.0,
+        "from_y": 0,
+        "type": "minecraft:y_clamped_gradient"
       },
       "lava": 0.0,
       "barrier": 0.0,
@@ -60,24 +47,11 @@
       "erosion": "minecraft:overworld/erosion",
       "temperature": "infinity:temperature",
       "final_density": {
-        "argument1": {
-          "to_y": 128,
-          "from_value": 1.0,
-          "to_value": -1.0,
-          "from_y": 0,
-          "type": "minecraft:y_clamped_gradient"
-        },
-        "argument2": {
-          "type": "minecraft:mul",
-          "argument1": 0.02,
-          "argument2": {
-            "type": "minecraft:noise",
-            "noise": "infinity:noise",
-            "xz_scale": 1.0,
-            "y_scale": 1.0
-          }
-        },
-        "type": "minecraft:add"
+        "to_y": 128,
+        "from_value": 1.0,
+        "to_value": -1.0,
+        "from_y": 0,
+        "type": "minecraft:y_clamped_gradient"
       },
       "vein_toggle": "infinity:vein_toggle",
       "fluid_level_floodedness": 0.0
@@ -112,9 +86,48 @@
             "size": 12
           },
           "then_run": {
+            "type": "minecraft:sequence",
+            "sequence": [
+              {
+                "type": "minecraft:condition",
+                "if_true": {
+                  "type": "y_above",
+                  "anchor": {
+                    "absolute": 63
+                  },
+                  "surface_depth_multiplier": 0,
+                  "add_stone_depth": false
+                },
+                "then_run": {
+                  "type": "minecraft:block",
+                  "result_state": {
+                    "Name": "minecraft:white_wool"
+                  }
+                }
+              },
+              {
+                "type": "minecraft:block",
+                "result_state": {
+                  "Name": "minecraft:white_concrete"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "minecraft:condition",
+          "if_true": {
+            "type": "y_above",
+            "anchor": {
+              "absolute": 63
+            },
+            "surface_depth_multiplier": 0,
+            "add_stone_depth": false
+          },
+          "then_run": {
             "type": "minecraft:block",
             "result_state": {
-              "Name": "minecraft:white_wool"
+              "Name": "minecraft:black_wool"
             }
           }
         }
