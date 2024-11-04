@@ -43,6 +43,25 @@ repositories {
             includeGroup("cc.tweaked")
         }
     }
+    maven {
+        url 'https://jitpack.io'
+    }
+    maven {
+        name = "Ladysnake Mods"
+        url = 'https://maven.ladysnake.org/releases'
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
+
 }
 
 
@@ -54,12 +73,14 @@ dependencies {
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+    // Mod Menu + Cloth Config for config on Fabric
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
     modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-
+    // Optional mod compat
     modImplementation("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cct_version")
+    modImplementation("com.github.qouteall:GravityChanger:v${gravity_changer_version}-mc${minecraft_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

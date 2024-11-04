@@ -3,6 +3,8 @@ package net.lerariemann.infinity.mixin;
 import com.google.common.collect.ImmutableList;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.compat.GravityChangerCompat;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.var.ModMaterialRules;
@@ -127,6 +129,10 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
             worlds.put(key, world);
             infinity$worldsToAdd.clear();
         }));
+        // Change world mavity via Gravity Changer if present.
+        if (PlatformMethods.isModLoaded("gravity_changer_q"))
+            GravityChangerCompat.changeMavity(world);
+        // Invoke load world event for listeners.
         ServerWorldEvents.LOAD.invoker().onWorldLoad((MinecraftServer) (Object) this, world);
     }
 

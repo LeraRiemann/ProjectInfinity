@@ -56,13 +56,6 @@ public class InfinityMod {
 		ModFeatures.registerFeatures();
 		ModStats.registerStats();
 		ModCriteria.registerCriteria();
-		InfinityMod.showCompatWarnings();
-	}
-
-	public static void showCompatWarnings() {
-		if (PlatformMethods.isModLoaded("gravity_changer_q")) {
-			LogManager.getLogger().info("The mod \"Gravity Changer\" has been detected. This mod is not completely compatible with Infinite Dimensions. Mavity has been disabled.");
-		}
 	}
 
 	public static boolean isInfinity(World w) {
