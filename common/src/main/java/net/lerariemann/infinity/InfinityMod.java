@@ -21,7 +21,7 @@ import java.nio.file.Path;
 
 public class InfinityMod {
 	public static final String MOD_ID = "infinity";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger("Infinite Dimensions");
 	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
 	public static Path rootResPath;
 	public static Path utilPath = Path.of("config/infinity/.util");

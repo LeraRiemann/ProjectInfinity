@@ -27,7 +27,6 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.level.ServerWorldProperties;
 import net.minecraft.world.level.storage.LevelStorage;
 import net.minecraft.world.spawner.SpecialSpawner;
-import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -90,7 +89,7 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
     private void injected(CallbackInfo info) {
         infinity$worldsToAdd = new HashMap<>();
         infinity$needsInvocation = !Files.exists(InfinityMod.invocationLock);
-        LogManager.getLogger().info("Invocation {}", infinity$needsInvocation ? "needed..." : "not needed");
+        InfinityMod.LOGGER.info("Invocation {}", infinity$needsInvocation ? "needed..." : "not needed");
         infinity$setDimensionProvider();
     }
     @Override
@@ -105,7 +104,7 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
                 Files.copy(InfinityMod.rootResPath.resolve("config/.util/invocation.lock"), p, REPLACE_EXISTING);
             }
             infinity$setDimensionProvider();
-            LogManager.getLogger().info("Invocation complete");
+            InfinityMod.LOGGER.info("Invocation complete");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
