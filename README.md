@@ -25,6 +25,6 @@ You can do so on my Discord, but make sure to stay respectful and don't expect m
 ### Acknowledgements
 I appreciate [Cassian](https://cassian.cc), for their plethora of bugfixing commits and hosting a server for the mod, and BasiqueEvangelist, for helping with runtime dimension registration on Fabric and his permission to port a part of his code.
 
-The NeoForge version of the mod would not be possible without the work of the Sinytra team on the [Forgified Fabric API](https://modrinth.com/mod/forgified-fabric-api), and Commoble's [infiniverse](https://github.com/Commoble/infiniverse/tree/main) library, which was referenced to troubleshoot errors with runtime dimension ticking on NeoForge.
+The Forge and NeoForge versions of the mod would not be possible without the work of the Sinytra team on the [Forgified Fabric API](https://modrinth.com/mod/forgified-fabric-api), and Commoble's [infiniverse](https://github.com/Commoble/infiniverse/tree/main) library, which was referenced to troubleshoot errors with dimension unfreezing on Forge and runtime dimension ticking on Forge and NeoForge.
 
 This mod also has copyright-free music from [ivory rosewood](https://www.youtube.com/@ivorysoundtracks980) - she's an amazing person, check her out! - that I hid among the dimensions. See if you're able to find it out there, it's pretty rare :D

@@ -56,7 +56,7 @@ public class Easterizer {
 
     public boolean easterize(RandomDimension d) {
         String name = d.getName();
-        if (!d.PROVIDER.easterizer.isEaster(d.getName())) return false;
+        if (!d.PROVIDER.easterizer.isEaster(d.getName(), d.PROVIDER)) return false;
         d.data.putString("type", InfinityMod.MOD_ID + ":" + map.get(name).getRight() + "_type");
         d.data.put("generator", map.get(name).getLeft());
         return true;

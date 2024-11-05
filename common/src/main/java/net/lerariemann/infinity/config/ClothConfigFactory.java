@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.architectury.platform.Platform;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -297,7 +298,7 @@ public class ClothConfigFactory {
     }
 
     static Path configPath() {
-        return Path.of(FabricLoader.getInstance().getConfigDir() + "/infinity");
+        return Path.of(Platform.getConfigFolder() + "/infinity");
     }
 
     public static NbtCompound readRootConfigNbt() {
