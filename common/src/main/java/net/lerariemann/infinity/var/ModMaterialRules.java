@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.var;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import dev.architectury.registry.registries.DeferredRegister;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.util.RandomProvider;
@@ -12,6 +14,7 @@ import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.CodecHolder;
@@ -362,8 +365,11 @@ public class ModMaterialRules {
         }
     }
 
+    public static final DeferredRegister<Codec<? extends MaterialRules.MaterialRule>> MATERIAL_RULES =
+            DeferredRegister.create(MOD_ID, RegistryKeys.MATERIAL_RULE);
+
     public static <T extends CodecHolder<? extends MaterialRules.MaterialRule>> void register(String name, T holder) {
-        Registry.register(Registries.MATERIAL_RULE, InfinityMod.MOD_ID + ":" + name, holder.codec());
+        MATERIAL_RULES.register(name, () -> holder.codec());
     }
 
     public static void registerRules() {

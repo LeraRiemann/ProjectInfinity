@@ -133,7 +133,7 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
         if (PlatformMethods.isModLoaded("gravity_changer_q"))
             GravityChangerCompat.changeMavity(world);
         // Invoke load world event for listeners.
-        ServerWorldEvents.LOAD.invoker().onWorldLoad((MinecraftServer) (Object) this, world);
+        PlatformMethods.onWorldLoad(this, world);
     }
 
     @Override
