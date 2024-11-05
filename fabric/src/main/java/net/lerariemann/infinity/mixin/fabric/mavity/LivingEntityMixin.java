@@ -18,16 +18,6 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ma
         super(type, world);
     }
 
-    @ModifyArg(method = "computeFallDamage", at = @At(value="INVOKE", target="Lnet/minecraft/util/math/MathHelper;ceil(F)I"))
-    float injected(float value) {
-        return (float)getMavity() * value;
-    }
-
-    @ModifyConstant(method = "travel", constant = @Constant(doubleValue = 0.08))
-    double inj2(double value) {
-        return value*getMavity();
-    }
-
     @ModifyConstant(method = "travel", constant = @Constant(doubleValue = 0.01))
     double inj3(double value) {
         return value*getMavity();

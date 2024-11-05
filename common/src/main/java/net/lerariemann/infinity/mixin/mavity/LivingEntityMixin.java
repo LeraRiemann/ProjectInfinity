@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin.forge.mavity;
+package net.lerariemann.infinity.mixin.mavity;
 
 import net.lerariemann.infinity.access.MavityInterface;
 import net.minecraft.entity.Attackable;

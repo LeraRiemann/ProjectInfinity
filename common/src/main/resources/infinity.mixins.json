@@ -21,6 +21,7 @@
     "SlimeEntityMixin",
     "WorldChunkMixin",
     "mavity.BoatEntityMixin",
+    "mavity.LivingEntityMixin",
     "mavity.PersistentProjectileEntityMixin",
     "mavity.SeveralEntitiesMixin",
     "mavity.ThrownEntityMixin",
