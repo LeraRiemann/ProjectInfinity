@@ -3,7 +3,6 @@ package net.lerariemann.infinity;
 import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.RegistrySupplier;
-import me.basiqueevangelist.dynreg.util.RegistryUtils;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -51,7 +50,7 @@ public class PlatformMethods {
 
     @ExpectPlatform
     public static void unfreeze(Registry<?> registry) {
-        RegistryUtils.unfreeze(registry);
+        throw new AssertionError();
     }
 
     @ExpectPlatform
