@@ -27,6 +27,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.gen.structure.Structure;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -298,10 +300,33 @@ public class ConfigGenerator {
         writeMap(music, "misc", "music");
     }
 
+    public static void generateStructures(MinecraftServer server) {
+        Map<String, WeighedStructure<NbtCompound>> map = new HashMap<>();
+        Registry<Structure> registry = server.getRegistryManager().get(RegistryKeys.STRUCTURE);
+        registry.getKeys().forEach(key -> {
+            if (!key.getValue().getNamespace().contains("infinity")) {
+                LogManager.getLogger().info(key.getValue());
+                Optional<Structure> o = registry.getOrEmpty(key);
+                o.ifPresent(structure -> {
+                    Optional<NbtElement> c;
+                    try {
+                        c = Optional.empty(); //i tried everything here and nothing works aaaaaaaaa
+                    } catch (StackOverflowError e) {
+                        c = Optional.empty();
+                        LogManager.getLogger().info("failiure");
+                    }
+                    c.ifPresent(e -> checkAndAddElement(map, key.getValue().getNamespace(), (NbtCompound) e));
+                });
+            }
+        });
+        writeMap(map, "extra", "structures");
+    }
+
     public static void generateAll(World w, BlockPos inAir, BlockPos onStone) {
         generateAllNoWorld();
         generateBlocks(w, inAir, onStone);
         MinecraftServer s = Objects.requireNonNull(w.getServer());
+        generateStructures(s);
         SurfaceRuleScanner.scan(s);
         generate(s.getRegistryManager().get(RegistryKeys.BIOME), "misc", "biomes", true);
     }
