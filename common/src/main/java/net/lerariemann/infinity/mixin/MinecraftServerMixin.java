@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.ImmutableList;
+import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
@@ -130,7 +131,7 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
             infinity$worldsToAdd.clear();
         }));
         // Change world mavity via Gravity Changer if present.
-        if (PlatformMethods.isModLoaded("gravity_changer_q"))
+        if (Platform.isModLoaded("gravity_changer_q"))
             GravityChangerCompat.changeMavity(world);
         // Invoke load world event for listeners.
         PlatformMethods.onWorldLoad(this, world);

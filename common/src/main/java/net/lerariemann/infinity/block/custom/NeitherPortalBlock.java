@@ -82,7 +82,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 key_dest = Identifier.tryParse(itemStack.getNbt().getString("key_destination"));
             }
             else {
-                key_dest = InfinityMod.getId("random");
+                key_dest = Identifier.of("minecraft", "random");
             }
             if (key_dest != null) {
                 MinecraftServer server = world.getServer();
