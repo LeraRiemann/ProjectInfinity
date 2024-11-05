@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProperties;
+import net.minecraftforge.common.util.ITeleporter;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,12 +42,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Shadow public abstract boolean damage(DamageSource source, float amount);
     @Shadow @Final public MinecraftServer server;
 
-
-    @Inject(method = "teleport(Lnet/minecraft/server/world/ServerWorld;DDDFF)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V"),
-            locals = LocalCapture.CAPTURE_FAILHARD)
-    private void injected2(ServerWorld destination, CallbackInfoReturnable<Entity> ci, ServerWorld serverWorld, RegistryKey<World> registryKey,
-                           WorldProperties worldProperties, PlayerManager playerManager, TeleportTarget teleportTarget) {
+    @Inject(method = "lambda$changeDimension$8", at= @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V"))
+    private void inject3(ServerWorld serverlevel, RegistryKey registryKey, ServerWorld destination, TeleportTarget teleportTarget, Boolean spawnPortal, CallbackInfoReturnable<Entity> cir) {
         if (RandomProvider.getProvider(server).rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = BlockPos.ofFloored(teleportTarget.position);
