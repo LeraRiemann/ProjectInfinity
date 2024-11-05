@@ -2,6 +2,7 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.util.RandomProvider;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -123,7 +124,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
                 StatusEffect newEffect = reg.get(Identifier.of(i));
                 if (newEffect != null) {
                     ChaosSkeleton newSkeleton;
-                    if (!this.getWorld().isClient() && (newSkeleton = ModEntities.CHAOS_SKELETON.get().create(this.getWorld())) != null) {
+                    if (!this.getWorld().isClient() && (newSkeleton = ModEntities.CHAOS_SKELETON.get().create(this.getWorld(), SpawnReason.CONVERSION)) != null) {
                         ((ServerWorld) this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
                         this.discard();
                         ModEntities.copy(this, newSkeleton);
@@ -142,7 +143,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
             player.setStackInHand(hand, itemStack3);
             this.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
             SkeletonEntity newSkeleton;
-            if (!this.getWorld().isClient() && (newSkeleton = EntityType.SKELETON.create(this.getWorld(), SpawnReason.BUCKET)) != null) {
+            if (!this.getWorld().isClient() && (newSkeleton = EntityType.SKELETON.create(this.getWorld(), SpawnReason.CONVERSION)) != null) {
                 this.discard();
                 ModEntities.copy(this, newSkeleton);
                 this.getWorld().spawnEntity(newSkeleton);
@@ -192,7 +193,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
         potionEffect.putInt("duration", duration);
         List<StatusEffectInstance> customEffects = new ArrayList<>();
         customEffects.add(StatusEffectInstance.fromNbt(potionEffect));
-        stack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Optional.empty(), Optional.of(color), customEffects));
+        stack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Optional.empty(), Optional.of(color), customEffects, Optional.of(I18n.translate("potion.infinity.skeleton"))));
         stack.set(DataComponentTypes.ITEM_NAME, Text.translatable("potion.infinity.skeleton"));
         return stack;
     }
@@ -215,9 +216,9 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
         super.dropEquipment(world, source, causedByPlayer);
         ItemStack weapon = source.getWeaponStack();
-        RegistryEntry<Enchantment> looting = world.getServer().getRegistryManager().get(RegistryKeys.ENCHANTMENT).entryOf(Enchantments.LOOTING);
+        RegistryEntry<Enchantment> looting = world.getServer().getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.LOOTING.getValue()).orElseThrow();
         int lootingLevel = weapon == null ? 0 : weapon.getEnchantments().getLevel(looting);
         int count = world.random.nextBetween(0, 2 + lootingLevel);
-        this.dropStack(getProjectileType().copyWithCount(count));
+        this.dropStack(world, getProjectileType().copyWithCount(count));
     }
 }

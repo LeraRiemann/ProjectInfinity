@@ -169,8 +169,8 @@ public class ConfigGenerator {
     public static void generateBlockTags() {
         Map<String, WeighedStructure<String>> tagMap = new HashMap<>();
         Registries.BLOCK.streamTags().forEach(tagKey -> {
-            checkAndAddWS(tagMap, tagKey.id().getNamespace());
-            tagMap.get(tagKey.id().getNamespace()).add("#" + tagKey.id().toString(), 1.0);
+            checkAndAddWS(tagMap, tagKey.getTag().id().getNamespace());
+            tagMap.get(tagKey.getTag().id().getNamespace()).add("#" + tagKey.getTag().id().toString(), 1.0);
         });
         writeMap(tagMap, "misc", "tags");
     }

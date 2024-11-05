@@ -187,7 +187,7 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         Random r = world.getRandom();
         setAllColors(r, world.getBlockState(this.getBlockPos().down(2)));
         double i = r.nextDouble() * 40;
-        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
+        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.MAX_HEALTH)).setBaseValue(i);
         this.setHealth((float)i);
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
@@ -207,8 +207,8 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         super.dropEquipment(world, source, causedByPlayer);
         if (this.dataTracker.get(special_case) == -1) {
             String s = RandomProvider.getProvider(Objects.requireNonNull(world.getServer())).registry.get("items").getRandomElement(world.random);
-            double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
-            this.dropStack(Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i)));
+            double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.MAX_HEALTH)).getBaseValue() / 10;
+            this.dropStack(world, Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i)));
         }
     }
 
