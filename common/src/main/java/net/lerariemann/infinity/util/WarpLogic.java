@@ -6,8 +6,10 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
+import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -31,7 +33,7 @@ public interface WarpLogic {
 
     static void warp(CommandContext<ServerCommandSource> context, Identifier value) {
         MinecraftServer s = context.getSource().getServer();
-        if (((MinecraftServerAccess)s).projectInfinity$needsInvocation()) {
+        if (((MinecraftServerAccess)s).infinity$needsInvocation()) {
             onInvocationNeedDetected(context.getSource().getPlayer());
             return;
         }
@@ -63,9 +65,14 @@ public interface WarpLogic {
                     case 1 -> 0xdaadb5;
                     default -> 0xffffff;
                 };
-            default -> RandomProvider.getProvider(server).easterizer.colormap.getOrDefault(
-                    id.getPath(), (int)getNumericFromId(id, server));
+            default -> defaultColorLogic(id, server);
         };
+    }
+
+    static int defaultColorLogic(Identifier id, MinecraftServer server) {
+        NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.getOrDefault(id.getPath(), new NbtCompound());
+        int color = (new InfinityOptions(c)).getPortalColor();
+        return (color == -1) ? (int)getNumericFromId(id, server) : color;
     }
 
     static long getNumericFromId(Identifier id, MinecraftServer server) {
@@ -112,7 +119,7 @@ public interface WarpLogic {
     static Identifier getIdentifier(String text, MinecraftServer s) {
         if (text.equals("abatised redivides")) return World.END.getValue();
         if (text.isEmpty()) return InfinityMod.getId("missingno");
-        if (RandomProvider.getProvider(s).easterizer.isEaster(text) && !text.equals("missingno")) return InfinityMod.getId(text);
+        if (RandomProvider.getProvider(s).easterizer.isEaster(text, RandomProvider.getProvider(s)) && !text.equals("missingno")) return InfinityMod.getId(text);
         return InfinityMod.getId("generated_" + getDimensionSeed(text, s));
     }
 

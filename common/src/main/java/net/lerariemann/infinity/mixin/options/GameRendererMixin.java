@@ -26,7 +26,7 @@ public class GameRendererMixin implements GameRendererAccess {
 
     @Inject(method = "onCameraEntitySet", at = @At("TAIL"), cancellable = true)
     private void preserveShaderThirdPerson(CallbackInfo ci) {
-        InfinityOptions options = ((InfinityOptionsAccess)MinecraftClient.getInstance()).projectInfinity$getInfinityOptions();
+        InfinityOptions options = ((InfinityOptionsAccess)MinecraftClient.getInstance()).infinity$getOptions();
         if (options.getShader().isEmpty()) {
             ci.cancel();
         }

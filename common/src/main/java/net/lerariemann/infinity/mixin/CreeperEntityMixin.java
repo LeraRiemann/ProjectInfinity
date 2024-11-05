@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin;
 
-import net.lerariemann.infinity.entity.custom.DimensionalCreeper;
+import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,8 +16,8 @@ public abstract class CreeperEntityMixin {
 
     @Inject(method = "explode()V", at = @At("HEAD"), cancellable = true)
     private void injected(CallbackInfo ci) {
-        if (((CreeperEntity)(Object)this) instanceof DimensionalCreeper) {
-            DimensionalCreeper e = (DimensionalCreeper)(Object)this;
+        if (((CreeperEntity)(Object)this) instanceof ChaosCreeper) {
+            ChaosCreeper e = (ChaosCreeper)(Object)this;
             World w = e.getWorld();
             if (!w.isClient) {
                 e.blow_up();

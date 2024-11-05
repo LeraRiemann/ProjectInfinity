@@ -24,5 +24,9 @@ public class TransfiniteKeyItem extends Item {
             MutableText mutableText = Text.literal(s.equals("minecraft:random") ? "Dimension randomised" : s);
             tooltip.add(mutableText.formatted(Formatting.GRAY));
         }
+        else {
+            MutableText mutableText = Text.literal("Dimension randomised");
+            tooltip.add(mutableText.formatted(Formatting.GRAY));
+        }
     }
 }

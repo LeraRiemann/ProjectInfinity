@@ -49,20 +49,6 @@ versionRange = "*"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.infinity]]
-modId = "fabric_object_builder_api_v1"
-type = "required"
-versionRange = "*"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.infinity]]
-modId = "fabric_registry_sync_v0"
-type = "required"
-versionRange = "*"
-ordering = "AFTER"
-side = "BOTH"
-
 [[mixins]]
 config = "infinity.mixins.json"
 

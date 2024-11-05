@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.var;
 
+import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
@@ -76,7 +77,7 @@ public class ModPayloads {
     public static void receiveShader(ShaderRePayload payload, Object context) {
         InfinityOptions options = new InfinityOptions(payload.shader_data);
         MinecraftClient client = client(context);
-        ((InfinityOptionsAccess)client).projectInfinity$setInfinityOptions(options);
+        ((InfinityOptionsAccess)client).infinity$setOptions(options);
         NbtCompound shader = options.getShader();
         boolean bl = shader.isEmpty();
         if (bl) client.execute(() -> ShaderLoader.reloadShaders(client, false));
@@ -92,7 +93,7 @@ public class ModPayloads {
         }
     }
     
-    public static boolean resourcesReloaded = Path.of(FabricLoader.getInstance().getGameDir() + "/resourcepacks/infinity/assets/infinity/shaders").toFile().exists();
+    public static boolean resourcesReloaded = Path.of(Platform.getGameFolder() + "/resourcepacks/infinity/assets/infinity/shaders").toFile().exists();
 
     public record StarsRePayLoad() implements CustomPayload {
         public static final StarsRePayLoad INSTANCE = new StarsRePayLoad();
@@ -108,7 +109,7 @@ public class ModPayloads {
     }
 
     public static ShaderRePayload setShaderFromWorld(ServerWorld destination) {
-        return new ShaderRePayload(((InfinityOptionsAccess)(destination)).projectInfinity$getInfinityOptions().data());
+        return new ShaderRePayload(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
     }
 
     public static void registerPayloadsServer() {

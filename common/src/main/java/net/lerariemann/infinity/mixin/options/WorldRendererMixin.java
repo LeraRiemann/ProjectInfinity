@@ -251,7 +251,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
 
     @Unique
     private InfinityOptions infinity$options() {
-        InfinityOptions options = ((InfinityOptionsAccess)client).projectInfinity$getInfinityOptions();
+        InfinityOptions options = ((InfinityOptionsAccess)client).infinity$getOptions();
         if (options == null) options = InfinityOptions.empty();
         return options;
     }

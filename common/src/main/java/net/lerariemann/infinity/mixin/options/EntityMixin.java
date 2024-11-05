@@ -19,7 +19,7 @@ public class EntityMixin {
     private void injected(CallbackInfoReturnable<Double> cir) {
         double mavity;
         if (world instanceof ServerWorld w) {
-            mavity = ((InfinityOptionsAccess)w).projectInfinity$getInfinityOptions().getMavity();
+            mavity = ((InfinityOptionsAccess)w).infinity$getOptions().getMavity();
         }
         else {
             mavity = 1.0;

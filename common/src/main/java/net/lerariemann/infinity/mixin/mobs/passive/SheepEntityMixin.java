@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.mixin.mobs.passive;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.mixin.mobs.LivingEntityMixin;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -41,7 +42,7 @@ public abstract class SheepEntityMixin extends LivingEntityMixin implements Shea
         if (world.toServerWorld().getRegistryKey().getValue().toString().contains("infinity:classic")) {
             setColor(DyeColor.WHITE);
         }
-        else if (world.toServerWorld().getRegistryKey().getValue().toString().contains("infinity")) {
+        else if (InfinityMod.isInfinity(world.toServerWorld())) {
             setColor(DyeColor.byId(world.getRandom().nextInt(16)));
         }
     }

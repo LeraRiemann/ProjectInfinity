@@ -18,11 +18,13 @@ Currently, the config files and therefore types of modded content which the invo
 * sounds,
 * items,
 * particles,
+* status effects,
+* block tags,
 * biomes and surface rules for them.
 
 Blocks are auto-assigned tags needed for the generator to know which parts of worldgen are they usable for ("full", "laggy" etc.,
-see the page on [configuring the mod](Configuring-the-mod)). Mobs are auto-sorted
-into sublists based on their spawn group (monsters, underwater creatures etc.). Music is also auto-chosen from the list of sounds,
+see the page on [configuring the mod](Configuring-the-mod)), plus checked for different traits (being a flower, rotatable, dyeable etc.).
+Mobs are auto-tagged with their spawn group (monsters, underwater creatures etc.). Music is also auto-chosen from the list of sounds,
 although the way the game checks for that is currently imperfect (it just checks if the ID of the sound event contains the
 substrings "music" or "disc"). When scanning for biomes, the game ignores all the ones from Infinite Dimensions itself as to not
 introduce mod-generated biomes into the pool of ones to choose from when you specifically want to _not_ generate one.
@@ -39,11 +41,6 @@ To force the invocation to happen again, you can either construct and activate t
     * Note that such reinvocation will not touch any of the existing files, only add new ones. As such, it is useful by itself only when
     adding new mods to the instance. If you update one of the mods (including Infinite Dimensions!) to a newer version that brings
     more content, or *especially* if you remove mods, you have to purge the `/config/modular` folder entirely to do a successful reinvocation.
-* Invocation takes time; it's only two game ticks, but using creative mode and saved hotbars / the warp command it is technically possible to
- prompt the game to generate a dimension before the invocation completes (especially since during invocation the server can lag a bit
- on larger modpacks). Please try to avoid that.
-* Particle types sometimes have additional configuration options required to use them. These options are accounted for when it comes
-to particles from vanilla Minecraft, but if another mod adds such a configurable particle, Infinite Dimensions will have no idea it is
-configurable - which can lead to creation of broken datapacks. I do not currently know of any mod which does add particles which require such
-configuration options and crash without them, which is why i left particles on the list; if it becomes a problem, i will remove them
-from it.
+* Starting at version 2.1.0 of the mod, Infinite Dimensions will automatically delete all modular configs and issue reinvocation
+if it detects that the version of those configs (set in the invocation lock) is outdated. If you make changes to your modular configs,
+do a backup of them before updating the mod!

@@ -72,7 +72,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method="findRespawnPosition", at = @At("HEAD"), cancellable = true)
     private static void injected(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> cir) {
-        if (((Timebombable)world).projectInfinity$isTimebombed() > 0) cir.setReturnValue(Optional.empty());
+        if (((Timebombable)world).infinity$isTimebombed() > 0) cir.setReturnValue(Optional.empty());
     }
 
     /* When the player is using the Infinity portal, this modifies the portal on the other side if needed. */
@@ -118,7 +118,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
         }
 
         /* Handle effects from dimension deletion */
-        int i = ((Timebombable)(getServerWorld())).projectInfinity$isTimebombed();
+        int i = ((Timebombable)(getServerWorld())).infinity$isTimebombed();
         if (i > 200) {
             if (i%4 == 0) {
                 Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().getOrThrow(RegistryKeys.DAMAGE_TYPE);

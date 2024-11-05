@@ -2,6 +2,7 @@ package net.lerariemann.infinity.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
@@ -38,7 +39,7 @@ public class NetherPortalBlockMixin {
 	private @Nullable ServerWorld injected(@Nullable ServerWorld original,
 										   @Local(argsOnly = true) ServerWorld world, @Local(argsOnly = true) BlockPos pos) {
 		if (!world.getBlockState(pos).isOf(ModBlocks.NEITHER_PORTAL.get())) {
-			if (!world.getRegistryKey().getValue().getNamespace().contains("infinity")) {
+			if (!InfinityMod.isInfinity(world)) {
 				return original; //when teleportation should not be redirected
 			}
 			return world.getServer().getWorld(World.OVERWORLD); //when we return from another dimension
@@ -51,7 +52,7 @@ public class NetherPortalBlockMixin {
 		RegistryKey<World> key2 = RegistryKey.of(RegistryKeys.WORLD, id);
 		ServerWorld serverWorld2 = world.getServer().getWorld(key2);
 
-		if (serverWorld2 != null && e.getOpen() && ((Timebombable)serverWorld2).projectInfinity$isTimebombed() == 0) {
+		if (serverWorld2 != null && e.getOpen() && ((Timebombable)serverWorld2).infinity$isTimebombed() == 0) {
 			return serverWorld2;
 		}
 		return world;

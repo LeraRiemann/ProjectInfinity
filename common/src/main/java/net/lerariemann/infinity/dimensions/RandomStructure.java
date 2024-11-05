@@ -24,7 +24,7 @@ public class RandomStructure {
         id = i;
         parent = b;
         random = new Random(i);
-        rawdata = (NbtCompound)(b.PROVIDER.extraRegistry.get("structures").getRandomElement(random));
+        rawdata = (NbtCompound)(b.PROVIDER.compoundRegistry.get("structures").getRandomElement(random));
         String name_raw = rawdata.getString("name");
         if (name_raw.lastIndexOf(":") < 0) name = name_raw + "_" + i;
         else name = name_raw.substring(0, name_raw.lastIndexOf(":")) + "_" + name_raw.substring(name_raw.lastIndexOf(":") + 1) + "_" + i;

@@ -31,16 +31,16 @@ public abstract class ClientWorldMixin extends World implements InfinityOptionsA
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(ClientPlayNetworkHandler networkHandler, ClientWorld.Properties properties, RegistryKey<World> registryRef, RegistryEntry<DimensionType> dimensionTypeEntry, int loadDistance, int simulationDistance, Supplier<Profiler> profiler, WorldRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
-        projectInfinity$setInfinityOptions(((InfinityOptionsAccess)MinecraftClient.getInstance()).projectInfinity$getInfinityOptions());
+        infinity$setOptions(((InfinityOptionsAccess)MinecraftClient.getInstance()).infinity$getOptions());
     }
 
     @Override
-    public InfinityOptions projectInfinity$getInfinityOptions() {
+    public InfinityOptions infinity$getOptions() {
         return infinity$options;
     }
     @Override
-    public void projectInfinity$setInfinityOptions(InfinityOptions options) {
+    public void infinity$setOptions(InfinityOptions options) {
         infinity$options = options;
-        ((InfinityOptionsAccess)(Object) getDimension()).projectInfinity$setInfinityOptions(options);
+        ((InfinityOptionsAccess)(Object) getDimension()).infinity$setOptions(options);
     }
 }
