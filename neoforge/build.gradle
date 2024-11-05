@@ -62,7 +62,6 @@ dependencies {
     // Forgified Fabric API modules. Where possible, work is being done to migrate these to Architectury API.
     modImplementation "org.sinytra.forgified-fabric-api:fabric-api-base:${forgified_fabric_api_base_version}" // Required for other modules to load.
     modImplementation "org.sinytra.forgified-fabric-api:fabric-networking-api-v1:${forgified_fabric_api_networking_version}" // Required by ModPayloads
-    modImplementation "org.sinytra.forgified-fabric-api:fabric-object-builder-api-v1:${forgified_fabric_api_object_builder_version}" // Required dependency *somewhere*.
     modImplementation "org.sinytra:forgified-fabric-loader:${forgified_fabric_loader_version}" // Required by FFAPI
 
     // Optional Forgified Fabric API modules.
