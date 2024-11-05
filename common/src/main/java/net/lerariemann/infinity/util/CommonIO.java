@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.util;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.architectury.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.*;
 import org.apache.commons.io.FileUtils;
@@ -140,7 +141,7 @@ public class CommonIO {
 
     private static boolean _checkIfModLoaded(File path1) {
         String modname = path1.toPath().getName(path1.toPath().getNameCount() - 1).toString();
-        return FabricLoader.getInstance().isModLoaded(modname);
+        return Platform.isModLoaded(modname);
     }
 
     private static NbtList _extractElements(File path1, String subpath) {

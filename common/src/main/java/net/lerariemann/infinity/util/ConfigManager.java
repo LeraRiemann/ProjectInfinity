@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.util;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.fabricmc.loader.api.FabricLoader;
+import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -26,7 +25,7 @@ public class ConfigManager {
         try {
             if (!endfile.toFile().exists() && fullname.endsWith(".json")) {
                 String separator;
-                if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+                if (Platform.isDevelopmentEnvironment()) {
                     separator = File.separator;
                 }
                 else {
@@ -54,7 +53,7 @@ public class ConfigManager {
     }
 
     public static boolean compareVersions(Path oldFile, Path newFile) throws IOException {
-        Path tempfile = Paths.get(getBaseConfigDir()+"/.infinity-temp.json");
+        Path tempfile = Paths.get(Platform.getConfigFolder()+"/.infinity-temp.json");
         int version_old = CommonIO.getVersion(oldFile.toFile());
         Files.copy(newFile, tempfile, REPLACE_EXISTING);
         int version_new = CommonIO.getVersion(tempfile.toFile());
@@ -77,7 +76,7 @@ public class ConfigManager {
             throw new RuntimeException(e);
         }
         if (bl2.get()) evictOldFiles();
-        Paths.get(getBaseConfigDir()+"/.infinity-temp.json").toFile().delete();
+        Paths.get(Platform.getConfigFolder()+"/.infinity-temp.json").toFile().delete();
     }
 
     public static void updateInvocationLock() {
@@ -100,11 +99,6 @@ public class ConfigManager {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    @ExpectPlatform
-    public static Path getBaseConfigDir() {
-        throw new AssertionError();
     }
 
     public static Path getConfigDir() {

@@ -2,6 +2,7 @@ package net.lerariemann.infinity;
 
 import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
@@ -27,14 +28,10 @@ import static net.lerariemann.infinity.InfinityModClient.sampler;
 
 //Abstraction layer for classes from Fabric API and Forgified Fabric API, as well as Fabric Loader vs. NeoForge Loader.
 public class PlatformMethods {
-    @ExpectPlatform
-    public static boolean isModLoaded(String modID) {
-        throw new AssertionError();
-    }
 
-    @ExpectPlatform
     public static boolean isFabricApiLoaded(String modID) {
-        throw new AssertionError();
+        if (Platform.isFabric()) return Platform.isModLoaded(modID.replace("_", "-"));
+        else return Platform.isModLoaded(modID.replace("-", "_"));
     }
 
     public static void sendServerPlayerEntity(ServerPlayerEntity entity, CustomPayload payload) {

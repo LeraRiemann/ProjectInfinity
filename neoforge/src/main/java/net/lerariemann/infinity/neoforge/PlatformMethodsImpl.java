@@ -13,7 +13,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
-import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.level.LevelEvent;
@@ -22,13 +21,6 @@ import net.neoforged.neoforge.event.level.LevelEvent;
  */
 @SuppressWarnings("unused")
 public class PlatformMethodsImpl {
-    public static boolean isModLoaded(String modID) {
-       return ModList.get().isLoaded(modID);
-    }
-
-    public static boolean isFabricApiLoaded(String modID) {
-        return isModLoaded(modID.replace("-", "_"));
-    }
 
     public static PacketByteBuf createPacketByteBufs() {
         return new PacketByteBuf(Unpooled.buffer());

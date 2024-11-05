@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.var;
 
+import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
@@ -92,7 +93,7 @@ public class ModPayloads {
         }
     }
     
-    public static boolean resourcesReloaded = Path.of(FabricLoader.getInstance().getGameDir() + "/resourcepacks/infinity/assets/infinity/shaders").toFile().exists();
+    public static boolean resourcesReloaded = Path.of(Platform.getGameFolder() + "/resourcepacks/infinity/assets/infinity/shaders").toFile().exists();
 
     public record StarsRePayLoad() implements CustomPayload {
         public static final StarsRePayLoad INSTANCE = new StarsRePayLoad();
