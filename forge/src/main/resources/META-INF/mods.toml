@@ -35,6 +35,13 @@ versionRange = "[9.2.14,)"
 ordering = "AFTER"
 side = "BOTH"
 
+[[dependencies.infinity]]
+modId = "fabric_api"
+mandatory = true
+versionRange = "[0.92.2,)"
+ordering = "AFTER"
+side = "BOTH"
+
 [modproperties.infinity]
 catalogueItemIcon="infinity:book_box"
 catalogueBackground="background.png"

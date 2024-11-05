@@ -2,11 +2,11 @@ package net.lerariemann.infinity.block.custom;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
+import dev.architectury.platform.Platform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
@@ -106,7 +106,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             }
         }
-        else if (FabricLoader.getInstance().isModLoaded("computercraft")) {
+        else if (Platform.isModLoaded("computercraft")) {
             if (isPrintedPage(itemStack.getItem())) {
                 NbtCompound compound = itemStack.getNbt();
                 String content;
