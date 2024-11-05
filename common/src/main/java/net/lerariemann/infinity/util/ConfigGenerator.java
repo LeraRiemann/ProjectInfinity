@@ -304,11 +304,11 @@ public class ConfigGenerator {
 
     public static void generateStructures(MinecraftServer server) {
         Map<String, WeighedStructure<NbtCompound>> map = new HashMap<>();
-        Registry<Structure> registry = server.getRegistryManager().get(RegistryKeys.STRUCTURE);
+        Registry<Structure> registry = server.getRegistryManager().getOrThrow(RegistryKeys.STRUCTURE);
         registry.getKeys().forEach(key -> {
             if (!key.getValue().getNamespace().contains("infinity")) {
                 LogManager.getLogger().info(key.getValue());
-                Optional<Structure> o = registry.getOrEmpty(key);
+                Optional<Structure> o = registry.getOptionalValue(key);
                 o.ifPresent(structure -> {
                     Optional<NbtElement> c;
                     try {

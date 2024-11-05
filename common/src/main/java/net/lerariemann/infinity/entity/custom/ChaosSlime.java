@@ -106,7 +106,7 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
 
     @Override
     protected ParticleEffect getParticles() {
-        return new DustParticleEffect(colorFromInt(this.getColorForRender()), 1.0f);
+        return new DustParticleEffect(this.getColorForRender(), 1.0f);
     }
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
