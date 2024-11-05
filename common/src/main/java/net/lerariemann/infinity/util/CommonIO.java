@@ -2,7 +2,6 @@ package net.lerariemann.infinity.util;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.architectury.platform.Platform;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.*;
 import org.apache.commons.io.FileUtils;
 
