@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.mixin;
 
+import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.PlatformMethods;
 import org.apache.logging.log4j.LogManager;
 import org.objectweb.asm.tree.ClassNode;
@@ -21,8 +22,10 @@ public class InfinityMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if(mixinClassName.contains("net.lerariemann.infinity.mixin.mavity") && PlatformMethods.isModLoaded("gravity_changer_q")){
-            return false;
+        if (Platform.isFabric()) {
+            if (mixinClassName.contains("net.lerariemann.infinity.mixin.mavity") && Platform.isModLoaded("gravity_changer_q")){
+                return false;
+            }
         }
         return true;
     }
