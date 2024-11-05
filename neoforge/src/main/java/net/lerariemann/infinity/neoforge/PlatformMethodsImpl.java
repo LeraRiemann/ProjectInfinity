@@ -3,15 +3,14 @@ package net.lerariemann.infinity.neoforge;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.mixin.registry.sync.BaseMappedRegistryAccessor;
 import net.lerariemann.infinity.PlatformMethods;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.neoforged.fml.ModList;
@@ -43,7 +42,8 @@ public class PlatformMethodsImpl {
     }
 
     public static void unfreeze(Registry<?> registry) {
-        ((BaseMappedRegistryAccessor) registry).invokeUnfreeze();
+        SimpleRegistry<?> writableRegistry = (SimpleRegistry<?>) registry;
+        writableRegistry.unfreeze();
     }
 
     public static void freeze(Registry<?> registry) {
