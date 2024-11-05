@@ -46,7 +46,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Shadow @Final public MinecraftServer server;
 
     @Inject(method = "lambda$changeDimension$8", at= @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V"))
-    private void inject3(ServerWorld destination, RegistryKey<World> registryKey, ServerWorld serverWorld, TeleportTarget teleportTarget, Boolean spawnPortal, CallbackInfoReturnable<Entity> cir) {
+    private void inject3(ServerWorld world, RegistryKey<World> registryKey, ServerWorld destination, TeleportTarget teleportTarget, Boolean spawnPortal, CallbackInfoReturnable<Entity> cir) {
         if (RandomProvider.getProvider(server).rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = BlockPos.ofFloored(teleportTarget.position);

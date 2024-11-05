@@ -91,6 +91,5 @@ loom {
         forge {
             mixinConfig "infinity.mixins.json"
             mixinConfig "infinity-forge.mixins.json"
-            mixinConfig "dynreg.mixins.json"
         }
 }
