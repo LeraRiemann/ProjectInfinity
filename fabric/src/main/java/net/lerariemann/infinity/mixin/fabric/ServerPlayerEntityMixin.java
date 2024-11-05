@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.mixin.fabric;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -45,11 +46,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Shadow @Final public MinecraftServer server;
 
 
-    @Inject(method = "moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V"),
-            locals = LocalCapture.CAPTURE_FAILHARD)
-    private void injected2(ServerWorld destination, CallbackInfoReturnable<Entity> ci, ServerWorld serverWorld, RegistryKey<World> registryKey,
-                           WorldProperties worldProperties, PlayerManager playerManager, TeleportTarget teleportTarget) {
+    @Inject(method = "moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V"))
+    private void injected2(ServerWorld destination, CallbackInfoReturnable<Entity> ci, @Local RegistryKey<World> registryKey, @Local TeleportTarget teleportTarget) {
         if (RandomProvider.getProvider(server).rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = BlockPos.ofFloored(teleportTarget.position);
