@@ -13,6 +13,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.registry.Registries;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.world.gen.structure.StructureType;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
@@ -310,7 +312,9 @@ public class ConfigGenerator {
                 o.ifPresent(structure -> {
                     Optional<NbtElement> c;
                     try {
-                        c = Optional.empty(); //i tried everything here and nothing works aaaaaaaaa
+                        c = getStr(structure, structure.getType());
+                        LogManager.getLogger().info("success");
+                        c.ifPresent(cc -> LogManager.getLogger().info(cc.asString()));
                     } catch (StackOverflowError e) {
                         c = Optional.empty();
                         LogManager.getLogger().info("failiure");
@@ -320,6 +324,10 @@ public class ConfigGenerator {
             }
         });
         writeMap(map, "extra", "structures");
+    }
+
+    public static <S extends Structure, T extends StructureType<S>> Optional<NbtElement> getStr(Structure structure, T type) {
+        return type.codec().encoder().encodeStart(NbtOps.INSTANCE, (S) structure).result();
     }
 
     public static void generateAll(World w, BlockPos inAir, BlockPos onStone) {

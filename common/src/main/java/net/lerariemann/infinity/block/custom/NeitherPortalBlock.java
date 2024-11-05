@@ -2,6 +2,7 @@ package net.lerariemann.infinity.block.custom;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
+import dev.architectury.platform.Platform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.PlatformMethods;
@@ -94,7 +95,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         WritableBookContentComponent writableComponent = itemStack.getComponents().get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
         WrittenBookContentComponent writtenComponent = itemStack.getComponents().get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
         String printedComponent = null;
-        if (PlatformMethods.isModLoaded("computercraft")) {
+        if (Platform.isModLoaded("computercraft")) {
             printedComponent = checkPrintedPage(itemStack);
         }
         if (writableComponent != null || writtenComponent != null || printedComponent != null) {
