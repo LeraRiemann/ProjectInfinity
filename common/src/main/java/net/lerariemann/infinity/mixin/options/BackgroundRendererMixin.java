@@ -10,28 +10,31 @@ import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
+import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.*;
 
 @Mixin(BackgroundRenderer.class)
 public class BackgroundRendererMixin {
-    @Shadow
+    //TODO fix
+//    @Shadow
     private static float red;
-    @Shadow
+//    @Shadow
     private static float green;
-    @Shadow
+//    @Shadow
     private static float blue;
 
 
-    @Inject(method = "render(Lnet/minecraft/client/render/Camera;FLnet/minecraft/client/world/ClientWorld;IF)V",
+    @Inject(method = "getFogColor",
             at= @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BackgroundRenderer;getFogModifier(Lnet/minecraft/entity/Entity;F)Lnet/minecraft/client/render/BackgroundRenderer$StatusEffectFogModifier;"))
-    private static void injected(Camera camera, float tickDelta, ClientWorld world, int viewDistance, float skyDarkness, CallbackInfo ci) {
+    private static void injected(Camera camera, float tickDelta, ClientWorld world, int clampedViewDistance, float skyDarkness, CallbackInfoReturnable<Vector4f> cir) {
         InfinityOptions options = infinity$options(world);
         if (options.getSkyType().equals("rainbow") && camera.getSubmersionType() == CameraSubmersionType.NONE) {
             infinity$applyRainbowFog(world, tickDelta);
@@ -39,7 +42,7 @@ public class BackgroundRendererMixin {
     }
 
     /* Disable void fog in custom dimensions. */
-    @ModifyExpressionValue(method = "render(Lnet/minecraft/client/render/Camera;FLnet/minecraft/client/world/ClientWorld;IF)V",
+    @ModifyExpressionValue(method = "getFogColor",
     at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getHorizonShadingRatio()F"))
     private static float inj(float original, @Local(argsOnly = true) ClientWorld world) {
         if (!InfinityMod.isInfinity(world)) return original;
