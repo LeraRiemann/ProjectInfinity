@@ -16,12 +16,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin implements GameRendererAccess {
     @Shadow
-    private void loadPostProcessor(Identifier id) {
+    private void setPostProcessor(Identifier id) {
     }
 
     @Override
     public void projectInfinity$loadPP(Identifier id) {
-        loadPostProcessor(id);
+        setPostProcessor(id);
     }
 
     @Inject(method = "onCameraEntitySet", at = @At("TAIL"), cancellable = true)
