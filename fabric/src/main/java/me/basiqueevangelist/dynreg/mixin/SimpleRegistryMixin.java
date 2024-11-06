@@ -80,7 +80,7 @@ public abstract class SimpleRegistryMixin<T> implements ExtendedRegistry<T>, Reg
 
     @Override
     public void dynreg$unfreeze() {
-        this.tagLookup = SimpleRegistry.TagLookup.ofUnbound();
+//        this.tagLookup = SimpleRegistry.TagLookup.ofUnbound();
         frozen = false;
         if (dynreg$intrusive)
             this.intrusiveValueToEntry = new IdentityHashMap<>();
