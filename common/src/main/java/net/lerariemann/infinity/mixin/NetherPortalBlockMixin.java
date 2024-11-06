@@ -58,7 +58,7 @@ public class NetherPortalBlockMixin {
 		return world;
 	}
 
-	@Redirect(method="getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Direction;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;",
+	@Redirect(method="getStateForNeighborUpdate",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
 	private boolean injected(BlockState neighborState, Block block) {
 		return (neighborState.getBlock() instanceof NetherPortalBlock);
