@@ -311,6 +311,7 @@ public class ConfigGenerator {
                 Optional<Structure> o = registry.getOrEmpty(key);
                 o.ifPresent(structure -> {
                     Optional<NbtElement> c;
+                    LogManager.getLogger(structure.getType().codec().decoder());
                     try {
                         c = getStr(structure, structure.getType());
                         LogManager.getLogger().info("success");
