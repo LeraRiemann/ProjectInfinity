@@ -56,7 +56,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Shadow public abstract ServerWorld getServerWorld();
 
-    @Shadow public abstract boolean teleport(ServerWorld world, double destX, double destY, double destZ, Set<PositionFlag> flags, float yaw, float pitch);
+    @Shadow public abstract boolean teleport(ServerWorld world, double destX, double destY, double destZ, Set<PositionFlag> flags, float yaw, float pitch, boolean resetCamera);
 
     @Shadow public abstract Entity getCameraEntity();
 
@@ -65,6 +65,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Shadow public ServerPlayNetworkHandler networkHandler;
 
     @Shadow public abstract @Nullable Entity teleportTo(TeleportTarget teleportTarget);
+
+    @Shadow protected abstract void fall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition);
 
     @Unique private long infinity$ticksUntilWarp;
     @Unique private Identifier infinity$idForWarp;
@@ -76,7 +78,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     }
 
     /* When the player is using the Infinity portal, this modifies the portal on the other side if needed. */
-    @Inject(method = "teleportTo",
+    @Inject(method = "teleportTo(Lnet/minecraft/world/TeleportTarget;)Lnet/minecraft/server/network/ServerPlayerEntity;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V")
     )
     private void injected2(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir, @Local(ordinal = 0) ServerWorld serverWorld, @Local RegistryKey<World> registryKey) {
@@ -94,7 +96,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
         }
     }
 
-    @Inject(method = "teleportTo",
+    @Inject(method = "teleportTo(Lnet/minecraft/world/TeleportTarget;)Lnet/minecraft/server/network/ServerPlayerEntity;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerManager()Lnet/minecraft/server/PlayerManager;"))
     private void injected3(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir) {
         PlatformMethods.sendServerPlayerEntity(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(teleportTarget.world()));
@@ -114,7 +116,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             BlockPos blockPos2 = WarpLogic.getPosForWarp(BlockPos.ofFloored(w.getWorldBorder().clamp(self.getX() * d, y, self.getZ() * d)), w);
             BlockState state = w.getBlockState(blockPos2.down());
             if (state.isAir() || state.isOf(Blocks.LAVA)) w.setBlockState(blockPos2.down(), Blocks.OBSIDIAN.getDefaultState());
-            this.teleport(w, blockPos2.getX() + 0.5, blockPos2.getY(), blockPos2.getZ() + 0.5, new HashSet<>(), self.getYaw(), self.getPitch());
+            this.teleport(w, blockPos2.getX() + 0.5, blockPos2.getY(), blockPos2.getZ() + 0.5, new HashSet<>(), self.getYaw(), self.getPitch(), false);
         }
 
         /* Handle effects from dimension deletion */
