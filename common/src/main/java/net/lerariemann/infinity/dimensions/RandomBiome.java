@@ -192,8 +192,7 @@ public class RandomBiome {
         return res;
     }
 
-    NbtCompound carvers() {
-        NbtCompound res = new NbtCompound();
+    NbtList carvers() {
         NbtList air = new NbtList();
         if (PROVIDER.roll(random, "use_random_cave")) air.add(NbtString.of((new RandomCarver(this, true)).fullname));
         if (PROVIDER.roll(random, "use_random_canyon")) air.add(NbtString.of((new RandomCarver(this, false)).fullname));
@@ -201,7 +200,6 @@ public class RandomBiome {
         for (int i = 0; i < carvers.keys.size(); i++) {
             if (random.nextDouble() < carvers.weights.get(i)) air.add(NbtString.of(carvers.keys.get(i)));
         }
-        res.put("air", air);
-        return res;
+        return air;
     }
 }
