@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,5 +18,5 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Inject(method = "damage", at = @At("RETURN"))
-    protected void injected_sheep(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {}
+    protected void injected_sheep(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {}
 }

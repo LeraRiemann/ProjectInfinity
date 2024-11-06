@@ -6,6 +6,8 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.DyeColor;
 import net.minecraft.world.LocalDifficulty;
@@ -24,16 +26,16 @@ public abstract class SheepEntityMixin extends LivingEntityMixin implements Shea
     }
 
     @Override
-    protected void injected_sheep(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    protected void injected_sheep(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if(cir.getReturnValue() && !this.isSheared() && source.getAttacker() != null &&
                 source.getAttacker() instanceof PlayerEntity && getWorld().getRegistryKey().getValue().toString().contains("infinity:classic")) {
-            this.sheared(SoundCategory.AMBIENT);
+            this.sheared(world, SoundCategory.AMBIENT, ItemStack.EMPTY);
         }
     }
 
     @Shadow public abstract void setColor(DyeColor color);
 
-    @Shadow public abstract void sheared(SoundCategory shearedSoundCategory);
+    @Shadow public abstract void sheared(ServerWorld world, SoundCategory shearedSoundCategory, ItemStack shears);
 
     @Shadow public abstract boolean isSheared();
 

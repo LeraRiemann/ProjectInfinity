@@ -60,7 +60,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Shadow public abstract Entity getCameraEntity();
 
-    @Shadow public abstract boolean damage(DamageSource source, float amount);
+    @Shadow public abstract boolean damage(ServerWorld world, DamageSource source, float amount);
     @Shadow public boolean notInAnyWorld;
     @Shadow public ServerPlayNetworkHandler networkHandler;
 
@@ -123,7 +123,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             if (i%4 == 0) {
                 Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().getOrThrow(RegistryKeys.DAMAGE_TYPE);
                 RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMod.getId("world_ceased")));
-                damage(new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
+                damage(getServerWorld(), new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
             }
             if (i > 3500) {
                 ModCriteria.WHO_REMAINS.get().trigger((ServerPlayerEntity)(Object)this);
