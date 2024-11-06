@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.mixin.options;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
@@ -13,7 +14,6 @@ import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,7 +33,7 @@ public class PlayerManagerMixin {
             BlockState st = serverWorld2.getBlockState(pos);
             serverWorld2.setBlockState(pos, ModBlocks.ALTAR_COSMIC.get().getDefaultState());
             serverWorld2.getBlockEntity(pos, ModBlockEntities.ALTAR_COSMIC.get()).ifPresent(e -> {
-                LogManager.getLogger().info("Invoking the name of the Cosmic Altar...");
+                InfinityMod.LOGGER.info("Invoking the name of the Cosmic Altar...");
                 e.startTime();
                 e.addNull(st);
             });
