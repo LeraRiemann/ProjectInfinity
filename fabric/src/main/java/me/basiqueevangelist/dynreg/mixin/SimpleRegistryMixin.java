@@ -33,8 +33,8 @@ public abstract class SimpleRegistryMixin<T> implements ExtendedRegistry<T>, Reg
     @Nullable
     private Map<T, RegistryEntry.Reference<T>> intrusiveValueToEntry;
 
-    @Shadow
-    public abstract Optional<RegistryEntry.Reference<T>> getEntry(RegistryKey<T> key);
+//    @Shadow
+//    public abstract Optional<RegistryEntry.Reference<T>> getEntry(RegistryKey<T> key);
 
     @Mutable
     @Shadow

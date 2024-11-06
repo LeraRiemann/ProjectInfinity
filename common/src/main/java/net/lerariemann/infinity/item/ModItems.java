@@ -46,11 +46,19 @@ public class ModItems {
     }
 
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group) {
-       return registerBlockItem(block, new Item.Settings().arch$tab(group));
+       return registerBlockItem(block, settings(block.getId().getPath()).useBlockPrefixedTranslationKey().arch$tab(group));
+    }
+
+    public static Item.Settings settings(String id) {
+        return new Item.Settings().registryKey(registryKey(id));
+    }
+
+    public static RegistryKey<Item> registryKey(String id) {
+        return RegistryKey.of(RegistryKeys.ITEM, InfinityMod.getId(id));
     }
 
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item) {
-        Item.Settings settings = new Item.Settings();
+        Item.Settings settings = settings(block.getId().getPath()).useBlockPrefixedTranslationKey();
         if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
             settings = settings.arch$tab(group);
         RegistrySupplier<Item> registeredItem = registerBlockItem(block, settings);
@@ -59,7 +67,7 @@ public class ModItems {
     }
 
     public static RegistrySupplier<Item> registerItem(String id, RegistryKey<ItemGroup> group, Item item) {
-        Item.Settings settings = new Item.Settings();
+        Item.Settings settings = settings(id);
         if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
             settings = settings.arch$tab(group);
         RegistrySupplier<Item> registeredItem = register(id, settings);
@@ -68,7 +76,7 @@ public class ModItems {
     }
 
     public static RegistrySupplier<Item> registerKeyItem() {
-        Item.Settings settings = new Item.Settings();
+        Item.Settings settings = settings("key");
         if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
             settings = settings.arch$tab(ItemGroups.INGREDIENTS);
         final Item.Settings keySettings = settings;
@@ -78,7 +86,7 @@ public class ModItems {
     }
 
     public static Item.Settings createSpawnEggSettings(String id) {
-        return new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
+        return settings(id).arch$tab(ItemGroups.SPAWN_EGGS);
     }
 
     public static void registerModItems() {
