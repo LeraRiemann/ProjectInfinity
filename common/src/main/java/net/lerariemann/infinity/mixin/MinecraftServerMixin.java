@@ -2,7 +2,6 @@ package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.ImmutableList;
 import dev.architectury.platform.Platform;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.compat.GravityChangerCompat;

@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.options;
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.util.CommonIO;
@@ -13,7 +13,7 @@ import net.minecraft.server.world.ServerWorld;
 
 public class PacketTransiever {
     public static PacketByteBuf buildPacket(ServerWorld destination) {
-        PacketByteBuf buf = PacketByteBufs.create();
+        PacketByteBuf buf = PlatformMethods.createPacketByteBufs();
         buf.writeNbt(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
         return buf;
     }

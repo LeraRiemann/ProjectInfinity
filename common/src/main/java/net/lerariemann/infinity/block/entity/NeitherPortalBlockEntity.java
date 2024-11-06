@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.block.entity;
 
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;

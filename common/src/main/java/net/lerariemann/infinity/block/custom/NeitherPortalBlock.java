@@ -5,9 +5,9 @@ import com.google.common.collect.Sets;
 import dev.architectury.platform.Platform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
@@ -309,7 +309,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     }
 
     static PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
-        PacketByteBuf buf = PacketByteBufs.create();
+        PacketByteBuf buf = PlatformMethods.createPacketByteBufs();
         buf.writeIdentifier(id);
         buf.writeNbt(d.type != null ? d.type.data : new NbtCompound());
         buf.writeInt(d.random_biomes.size());
