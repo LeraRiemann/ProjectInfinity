@@ -28,6 +28,8 @@ import java.util.Optional;
 
 @Mixin(value = SimpleRegistry.class)
 public abstract class SimpleRegistryMixin<T> implements ExtendedRegistry<T>, Registry<T> {
+    @Shadow
+    SimpleRegistry.TagLookup<T> tagLookup;
     @Shadow private boolean frozen;
     @Shadow
     @Nullable
@@ -78,6 +80,7 @@ public abstract class SimpleRegistryMixin<T> implements ExtendedRegistry<T>, Reg
 
     @Override
     public void dynreg$unfreeze() {
+        this.tagLookup = SimpleRegistry.TagLookup.ofUnbound();
         frozen = false;
         if (dynreg$intrusive)
             this.intrusiveValueToEntry = new IdentityHashMap<>();
