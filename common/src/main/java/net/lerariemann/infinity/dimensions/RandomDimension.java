@@ -301,11 +301,11 @@ public class RandomDimension {
 
     NbtElement randomMultiNoiseParameter() {
         if (random.nextBoolean()) {
-            NbtCompound res = new NbtCompound();
+            NbtList res = new NbtList();
             double a = (random.nextFloat()-0.5)*2;
             double b = (random.nextFloat()-0.5)*2;
-            res.putFloat("min", (float)Math.min(a, b));
-            res.putFloat("max", (float)Math.max(a, b));
+            res.add(NbtFloat.of((float)Math.min(a, b)));
+            res.add(NbtFloat.of((float)Math.max(a, b)));
             return res;
         }
         return NbtDouble.of((random.nextDouble()-0.5)*2);
