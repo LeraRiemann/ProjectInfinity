@@ -2,8 +2,8 @@ package net.lerariemann.infinity.mixin;
 
 import dev.architectury.core.fluid.SimpleArchitecturyFluidAttributes;
 import dev.architectury.fluid.FluidStack;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.fluid.Iridescence;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +18,7 @@ public class IridescenceMixin {
     at = @At("HEAD"), cancellable = true)
     void inj(@Nullable FluidStack stack, @Nullable BlockRenderView level, @Nullable BlockPos pos, CallbackInfoReturnable<Integer> cir) {
         if (level != null && pos != null && level.getBlockState(pos).isOf(ModBlocks.IRIDESCENCE.get())) {
-            cir.setReturnValue(PlatformMethods.iridescentColor(pos));
+            cir.setReturnValue(Iridescence.color(pos));
         }
     }
 }

@@ -3,8 +3,8 @@ package net.lerariemann.infinity.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.fluid.Iridescence;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.LavaFluid;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +26,7 @@ public class LavaFluidMixin {
             target = "Lnet/minecraft/world/WorldAccess;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z"), index = 1)
     BlockState inj(BlockState original, @Local(argsOnly = true) WorldAccess world, @Local(argsOnly = true) BlockPos pos) {
         if (world.getBlockState(pos).isOf(ModBlocks.IRIDESCENCE.get())) {
-            return PlatformMethods.getRandomColorBlock(world, "glazed_terracotta").getDefaultState();
+            return Iridescence.getRandomColorBlock(world, "glazed_terracotta").getDefaultState();
         }
         return original;
     }

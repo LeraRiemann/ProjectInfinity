@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.lerariemann.infinity.PlatformMethods;
-import net.lerariemann.infinity.fluid.ModFluids;
+import net.lerariemann.infinity.fluids.ModFluidsFabric;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
@@ -57,11 +57,11 @@ public class PlatformMethodsImpl {
 
 
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceStill() {
-        return ModFluids.IRIDESCENCE_STILL;
+        return ModFluidsFabric.IRIDESCENCE_STILL;
     }
 
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
-        return ModFluids.IRIDESCENCE_FLOWING;
+        return ModFluidsFabric.IRIDESCENCE_FLOWING;
     }
 
 }

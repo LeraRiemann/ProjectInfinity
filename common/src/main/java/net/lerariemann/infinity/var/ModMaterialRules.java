@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.fluid.Iridescence;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.block.BlockState;
@@ -70,7 +70,7 @@ public class ModMaterialRules {
             long seed = MathHelper.hashCode(i, j, k);
             double d = (seed & 0xFFFL) / (double)0xFFFL;
             d = d - Math.floor(d);
-            BlockState st = PlatformMethods.getRandomColorBlock(d, str).getDefaultState();
+            BlockState st = Iridescence.getRandomColorBlock(d, str).getDefaultState();
             if(st.contains(Properties.PERSISTENT)) st = st.with(Properties.PERSISTENT, Boolean.TRUE);
             return st;
         }
