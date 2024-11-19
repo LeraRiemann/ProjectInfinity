@@ -25,6 +25,7 @@ public final class InfinityModNeoForge {
         // Run any remaining tasks that require waiting for the registry to freeze on NeoForge.
         eventBus.addListener(InfinityModNeoForge::registerSpawns);
         eventBus.addListener(InfinityModNeoForge::loadStats);
+        eventBus.addListener(FluidTypes::registerFluidInteractions);
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsNeoforge.registerModFluids();
     }
