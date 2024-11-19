@@ -1,8 +1,10 @@
 package net.lerariemann.infinity.block;
 
+import dev.architectury.core.block.ArchitecturyLiquidBlock;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.block.custom.*;
+import net.lerariemann.infinity.fluid.ModFluids;
 import net.minecraft.block.*;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
@@ -32,6 +34,8 @@ public class ModBlocks {
             new SlabBlock(AbstractBlock.Settings.copy(Blocks.NETHERITE_BLOCK)));
     public static final RegistrySupplier<Block> TIME_BOMB = BLOCKS.register("timebomb", () ->
             new TimeBombBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(state -> 15)));
+    public static final RegistrySupplier<FluidBlock> IRIDESCENCE = BLOCKS.register("iridescence", () ->
+            new ArchitecturyLiquidBlock(ModFluids.IRIDESCENCE_STILL, AbstractBlock.Settings.copy(Blocks.WATER)));
 
     public static void registerModBlocks() {
         BLOCKS.register();

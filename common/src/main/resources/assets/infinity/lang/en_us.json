@@ -141,6 +141,8 @@
   "item.infinity.key": "Transfinite Key",
   "item.infinity.footprint": "Footprint",
   "item.infinity.fine_item": "A Very Fine Item",
+  "item.infinity.iridescence_bucket": "Iridescence Bucket",
+  "fluid.infinity.iridescence": "Iridescence",
   "emi.info.book_box": "You can create a Box of Infinite Books by throwing a Bookshelf into an Infinity Portal.",
   "emi.info.altar": "You can create a Transfinite Altar by throwing a Lectern into an Infinity Portal.",
   "emi.info.transfinite_key": "You can create a Transfinite Key by throwing Amethyst into an Infinity Portal.",
