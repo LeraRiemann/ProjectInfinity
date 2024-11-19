@@ -86,6 +86,7 @@ public class ModItems {
     }
 
     public static void registerModItems() {
+        addAfter(IRIDESCENCE_BUCKET, ItemGroups.TOOLS, Items.MILK_BUCKET);
         ITEMS.register();
     }
 
