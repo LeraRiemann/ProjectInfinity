@@ -505,7 +505,6 @@ public class ModMaterialRules {
     public static void registerRules() {
         register("chaos", RandomBlockMaterialRule.CODEC);
         register("colored_chaos", RandomColoredBlock.Rule.CODEC);
-        register("perfection", Perfection.Rule.CODEC);
         register("library", Library.Rule.CODEC);
         register("backrooms", Backrooms.Rule.CODEC);
         register("nexus", Nexus.Rule.CODEC);

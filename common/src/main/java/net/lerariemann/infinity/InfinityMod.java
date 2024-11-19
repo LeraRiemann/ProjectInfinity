@@ -42,7 +42,6 @@ public class InfinityMod {
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
 		ModEntities.registerEntities();
-		ModFluids.registerModFluids();
 		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
 		ModBlockEntities.registerBlockEntities();

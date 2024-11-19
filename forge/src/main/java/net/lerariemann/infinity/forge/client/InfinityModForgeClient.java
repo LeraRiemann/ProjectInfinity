@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.forge.client;
 
 import dev.architectury.platform.Platform;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
@@ -48,6 +49,21 @@ public class InfinityModForgeClient {
     public static void onClientSetup(FMLClientSetupEvent event) {
         RenderLayers.setRenderLayer(ModFluids.IRIDESCENCE_STILL.get(), RenderLayer.getTranslucent());
         RenderLayers.setRenderLayer(ModFluids.IRIDESCENCE_FLOWING.get(), RenderLayer.getTranslucent());
+    }
+
+    @SubscribeEvent
+    static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+        event.registerFluidType(new IClientFluidTypeExtensions() {
+            private static final Identifier IRIDESCENCE = InfinityMod.getId("block/iridescence");
+
+            public @NotNull Identifier getStillTexture() {
+                return IRIDESCENCE;
+            }
+
+            public @NotNull Identifier getFlowingTexture() {
+                return IRIDESCENCE;
+            }
+        }, FluidTypes.IRIDESCENCE_TYPE.value());
     }
 
     private static boolean clothConfigInstalled() {
