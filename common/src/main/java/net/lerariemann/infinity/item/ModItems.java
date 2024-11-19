@@ -11,7 +11,6 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.fluid.ModFluids;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
@@ -38,7 +37,8 @@ public class ModItems {
     public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = ITEMS.register("chaos_creeper_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_CREEPER, 0x91BD59, 0x78A7FF, createSpawnEggSettings("chaos_creeper_spawn_egg")));
     public static final RegistrySupplier<Item> CHAOS_SKELETON_SPAWN_EGG = ITEMS.register("chaos_skeleton_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_SKELETON, 0xF3CFB9, 0x87A363, createSpawnEggSettings("chaos_skeleton_spawn_egg")));
     public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = ITEMS.register("chaos_slime_spawn_egg",  () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME, 0xAA77DD, 0xFF66FF, createSpawnEggSettings("chaos_slime_spawn_egg")));
-    public static final RegistrySupplier<Item> IRIDESCENCE_BUCKET = ITEMS.register("iridescence_bucket", () -> new ArchitecturyBucketItem(ModFluids.IRIDESCENCE_STILL, new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1)));
+    public static final RegistrySupplier<Item> IRIDESCENCE_BUCKET = ITEMS.register("iridescence_bucket", () ->
+            new ArchitecturyBucketItem(PlatformMethods.getIridescenceStill(), new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1)));
 
 
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {

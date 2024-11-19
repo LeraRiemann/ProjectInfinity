@@ -10,6 +10,7 @@ import net.lerariemann.infinity.item.ModComponentTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -148,6 +149,15 @@ public class PlatformMethods {
 
     @ExpectPlatform
     public static boolean isInWhite(BlockState state) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static RegistrySupplier<? extends FlowableFluid> getIridescenceStill() {
+        throw new AssertionError();
+    }
+    @ExpectPlatform
+    public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
         throw new AssertionError();
     }
 }

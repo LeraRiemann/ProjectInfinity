@@ -4,6 +4,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.fluid.Iridescence;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
@@ -18,7 +19,8 @@ import org.jetbrains.annotations.NotNull;
 public class FluidTypes {
     private static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, InfinityMod.MOD_ID);
 
-    public static final DeferredHolder<FluidType, FluidType> IRIDESCENCE_TYPE = FLUID_TYPES.register("iridescence", () -> new FluidType(FluidType.Properties.create()
+    public static final DeferredHolder<FluidType, FluidType> IRIDESCENCE_TYPE = FLUID_TYPES.register("iridescence",
+            () -> new FluidType(FluidType.Properties.create()
             .descriptionId("fluid.infinity.iridescence")
             .fallDistanceModifier(0F)
             .canExtinguish(true)

@@ -2,6 +2,7 @@ package net.lerariemann.infinity.fluid;
 
 import dev.architectury.core.fluid.ArchitecturyFlowingFluid;
 import dev.architectury.core.fluid.ArchitecturyFluidAttributes;
+import net.lerariemann.infinity.PlatformMethods;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.world.World;
 
@@ -10,7 +11,7 @@ public class Iridescence {
         return world.getRegistryKey().getValue().toString().equals("infinity:chaos");
     }
     public static boolean isIridescence(FluidState st) {
-        return st.isOf(ModFluids.IRIDESCENCE_FLOWING.get()) || st.isOf(ModFluids.IRIDESCENCE_STILL.get());
+        return st.isOf(PlatformMethods.getIridescenceStill().get()) || st.isOf(PlatformMethods.getIridescenceFlowing().get());
     }
 
     public static class Still extends ArchitecturyFlowingFluid.Source {

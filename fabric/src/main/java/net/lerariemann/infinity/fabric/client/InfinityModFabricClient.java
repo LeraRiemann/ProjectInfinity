@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.fluid.ModFluids;
 import net.lerariemann.infinity.item.ModItems;
 import net.minecraft.client.render.RenderLayer;
 
@@ -23,7 +22,7 @@ public class InfinityModFabricClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_BOMB.get(), RenderLayer.getTranslucent());
 
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(),
-                ModFluids.IRIDESCENCE_STILL.get(), ModFluids.IRIDESCENCE_FLOWING.get());
+                PlatformMethods.getIridescenceStill().get(), PlatformMethods.getIridescenceFlowing().get());
         // Common client setup tasks.
         InfinityModClient.initializeClient();
         // Register model predicates for Transfinite Keys
