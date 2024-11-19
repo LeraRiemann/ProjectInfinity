@@ -335,7 +335,6 @@ public class ConfigGenerator {
         generateAllNoWorld();
         generateBlocks(w, inAir, onStone);
         MinecraftServer s = Objects.requireNonNull(w.getServer());
-        generateStructures(s);
         SurfaceRuleScanner.scan(s);
         generate(s.getRegistryManager().get(RegistryKeys.BIOME), "misc", "biomes", true);
     }
