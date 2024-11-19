@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.fluid.Iridescence;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
@@ -20,7 +19,7 @@ public class FluidBlockMixin {
                    @Local(argsOnly = true) World world, @Local(argsOnly = true) BlockPos pos) {
         FluidState st = world.getFluidState(pos.offset(dir.getOpposite()));
         if (Iridescence.isIridescence(st) && !world.getFluidState(pos).isStill()) {
-            return PlatformMethods.getRandomColorBlock(world, "glazed_terracotta").getDefaultState();
+            return Iridescence.getRandomColorBlock(world, "glazed_terracotta").getDefaultState();
         }
         return original;
     }

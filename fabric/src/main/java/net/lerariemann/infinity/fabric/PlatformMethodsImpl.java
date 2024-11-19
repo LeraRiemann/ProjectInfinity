@@ -40,4 +40,13 @@ public class PlatformMethodsImpl {
         ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, blockItem.get()));
     }
 
+
+    public static RegistrySupplier<? extends FlowableFluid> getIridescenceStill() {
+        return ModFluidsFabric.IRIDESCENCE_STILL;
+    }
+
+    public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
+        return ModFluidsFabric.IRIDESCENCE_FLOWING;
+    }
+
 }

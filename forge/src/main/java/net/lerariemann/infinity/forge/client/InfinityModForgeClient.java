@@ -47,23 +47,35 @@ public class InfinityModForgeClient {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        RenderLayers.setRenderLayer(ModFluids.IRIDESCENCE_STILL.get(), RenderLayer.getTranslucent());
-        RenderLayers.setRenderLayer(ModFluids.IRIDESCENCE_FLOWING.get(), RenderLayer.getTranslucent());
+        RenderLayers.setRenderLayer(PlatformMethods.getIridescenceStill().get(), RenderLayer.getTranslucent());
+        RenderLayers.setRenderLayer(PlatformMethods.getIridescenceFlowing().get(), RenderLayer.getTranslucent());
     }
 
-    @SubscribeEvent
-    static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
-        event.registerFluidType(new IClientFluidTypeExtensions() {
-            private static final Identifier IRIDESCENCE = InfinityMod.getId("block/iridescence");
+    @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = InfinityMod.MOD_ID)
+    public static class FluidClientHandler {
+        @SubscribeEvent
+        static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+            event.registerFluidType(new IClientFluidTypeExtensions() {
+                private static final Identifier IRIDESCENCE = InfinityMod.getId("block/iridescence");
 
-            public @NotNull Identifier getStillTexture() {
-                return IRIDESCENCE;
-            }
+                @Override
+                public @NotNull Identifier getStillTexture() {
+                    return IRIDESCENCE;
+                }
 
-            public @NotNull Identifier getFlowingTexture() {
-                return IRIDESCENCE;
-            }
-        }, FluidTypes.IRIDESCENCE_TYPE.value());
+                @Override
+                public @NotNull Identifier getFlowingTexture() {
+                    return IRIDESCENCE;
+                }
+
+                @Override
+                public int getTintColor(@NotNull FluidState state, @NotNull BlockRenderView getter, @NotNull BlockPos pos) {
+                    return Iridescence.color(pos);
+                }
+
+            }, FluidTypes.IRIDESCENCE_TYPE.value());
+            LogManager.getLogger().info("BOOOOOOP");
+        }
     }
 
     private static boolean clothConfigInstalled() {

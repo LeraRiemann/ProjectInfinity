@@ -3,7 +3,7 @@ package net.lerariemann.infinity.fabric;
 import net.fabricmc.api.ModInitializer;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.fluid.ModFluids;
+import net.lerariemann.infinity.fluids.ModFluidsFabric;
 import net.lerariemann.infinity.var.ModStats;
 
 public final class  InfinityModFabric implements ModInitializer {
@@ -14,9 +14,9 @@ public final class  InfinityModFabric implements ModInitializer {
         // Proceed with mild caution.
 
         // Run our common setup.
+        ModFluidsFabric.registerModFluids();
         InfinityMod.init();
         // Run any remaining tasks that require waiting for the registry to freeze on NeoForge.
-//        ModFluids.registerModFluids();
         ModEntities.registerSpawnRestrictions();
         ModStats.load();
     }
