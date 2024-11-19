@@ -5,7 +5,6 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.item.ModComponentTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -13,14 +12,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.poi.PointOfInterestType;
@@ -126,10 +123,10 @@ public class PlatformMethods {
             "minecraft:brown_");
 
     public static Block getRandomColorBlock(WorldAccess world, String str) {
-        return Registries.BLOCK.get(Identifier.of(colors.get(world.getRandom().nextInt(16)) + str));
+        return Registries.BLOCK.get(new Identifier(colors.get(world.getRandom().nextInt(16)) + str));
     }
     public static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*16)) + str));
+        return Registries.BLOCK.get(new Identifier(colors.get((int)(d*16)) + str));
     }
 
     @ExpectPlatform

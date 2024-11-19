@@ -16,7 +16,7 @@ public final class  InfinityModFabric implements ModInitializer {
         // Run our common setup.
         InfinityMod.init();
         // Run any remaining tasks that require waiting for the registry to freeze on NeoForge.
-        ModFluids.registerModFluids();
+//        ModFluids.registerModFluids();
         ModEntities.registerSpawnRestrictions();
         ModStats.load();
     }

@@ -4,6 +4,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
+import net.lerariemann.infinity.fluid.ModFluids;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.structure.ModStructureType;
 import net.lerariemann.infinity.var.*;
@@ -42,6 +43,7 @@ public class InfinityMod {
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
 		ModEntities.registerEntities();
+		ModFluids.registerModFluids();
 		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
 		ModBlockEntities.registerBlockEntities();

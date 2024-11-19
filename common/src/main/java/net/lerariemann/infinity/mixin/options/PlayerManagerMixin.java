@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.mixin.options;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;

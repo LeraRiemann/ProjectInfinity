@@ -12,6 +12,7 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -92,8 +93,11 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random r = new Random();
-        NbtElement effect = RandomProvider.getProvider(world.getServer()).compoundRegistry.get("effects").getRandomElement(world.getRandom());
-        Identifier e = new Identifier(((NbtCompound)effect).getString("Name"));
+        List<Identifier> a = new ArrayList<>();
+        reg.getIds().forEach(i -> {
+            if (Objects.requireNonNull(reg.get(i)).getCategory().equals(StatusEffectCategory.HARMFUL)) a.add(i);
+        });
+        Identifier e = a.get(r.nextInt(a.size()));
         this.setEffect(e);
         this.setColorRaw(Objects.requireNonNull(reg.get(e)).getColor());
         this.setDuration(r.nextInt(600));
