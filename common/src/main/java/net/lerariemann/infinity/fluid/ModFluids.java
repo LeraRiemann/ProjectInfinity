@@ -19,7 +19,8 @@ public class ModFluids {
                     .blockSupplier(() -> ModBlocks.IRIDESCENCE)
                     .bucketItemSupplier(() -> ModItems.IRIDESCENCE_BUCKET)
                     .sourceTexture(InfinityMod.getId("block/iridescence"))
-                    .flowingTexture(InfinityMod.getId("block/iridescence"));
+                    .flowingTexture(InfinityMod.getId("block/iridescence"))
+                    .overlayTexture(InfinityMod.getId("block/iridescence"));
     public static final RegistrySupplier<ArchitecturyFlowingFluid> IRIDESCENCE_FLOWING =
             FLUIDS.register("flowing_iridescence", () -> new Iridescence.Flowing(iridescence_attributes));
     public static final RegistrySupplier<ArchitecturyFlowingFluid> IRIDESCENCE_STILL =

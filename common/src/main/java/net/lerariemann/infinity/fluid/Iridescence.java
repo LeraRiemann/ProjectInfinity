@@ -6,7 +6,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.world.World;
 
 public class Iridescence {
-    protected static boolean isInfinite(World world) {
+    public static boolean isInfinite(World world) {
         return world.getRegistryKey().getValue().toString().equals("infinity:chaos");
     }
     public static boolean isIridescence(FluidState st) {
