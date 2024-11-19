@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.forge.client;
 
+import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
@@ -32,6 +33,7 @@ public class InfinityModForgeClient {
     public static void registerBlockColorHandlers(RegisterColorHandlersEvent.Block event) {
         event.register(PlatformMethods::getNeitherPortalColour, ModBlocks.NEITHER_PORTAL.get());
         event.register(PlatformMethods::getBookBoxColour, ModBlocks.BOOK_BOX.get());
+        event.register(PlatformMethods::getBookBoxColour, ModBlocks.IRIDESCENCE.get());
     }
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
@@ -42,7 +44,13 @@ public class InfinityModForgeClient {
         ModItems.registerModelPredicates();
     }
 
+    @SubscribeEvent
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        RenderLayers.setRenderLayer(ModFluids.IRIDESCENCE_STILL.get(), RenderLayer.getTranslucent());
+        RenderLayers.setRenderLayer(ModFluids.IRIDESCENCE_FLOWING.get(), RenderLayer.getTranslucent());
+    }
+
     private static boolean clothConfigInstalled() {
-        return PlatformMethods.isModLoaded("cloth_config");
+        return Platform.isModLoaded("cloth_config");
     }
 }

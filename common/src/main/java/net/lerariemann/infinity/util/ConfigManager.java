@@ -84,7 +84,7 @@ public class ConfigManager {
         if (invlock.exists()) {
             try {
                 if (compareVersions(InfinityMod.invocationLock, InfinityMod.rootResPath.resolve( "config/.util/invocation.lock"))) {
-                    LogManager.getLogger().info("Deleting outdated modular configs");
+                    InfinityMod.LOGGER.info("Deleting outdated modular configs");
                     Files.walk(getConfigDir().resolve("modular")).forEach(p -> {
                         if (p.toFile().isFile()) {
                             try {
@@ -110,7 +110,7 @@ public class ConfigManager {
     }
 
     public static void evictOldFiles() {
-        LogManager.getLogger().info("Evicting old files");
+        InfinityMod.LOGGER.info("Evicting old files");
         NbtCompound c = CommonIO.read(InfinityMod.utilPath + "/evicted_files.json");
         NbtList l = c.getList("content", NbtElement.STRING_TYPE);
         try {

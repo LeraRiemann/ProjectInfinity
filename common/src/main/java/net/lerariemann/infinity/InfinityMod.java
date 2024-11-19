@@ -21,7 +21,7 @@ import java.nio.file.Path;
 
 public class InfinityMod {
 	public static final String MOD_ID = "infinity";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger("Infinite Dimensions");
 	public static final Identifier WORLD_ADD = getId("reload_worlds");
 	public static final Identifier SHADER_RELOAD = getId("reload_shader");
 	public static final Identifier STARS_RELOAD = getId("reload_stars");
@@ -42,6 +42,7 @@ public class InfinityMod {
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
 		ModEntities.registerEntities();
+		ModFluids.registerModFluids();
 		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
 		ModBlockEntities.registerBlockEntities();

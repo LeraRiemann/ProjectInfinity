@@ -83,7 +83,7 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
     private void injected(CallbackInfo info) {
         infinity$worldsToAdd = new HashMap<>();
         infinity$needsInvocation = !Files.exists(InfinityMod.invocationLock);
-        LogManager.getLogger().info("Invocation {}", infinity$needsInvocation ? "needed..." : "not needed");
+        InfinityMod.LOGGER.info("Invocation {}", infinity$needsInvocation ? "needed..." : "not needed");
         infinity$setDimensionProvider();
     }
     @Override
@@ -98,7 +98,7 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
                 Files.copy(InfinityMod.rootResPath.resolve("config/.util/invocation.lock"), p, REPLACE_EXISTING);
             }
             infinity$setDimensionProvider();
-            LogManager.getLogger().info("Invocation complete");
+            InfinityMod.LOGGER.info("Invocation complete");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

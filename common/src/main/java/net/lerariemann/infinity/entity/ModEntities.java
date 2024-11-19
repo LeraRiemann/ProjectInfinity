@@ -72,9 +72,9 @@ public class ModEntities {
     public static boolean canChaosMonsterSpawn(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         return HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random) && chaosMobsEnabled(world);
     }
-
+    
     public static boolean chaosMobsEnabled(ServerWorldAccess world) {
-        return RandomProvider.getProvider(world.toServerWorld().getServer()).rule("chaosMobsEnabled");
+        return RandomProvider.getProvider(world.getServer()).rule("chaosMobsEnabled");
     }
 
     public static void registerEntityRenderers() {
