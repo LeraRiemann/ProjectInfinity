@@ -5,14 +5,20 @@ import net.lerariemann.infinity.fluid.Iridescence;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.SoundActions;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fluids.FluidInteractionRegistry;
 import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -69,7 +75,7 @@ public class FluidTypes {
         return new FluidInteractionRegistry.InteractionInformation(
                 (level, currentPos, relativePos, currentState) -> level.getFluidState(relativePos).getFluidType() == type,
                 (level, currentPos, relativePos, currentState) -> {
-            level.setBlockState(currentPos, EventHooks.fireFluidPlaceBlockEvent(level, currentPos, currentPos,
+            level.setBlockState(currentPos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, currentPos, currentPos,
                     currentState.isStill() ? Blocks.OBSIDIAN.getDefaultState() :
                             Iridescence.getRandomColorBlock(level,"glazed_terracotta").getDefaultState()));
             level.syncWorldEvent(1501, currentPos, 0);
@@ -80,6 +86,6 @@ public class FluidTypes {
         FLUID_TYPES.register(bus);
     }
     public static void registerFluidInteractions(FMLCommonSetupEvent event) {
-        FluidInteractionRegistry.addInteraction(NeoForgeMod.LAVA_TYPE.value(), getIridescentInteraction(IRIDESCENCE_TYPE.value()));
+        FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), getIridescentInteraction(IRIDESCENCE_TYPE.get()));
     }
 }

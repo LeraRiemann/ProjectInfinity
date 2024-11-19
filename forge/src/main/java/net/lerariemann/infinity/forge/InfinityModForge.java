@@ -28,6 +28,7 @@ public final class InfinityModForge {
         // Run any remaining NeoForge specific tasks.
         eventBus.addListener(InfinityModForge::registerSpawns);
         eventBus.addListener(InfinityModForge::loadStats);
+        eventBus.addListener(FluidTypes::registerFluidInteractions);
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsForge.registerModFluids();
 
