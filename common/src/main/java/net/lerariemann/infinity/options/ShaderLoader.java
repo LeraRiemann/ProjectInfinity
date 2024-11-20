@@ -4,10 +4,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.GameRendererAccess;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.resource.ResourcePackManager;
+import net.minecraft.util.Identifier;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,6 +27,11 @@ public class ShaderLoader {
             load(client);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+        Identifier iridShader = Iridescence.shouldApplyShader(client.player);
+        if (iridShader != null) {
+            ((GameRendererAccess)(client.gameRenderer)).projectInfinity$loadPP(iridShader);
+            return;
         }
         if(bl && shaderDir(client).resolve(FILENAME).toFile().exists()) {
             ((GameRendererAccess)(client.gameRenderer)).projectInfinity$loadPP(InfinityMod.getId("shaders/" + FILENAME));

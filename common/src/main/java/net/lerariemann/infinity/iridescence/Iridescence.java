@@ -1,23 +1,23 @@
 package net.lerariemann.infinity.iridescence;
 
-import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.block.Block;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;
-import java.util.Optional;
 
 public class Iridescence {
     public static boolean isInfinite(World world) {
@@ -88,16 +88,28 @@ public class Iridescence {
         return (amplifier > 0) && (duration == ticksInHour);
     }
 
+    public static boolean shouldUpdateShader(int duration) {
+        return duration % ticksInHour == 0;
+    }
+
+    public static void updateShader(ServerPlayerEntity player) {
+        PlatformMethods.sendServerPlayerEntity(player, ModPayloads.setShaderFromWorld(player.getServerWorld()));
+    }
+
+    @Nullable
+    public static Identifier shouldApplyShader(@Nullable ClientPlayerEntity player) {
+        if (player == null) return null;
+        StatusEffectInstance effect = player.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
+        if (effect == null) return null;
+        return (getPhase(effect.getDuration(), effect.getAmplifier()) != Phase.INITIAL) ?
+                InfinityMod.getId("shaders/post/iridescence.json") :
+                null;
+    }
+
     public enum Phase {
         INITIAL,
         UPWARDS,
         PLATEAU,
         DOWNWARDS
-    }
-
-    public static RegistryEntry<StatusEffect> getEffect(RegistrySupplier<StatusEffect> supplier) {
-        Optional<RegistryKey<StatusEffect>> opt = supplier.getKeyOrValue().left();
-        assert opt.isPresent();
-        return Registries.STATUS_EFFECT.entryOf(opt.get());
     }
 }

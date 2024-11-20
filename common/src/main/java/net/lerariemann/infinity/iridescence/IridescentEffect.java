@@ -8,27 +8,20 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class IridescentEffect extends StatusEffect implements ModStatusEffects.SpecialEffect {
-    protected IridescentEffect(StatusEffectCategory category, int color) {
+    public IridescentEffect(StatusEffectCategory category, int color) {
         super(category, color);
     }
 
     @Override
     public void onApplied(LivingEntity entity, int amplifier) {
         super.onApplied(entity, amplifier);
-        if (!entity.hasStatusEffect(Iridescence.getEffect(ModStatusEffects.IRIDESCENT_SETUP))) {
-            entity.removeStatusEffect(Iridescence.getEffect(ModStatusEffects.IRIDESCENT_EFFECT)); //effect is only obtainable through setup
-            if (entity instanceof PlayerEntity player) {
-                player.sendMessage(Text.translatable("error.infinity.iridescent_setup_needed"));
-            }
-        }
-        else {
-            entity.removeStatusEffect(Iridescence.getEffect(ModStatusEffects.IRIDESCENT_SETUP));
-            entity.removeStatusEffect(Iridescence.getEffect(ModStatusEffects.IRIDESCENT_COOLDOWN));
-            entity.addStatusEffect(new StatusEffectInstance(Iridescence.getEffect(ModStatusEffects.IRIDESCENT_COOLDOWN),
+        if (entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_SETUP)) {
+            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP);
+            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
                     Iridescence.getCooldownDuration(), amplifier > 0 ? 1 : 0));
             if (entity instanceof PlayerEntity player) {
                 player.increaseStat(ModStats.IRIDESCENCE, 1);
@@ -38,6 +31,9 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
 
     public void onRemoved(LivingEntity entity) {
         entity.setInvulnerable(false);
+        if (entity instanceof ServerPlayerEntity player) {
+            Iridescence.updateShader(player);
+        }
     }
 
     @Override
@@ -51,6 +47,9 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             if (Iridescence.shouldReturn(duration, amplifier)) {
                 player.setInvulnerable(false);
                 WarpLogic.respawnAlive(player);
+            }
+            if (Iridescence.shouldUpdateShader(duration)) {
+                Iridescence.updateShader(player);
             }
         }
     }

@@ -3,6 +3,7 @@ package net.lerariemann.infinity.neoforge;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.fluids.FluidTypes;
+import net.lerariemann.infinity.fluids.ModEffectsNeoforge;
 import net.lerariemann.infinity.fluids.ModFluidsNeoforge;
 import net.lerariemann.infinity.neoforge.client.InfinityModNeoForgeClient;
 import net.lerariemann.infinity.var.ModStats;
@@ -26,6 +27,8 @@ public final class InfinityModNeoForge {
         eventBus.addListener(InfinityModNeoForge::registerSpawns);
         eventBus.addListener(InfinityModNeoForge::loadStats);
         eventBus.addListener(FluidTypes::registerFluidInteractions);
+        eventBus.addListener(ModEffectsNeoforge::register);
+
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsNeoforge.registerModFluids();
     }
