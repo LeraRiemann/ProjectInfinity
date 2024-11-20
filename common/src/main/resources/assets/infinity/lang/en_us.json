@@ -93,7 +93,6 @@
   "commands.warp.runtime_disabled": "Runtime dimension generation is disabled",
   "commands.warp.not_a_player": "Only players can warp",
   "error.infinity.invocation_needed": "This multiverse still needs invocation. This is a bug, please contact Lera",
-  "error.infinity.iridescent_setup_needed": "This effect cannot be applied directly. Use infinity:iridescent_setup instead.",
   "effect.infinity.iridescence": "Iridescence",
   "effect.infinity.iridescent_cooldown": "Iridescent Cooldown",
   "effect.infinity.iridescent_setup": "Iridescent Setup",

@@ -3,10 +3,12 @@ package net.lerariemann.infinity.iridescence;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.var.ModPayloads;
+import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Block;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -104,6 +106,20 @@ public class Iridescence {
         return (getPhase(effect.getDuration(), effect.getAmplifier()) != Phase.INITIAL) ?
                 InfinityMod.getId("shaders/post/iridescence.json") :
                 null;
+    }
+
+    public static void tryBeginJourney(LivingEntity entity, int amplifier) {
+        int i = Iridescence.getAmplifierOnApply(entity, amplifier);
+        if (i >= 0) {
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
+                    Iridescence.getEffectLength(amplifier), i));
+            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
+                    Iridescence.getCooldownDuration(), amplifier > 0 ? 1 : 0));
+            if (entity instanceof PlayerEntity player) {
+                player.increaseStat(ModStats.IRIDESCENCE, 1);
+            }
+        }
     }
 
     public enum Phase {
