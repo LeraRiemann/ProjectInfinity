@@ -11,7 +11,6 @@
     "EntityMixin",
     "FireBlockMixin",
     "FluidBlockMixin",
-    "IridescenceMixin",
     "LavaFluidMixin",
     "MaterialRuleContextAccess",
     "MinecraftServerMixin",
@@ -27,6 +26,9 @@
     "mavity.PersistentProjectileEntityMixin",
     "mavity.SeveralEntitiesMixin",
     "mavity.ThrownEntityMixin",
+    "iridescence.IridescenceMixin",
+    "iridescence.LivingEntityMixin",
+    "iridescence.StatusEffectInstanceMixin",
     "mobs.ElderGuardianEntityMixin",
     "mobs.EndermiteEntityMixin",
     "mobs.HoglinEntityMixin",
@@ -47,6 +49,8 @@
     "options.ServerWorldMixin"
   ],
   "client": [
+    "client.EntityMixin",
+    "iridescence.PostEffectProcessorMixin",
     "options.BackgroundRendererMixin",
     "options.ClientWorldMixin",
     "options.GameRendererMixin",

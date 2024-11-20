@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.fluids;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.fluid.Iridescence;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.sound.SoundEvents;

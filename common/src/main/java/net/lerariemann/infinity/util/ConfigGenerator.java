@@ -110,7 +110,8 @@ public class ConfigGenerator {
         res.putBoolean("float", isFloat(bs, w, inAir));
         NbtCompound properties = new NbtCompound();
         if (bs.contains(Properties.PERSISTENT)) properties.putString("persistent", "true");
-        if (bs.contains(Properties.WALL_MOUNT_LOCATION)) {
+        if (bs.contains(Properties.LIT)) properties.putString("lit", "false");
+        if (bs.contains(Properties.BLOCK_FACE)) {
             properties.putString("face", "floor");
             bs = bs.with(Properties.WALL_MOUNT_LOCATION, WallMountLocation.FLOOR);
         }

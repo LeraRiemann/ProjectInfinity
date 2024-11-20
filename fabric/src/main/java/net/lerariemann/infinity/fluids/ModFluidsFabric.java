@@ -7,7 +7,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.fluid.Iridescence;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.item.ModItems;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.registry.RegistryKeys;

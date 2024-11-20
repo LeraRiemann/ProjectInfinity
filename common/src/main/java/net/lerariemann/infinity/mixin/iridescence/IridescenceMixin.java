@@ -1,9 +1,9 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.iridescence;
 
 import dev.architectury.core.fluid.SimpleArchitecturyFluidAttributes;
 import dev.architectury.fluid.FluidStack;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.fluid.Iridescence;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;

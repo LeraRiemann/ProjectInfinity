@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.fluid.Iridescence;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.LavaFluid;
 import net.minecraft.util.math.BlockPos;

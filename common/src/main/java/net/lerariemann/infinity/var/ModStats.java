@@ -16,11 +16,14 @@ public class ModStats {
     public static Stat<Identifier> WORLDS_DESTROYED_STAT;
     public static Identifier PORTALS_OPENED = getId("portals_opened_stat");
     public static Stat<Identifier> PORTALS_OPENED_STAT;
+    public static Identifier IRIDESCENCE = getId("iridescence_stat");
+    public static Stat<Identifier> IRIDESCENCE_STAT;
 
     public static void load() {
         DIMS_OPENED_STAT = Stats.CUSTOM.getOrCreateStat(DIMS_OPENED);
         PORTALS_OPENED_STAT = Stats.CUSTOM.getOrCreateStat(PORTALS_OPENED);
         WORLDS_DESTROYED_STAT = Stats.CUSTOM.getOrCreateStat(WORLDS_DESTROYED);
+        IRIDESCENCE_STAT = Stats.CUSTOM.getOrCreateStat(IRIDESCENCE);
     }
 
     public static final DeferredRegister<Identifier> STATS = DeferredRegister.create(MOD_ID, RegistryKeys.CUSTOM_STAT);
@@ -30,6 +33,7 @@ public class ModStats {
         STATS.register(DIMS_OPENED, () -> DIMS_OPENED);
         STATS.register(PORTALS_OPENED, () -> PORTALS_OPENED);
         STATS.register(WORLDS_DESTROYED, () -> WORLDS_DESTROYED);
+        STATS.register(IRIDESCENCE, () -> IRIDESCENCE);
         STATS.register();
     }
 }

@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.lerariemann.infinity.fluid.Iridescence;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.FluidState;
