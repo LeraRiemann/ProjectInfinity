@@ -1,6 +1,6 @@
 #version 150
 precision mediump float;
-uniform float GameTime; //0 to 1
+uniform float Time; //0 to 1
 uniform sampler2D DiffuseSampler;
 
 in vec2 texCoord;
@@ -11,7 +11,7 @@ out vec4 fragColor;
 void main() {
     vec4 InTexel = texture(DiffuseSampler, texCoord);
 
-    float iTime = GameTime * 240.0f;
+    float iTime = Time * 2 * 3.1415f;
     float a = (1.0f - cos(iTime))/3.0f + cos(iTime);
     float b = (1.0f - cos(iTime))/3.0f - sin(iTime) / sqrt(3);
     float c = (1.0f - cos(iTime))/3.0f + sin(iTime) / sqrt(3);
