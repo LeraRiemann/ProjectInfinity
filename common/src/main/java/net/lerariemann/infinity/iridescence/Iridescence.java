@@ -2,6 +2,7 @@ package net.lerariemann.infinity.iridescence;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Block;
@@ -116,8 +117,9 @@ public class Iridescence {
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
                     Iridescence.getCooldownDuration(), amplifier > 0 ? 1 : 0));
-            if (entity instanceof PlayerEntity player) {
+            if (entity instanceof ServerPlayerEntity player) {
                 player.increaseStat(ModStats.IRIDESCENCE, 1);
+                ModCriteria.IRIDESCENT.get().trigger(player);
             }
         }
     }
