@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.iridescence;
 
 import net.minecraft.client.gl.PostEffectPass;
 import net.minecraft.client.gl.PostEffectProcessor;

@@ -24,5 +24,11 @@ public class ModCommands {
                     WarpLogic.warp(context, WarpLogic.getIdentifier(text, context.getSource().getServer()));
                     return 1;
                 }))));
+
+        CommandRegistrationEvent.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("respawn")
+                .requires(source -> source.hasPermissionLevel(2)).executes(context -> {
+                    WarpLogic.respawnAlive(context.getSource().getPlayer());
+                    return 1;
+                })));
     }
 }

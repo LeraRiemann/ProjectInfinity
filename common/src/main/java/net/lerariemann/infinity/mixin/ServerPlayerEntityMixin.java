@@ -17,7 +17,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -61,8 +60,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Shadow public abstract Entity getCameraEntity();
 
     @Shadow public abstract boolean damage(DamageSource source, float amount);
-    @Shadow public boolean notInAnyWorld;
-    @Shadow public ServerPlayNetworkHandler networkHandler;
 
     @Shadow public abstract @Nullable Entity teleportTo(TeleportTarget teleportTarget);
 
@@ -129,12 +126,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
                 ModCriteria.WHO_REMAINS.get().trigger((ServerPlayerEntity)(Object)this);
             }
             if (i > 3540) {
-                this.detach();
-                this.getServerWorld().removePlayer((ServerPlayerEntity)(Object)this, Entity.RemovalReason.CHANGED_DIMENSION);
-                if (!this.notInAnyWorld) {
-                    this.notInAnyWorld = true;
-                    this.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.GAME_WON, 0));
-                }
+                WarpLogic.respawnAlive((ServerPlayerEntity)(Object)this);
             }
         }
     }

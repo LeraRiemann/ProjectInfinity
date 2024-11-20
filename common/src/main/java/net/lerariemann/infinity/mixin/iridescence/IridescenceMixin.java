@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.iridescence;
 
 import dev.architectury.core.fluid.SimpleArchitecturyFluidAttributes;
 import dev.architectury.fluid.FluidStack;

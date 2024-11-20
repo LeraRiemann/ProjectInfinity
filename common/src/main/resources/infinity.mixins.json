@@ -10,7 +10,6 @@
     "CreeperEntityMixin",
     "FireBlockMixin",
     "FluidBlockMixin",
-    "IridescenceMixin",
     "LavaFluidMixin",
     "MaterialRuleContextAccess",
     "MinecraftServerMixin",
@@ -21,6 +20,9 @@
     "ServerPlayerEntityMixin",
     "SlimeEntityMixin",
     "WorldChunkMixin",
+    "iridescence.IridescenceMixin",
+    "iridescence.LivingEntityMixin",
+    "iridescence.StatusEffectInstanceMixin",
     "mobs.ElderGuardianEntityMixin",
     "mobs.EndermiteEntityMixin",
     "mobs.HoglinEntityMixin",
@@ -42,8 +44,8 @@
     "options.ServerWorldMixin"
   ],
   "client": [
-    "PostEffectProcessorMixin",
     "client.EntityMixin",
+    "iridescence.PostEffectProcessorMixin",
     "options.BackgroundRendererMixin",
     "options.ClientWorldMixin",
     "options.GameRendererMixin",
