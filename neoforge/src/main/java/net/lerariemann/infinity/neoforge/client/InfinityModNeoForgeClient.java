@@ -24,7 +24,6 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderLayers;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 
 public class InfinityModNeoForgeClient {
@@ -87,7 +86,6 @@ public class InfinityModNeoForgeClient {
                 }
 
             }, FluidTypes.IRIDESCENCE_TYPE.value());
-            LogManager.getLogger().info("BOOOOOOP");
         }
     }
 

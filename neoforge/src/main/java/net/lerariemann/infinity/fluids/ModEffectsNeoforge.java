@@ -8,18 +8,19 @@ import net.lerariemann.infinity.iridescence.ModStatusEffects;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.registry.Registries;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.apache.logging.log4j.LogManager;
 
 public class ModEffectsNeoforge {
     public static final DeferredRegister<StatusEffect> EFFECTS = DeferredRegister.create(Registries.STATUS_EFFECT, InfinityMod.MOD_ID);
 
-    public static void register(IEventBus bus) {
+    public static void register() {
         ModStatusEffects.IRIDESCENT_EFFECT = EFFECTS.register("iridescence",
-                () -> new IridescentEffect(StatusEffectCategory.NEUTRAL, 0xFF00FF));
+                () -> new IridescentEffect(StatusEffectCategory.NEUTRAL, 0xFF00FF)).getDelegate();
         ModStatusEffects.IRIDESCENT_SETUP = EFFECTS.register("iridescent_setup",
-                () -> new IridescentSetupEffect(StatusEffectCategory.NEUTRAL, 0xFF00FF));
+                () -> new IridescentSetupEffect(StatusEffectCategory.NEUTRAL, 0xFF00FF)).getDelegate();
         ModStatusEffects.IRIDESCENT_COOLDOWN = EFFECTS.register("iridescent_cooldown",
-                () -> new IridescentCooldownEffect(StatusEffectCategory.NEUTRAL, 0x884488));
+                () -> new IridescentCooldownEffect(StatusEffectCategory.NEUTRAL, 0x884488)).getDelegate();
+        LogManager.getLogger().info("Registered effects!!");
     }
 }

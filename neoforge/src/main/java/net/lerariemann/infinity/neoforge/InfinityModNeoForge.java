@@ -27,10 +27,10 @@ public final class InfinityModNeoForge {
         eventBus.addListener(InfinityModNeoForge::registerSpawns);
         eventBus.addListener(InfinityModNeoForge::loadStats);
         eventBus.addListener(FluidTypes::registerFluidInteractions);
-        eventBus.addListener(ModEffectsNeoforge::register);
 
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsNeoforge.registerModFluids();
+        ModEffectsNeoforge.register();
     }
 
     @SubscribeEvent

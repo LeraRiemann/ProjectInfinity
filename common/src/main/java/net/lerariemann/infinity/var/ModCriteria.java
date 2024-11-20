@@ -49,6 +49,17 @@ public class ModCriteria {
         }
     }
 
+    public static class IridescentCriterion extends AbstractCriterion<EmptyConditions> {
+        public void trigger(ServerPlayerEntity player) {
+            this.trigger(player, (conditions) -> true);
+        }
+
+        @Override
+        public Codec<EmptyConditions> getConditionsCodec() {
+            return EmptyConditions.CODEC;
+        }
+    }
+
     public record EmptyConditions(Optional<LootContextPredicate> player) implements AbstractCriterion.Conditions {
         public static final Codec<EmptyConditions> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
@@ -75,6 +86,7 @@ public class ModCriteria {
     public static RegistrySupplier<DimensionOpenedCriterion> DIMS_OPENED;
     public static RegistrySupplier<DimensionClosedCriterion> DIMS_CLOSED;
     public static RegistrySupplier<WhoRemainsCriterion> WHO_REMAINS;
+    public static RegistrySupplier<IridescentCriterion> IRIDESCENT;
 
     public static final DeferredRegister<Criterion<?>> CRITERIA = DeferredRegister.create(MOD_ID, RegistryKeys.CRITERION);
 
@@ -82,6 +94,7 @@ public class ModCriteria {
         DIMS_OPENED = CRITERIA.register("dims_open", DimensionOpenedCriterion::new);
         DIMS_CLOSED = CRITERIA.register("dims_closed", DimensionClosedCriterion::new);
         WHO_REMAINS = CRITERIA.register("who_remains", WhoRemainsCriterion::new);
+        IRIDESCENT = CRITERIA.register("iridescence", IridescentCriterion::new);
         CRITERIA.register();
     }
 }
