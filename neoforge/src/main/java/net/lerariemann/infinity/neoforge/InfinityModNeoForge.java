@@ -30,7 +30,7 @@ public final class InfinityModNeoForge {
 
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsNeoforge.registerModFluids();
-        ModEffectsNeoforge.register();
+        ModEffectsNeoforge.register(eventBus);
     }
 
     @SubscribeEvent
