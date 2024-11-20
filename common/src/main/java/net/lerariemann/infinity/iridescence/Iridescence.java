@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.fluid;
+package net.lerariemann.infinity.iridescence;
 
 import net.lerariemann.infinity.PlatformMethods;
 import net.minecraft.block.Block;
