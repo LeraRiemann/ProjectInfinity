@@ -303,7 +303,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         ((MinecraftServerAccess)(server)).infinity$addWorld(
                 key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d)); // create the dimension
         server.getPlayerManager().getPlayerList().forEach(a ->
-                ServerPlayNetworking.send(a, InfinityMod.WORLD_ADD, buildPacket(id, d)));
+                ServerPlayNetworking.send(a, ModPayloads.WORLD_ADD, buildPacket(id, d)));
         return true;
     }
 

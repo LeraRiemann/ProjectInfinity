@@ -5,7 +5,6 @@ import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
 import net.lerariemann.infinity.iridescence.ModStatusEffects;
-import net.lerariemann.infinity.item.ModComponentTypes;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.structure.ModStructureType;
 import net.lerariemann.infinity.var.*;
@@ -23,9 +22,6 @@ import java.nio.file.Path;
 public class InfinityMod {
 	public static final String MOD_ID = "infinity";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Infinite Dimensions");
-	public static final Identifier WORLD_ADD = getId("reload_worlds");
-	public static final Identifier SHADER_RELOAD = getId("reload_shader");
-	public static final Identifier STARS_RELOAD = getId("reload_stars");
 	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
 	public static Path rootResPath;
 	public static Path utilPath = Path.of("config/infinity/.util");

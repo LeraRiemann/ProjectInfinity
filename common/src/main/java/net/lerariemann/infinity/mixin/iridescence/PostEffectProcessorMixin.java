@@ -22,31 +22,32 @@ public abstract class PostEffectProcessorMixin {
     @Shadow
     private List<PostEffectPass> passes;
 
-    @Shadow protected abstract void setTexFilter(int texFilter);
-
-    @Inject(method="render", at = @At("HEAD"), cancellable = true)
-    void inj(float tickDelta, CallbackInfo ci) {
-        if (name.contains("infinity")) {
-            time += tickDelta;
-
-            while (time > 200.0F) {
-                time -= 200.0F;
-            }
-
-            int i = 9728;
-
-            for (PostEffectPass postEffectPass : passes) {
-                int j = postEffectPass.getTexFilter();
-                if (i != j) {
-                    setTexFilter(j);
-                    i = j;
-                }
-
-                postEffectPass.render(this.time / 200.0F);
-            }
-
-            this.setTexFilter(9728);
-            ci.cancel();
-        }
-    }
+    //TODO reimplement this!!
+//    @Shadow protected abstract void setTexFilter(int texFilter);
+//
+//    @Inject(method="render", at = @At("HEAD"), cancellable = true)
+//    void inj(float tickDelta, CallbackInfo ci) {
+//        if (name.contains("infinity")) {
+//            time += tickDelta;
+//
+//            while (time > 200.0F) {
+//                time -= 200.0F;
+//            }
+//
+//            int i = 9728;
+//
+//            for (PostEffectPass postEffectPass : passes) {
+//                int j = postEffectPass.getProgram().getGlRef();
+//                if (i != j) {
+//                    setTexFilter(j);
+//                    i = j;
+//                }
+//
+//                postEffectPass.render(this.time / 200.0F);
+//            }
+//
+//            this.setTexFilter(9728);
+//            ci.cancel();
+//        }
+//    }
 }

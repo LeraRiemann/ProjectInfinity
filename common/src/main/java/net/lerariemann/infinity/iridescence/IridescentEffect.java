@@ -2,6 +2,7 @@ package net.lerariemann.infinity.iridescence;
 
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -13,10 +14,10 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
     }
 
     @Override
-    public void onApplied(LivingEntity entity, int amplifier) {
-        super.onApplied(entity, amplifier);
-        if (entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_SETUP)) {
-            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP);
+    public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
+        super.onApplied(entity, attributes, amplifier);
+        if (entity.hasStatusEffect((StatusEffect) ModStatusEffects.IRIDESCENT_SETUP)) {
+            entity.removeStatusEffect((StatusEffect) ModStatusEffects.IRIDESCENT_SETUP);
         }
     }
 

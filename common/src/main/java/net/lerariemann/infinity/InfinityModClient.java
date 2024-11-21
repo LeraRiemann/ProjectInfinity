@@ -3,7 +3,7 @@ package net.lerariemann.infinity;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.loading.DimensionGrabber;
-import net.lerariemann.infinity.options.PacketTransiever;
+import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
@@ -18,7 +18,7 @@ public class InfinityModClient {
 
     public static void initializeClient() {
         ModEntities.registerEntityRenderers();
-        ClientPlayNetworking.registerGlobalReceiver(InfinityMod.WORLD_ADD, (client, handler, buf, responseSender) -> {
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.WORLD_ADD, (client, handler, buf, responseSender) -> {
             Identifier id = buf.readIdentifier();
             NbtCompound optiondata = buf.readNbt();
             int i = buf.readInt();
@@ -30,7 +30,7 @@ public class InfinityModClient {
             }
             client.execute(() -> (new DimensionGrabber(client.getNetworkHandler().getRegistryManager())).grab_for_client(id, optiondata, biomeids, biomes));
         });
-        ClientPlayNetworking.registerGlobalReceiver(InfinityMod.SHADER_RELOAD, PacketTransiever::receive);
-        ClientPlayNetworking.registerGlobalReceiver(InfinityMod.STARS_RELOAD, PacketTransiever::receiveStars);
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.SHADER_RELOAD, ModPayloads::receiveShader);
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.STARS_RELOAD, ModPayloads::receiveStars);
     }
 }

@@ -111,7 +111,7 @@ public class ConfigGenerator {
         NbtCompound properties = new NbtCompound();
         if (bs.contains(Properties.PERSISTENT)) properties.putString("persistent", "true");
         if (bs.contains(Properties.LIT)) properties.putString("lit", "false");
-        if (bs.contains(Properties.BLOCK_FACE)) {
+        if (bs.contains(Properties.WALL_MOUNT_LOCATION)) {
             properties.putString("face", "floor");
             bs = bs.with(Properties.WALL_MOUNT_LOCATION, WallMountLocation.FLOOR);
         }

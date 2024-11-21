@@ -4,6 +4,7 @@ import dev.architectury.platform.forge.EventBuses;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.fluids.FluidTypes;
+import net.lerariemann.infinity.fluids.ModEffectsForge;
 import net.lerariemann.infinity.fluids.ModFluidsForge;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,6 +32,8 @@ public final class InfinityModForge {
         eventBus.addListener(FluidTypes::registerFluidInteractions);
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsForge.registerModFluids();
+        ModEffectsForge.register(eventBus);
+
 
     }
 

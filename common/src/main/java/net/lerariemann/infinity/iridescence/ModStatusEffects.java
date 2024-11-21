@@ -10,9 +10,9 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 
 public class ModStatusEffects {
-    public static RegistryEntry<StatusEffect> IRIDESCENT_EFFECT;
-    public static RegistryEntry<StatusEffect> IRIDESCENT_SETUP;
-    public static RegistryEntry<StatusEffect> IRIDESCENT_COOLDOWN;
+    public static RegistryEntry<? extends StatusEffect> IRIDESCENT_EFFECT;
+    public static RegistryEntry<? extends StatusEffect> IRIDESCENT_SETUP;
+    public static RegistryEntry<? extends StatusEffect> IRIDESCENT_COOLDOWN;
 
     public static void registerModEffectsFabric() {
         IRIDESCENT_EFFECT = Registry.registerReference(Registries.STATUS_EFFECT, InfinityMod.getId("iridescence"),

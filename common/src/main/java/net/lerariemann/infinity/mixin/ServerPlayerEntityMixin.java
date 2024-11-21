@@ -6,7 +6,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.options.PacketTransiever;
+import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.minecraft.entity.Entity;
@@ -19,7 +19,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -28,7 +27,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -53,8 +51,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Shadow public abstract Entity getCameraEntity();
 
     @Shadow public abstract boolean damage(DamageSource source, float amount);
-
-    @Shadow public abstract @Nullable Entity teleportTo(TeleportTarget teleportTarget);
 
     @Unique private long infinity$ticksUntilWarp;
     @Unique private Identifier infinity$idForWarp;
@@ -87,13 +83,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method = "changeGameMode", at = @At("RETURN"))
     private void injected4(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(this.getServerWorld()));
+        if (cir.getReturnValue()) ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(this.getServerWorld()));
     }
 
     @Inject(method= "teleport(Lnet/minecraft/server/world/ServerWorld;DDDFF)V", at = @At(value="INVOKE", target ="Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected5(ServerWorld targetWorld, double x, double y, double z, float yaw, float pitch, CallbackInfo ci) {
-        ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(targetWorld));
-        ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), InfinityMod.STARS_RELOAD, PlatformMethods.createPacketByteBufs());
+        ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(targetWorld));
+        ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), ModPayloads.STARS_RELOAD, PlatformMethods.createPacketByteBufs());
     }
 
 

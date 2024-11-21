@@ -4,11 +4,10 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
-import net.lerariemann.infinity.options.PacketTransiever;
+import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.block.BlockState;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
@@ -25,8 +24,8 @@ public class PlayerManagerMixin {
     @Inject(method = "onPlayerConnect", at = @At(value="INVOKE",
             target = "Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci, @Local(ordinal=0) ServerWorld serverWorld2) {
-        ServerPlayNetworking.send(player, InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(serverWorld2));
-        ServerPlayNetworking.send(player, InfinityMod.STARS_RELOAD, PacketByteBufs.create());
+        ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(serverWorld2));
+        ServerPlayNetworking.send(player, ModPayloads.STARS_RELOAD, PacketByteBufs.create());
         MinecraftServerAccess acc = ((MinecraftServerAccess)(serverWorld2.getServer()));
         if (acc.infinity$needsInvocation()) {
             int y = serverWorld2.getTopY() - 10;
@@ -43,7 +42,7 @@ public class PlayerManagerMixin {
 
     @Inject(method="sendWorldInfo", at = @At("TAIL"))
     private void injected2(ServerPlayerEntity player, ServerWorld world, CallbackInfo ci) {
-        ServerPlayNetworking.send(player, InfinityMod.SHADER_RELOAD, PacketTransiever.buildPacket(world));
-        ServerPlayNetworking.send(player, InfinityMod.STARS_RELOAD, PacketByteBufs.create());
+        ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(world));
+        ServerPlayNetworking.send(player, ModPayloads.STARS_RELOAD, PacketByteBufs.create());
     }
 }

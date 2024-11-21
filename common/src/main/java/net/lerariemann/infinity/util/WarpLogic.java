@@ -2,8 +2,8 @@ package net.lerariemann.infinity.util;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.mojang.brigadier.context.CommandContext;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
@@ -19,7 +19,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -55,7 +54,7 @@ public interface WarpLogic {
     static void respawnAlive(@Nullable ServerPlayerEntity player) {
         if (player == null) return;
         player.notInAnyWorld = true;
-        PlatformMethods.sendServerPlayerEntity(player, ModPayloads.RespawnAlivePayload.INSTANCE);
+        ServerPlayNetworking.send(player, ModPayloads.RESPAWN_ALIVE, ModPayloads.buildPacket(player.getServerWorld()));
     }
 
     static Identifier getRandomId(MinecraftServer server, Random random) {

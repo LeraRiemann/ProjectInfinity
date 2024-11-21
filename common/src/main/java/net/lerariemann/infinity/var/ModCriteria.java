@@ -80,23 +80,36 @@ public class ModCriteria {
     }
 
     public static class IridescentCriterion extends AbstractCriterion<EmptyConditions> {
+        static final Identifier ID = InfinityMod.getId("iridescent");
+
         public void trigger(ServerPlayerEntity player) {
             this.trigger(player, (conditions) -> true);
         }
 
         @Override
-        public Codec<EmptyConditions> getConditionsCodec() {
-            return EmptyConditions.CODEC;
+        protected EmptyConditions conditionsFromJson(JsonObject obj, LootContextPredicate lootContextPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
+            return new EmptyConditions(lootContextPredicate, ID);
+        }
+
+        @Override
+        public Identifier getId() {
+            return ID;
         }
     }
 
-    public record EmptyConditions(Optional<LootContextPredicate> player) implements AbstractCriterion.Conditions {
-        public static final Codec<EmptyConditions> CODEC = RecordCodecBuilder.create(
-                instance -> instance.group(
-                                EntityPredicate.LOOT_CONTEXT_PREDICATE_CODEC.optionalFieldOf("player").forGetter(EmptyConditions::player)
-                        )
-                        .apply(instance, EmptyConditions::new)
-        );
+    public static class EmptyConditions extends AbstractCriterionConditions {
+
+        public EmptyConditions(LootContextPredicate player, Identifier ID) {
+            super(ID, player);
+        }
+
+        public static EmptyConditions create(Identifier ID) {
+            return new EmptyConditions(LootContextPredicate.EMPTY, ID);
+        }
+
+        public JsonObject toJson(AdvancementEntityPredicateSerializer predicateSerializer) {
+            return super.toJson(predicateSerializer);
+        }
     }
 
     public static class ScoredConditions extends AbstractCriterionConditions {
@@ -122,18 +135,15 @@ public class ModCriteria {
         }
     }
 
-    public static RegistrySupplier<DimensionOpenedCriterion> DIMS_OPENED;
-    public static RegistrySupplier<DimensionClosedCriterion> DIMS_CLOSED;
-    public static RegistrySupplier<WhoRemainsCriterion> WHO_REMAINS;
-    public static RegistrySupplier<IridescentCriterion> IRIDESCENT;
-
-    public static final DeferredRegister<Criterion<?>> CRITERIA = DeferredRegister.create(MOD_ID, RegistryKeys.CRITERION);
+    public static DimensionOpenedCriterion DIMS_OPENED;
+    public static DimensionClosedCriterion DIMS_CLOSED;
+    public static WhoRemainsCriterion WHO_REMAINS;
+    public static IridescentCriterion IRIDESCENT;
 
     public static void registerCriteria() {
-        DIMS_OPENED = CRITERIA.register("dims_open", DimensionOpenedCriterion::new);
-        DIMS_CLOSED = CRITERIA.register("dims_closed", DimensionClosedCriterion::new);
-        WHO_REMAINS = CRITERIA.register("who_remains", WhoRemainsCriterion::new);
-        IRIDESCENT = CRITERIA.register("iridescence", IridescentCriterion::new);
-        CRITERIA.register();
+        DIMS_OPENED = Criteria.register(new DimensionOpenedCriterion());
+        DIMS_CLOSED = Criteria.register(new DimensionClosedCriterion());
+        WHO_REMAINS = Criteria.register(new WhoRemainsCriterion());
+        IRIDESCENT = Criteria.register(new IridescentCriterion());
     }
 }
