@@ -91,7 +91,7 @@ public class Iridescence {
     }
 
     public static boolean shouldUpdateShader(int duration) {
-        return duration % ticksInHour == 0;
+        return duration == ticksInHour;
     }
 
     public static void updateShader(ServerPlayerEntity player) {

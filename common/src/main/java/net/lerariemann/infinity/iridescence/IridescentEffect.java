@@ -4,8 +4,15 @@ import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.particle.EntityEffectParticleEffect;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
+
+import java.awt.*;
 
 public class IridescentEffect extends StatusEffect implements ModStatusEffects.SpecialEffect {
     public IridescentEffect(StatusEffectCategory category, int color) {
@@ -43,5 +50,13 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
                 Iridescence.updateShader(player);
             }
         }
+    }
+
+    @Override
+    public ParticleEffect createParticle(StatusEffectInstance effect) {
+        float hue = effect.getDuration() / 13.0f;
+        return EntityEffectParticleEffect.create(
+                ParticleTypes.ENTITY_EFFECT, ColorHelper.Argb.withAlpha(255,
+                        Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
     }
 }
