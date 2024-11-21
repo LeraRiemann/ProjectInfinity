@@ -32,7 +32,7 @@ public final class InfinityModForge {
         eventBus.addListener(InfinityModForge::commonSetup);
         eventBus.addListener(FluidTypes::registerFluidInteractions);
         FluidTypes.registerFluidTypes(eventBus);
-        ModFluidsForge.registerModFluids();
+        ModFluidsForge.registerModFluids(eventBus);
         ModEffectsForge.register(eventBus);
 
 

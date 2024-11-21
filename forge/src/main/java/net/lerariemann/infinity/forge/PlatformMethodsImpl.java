@@ -4,7 +4,6 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.lerariemann.infinity.fluids.ModFluidsForge;
-import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
@@ -15,6 +14,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * See {@link net.lerariemann.infinity.PlatformMethods} for usages.
@@ -47,11 +48,11 @@ public class PlatformMethodsImpl {
         ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, blockItem.get()));
     }
 
-    public static RegistrySupplier<? extends FlowableFluid> getIridescenceStill() {
+    public static RegistryObject<ForgeFlowingFluid.Source> getIridescenceStill() {
         return ModFluidsForge.IRIDESCENCE_STILL;
     }
 
-    public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
+    public static RegistryObject<ForgeFlowingFluid.Flowing> getIridescenceFlowing() {
         return ModFluidsForge.IRIDESCENCE_FLOWING;
     }
 }
