@@ -37,14 +37,16 @@ repositories {
         name = "Terraformers"
         url = "https://maven.terraformersmc.com/"
     }
-    maven {
-        url "https://maven.squiddev.cc"
-        content {
-            includeGroup("cc.tweaked")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "CC: Tweaked"
+                url = "https://maven.squiddev.cc"
+            }
         }
-    }
-    maven {
-        url 'https://jitpack.io'
+        filter {
+            includeGroup "cc.tweaked"
+        }
     }
     maven {
         name = "Ladysnake Mods"
@@ -61,6 +63,24 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Fabricators of Create"
+                url = "https://mvn.devos.one/snapshots"
+            }
+        }
+        filter {
+            includeGroup "io.github.fabricators_of_create"
+            includeGroup "io.github.fabricators_of_create.Porting-Lib"
+            includeGroup "com.tterrag.registrate_fabric"
+            includeGroup "io.github.tropheusj"
+            includeGroup "com.simibubi.create"
+        }
+    }
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // Forge Config API Port
+    maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
+
 
 }
 
@@ -81,6 +101,7 @@ dependencies {
     // Optional mod compat
     modImplementation("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cct_version")
     modImplementation("com.github.qouteall:GravityChanger:v${gravity_changer_version}-mc${minecraft_version}")
+    modImplementation("com.simibubi.create:create-fabric-${minecraft_version}:${create_fabric_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

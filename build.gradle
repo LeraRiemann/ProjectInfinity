@@ -57,6 +57,13 @@ subprojects {
         // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
         // See https://docs.gradle.org/current/userguide/declaring_repositories.html
         // for more information about repositories.
+        maven { // Flywheel
+            url = "https://maven.tterrag.com/"
+            content {
+                // need to be specific here due to version overlaps
+                includeGroup("com.jozufozu.flywheel")
+            }
+        }
     }
 
     dependencies {
