@@ -1,26 +1,35 @@
 package net.lerariemann.infinity.iridescence;
 
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Block;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.*;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Iridescence {
@@ -128,6 +137,42 @@ public class Iridescence {
     public static Identifier getIdForWarp(ServerPlayerEntity player) {
         ServerWorld w = player.getServerWorld().getServer().getOverworld();
         return InfinityMod.getDimId(new Random(w.getSeed() + w.getTime() / ticksInHour).nextInt());
+    }
+
+    public static final Map<EntityType<? extends MobEntity>, RegistrySupplier<? extends EntityType<? extends MobEntity>>> convertibles =
+            Map.ofEntries(Map.entry(EntityType.SKELETON, ModEntities.CHAOS_SKELETON),
+            Map.entry(EntityType.CREEPER, ModEntities.CHAOS_CREEPER),
+            Map.entry(EntityType.SLIME, ModEntities.CHAOS_SLIME)
+    );
+
+    public static EntityType<? extends MobEntity> getConversion(MobEntity entity) {
+        return convertibles.get(entity.getType()).get();
+    }
+
+    public static void tryBeginConversion(MobEntity ent) {
+        if (convertibles.containsKey(ent.getType()) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT))
+            ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0));
+    }
+
+    public static void endConversion(MobEntity currEntity) {
+        EntityType<? extends MobEntity> typeNew = Iridescence.getConversion(currEntity);
+        if (typeNew != null) {
+            MobEntity newEntity = typeNew.create(currEntity.getWorld());
+            if (newEntity != null) {
+                currEntity.discard();
+                ModEntities.copy(currEntity, newEntity);
+                if (currEntity instanceof SlimeEntity e1 && newEntity instanceof SlimeEntity e2) {
+                    e1.setSize(e2.getSize(), true);
+                }
+                if (newEntity instanceof ChaosCreeper creeper) {
+                    RegistryEntry<Biome> b = creeper.getWorld().getBiome(creeper.getBlockPos());
+                    creeper.setBiome(b.getIdAsString());
+                    creeper.setColor(b.value().getFoliageColor());
+                }
+                currEntity.getWorld().spawnEntity(newEntity);
+                newEntity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
+            }
+        }
     }
 
     public enum Phase {

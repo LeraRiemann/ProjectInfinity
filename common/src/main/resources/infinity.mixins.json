@@ -45,6 +45,7 @@
   ],
   "client": [
     "client.EntityMixin",
+    "iridescence.LivingEntityRendererMixin",
     "iridescence.PostEffectProcessorMixin",
     "options.BackgroundRendererMixin",
     "options.ClientWorldMixin",

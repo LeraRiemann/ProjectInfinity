@@ -5,6 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -31,6 +32,9 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         entity.setInvulnerable(false);
         if (entity instanceof ServerPlayerEntity player) {
             Iridescence.updateShader(player);
+        }
+        else if (entity instanceof MobEntity currEntity) {
+            Iridescence.endConversion(currEntity);
         }
     }
 
