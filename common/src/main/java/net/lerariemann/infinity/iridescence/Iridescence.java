@@ -12,6 +12,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Random;
 
 public class Iridescence {
     public static boolean isInfinite(World world) {
@@ -121,6 +123,11 @@ public class Iridescence {
                 ModCriteria.IRIDESCENT.get().trigger(player);
             }
         }
+    }
+
+    public static Identifier getIdForWarp(ServerPlayerEntity player) {
+        ServerWorld w = player.getServerWorld().getServer().getOverworld();
+        return InfinityMod.getDimId(new Random(w.getSeed() + w.getTime() / ticksInHour).nextInt());
     }
 
     public enum Phase {

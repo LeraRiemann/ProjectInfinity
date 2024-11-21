@@ -36,6 +36,10 @@ public class InfinityMod {
 		return Identifier.of(MOD_ID, value);
 	}
 
+	public static Identifier getDimId(long value){
+		return getId("generated_" + value);
+	}
+
 	public static void init() {
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
