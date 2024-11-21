@@ -6,6 +6,7 @@ import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.fluids.FluidTypes;
 import net.lerariemann.infinity.fluids.ModEffectsForge;
 import net.lerariemann.infinity.fluids.ModFluidsForge;
+import net.lerariemann.infinity.iridescence.ModStatusEffects;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -28,7 +29,7 @@ public final class InfinityModForge {
         if (FMLEnvironment.dist == Dist.CLIENT) net.lerariemann.infinity.forge.client.InfinityModForgeClient.initializeClient(eventBus);
         // Run any remaining NeoForge specific tasks.
         eventBus.addListener(InfinityModForge::registerSpawns);
-        eventBus.addListener(InfinityModForge::loadStats);
+        eventBus.addListener(InfinityModForge::commonSetup);
         eventBus.addListener(FluidTypes::registerFluidInteractions);
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsForge.registerModFluids();
@@ -43,7 +44,10 @@ public final class InfinityModForge {
     }
 
     @SubscribeEvent
-    public static void loadStats(FMLCommonSetupEvent event) {
+    public static void commonSetup(FMLCommonSetupEvent event) {
         ModStats.load();
+        ModStatusEffects.IRIDESCENT_EFFECT = ModEffectsForge.IRIDESCENT_EFFECT.getHolder().get();
+        ModStatusEffects.IRIDESCENT_SETUP = ModEffectsForge.IRIDESCENT_SETUP.getHolder().get();
+        ModStatusEffects.IRIDESCENT_COOLDOWN = ModEffectsForge.IRIDESCENT_COOLDOWN.getHolder().get();
     }
 }
