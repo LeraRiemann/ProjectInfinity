@@ -13,6 +13,17 @@ architectury {
 forgix {
     group = "net.lerariemann.infinity"
     mergedJarName = "infinite-dimensions-${mod_version}.jar"
+
+    neoforge {
+        projectName = "neoforge"
+        jarLocation = "build/libs/infinity-neoforge-${mod_version}.jar"
+    }
+
+    fabric {
+        projectName = "fabric"
+        jarLocation = "build/libs/infinity-fabric-${mod_version}.jar"
+    }
+
 }
 wiki {
     docs {

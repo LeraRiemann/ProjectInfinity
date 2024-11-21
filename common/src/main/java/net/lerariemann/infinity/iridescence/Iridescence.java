@@ -92,7 +92,7 @@ public class Iridescence {
     }
 
     public static boolean shouldUpdateShader(int duration) {
-        return duration % ticksInHour == 0;
+        return duration == ticksInHour;
     }
 
     public static void updateShader(ServerPlayerEntity player) {
@@ -114,9 +114,9 @@ public class Iridescence {
         if (i >= 0) {
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(),
                     Iridescence.getEffectLength(amplifier), i));
-            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN.value(),
-                    Iridescence.getCooldownDuration(), amplifier > 0 ? 1 : 0, false, false, true));
+            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
+                    Iridescence.getCooldownDuration(), amplifier > 0 ? 1 : 0, false, false, false));
             if (entity instanceof ServerPlayerEntity player) {
                 player.increaseStat(ModStats.IRIDESCENCE, 1);
                 ModCriteria.IRIDESCENT.trigger(player);
