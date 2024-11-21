@@ -49,7 +49,6 @@
     "options.ServerWorldMixin"
   ],
   "client": [
-    "client.EntityMixin",
     "iridescence.PostEffectProcessorMixin",
     "options.BackgroundRendererMixin",
     "options.ClientWorldMixin",

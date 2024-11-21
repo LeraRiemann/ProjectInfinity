@@ -14,9 +14,9 @@ forgix {
     group = "net.lerariemann.infinity"
     mergedJarName = "infinite-dimensions-${mod_version}.jar"
 
-    neoforge {
-        projectName = "neoforge"
-        jarLocation = "build/libs/infinity-neoforge-${mod_version}.jar"
+    forge {
+        projectName = "forge"
+        jarLocation = "build/libs/infinity-forge-${mod_version}.jar"
     }
 
     fabric {

@@ -6,7 +6,6 @@ import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -23,8 +22,8 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
     @Override
     public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         super.onApplied(entity, attributes, amplifier);
-        if (entity.hasStatusEffect((StatusEffect) ModStatusEffects.IRIDESCENT_SETUP)) {
-            entity.removeStatusEffect((StatusEffect) ModStatusEffects.IRIDESCENT_SETUP);
+        if (entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_SETUP.value())) {
+            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP.value());
         }
     }
 
@@ -53,11 +52,12 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         }
     }
 
-    @Override
-    public ParticleEffect createParticle(StatusEffectInstance effect) {
-        float hue = effect.getDuration() / 13.0f;
-        return EntityEffectParticleEffect.create(
-                ParticleTypes.ENTITY_EFFECT, ColorHelper.Argb.withAlpha(255,
-                        Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
-    }
+    // TODO fix, this method just doesn't exist yet?
+//    @Override
+//    public ParticleEffect createParticle(StatusEffectInstance effect) {
+//        float hue = effect.getDuration() / 13.0f;
+//        return EntityEffectParticleEffect.create(
+//                ParticleTypes.ENTITY_EFFECT, ColorHelper.Argb.withAlpha(255,
+//                        Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
+//    }
 }
