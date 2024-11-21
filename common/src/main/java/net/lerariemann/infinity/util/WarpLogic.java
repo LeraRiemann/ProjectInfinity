@@ -31,7 +31,7 @@ import java.util.Objects;
 
 public interface WarpLogic {
     static void warpId(CommandContext<ServerCommandSource> context, long value) {
-        warp(context, InfinityMod.getId("generated_" + value));
+        warp(context, InfinityMod.getDimId(value));
     }
 
     static void warp(CommandContext<ServerCommandSource> context, Identifier value) {
@@ -58,8 +58,8 @@ public interface WarpLogic {
     }
 
     static Identifier getRandomId(MinecraftServer server, Random random) {
-        return InfinityMod.getId("generated_" + (RandomProvider.getProvider(server).rule("longArithmeticEnabled") ?
-                random.nextLong() : random.nextInt()));
+        return InfinityMod.getDimId(RandomProvider.getProvider(server).rule("longArithmeticEnabled") ?
+                random.nextLong() : random.nextInt());
     }
 
     static void onInvocationNeedDetected(PlayerEntity player) {
@@ -136,8 +136,8 @@ public interface WarpLogic {
     static Identifier getIdentifier(String text, MinecraftServer s) {
         if (text.equals("abatised redivides")) return World.END.getValue();
         if (text.isEmpty()) return InfinityMod.getId("missingno");
-        if (RandomProvider.getProvider(s).easterizer.isEaster(text) && !text.equals("missingno")) return InfinityMod.getId(text);
-        return InfinityMod.getId("generated_" + getDimensionSeed(text, s));
+        if (RandomProvider.getProvider(s).easterizer.isEaster(text, RandomProvider.getProvider(s)) && !text.equals("missingno")) return InfinityMod.getId(text);
+        return InfinityMod.getDimId(getDimensionSeed(text, s));
     }
 
     static long getDimensionSeed(String text, MinecraftServer s) {

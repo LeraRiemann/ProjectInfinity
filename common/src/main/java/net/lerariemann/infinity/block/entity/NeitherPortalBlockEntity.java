@@ -39,7 +39,7 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     }
 
     public NeitherPortalBlockEntity(BlockPos pos, BlockState state, long i) {
-        this(pos, state, i, InfinityMod.getId("generated_"+i));
+        this(pos, state, i, InfinityMod.getDimId(i));
     }
 
     public NeitherPortalBlockEntity(BlockPos pos, BlockState state, long i, Identifier id) {
@@ -62,7 +62,7 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     }
 
     public void setDimension(long c) {
-        setDimension(c, InfinityMod.getId("generated_"+c));
+        setDimension(c, InfinityMod.getDimId(c));
     }
 
     public void setDimension(long c, Identifier i) {
@@ -86,7 +86,7 @@ public class NeitherPortalBlockEntity extends BlockEntity {
         if (tag.contains("DimensionName")) {
             this.dimension = Identifier.tryParse(tag.getString("DimensionName"));
         }
-        else this.dimension = InfinityMod.getId("generated_" + this.portalColor);
+        else this.dimension = InfinityMod.getDimId(this.portalColor);
         this.isOpen = tag.getBoolean("Open");
     }
 

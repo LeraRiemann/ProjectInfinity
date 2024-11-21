@@ -9,21 +9,13 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.ChunkSectionPos;
@@ -36,10 +28,8 @@ import net.minecraft.world.biome.source.BiomeSupplier;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public static TrackedData<Integer> color = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.INTEGER);
@@ -121,35 +111,6 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
         this.setRange(nbt.getFloat("range"));
         this.setColor(nbt.getInt("color"));
         this.setBiome(nbt.getString("biome"));
-    }
-
-    protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
-        if (itemStack.isOf(Items.WATER_BUCKET)) {
-            if (!this.getWorld().isClient) {
-                this.ignite_backwards();
-                if (!player.getAbilities().creativeMode) player.setStackInHand(hand, new ItemStack(Items.BUCKET, itemStack.getCount()));
-            }
-            return ActionResult.success(this.getWorld().isClient);
-        }
-        return super.interactMob(player, hand);
-    }
-
-    public void ignite_backwards() {
-        World w = this.getWorld();
-        if (!w.isClient()) {
-            RegistryEntry<Biome> entry = this.getWorld().getBiomeAccess().getBiome(this.getBlockPos());
-            Optional<RegistryKey<Biome>> s = entry.getKey();
-            s.ifPresent(biomeRegistryKey -> this.setBiome(biomeRegistryKey.getValue().toString()));
-            int cl = entry.value().getFoliageColor();
-            this.setColor(cl);
-            float b = (cl%256)/256.0f;
-            float g = ((cl >> 8)%256)/256.0f;
-            float r = ((cl >> 16)%256)/256.0f;
-            ((ServerWorld)w).spawnParticles(new DustParticleEffect(new Vector3f(r, g, b), 1.0f), this.getX(),
-                    this.getBodyY(0.5), this.getZ(), 30, 0.5, 0.5, 0.5, 0.2);
-            this.playSound(SoundEvents.AMBIENT_UNDERWATER_EXIT, 1.0f, 0.5f);
-        }
     }
 
     public void blow_up() {

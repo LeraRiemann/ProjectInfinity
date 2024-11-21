@@ -6,6 +6,8 @@ import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -32,6 +34,9 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         if (entity instanceof ServerPlayerEntity player) {
             Iridescence.updateShader(player);
         }
+        else if (entity instanceof MobEntity currEntity) {
+            Iridescence.endConversion(currEntity);
+        }
     }
 
     @Override
@@ -39,7 +44,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         if (entity instanceof ServerPlayerEntity player) {
             if (Iridescence.shouldWarp(duration, amplifier)) {
                 player.setInvulnerable(true);
-                Identifier id = WarpLogic.getRandomId(player.getServer(), player.getRandom());
+                Identifier id = Iridescence.getIdForWarp(player);
                 WarpLogic.warpWithTimer(player, id, 10, false);
             }
             if (Iridescence.shouldReturn(duration, amplifier)) {

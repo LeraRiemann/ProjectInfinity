@@ -50,6 +50,7 @@
   ],
   "client": [
     "iridescence.PostEffectProcessorMixin",
+    "iridescence.LivingEntityRendererMixin",
     "options.BackgroundRendererMixin",
     "options.ClientWorldMixin",
     "options.GameRendererMixin",

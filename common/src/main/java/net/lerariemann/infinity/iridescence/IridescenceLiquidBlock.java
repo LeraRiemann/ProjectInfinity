@@ -3,6 +3,7 @@ package net.lerariemann.infinity.iridescence;
 import dev.architectury.core.block.ArchitecturyLiquidBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +21,9 @@ public class IridescenceLiquidBlock extends ArchitecturyLiquidBlock {
         super.onEntityCollision(state, world, pos, entity);
         if (entity instanceof PlayerEntity player) {
             Iridescence.tryBeginJourney(player, 4);
+        }
+        else if (entity instanceof MobEntity ent) {
+            Iridescence.tryBeginConversion(ent);
         }
     }
 }
