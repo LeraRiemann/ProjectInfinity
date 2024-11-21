@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.iridescence;
 
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.entity.ModEntities;
@@ -151,8 +152,8 @@ public class Iridescence {
     }
 
     public static void tryBeginConversion(MobEntity ent) {
-        if (convertibles.containsKey(ent.getType()) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT))
-            ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0));
+        if (convertibles.containsKey(ent.getType()) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value()))
+            ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0));
     }
 
     public static void endConversion(MobEntity currEntity) {
@@ -167,7 +168,7 @@ public class Iridescence {
                 }
                 if (newEntity instanceof ChaosCreeper creeper) {
                     RegistryEntry<Biome> b = creeper.getWorld().getBiome(creeper.getBlockPos());
-                    creeper.setBiome(b.getIdAsString());
+                    creeper.setBiome(b.value().toString());
                     creeper.setColor(b.value().getFoliageColor());
                 }
                 currEntity.getWorld().spawnEntity(newEntity);
