@@ -5,6 +5,8 @@ import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -18,6 +20,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
@@ -233,7 +236,9 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         if (!this.isChess()) {
             String s = RandomProvider.getProvider(Objects.requireNonNull(world.getServer())).registry.get("items").getRandomElement(world.random);
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
-            this.dropStack(Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i)));
+            ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i));
+            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
+            this.dropStack(stack);
         }
     }
 

@@ -51,7 +51,7 @@ public class Iridescence {
 
     public static int color(BlockPos pos) {
         int i = pos.getX() + pos.getY() + pos.getZ();
-        return Color.HSBtoRGB(i / 600.0f + (float)((Math.sin(pos.getX()/12.0f) + Math.sin(pos.getZ()/12.0f)) / 4), 1.0F, 1.0F);
+        return Color.HSBtoRGB(i / 600.0f + (float)((Math.sin(pos.getX()/12.0f) + Math.sin(pos.getY()/12.0f) + Math.sin(pos.getZ()/12.0f)) / 4) , 1.0F, 1.0F);
     }
 
     public static java.util.List<String> colors = List.of("minecraft:white_",
@@ -111,7 +111,7 @@ public class Iridescence {
     }
 
     public static boolean shouldUpdateShader(int duration, int amplifier) {
-        return getEffectLength(amplifier) - duration == ticksInHour;
+        return getEffectLength(amplifier) - duration == ticksInHour - 1;
     }
 
     public static void updateShader(ServerPlayerEntity player) {

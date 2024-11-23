@@ -28,9 +28,8 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         if (entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_SETUP)) {
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP);
         }
-        if (entity instanceof Angerable ang) {
-            ang.stopAnger();
-        }
+        if (entity instanceof Angerable ang) ang.stopAnger();
+        if (entity instanceof ServerPlayerEntity player) Iridescence.updateShader(player);
     }
 
     public void onRemoved(LivingEntity entity) {
