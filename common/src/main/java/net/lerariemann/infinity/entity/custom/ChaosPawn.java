@@ -1,8 +1,5 @@
 package net.lerariemann.infinity.entity.custom;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.mojang.serialization.Dynamic;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.util.RandomProvider;
@@ -12,15 +9,6 @@ import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.brain.Activity;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.entity.ai.brain.task.GoToRememberedPositionTask;
-import net.minecraft.entity.ai.brain.task.LookAroundTask;
-import net.minecraft.entity.ai.brain.task.MoveToTargetTask;
-import net.minecraft.entity.ai.brain.task.PacifyTask;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -32,6 +20,7 @@ import net.minecraft.entity.mob.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -42,6 +31,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
@@ -97,7 +87,9 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
-        return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0);
+        return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.6F);
     }
 
     @Override
@@ -109,11 +101,11 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     @Override
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
-        this.targetSelector.add(1, new RevengeGoal(this).setGroupRevenge());
+        this.targetSelector.add(1, new PawnRevengeGoal(this).setGroupRevenge());
         this.goalSelector.add(2, new MeleeAttackGoal(this, 1.0, false));
         this.targetSelector.add(3, new ChaosCleanseGoal<>(this, ChaosSlime.class, true));
         this.targetSelector.add(3, new ChaosCleanseGoal<>(this, ChaosSkeleton.class, true));
-        this.targetSelector.add(3, new UniversalAngerGoal<>(this, true));
+        this.targetSelector.add(3, new PawnUniversalAngerGoal(this));
         this.goalSelector.add(5, new EatGrassGoal(this));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
         this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
@@ -126,11 +118,15 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         this.setAllColors(this.getWorld().getBiome(this.getBlockPos()).value().getGrassColorAt(this.getX(), this.getZ()));
     }
 
+    public int getCase() {
+        return dataTracker.get(special_case);
+    }
+
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.put("colors", getColors());
-        nbt.putInt("case", dataTracker.get(special_case));
+        nbt.putInt("case", getCase());
     }
 
     @Override
@@ -165,21 +161,22 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public boolean isChess() {
-        return dataTracker.get(special_case) != -1;
+        return dataTracker.get(special_case) != -1 && !Iridescence.isUnderEffect(this);
     }
 
     public void setAllColors(Random r, BlockState state) {
         if (state.isOf(Blocks.WHITE_WOOL) || state.isOf(Blocks.WHITE_CONCRETE)) {
-            dataTracker.set(special_case, 1);
-            setAllColors(0xFFFFFF);
-            return;
+            chess(true);
         }
-        if (state.isOf(Blocks.BLACK_WOOL) || state.isOf(Blocks.BLACK_CONCRETE)) {
-            dataTracker.set(special_case, 0);
-            setAllColors(0);
-            return;
+        else if (state.isOf(Blocks.BLACK_WOOL) || state.isOf(Blocks.BLACK_CONCRETE)) {
+            chess(false);
         }
-        this.randomizeColors(r);
+        else this.randomizeColors(r);
+    }
+
+    public void chess(boolean white) {
+        dataTracker.set(special_case, white ? 1 : 0);
+        setAllColors(white ? 0xFFFFFF : 0);
     }
     
     public void unchess() {
@@ -238,6 +235,13 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         }
     }
 
+    @Override
+    public float getPathfindingFavor(BlockPos pos, WorldView world) {
+        if (!isChess()) return 0.0f;
+        if (Iridescence.isIridescence(world, pos)) return -1.0F;
+        return 0.0f;
+    }
+
     public static class ChaosCleanseGoal<T extends LivingEntity> extends ActiveTargetGoal<T> {
         public ChaosCleanseGoal(MobEntity mob, Class<T> targetClass, boolean checkVisibility) {
             super(mob, targetClass, checkVisibility);
@@ -250,63 +254,68 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         }
     }
 
-    protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_MODULE_TYPES = ImmutableList.of(
-            MemoryModuleType.NEAREST_REPELLENT
-    );
+    public static class PawnUniversalAngerGoal extends Goal {
+        private final ChaosPawn mob;
+        private int lastAttackedTime;
 
-    protected static final ImmutableList<SensorType<? extends Sensor<? super ChaosPawn>>> SENSOR_TYPES = ImmutableList.of(
-            ModEntities.PAWN_SENSOR.get()
-    );
-
-    @Override
-    protected Brain.Profile<ChaosPawn> createBrainProfile() {
-        return Brain.createProfile(MEMORY_MODULE_TYPES, SENSOR_TYPES);
-    }
-
-    @Override
-    protected Brain<?> deserializeBrain(Dynamic<?> dynamic) {
-        Brain<ChaosPawn> brain = this.createBrainProfile().deserialize(dynamic);
-        brain.setTaskList(Activity.CORE, 0, ImmutableList.of(new LookAroundTask(45, 90), new MoveToTargetTask()));
-        brain.setTaskList(Activity.IDLE, 10, ImmutableList.of(
-                PacifyTask.create(MemoryModuleType.NEAREST_REPELLENT, 200),
-                GoToRememberedPositionTask.createPosBased(MemoryModuleType.NEAREST_REPELLENT, 1.0F, 8, true)
-        ));
-        brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
-        brain.setDefaultActivity(Activity.IDLE);
-        brain.resetPossibleActivities();
-        return brain;
-    }
-
-    @Override
-    public float getPathfindingFavor(BlockPos pos, WorldView world) {
-        if (isIridescenceAround(pos)) {
-            return -1.0F;
-        } else {
-            return 0.0F;
-        }
-    }
-
-    public boolean isIridescenceAround(BlockPos pos) {
-        Optional<BlockPos> optional = getBrain().getOptionalRegisteredMemory(MemoryModuleType.NEAREST_REPELLENT);
-        return optional.isPresent() && (optional.get()).isWithinDistance(pos, 8.0);
-    }
-
-    public static class PawnSensor extends Sensor<LivingEntity> {
-        @Override
-        public Set<MemoryModuleType<?>> getOutputMemoryModules() {
-            return ImmutableSet.of(MemoryModuleType.NEAREST_REPELLENT);
+        public PawnUniversalAngerGoal(ChaosPawn mob) {
+            this.mob = mob;
         }
 
         @Override
-        public void sense(ServerWorld world, LivingEntity entity) {
-            Brain<?> brain = entity.getBrain();
-            if (entity instanceof ChaosPawn pawn && pawn.isChess())
-                brain.remember(MemoryModuleType.NEAREST_REPELLENT, findRepellent(world, entity));
+        public boolean canStart() {
+            return this.mob.getWorld().getGameRules().getBoolean(GameRules.UNIVERSAL_ANGER) && this.canStartUniversalAnger();
         }
 
-        public static Optional<BlockPos> findRepellent(ServerWorld world, LivingEntity entity) {
-            return BlockPos.findClosest(entity.getBlockPos(), 8, 4,
-                    pos -> Iridescence.isIridescence(world.getFluidState(pos)));
+        private boolean canStartUniversalAnger() {
+            return this.mob.getAttacker() != null
+                    && this.mob.getAttacker().getType() == EntityType.PLAYER
+                    && this.mob.getLastAttackedTime() > this.lastAttackedTime
+                    && !Iridescence.isUnderEffect(this.mob);
+        }
+
+        @Override
+        public void start() {
+            this.lastAttackedTime = this.mob.getLastAttackedTime();
+            this.mob.universallyAnger();
+            this.getOthersInRange().stream().filter(entity -> {
+                if (entity == mob) return false;
+                if (Iridescence.isUnderEffect(entity)) return false;
+                if (entity instanceof ChaosPawn pawn) {
+                    return mob.getCase() == pawn.getCase();
+                }
+                return true;
+            }).map(entity -> (Angerable)entity).forEach(Angerable::universallyAnger);
+            super.start();
+        }
+
+        private List<? extends ChaosPawn> getOthersInRange() {
+            double d = this.mob.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE);
+            Box box = Box.from(this.mob.getPos()).expand(d, 10.0, d);
+            return this.mob.getWorld().getEntitiesByClass(this.mob.getClass(), box, EntityPredicates.EXCEPT_SPECTATOR);
+        }
+    }
+
+    public static class PawnRevengeGoal extends RevengeGoal {
+        public PawnRevengeGoal(PathAwareEntity mob, Class<?>... noRevengeTypes) {
+            super(mob, noRevengeTypes);
+        }
+
+        @Override
+        protected void callSameTypeForRevenge() {
+            if (mob instanceof ChaosPawn pawn && !Iridescence.isUnderEffect(pawn)) {
+                double d = this.getFollowRange();
+                Box box = Box.from(pawn.getPos()).expand(d, 10.0, d);
+                List<ChaosPawn> list = pawn.getWorld().getEntitiesByClass(ChaosPawn.class, box, EntityPredicates.EXCEPT_SPECTATOR);
+                for (ChaosPawn pawn2 : list) {
+                    if (pawn != pawn2
+                            && pawn2.getTarget() == null
+                            && !pawn2.isTeammate(pawn.getAttacker())
+                            && !Iridescence.isUnderEffect(pawn2)
+                            && pawn2.getCase() == pawn.getCase())
+                        this.setMobEntityTarget(pawn2, pawn.getAttacker());
+                }
+            }
         }
     }
 }

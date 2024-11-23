@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
@@ -26,6 +27,9 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         super.onApplied(entity, amplifier);
         if (entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_SETUP)) {
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP);
+        }
+        if (entity instanceof Angerable ang) {
+            ang.stopAnger();
         }
     }
 

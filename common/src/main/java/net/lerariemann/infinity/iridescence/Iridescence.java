@@ -25,6 +25,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,6 +40,13 @@ public class Iridescence {
     }
     public static boolean isIridescence(FluidState st) {
         return st.isOf(PlatformMethods.getIridescenceStill().get()) || st.isOf(PlatformMethods.getIridescenceFlowing().get());
+    }
+    public static boolean isIridescence(WorldView world, BlockPos pos) {
+        return Iridescence.isIridescence(world.getFluidState(pos));
+    }
+
+    public static boolean isUnderEffect(LivingEntity entity) {
+        return entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
     }
 
     public static int color(BlockPos pos) {

@@ -21,6 +21,7 @@
     "SlimeEntityMixin",
     "WorldChunkMixin",
     "iridescence.IridescenceMixin",
+    "iridescence.LandPathNodeMakerMixin",
     "iridescence.LivingEntityMixin",
     "iridescence.StatusEffectInstanceMixin",
     "mobs.ElderGuardianEntityMixin",

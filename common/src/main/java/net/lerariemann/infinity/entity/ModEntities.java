@@ -4,6 +4,7 @@ import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.client.ChaosPawnRenderer;
 import net.lerariemann.infinity.entity.client.ChaosCreeperRenderer;
@@ -11,7 +12,6 @@ import net.lerariemann.infinity.entity.client.ChaosSkeletonRenderer;
 import net.lerariemann.infinity.entity.client.ChaosSlimeRenderer;
 import net.lerariemann.infinity.entity.custom.*;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
@@ -44,17 +44,14 @@ public class ModEntities {
 
 
     public static final DeferredRegister<EntityType<?>> INFINITY_ENTITIES = DeferredRegister.create(MOD_ID, RegistryKeys.ENTITY_TYPE);
-    public static final DeferredRegister<SensorType<?>> SENSOR_TYPES = DeferredRegister.create(MOD_ID, RegistryKeys.SENSOR_TYPE);
 
     public static final RegistrySupplier<EntityType<ChaosSlime>> CHAOS_SLIME = INFINITY_ENTITIES.register("chaos_slime", () -> EntityType.Builder.create(ChaosSlime::new, SpawnGroup.MONSTER).dimensions(0.52f, 0.52f).maxTrackingRange(10).build("chaos_slime"));
     public static final RegistrySupplier<EntityType<ChaosSkeleton>> CHAOS_SKELETON = INFINITY_ENTITIES.register("chaos_skeleton", () -> EntityType.Builder.create(ChaosSkeleton::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.99f).maxTrackingRange(8).build("chaos_skeleton"));
     public static final RegistrySupplier<EntityType<ChaosCreeper>> CHAOS_CREEPER = INFINITY_ENTITIES.register("chaos_creeper", () -> EntityType.Builder.create(ChaosCreeper::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.7f).maxTrackingRange(8).build("chaos_creeper"));
     public static final RegistrySupplier<EntityType<ChaosPawn>> CHAOS_PAWN = INFINITY_ENTITIES.register("chaos_pawn", () -> EntityType.Builder.create(ChaosPawn::new, SpawnGroup.MONSTER).dimensions(0.6f, 1.8f).maxTrackingRange(10).build("chaos_pawn"));
-    public static final RegistrySupplier<SensorType<ChaosPawn.PawnSensor>> PAWN_SENSOR = SENSOR_TYPES.register("pawn_sensor", () -> new SensorType<>(ChaosPawn.PawnSensor::new));
 
     public static void registerEntities() {
         INFINITY_ENTITIES.register();
-        SENSOR_TYPES.register();
         registerAttributes();
     }
 
