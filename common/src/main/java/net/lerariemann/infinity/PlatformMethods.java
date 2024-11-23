@@ -9,6 +9,7 @@ import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.item.ModComponentTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -67,7 +68,7 @@ public class PlatformMethods {
         return sampler.sample(x, y, z);
     }
 
-    static int posToColor(BlockPos pos) {
+    public static int posToColor(BlockPos pos) {
         double r = sample(pos.getX(), pos.getY() - 10000, pos.getZ());
         double g = sample(pos.getX(), pos.getY(), pos.getZ());
         double b = sample(pos.getX(), pos.getY() + 10000, pos.getZ());
@@ -113,6 +114,15 @@ public class PlatformMethods {
 
     @ExpectPlatform
     public static boolean isInWhite(BlockState state) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static RegistrySupplier<? extends FlowableFluid> getIridescenceStill() {
+        throw new AssertionError();
+    }
+    @ExpectPlatform
+    public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
         throw new AssertionError();
     }
 }

@@ -1,0 +1,23 @@
+{
+  "parent": "infinity:multiverse_root",
+  "display": {
+    "icon": {
+      "id": "infinity:iridescence_bucket"
+    },
+    "title": {
+      "translate": "advancements.infinity.iridescence.title"
+    },
+    "description": {
+      "translate": "advancements.infinity.iridescence.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "who_remains": {
+      "trigger": "infinity:iridescence"
+    }
+  }
+}

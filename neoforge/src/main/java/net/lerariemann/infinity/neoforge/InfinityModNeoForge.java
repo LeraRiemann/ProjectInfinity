@@ -2,6 +2,9 @@ package net.lerariemann.infinity.neoforge;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.fluids.FluidTypes;
+import net.lerariemann.infinity.fluids.ModEffectsNeoforge;
+import net.lerariemann.infinity.fluids.ModFluidsNeoforge;
 import net.lerariemann.infinity.neoforge.client.InfinityModNeoForgeClient;
 import net.lerariemann.infinity.var.ModStats;
 import net.neoforged.api.distmarker.Dist;
@@ -23,7 +26,11 @@ public final class InfinityModNeoForge {
         // Run any remaining tasks that require waiting for the registry to freeze on NeoForge.
         eventBus.addListener(InfinityModNeoForge::registerSpawns);
         eventBus.addListener(InfinityModNeoForge::loadStats);
+        eventBus.addListener(FluidTypes::registerFluidInteractions);
 
+        FluidTypes.registerFluidTypes(eventBus);
+        ModFluidsNeoforge.registerModFluids();
+        ModEffectsNeoforge.register(eventBus);
     }
 
     @SubscribeEvent

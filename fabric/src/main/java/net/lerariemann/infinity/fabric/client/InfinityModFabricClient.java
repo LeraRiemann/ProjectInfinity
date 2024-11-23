@@ -15,10 +15,14 @@ public class InfinityModFabricClient implements ClientModInitializer {
         // Apply colour handlers to tint Neither Portals and Book Boxes.
         ColorProviderRegistry.BLOCK.register(PlatformMethods::getNeitherPortalColour, ModBlocks.NEITHER_PORTAL.get());
         ColorProviderRegistry.BLOCK.register(PlatformMethods::getBookBoxColour, ModBlocks.BOOK_BOX.get());
+        ColorProviderRegistry.BLOCK.register(PlatformMethods::getBookBoxColour, ModBlocks.IRIDESCENCE.get());
         ColorProviderRegistry.ITEM.register(PlatformMethods::getKeyColor, ModItems.TRANSFINITE_KEY.get());
         // On Fabric, render layer maps are also applied to Book Boxes and Time Bombs.
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX.get(), RenderLayer.getCutoutMipped());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_BOMB.get(), RenderLayer.getTranslucent());
+
+        BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(),
+                PlatformMethods.getIridescenceStill().get(), PlatformMethods.getIridescenceFlowing().get());
         // Common client setup tasks.
         InfinityModClient.initializeClient();
         // Register model predicates for Transfinite Keys

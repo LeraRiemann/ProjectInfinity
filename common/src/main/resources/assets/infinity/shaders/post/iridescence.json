@@ -1,0 +1,17 @@
+{
+  "targets": [
+    "swap"
+  ],
+  "passes": [
+    {
+      "name": "infinity:color_wheel",
+      "intarget": "minecraft:main",
+      "outtarget": "swap"
+    },
+    {
+      "intarget": "swap",
+      "name": "blit",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

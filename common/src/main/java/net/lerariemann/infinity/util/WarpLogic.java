@@ -3,10 +3,12 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.mojang.brigadier.context.CommandContext;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -18,8 +20,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.nio.charset.StandardCharsets;
@@ -28,21 +32,35 @@ import java.util.Objects;
 
 public interface WarpLogic {
     static void warpId(CommandContext<ServerCommandSource> context, long value) {
-        warp(context, InfinityMod.getId("generated_" + value));
+        warp(context, InfinityMod.getDimId(value));
     }
 
     static void warp(CommandContext<ServerCommandSource> context, Identifier value) {
-        MinecraftServer s = context.getSource().getServer();
+        warpWithTimer(context.getSource().getPlayer(), value, 20, true);
+    }
+
+    static void warpWithTimer(@Nullable ServerPlayerEntity player, Identifier value, int ticks, boolean increaseStats) {
+        if (player == null) return;
+        MinecraftServer s = player.getServer();
+        if (s == null) return;
         if (((MinecraftServerAccess)s).infinity$needsInvocation()) {
-            onInvocationNeedDetected(context.getSource().getPlayer());
+            onInvocationNeedDetected(player);
             return;
         }
         boolean isThisANewDimension = NeitherPortalBlock.addInfinityDimension(s, value);
-        final ServerPlayerEntity self = context.getSource().getPlayer();
-        if (self != null) {
-            if (isThisANewDimension) self.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
-            ((ServerPlayerEntityAccess)(self)).projectInfinity$setWarpTimer(20, value);
-        }
+        if (isThisANewDimension && increaseStats) player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
+        ((ServerPlayerEntityAccess)(player)).projectInfinity$setWarpTimer(ticks, value);
+    }
+
+    static void respawnAlive(@Nullable ServerPlayerEntity player) {
+        if (player == null) return;
+        player.notInAnyWorld = true;
+        PlatformMethods.sendServerPlayerEntity(player, ModPayloads.RespawnAlivePayload.INSTANCE);
+    }
+
+    static Identifier getRandomId(MinecraftServer server, Random random) {
+        return InfinityMod.getDimId(RandomProvider.getProvider(server).rule("longArithmeticEnabled") ?
+                random.nextLong() : random.nextInt());
     }
 
     static void onInvocationNeedDetected(PlayerEntity player) {
@@ -120,7 +138,7 @@ public interface WarpLogic {
         if (text.equals("abatised redivides")) return World.END.getValue();
         if (text.isEmpty()) return InfinityMod.getId("missingno");
         if (RandomProvider.getProvider(s).easterizer.isEaster(text, RandomProvider.getProvider(s)) && !text.equals("missingno")) return InfinityMod.getId(text);
-        return InfinityMod.getId("generated_" + getDimensionSeed(text, s));
+        return InfinityMod.getDimId(getDimensionSeed(text, s));
     }
 
     static long getDimensionSeed(String text, MinecraftServer s) {

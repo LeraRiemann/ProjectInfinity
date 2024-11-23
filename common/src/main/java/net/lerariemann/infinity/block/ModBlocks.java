@@ -2,8 +2,9 @@ package net.lerariemann.infinity.block;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.custom.*;
+import net.lerariemann.infinity.iridescence.IridescenceLiquidBlock;
 import net.minecraft.block.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -46,7 +47,9 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> NETHERITE_SLAB = BLOCKS.register("netherite_slab", () ->
             new SlabBlock(copy("netherite_slab", Blocks.NETHERITE_BLOCK)));
     public static final RegistrySupplier<Block> TIME_BOMB = BLOCKS.register("timebomb", () ->
-            new TimeBombBlock(copy("timebomb", Blocks.BEDROCK).nonOpaque().luminance(state -> 15)));
+            new TimeBombBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(state -> 15)));
+    public static final RegistrySupplier<FluidBlock> IRIDESCENCE = BLOCKS.register("iridescence", () ->
+            new IridescenceLiquidBlock(PlatformMethods.getIridescenceStill(), AbstractBlock.Settings.copy(Blocks.WATER)));
 
     public static void registerModBlocks() {
         BLOCKS.register();

@@ -7,8 +7,8 @@
     "sky_color": 65535,
     "water_color": 255,
     "water_fog_color": 65535,
-    "foliage_color": 16776960,
-    "grass_color": 16711935
+    "foliage_color": 16711935,
+    "grass_color": 16776960
   },
   "features": [
     [],

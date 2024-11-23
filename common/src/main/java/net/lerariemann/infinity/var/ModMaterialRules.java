@@ -1,8 +1,11 @@
 package net.lerariemann.infinity.var;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.block.BlockState;
@@ -59,6 +62,37 @@ public class ModMaterialRules {
             return new RandomBlockStateRule(PROVIDER.compoundRegistry.get("full_blocks_worldgen"));
         }
     }
+
+    public record RandomColoredBlock(String str) implements MaterialRules.BlockStateRule
+    {
+        @Override
+        public BlockState tryApply(int i, int j, int k) {
+            long seed = MathHelper.hashCode(i, j, k);
+            double d = (seed & 0xFFFL) / (double)0xFFFL;
+            d = d - Math.floor(d);
+            BlockState st = Iridescence.getRandomColorBlock(d, str).getDefaultState();
+            if(st.contains(Properties.PERSISTENT)) st = st.with(Properties.PERSISTENT, Boolean.TRUE);
+            return st;
+        }
+
+        record Rule(String str) implements MaterialRules.MaterialRule
+        {
+            static final CodecHolder<RandomColoredBlock.Rule> CODEC = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    Codec.STRING.fieldOf("block_type").orElse("concrete").forGetter(a -> a.str)).apply(instance, RandomColoredBlock.Rule::new)));
+
+            @Override
+            public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
+                return CODEC;
+            }
+
+            @Override
+            public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
+                return new RandomColoredBlock(str);
+            }
+        }
+    }
+
+
     public static class Library implements MaterialRules.BlockStateRule
     {
         static final BlockState floor = Blocks.OAK_SLAB.getDefaultState();
@@ -98,17 +132,18 @@ public class ModMaterialRules {
             }
             return air;
         }
-    }
-    enum LibraryRule implements MaterialRules.MaterialRule {
-        INSTANCE;
-        static final CodecHolder<LibraryRule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
-        @Override
-        public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
-            return CODEC;
-        }
-        @Override
-        public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
-            return new Library();
+
+        enum Rule implements MaterialRules.MaterialRule {
+            INSTANCE;
+            static final CodecHolder<Library.Rule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
+            @Override
+            public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
+                return CODEC;
+            }
+            @Override
+            public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
+                return new Library();
+            }
         }
     }
 
@@ -160,17 +195,17 @@ public class ModMaterialRules {
             return filler;
         }
 
-    }
-    enum BackroomsRule implements MaterialRules.MaterialRule {
-        INSTANCE;
-        static final CodecHolder<BackroomsRule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
-        @Override
-        public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
-            return CODEC;
-        }
-        @Override
-        public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
-            return new Backrooms();
+        enum Rule implements MaterialRules.MaterialRule {
+            INSTANCE;
+            static final CodecHolder<Backrooms.Rule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
+            @Override
+            public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
+                return CODEC;
+            }
+            @Override
+            public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
+                return new Backrooms();
+            }
         }
     }
 
@@ -243,17 +278,18 @@ public class ModMaterialRules {
                 }
             }
         }
-    }
-    enum NexusRule implements MaterialRules.MaterialRule {
-        INSTANCE;
-        static final CodecHolder<NexusRule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
-        @Override
-        public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
-            return CODEC;
-        }
-        @Override
-        public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
-            return new Nexus();
+
+        enum Rule implements MaterialRules.MaterialRule {
+            INSTANCE;
+            static final CodecHolder<Nexus.Rule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
+            @Override
+            public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
+                return CODEC;
+            }
+            @Override
+            public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
+                return new Nexus();
+            }
         }
     }
 
@@ -339,17 +375,18 @@ public class ModMaterialRules {
                 }
             }
         }
-    }
-    enum PerfectionRule implements MaterialRules.MaterialRule {
-        INSTANCE;
-        static final CodecHolder<PerfectionRule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
-        @Override
-        public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
-            return CODEC;
-        }
-        @Override
-        public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
-            return new Perfection();
+
+        enum Rule implements MaterialRules.MaterialRule {
+            INSTANCE;
+            static final CodecHolder<Perfection.Rule> CODEC = CodecHolder.of(MapCodec.unit(INSTANCE));
+            @Override
+            public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
+                return CODEC;
+            }
+            @Override
+            public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
+                return new Perfection();
+            }
         }
     }
 
@@ -362,10 +399,11 @@ public class ModMaterialRules {
 
     public static void registerRules() {
         register("chaos", RandomBlockMaterialRule.CODEC);
-        register("library", LibraryRule.CODEC);
-        register("backrooms", BackroomsRule.CODEC);
-        register("nexus", NexusRule.CODEC);
-        register("perfection", PerfectionRule.CODEC);
+        register("colored_chaos", RandomColoredBlock.Rule.CODEC);
+        register("library", Library.Rule.CODEC);
+        register("backrooms", Backrooms.Rule.CODEC);
+        register("nexus", Nexus.Rule.CODEC);
+        register("perfection", Perfection.Rule.CODEC);
         MATERIAL_RULES.register();
     }
 }

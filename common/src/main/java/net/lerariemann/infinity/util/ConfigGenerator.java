@@ -111,6 +111,7 @@ public class ConfigGenerator {
         res.putBoolean("float", isFloat(bs, w, inAir));
         NbtCompound properties = new NbtCompound();
         if (bs.contains(Properties.PERSISTENT)) properties.putString("persistent", "true");
+        if (bs.contains(Properties.LIT)) properties.putString("lit", "false");
         if (bs.contains(Properties.BLOCK_FACE)) {
             properties.putString("face", "floor");
             bs = bs.with(Properties.BLOCK_FACE, BlockFace.FLOOR);
@@ -335,7 +336,6 @@ public class ConfigGenerator {
         generateAllNoWorld();
         generateBlocks(w, inAir, onStone);
         MinecraftServer s = Objects.requireNonNull(w.getServer());
-        generateStructures(s);
         SurfaceRuleScanner.scan(s);
         generate(s.getRegistryManager().getOrThrow(RegistryKeys.BIOME), "misc", "biomes", true);
     }

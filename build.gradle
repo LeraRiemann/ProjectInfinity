@@ -3,7 +3,7 @@ plugins {
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
     id "io.github.pacifistmc.forgix" version "1.2.9-local.7"
-    id 'org.sinytra.wiki.toolkit' version '0.1.16'
+    id "org.moddedmc.wiki.toolkit" version "0.2.4"
 }
 
 architectury {
@@ -13,6 +13,17 @@ architectury {
 forgix {
     group = "net.lerariemann.infinity"
     mergedJarName = "infinite-dimensions-${mod_version}.jar"
+
+    neoforge {
+        projectName = "neoforge"
+        jarLocation = "build/libs/infinity-neoforge-${mod_version}.jar"
+    }
+
+    fabric {
+        projectName = "fabric"
+        jarLocation = "build/libs/infinity-fabric-${mod_version}.jar"
+    }
+
 }
 
 wiki {

@@ -4,7 +4,9 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.fluids.ModFluidsNeoforge;
 import net.minecraft.block.BlockState;
+import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
@@ -57,4 +59,11 @@ public class PlatformMethodsImpl {
         return state.isIn(Tags.Blocks.DYED_WHITE);
     }
 
+    public static RegistrySupplier<? extends FlowableFluid> getIridescenceStill() {
+        return ModFluidsNeoforge.IRIDESCENCE_STILL;
+    }
+
+    public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
+        return ModFluidsNeoforge.IRIDESCENCE_FLOWING;
+    }
 }
