@@ -41,9 +41,9 @@
     "mobs.passive.TurtleEntityMixin",
     "mobs.passive.WolfEntityMixin",
     "options.DimensionTypeMixin",
+    "options.EntityMixin",
     "options.PlayerManagerMixin",
-    "options.ServerWorldMixin",
-    "options.EntityMixin"
+    "options.ServerWorldMixin"
   ],
   "client": [
     "iridescence.LivingEntityRendererMixin",
@@ -52,6 +52,7 @@
     "options.ClientWorldMixin",
     "options.GameRendererMixin",
     "options.MinecraftClientMixin",
+    "options.SoundSystemMixin",
     "options.WorldRendererMixin"
   ],
   "injectors": {

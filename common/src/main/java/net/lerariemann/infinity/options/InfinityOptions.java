@@ -11,8 +11,21 @@ import net.minecraft.world.World;
 import org.joml.Vector3f;
 
 import java.io.File;
+import java.util.function.Function;
 
-public record InfinityOptions(NbtCompound data) {
+public class InfinityOptions {
+    public NbtCompound data;
+    public PitchShifter shifter;
+
+    public InfinityOptions(NbtCompound data) {
+        this.data = data;
+        this.shifter = data.contains("pitch_shift") ? new PitchShifter(data.getCompound("pitch_shift")) : new PitchShifter();
+    }
+
+    public NbtCompound data() {
+        return data;
+    }
+
     public static InfinityOptions empty() {
         return new InfinityOptions(new NbtCompound());
     }
@@ -150,6 +163,10 @@ public record InfinityOptions(NbtCompound data) {
 
     public float getLunarOffset(int i) {
         return fullLunarTest("lunar_offset", i, 0.0f);
+    }
+
+    public Function<Float, Float> getSoundPitch() {
+        return shifter.applier();
     }
 
     public float getHorizonShadingRatio() {

@@ -51,6 +51,7 @@ public class RandomInfinityOptions {
         data.putFloat("star_size_modifier", (float)(0.03*r.nextExponential()));
         data.putDouble("time_scale", timeScale(r));
         data.putDouble("mavity", mavity(r));
+        data.put("pitch_shift", pitchShift(r));
     }
 
     public static double timeScale(Random r) {
@@ -84,5 +85,27 @@ public class RandomInfinityOptions {
             res[i] = points.get(i+1) - points.get(i);
         }
         return res;
+    }
+
+    public static NbtCompound pitchShift(Random r) {
+        NbtCompound comp = new NbtCompound();
+        int i = r.nextInt(-1, 2);
+        switch (i) {
+            case -1 -> {
+                comp.putString("type", "empty");
+                return comp;
+            }
+            case 0 -> {
+                comp.putString("type", "constant");
+                comp.putFloat("value", r.nextFloat(0.5f, 2.0f));
+                return comp;
+            }
+            case 1 -> {
+                comp.putString("type", "add");
+                comp.putFloat("value", r.nextFloat(-1.0f, 1.0f));
+                return comp;
+            }
+        }
+        return comp;
     }
 }

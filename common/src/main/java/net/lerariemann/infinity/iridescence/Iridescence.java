@@ -129,13 +129,13 @@ public class Iridescence {
     }
 
     public static void tryBeginJourney(LivingEntity entity, int amplifier) {
-        int i = Iridescence.getAmplifierOnApply(entity, amplifier);
-        if (i >= 0) {
+        int amplifier1 = Iridescence.getAmplifierOnApply(entity, amplifier);
+        if (amplifier1 >= 0) {
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
-                    Iridescence.getEffectLength(amplifier), i));
+                    Iridescence.getEffectLength(amplifier1), amplifier1));
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
-                    Iridescence.getCooldownDuration(), amplifier > 0 ? 1 : 0, false, false, false));
+                    Iridescence.getCooldownDuration(), amplifier1 > 0 ? 1 : 0, false, false, false));
             if (entity instanceof ServerPlayerEntity player) {
                 player.increaseStat(ModStats.IRIDESCENCE, 1);
                 ModCriteria.IRIDESCENT.get().trigger(player);
