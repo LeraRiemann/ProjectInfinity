@@ -8,12 +8,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Collection;
+
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
-    @Inject(method = "onStatusEffectRemoved", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateAttributes()V"))
-    void inj(StatusEffectInstance effect, CallbackInfo ci) {
-        if (effect.getEffectType().value() instanceof ModStatusEffects.SpecialEffect eff) {
-            eff.onRemoved((LivingEntity)(Object)this);
+    @Inject(method = "onStatusEffectsRemoved", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateAttributes()V"))
+    void inj(Collection<StatusEffectInstance> effects, CallbackInfo ci) {
+        for (StatusEffectInstance effect : effects) {
+            if (effect.getEffectType().value() instanceof ModStatusEffects.SpecialEffect eff) {
+                eff.onRemoved((LivingEntity)(Object)this);
+            }
         }
     }
 }
