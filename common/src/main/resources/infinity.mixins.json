@@ -42,10 +42,10 @@
     "mobs.passive.WolfEntityMixin",
     "options.DimensionTypeMixin",
     "options.PlayerManagerMixin",
-    "options.ServerWorldMixin"
+    "options.ServerWorldMixin",
+    "options.EntityMixin"
   ],
   "client": [
-    "client.EntityMixin",
     "iridescence.LivingEntityRendererMixin",
     "iridescence.PostEffectProcessorMixin",
     "options.BackgroundRendererMixin",
@@ -53,9 +53,6 @@
     "options.GameRendererMixin",
     "options.MinecraftClientMixin",
     "options.WorldRendererMixin"
-  ],
-  "server": [
-    "options.EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
