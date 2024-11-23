@@ -299,8 +299,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     /* Create and send S2C packets neseccary for the client to process a freshly added dimension. */
     public static void sendNewWorld(ServerPlayerEntity player, Identifier id, RandomDimension d) {
-        d.random_biomes.forEach(b -> PlatformMethods.sendServerPlayerEntity(player, new ModPayloads.BiomeAddPayload(InfinityMod.getId(b.name), b.data)));
-        PlatformMethods.sendServerPlayerEntity(player, new ModPayloads.WorldAddPayload(id, d.type != null ? d.type.data : new NbtCompound()));
+        d.random_biomes.forEach(b -> PlatformMethods.sendS2CPayload(player, new ModPayloads.BiomeAddPayload(InfinityMod.getId(b.name), b.data)));
+        PlatformMethods.sendS2CPayload(player, new ModPayloads.WorldAddPayload(id, d.type != null ? d.type.data : new NbtCompound()));
     }
 
     /* Spawns colourful particles. */

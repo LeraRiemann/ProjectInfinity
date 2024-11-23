@@ -55,7 +55,7 @@ public interface WarpLogic {
     static void respawnAlive(@Nullable ServerPlayerEntity player) {
         if (player == null) return;
         player.notInAnyWorld = true;
-        PlatformMethods.sendServerPlayerEntity(player, ModPayloads.RespawnAlivePayload.INSTANCE);
+        PlatformMethods.sendS2CPayload(player, ModPayloads.RespawnAlivePayload.INSTANCE);
     }
 
     static Identifier getRandomId(MinecraftServer server, Random random) {

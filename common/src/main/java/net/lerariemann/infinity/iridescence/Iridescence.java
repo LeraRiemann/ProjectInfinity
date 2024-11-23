@@ -115,7 +115,7 @@ public class Iridescence {
     }
 
     public static void updateShader(ServerPlayerEntity player) {
-        PlatformMethods.sendServerPlayerEntity(player, ModPayloads.setShaderFromWorld(player.getServerWorld()));
+        PlatformMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(player.getServerWorld()));
     }
 
     @Nullable

@@ -92,7 +92,7 @@ public class ModPayloads {
             });
         }
     }
-    
+
     public static boolean resourcesReloaded = Path.of(Platform.getGameFolder() + "/resourcepacks/infinity/assets/infinity/shaders").toFile().exists();
 
     public record StarsRePayLoad() implements CustomPayload {
@@ -119,7 +119,8 @@ public class ModPayloads {
         }
     }
     public static void respawnAliveClient(RespawnAlivePayload payload, Object context) {
-        client(context).player.networkHandler.sendPacket(new ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.PERFORM_RESPAWN));
+        if (Platform.isFabric())
+            client(context).player.networkHandler.sendPacket(new ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.PERFORM_RESPAWN));
     }
 
     public static ShaderRePayload setShaderFromWorld(ServerWorld destination) {

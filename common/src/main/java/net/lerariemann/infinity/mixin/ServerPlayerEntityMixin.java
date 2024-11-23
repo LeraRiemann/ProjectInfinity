@@ -23,7 +23,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -94,8 +93,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Inject(method = "teleportTo",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerManager()Lnet/minecraft/server/PlayerManager;"))
     private void injected3(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir) {
-        PlatformMethods.sendServerPlayerEntity(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(teleportTarget.world()));
-        PlatformMethods.sendServerPlayerEntity(((ServerPlayerEntity)(Object)this), ModPayloads.StarsRePayLoad.INSTANCE);
+        PlatformMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(teleportTarget.world()));
+        PlatformMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.StarsRePayLoad.INSTANCE);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -133,7 +132,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method = "changeGameMode", at = @At("RETURN"))
     private void injected4(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) PlatformMethods.sendServerPlayerEntity(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(this.getServerWorld()));
+        if (cir.getReturnValue()) PlatformMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(this.getServerWorld()));
     }
 
     @Override

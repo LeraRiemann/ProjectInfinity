@@ -30,6 +30,7 @@ public class FluidTypes {
             .canExtinguish(true)
             .canConvertToSource(true)
             .supportsBoating(true)
+            .canSwim(true)
             .sound(SoundActions.BUCKET_FILL, SoundEvents.ITEM_BUCKET_FILL)
             .sound(SoundActions.BUCKET_EMPTY, SoundEvents.ITEM_BUCKET_EMPTY)
             .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.BLOCK_FIRE_EXTINGUISH)
