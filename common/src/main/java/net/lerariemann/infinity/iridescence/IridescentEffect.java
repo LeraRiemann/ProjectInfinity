@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.iridescence;
 
+import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
@@ -30,11 +31,12 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
 
     public void onRemoved(LivingEntity entity) {
         entity.setInvulnerable(false);
-        if (entity instanceof ServerPlayerEntity player) {
-            Iridescence.updateShader(player);
-        }
-        else if (entity instanceof MobEntity currEntity) {
-            Iridescence.endConversion(currEntity);
+        switch (entity) {
+            case ServerPlayerEntity player -> Iridescence.updateShader(player);
+            case ChaosPawn pawn -> pawn.unchess();
+            case MobEntity currEntity -> Iridescence.endConversion(currEntity);
+            default -> {
+            }
         }
     }
 

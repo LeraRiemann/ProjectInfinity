@@ -5,6 +5,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
+import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
@@ -145,12 +146,16 @@ public class Iridescence {
             Map.entry(EntityType.SLIME, ModEntities.CHAOS_SLIME)
     );
 
+    public static boolean isConvertible(MobEntity entity) {
+        return (convertibles.containsKey(entity.getType()) || (entity instanceof ChaosPawn pawn && pawn.isChess()));
+    }
+
     public static EntityType<? extends MobEntity> getConversion(MobEntity entity) {
         return convertibles.get(entity.getType()).get();
     }
 
     public static void tryBeginConversion(MobEntity ent) {
-        if (convertibles.containsKey(ent.getType()) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT))
+        if (isConvertible(ent) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT))
             ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0));
     }
 
