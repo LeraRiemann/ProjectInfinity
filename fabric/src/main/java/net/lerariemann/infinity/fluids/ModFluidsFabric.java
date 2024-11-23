@@ -11,6 +11,7 @@ import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.item.ModItems;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
@@ -39,7 +40,7 @@ public class ModFluidsFabric {
         }
 
         @Override
-        protected boolean isInfinite(World world) {
+        protected boolean isInfinite(ServerWorld world) {
             return Iridescence.isInfinite(world);
         }
     }
@@ -50,7 +51,7 @@ public class ModFluidsFabric {
         }
 
         @Override
-        protected boolean isInfinite(World world) {
+        protected boolean isInfinite(ServerWorld world) {
             return Iridescence.isInfinite(world);
         }
     }
