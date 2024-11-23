@@ -110,8 +110,8 @@ public class Iridescence {
         return (amplifier > 0) && (duration == ticksInHour);
     }
 
-    public static boolean shouldUpdateShader(int duration) {
-        return duration == ticksInHour;
+    public static boolean shouldUpdateShader(int duration, int amplifier) {
+        return getEffectLength(amplifier) - duration == ticksInHour;
     }
 
     public static void updateShader(ServerPlayerEntity player) {

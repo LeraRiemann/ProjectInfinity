@@ -56,7 +56,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
                 player.setInvulnerable(false);
                 WarpLogic.respawnAlive(player);
             }
-            if (Iridescence.shouldUpdateShader(duration)) {
+            if (Iridescence.shouldUpdateShader(duration, amplifier)) {
                 Iridescence.updateShader(player);
             }
         }
