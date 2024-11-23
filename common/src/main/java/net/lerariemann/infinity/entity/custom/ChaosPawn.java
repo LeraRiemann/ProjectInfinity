@@ -180,9 +180,11 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
     
     public void unchess() {
-        dataTracker.set(special_case, -1);
-        randomizeColors(getRandom());
-        playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
+        if (random.nextBoolean()) {
+            dataTracker.set(special_case, -1);
+            randomizeColors(getRandom());
+            playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
+        }
     }
 
     public void randomizeColors(Random r) {
