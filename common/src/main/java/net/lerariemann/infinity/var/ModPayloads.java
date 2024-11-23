@@ -16,7 +16,6 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 
@@ -108,21 +107,6 @@ public class ModPayloads {
         ((WorldRendererAccess)(client(context).worldRenderer)).projectInfinity$setNeedsStars(true);
     }
 
-
-    public record RespawnAlivePayload() implements CustomPayload {
-        public static final RespawnAlivePayload INSTANCE = new RespawnAlivePayload();
-        public static final CustomPayload.Id<RespawnAlivePayload> ID = new CustomPayload.Id<>(InfinityMod.getId("respawn_alive"));
-        public static final PacketCodec<RegistryByteBuf, RespawnAlivePayload> CODEC = PacketCodec.unit(INSTANCE);
-        @Override
-        public CustomPayload.Id<? extends CustomPayload> getId() {
-            return ID;
-        }
-    }
-    public static void respawnAliveClient(RespawnAlivePayload payload, Object context) {
-        if (Platform.isFabric())
-            client(context).player.networkHandler.sendPacket(new ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.PERFORM_RESPAWN));
-    }
-
     public static ShaderRePayload setShaderFromWorld(ServerWorld destination) {
         return new ShaderRePayload(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
     }
@@ -132,7 +116,6 @@ public class ModPayloads {
         PayloadTypeRegistry.playS2C().register(BiomeAddPayload.ID, BiomeAddPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ShaderRePayload.ID, ShaderRePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
-        PayloadTypeRegistry.playS2C().register(RespawnAlivePayload.ID, RespawnAlivePayload.CODEC);
 
     }
 
@@ -141,6 +124,5 @@ public class ModPayloads {
         ClientPlayNetworking.registerGlobalReceiver(ModPayloads.BiomeAddPayload.ID, ModPayloads::addBiome);
         ClientPlayNetworking.registerGlobalReceiver(ModPayloads.ShaderRePayload.ID, ModPayloads::receiveShader);
         ClientPlayNetworking.registerGlobalReceiver(ModPayloads.StarsRePayLoad.ID, ModPayloads::receiveStars);
-        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.RespawnAlivePayload.ID, ModPayloads::respawnAliveClient);
     }
 }
