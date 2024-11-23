@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.*;
 import net.minecraft.fluid.FluidState;
@@ -157,7 +158,7 @@ public class Iridescence {
     public static void endConversion(MobEntity currEntity) {
         EntityType<? extends MobEntity> typeNew = Iridescence.getConversion(currEntity);
         if (typeNew != null) {
-            MobEntity newEntity = typeNew.create(currEntity.getWorld());
+            MobEntity newEntity = typeNew.create(currEntity.getWorld(), SpawnReason.CONVERSION);
             if (newEntity != null) {
                 currEntity.discard();
                 ModEntities.copy(currEntity, newEntity);

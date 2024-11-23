@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.server.world.ServerWorld;
 
 public class IridescentCooldownEffect extends StatusEffect {
     public IridescentCooldownEffect(StatusEffectCategory category, int color) {
@@ -11,7 +12,7 @@ public class IridescentCooldownEffect extends StatusEffect {
     }
 
     @Override
-    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(ServerWorld world, LivingEntity entity, int amplifier) {
         entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
                 Iridescence.getCooldownDuration(), 0, false, false, false));
         return true;
