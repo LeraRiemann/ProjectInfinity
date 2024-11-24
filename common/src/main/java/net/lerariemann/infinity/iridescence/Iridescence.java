@@ -48,7 +48,7 @@ public class Iridescence {
     }
 
     public static boolean isUnderEffect(LivingEntity entity) {
-        return entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
+        return entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value());
     }
 
     public static int color(BlockPos pos) {
@@ -133,10 +133,10 @@ public class Iridescence {
     public static void tryBeginJourney(LivingEntity entity, int amplifier) {
         int amplifier1 = Iridescence.getAmplifierOnApply(entity, amplifier);
         if (amplifier1 >= 0) {
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(),
                     Iridescence.getEffectLength(amplifier1), amplifier1));
-            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
+            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN.value(),
                     Iridescence.getCooldownDuration(), amplifier1 > 0 ? 1 : 0, false, false, false));
             if (entity instanceof ServerPlayerEntity player) {
                 player.increaseStat(ModStats.IRIDESCENCE, 1);
@@ -165,8 +165,8 @@ public class Iridescence {
     }
 
     public static void tryBeginConversion(MobEntity ent) {
-        if (isConvertible(ent) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT))
-            ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0));
+        if (isConvertible(ent) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value()))
+            ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0));
     }
 
     public static void endConversion(MobEntity currEntity) {

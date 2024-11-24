@@ -53,8 +53,8 @@ public interface WarpLogic {
 
     static void respawnAlive(@Nullable ServerPlayerEntity player) {
         if (player == null) return;
-        TeleportTarget targ = player.getRespawnTarget(true, TeleportTarget.NO_OP);
-        player.teleport(targ.world(), targ.pos().x, targ.pos().y, targ.pos().z, targ.yaw(), targ.pitch());
+        BlockPos targ = player.getSpawnPointPosition();
+        player.teleport(targ.getX(), targ.getY(), targ.getZ());
     }
 
     static Identifier getRandomId(MinecraftServer server, Random random) {

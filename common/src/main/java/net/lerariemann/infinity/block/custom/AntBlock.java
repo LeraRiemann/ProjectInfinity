@@ -23,23 +23,27 @@ public class AntBlock extends HorizontalFacingBlock {
     }
 
     boolean inverseExists(Block down) {
-        var s = down.toString();
+        Identifier id = Registries.BLOCK.getId(down);
+        String n = id.getNamespace();
+        String s = id.getPath();
         if (s.contains("black_")) {
-            return Registries.BLOCK.containsId(new Identifier(s.replace("black", "white")));
+            return Registries.BLOCK.containsId(Identifier.of(n, s.replace("black", "white")));
         }
         if (s.contains("white_")) {
-            return Registries.BLOCK.containsId(new Identifier(s.replace("white", "black")));
+            return Registries.BLOCK.containsId(Identifier.of(n, s.replace("white", "black")));
         }
         return false;
     }
 
     Block recolor(Block down, boolean toWhite) {
-        var s = down.toString();
+        Identifier id = Registries.BLOCK.getId(down);
+        String n = id.getNamespace();
+        String s = id.getPath();
         if (s.contains("black_")) {
-            return toWhite ? Registries.BLOCK.get(new Identifier(s.replace("black", "white"))) : down;
+            return toWhite ? Registries.BLOCK.get(Identifier.of(n, s.replace("black", "white"))) : down;
         }
         if (s.contains("white_")) {
-            return toWhite ? down : Registries.BLOCK.get(new Identifier(s.replace("white", "black")));
+            return toWhite ? down : Registries.BLOCK.get(Identifier.of(n, s.replace("white", "black")));
         }
         return null;
     }

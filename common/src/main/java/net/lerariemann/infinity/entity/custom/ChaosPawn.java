@@ -1,8 +1,12 @@
 package net.lerariemann.infinity.entity.custom;
 
+
+
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.MobEntityAccess;
 import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -13,7 +17,10 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.*;
+import net.minecraft.entity.mob.Angerable;
+import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -26,13 +33,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Supplier;
 
 public class ChaosPawn extends HostileEntity implements Angerable {
     public static final TrackedData<NbtCompound> colors = DataTracker.registerData(ChaosPawn.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
@@ -132,11 +138,11 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     @Override
-    public RegistryKey<LootTable> getLootTableId() {
-        Identifier i = switch (dataTracker.get(special_case)) {
-            case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
-            case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
-            default -> Identifier.of("");
+    public Identifier getLootTableId() {
+        return switch (dataTracker.get(special_case)) {
+            case 0 -> Identifier.tryParse("infinity:entities/chaos_pawn_black");
+            case 1 -> Identifier.tryParse("infinity:entities/chaos_pawn_white");
+            default -> Identifier.tryParse("");
         };
     }
 
@@ -176,7 +182,7 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     public void unchess() {
         if (random.nextBoolean()) {
             dataTracker.set(special_case, -1);
-            randomizeColors(getRandom());
+            randomizeColors(new Random());
             playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
         }
     }
@@ -207,8 +213,8 @@ public class ChaosPawn extends HostileEntity implements Angerable {
 
     @Override
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
-        Random r = getRandom();
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+        Random r = new Random();
         setAllColors(r, world.getBlockState(this.getBlockPos().down(2)));
         double i = 15*r.nextExponential();
         this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(i);
@@ -234,13 +240,13 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     @Override
-    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
-        super.dropEquipment(world, source, causedByPlayer);
+    protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
+        super.dropEquipment(source, lootingMultiplier, allowDrops);
         if (!this.isChess()) {
-            String s = RandomProvider.getProvider(Objects.requireNonNull(world.getServer())).registry.get("items").getRandomElement(world.random);
+            String s = RandomProvider.getProvider(Objects.requireNonNull(source.getSource().getServer())).registry.get("items").getRandomElement(source.getSource().getWorld().random);
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
-            ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i));
-            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
+            ItemStack stack = Registries.ITEM.get(new Identifier(s)).getDefaultStack().copyWithCount((int)(i*i));
+//            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
             this.dropStack(stack);
         }
     }
@@ -290,8 +296,8 @@ public class ChaosPawn extends HostileEntity implements Angerable {
             this.getOthersInRange().stream().filter(entity -> {
                 if (entity == mob) return false;
                 if (Iridescence.isUnderEffect(entity)) return false;
-                if (entity instanceof ChaosPawn pawn) {
-                    return mob.getCase() == pawn.getCase();
+                if (entity instanceof ChaosPawn) {
+                    return mob.getCase() == entity.getCase();
                 }
                 return true;
             }).map(entity -> (Angerable)entity).forEach(Angerable::universallyAnger);

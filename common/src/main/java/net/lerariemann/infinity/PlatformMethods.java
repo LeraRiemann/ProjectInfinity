@@ -18,6 +18,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -32,14 +33,6 @@ public class PlatformMethods {
     public static boolean isFabricApiLoaded(String modID) {
         if (Platform.isFabric()) return Platform.isModLoaded(modID.replace("_", "-"));
         else return Platform.isModLoaded(modID.replace("-", "_"));
-    }
-
-    public static void sendS2CPayload(ServerPlayerEntity entity, CustomPayload payload) {
-        ServerPlayNetworking.send(entity, payload);
-    }
-
-    public static void sendC2SPayload(CustomPayload payload) {
-        ClientPlayNetworking.send(payload);
     }
 
     @ExpectPlatform

@@ -46,7 +46,6 @@
     "mobs.passive.TurtleEntityMixin",
     "mobs.passive.WolfEntityMixin",
     "options.DimensionTypeMixin",
-    "options.EntityMixin",
     "options.PlayerManagerMixin",
     "options.ServerWorldMixin"
   ],
