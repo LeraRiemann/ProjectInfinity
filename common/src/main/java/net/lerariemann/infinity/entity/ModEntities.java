@@ -4,6 +4,7 @@ import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.client.ChaosPawnRenderer;
 import net.lerariemann.infinity.entity.client.ChaosCreeperRenderer;
@@ -40,6 +41,8 @@ public class ModEntities {
         e.setStackInHand(Hand.MAIN_HAND, from.getStackInHand(Hand.MAIN_HAND));
         e.setStackInHand(Hand.OFF_HAND, from.getStackInHand(Hand.OFF_HAND));
     }
+
+
     public static final DeferredRegister<EntityType<?>> INFINITY_ENTITIES = DeferredRegister.create(MOD_ID, RegistryKeys.ENTITY_TYPE);
 
     public static final RegistrySupplier<EntityType<ChaosSlime>> CHAOS_SLIME = INFINITY_ENTITIES.register("chaos_slime", () -> EntityType.Builder.create(ChaosSlime::new, SpawnGroup.MONSTER).setDimensions(0.52f, 0.52f).maxTrackingRange(10).build("chaos_slime"));

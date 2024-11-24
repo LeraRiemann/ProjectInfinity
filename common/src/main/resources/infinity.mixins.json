@@ -27,6 +27,7 @@
     "mavity.SeveralEntitiesMixin",
     "mavity.ThrownEntityMixin",
     "iridescence.IridescenceMixin",
+    "iridescence.LandPathNodeMakerMixin",
     "iridescence.LivingEntityMixin",
     "iridescence.StatusEffectInstanceMixin",
     "mobs.ElderGuardianEntityMixin",
@@ -45,16 +46,19 @@
     "mobs.passive.TurtleEntityMixin",
     "mobs.passive.WolfEntityMixin",
     "options.DimensionTypeMixin",
+    "options.EntityMixin",
     "options.PlayerManagerMixin",
     "options.ServerWorldMixin"
   ],
   "client": [
+    "iridescence.LivingEntityRendererMixin",
     "iridescence.PostEffectProcessorMixin",
     "iridescence.LivingEntityRendererMixin",
     "options.BackgroundRendererMixin",
     "options.ClientWorldMixin",
     "options.GameRendererMixin",
     "options.MinecraftClientMixin",
+    "options.SoundSystemMixin",
     "options.WorldRendererMixin"
   ],
   "injectors": {

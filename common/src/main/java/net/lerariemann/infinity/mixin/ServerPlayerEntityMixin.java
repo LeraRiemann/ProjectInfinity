@@ -55,6 +55,38 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Unique private long infinity$ticksUntilWarp;
     @Unique private Identifier infinity$idForWarp;
 
+
+    @Inject(method="findRespawnPosition", at = @At("HEAD"), cancellable = true)
+    private static void injected(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> cir) {
+        if (((Timebombable)world).infinity$isTimebombed() > 0) cir.setReturnValue(Optional.empty());
+    }
+
+    /* When the player is using the Infinity portal, this modifies the portal on the other side if needed. */
+    @Inject(method = "teleportTo",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V")
+    )
+    private void injected2(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir, @Local(ordinal = 0) ServerWorld serverWorld, @Local RegistryKey<World> registryKey) {
+        if (RandomProvider.getProvider(serverWorld.getServer()).rule("returnPortalsEnabled") &&
+                (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
+            BlockPos pos = BlockPos.ofFloored(teleportTarget.pos());
+            ServerWorld destination = teleportTarget.world();
+            for (BlockPos pos2: new BlockPos[] {pos, pos.add(1, 0, 0), pos.add(0, 0, 1),
+                    pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
+                Identifier dimensionName = registryKey.getValue();
+
+                NeitherPortalBlock.modifyPortalRecursive(destination, pos2, destination.getBlockState(pos), dimensionName, true);
+                break;
+            }
+        }
+    }
+
+    @Inject(method = "teleportTo",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerManager()Lnet/minecraft/server/PlayerManager;"))
+    private void injected3(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir) {
+        PlatformMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(teleportTarget.world()));
+        PlatformMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.StarsRePayLoad.INSTANCE);
+    }
+
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {
         if (--this.infinity$ticksUntilWarp == 0L) {

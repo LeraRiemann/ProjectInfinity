@@ -307,6 +307,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         return true;
     }
 
+    /* Create and send S2C packets necessary for the client to process a freshly added dimension. */
     static PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
         PacketByteBuf buf = PlatformMethods.createPacketByteBufs();
         buf.writeIdentifier(id);

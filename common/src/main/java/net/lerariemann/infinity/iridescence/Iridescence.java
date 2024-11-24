@@ -6,6 +6,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
+import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModCriteria;
@@ -26,6 +27,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,10 +43,17 @@ public class Iridescence {
     public static boolean isIridescence(FluidState st) {
         return st.isOf(PlatformMethods.getIridescenceStill().get()) || st.isOf(PlatformMethods.getIridescenceFlowing().get());
     }
+    public static boolean isIridescence(WorldView world, BlockPos pos) {
+        return Iridescence.isIridescence(world.getFluidState(pos));
+    }
+
+    public static boolean isUnderEffect(LivingEntity entity) {
+        return entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
+    }
 
     public static int color(BlockPos pos) {
         int i = pos.getX() + pos.getY() + pos.getZ();
-        return Color.HSBtoRGB(i / 600.0f + (float)((Math.sin(pos.getX()/12.0f) + Math.sin(pos.getZ()/12.0f)) / 4), 1.0F, 1.0F);
+        return Color.HSBtoRGB(i / 600.0f + (float)((Math.sin(pos.getX()/12.0f) + Math.sin(pos.getY()/12.0f) + Math.sin(pos.getZ()/12.0f)) / 4) , 1.0F, 1.0F);
     }
 
     public static java.util.List<String> colors = List.of("minecraft:white_",
@@ -103,8 +112,8 @@ public class Iridescence {
         return (amplifier > 0) && (duration == ticksInHour);
     }
 
-    public static boolean shouldUpdateShader(int duration) {
-        return duration == ticksInHour;
+    public static boolean shouldUpdateShader(int duration, int amplifier) {
+        return getEffectLength(amplifier) - duration == ticksInHour - 1;
     }
 
     public static void updateShader(ServerPlayerEntity player) {
@@ -122,13 +131,13 @@ public class Iridescence {
     }
 
     public static void tryBeginJourney(LivingEntity entity, int amplifier) {
-        int i = Iridescence.getAmplifierOnApply(entity, amplifier);
-        if (i >= 0) {
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(),
-                    Iridescence.getEffectLength(amplifier), i));
-            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN.value(),
-                    Iridescence.getCooldownDuration(), amplifier > 0 ? 1 : 0, false, false, false));
+        int amplifier1 = Iridescence.getAmplifierOnApply(entity, amplifier);
+        if (amplifier1 >= 0) {
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
+                    Iridescence.getEffectLength(amplifier1), amplifier1));
+            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
+                    Iridescence.getCooldownDuration(), amplifier1 > 0 ? 1 : 0, false, false, false));
             if (entity instanceof ServerPlayerEntity player) {
                 player.increaseStat(ModStats.IRIDESCENCE, 1);
                 ModCriteria.IRIDESCENT.trigger(player);
@@ -147,13 +156,17 @@ public class Iridescence {
             Map.entry(EntityType.SLIME, ModEntities.CHAOS_SLIME)
     );
 
+    public static boolean isConvertible(MobEntity entity) {
+        return (convertibles.containsKey(entity.getType()) || (entity instanceof ChaosPawn pawn && pawn.isChess()));
+    }
+
     public static EntityType<? extends MobEntity> getConversion(MobEntity entity) {
         return convertibles.get(entity.getType()).get();
     }
 
     public static void tryBeginConversion(MobEntity ent) {
-        if (convertibles.containsKey(ent.getType()) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value()))
-            ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0));
+        if (isConvertible(ent) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT))
+            ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0));
     }
 
     public static void endConversion(MobEntity currEntity) {

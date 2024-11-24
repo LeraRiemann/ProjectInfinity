@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.iridescence;
 
+import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
@@ -20,15 +21,18 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         if (entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_SETUP.value())) {
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP.value());
         }
+        if (entity instanceof Angerable ang) ang.stopAnger();
+        if (entity instanceof ServerPlayerEntity player) Iridescence.updateShader(player);
     }
 
     public void onRemoved(LivingEntity entity) {
         entity.setInvulnerable(false);
-        if (entity instanceof ServerPlayerEntity player) {
-            Iridescence.updateShader(player);
-        }
-        else if (entity instanceof MobEntity currEntity) {
-            Iridescence.endConversion(currEntity);
+        switch (entity) {
+            case ServerPlayerEntity player -> Iridescence.updateShader(player);
+            case ChaosPawn pawn -> pawn.unchess();
+            case MobEntity currEntity -> Iridescence.endConversion(currEntity);
+            default -> {
+            }
         }
     }
 
@@ -44,7 +48,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
                 player.setInvulnerable(false);
                 WarpLogic.respawnAlive(player);
             }
-            if (Iridescence.shouldUpdateShader(duration)) {
+            if (Iridescence.shouldUpdateShader(duration, amplifier)) {
                 Iridescence.updateShader(player);
             }
         }

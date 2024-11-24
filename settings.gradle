@@ -4,12 +4,8 @@ pluginManagement {
         maven { url "https://maven.architectury.dev/" }
         maven { url "https://files.minecraftforge.net/maven/" }
         maven {
-            name = 'Sinytra'
-            url = 'https://maven.sinytra.org/'
-        }
-        maven {
             name = 'Forgix Fork'
-            url = 'https://resources.godsted.com/maven'
+            url = 'https://maven.cassian.cc'
         }
         gradlePluginPortal()
     }

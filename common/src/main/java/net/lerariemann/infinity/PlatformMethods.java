@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -30,6 +32,14 @@ public class PlatformMethods {
     public static boolean isFabricApiLoaded(String modID) {
         if (Platform.isFabric()) return Platform.isModLoaded(modID.replace("_", "-"));
         else return Platform.isModLoaded(modID.replace("-", "_"));
+    }
+
+    public static void sendS2CPayload(ServerPlayerEntity entity, CustomPayload payload) {
+        ServerPlayNetworking.send(entity, payload);
+    }
+
+    public static void sendC2SPayload(CustomPayload payload) {
+        ClientPlayNetworking.send(payload);
     }
 
     @ExpectPlatform

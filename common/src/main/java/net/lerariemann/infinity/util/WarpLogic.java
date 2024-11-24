@@ -8,7 +8,6 @@ import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.options.InfinityOptions;
-import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -21,6 +20,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,8 +53,8 @@ public interface WarpLogic {
 
     static void respawnAlive(@Nullable ServerPlayerEntity player) {
         if (player == null) return;
-        player.notInAnyWorld = true;
-        ServerPlayNetworking.send(player, ModPayloads.RESPAWN_ALIVE, ModPayloads.buildPacket(player.getServerWorld()));
+        TeleportTarget targ = player.getRespawnTarget(true, TeleportTarget.NO_OP);
+        player.teleport(targ.world(), targ.pos().x, targ.pos().y, targ.pos().z, targ.yaw(), targ.pitch());
     }
 
     static Identifier getRandomId(MinecraftServer server, Random random) {
