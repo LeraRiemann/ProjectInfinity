@@ -30,7 +30,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.BlockPos;
@@ -40,6 +39,7 @@ import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class ChaosPawn extends HostileEntity implements Angerable {
@@ -79,15 +79,6 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     @Override
     public void chooseRandomAngerTime() {
         this.setAngerTime(TimeHelper.betweenSeconds(20, 40).get(this.random));
-    }
-    @Override
-    public boolean hasCustomName() {
-        return getCustomName() != null;
-    }
-    @Override
-    public Text getName() {
-        Text text = this.getCustomName();
-        return text != null ? ModEntities.removeClickEvents(text) : this.getDefaultName();
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {

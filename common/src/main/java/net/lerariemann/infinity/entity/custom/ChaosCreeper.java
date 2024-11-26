@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.entity.EntityData;
@@ -16,7 +15,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.ChunkSectionPos;
@@ -30,6 +28,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class ChaosCreeper extends CreeperEntity implements TintableEntity {
@@ -76,18 +75,20 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     }
 
     @Override
-    public int getAge() {
-        return age;
-    }
-    @Override
-    public boolean hasCustomName() {
-        return getCustomName() != null;
-    }
-
-    @Override
-    public Text getName() {
-        Text text = this.getCustomName();
-        return text != null ? ModEntities.removeClickEvents(text) : this.getDefaultName();
+    public int getColorNamed() {
+        if (hasCustomName()) {
+            String s = getName().getString();
+            if ("jeb_".equals(s)) {
+                return TintableEntity.getColorJeb(age, getId());
+            }
+            if ("hue".equals(s)) {
+                int n = age + 400*getId();
+                float hue = n / 400.f;
+                hue = hue - (int) hue;
+                return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
+            }
+        }
+        return -1;
     }
 
     @Override
