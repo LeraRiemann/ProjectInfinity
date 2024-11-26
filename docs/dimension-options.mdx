@@ -17,8 +17,9 @@ a player can obtain control over many new features the mod adds to its dimension
 specific type of shader (a color-convolving one), you can paste *any* postprocessing shader here and it will just work,
 as long as it's written correctly (functional if placed in a standalone file)! [Here's some data](https://minecraft.wiki/w/Shader#Post-processing_effects)
 on postprocessing shaders :D
-- `mavity`: this is a multiplier to the dimension's gravity! zero and negative values, although not used by the mod,
-work as you'd expect them to.
+- `mavity`: this is a multiplier to the dimension's gravity! Zero and negative values, although not utilised by the mod naturally,
+can be technically used, but there's no actual support to upside-down gravity at the moment (falling blocks
+ won't land in it, mobs won't stand upside-down, etc.).
 - `portal_color`: used in easter egg dimensions, this option overrides the color all portals to this dimension have.
 Note that it will not recolor existing portals if you change it, but new ones will respect it! the format is the 12-byte color integer.
 - `pitch_shift`: a compound that, if present and correctly formatted, allows the dimensions to shift the pitch of any sound
