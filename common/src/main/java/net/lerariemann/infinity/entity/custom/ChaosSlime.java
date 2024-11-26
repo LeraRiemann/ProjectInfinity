@@ -45,15 +45,15 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
         return age;
     }
 
-
     @Override
     public boolean hasCustomName() {
-        return super.hasCustomName();
+        return getCustomName() != null;
     }
 
     @Override
     public Text getName() {
-        return super.getName();
+        Text text = this.getCustomName();
+        return text != null ? ModEntities.removeClickEvents(text) : this.getDefaultName();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
+import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.entity.EntityData;
@@ -80,12 +81,13 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     }
     @Override
     public boolean hasCustomName() {
-        return super.hasCustomName();
+        return getCustomName() != null;
     }
 
     @Override
     public Text getName() {
-        return super.getName();
+        Text text = this.getCustomName();
+        return text != null ? ModEntities.removeClickEvents(text) : this.getDefaultName();
     }
 
     @Override
