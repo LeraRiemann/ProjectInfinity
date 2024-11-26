@@ -1,7 +1,5 @@
 # Infinite Dimensions
 
-## This branch is under active development to bring it up to the same state as the 1.21.1 version. Bugs are expected!
-
 **Infinite Dimensions** is a mod that reworks and reimagines 20w14infinite - the April Fools' snapshot of 2020 - in Minecraft 1.20.1.
 
 Get a Book and Quill, write anything in it, and throw it into a Nether Portal - and the portal will change its color before your eyes. Beyond lies one of 2.1+ billion dimensions this mod can generate! Whacky terrain, crazy sky colors and funky flora made out of random blocks - there's a possibility to find all this and more on the other side.
@@ -25,6 +23,6 @@ You can do so on my Discord, but make sure to stay respectful and don't expect m
 ### Acknowledgements
 I appreciate [Cassian](https://cassian.cc), for their plethora of bugfixing commits and hosting a server for the mod, and BasiqueEvangelist, for helping with runtime dimension registration on Fabric and his permission to port a part of his code.
 
-The Forge and NeoForge versions of the mod would not be possible without the work of the Sinytra team on the [Forgified Fabric API](https://modrinth.com/mod/forgified-fabric-api), and Commoble's [infiniverse](https://github.com/Commoble/infiniverse/tree/main) library, which was referenced to troubleshoot errors with dimension unfreezing on Forge and runtime dimension ticking on Forge and NeoForge.
+The Forge and NeoForge versions of the mod would not be possible without the work of the Sinytra team on the [Forgified Fabric API](https://modrinth.com/mod/forgified-fabric-api), and Commoble's [infiniverse](https://github.com/Commoble/infiniverse/tree/main) library, which was referenced to troubleshoot errors with dimension unfreezing and runtime dimension ticking on Forge/NeoForge.
 
 This mod also has copyright-free music from [ivory rosewood](https://www.youtube.com/@ivorysoundtracks980) - she's an amazing person, check her out! - that I hid among the dimensions. See if you're able to find it out there, it's pretty rare :D
