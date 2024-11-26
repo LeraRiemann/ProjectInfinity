@@ -27,7 +27,8 @@ played on the client when the player is in them. Has the following subfields:
     - `value`: the actual value to set the pitch to (under the constant type) or add to the pitch (under the add type).
     Negative values work in addition, but keep in mind that Minecraft clamps sound pitch to between 0.5 and 2.0
     (1.0 being the default for most sounds).
-And now to the greatest subset of the options: the ones related to the sky!
+
+And now to the biggest chunk of the options: the ones related to the sky!
 - `sky_type`: i wanted to do more with this, but for now the only value that works in here is `"rainbow"` - it makes the sky
 in the dimension rotate slowly through hues of the color wheel (and completely discards biome-dependent sky and fog colors
 in the process).
@@ -53,3 +54,90 @@ compounds, each compound representing a single moon. The moon-specific options a
     rotates the orbit in a perpendicular direction, lowering its highest point from the zenith.
     - `lunar_velocity`, multiplicative with `time_scale`, defines how fast each moon is relative to the Sun.
     - `lunar_offset` defines the starting position the moon has on its orbit (observed when you execute `/time set 0`).
+
+Here's an example of an options file from the wild, edited a bit for your readability:
+
+```java
+{
+	"mavity": 1.0,
+	"time_scale": 15.83437,
+	"solar_size": 25.333763,
+	"solar_tilt": -167.561,
+	"moons": [
+		{
+			"lunar_size": 16.186508,
+			"lunar_tilt_y": 12.12323,
+			"lunar_tilt_z": 86.85659,
+			"lunar_velocity": 1.3169498,
+			"lunar_offset": 0.6354257,
+			"lunar_tint": 1570424
+		},
+		{
+			"lunar_size": 19.354776,
+			"lunar_tilt_y": -44.114567,
+			"lunar_tilt_z": 62.194595,
+			"lunar_velocity": -1.0008916,
+			"lunar_offset": 0.7587377,
+			"lunar_tint": 12379133
+		},
+		{
+			"lunar_size": 26.861193,
+			"lunar_tilt_y": -49.608643,
+			"lunar_tilt_z": -17.065638,
+			"lunar_velocity": 1.1835625,
+			"lunar_offset": 0.3711853,
+			"lunar_tint": 9905751
+		}
+	],
+	"star_size_base": 0.115367465,
+	"star_size_modifier": 0.01508815,
+	"num_stars": 3362,
+	"pitch_shift": {
+		"type": "constant",
+		"value": 1.9038134
+	},
+	"shader": {
+		"passes": [
+			{
+				"intarget": "minecraft:main",
+				"name": "color_convolve",
+				"outtarget": "swap",
+				"uniforms": [
+					{
+						"values": [
+							0.595786,
+							0.219675,
+							0.073982
+						],
+						"name": "RedMatrix"
+					},
+					{
+						"values": [
+							0.700408,
+							0.579702,
+							0.013294
+						],
+						"name": "GreenMatrix"
+					},
+					{
+						"values": [
+							0.068008,
+							0.297012,
+							0.264795
+						],
+						"name": "BlueMatrix"
+					}
+				]
+			},
+			{
+				"intarget": "swap",
+				"name": "blit",
+				"outtarget": "minecraft:main"
+			}
+		],
+		"targets": [
+			"swap"
+		]
+	}
+}
+```
