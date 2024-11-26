@@ -17,6 +17,8 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -26,6 +28,12 @@ import net.minecraft.world.ServerWorldAccess;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModEntities {
+    public static Text removeClickEvents(Text textComponent) {
+        MutableText mutableText = textComponent.copyContentOnly().setStyle(textComponent.getStyle().withClickEvent(null));
+        for (Text text : textComponent.getSiblings()) mutableText.append(removeClickEvents(text));
+        return mutableText;
+    }
+
     public static void copy(MobEntity from, MobEntity e) {
         e.refreshPositionAndAngles(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch());
         e.setHealth(from.getHealth());

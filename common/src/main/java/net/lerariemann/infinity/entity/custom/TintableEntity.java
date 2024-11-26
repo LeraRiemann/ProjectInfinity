@@ -1,17 +1,11 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import org.joml.Vector3f;
 
-import java.awt.*;
-
 public interface TintableEntity {
-    boolean hasCustomName();
-    Text getName();
     int getId();
-    int getAge();
 
     default Vector3f colorFromInt(int i) {
         float f = (float)(i >> 16 & 0xFF) / 255.0f;

@@ -40,7 +40,9 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     static Registry<StatusEffect> reg = Registries.STATUS_EFFECT;
@@ -75,18 +77,22 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     public ChaosSkeleton(EntityType<? extends SkeletonEntity> entityType, World world) {
         super(entityType, world);
     }
-    @Override
-    public int getAge() {
-        return age;
-    }
-    @Override
-    public boolean hasCustomName() {
-        return super.hasCustomName();
-    }
 
     @Override
-    public Text getName() {
-        return super.getName();
+    public int getColorNamed() {
+        if (hasCustomName()) {
+            String s = getName().getString();
+            if ("jeb_".equals(s)) {
+                return TintableEntity.getColorJeb(age, getId());
+            }
+            if ("hue".equals(s)) {
+                int n = age + 400*getId();
+                float hue = n / 400.f;
+                hue = hue - (int) hue;
+                return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
+            }
+        }
+        return -1;
     }
 
     @Override
