@@ -7,14 +7,14 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
-import net.neoforged.neoforge.common.extensions.IBlockExtension;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class IridescenceLiquidBlockNeoforge extends IridescenceLiquidBlock implements IBlockExtension {
-    public IridescenceLiquidBlockNeoforge(Supplier<? extends FlowableFluid> fluid, Settings properties) {
+public class IridescenceLiquidBlockForge extends IridescenceLiquidBlock implements IClientBlockExtensions {
+    public IridescenceLiquidBlockForge(Supplier<? extends FlowableFluid> fluid, Settings properties) {
         super(fluid, properties);
     }
 

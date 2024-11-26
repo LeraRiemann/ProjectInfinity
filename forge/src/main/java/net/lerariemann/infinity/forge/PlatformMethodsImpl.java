@@ -3,7 +3,13 @@ package net.lerariemann.infinity.forge;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.fluids.IridescenceLiquidBlockForge;
 import net.lerariemann.infinity.fluids.ModFluidsForge;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
@@ -48,16 +54,16 @@ public class PlatformMethodsImpl {
         ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, blockItem.get()));
     }
 
-    public static RegistryObject<ForgeFlowingFluid.Source> getIridescenceStill() {
+    public static RegistrySupplier<ForgeFlowingFluid.Source> getIridescenceStill() {
         return ModFluidsForge.IRIDESCENCE_STILL;
     }
 
-    public static RegistryObject<ForgeFlowingFluid.Flowing> getIridescenceFlowing() {
+    public static RegistrySupplier<ForgeFlowingFluid.Flowing> getIridescenceFlowing() {
         return ModFluidsForge.IRIDESCENCE_FLOWING;
     }
 
     public static RegistrySupplier<FluidBlock> getIridBlockForReg() {
         return ModBlocks.BLOCKS.register("iridescence", () ->
-                new IridescenceLiquidBlockNeoforge(PlatformMethods.getIridescenceStill(), AbstractBlock.Settings.copy(Blocks.WATER)));
+                new IridescenceLiquidBlockForge(PlatformMethods.getIridescenceStill(), AbstractBlock.Settings.copy(Blocks.WATER)));
     }
 }
