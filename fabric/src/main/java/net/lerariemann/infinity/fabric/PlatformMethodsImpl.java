@@ -7,8 +7,13 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.fluids.ModFluidsFabric;
+import net.lerariemann.infinity.iridescence.IridescenceLiquidBlock;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -62,6 +67,11 @@ public class PlatformMethodsImpl {
 
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
         return ModFluidsFabric.IRIDESCENCE_FLOWING;
+    }
+
+    public static RegistrySupplier<FluidBlock> getIridBlockForReg() {
+        return ModBlocks.BLOCKS.register("iridescence", () ->
+                new IridescenceLiquidBlock(PlatformMethods.getIridescenceStill(), AbstractBlock.Settings.copy(Blocks.WATER)));
     }
 
 }

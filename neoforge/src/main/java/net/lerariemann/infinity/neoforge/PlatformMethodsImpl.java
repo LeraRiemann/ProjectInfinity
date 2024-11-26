@@ -4,8 +4,13 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.fluids.IridescenceLiquidBlockNeoforge;
 import net.lerariemann.infinity.fluids.ModFluidsNeoforge;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -65,5 +70,10 @@ public class PlatformMethodsImpl {
 
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
         return ModFluidsNeoforge.IRIDESCENCE_FLOWING;
+    }
+
+    public static RegistrySupplier<FluidBlock> getIridBlockForReg() {
+        return ModBlocks.BLOCKS.register("iridescence", () ->
+                new IridescenceLiquidBlockNeoforge(PlatformMethods.getIridescenceStill(), AbstractBlock.Settings.copy(Blocks.WATER)));
     }
 }
