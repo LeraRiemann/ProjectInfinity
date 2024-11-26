@@ -18,6 +18,7 @@ The file `/config/infinity/infinity.json` is the master file for configuring gam
 * `forceSolidSurface` - setting this to true will disallow non-full blocks from being used as material for the surface of random biomes.
 * `chaosMobsEnabled` - a toggle to enable/disable custom mobs, added in the mod, from naturally spawning.
 * `consumePortalKey` - by default, if you introduce an item requirement to unlock new portals (see below), the item will be consumed on use. Setting this as false prevents this behaviour if you want to make a special portal-creating wand, for example.
+* `disabledUntilReview` - some easter egg dimensions are disabled until a later version to properly integrate them into the mod first (they aren't listed on the wiki yet). You can reenable them with this toggle, if you don't mind deleting their files in a later version to allow them to generate anew in a better state.
 * `maxBiomeCount` - the largest amount of biomes that can be assigned to generate in any random dimension. 6 by default.
 
 ### Portal key
@@ -35,8 +36,9 @@ This string, blank by default, will be added to the book text in the process of 
 ### Root chances
 The *root chances* control how likely it is for the dimension to possess a certain property or generate a certain type of feature.
 
-* `dimension_type` chances control properties that are applied across the whole dimension, i.e. "ultrawarm" means water evaporates like in the Nether, "fixed_time" means if the Sun/Moon exist they won't move, etc. `"fixed_time": 0.25` means 25% of dimensions will have fixed time. You can learn more on the listed properties [here](https://minecraft.wiki/w/Custom_dimension#Dimension_type).
-    * use_shaders: some dimensions have custom shaders which recolor your entire vision for as long as you're in the dimension :D this is the chance they will have it
+* `dimension_type` chances control properties that are applied across the whole dimension, i.e. "ultrawarm" means water evaporates like in the Nether, "fixed_time" means if the Sun/Moon exist they won't move, etc. `"fixed_time": 0.25` means 25% of dimensions will have fixed time. You can learn more on most listed properties [here](https://minecraft.wiki/w/Custom_dimension#Dimension_type), but the mod adds more:
+    * `use_shaders:` some dimensions have custom shaders which recolor your entire vision for as long as you're in the dimension :D this is the chance they will have it
+    * `pitch_shifter:` the chance to get a dimension that will subtly mess with Minecraft's sound system, changing the pitch of all sounds played
 * `noise_settings` chances control properties of the world shape and how the blocks are assigned to it.
     * `randomise_blocks`: the chance to have a random block instead of stone.
     * `randomise_biome_blocks`: the chance to have random blocks instead of dirt and grass.
