@@ -42,15 +42,15 @@ The *root chances* control how likely it is for the dimension to possess a certa
 * `noise_settings` chances control properties of the world shape and how the blocks are assigned to it.
     * `randomise_blocks`: the chance to have a random block instead of stone.
     * `randomise_biome_blocks`: the chance to have random blocks instead of dirt and grass.
-    * `solid_oceans`, solid_lakes: the chance for oceans/lakes to be filled with a random solid block instead of a random fluid. (Currently disabled)
+    * `solid_oceans`, `solid_lakes`: the chance for oceans/lakes to be filled with a random solid block instead of a random fluid. (Currently disabled)
     * `rift_world_chance`: the chance to generate a rift world. Rift worlds have 4 block gaps to the void on every chunk border.
 * `biome` chances control properties that are applied inside a particular biome in a dimension.
     * `use_random_biome`: the chance to make a new random biome instead of choosing one from /modular/.../misc/biomes.json.
     * `use_sparse_vegetation`: the chance for a random biome to have individually standing sparse trees instead of being densely forested.
     * `has_precipitation`: the chance a biome will have rain/snow (otherwise, when it rains, it will just darken the sky like in deserts)
     * `use_particles`: for particles flying in the air, like in warped forests!
-    * `ambient_sound`, mood_sound, additions_sound, music: these are various sounds that can play in a biome. ambient_sound plays on constant loop, mood_sound behaves like cave noises, additions_sound has a chance to randomly play every tick - these three are sort of annoying (especially when it's a horse dying). And music is music! No dying horses there, it's picked from a separate list in which there really is only music.
-    * `use_random_cave`, use_random_canyon: a chance the mod will try to generate a random cave/canyon carver utility. These behave like legacy noodle caves and ravines from before 1.18, however the mod can throw in such wild values that the world becomes shredded.
+    * `ambient_sound`, `mood_sound`, `additions_sound`, `music`: these are various sounds that can play in a biome. ambient_sound plays on constant loop, mood_sound behaves like cave noises, additions_sound has a chance to randomly play every tick - these three are sort of annoying (especially when it's a horse dying). And music is music! No dying horses there, it's picked from a separate list in which there really is only music.
+    * `use_random_cave`, `use_random_canyon`: a chance the mod will try to generate a random cave/canyon carver utility. These behave like legacy noodle caves and ravines from before 1.18, however the mod can throw in such wild values that the world becomes shredded.
 * `features_chances` chances control likelihood of generating a specific feature type. They are independent from one another, i.e. if "shape" and "lake" are both set to 0.5, it means half of all dimensions will have shapes; also half of all dimensions will have lakes; and since these halves are independent, a quarter of all dimensions will have both.
 * `features_rules` chances control properties applied to a specific feature:
     * `generate_vanilla_features`: a master toggle to try generating vanilla stuff - regular ice icebergs, etc. - alongside the "any block the mod wants" icebergs, chances for which are defined in a previous category.
