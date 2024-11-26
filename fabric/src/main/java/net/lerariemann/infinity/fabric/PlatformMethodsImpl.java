@@ -51,4 +51,9 @@ public class PlatformMethodsImpl {
         return ModFluidsFabric.IRIDESCENCE_FLOWING;
     }
 
+    public static RegistrySupplier<FluidBlock> getIridBlockForReg() {
+        return ModBlocks.BLOCKS.register("iridescence", () ->
+                new IridescenceLiquidBlock(PlatformMethods.getIridescenceStill(), AbstractBlock.Settings.copy(Blocks.WATER)));
+    }
+
 }

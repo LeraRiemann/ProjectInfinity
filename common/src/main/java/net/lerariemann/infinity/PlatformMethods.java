@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
@@ -113,4 +114,6 @@ public class PlatformMethods {
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
         throw new AssertionError();
     }
+    @ExpectPlatform
+    public static RegistrySupplier<FluidBlock> getIridBlockForReg() { throw new AssertionError(); }
 }

@@ -55,4 +55,9 @@ public class PlatformMethodsImpl {
     public static RegistryObject<ForgeFlowingFluid.Flowing> getIridescenceFlowing() {
         return ModFluidsForge.IRIDESCENCE_FLOWING;
     }
+
+    public static RegistrySupplier<FluidBlock> getIridBlockForReg() {
+        return ModBlocks.BLOCKS.register("iridescence", () ->
+                new IridescenceLiquidBlockNeoforge(PlatformMethods.getIridescenceStill(), AbstractBlock.Settings.copy(Blocks.WATER)));
+    }
 }
