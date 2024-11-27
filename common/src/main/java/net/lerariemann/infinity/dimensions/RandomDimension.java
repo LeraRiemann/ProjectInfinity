@@ -118,6 +118,7 @@ public class RandomDimension {
     }
 
     void wrap_up(boolean isEasterDim) {
+        if (!isEasterDim) (new DimensionData(this)).save();
         (new RandomInfinityOptions(this, isEasterDim)).save();
         CommonIO.write(data, getStoragePath() + "/dimension", getName() + ".json");
         if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
