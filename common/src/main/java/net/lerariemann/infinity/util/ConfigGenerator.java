@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.util;
 
-import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
@@ -14,7 +13,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.registry.Registries;
@@ -33,8 +31,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.structure.Structure;
-import net.minecraft.world.gen.structure.StructureType;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -345,9 +341,7 @@ public class ConfigGenerator {
 
     public static NbtList genSpawns(Pool<SpawnSettings.SpawnEntry> entries) {
         NbtList lst = new NbtList();
-        entries.getEntries().forEach((entry) -> {
-            lst.add(genEntry(entry));
-        });
+        entries.getEntries().forEach((entry) -> lst.add(genEntry(entry)));
         return lst;
     }
 
