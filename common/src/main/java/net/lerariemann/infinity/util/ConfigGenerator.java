@@ -24,12 +24,13 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.Pool;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.StructureSpawns;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.structure.Structure;
-import net.minecraft.world.gen.structure.StructureType;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,8 +38,8 @@ import java.util.stream.IntStream;
 
 import static net.lerariemann.infinity.util.ConfigManager.getConfigDir;
 
-public class ConfigGenerator {
-    public static <T> NbtCompound wsToCompound(WeighedStructure<T> w) {
+public interface ConfigGenerator {
+    static <T> NbtCompound wsToCompound(WeighedStructure<T> w) {
         NbtCompound res = new NbtCompound();
         NbtList elements = new NbtList();
         int cse = 0;
@@ -75,11 +76,11 @@ public class ConfigGenerator {
         return res;
     }
 
-    public static boolean isLaggy(Block b) {
+    static boolean isLaggy(Block b) {
         return (b.getDefaultState().hasBlockEntity());
     }
 
-    public static boolean isTop(BlockState bs, WorldView w, BlockPos onStone) {
+    static boolean isTop(BlockState bs, WorldView w, BlockPos onStone) {
         try {
             return bs.canPlaceAt(w, onStone);
         }
@@ -87,7 +88,7 @@ public class ConfigGenerator {
             return false;
         }
     }
-    public static boolean isFloat(BlockState bs, WorldView w, BlockPos inAir) {
+    static boolean isFloat(BlockState bs, WorldView w, BlockPos inAir) {
         try {
             return bs.canPlaceAt(w, inAir) && !(bs.getBlock() instanceof FallingBlock);
         }
@@ -95,7 +96,7 @@ public class ConfigGenerator {
             return false;
         }
     }
-    public static boolean isFull(BlockState bs, WorldView w, BlockPos inAir) {
+    static boolean isFull(BlockState bs, WorldView w, BlockPos inAir) {
         return bs.isFullCube(w, inAir);
     }
 
@@ -129,25 +130,33 @@ public class ConfigGenerator {
         return res;
     }
 
-    public static <T> void checkAndAddWS(Map<String, WeighedStructure<T>> m, String key) {
+    static <T> void checkAndAddWS(Map<String, WeighedStructure<T>> m, String key) {
         if (!m.containsKey(key)) m.put(key, new WeighedStructure<>());
     }
 
-    public static void checkAndAddElement(Map<String, WeighedStructure<String>> m, Identifier id) {
+    static void checkAndAddElement(Map<String, WeighedStructure<String>> m, Identifier id) {
         checkAndAddWS(m, id.getNamespace());
         m.get(id.getNamespace()).add(id.toString(), 1.0);
     }
 
-    public static <T extends NbtElement> void checkAndAddElement(Map<String, WeighedStructure<T>> m, String namespace, T elem) {
+    static <T extends NbtElement> void checkAndAddElement(Map<String, WeighedStructure<T>> m, String namespace, T elem) {
         checkAndAddWS(m, namespace);
         m.get(namespace).add(elem, 1.0);
     }
 
-    public static <T> void generate(Registry<T> r, String additionalPath, String name) {
+    static <T> void writeMap(Map<String, WeighedStructure<T>> m, String addpath, String name) {
+        m.keySet().forEach(key -> {
+            if (!m.get(key).keys.isEmpty()) {
+                CommonIO.write(wsToCompound(m.get(key)), getConfigDir()+ "/modular/" + key + "/" + addpath, name + ".json");
+            }
+        });
+    }
+
+    static <T> void generate(Registry<T> r, String additionalPath, String name) {
         generate(r, additionalPath, name, false);
     }
 
-    public static <T> void generate(Registry<T> r, String additionalPath, String name, boolean excludeInfinity) {
+    static <T> void generate(Registry<T> r, String additionalPath, String name, boolean excludeInfinity) {
         Map<String, WeighedStructure<String>> m = new HashMap<>();
         r.getKeys().forEach(key -> {
             String namespace = key.getValue().getNamespace();
@@ -158,7 +167,7 @@ public class ConfigGenerator {
         writeMap(m, additionalPath, name);
     }
 
-    public static void generateParticles() {
+    static void generateParticles() {
         Registry<ParticleType<?>> r = Registries.PARTICLE_TYPE;
         Map<String, WeighedStructure<String>> m = new HashMap<>();
         r.getKeys().forEach(a -> {
@@ -170,7 +179,7 @@ public class ConfigGenerator {
         writeMap(m, "misc", "particles");
     }
 
-    public static void generateBlockTags() {
+    static void generateBlockTags() {
         Map<String, WeighedStructure<String>> tagMap = new HashMap<>();
         Registries.BLOCK.streamTags().forEach(tagKey -> {
             checkAndAddWS(tagMap, tagKey.id().getNamespace());
@@ -179,7 +188,7 @@ public class ConfigGenerator {
         writeMap(tagMap, "misc", "tags");
     }
 
-    public static void generateFluids() {
+    static void generateFluids() {
         Registry<Fluid> r = Registries.FLUID;
         Map<String, WeighedStructure<NbtCompound>> m = new HashMap<>();
         r.getKeys().forEach(a -> {
@@ -192,7 +201,7 @@ public class ConfigGenerator {
         writeMap(m, "blocks", "fluids");
     }
 
-    public static void generateMobs() {
+    static void generateMobs() {
         Map<String, WeighedStructure<NbtCompound>> allMobs = new HashMap<>();
         Registries.ENTITY_TYPE.getKeys().forEach(key -> {
             NbtCompound mob = mob(key);
@@ -214,7 +223,7 @@ public class ConfigGenerator {
         return null;
     }
 
-    public static void generateEffects() {
+    static void generateEffects() {
         Map<String, WeighedStructure<NbtCompound>> allEffects = new HashMap<>();
         Registries.STATUS_EFFECT.getKeys().forEach(key -> checkAndAddElement(allEffects, key.getValue().getNamespace(), effect(key)));
         writeMap(allEffects, "extra", "effects");
@@ -232,7 +241,7 @@ public class ConfigGenerator {
         return res;
     }
 
-    public static void generateBlocks(WorldView w, BlockPos inAir, BlockPos onStone) {
+    static void generateBlocks(WorldView w, BlockPos inAir, BlockPos onStone) {
         Registry<Block> r = Registries.BLOCK;
         Map<String, WeighedStructure<NbtCompound>> blockMap = new HashMap<>();
         Map<String, WeighedStructure<NbtList>> colorPresetMap = new HashMap<>();
@@ -259,7 +268,7 @@ public class ConfigGenerator {
         writeMap(flowerMap, "blocks", "flowers");
     }
 
-    public static void checkColorSet(String block, WeighedStructure<NbtList> w) {
+    static void checkColorSet(String block, WeighedStructure<NbtList> w) {
         String[] colors = {"white", "light_gray", "gray", "black", "brown", "red", "orange", "yellow", "lime", "green",
                 "light_blue", "blue", "cyan", "purple", "magenta", "pink"};
         AtomicInteger successCounter = new AtomicInteger();
@@ -277,15 +286,7 @@ public class ConfigGenerator {
         if (successCounter.get() == colors.length) w.add(colorSet, 1.0);
     }
 
-    public static <T> void writeMap(Map<String, WeighedStructure<T>> m, String addpath, String name) {
-        m.keySet().forEach(key -> {
-            if (!m.get(key).keys.isEmpty()) {
-                CommonIO.write(wsToCompound(m.get(key)), getConfigDir()+ "/modular/" + key + "/" + addpath, name + ".json");
-            }
-        });
-    }
-
-    public static void generateSounds() {
+    static void generateSounds() {
         Registry<SoundEvent> r = Registries.SOUND_EVENT;
         Map<String, WeighedStructure<String>> music = new HashMap<>();
         Map<String, WeighedStructure<String>> sounds = new HashMap<>();
@@ -302,44 +303,67 @@ public class ConfigGenerator {
         writeMap(music, "misc", "music");
     }
 
-//    public static void generateStructures(MinecraftServer server) {
-//        Map<String, WeighedStructure<NbtCompound>> map = new HashMap<>();
-//        Registry<Structure> registry = server.getRegistryManager().get(RegistryKeys.STRUCTURE);
-//        registry.getKeys().forEach(key -> {
-//            if (!key.getValue().getNamespace().contains("infinity")) {
-//                LogManager.getLogger().info(key.getValue());
-//                Optional<Structure> o = registry.getOrEmpty(key);
-//                o.ifPresent(structure -> {
-//                    Optional<NbtElement> c;
-//                    LogManager.getLogger(structure.getType().codec().decoder());
-//                    try {
-//                        c = getStr(structure, structure.getType());
-//                        LogManager.getLogger().info("success");
-//                        c.ifPresent(cc -> LogManager.getLogger().info(cc.asString()));
-//                    } catch (StackOverflowError e) {
-//                        c = Optional.empty();
-//                        LogManager.getLogger().info("failiure");
-//                    }
-//                    c.ifPresent(e -> checkAndAddElement(map, key.getValue().getNamespace(), (NbtCompound) e));
-//                });
-//            }
-//        });
-//        writeMap(map, "extra", "structures");
-//    }
-//
-//    public static <S extends Structure, T extends StructureType<S>> Optional<NbtElement> getStr(Structure structure, T type) {
-//        return type.codec().encoder().encodeStart(NbtOps.INSTANCE, (S) structure).result();
-//    }
+    static void generateStructures(MinecraftServer server) {
+        Map<String, WeighedStructure<NbtCompound>> map = new HashMap<>();
+        Registry<Structure> registry = server.getRegistryManager().get(RegistryKeys.STRUCTURE);
+        registry.getKeys().forEach(key -> {
+            Identifier id = key.getValue();
+            if (!id.getNamespace().equals("infinity") || !id.getPath().contains("_") || id.getPath().equals("indev_house")) {
+                Optional<Structure> o = registry.getOrEmpty(key);
+                o.ifPresent(structure -> {
+                    String step = structure.getFeatureGenerationStep().name().toLowerCase();
+                    String adaptation = structure.getTerrainAdaptation().name().toLowerCase();
+                    NbtCompound overrides = genOverrides(structure.getStructureSpawns());
+                    NbtCompound res = new NbtCompound();
+                    res.putString("id", id.toString());
+                    res.putString("step", step);
+                    res.put("spawn_overrides", overrides);
+                    res.putString("terrain_adaptation", adaptation);
+                    checkAndAddElement(map, id.getNamespace(), res);
+                });
+            }
+        });
+        writeMap(map, "extra", "structures");
+    }
 
-    public static void generateAll(World w, BlockPos inAir, BlockPos onStone) {
+    static NbtCompound genOverrides(Map<SpawnGroup, StructureSpawns> overrides) {
+        NbtCompound res = new NbtCompound();
+        overrides.forEach((key, value) -> res.put(key.name().toLowerCase(), genOverride(value)));
+        return res;
+    }
+
+    static NbtCompound genOverride(StructureSpawns spawns) {
+        NbtCompound res = new NbtCompound();
+        res.putString("bounding_box", spawns.boundingBox().name().toLowerCase());
+        res.put("spawns", genSpawns(spawns.spawns()));
+        return res;
+    }
+
+    static NbtList genSpawns(Pool<SpawnSettings.SpawnEntry> entries) {
+        NbtList lst = new NbtList();
+        entries.getEntries().forEach((entry) -> lst.add(genEntry(entry)));
+        return lst;
+    }
+
+    static NbtCompound genEntry(SpawnSettings.SpawnEntry entry) {
+        NbtCompound res = new NbtCompound();
+        res.putString("type", Registries.ENTITY_TYPE.getId(entry.type).toString());
+        res.putInt("maxCount", entry.maxGroupSize);
+        res.putInt("minCount", entry.minGroupSize);
+        res.putInt("weight", entry.getWeight().getValue());
+        return res;
+    }
+
+    static void generateAll(World w, BlockPos inAir, BlockPos onStone) {
         generateAllNoWorld();
         generateBlocks(w, inAir, onStone);
         MinecraftServer s = Objects.requireNonNull(w.getServer());
         SurfaceRuleScanner.scan(s);
         generate(s.getRegistryManager().get(RegistryKeys.BIOME), "misc", "biomes", true);
+        generateStructures(s);
     }
 
-    public static void generateAllNoWorld() {
+    static void generateAllNoWorld() {
         generateSounds();
         generate(Registries.ITEM, "misc", "items");
         generateParticles();

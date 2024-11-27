@@ -7,6 +7,7 @@ import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
+import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModCriteria;
@@ -147,7 +148,7 @@ public class Iridescence {
 
     public static Identifier getIdForWarp(ServerPlayerEntity player) {
         ServerWorld w = player.getServerWorld().getServer().getOverworld();
-        return InfinityMod.getDimId(new Random(w.getSeed() + w.getTime() / ticksInHour).nextInt());
+        return WarpLogic.getRandomId(new Random(w.getSeed() + w.getTime() / ticksInHour));
     }
 
     public static final Map<EntityType<? extends MobEntity>, RegistrySupplier<? extends EntityType<? extends MobEntity>>> convertibles =

@@ -118,6 +118,7 @@ public class RandomDimension {
     }
 
     void wrap_up(boolean isEasterDim) {
+        if (!isEasterDim) (new DimensionData(this)).save();
         (new RandomInfinityOptions(this, isEasterDim)).save();
         CommonIO.write(data, getStoragePath() + "/dimension", getName() + ".json");
         if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
@@ -318,7 +319,7 @@ public class RandomDimension {
             vanilla_biomes.add(biome);
         }
         else {
-            long id = PROVIDER.rule("longArithmeticEnabled") ? random.nextLong() : random.nextInt();
+            long id = WarpLogic.getRandomSeed(random);
             random_biome_ids.add(id);
             biome = "infinity:biome_" + id;
         }
@@ -353,8 +354,8 @@ public class RandomDimension {
         }
         NbtCompound dictionary = CommonIO.read(InfinityMod.utilPath + "/structure_tags.json");
         Map<String, NbtList> tags = new HashMap<>();
-        for (String s : structure_ids.keySet()) if (dictionary.contains(s)) {
-            for (NbtElement e : (NbtList) Objects.requireNonNull(dictionary.get(s))) {
+        for (String s : structure_ids.keySet()) for (String ss : dictionary.getKeys()) if (s.contains(ss)) {
+            for (NbtElement e : (NbtList) Objects.requireNonNull(dictionary.get(ss))) {
                 String t = e.asString();
                 if (!tags.containsKey(t)) tags.put(t, new NbtList());
                 structure_ids.get(s).forEach(fullname -> tags.get(t).add(NbtString.of(fullname)));

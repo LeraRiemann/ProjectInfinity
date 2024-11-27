@@ -1,6 +1,15 @@
 {
-  "infinity_version": 2000004,
+  "infinity_version": 2000005,
   "easter-type": "chess",
+  "easter-options": {
+    "portal_color": {
+      "type": "checker",
+      "values": [
+        0,
+        16777215
+      ]
+    }
+  },
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 16,

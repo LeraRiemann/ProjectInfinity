@@ -12,6 +12,7 @@ import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 public class ModStructureType {
     public static RegistrySupplier<StructurePieceType> PYRAMID_PIECE;
     public static RegistrySupplier<StructureType<PyramidStructure>> PYRAMID;
+    public static RegistrySupplier<StructureType<SetupperStructure>> SETUPPER;
     public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(MOD_ID, RegistryKeys.STRUCTURE_TYPE);
     public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECES = DeferredRegister.create(MOD_ID, RegistryKeys.STRUCTURE_PIECE);
 
@@ -25,7 +26,8 @@ public class ModStructureType {
     public static void registerStructures() {
         InfinityMod.LOGGER.debug("Registering processors for " + InfinityMod.MOD_ID);
 
-        PYRAMID = STRUCTURE_TYPES.register("pyramid", () -> PyramidStructure.CODEC::codec);
+        PYRAMID = STRUCTURE_TYPES.register("pyramid", () -> () -> PyramidStructure.CODEC);
+        SETUPPER = STRUCTURE_TYPES.register("setupper", () -> () -> SetupperStructure.CODEC);
         PYRAMID_PIECE = register(PyramidGenerator::new, "pypiece");
 
         STRUCTURE_PIECES.register();

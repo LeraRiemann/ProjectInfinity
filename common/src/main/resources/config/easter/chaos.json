@@ -1,6 +1,9 @@
 {
-  "infinity_version": 2000004,
+  "infinity_version": 2000005,
   "easter-options": {
+    "portal_color": {
+      "type": "random_hue"
+    },
     "time_scale": 50.0,
     "sky_type": "rainbow"
   },

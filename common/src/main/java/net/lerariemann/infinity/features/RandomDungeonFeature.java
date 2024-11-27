@@ -3,6 +3,8 @@ package net.lerariemann.infinity.features;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import java.util.function.Predicate;
+
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -18,19 +20,20 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import org.slf4j.Logger;
 
-public class RandomDungeonFeature extends Feature<RandomDungeonFeatureConfig> {
+public class RandomDungeonFeature extends Feature<RandomDungeonFeature.Config> {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final BlockState AIR = Blocks.CAVE_AIR.getDefaultState();
 
-    public RandomDungeonFeature(Codec<RandomDungeonFeatureConfig> codec) {
+    public RandomDungeonFeature(Codec<Config> codec) {
         super(codec);
     }
 
     @Override
-    public boolean generate(FeatureContext<RandomDungeonFeatureConfig> context) {
+    public boolean generate(FeatureContext<Config> context) {
         BlockPos blockPos2;
         int u;
         int t;
@@ -112,6 +115,17 @@ public class RandomDungeonFeature extends Feature<RandomDungeonFeatureConfig> {
             LOGGER.error("Failed to fetch mob spawner entity at ({}, {}, {})", blockPos.getX(), blockPos.getY(), blockPos.getZ());
         }
         return true;
+    }
+
+    public record Config(BlockState mainProvider, BlockState decorationProvider, String mob,
+                                             int size) implements FeatureConfig {
+        public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                (BlockState.CODEC.fieldOf("main_state")).forGetter(a -> a.mainProvider),
+                (BlockState.CODEC.fieldOf("decor_state")).forGetter(a -> a.decorationProvider),
+                (Codec.STRING.fieldOf("mob")).orElse("minecraft:pig").forGetter(a -> a.mob),
+                (Codec.INT.fieldOf("size")).orElse(2).forGetter(a -> a.size)).apply(
+                instance, Config::new));
+
     }
 }
 

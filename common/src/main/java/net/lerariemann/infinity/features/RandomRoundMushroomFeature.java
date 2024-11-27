@@ -7,12 +7,12 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.WorldAccess;
 
 public class RandomRoundMushroomFeature extends RandomMushroomFeature {
-    public RandomRoundMushroomFeature(Codec<RandomMushroomFeatureConfig> codec) {
+    public RandomRoundMushroomFeature(Codec<RandomMushroomFeature.Config> codec) {
         super(codec);
     }
 
     @Override
-    protected void generateCap(WorldAccess world, Random random, BlockPos start, int y, BlockPos.Mutable mutable, RandomMushroomFeatureConfig config) {
+    protected void generateCap(WorldAccess world, Random random, BlockPos start, int y, BlockPos.Mutable mutable, RandomMushroomFeature.Config config) {
         for (int i = y - 3; i <= y; ++i) {
             int j = i < y ? config.foliageRadius() : config.foliageRadius() - 1;
             for (int l = -j; l <= j; ++l) {

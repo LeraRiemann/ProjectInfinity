@@ -25,6 +25,7 @@ public class InfinityMod {
 	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
 	public static Path rootResPath;
 	public static Path utilPath = Path.of("config/infinity/.util");
+	public static boolean longArithmeticEnabled = false;
 	static {
 		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
 		assert mc != null;
@@ -34,7 +35,6 @@ public class InfinityMod {
 	public static Identifier getId(String value){
 		return Identifier.of(MOD_ID, value);
 	}
-
 	public static Identifier getDimId(long value){
 		return getId("generated_" + value);
 	}

@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2001003,
+  "infinity_version": 2001005,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "returnPortalsEnabled": true,
@@ -23,8 +23,10 @@
       "respawn_anchor_works": 1.0,
       "has_raids": 0.5,
       "fixed_time": 0.25,
+      "use_mavity": 0.25,
       "use_shaders": 0.15,
-      "pitch_shift": 0.25
+      "pitch_shift": 0.25,
+      "give_effect": 0.1
     },
     "noise_settings": {
       "randomise_blocks": 0.75,
@@ -84,13 +86,6 @@
     "structures": {
       "spawn_override": 0.0,
       "full_box": 0.5,
-      "ruins_warm": 0.5,
-      "shipwrecks_beach": 0.5,
-      "mineshafts_mesa": 0.5,
-      "portal_overgrown": 0.5,
-      "portal_vines": 0.5,
-      "portal_cold": 0.5,
-      "portal_blackstone": 0.5,
       "triangular_spread": 0.1
     }
   }

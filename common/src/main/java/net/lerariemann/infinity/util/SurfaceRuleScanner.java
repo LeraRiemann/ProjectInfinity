@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class SurfaceRuleScanner {
-    public static void scan(MinecraftServer server) {
+public interface SurfaceRuleScanner {
+    static void scan(MinecraftServer server) {
         Map<String, NbtCompound> map = new HashMap<>();
         Registry<ChunkGeneratorSettings> registry = server.getRegistryManager().get(RegistryKeys.CHUNK_GENERATOR_SETTINGS);
         registry.getKeys().forEach(key -> {
@@ -37,9 +37,9 @@ public class SurfaceRuleScanner {
     }
 }
 
-class Tree{
-    ArrayList<TreeLeaf> registry;
-    HashMap<String, ArrayList<Integer>> biomeLocations;
+    class Tree{
+        ArrayList<TreeLeaf> registry;
+        HashMap<String, ArrayList<Integer>> biomeLocations;
 
     Tree(NbtCompound surfaceRule) {
         registry = new ArrayList<>();

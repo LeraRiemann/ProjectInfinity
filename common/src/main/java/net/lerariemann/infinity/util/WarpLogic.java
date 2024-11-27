@@ -8,6 +8,7 @@ import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -24,9 +25,7 @@ import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 
 public interface WarpLogic {
@@ -57,11 +56,6 @@ public interface WarpLogic {
         player.teleport(targ.getX(), targ.getY(), targ.getZ());
     }
 
-    static Identifier getRandomId(MinecraftServer server, Random random) {
-        return InfinityMod.getDimId(RandomProvider.getProvider(server).rule("longArithmeticEnabled") ?
-                random.nextLong() : random.nextInt());
-    }
-
     static void onInvocationNeedDetected(PlayerEntity player) {
         if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"));
     }
@@ -71,25 +65,11 @@ public interface WarpLogic {
         return (res >= 0) ? res : b + res;
     }
 
-    static long getPortalColorFromId(Identifier id, MinecraftServer server, BlockPos pos) {
-        return switch(id.toString()) {
-            case "minecraft:the_end" -> 0;
-            case "infinity:chaos" -> Color.HSBtoRGB(Objects.requireNonNull(server.getWorld(World.OVERWORLD)).getRandom().nextFloat(),
-                    1.0f, 1.0f);
-            case "infinity:chess" -> (properMod(pos.getX() + pos.getY() + pos.getZ(), 2) == 0 ? 0 : 0xffffff);
-            case "infinity:pride" -> switch(properMod(pos.getX() + pos.getY() + pos.getZ(), 3)) {
-                    case 0 -> 0x77c1de;
-                    case 1 -> 0xdaadb5;
-                    default -> 0xffffff;
-                };
-            default -> defaultColorLogic(id, server);
-        };
-    }
-
-    static int defaultColorLogic(Identifier id, MinecraftServer server) {
-        NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.getOrDefault(id.getPath(), new NbtCompound());
-        int color = (new InfinityOptions(c)).getPortalColor();
-        return (color == -1) ? (int)getNumericFromId(id, server) : color;
+    static PortalColorApplier getPortalColorApplier(Identifier id, MinecraftServer server) {
+        if(id.toString().equals("minecraft:the_end")) return new PortalColorApplier.Simple(0);
+        NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.get(id.getPath());
+        if (c == null) c = InfinityOptions.readData(server, id);
+        return InfinityOptions.extractApplier(c);
     }
 
     static long getNumericFromId(Identifier id, MinecraftServer server) {
@@ -147,6 +127,20 @@ public interface WarpLogic {
     /* Hashes text into dimension ID. */
     static long getDimensionSeed(String text, RandomProvider prov) {
         HashCode f = Hashing.sha256().hashString(text + prov.salt, StandardCharsets.UTF_8);
-        return prov.rule("longArithmeticEnabled") ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
+        return InfinityMod.longArithmeticEnabled ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
+    }
+
+    static long getRandomSeed(java.util.Random random) {
+        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
+    }
+    static long getRandomSeed(Random random) {
+        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
+    }
+
+    static Identifier getRandomId(java.util.Random random) {
+        return InfinityMod.getDimId(getRandomSeed(random));
+    }
+    static Identifier getRandomId(Random random) {
+        return InfinityMod.getDimId(getRandomSeed(random));
     }
 }

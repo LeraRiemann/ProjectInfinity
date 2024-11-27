@@ -33,15 +33,15 @@ public class ModFeatures {
     public static void registerFeatures() {
         InfinityMod.LOGGER.debug("Registering features for " + InfinityMod.MOD_ID);
         RANDOM_END_ISLAND = register("random_end_island", new RandomEndIslandFeature(SingleStateFeatureConfig.CODEC));
-        RANDOM_DUNGEON = register("random_dungeon", new RandomDungeonFeature(RandomDungeonFeatureConfig.CODEC));
-        RANDOM_COLUMNS = register("random_columns", new RandomColumnsFeature(RandomColumnsFeatureConfig.CODEC));
-        RANDOM_FLAT_MUSHROOM = register("random_flat_mushroom", new RandomFlatMushroomFeature(RandomMushroomFeatureConfig.CODEC));
-        RANDOM_ROUND_MUSHROOM = register("random_round_mushroom", new RandomRoundMushroomFeature(RandomMushroomFeatureConfig.CODEC));
-        RANDOM_CEILING_BLOB = register("random_ceiling_blob", new RandomCeilingBlobFeature(RandomCeilingBlobFeatureConfig.CODEC));
-        RANDOM_CUBE = register("random_cube", new RandomCubeFeature(RandomCubeFeatureConfig.CODEC));
-        RANDOM_STAR = register("random_shape", new RandomShapeFeature(RandomShapeFeatureConfig.CODEC));
-        RANDOM_TEXT = register("random_text", new TextFeature(TextFeatureConfig.CODEC));
-        PORTAL_SETUPPER = register("portal_setupper", new RandomPortalSetupper((RandomPortalSetupperConfig.CODEC)));
+        RANDOM_DUNGEON = register("random_dungeon", new RandomDungeonFeature(RandomDungeonFeature.Config.CODEC));
+        RANDOM_COLUMNS = register("random_columns", new RandomColumnsFeature(RandomColumnsFeature.Config.CODEC));
+        RANDOM_FLAT_MUSHROOM = register("random_flat_mushroom", new RandomFlatMushroomFeature(RandomMushroomFeature.Config.CODEC));
+        RANDOM_ROUND_MUSHROOM = register("random_round_mushroom", new RandomRoundMushroomFeature(RandomMushroomFeature.Config.CODEC));
+        RANDOM_CEILING_BLOB = register("random_ceiling_blob", new RandomCeilingBlobFeature(RandomCeilingBlobFeature.Config.CODEC));
+        RANDOM_CUBE = register("random_cube", new RandomCubeFeature(RandomCubeFeature.Config.CODEC));
+        RANDOM_STAR = register("random_shape", new RandomShapeFeature(RandomShapeFeature.Config.CODEC));
+        RANDOM_TEXT = register("random_text", new TextFeature(TextFeature.Config.CODEC));
+        PORTAL_SETUPPER = register("portal_setupper", new RandomPortalSetupper((RandomPortalSetupper.Config.CODEC)));
         FEATURES.register();
     }
 }

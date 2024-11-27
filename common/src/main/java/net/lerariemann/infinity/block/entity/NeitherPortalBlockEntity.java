@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class NeitherPortalBlockEntity extends BlockEntity {
     private final PropertyDelegate propertyDelegate;
     private Identifier dimension;
-    private long portalColor;
+    private int portalColor;
     private boolean isOpen;
 
     public NeitherPortalBlockEntity(BlockPos pos, BlockState state) {
@@ -21,7 +21,7 @@ public class NeitherPortalBlockEntity extends BlockEntity {
         this.propertyDelegate = new PropertyDelegate() {
             public int get(int index) {
                 if (index == 0) {
-                    return (int)(NeitherPortalBlockEntity.this.portalColor);
+                    return NeitherPortalBlockEntity.this.portalColor;
                 }
                 return 0;
             }
@@ -38,11 +38,11 @@ public class NeitherPortalBlockEntity extends BlockEntity {
         };
     }
 
-    public NeitherPortalBlockEntity(BlockPos pos, BlockState state, long i) {
+    public NeitherPortalBlockEntity(BlockPos pos, BlockState state, int i) {
         this(pos, state, i, InfinityMod.getDimId(i));
     }
 
-    public NeitherPortalBlockEntity(BlockPos pos, BlockState state, long i, Identifier id) {
+    public NeitherPortalBlockEntity(BlockPos pos, BlockState state, int i, Identifier id) {
         this(pos, state);
         this.dimension = id;
         this.portalColor = i;
@@ -52,8 +52,7 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     public Identifier getDimension() {
         return this.dimension;
     }
-
-    public long getPortalColor() {
+    public int getPortalColor() {
         return this.portalColor;
     }
 
@@ -62,10 +61,10 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     }
 
     public void setDimension(long c) {
-        setDimension(c, InfinityMod.getDimId(c));
+        setDimension((int)c, InfinityMod.getDimId(c));
     }
 
-    public void setDimension(long c, Identifier i) {
+    public void setDimension(int c, Identifier i) {
         this.portalColor = c;
         this.dimension = i;
     }
@@ -80,9 +79,9 @@ public class NeitherPortalBlockEntity extends BlockEntity {
         tag.putBoolean("Open", this.isOpen);
     }
 
-    public void readNbt(NbtCompound tag) {
-        super.readNbt(tag);
-        this.portalColor = tag.getLong("Dimension");
+    public void readNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(tag, registryLookup);
+        this.portalColor = tag.getInt("Dimension");
         if (tag.contains("DimensionName")) {
             this.dimension = Identifier.tryParse(tag.getString("DimensionName"));
         }

@@ -7,3 +7,4 @@ accessible class net/minecraft/world/gen/surfacebuilder/MaterialRules$BlockMater
 accessible class net/minecraft/world/gen/surfacebuilder/MaterialRules$BlockStateRule
 accessible class net/minecraft/world/gen/surfacebuilder/MaterialRules$SimpleBlockStateRule
 accessible method net/minecraft/entity/effect/StatusEffect <init> (Lnet/minecraft/entity/effect/StatusEffectCategory;I)V
+accessible method net/minecraft/world/gen/structure/Structure getStructurePosition (Lnet/minecraft/world/gen/structure/Structure$Context;)Ljava/util/Optional;

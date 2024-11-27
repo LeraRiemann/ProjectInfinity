@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.features;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
@@ -9,15 +10,17 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 
 public abstract class RandomMushroomFeature
-        extends Feature<RandomMushroomFeatureConfig> {
-    public RandomMushroomFeature(Codec<RandomMushroomFeatureConfig> codec) {
+        extends Feature<RandomMushroomFeature.Config> {
+    public RandomMushroomFeature(Codec<Config> codec) {
         super(codec);
     }
 
-    protected void generateStem(WorldAccess world, Random random, BlockPos pos, RandomMushroomFeatureConfig config, int height, BlockPos.Mutable mutablePos) {
+    protected void generateStem(WorldAccess world, Random random, BlockPos pos, Config config, int height, BlockPos.Mutable mutablePos) {
         for (int i = 0; i < height; ++i) {
             mutablePos.set(pos).move(Direction.UP, i);
             if (world.getBlockState(mutablePos).isOpaqueFullCube(world, mutablePos)) continue;
@@ -33,7 +36,7 @@ public abstract class RandomMushroomFeature
         return i;
     }
 
-    protected boolean canGenerate(WorldAccess world, BlockPos pos, int height, BlockPos.Mutable mutablePos, RandomMushroomFeatureConfig config) {
+    protected boolean canGenerate(WorldAccess world, BlockPos pos, int height, BlockPos.Mutable mutablePos, Config config) {
         int i = pos.getY();
         if (i < world.getBottomY() + 1 || i + height + 1 >= world.getTopY()) {
             return false;
@@ -56,12 +59,12 @@ public abstract class RandomMushroomFeature
     }
 
     @Override
-    public boolean generate(FeatureContext<RandomMushroomFeatureConfig> context) {
+    public boolean generate(FeatureContext<Config> context) {
         BlockPos.Mutable mutable;
         StructureWorldAccess structureWorldAccess = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         Random random = context.getRandom();
-        RandomMushroomFeatureConfig hugeMushroomFeatureConfig = context.getConfig();
+        Config hugeMushroomFeatureConfig = context.getConfig();
         int i = this.getHeight(random, context.getConfig().height());
         if (!this.canGenerate(structureWorldAccess, blockPos, i, mutable = new BlockPos.Mutable(), hugeMushroomFeatureConfig)) {
             return false;
@@ -73,6 +76,18 @@ public abstract class RandomMushroomFeature
 
     protected abstract int getCapSize(int var1, int var2, int var3, int var4);
 
-    protected abstract void generateCap(WorldAccess var1, Random var2, BlockPos var3, int var4, BlockPos.Mutable var5, RandomMushroomFeatureConfig var6);
+    protected abstract void generateCap(WorldAccess var1, Random var2, BlockPos var3, int var4, BlockPos.Mutable var5, Config var6);
+
+    public record Config(BlockStateProvider capProvider, BlockStateProvider stemProvider,
+                                              BlockState validBaseBlock, int foliageRadius,
+                                              int height) implements FeatureConfig {
+        public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                (BlockStateProvider.TYPE_CODEC.fieldOf("cap_provider")).forGetter(a -> a.capProvider),
+                (BlockStateProvider.TYPE_CODEC.fieldOf("stem_provider")).forGetter(a -> a.stemProvider),
+                (BlockState.CODEC.fieldOf("valid_base_block")).forGetter(a -> a.validBaseBlock),
+                (Codec.INT.fieldOf("foliage_radius")).orElse(2).forGetter(a -> a.foliageRadius),
+                (Codec.INT.fieldOf("height")).orElse(5).forGetter(a -> a.height)).apply(
+                instance, Config::new));
+    }
 }
 
