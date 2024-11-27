@@ -328,7 +328,7 @@ public class ConfigGenerator {
 
     public static NbtCompound genOverrides(Map<SpawnGroup, StructureSpawns> overrides) {
         NbtCompound res = new NbtCompound();
-        overrides.forEach((key, value) -> res.put(key.name(), genOverride(value)));
+        overrides.forEach((key, value) -> res.put(key.name().toLowerCase(), genOverride(value)));
         return res;
     }
 
