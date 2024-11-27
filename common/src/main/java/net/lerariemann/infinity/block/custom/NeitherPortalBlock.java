@@ -136,7 +136,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     public static boolean modifyOnInitialCollision(Identifier dimName, World world, BlockPos pos, BlockState state) {
         MinecraftServer server = world.getServer();
         if (dimName.toString().equals("minecraft:random")) {
-            dimName = WarpLogic.getRandomId(server, world.getRandom());
+            dimName = WarpLogic.getRandomId(world.getRandom());
         }
         if (server != null) {
             PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);

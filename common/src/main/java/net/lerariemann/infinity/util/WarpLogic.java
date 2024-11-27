@@ -56,11 +56,6 @@ public interface WarpLogic {
         player.teleport(targ.world(), targ.pos().x, targ.pos().y, targ.pos().z, targ.yaw(), targ.pitch());
     }
 
-    static Identifier getRandomId(MinecraftServer server, Random random) {
-        return InfinityMod.getDimId(RandomProvider.getProvider(server).rule("longArithmeticEnabled") ?
-                random.nextLong() : random.nextInt());
-    }
-
     static void onInvocationNeedDetected(PlayerEntity player) {
         if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"));
     }
@@ -132,6 +127,20 @@ public interface WarpLogic {
     /* Hashes text into dimension ID. */
     static long getDimensionSeed(String text, RandomProvider prov) {
         HashCode f = Hashing.sha256().hashString(text + prov.salt, StandardCharsets.UTF_8);
-        return prov.rule("longArithmeticEnabled") ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
+        return InfinityMod.longArithmeticEnabled ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
+    }
+
+    static long getRandomSeed(java.util.Random random) {
+        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
+    }
+    static long getRandomSeed(Random random) {
+        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
+    }
+
+    static Identifier getRandomId(java.util.Random random) {
+        return InfinityMod.getDimId(getRandomSeed(random));
+    }
+    static Identifier getRandomId(Random random) {
+        return InfinityMod.getDimId(getRandomSeed(random));
     }
 }

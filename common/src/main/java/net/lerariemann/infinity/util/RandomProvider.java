@@ -52,6 +52,7 @@ public class RandomProvider {
         gameRulesInt = new HashMap<>();
         register_all();
         easterizer = new Easterizer(this);
+        InfinityMod.longArithmeticEnabled = rule("longArithmeticEnabled");
     }
 
     void register_all() {

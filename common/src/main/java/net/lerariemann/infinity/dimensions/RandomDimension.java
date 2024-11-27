@@ -319,7 +319,7 @@ public class RandomDimension {
             vanilla_biomes.add(biome);
         }
         else {
-            long id = PROVIDER.rule("longArithmeticEnabled") ? random.nextLong() : random.nextInt();
+            long id = WarpLogic.getRandomSeed(random);
             random_biome_ids.add(id);
             biome = "infinity:biome_" + id;
         }

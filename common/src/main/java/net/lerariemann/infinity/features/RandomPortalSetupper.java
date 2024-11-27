@@ -68,7 +68,7 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupperConfig> {
 
     public boolean generateOnePortal(StructureWorldAccess structureWorldAccess, BlockPos blockPos, Random random,
                                      boolean axis_x, int width, int height, int sol, int soy) {
-        int dim = random.nextInt();
+        long dim = WarpLogic.getRandomSeed(random);
         for (int y = 0; y < height+2; y++) {
             if (y == 0 || y == height+1) for (int l = 0; l < width+2; l++) {
                 setBlockState(structureWorldAccess, bpadd(blockPos, l, y, 0, axis_x), obs);

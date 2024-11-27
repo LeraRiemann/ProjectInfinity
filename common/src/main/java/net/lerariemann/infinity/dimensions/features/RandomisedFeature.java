@@ -5,6 +5,7 @@ import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -23,7 +24,7 @@ public abstract class RandomisedFeature {
     NbtList placement_data;
 
     public RandomisedFeature(RandomFeaturesList lst, String namecore) {
-        this(lst.PROVIDER.rule("longArithmeticEnabled") ? lst.random.nextLong() : lst.random.nextInt(), lst, namecore);
+        this(WarpLogic.getRandomSeed(lst.random), lst, namecore);
     }
 
     public RandomisedFeature(long i, RandomFeaturesList lst, String namecore) {
