@@ -24,7 +24,7 @@ public abstract class PortalColorApplier {
     public static class Simple extends PortalColorApplier {
         public int value;
 
-        Simple(int i) {
+        public Simple(int i) {
             value = i;
         }
 
@@ -37,7 +37,7 @@ public abstract class PortalColorApplier {
     public static class Checker extends PortalColorApplier {
         public NbtList values;
 
-        Checker(NbtList lst) {
+        public Checker(NbtList lst) {
             values = lst;
         }
 
@@ -63,7 +63,7 @@ public abstract class PortalColorApplier {
         float saturation;
         float brightness;
 
-        RandomHue(NbtCompound applierData) {
+        public RandomHue(NbtCompound applierData) {
             saturation = InfinityOptions.test(applierData, "saturation", 1.0f);
             brightness = InfinityOptions.test(applierData, "brightness", 1.0f);
         }

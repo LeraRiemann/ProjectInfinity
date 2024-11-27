@@ -7,6 +7,7 @@ import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -69,11 +70,11 @@ public interface WarpLogic {
         return (res >= 0) ? res : b + res;
     }
 
-    static long getPortalColorFromId(Identifier id, MinecraftServer server, BlockPos pos) {
-        if(id.toString().equals("minecraft:the_end")) return 0;
-        NbtCompound c = InfinityOptions.readData(server, id);
-        if (c.isEmpty()) c = RandomProvider.getProvider(server).easterizer.optionmap.getOrDefault(id.getPath(), new NbtCompound());
-        return InfinityOptions.extractApplier(c).apply(id, server, pos);
+    static PortalColorApplier getPortalColorApplier(Identifier id, MinecraftServer server) {
+        if(id.toString().equals("minecraft:the_end")) return new PortalColorApplier.Simple(0);
+        NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.get(id.getPath());
+        if (c == null) c = InfinityOptions.readData(server, id);
+        return InfinityOptions.extractApplier(c);
     }
 
     static long getNumericFromId(Identifier id, MinecraftServer server) {

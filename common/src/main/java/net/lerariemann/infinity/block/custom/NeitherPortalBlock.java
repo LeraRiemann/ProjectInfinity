@@ -11,6 +11,7 @@ import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
+import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
@@ -244,11 +245,12 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         queue.add(pos);
         BlockPos blockPos;
         Direction.Axis axis = state.get(AXIS);
+        PortalColorApplier applier = WarpLogic.getPortalColorApplier(id, world.getServer());
         while ((blockPos = queue.poll()) != null) {
             set.add(blockPos);
             BlockState blockState = world.getBlockState(blockPos);
             if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof NeitherPortalBlock) {
-                modifyPortalBlock(world, blockPos, axis, id, open);
+                modifyPortalBlock(world, blockPos, axis, id, open, applier.apply(id, world.getServer(), pos));
                 Set<Direction> toCheck = (axis == Direction.Axis.Z) ?
                         Set.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH) :
                         Set.of(Direction.UP, Direction.DOWN, Direction.EAST, Direction.WEST);
@@ -263,8 +265,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     }
 
     /* Sets the portal color, destination and open status for one portal block. */
-    private static void modifyPortalBlock(World world, BlockPos pos, Direction.Axis axis, Identifier id, boolean open) {
-        long color = WarpLogic.getPortalColorFromId(id, world.getServer(), pos);
+    private static void modifyPortalBlock(World world, BlockPos pos, Direction.Axis axis, Identifier id, boolean open,
+                                          int color) {
         world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.get().getDefaultState().with(AXIS, axis));
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity != null) {
@@ -297,7 +299,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         return true;
     }
 
-    /* Create and send S2C packets neseccary for the client to process a freshly added dimension. */
+    /* Create and send S2C packets necessary for the client to process a freshly added dimension. */
     public static void sendNewWorld(ServerPlayerEntity player, Identifier id, RandomDimension d) {
         d.random_biomes.forEach(b -> PlatformMethods.sendS2CPayload(player, new ModPayloads.BiomeAddPayload(InfinityMod.getId(b.name), b.data)));
         PlatformMethods.sendS2CPayload(player, new ModPayloads.WorldAddPayload(id, d.type != null ? d.type.data : new NbtCompound()));
@@ -330,9 +332,9 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             ParticleEffect eff = ParticleTypes.PORTAL;
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof NeitherPortalBlockEntity) {
-                long dim = ((NeitherPortalBlockEntity)blockEntity).getPortalColor();
-                Vec3d vec3d = Vec3d.unpackRgb((int)dim);
-                double color = 1.0D + (dim >> 16 & 0xFF) / 255.0D;
+                int colorInt = ((NeitherPortalBlockEntity)blockEntity).getPortalColor();
+                Vec3d vec3d = Vec3d.unpackRgb(colorInt);
+                double color = 1.0D + (colorInt >> 16 & 0xFF) / 255.0D;
                 eff = new DustParticleEffect(new Vector3f((float)vec3d.x, (float)vec3d.y, (float)vec3d.z), (float)color);
             }
 
@@ -394,8 +396,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());
                 if (blockEntity instanceof NeitherPortalBlockEntity) {
-                    int dim = (int)((NeitherPortalBlockEntity)blockEntity).getPortalColor();
-                    Vec3d c = Vec3d.unpackRgb(dim);
+                    int color = ((NeitherPortalBlockEntity)blockEntity).getPortalColor();
+                    Vec3d c = Vec3d.unpackRgb(color);
                     entity.setAllColors((int)(256 * c.z) + 256 * (int)(256 * c.y) + 65536 * (int)(256 * c.x));
                 }
             }
