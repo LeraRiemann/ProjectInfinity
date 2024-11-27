@@ -3,7 +3,7 @@ package net.lerariemann.infinity.mixin.options;
 import net.lerariemann.infinity.access.GameRendererAccess;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
-import net.lerariemann.infinity.options.ShaderLoader;
+import net.lerariemann.infinity.util.ShaderLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.util.Identifier;

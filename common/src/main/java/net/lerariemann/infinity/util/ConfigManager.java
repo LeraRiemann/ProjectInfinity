@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
-public class ConfigManager {
+public interface ConfigManager {
     static boolean registerConfig(Path fromPath, Path toDirectory) {
         boolean bl = false;
         String path1 = fromPath.toString();
@@ -52,7 +52,7 @@ public class ConfigManager {
         return bl;
     }
 
-    public static boolean compareVersions(Path oldFile, Path newFile) throws IOException {
+    static boolean compareVersions(Path oldFile, Path newFile) throws IOException {
         Path tempfile = Paths.get(Platform.getConfigFolder()+"/.infinity-temp.json");
         int version_old = CommonIO.getVersion(oldFile.toFile());
         Files.copy(newFile, tempfile, REPLACE_EXISTING);
@@ -60,7 +60,7 @@ public class ConfigManager {
         return version_new > version_old;
     }
 
-    public static void unpackDefaultConfigs() {
+    static void unpackDefaultConfigs() {
         AtomicBoolean bl2 = new AtomicBoolean(false);
         try {
             Path path = getConfigDir();
@@ -79,7 +79,7 @@ public class ConfigManager {
         Paths.get(Platform.getConfigFolder()+"/.infinity-temp.json").toFile().delete();
     }
 
-    public static void updateInvocationLock() {
+    static void updateInvocationLock() {
         File invlock = InfinityMod.invocationLock.toFile();
         if (invlock.exists()) {
             try {
@@ -101,11 +101,11 @@ public class ConfigManager {
         }
     }
 
-    public static Path getConfigDir() {
+    static Path getConfigDir() {
         return Path.of("config", InfinityMod.MOD_ID);
     }
 
-    public static void evictOldFiles() {
+    static void evictOldFiles() {
         InfinityMod.LOGGER.info("Evicting old files");
         NbtCompound c = CommonIO.read(InfinityMod.utilPath + "/evicted_files.json");
         NbtList l = c.getList("content", NbtElement.STRING_TYPE);

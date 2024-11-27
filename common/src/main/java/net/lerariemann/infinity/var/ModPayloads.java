@@ -8,7 +8,7 @@ import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.InfinityOptions;
-import net.lerariemann.infinity.options.ShaderLoader;
+import net.lerariemann.infinity.util.ShaderLoader;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;

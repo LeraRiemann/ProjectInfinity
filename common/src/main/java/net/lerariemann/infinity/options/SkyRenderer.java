@@ -47,14 +47,7 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
         }
         return client.world != null && client.world.getDimensionEffects().getSkyType() != DimensionEffects.SkyType.NORMAL;
     }
-    
-    public void finish() {
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.disableBlend();
-        RenderSystem.defaultBlendFunc();
-        matrices.pop();
-        RenderSystem.depthMask(true);
-    }
+
     public void setupOverworldySky() {
         BackgroundRenderer.applyFogColor();
         RenderSystem.depthMask(false);
@@ -122,6 +115,14 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
             renderMoon(i);
         }
         renderStars(fogCallback, rain_alpha);
+    }
+
+    public void finish() {
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.disableBlend();
+        RenderSystem.defaultBlendFunc();
+        matrices.pop();
+        RenderSystem.depthMask(true);
     }
 
     public void rotate_with_velocity(float v, float offset) {

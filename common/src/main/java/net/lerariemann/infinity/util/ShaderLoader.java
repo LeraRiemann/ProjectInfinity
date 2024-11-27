@@ -1,11 +1,10 @@
-package net.lerariemann.infinity.options;
+package net.lerariemann.infinity.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.GameRendererAccess;
 import net.lerariemann.infinity.iridescence.Iridescence;
-import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.resource.ResourcePackManager;
@@ -16,13 +15,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Environment(EnvType.CLIENT)
-public class ShaderLoader {
-    public static String FILENAME = "current.json";
-    public static Path shaderDir(MinecraftClient client) {
+public interface ShaderLoader {
+    String FILENAME = "current.json";
+    static Path shaderDir(MinecraftClient client) {
         return client.getResourcePackDir().resolve("infinity/assets/infinity/shaders");
     }
 
-    public static void reloadShaders(MinecraftClient client, boolean bl) {
+    static void reloadShaders(MinecraftClient client, boolean bl) {
         try {
             load(client);
         } catch (IOException e) {
@@ -49,7 +48,7 @@ public class ShaderLoader {
         m.enable(name);
     }
 
-    private static NbtCompound packMcmeta() {
+    static NbtCompound packMcmeta() {
         NbtCompound res = new NbtCompound();
         NbtCompound pack = new NbtCompound();
         pack.putInt("pack_format", 34);
