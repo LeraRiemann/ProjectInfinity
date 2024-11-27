@@ -65,7 +65,7 @@ public class InfinityOptions {
         return data.contains(key, NbtElement.COMPOUND_TYPE) ? data.getCompound(key) : def;
     }
     public static float test(NbtCompound data, String key, float def) {
-        return data.contains(key, NbtElement.FLOAT_TYPE) ? data.getFloat(key) : def;
+        return data.contains(key, NbtElement.DOUBLE_TYPE) ? data.getFloat(key) : def;
     }
     public static int test(NbtCompound data, String key, int def) {
         return data.contains(key, NbtElement.INT_TYPE) ? data.getInt(key) : def;
@@ -82,64 +82,40 @@ public class InfinityOptions {
         return test(data, "shader", new NbtCompound());
     }
 
+    public double getTimeScale() {
+        return test(data, "time_scale", 1.0);
+    }
+    public double getMavity() {
+        return test(data, "mavity", 1.0);
+    }
+    public Function<Float, Float> getSoundPitch() {
+        return shifter.applier();
+    }
+
+    //sky - common
     public String getSkyType() {
         return test(data, "sky_type", "empty");
     }
+    public float getHorizonShadingRatio() {
+        return test(data, "horizon_shading_ratio", 1.0f);
+    }
 
+    //sun
     public float getSolarSize() {
         return test(data, "solar_size", 30.0f);
     }
-
-    public float getCelestialTilt() {
-        return test(data, "celestial_tilt", -90.0f);
-    }
-
     public float getSolarTilt() {
         return test(data, "solar_tilt", -90.0f);
     }
-
     public Vector3f getSolarTint() {
         int color = test(data, "solar_tint",16777215);
         return new Vector3f((float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f);
     }
-
     public Identifier getSolarTexture() {
         return Identifier.of(test(data, "solar_texture", "textures/environment/sun.png"));
     }
 
-    public Vector3f getStellarColor() {
-        int color = test(data, "stellar_color",16777215);
-        return new Vector3f((float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f);
-    }
-
-    public boolean isMoonCustom() {
-        return data.contains("lunar_texture");
-    }
-
-    public float getCelestialTilesAmount() {
-        return test(data, "celestial_tiles_amount", 1.0f);
-    }
-
-    public float getCelestialNightBrightness() {
-        return test(data, "celestial_night_brightness", 0.0f);
-    }
-
-    public int getCelestialBrightness() {
-        return test(data, "celestial_brightness", 255);
-    }
-
-    public int getCelestialAlpha() {
-        return test(data, "celestial_alpha", 255);
-    }
-
-    public float getCelestialVelocity() {
-        return test(data, "celestial_velocity", 0.0f);
-    }
-
-    public boolean endSkyLike() {
-        return data.contains("end_sky_like") && data.getBoolean("end_sky_like");
-    }
-
+    //stars
     public int getNumStars() {
         return test(data, "num_stars", 1500);
     }
@@ -149,15 +125,24 @@ public class InfinityOptions {
     public float getStarSizeModifier() {
         return test(data, "star_size_modifier", 0.1f);
     }
-
-    public double getTimeScale() {
-        return test(data, "time_scale", 1.0);
+    public float getStellarTiltY() {
+        return test(data, "stellar_tilt_y", -90.0f);
+    }
+    public float getStellarTiltZ() {
+        return test(data, "stellar_tilt_z", 0.0f);
+    }
+    public float getStellarVelocity() {
+        return test(data, "stellar_velocity", 1.0f);
+    }
+    public Vector3f getStellarColor() {
+        int color = test(data, "stellar_color",16777215);
+        return new Vector3f((float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f);
     }
 
-    public double getMavity() {
-        return test(data, "mavity", 1.0);
+    //moons
+    public boolean isMoonCustom() {
+        return data.contains("lunar_texture");
     }
-
     public int getNumMoons() {
         return data.contains("moons") ? data.getList("moons", NbtElement.COMPOUND_TYPE).size() : 1;
     }
@@ -167,42 +152,35 @@ public class InfinityOptions {
     public float fullLunarTest(String key, int i, float def) {
         return lunarTest(key, i) ? ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).getFloat(key) : def;
     }
-
     public float getLunarSize(int i) {
         return fullLunarTest("lunar_size", i, 20.0f);
     }
-
     public float getLunarTiltY(int i) {
-        return fullLunarTest("lunar_tilt_y", i, 0.0f);
+        return fullLunarTest("lunar_tilt_y", i, -90.0f);
     }
-
     public float getLunarTiltZ(int i) {
         return fullLunarTest("lunar_tilt_z", i, 0.0f);
     }
-
     public Vector3f getLunarTint(int i) {
         int color = lunarTest("lunar_tint", i) ? ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).getInt("lunar_tint") : 16777215;
         return new Vector3f((float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f);
     }
-
     public Identifier getLunarTexture(int i) {
         return Identifier.of(lunarTest("lunar_texture", i) ?
                 ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).getString("lunar_texture") : "textures/environment/moon_phases.png");
     }
-
     public float getLunarVelocity(int i) {
         return fullLunarTest("lunar_velocity", i, 1.0f);
     }
-
     public float getLunarOffset(int i) {
         return fullLunarTest("lunar_offset", i, 0.0f);
     }
 
-    public Function<Float, Float> getSoundPitch() {
-        return shifter.applier();
+    //skybox
+    public float getCelestialNightBrightness() {
+        return test(data, "celestial_night_brightness", 0.0f);
     }
-
-    public float getHorizonShadingRatio() {
-        return test(data, "horizon_shading_ratio", 1.0f);
+    public boolean endSkyLike() {
+        return data.contains("end_sky_like") && data.getBoolean("end_sky_like");
     }
 }
