@@ -24,7 +24,7 @@ public record EffectGiver(RegistryEntry<StatusEffect> id, int duration, int ampl
         if (data.contains("id")) return new EffectGiver(effectOf(data.getString("id")),
                 InfinityOptions.test(data, "duration", 300),
                 InfinityOptions.test(data, "amplifier", 0),
-                Math.min(InfinityOptions.test(data, "cooldown", 200), 400));
+                Math.min(InfinityOptions.test(data, "cooldown", 100), 100));
         return new EffectGiver(null, 0,0,200);
     }
 

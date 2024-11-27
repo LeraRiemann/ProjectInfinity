@@ -1,6 +1,6 @@
 {
   "has_precipitation": false,
-  "temperature": 0.0,
+  "temperature": 1.0,
   "downfall": 0.0,
   "effects": {
     "fog_color": 16777215,

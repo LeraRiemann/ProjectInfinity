@@ -12,10 +12,15 @@ import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.minecraft.block.Block;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
+import java.util.Optional;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.PlatformMethods.*;
@@ -23,22 +28,42 @@ import static net.lerariemann.infinity.PlatformMethods.*;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, RegistryKeys.ITEM);
 
-    public static final RegistrySupplier<Item> ALTAR_ITEM = registerBlockItem(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN);
-    public static final RegistrySupplier<Item> ANT_ITEM  = registerBlockItem(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE);
-    public static final RegistrySupplier<Item> BOOK_BOX_ITEM = registerBlockItem(ModBlocks.BOOK_BOX, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
-    public static final RegistrySupplier<Item> CURSOR_ITEM  = registerBlockItem(ModBlocks.CURSOR, ItemGroups.COLORED_BLOCKS, Items.PINK_TERRACOTTA);
-    public static final RegistrySupplier<Item> FOOTPRINT = registerItem("footprint", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
-    public static final RegistrySupplier<Item> FINE_ITEM = registerItem("fine_item", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
-    public static final RegistrySupplier<Item> NETHERITE_SLAB_ITEM  = registerBlockItem(ModBlocks.NETHERITE_SLAB, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
-    public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM  = registerBlockItem(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
-    public static final RegistrySupplier<Item> TIME_BOMB_ITEM = registerBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR);
+    public static final RegistrySupplier<Item> ALTAR_ITEM =
+            registerBlockItem(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN);
+    public static final RegistrySupplier<Item> ANT_ITEM  =
+            registerBlockItem(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE);
+    public static final RegistrySupplier<Item> BOOK_BOX_ITEM =
+            registerBlockItem(ModBlocks.BOOK_BOX, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
+    public static final RegistrySupplier<Item> CURSOR_ITEM  =
+            registerBlockItem(ModBlocks.CURSOR, ItemGroups.COLORED_BLOCKS, Items.PINK_TERRACOTTA);
+    public static final RegistrySupplier<Item> FOOTPRINT =
+            registerItem("footprint", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
+    public static final RegistrySupplier<Item> FINE_ITEM = registerHomeItem();
+    public static final RegistrySupplier<Item> NETHERITE_SLAB_ITEM =
+            registerBlockItem(ModBlocks.NETHERITE_SLAB, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
+    public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM =
+            registerBlockItem(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
+    public static final RegistrySupplier<Item> TIME_BOMB_ITEM =
+            registerBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR);
     public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
-    public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0, 0xFFFFFF, createSpawnEggSettings("chaos_pawn_spawn_egg")));
-    public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = ITEMS.register("chaos_creeper_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_CREEPER, 0x91BD59, 0x78A7FF, createSpawnEggSettings("chaos_creeper_spawn_egg")));
-    public static final RegistrySupplier<Item> CHAOS_SKELETON_SPAWN_EGG = ITEMS.register("chaos_skeleton_spawn_egg", () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_SKELETON, 0xF3CFB9, 0x87A363, createSpawnEggSettings("chaos_skeleton_spawn_egg")));
-    public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = ITEMS.register("chaos_slime_spawn_egg",  () -> new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME, 0xAA77DD, 0xFF66FF, createSpawnEggSettings("chaos_slime_spawn_egg")));
+    public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () ->
+            new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0, 0xFFFFFF,
+                    createSpawnEggSettings()));
+    public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = ITEMS.register("chaos_creeper_spawn_egg", () ->
+            new ArchitecturySpawnEggItem(ModEntities.CHAOS_CREEPER, 0x91BD59, 0x78A7FF,
+                    createSpawnEggSettings()));
+    public static final RegistrySupplier<Item> CHAOS_SKELETON_SPAWN_EGG = ITEMS.register("chaos_skeleton_spawn_egg", () ->
+            new ArchitecturySpawnEggItem(ModEntities.CHAOS_SKELETON, 0xF3CFB9, 0x87A363,
+                    createSpawnEggSettings()));
+    public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = ITEMS.register("chaos_slime_spawn_egg",  () ->
+            new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME, 0xAA77DD, 0xFF66FF,
+                    createSpawnEggSettings()));
     public static final RegistrySupplier<Item> IRIDESCENCE_BUCKET = ITEMS.register("iridescence_bucket", () ->
             new ArchitecturyBucketItem(PlatformMethods.getIridescenceStill(), new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1)));
+    public static final RegistrySupplier<Item> WHITE_MATTER =
+            registerItem("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
+    public static final RegistrySupplier<Item> BLACK_MATTER =
+            registerItem("black_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
 
 
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {
@@ -81,7 +106,18 @@ public class ModItems {
         return registeredItem;
     }
 
-    public static Item.Settings createSpawnEggSettings(String id) {
+    public static RegistrySupplier<Item> registerHomeItem() {
+        Item.Settings settings = new Item.Settings();
+        if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
+            settings = settings.arch$tab(ItemGroups.INGREDIENTS);
+        final Item.Settings homeSettings = settings.component(DataComponentTypes.FOOD,
+                new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of()));
+        RegistrySupplier<Item> registeredItem = ITEMS.register("fine_item", () -> new HomeItem(homeSettings));
+        addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
+        return registeredItem;
+    }
+
+    public static Item.Settings createSpawnEggSettings() {
         return new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
     }
 

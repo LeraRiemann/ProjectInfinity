@@ -69,6 +69,8 @@
   "item.infinity.footprint": "Footprint",
   "item.infinity.fine_item": "A Very Fine Item",
   "item.infinity.iridescence_bucket": "Iridescence Bucket",
+  "item.infinity.black_matter": "Black Matter",
+  "item.infinity.white_matter": "White Matter",
   "lore.infinity.altar": "This block can be crafted by throwing a Lectern into an Infinity Portal. Using a diamond on it will play a fun animation!",
   "lore.infinity.ant": "This strange block rapidly moves, changing White Concrete to Black Concrete and back again, referencing \"Langton's ant\".",
   "lore.infinity.book_box": "This block can be found in the Infinite Library. Using it will give you a randomly generated book based on the block's position.",
