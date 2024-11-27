@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.util;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
@@ -25,9 +26,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.Pool;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.StructureSpawns;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.structure.Structure;
 import net.minecraft.world.gen.structure.StructureType;
 import org.apache.logging.log4j.LogManager;
@@ -307,29 +311,53 @@ public class ConfigGenerator {
         Map<String, WeighedStructure<NbtCompound>> map = new HashMap<>();
         Registry<Structure> registry = server.getRegistryManager().get(RegistryKeys.STRUCTURE);
         registry.getKeys().forEach(key -> {
-            if (!key.getValue().getNamespace().contains("infinity")) {
-                LogManager.getLogger().info(key.getValue());
+            Identifier id = key.getValue();
+            if (!id.getNamespace().equals("infinity") || !id.getPath().contains("_") || id.getPath().equals("indev_house")) {
                 Optional<Structure> o = registry.getOrEmpty(key);
                 o.ifPresent(structure -> {
-                    Optional<NbtElement> c;
-                    LogManager.getLogger(structure.getType().codec().decoder());
-                    try {
-                        c = getStr(structure, structure.getType());
-                        LogManager.getLogger().info("success");
-                        c.ifPresent(cc -> LogManager.getLogger().info(cc.asString()));
-                    } catch (StackOverflowError e) {
-                        c = Optional.empty();
-                        LogManager.getLogger().info("failiure");
-                    }
-                    c.ifPresent(e -> checkAndAddElement(map, key.getValue().getNamespace(), (NbtCompound) e));
+                    String step = structure.getFeatureGenerationStep().name().toLowerCase();
+                    String adaptation = structure.getTerrainAdaptation().name().toLowerCase();
+                    NbtCompound overrides = genOverrides(structure.getStructureSpawns());
+                    NbtCompound res = new NbtCompound();
+                    res.putString("id", id.toString());
+                    res.putString("step", step);
+                    res.put("spawn_overrides", overrides);
+                    res.putString("terrain_adaptation", adaptation);
+                    checkAndAddElement(map, id.getNamespace(), res);
                 });
             }
         });
         writeMap(map, "extra", "structures");
     }
 
-    public static <S extends Structure, T extends StructureType<S>> Optional<NbtElement> getStr(Structure structure, T type) {
-        return type.codec().encoder().encodeStart(NbtOps.INSTANCE, (S) structure).result();
+    public static NbtCompound genOverrides(Map<SpawnGroup, StructureSpawns> overrides) {
+        NbtCompound res = new NbtCompound();
+        overrides.forEach((key, value) -> res.put(key.name(), genOverride(value)));
+        return res;
+    }
+
+    public static NbtCompound genOverride(StructureSpawns spawns) {
+        NbtCompound res = new NbtCompound();
+        res.putString("bounding_box", spawns.boundingBox().name().toLowerCase());
+        res.put("spawns", genSpawns(spawns.spawns()));
+        return res;
+    }
+
+    public static NbtList genSpawns(Pool<SpawnSettings.SpawnEntry> entries) {
+        NbtList lst = new NbtList();
+        entries.getEntries().forEach((entry) -> {
+            lst.add(genEntry(entry));
+        });
+        return lst;
+    }
+
+    public static NbtCompound genEntry(SpawnSettings.SpawnEntry entry) {
+        NbtCompound res = new NbtCompound();
+        res.putString("type", Registries.ENTITY_TYPE.getId(entry.type).toString());
+        res.putInt("maxCount", entry.maxGroupSize);
+        res.putInt("minCount", entry.minGroupSize);
+        res.putInt("weight", entry.getWeight().getValue());
+        return res;
     }
 
     public static void generateAll(World w, BlockPos inAir, BlockPos onStone) {
@@ -338,6 +366,7 @@ public class ConfigGenerator {
         MinecraftServer s = Objects.requireNonNull(w.getServer());
         SurfaceRuleScanner.scan(s);
         generate(s.getRegistryManager().get(RegistryKeys.BIOME), "misc", "biomes", true);
+        generateStructures(s);
     }
 
     public static void generateAllNoWorld() {

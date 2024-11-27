@@ -353,8 +353,8 @@ public class RandomDimension {
         }
         NbtCompound dictionary = CommonIO.read(InfinityMod.utilPath + "/structure_tags.json");
         Map<String, NbtList> tags = new HashMap<>();
-        for (String s : structure_ids.keySet()) if (dictionary.contains(s)) {
-            for (NbtElement e : (NbtList) Objects.requireNonNull(dictionary.get(s))) {
+        for (String s : structure_ids.keySet()) for (String ss : dictionary.getKeys()) if (s.contains(ss)) {
+            for (NbtElement e : (NbtList) Objects.requireNonNull(dictionary.get(ss))) {
                 String t = e.asString();
                 if (!tags.containsKey(t)) tags.put(t, new NbtList());
                 structure_ids.get(s).forEach(fullname -> tags.get(t).add(NbtString.of(fullname)));

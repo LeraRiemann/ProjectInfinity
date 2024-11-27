@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2001003,
+  "infinity_version": 2001005,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "returnPortalsEnabled": true,
@@ -84,13 +84,6 @@
     "structures": {
       "spawn_override": 0.0,
       "full_box": 0.5,
-      "ruins_warm": 0.5,
-      "shipwrecks_beach": 0.5,
-      "mineshafts_mesa": 0.5,
-      "portal_overgrown": 0.5,
-      "portal_vines": 0.5,
-      "portal_cold": 0.5,
-      "portal_blackstone": 0.5,
       "triangular_spread": 0.1
     }
   }
