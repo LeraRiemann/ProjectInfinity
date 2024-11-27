@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.features;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.util.WarpLogic;
@@ -13,13 +14,14 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class RandomPortalSetupper extends Feature<RandomPortalSetupperConfig> {
-    public RandomPortalSetupper(Codec<RandomPortalSetupperConfig> configCodec) {
+public class RandomPortalSetupper extends Feature<RandomPortalSetupper.Config> {
+    public RandomPortalSetupper(Codec<Config> configCodec) {
         super(configCodec);
     }
 
@@ -33,7 +35,7 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupperConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<RandomPortalSetupperConfig> context) {
+    public boolean generate(FeatureContext<Config> context) {
         StructureWorldAccess structureWorldAccess = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         int y = context.getConfig().y();
@@ -93,5 +95,19 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupperConfig> {
                 bpadd(blockPos, sol, soy, i, axis_x),
                 axis_x ? sign : sign.with(Properties.ROTATION, 4));
         return true;
+    }
+
+    public record Config(boolean axis_x, int width, int height, int offset_l, int offset_t,
+                                              int sign_offset_l, int sign_offset_y, int y) implements FeatureConfig {
+        public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                (Codec.BOOL.fieldOf("axis_x")).orElse(Boolean.TRUE).forGetter(a -> a.axis_x),
+                (Codec.INT.fieldOf("width")).orElse(2).forGetter(a -> a.width),
+                (Codec.INT.fieldOf("height")).orElse(3).forGetter(a -> a.height),
+                (Codec.INT.fieldOf("offset_l")).orElse(8).forGetter(a -> a.offset_l),
+                (Codec.INT.fieldOf("offset_t")).orElse(8).forGetter(a -> a.offset_t),
+                (Codec.INT.fieldOf("sign_offset_l")).orElse(0).forGetter(a -> a.sign_offset_l),
+                (Codec.INT.fieldOf("sign_offset_y")).orElse(0).forGetter(a -> a.sign_offset_y),
+                (Codec.INT.fieldOf("y")).orElse(16).forGetter(a -> a.y)).apply(
+                instance, Config::new));
     }
 }

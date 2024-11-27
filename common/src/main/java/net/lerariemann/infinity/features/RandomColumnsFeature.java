@@ -2,34 +2,38 @@ package net.lerariemann.infinity.features;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import org.jetbrains.annotations.Nullable;
 
 public class RandomColumnsFeature
-        extends Feature<RandomColumnsFeatureConfig> {
+        extends Feature<RandomColumnsFeature.Config> {
     private static final ImmutableList<Block> CANNOT_REPLACE_BLOCKS = ImmutableList.of(Blocks.LAVA, Blocks.BEDROCK, Blocks.WATER, Blocks.END_GATEWAY, Blocks.CHEST, Blocks.SPAWNER);
 
-    public RandomColumnsFeature(Codec<RandomColumnsFeatureConfig> codec) {
+    public RandomColumnsFeature(Codec<RandomColumnsFeature.Config> codec) {
         super(codec);
     }
 
     @Override
-    public boolean generate(FeatureContext<RandomColumnsFeatureConfig> context) {
+    public boolean generate(FeatureContext<RandomColumnsFeature.Config> context) {
         int i = context.getGenerator().getSeaLevel();
         BlockPos blockPos = context.getOrigin();
         StructureWorldAccess structureWorldAccess = context.getWorld();
         Random random = context.getRandom();
-        RandomColumnsFeatureConfig randomColumnsFeatureConfig = context.getConfig();
+        Config randomColumnsFeatureConfig = context.getConfig();
         if (!RandomColumnsFeature.canPlaceAt(structureWorldAccess, i, blockPos.mutableCopy())) {
             return false;
         }
@@ -111,6 +115,15 @@ public class RandomColumnsFeature
     private static boolean isAirOrOcean(WorldAccess world, int seaLevel, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
         return blockState.isAir() || (blockState.getBlock() instanceof FluidBlock) && pos.getY() <= seaLevel;
+    }
+
+    public record Config(IntProvider reach, IntProvider height,
+                         BlockStateProvider block) implements FeatureConfig {
+        public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                (IntProvider.createValidatingCodec(0, 3).fieldOf("reach")).forGetter(a -> a.reach),
+                (IntProvider.createValidatingCodec(1, 15).fieldOf("height")).forGetter(a -> a.height),
+                (BlockStateProvider.TYPE_CODEC.fieldOf("block_provider")).forGetter(a -> a.block)).apply(
+                instance, Config::new));
     }
 }
 

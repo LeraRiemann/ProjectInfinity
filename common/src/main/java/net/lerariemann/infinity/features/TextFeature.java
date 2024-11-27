@@ -1,17 +1,21 @@
 package net.lerariemann.infinity.features;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lerariemann.infinity.var.ModMaterialConditions;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 
 import java.util.List;
 
-public class TextFeature extends Feature<TextFeatureConfig> {
-    public TextFeature(Codec<TextFeatureConfig> codec) {
+public class TextFeature extends Feature<TextFeature.Config> {
+    public TextFeature(Codec<Config> codec) {
         super(codec);
     }
 
@@ -30,7 +34,7 @@ public class TextFeature extends Feature<TextFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<TextFeatureConfig> context) {
+    public boolean generate(FeatureContext<Config> context) {
         StructureWorldAccess structureWorldAccess = context.getWorld();
         Random random = context.getRandom();
         BlockPos blockPos = context.getOrigin();
@@ -60,5 +64,14 @@ public class TextFeature extends Feature<TextFeatureConfig> {
             }
         }
         return true;
+    }
+
+    public record Config(BlockStateProvider blockProvider, List<BlockState> replaceable, int orientation, int spacing, String text) implements FeatureConfig {
+        public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                (BlockStateProvider.TYPE_CODEC.fieldOf("block_provider")).forGetter(a -> a.blockProvider),
+                (Codec.list(BlockState.CODEC).fieldOf("replaceable")).forGetter(a -> a.replaceable),
+                (Codec.INT.fieldOf("orientation")).orElse(2).forGetter(a -> a.orientation),
+                (Codec.INT.fieldOf("spacing")).orElse(1).forGetter(a -> a.spacing),
+                (Codec.STRING.fieldOf("text")).forGetter(a -> a.text)).apply(instance, Config::new));
     }
 }
