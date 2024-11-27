@@ -38,7 +38,7 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
     
     public boolean testAndRenderNonOverworldySkies() {
         if (client.world!=null && client.world.getDimensionEffects().getSkyType() == DimensionEffects.SkyType.END) {
-            renderSkybox(Identifier.of("textures/environment/end_sky.png"), 16.0f, 40, 255, false);
+            renderSkybox(Identifier.of("textures/environment/end_sky.png"), 16.0f, 40, 255);
             return true;
         }
         if (options.endSkyLike()) {
@@ -233,18 +233,13 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
         }
     }
     
-    public void renderSkybox(Identifier texture, float copies, int brightness, int alpha, boolean color) {
-        renderSkybox(texture, copies, brightness, brightness, brightness, alpha, color);
+    public void renderSkybox(Identifier texture, float copies, int brightness, int alpha) {
+        renderSkybox(texture, copies, brightness, brightness, brightness, alpha);
     }
-    public void renderSkybox(Identifier texture, float copies, int r, int g, int b, int alpha, boolean color) {
+    public void renderSkybox(Identifier texture, float copies, int r, int g, int b, int alpha) {
         RenderSystem.enableBlend();
         RenderSystem.depthMask(false);
         RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-        if (color) {
-            float f = MathHelper.clamp(MathHelper.cos(world.getSkyAngle(tickDelta) * ((float)Math.PI * 2)) * 2.0f + 0.5f, 
-                    options.getCelestialNightBrightness(), 1.0f);
-            RenderSystem.setShaderColor(f, f, f, 1.0f);
-        }
         RenderSystem.setShaderTexture(0, texture);
         Tessellator tessellator = Tessellator.getInstance();
 

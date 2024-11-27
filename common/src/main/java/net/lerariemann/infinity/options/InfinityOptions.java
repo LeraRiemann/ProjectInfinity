@@ -177,9 +177,6 @@ public class InfinityOptions {
     }
 
     //skybox
-    public float getCelestialNightBrightness() {
-        return test(data, "celestial_night_brightness", 0.0f);
-    }
     public boolean endSkyLike() {
         return data.contains("end_sky_like") && data.getBoolean("end_sky_like");
     }

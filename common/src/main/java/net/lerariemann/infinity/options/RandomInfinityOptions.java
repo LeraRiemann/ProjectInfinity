@@ -31,8 +31,10 @@ public class RandomInfinityOptions {
             shader = CommonIO.readCarefully(InfinityMod.utilPath + "/shader.json", lst);
         }
         data.put("shader", shader);
+        //sun
         data.putFloat("solar_size", (float)(30*r.nextExponential()));
         data.putFloat("solar_tilt", (float)(360*r.nextDouble() - 180));
+        //moons
         int moons = r.nextInt(1, 9);
         NbtList moonslist = new NbtList();
         for (int i = 0; i < moons; i++) {
@@ -46,9 +48,14 @@ public class RandomInfinityOptions {
             moonslist.add(moon);
         }
         data.put("moons", moonslist);
+        //stars
         data.putInt("num_stars", r.nextInt(1000, 4000));
         data.putFloat("star_size_base", (float)(0.1 + r.nextDouble()*0.3));
         data.putFloat("star_size_modifier", (float)(0.03*r.nextExponential()));
+        data.putFloat("stellar_velocity", (float)(r.nextDouble() * 4 - 2));
+        data.putFloat("stellar_tilt_y", (float)(r.nextDouble() * 180 - 90));
+        data.putFloat("stellar_tilt_z", (float)(r.nextDouble() * 180 - 90));
+        //other stuff
         data.putDouble("time_scale", timeScale(r));
         data.putDouble("mavity", prov.roll(r, "use_mavity") ? mavity(r) : 1.0);
         if (prov.roll(r, "pitch_shift")) data.put("pitch_shift", pitchShift(r));
