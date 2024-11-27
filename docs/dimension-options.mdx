@@ -37,6 +37,7 @@ in the process).
 for the sky to stop being darkened by void fog. With 0 it's always darkened, and with 1 - never (which is the case for all
 of the mod's dimensions). The overworld uses 0.03125.
 - `end_sky_like`: setting this to true disables the rendering of stellar bodies completely even in a world with overworld dimension effects.
+- `dawn`: a boolean dictating if skies get shading on sunrise and sunset. They do by default except when they're rainbow.
 - `time_scale`: how fast does the Sun move across the sky! affects most things the day length in minecraft should logically affect,
 including undead mobs burning. 0.0 is fixed time, 1.0 is normal time, negatives make the sun rise in the west.
 - `solar_size`: the size of the Sun :D the Overworld uses 30.0
@@ -51,11 +52,14 @@ compounds, each compound representing a single moon. The moon-specific options a
     rotates the orbit in a perpendicular direction, lowering its highest point from the zenith.
     - `lunar_velocity`, multiplicative with `time_scale`, defines how fast each moon moves.
     - `lunar_offset` defines the starting position the moon has on its orbit (observed when you execute `/time set 0`).
-- `num_stars`: the amount of stars in the night sky. 1500 is the vanilla value.
+- `num_stars`: the amount of stars in the night sky. 1500 is the vanilla value. Needs to be above 0 (to disable the stars, set their
+brightness to 0 instead).
 - `star_size_base` and `star_size_modifier` are the minimum and width of the star size distribution. Actual star sizes are distributed
 uniformly between base and base+modifier. 0.15 and 0.1 are corresponding vanilla options.
 - `stellar_color`: the tint for stars.
 - `stellar_tilt_y`, `stellar_tilt_z`, `stellar_velocity` mirror the lunar options for the movement of the entire star-filled sphere.
+- `star_brightness_day`, `star_brightness_night`: self-explanatory. Need to be between 0 and 1. Vanilla uses 0.0 and 0.5 respectfully,
+and that's a pity, cause stars are very beautiful when `star_brightness_night` is raised to 1.0 :D
 
 Here's an example of an options file from the wild, edited a bit for your readability:
 

@@ -104,7 +104,7 @@ public class ModPayloads {
         }
     }
     public static void receiveStars(StarsRePayLoad payload, Object context) {
-        ((WorldRendererAccess)(client(context).worldRenderer)).projectInfinity$setNeedsStars(true);
+        ((WorldRendererAccess)(client(context).worldRenderer)).infinity$setNeedsStars(true);
     }
 
     public static ShaderRePayload setShaderFromWorld(ServerWorld destination) {

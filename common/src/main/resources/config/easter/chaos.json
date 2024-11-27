@@ -5,7 +5,9 @@
       "type": "random_hue"
     },
     "time_scale": 50.0,
-    "sky_type": "rainbow"
+    "sky_type": "rainbow",
+    "star_brightness_day": 0.5,
+    "star_brightness_night": 1.0
   },
   "easter-type": "chaos",
   "type": "minecraft:noise",

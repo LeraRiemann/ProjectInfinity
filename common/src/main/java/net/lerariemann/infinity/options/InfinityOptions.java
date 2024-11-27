@@ -73,6 +73,9 @@ public class InfinityOptions {
     public static double test(NbtCompound data, String key, double def) {
         return data.contains(key, NbtElement.DOUBLE_TYPE) ? data.getDouble(key) : def;
     }
+    public static boolean test(NbtCompound data, String key, boolean def) {
+        return data.contains(key) ? data.getBoolean(key) : def;
+    }
 
     public boolean isEmpty() {
         return data.isEmpty();
@@ -98,6 +101,12 @@ public class InfinityOptions {
     }
     public float getHorizonShadingRatio() {
         return test(data, "horizon_shading_ratio", 1.0f);
+    }
+    public boolean endSkyLike() {
+        return test(data, "end_sky_like", false);
+    }
+    public boolean hasDawn() {
+        return test(data, "dawn", !getSkyType().equals("rainbow"));
     }
 
     //sun
@@ -133,6 +142,12 @@ public class InfinityOptions {
     }
     public float getStellarVelocity() {
         return test(data, "stellar_velocity", 1.0f);
+    }
+    public float getDayStarBrightness() {
+        return test(data, "star_brightness_day", 0.0f);
+    }
+    public float getNightStarBrightness() {
+        return test(data, "star_brightness_night", 0.5f);
     }
     public Vector3f getStellarColor() {
         int color = test(data, "stellar_color",16777215);
@@ -174,10 +189,5 @@ public class InfinityOptions {
     }
     public float getLunarOffset(int i) {
         return fullLunarTest("lunar_offset", i, 0.0f);
-    }
-
-    //skybox
-    public boolean endSkyLike() {
-        return data.contains("end_sky_like") && data.getBoolean("end_sky_like");
     }
 }

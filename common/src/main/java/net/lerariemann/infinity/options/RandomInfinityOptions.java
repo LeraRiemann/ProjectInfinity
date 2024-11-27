@@ -55,6 +55,10 @@ public class RandomInfinityOptions {
         data.putFloat("stellar_velocity", (float)(r.nextDouble() * 4 - 2));
         data.putFloat("stellar_tilt_y", (float)(r.nextDouble() * 180 - 90));
         data.putFloat("stellar_tilt_z", (float)(r.nextDouble() * 180 - 90));
+        float a = r.nextFloat();
+        float b = r.nextFloat();
+        data.putFloat("star_brightness_day", Math.min(a, b));
+        data.putFloat("star_brightness_night", Math.max(a, b));
         //other stuff
         data.putDouble("time_scale", timeScale(r));
         data.putDouble("mavity", prov.roll(r, "use_mavity") ? mavity(r) : 1.0);

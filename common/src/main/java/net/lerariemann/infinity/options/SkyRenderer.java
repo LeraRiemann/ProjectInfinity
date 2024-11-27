@@ -14,7 +14,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import java.awt.*;
@@ -68,7 +70,7 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
     public void renderRainbowBackground() {
         float main = world.getSkyAngle(tickDelta) * 2;
         int color = Color.getHSBColor(main - (int)main, 1.0f, 1.0f).getRGB();
-        float f = MathHelper.clamp(MathHelper.cos(world.getSkyAngle(tickDelta) * ((float)Math.PI * 2)) * 2.0f + 0.5f, 0.2f, 1.0f);
+        float f = MathHelper.clamp(MathHelper.cos(world.getSkyAngle(tickDelta) * ((float)Math.PI * 2)) * 2.0f + 0.5f, 0.0f, 1.0f);
         renderSingleColorBackground(f * (float)(color >> 16 & 0xFF) / 255.0f, f * (float)(color >> 8 & 0xFF) / 255.0f, f * (float)(color & 0xFF) / 255.0f, 1.0f);
     }
     public void renderSingleColorBackground(float f, float g, float h, float a) {
@@ -81,7 +83,7 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
     public void handleFog() {
         RenderSystem.enableBlend();
         float[] fs = this.world.getDimensionEffects().getFogColorOverride(this.world.getSkyAngle(tickDelta), tickDelta);
-        if (fs != null && !options().getSkyType().equals("rainbow")) handleSunriseFog(fs);
+        if (fs != null && options().hasDawn()) handleSunriseFog(fs);
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
     }
     public void handleSunriseFog(float[] fs) {
@@ -221,7 +223,7 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-tilt_y));
     }
     public void renderStars(Matrix4f matrix4f2, Matrix4f projectionMatrix, Runnable fogCallback, float rain_alpha) {
-        float u = world.getStarBrightness(tickDelta) * rain_alpha;
+        float u = getStarBrightness(tickDelta) * rain_alpha;
         Vector3f color = options.getStellarColor();
         if (u > 0.0f) {
             RenderSystem.setShaderColor(u*color.x, u*color.y, u*color.z, u);
@@ -231,6 +233,38 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
             VertexBuffer.unbind();
             fogCallback.run();
         }
+    }
+    public float getStarBrightness(float tickDelta) {
+        float f = world.getSkyAngle(tickDelta);
+        float g = 1.0F - (MathHelper.cos(f * (float) (Math.PI * 2)) * 2.0F + 0.25F);
+        g = MathHelper.clamp(g, 0.0f, 1.0f);
+        float day = options.getDayStarBrightness();
+        float night = options.getNightStarBrightness();
+        return day + g*g*(night-day);
+    }
+
+    public static BuiltBuffer buildStarsBuffer(Tessellator tessellator, InfinityOptions options) {
+        Random random = Random.create(10842L);
+        int num_stars = options.getNumStars();
+        float distance_to_stars = 100.0F;
+        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
+        for (int star = 0; star < num_stars; star++) {
+            float star_x = random.nextFloat() * 2.0F - 1.0F;
+            float star_y = random.nextFloat() * 2.0F - 1.0F;
+            float star_z = random.nextFloat() * 2.0F - 1.0F;
+            float star_size = options.getStarSizeBase() + random.nextFloat() * options.getStarSizeModifier();
+            float m = MathHelper.magnitude(star_x, star_y, star_z);
+            if (!(m <= 0.010000001F) && !(m >= 1.0F)) {
+                Vector3f star_coords = new Vector3f(star_x, star_y, star_z).normalize(distance_to_stars);
+                float rotation_angle = (float)(random.nextDouble() * (float) Math.PI * 2.0);
+                Quaternionf quaternionf = new Quaternionf().rotateTo(new Vector3f(0.0F, 0.0F, -1.0F), star_coords).rotateZ(rotation_angle);
+                bufferBuilder.vertex(star_coords.add(new Vector3f(star_size, -star_size, 0.0F).rotate(quaternionf)));
+                bufferBuilder.vertex(star_coords.add(new Vector3f(star_size, star_size, 0.0F).rotate(quaternionf)));
+                bufferBuilder.vertex(star_coords.add(new Vector3f(-star_size, star_size, 0.0F).rotate(quaternionf)));
+                bufferBuilder.vertex(star_coords.add(new Vector3f(-star_size, -star_size, 0.0F).rotate(quaternionf)));
+            }
+        }
+        return bufferBuilder.end();
     }
     
     public void renderSkybox(Identifier texture, float copies, int brightness, int alpha) {
