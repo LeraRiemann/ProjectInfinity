@@ -24,9 +24,7 @@ import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 
 public interface WarpLogic {
@@ -72,24 +70,10 @@ public interface WarpLogic {
     }
 
     static long getPortalColorFromId(Identifier id, MinecraftServer server, BlockPos pos) {
-        return switch(id.toString()) {
-            case "minecraft:the_end" -> 0;
-            case "infinity:chaos" -> Color.HSBtoRGB(Objects.requireNonNull(server.getWorld(World.OVERWORLD)).getRandom().nextFloat(),
-                        1.0f, 1.0f);
-            case "infinity:chess" -> (properMod(pos.getX() + pos.getY() + pos.getZ(), 2) == 0 ? 0 : 0xffffff);
-            case "infinity:pride" -> switch(properMod(pos.getX() + pos.getY() + pos.getZ(), 3)) {
-                    case 0 -> 0x77c1de;
-                    case 1 -> 0xdaadb5;
-                    default -> 0xffffff;
-                };
-            default -> defaultColorLogic(id, server);
-        };
-    }
-
-    static int defaultColorLogic(Identifier id, MinecraftServer server) {
-        NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.getOrDefault(id.getPath(), new NbtCompound());
-        int color = (new InfinityOptions(c)).getPortalColor();
-        return (color == -1) ? (int)getNumericFromId(id, server) : color;
+        if(id.toString().equals("minecraft:the_end")) return 0;
+        NbtCompound c = InfinityOptions.readData(server, id);
+        if (c.isEmpty()) c = RandomProvider.getProvider(server).easterizer.optionmap.getOrDefault(id.getPath(), new NbtCompound());
+        return InfinityOptions.extractApplier(c).apply(id, server, pos);
     }
 
     static long getNumericFromId(Identifier id, MinecraftServer server) {

@@ -4,9 +4,11 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
+import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
@@ -16,6 +18,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.Registry;
@@ -99,6 +102,14 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {
+        /* Handle infinity options */
+        InfinityOptions opt = ((InfinityOptionsAccess)getWorld()).infinity$getOptions();
+        if (!opt.effect.isEmpty()) {
+            if (age % opt.effect.cooldown() == 0) {
+                addStatusEffect(new StatusEffectInstance(opt.effect.id(), opt.effect.duration(), opt.effect.amplifier()));
+            }
+        }
+
         /* Handle the warp command */
         if (--this.infinity$ticksUntilWarp == 0L) {
             MinecraftServer s = this.getServerWorld().getServer();

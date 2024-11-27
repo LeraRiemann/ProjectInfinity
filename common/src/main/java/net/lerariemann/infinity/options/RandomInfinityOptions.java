@@ -50,8 +50,9 @@ public class RandomInfinityOptions {
         data.putFloat("star_size_base", (float)(0.1 + r.nextDouble()*0.3));
         data.putFloat("star_size_modifier", (float)(0.03*r.nextExponential()));
         data.putDouble("time_scale", timeScale(r));
-        data.putDouble("mavity", mavity(r));
+        data.putDouble("mavity", prov.roll(r, "use_mavity") ? mavity(r) : 1.0);
         if (prov.roll(r, "pitch_shift")) data.put("pitch_shift", pitchShift(r));
+        if (prov.roll(r, "give_effect")) data.put("effect", effect(r, prov));
     }
 
     public static double timeScale(Random r) {
@@ -64,8 +65,7 @@ public class RandomInfinityOptions {
 
     public static double mavity(Random r) {
         double d = r.nextDouble();
-        if (d < 0.75) return 1.0;
-        if (d < 0.95) return r.nextDouble();
+        if (d < 0.8) return r.nextDouble();
         return 1 / (0.95*r.nextDouble() + 0.05);
     }
 
@@ -103,5 +103,14 @@ public class RandomInfinityOptions {
             }
         }
         return comp;
+    }
+
+    public static NbtCompound effect(Random r, RandomProvider provider) {
+        NbtCompound res = new NbtCompound();
+        String effect = ((NbtCompound)provider.compoundRegistry.get("effects").getRandomElement(r)).getString("Name");
+        int amplifier = Math.min(5, (int)(0.5*r.nextExponential()));
+        res.putString("id", effect);
+        res.putInt("amplifier", amplifier);
+        return res;
     }
 }

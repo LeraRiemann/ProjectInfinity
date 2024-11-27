@@ -1,4 +1,10 @@
 {
+  "infinity_version": 2000005,
+  "easter-options": {
+    "portal_color": {
+      "type": "random"
+    }
+  },
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 0,

@@ -23,8 +23,10 @@
       "respawn_anchor_works": 1.0,
       "has_raids": 0.5,
       "fixed_time": 0.25,
+      "use_mavity": 0.25,
       "use_shaders": 0.15,
-      "pitch_shift": 0.25
+      "pitch_shift": 0.25,
+      "give_effect": 0.1
     },
     "noise_settings": {
       "randomise_blocks": 0.75,

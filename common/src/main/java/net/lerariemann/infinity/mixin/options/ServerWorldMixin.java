@@ -46,7 +46,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<SpecialSpawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
-        infinity$options = InfinityOptions.generate(server, worldKey);
+        infinity$options = InfinityOptions.generate(server, worldKey.getValue());
         DimensionType t = getDimension();
         ((InfinityOptionsAccess)(Object)t).infinity$setOptions(infinity$options);
         infinity$timebombed = 0;
