@@ -79,8 +79,8 @@ public class NeitherPortalBlockEntity extends BlockEntity {
         tag.putBoolean("Open", this.isOpen);
     }
 
-    public void readNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(tag, registryLookup);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         this.portalColor = tag.getInt("Dimension");
         if (tag.contains("DimensionName")) {
             this.dimension = Identifier.tryParse(tag.getString("DimensionName"));

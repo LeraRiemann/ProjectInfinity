@@ -26,8 +26,8 @@ public class ModStructureType {
     public static void registerStructures() {
         InfinityMod.LOGGER.debug("Registering processors for " + InfinityMod.MOD_ID);
 
-        PYRAMID = STRUCTURE_TYPES.register("pyramid", () -> () -> PyramidStructure.CODEC);
-        SETUPPER = STRUCTURE_TYPES.register("setupper", () -> () -> SetupperStructure.CODEC);
+        PYRAMID = STRUCTURE_TYPES.register("pyramid", () -> PyramidStructure.CODEC::codec);
+        SETUPPER = STRUCTURE_TYPES.register("setupper", () -> SetupperStructure.CODEC::codec);
         PYRAMID_PIECE = register(PyramidGenerator::new, "pypiece");
 
         STRUCTURE_PIECES.register();

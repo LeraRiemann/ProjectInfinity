@@ -11,6 +11,7 @@ import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
+import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
@@ -64,7 +65,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
         InfinityOptions opt = ((InfinityOptionsAccess)getWorld()).infinity$getOptions();
         if (!opt.effect.isEmpty()) {
             if (age % opt.effect.cooldown() == 0) {
-                addStatusEffect(new StatusEffectInstance(opt.effect.id(), opt.effect.duration(), opt.effect.amplifier()));
+                addStatusEffect(new StatusEffectInstance(opt.effect.id().value(), opt.effect.duration(), opt.effect.amplifier()));
             }
         }
 

@@ -15,7 +15,7 @@ public record EffectGiver(RegistryEntry<StatusEffect> id, int duration, int ampl
     }
 
     public static RegistryEntry<StatusEffect> effectOf(String id) {
-        RegistryEntry<StatusEffect> entry = Registries.STATUS_EFFECT.entryOf(RegistryKey.of(RegistryKeys.STATUS_EFFECT, Identifier.of(id)));
+        RegistryEntry<StatusEffect> entry = Registries.STATUS_EFFECT.entryOf(RegistryKey.of(RegistryKeys.STATUS_EFFECT, new Identifier(id)));
         if (entry == null || entry.value() instanceof InstantStatusEffect) return null;
         return entry;
     }

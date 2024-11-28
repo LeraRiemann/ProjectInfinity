@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static net.lerariemann.infinity.var.ModPayloads.resourcesReloaded;
+
 @Environment(EnvType.CLIENT)
 public interface ShaderLoader {
     String FILENAME = "current.json";
@@ -44,7 +46,6 @@ public interface ShaderLoader {
         }
     }
 
-    public static boolean resourcesReloaded = Path.of(Platform.getGameFolder() + "/resourcepacks/infinity/assets/infinity/shaders").toFile().exists();
 
     static void load(MinecraftClient client) throws IOException {
         ResourcePackManager m = client.getResourcePackManager();

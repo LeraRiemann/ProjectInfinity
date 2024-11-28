@@ -112,7 +112,7 @@ public class InfinityOptions {
         return new Vector3f((float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f);
     }
     public Identifier getSolarTexture() {
-        return Identifier.of(test(data, "solar_texture", "textures/environment/sun.png"));
+        return new Identifier(test(data, "solar_texture", "textures/environment/sun.png"));
     }
 
     //stars

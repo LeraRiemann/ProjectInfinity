@@ -75,8 +75,8 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     private void infinity$renderEntireSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback) {
         fogCallback.run();
         if (thickFog || hasBlindnessOrDarkness(camera) || SkyRenderer.testCameraCancels(camera)) return;
-        MatrixStack matrices = new MatrixStack();
-        matrices.multiplyPositionMatrix(matrix4f);
+//        MatrixStack matrices = new MatrixStack();
+//        matrices.multiply(matrices);
         SkyRenderer renderer = new SkyRenderer(infinity$options(), client, world,
                 matrices, tickDelta, projectionMatrix,
                 lightSkyBuffer, starsBuffer);

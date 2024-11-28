@@ -2,7 +2,7 @@
   "parent": "infinity:multiverse_root",
   "display": {
     "icon": {
-      "id": "infinity:iridescence_bucket"
+      "item": "infinity:iridescence_bucket"
     },
     "title": {
       "translate": "advancements.infinity.iridescence.title"

@@ -183,16 +183,15 @@ public interface CommonIO {
     }
 
     static String ElementToString(NbtElement base, int t) {
-        return switch (base) {
-            case null -> "!!NULL!!";
-            case NbtCompound nbtCompound -> CompoundToString(nbtCompound, t + 1);
-            case NbtList nbtElements -> ListToString(nbtElements, t + 1);
-            case NbtByte nbtByte -> (nbtByte.byteValue() != 0) ? "true" : "false";
-            case NbtDouble nbtDouble -> String.valueOf(boundsCheck(nbtDouble.floatValue()));
-            case NbtFloat nbtFloat -> String.valueOf(boundsCheck(nbtFloat.floatValue()));
-            case NbtLong nbtLong -> String.valueOf(boundsCheck(nbtLong.longValue()));
-            default -> base.toString();
-        };
+        String str;
+        if (base == null) str = "!!NULL!!";
+        else if (base instanceof NbtCompound) str = CompoundToString((NbtCompound)base, t+1);
+        else if (base instanceof NbtList) str = ListToString((NbtList)base, t+1);
+        else if (base instanceof NbtByte) str = (((NbtByte)base).byteValue() != 0) ? "true" : "false";
+        else if (base instanceof NbtDouble) str = String.valueOf(((NbtDouble) base).floatValue());
+        else if (base instanceof NbtFloat) str = String.valueOf(((NbtFloat) base).floatValue());
+        else str = base.toString();
+        return str;
     }
 
     static float boundsCheck(float base) {

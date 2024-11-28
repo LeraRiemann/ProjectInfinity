@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
@@ -38,7 +37,7 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
     
     public boolean testAndRenderNonOverworldySkies() {
         if (client.world!=null && client.world.getDimensionEffects().getSkyType() == DimensionEffects.SkyType.END) {
-            renderSkybox(Identifier.of("textures/environment/end_sky.png"), 16.0f, 40, 255);
+            renderSkybox(new Identifier("textures/environment/end_sky.png"), 16.0f, 40, 255);
             return true;
         }
         if (options.endSkyLike()) {
@@ -49,7 +48,7 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
     }
 
     public void setupOverworldySky() {
-        BackgroundRenderer.applyFogColor();
+        BackgroundRenderer.setFogBlack();
         RenderSystem.depthMask(false);
         handleSkyBackground();
         handleFog();
@@ -94,7 +93,8 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(i - options.getSolarTilt()));
 
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
         bufferBuilder.vertex(matrix4f, 0.0f, 100.0f, 0.0f).color(fs[0], fs[1], fs[2], fs[3]);
         for (int n = 0; n <= 16; ++n) {
             float o = (float)n * ((float)Math.PI * 2) / 16.0f;
@@ -167,7 +167,8 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
-        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
         bufferBuilder.vertex(matrix4f2, -k, y, -k).texture(0.0f, 0.0f);
         bufferBuilder.vertex(matrix4f2, k, y, -k).texture(1.0f, 0.0f);
         bufferBuilder.vertex(matrix4f2, k, y, k).texture(1.0f, 1.0f);
@@ -195,7 +196,8 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShaderColor(tint.x, tint.y, tint.z, 1.0f);
-        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
         bufferBuilder.vertex(matrix4f2, -k, y, k).texture(p, q);
         bufferBuilder.vertex(matrix4f2, k, y, k).texture(t, q);
         bufferBuilder.vertex(matrix4f2, k, y, -k).texture(t, o);
@@ -221,7 +223,7 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-tilt_y));
     }
     public void renderStars(Matrix4f matrix4f2, Matrix4f projectionMatrix, Runnable fogCallback, float rain_alpha) {
-        float u = world.getStarBrightness(tickDelta) * rain_alpha;
+        float u = world.method_23787(tickDelta) * rain_alpha;
         Vector3f color = options.getStellarColor();
         if (u > 0.0f) {
             RenderSystem.setShaderColor(u*color.x, u*color.y, u*color.z, u);
@@ -262,7 +264,8 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
             }
 
             Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-            BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+            BufferBuilder bufferBuilder = tessellator.getBuffer();
+            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
             bufferBuilder.vertex(matrix4f, -100.0f, -100.0f, -100.0f).texture(0.0f, 0.0f).color(r, g, b, alpha);
             bufferBuilder.vertex(matrix4f, -100.0f, -100.0f, 100.0f).texture(0.0f, copies).color(r, g, b, alpha);
             bufferBuilder.vertex(matrix4f, 100.0f, -100.0f, 100.0f).texture(copies, copies).color(r, g, b, alpha);

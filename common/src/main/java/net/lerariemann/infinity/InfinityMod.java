@@ -1,5 +1,6 @@
 package net.lerariemann.infinity;
 
+import dev.architectury.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.entity.ModEntities;
@@ -26,6 +27,7 @@ public class InfinityMod {
 	public static Path rootResPath;
 	public static Path utilPath = Path.of("config/infinity/.util");
 	public static boolean longArithmeticEnabled = false;
+
 	static {
 		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
 		assert mc != null;

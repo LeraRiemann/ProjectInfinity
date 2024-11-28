@@ -25,7 +25,7 @@ public class RandomStructure {
         random = new Random(i);
         data = (NbtCompound)(b.PROVIDER.compoundRegistry.get("structures").getRandomElement(random));
         type = data.getString("id");
-        name = Identifier.of(type).getPath() + "_" + i;
+        name = new Identifier(type).getPath() + "_" + i;
     }
 
     void save() {
