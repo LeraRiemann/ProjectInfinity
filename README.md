@@ -4,7 +4,7 @@
 
 Get a Book and Quill, write anything in it, and throw it into a Nether Portal - and the portal will change its color before your eyes. Beyond lies one of 2.1+ billion dimensions this mod can generate! Whacky terrain, crazy sky colors and funky flora made out of random blocks - there's a possibility to find all this and more on the other side.
 
-Most features in the mod are fully configurable in terms of their spawning chances and block selection weights. This allows you to easily introduce blocks (mobs, fluids etc.) from other mods to this mod's dimensions - or, say, remove the chance for dimensions where netherite generates instead of stone. I made a detailed [guide](https://lerariemann.neocities.org/var/mod-configuration) on how to use all the config options.
+Most features in the mod are fully configurable in terms of their spawning chances and block selection weights. This allows you to easily introduce blocks (mobs, fluids etc.) from other mods to this mod's dimensions - or, say, remove the chance for dimensions where netherite generates instead of stone. I made a detailed [guide](https://moddedmc.org/en/mod/infinite-dimensions/docs/Configuring-the-mod) on how to use all the config options.
 
 Please make sure to report any problems you have with the mod on its [issue tracker](https://github.com/LeraRiemann/ProjectInfinity/issues) or on my [Discord server](https://discord.gg/NrvaQWV7Qv). By "problems", I mean anything that leads to excessive lag, mass entity spawning, broken datapack creation etc. *under default mod configuration*.
 

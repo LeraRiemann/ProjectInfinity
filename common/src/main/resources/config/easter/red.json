@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2000003,
+  "infinity_version": 2001005,
   "easter-options": {
     "portal_color": 16711680,
     "shader": {
@@ -14,15 +14,15 @@
           "uniforms": [
             {
               "name": "RedMatrix",
-              "values": [ 1.0, 1.0, 1.0 ]
+              "values": [ 1.0, 0.7, 0.7 ]
             },
             {
               "name": "GreenMatrix",
-              "values": [ 0.0, 0.0, 0.0 ]
+              "values": [ 0.0, 0.7, 0.0 ]
             },
             {
               "name": "BlueMatrix",
-              "values": [ 0.0, 0.0, 0.0 ]
+              "values": [ 0.0, 0.0, 0.7 ]
             }
           ]
         },

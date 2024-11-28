@@ -4,7 +4,7 @@
     "srcrgb": "one",
     "dstrgb": "zero"
   },
-  "vertex": "sobel",
+  "vertex": "infinity:sobel_with_colors",
   "fragment": "infinity:color_wheel",
   "attributes": [ "Position" ],
   "samplers": [

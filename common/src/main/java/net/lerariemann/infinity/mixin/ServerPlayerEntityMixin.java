@@ -64,8 +64,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
         /* Handle infinity options */
         InfinityOptions opt = ((InfinityOptionsAccess)getWorld()).infinity$getOptions();
         if (!opt.effect.isEmpty()) {
-            if (age % opt.effect.cooldown() == 0) {
-                addStatusEffect(new StatusEffectInstance(opt.effect.id().value(), opt.effect.duration(), opt.effect.amplifier()));
+            if (getWorld().getTime() % opt.effect.cooldown() == 0) {
+                addStatusEffect(new StatusEffectInstance(opt.effect.id(), opt.effect.duration(), opt.effect.amplifier()));
             }
         }
 

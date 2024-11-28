@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2000005,
+  "infinity_version": 2001005,
   "easter-type": "chess",
   "easter-options": {
     "portal_color": {
@@ -8,7 +8,9 @@
         0,
         16777215
       ]
-    }
+    },
+    "dawn": false,
+    "star_brightness_night": 0.0
   },
   "type": "minecraft:noise",
   "settings": {
