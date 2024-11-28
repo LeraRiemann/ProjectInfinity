@@ -19,7 +19,7 @@
     "hsh": {
       "conditions": {
         "item": {
-          "items": "infinity:fine_item"
+          "items": ["infinity:fine_item"]
         }
       },
       "trigger": "minecraft:consume_item"
