@@ -8,6 +8,8 @@ import net.minecraft.structure.StructurePiecesCollector;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.gen.HeightContext;
+import net.minecraft.world.gen.heightprovider.HeightProvider;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.structure.Structure;
 import net.minecraft.world.gen.structure.StructureType;
@@ -24,17 +26,18 @@ public class TextStructure extends Structure {
             (Codec.STRING.fieldOf("direction")).orElse("random").forGetter(a -> a.dir),
             (Codec.INT.fieldOf("char_spacing")).orElse(1).forGetter(a -> a.char_spacing),
             (Codec.INT.fieldOf("line_spacing")).orElse(1).forGetter(a -> a.line_spacing),
-            (Codec.INT.fieldOf("y")).orElse(80).forGetter(a -> a.y)).apply(instance, TextStructure::new));
+            (HeightProvider.CODEC.fieldOf("y")).forGetter(a -> a.y_provider)).apply(instance, TextStructure::new));
     String text;
     BlockStateProvider block;
     String dir;
     int line_spacing;
     int char_spacing;
-    int y;
+    HeightProvider y_provider;
     TextData.Polarization pol;
 
+
     TextStructure(Structure.Config config, String text, BlockStateProvider block, int pol, String dir,
-                  int line_spacing, int char_spacing, int y) {
+                  int line_spacing, int char_spacing, HeightProvider y_provider) {
         super(config);
         this.text = text;
         this.block = block;
@@ -42,7 +45,7 @@ public class TextStructure extends Structure {
         this.pol = TextData.Polarization.of(pol);
         this.line_spacing = line_spacing;
         this.char_spacing = char_spacing;
-        this.y = y;
+        this.y_provider = y_provider;
     }
 
     public Direction getDir(Structure.Context context) {
@@ -67,7 +70,8 @@ public class TextStructure extends Structure {
 
     private void addPieces(StructurePiecesCollector collector, Structure.Context context) {
         BlockPos centerPos = context.chunkPos().getStartPos().add(8, 0, 8);
-        centerPos = centerPos.up(y - centerPos.getY());
+        int new_y = y_provider.get(context.random(), new HeightContext(context.chunkGenerator(), context.world()));
+        centerPos = centerPos.up(new_y - centerPos.getY());
         int maxsize = 119;
         TextData data = TextData.genData(char_spacing, 2*maxsize, text);
 

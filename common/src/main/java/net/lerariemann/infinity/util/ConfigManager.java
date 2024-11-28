@@ -52,8 +52,12 @@ public interface ConfigManager {
         return bl;
     }
 
+    static Path tempfile() {
+      return Paths.get(Platform.getConfigFolder()+"/.infinity-temp.json");
+    }
+
     static boolean compareVersions(Path oldFile, Path newFile) throws IOException {
-        Path tempfile = Paths.get(Platform.getConfigFolder()+"/.infinity-temp.json");
+        Path tempfile = tempfile();
         int version_old = CommonIO.getVersion(oldFile.toFile());
         Files.copy(newFile, tempfile, REPLACE_EXISTING);
         int version_new = CommonIO.getVersion(tempfile.toFile());

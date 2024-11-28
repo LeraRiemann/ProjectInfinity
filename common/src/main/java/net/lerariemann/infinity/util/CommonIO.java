@@ -191,6 +191,7 @@ public interface CommonIO {
             case NbtDouble nbtDouble -> String.valueOf(boundsCheck(nbtDouble.floatValue()));
             case NbtFloat nbtFloat -> String.valueOf(boundsCheck(nbtFloat.floatValue()));
             case NbtLong nbtLong -> String.valueOf(boundsCheck(nbtLong.longValue()));
+            case NbtString nbtString -> "\"" + nbtString.asString().replace("\"", "\\\"") + "\"";
             default -> base.toString();
         };
     }

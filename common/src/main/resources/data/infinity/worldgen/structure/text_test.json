@@ -9,5 +9,11 @@
     "state": {
       "Name": "minecraft:fire"
     }
+  },
+  "y": {
+    "type": "constant",
+    "value": {
+      "absolute": 80
+    }
   }
 }

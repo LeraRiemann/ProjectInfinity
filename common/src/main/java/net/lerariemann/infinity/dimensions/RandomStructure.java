@@ -23,19 +23,24 @@ public class RandomStructure {
         id = i;
         parent = b;
         random = new Random(i);
-        data = (NbtCompound)(b.PROVIDER.compoundRegistry.get("structures").getRandomElement(random));
-        type = data.getString("id");
-        name = Identifier.of(type).getPath() + "_" + i;
+        addData();
+        fullname = InfinityMod.MOD_ID + ":" + name;
     }
 
-    void save() {
-        fullname = InfinityMod.MOD_ID + ":" + name;
+    void addData() {
+        data = (NbtCompound)(parent.PROVIDER.compoundRegistry.get("structures").getRandomElement(random));
+        type = data.getString("id");
+        name = Identifier.of(type).getPath() + "_" + id;
+
         data.putString("type", "infinity:setupper");
         data.putString("biomes", parent.fullname);
         if (roll("spawn_override")) {
             data.remove("spawn_overrides");
             data.put("spawn_overrides", spawnOverrides());
         }
+    }
+
+    void save() {
         CommonIO.write(data, parent.parent.getStoragePath() + "/worldgen/structure", name + ".json");
         (new RandomStructureSet(this)).save();
     }
