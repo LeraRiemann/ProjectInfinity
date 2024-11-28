@@ -334,7 +334,8 @@ public interface ConfigGenerator {
 
     static NbtCompound genOverride(StructureSpawns spawns) {
         NbtCompound res = new NbtCompound();
-        res.putString("bounding_box", spawns.boundingBox().name().toLowerCase());
+        StructureSpawns.BoundingBox box = spawns.boundingBox();
+        res.putString("bounding_box", box == StructureSpawns.BoundingBox.PIECE ? "piece" : "full");
         res.put("spawns", genSpawns(spawns.spawns()));
         return res;
     }

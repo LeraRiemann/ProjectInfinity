@@ -1,5 +1,5 @@
 {
-  "parent": "infinity:book_box",
+  "parent": "infinity:multiverse_root",
   "criteria": {
     "library": {
       "conditions": {

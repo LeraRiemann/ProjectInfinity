@@ -1,8 +1,6 @@
 {
   "advancements.infinity.multiverse_start.title": "Welcome to the Multiverse",
   "advancements.infinity.multiverse_start.description": "Throw a written book into a Nether Portal",
-  "advancements.infinity.book_box.title": "Delving into Chaos",
-  "advancements.infinity.book_box.description": "Obtain a Box of Infinite Books",
   "advancements.infinity.library.title": "Tomes on Tomes",
   "advancements.infinity.library.description": "Visit the Library of Babel",
   "advancements.infinity.completion.title": "Easter Egg Hunter",
@@ -15,6 +13,8 @@
   "advancements.infinity.who_remains.description": "Survive three minutes in a crumbling world",
   "advancements.infinity.iridescence.title": "Turn On, Tune In, Drop Out",
   "advancements.infinity.iridescence.description": "Embrace the iridescent experience",
+  "advancements.infinity.home_sweet_home.title": "Home Sweet Home",
+  "advancements.infinity.home_sweet_home.description": "Return home in a very fine way",
   "biome.infinity.ant": "Ant's Domain",
   "biome.infinity.chaos": "Abode of Chaos",
   "biome.infinity.chess": "Chess Battle Advanced",
