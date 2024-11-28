@@ -1,0 +1,13 @@
+{
+  "type": "infinity:text",
+  "biomes": "infinity:classic",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "text": "{$n  \"type\": \"infinity:text\",$n  \"biomes\": \"infinity:classic\",$n  \"step\": \"surface_structures\",$n  \"spawn_overrides\": {},$n  \"text\": \"\",$n  \"block\": {$n    \"type\": \"simple_state_provider\",$n    \"state\": {$n      \"Name\": \"minecraft:glowstone\"$n    }$n  }$n}",
+  "block": {
+    "type": "simple_state_provider",
+    "state": {
+      "Name": "minecraft:glowstone"
+    }
+  }
+}

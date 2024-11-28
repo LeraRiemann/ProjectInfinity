@@ -49,11 +49,11 @@ public class RandomText extends RandomisedFeature {
                 }
                 case 1 -> {
                 }
-                default -> {
-                    return genTextRandomly(random);
-                }
                 case 3 -> {
                     return genTextFromFile(random, f, false);
+                }
+                default -> {
+                    return genTextRandomly(random);
                 }
             }
         }

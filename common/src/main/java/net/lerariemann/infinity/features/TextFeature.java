@@ -19,9 +19,13 @@ public class TextFeature extends Feature<TextFeature.Config> {
         super(codec);
     }
 
-    BlockPos mutate(BlockPos blockPos, int ori, int a, int b) {
-        if (((ori/6)%2) == 1) a*=-1;
-        if (((ori/12)%2) == 1) b*=-1;
+    public static BlockPos mutate(BlockPos blockPos, int ori, int a, int b) {
+        if (((ori/6)%2) == 1) {
+            a*=-1;
+        }
+        if (((ori/12)%2) == 1) {
+            b*=-1;
+        }
         List<Integer> lst = switch (ori % 6) {
             case 0 -> List.of(0, a, b);
             case 1 -> List.of(b, 0, a);
