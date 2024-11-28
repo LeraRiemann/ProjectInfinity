@@ -80,7 +80,7 @@ public class ModCriteria {
     }
 
     public static class IridescentCriterion extends AbstractCriterion<EmptyConditions> {
-        static final Identifier ID = InfinityMod.getId("iridescent");
+        static final Identifier ID = InfinityMod.getId("iridescence");
 
         public void trigger(ServerPlayerEntity player) {
             this.trigger(player, (conditions) -> true);
