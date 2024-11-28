@@ -33,6 +33,7 @@
     "mobs.ElderGuardianEntityMixin",
     "mobs.EndermiteEntityMixin",
     "mobs.HoglinEntityMixin",
+    "mobs.LivingEntityMixin",
     "mobs.WaterCreaturesMixin",
     "mobs.passive.AnimalEntityMixin",
     "mobs.passive.FoxEntityMixin",
