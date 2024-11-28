@@ -12,8 +12,6 @@ import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.minecraft.block.Block;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -107,8 +105,7 @@ public class ModItems {
         Item.Settings settings = new Item.Settings();
         if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
             settings = settings.arch$tab(ItemGroups.INGREDIENTS);
-        final Item.Settings homeSettings = settings.component(DataComponentTypes.FOOD,
-                new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of()));
+        final Item.Settings homeSettings = settings.food(new FoodComponent.Builder().build());
         RegistrySupplier<Item> registeredItem = ITEMS.register("fine_item", () -> new HomeItem(homeSettings));
         addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
         return registeredItem;

@@ -50,7 +50,7 @@ public class ModPayloads {
     public static boolean resourcesReloaded = Path.of(Platform.getGameFolder() + "/resourcepacks/infinity/assets/infinity/shaders").toFile().exists();
 
     public static void receiveStars(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        ((WorldRendererAccess)(client.worldRenderer)).projectInfinity$setNeedsStars(true);
+        ((WorldRendererAccess)(client.worldRenderer)).infinity$setNeedsStars(true);
     }
 
     public static void recieveSpawnAlive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {

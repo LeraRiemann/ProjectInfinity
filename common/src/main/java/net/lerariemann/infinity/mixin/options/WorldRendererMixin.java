@@ -31,7 +31,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
 
     @Shadow protected abstract boolean hasBlindnessOrDarkness(Camera camera);
 
-    @Shadow public abstract void render(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2);
+    @Shadow protected abstract void renderStars();
 
     @Unique
     public boolean infinity$needsStars;
