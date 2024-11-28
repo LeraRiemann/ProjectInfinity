@@ -20,25 +20,29 @@ public class TextStructure extends Structure {
             TextStructure.configCodecBuilder(instance),
             (Codec.STRING.fieldOf("text")).forGetter(a -> a.text),
             (BlockStateProvider.TYPE_CODEC.fieldOf("block")).forGetter(a -> a.block),
-            (Codec.INT.fieldOf("polarization")).orElse(0).forGetter(a -> a.pol.id),
-            (Codec.STRING.fieldOf("direction")).orElse("E").forGetter(a -> a.dir),
+            (Codec.INT.fieldOf("polarization")).orElse(2).forGetter(a -> a.pol.id),
+            (Codec.STRING.fieldOf("direction")).orElse("random").forGetter(a -> a.dir),
             (Codec.INT.fieldOf("char_spacing")).orElse(1).forGetter(a -> a.char_spacing),
-            (Codec.INT.fieldOf("line_spacing")).orElse(1).forGetter(a -> a.line_spacing)).apply(instance, TextStructure::new));
+            (Codec.INT.fieldOf("line_spacing")).orElse(1).forGetter(a -> a.line_spacing),
+            (Codec.INT.fieldOf("y")).orElse(80).forGetter(a -> a.y)).apply(instance, TextStructure::new));
     String text;
     BlockStateProvider block;
     String dir;
     int line_spacing;
     int char_spacing;
+    int y;
     TextData.Polarization pol;
 
-    TextStructure(Structure.Config config, String text, BlockStateProvider block, int ori, String dir, int line_spacing, int char_spacing) {
+    TextStructure(Structure.Config config, String text, BlockStateProvider block, int pol, String dir,
+                  int line_spacing, int char_spacing, int y) {
         super(config);
         this.text = text;
         this.block = block;
         this.dir = dir;
-        this.pol = TextData.Polarization.of(ori);
+        this.pol = TextData.Polarization.of(pol);
         this.line_spacing = line_spacing;
         this.char_spacing = char_spacing;
+        this.y = y;
     }
 
     public Direction getDir(Structure.Context context) {
@@ -62,27 +66,30 @@ public class TextStructure extends Structure {
     }
 
     private void addPieces(StructurePiecesCollector collector, Structure.Context context) {
-        BlockPos p = context.chunkPos().getStartPos();
-        int y = context.chunkGenerator().getHeightInGround(p.getX(), p.getZ(),
-                Heightmap.Type.WORLD_SURFACE_WG, context.world(), context.noiseConfig());
-        if (context.world().getTopY() - y < 16) y = context.world().getBottomY() + context.world().getHeight()/2;
-        p = p.up(y - p.getY());
-        int maxsize = 196;
-        TextData data = TextData.genData(char_spacing, maxsize, text);
-        for (int i = 0; i < data.getLines(); i++) {
+        BlockPos centerPos = context.chunkPos().getStartPos().add(8, 0, 8);
+        centerPos = centerPos.up(y - centerPos.getY());
+        int maxsize = 119;
+        TextData data = TextData.genData(char_spacing, 2*maxsize, text);
+
+        int line_height = 8+line_spacing;
+        int length = Math.min(2*maxsize, data.longest_line());
+        int height = Math.min(2*maxsize, line_height*data.getLineCount());
+
+        Direction dir = getDir(context);
+        int ori = TextData.getOri(pol, dir);
+        for (int i = 0; i < data.getLineCount(); i++) {
             for (int j = 0; j < data.getLineLen(i); j++) {
-                int line = i*(8+line_spacing);
+                int line = -height/2 + i*line_height;
                 if (line > maxsize) {
                     break;
                 }
-                int len = data.offsetMap().get(i).get(j);
+                int len = -length/2 + data.offsetMap().get(i).get(j);
                 List<Integer> lst = TextData.storage.get(data.charMap().get(i).get(j));
                 if (lst == null) {
                     continue;
                 }
-                Direction dir = getDir(context);
-                BlockPos letterOrigin = p.add(TextData.offset(line, len, pol, dir));
-                collector.addPiece(LetterPiece.of(letterOrigin, dir, pol, lst, block));
+                BlockPos letterOrigin = TextData.mutate(centerPos, ori, line, len);
+                collector.addPiece(LetterPiece.of(letterOrigin, ori, lst, block));
             }
         }
     }

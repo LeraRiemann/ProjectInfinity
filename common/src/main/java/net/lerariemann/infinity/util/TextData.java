@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.util;
 
-import net.lerariemann.infinity.features.TextFeature;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -10,7 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public record TextData(int longest_line, List<List<Integer>> offsetMap, List<List<Character>> charMap) {
-    public int getLines() {
+    public int getLineCount() {
         return offsetMap.size();
     }
     public int getLineLen(int i) {
@@ -45,24 +44,45 @@ public record TextData(int longest_line, List<List<Integer>> offsetMap, List<Lis
         return blockPos.add(lst.get(0), lst.get(1), lst.get(2));
     }
 
-    public static BlockPos offset(int down, int along, Polarization pol) { //for structures as they introduce symmetry
-        return switch (pol) { // direction = positive x
-            case FLAT -> new BlockPos(along, 0, down);
-            case FLAT_REVERSE -> new BlockPos(along, 0, -down);
-            case STANDING -> new BlockPos(along, -down, 0);
-            case STANDING_REVERSE -> new BlockPos(along, down, 0);
-            case UP -> new BlockPos(0, along, -down);
-            case DOWN -> new BlockPos(0, -along, down);
+    public static BlockPos mutate(BlockPos blockPos, int ori, int a, int b, int c, int amax, int bmax, int cmax) {
+        if (((ori/6)%2) == 1) {
+            a = amax - a;
+            c = cmax - c;
+        }
+        if (((ori/12)%2) == 1) {
+            b = bmax - b;
+            c = cmax - c;
+        }
+        List<Integer> lst = switch (ori % 6) {
+            case 0 -> List.of(c, a, b);
+            case 1 -> List.of(b, c, a);
+            case 2 -> List.of(a, b, c);
+            case 3 -> List.of(c, b, a);
+            case 4 -> List.of(a, c, b);
+            default -> List.of(b, a, c);
+        };
+        return blockPos.add(lst.get(0), lst.get(1), lst.get(2));
+    }
+
+    public static int getOri(Polarization pol, Direction dir) {
+        return axis(pol, dir) + (isDownPos(pol, dir) ? 0 : 6) + (isAlongPos(pol, dir) ? 0 : 12);
+    }
+    static int axis(Polarization pol, Direction dir) {
+        boolean x = dir.getAxis().equals(Direction.Axis.X);
+        if (pol.isVertical()) return x ? 3 : 2;
+        if (x) return pol.isFlat() ? 1 : 5;
+        return pol.isFlat() ? 4 : 0;
+    }
+    static boolean isDownPos(Polarization pol, Direction dir) {
+        return !pol.isPositive() ^ switch (pol.toPositive()) {
+            case FLAT -> dir.equals(Direction.EAST) || dir.equals(Direction.NORTH);
+            case UP -> dir.equals(Direction.SOUTH) || dir.equals(Direction.WEST);
+            default -> false; //STANDING
         };
     }
-    public static BlockPos offset(int down, int along, Polarization pol, Direction dir) {
-        BlockPos offset = offset(down, along, pol);
-        return switch (dir) {
-            case Direction.WEST -> new BlockPos(-offset.getX(), offset.getY(), -offset.getZ());
-            case Direction.SOUTH -> new BlockPos(-offset.getZ(), offset.getY(), offset.getX());
-            case Direction.NORTH -> new BlockPos(offset.getZ(), offset.getY(), -offset.getX());
-            default -> offset;
-        };
+    static boolean isAlongPos(Polarization pol, Direction dir) {
+        if (pol.isVertical()) return pol.isPositive();
+        return dir.getDirection().equals(Direction.AxisDirection.POSITIVE);
     }
 
     public enum Polarization {
@@ -86,6 +106,19 @@ public record TextData(int longest_line, List<List<Integer>> offsetMap, List<Lis
                 default -> FLAT;
             };
         }
+        public boolean isVertical() {
+            return id > 3;
+        }
+        public boolean isFlat() {
+            return id < 2;
+        }
+        public boolean isPositive() {
+            return id%2 == 0;
+        }
+        public Polarization toPositive() {
+            if (isPositive()) return this;
+            return of(id - 1);
+        }
     }
 
     public static TextData genData(int char_spacing, int max_width, String text) {
@@ -98,6 +131,7 @@ public record TextData(int longest_line, List<List<Integer>> offsetMap, List<Lis
         textmap.add(new ArrayList<>());
         charmap.add(new ArrayList<>());
         int i = 0;
+        boolean lineWrap = false;
         while (i < text.length()) {
             bl = false;
             Character c = text.charAt(i);
@@ -105,10 +139,12 @@ public record TextData(int longest_line, List<List<Integer>> offsetMap, List<Lis
                 if (i+1 < text.length() && (Objects.equals(text.charAt(i+1), 'n'))) {
                     i+=1;
                     bl = true;
+                    lineWrap = false;
                 }
             }
-            if (x == 0 && c.equals(' ')) {
+            if (lineWrap && x == 0 && c.equals(' ')) {
                 i+=1;
+                lineWrap = false;
                 continue;
             }
             if (!bl && storage.containsKey(c)) {
@@ -126,6 +162,7 @@ public record TextData(int longest_line, List<List<Integer>> offsetMap, List<Lis
                 longest_line = Math.max(longest_line, x);
                 x = 0;
                 z += 1;
+                lineWrap = true;
             }
             i++;
         }
