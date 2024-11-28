@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "infinity:text_test",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 48,
+    "separation": 32,
+    "salt": 1646
+  }
+}

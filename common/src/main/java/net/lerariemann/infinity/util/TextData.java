@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.util;
 
+import net.lerariemann.infinity.features.TextFeature;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +10,13 @@ import java.util.Map;
 import java.util.Objects;
 
 public record TextData(int longest_line, List<List<Integer>> offsetMap, List<List<Character>> charMap) {
+    public int getLines() {
+        return offsetMap.size();
+    }
+    public int getLineLen(int i) {
+        return offsetMap.get(i).size();
+    }
+
     public static int width(Character c, int char_spacing) {
         return storage.get(c).size() + char_spacing;
     }
@@ -18,7 +27,7 @@ public record TextData(int longest_line, List<List<Integer>> offsetMap, List<Lis
         return ((lst.get(x) >> z)%2) == 1;
     }
 
-    public static BlockPos mutate(BlockPos blockPos, int ori, int a, int b) {
+    public static BlockPos mutate(BlockPos blockPos, int ori, int a, int b) { //for features and surface rules
         if (((ori/6)%2) == 1) {
             a*=-1;
         }
@@ -34,6 +43,49 @@ public record TextData(int longest_line, List<List<Integer>> offsetMap, List<Lis
             default -> List.of(b, a, 0);
         };
         return blockPos.add(lst.get(0), lst.get(1), lst.get(2));
+    }
+
+    public static BlockPos offset(int down, int along, Polarization pol) { //for structures as they introduce symmetry
+        return switch (pol) { // direction = positive x
+            case FLAT -> new BlockPos(along, 0, down);
+            case FLAT_REVERSE -> new BlockPos(along, 0, -down);
+            case STANDING -> new BlockPos(along, -down, 0);
+            case STANDING_REVERSE -> new BlockPos(along, down, 0);
+            case UP -> new BlockPos(0, along, -down);
+            case DOWN -> new BlockPos(0, -along, down);
+        };
+    }
+    public static BlockPos offset(int down, int along, Polarization pol, Direction dir) {
+        BlockPos offset = offset(down, along, pol);
+        return switch (dir) {
+            case Direction.WEST -> new BlockPos(-offset.getX(), offset.getY(), -offset.getZ());
+            case Direction.SOUTH -> new BlockPos(-offset.getZ(), offset.getY(), offset.getX());
+            case Direction.NORTH -> new BlockPos(offset.getZ(), offset.getY(), -offset.getX());
+            default -> offset;
+        };
+    }
+
+    public enum Polarization {
+        FLAT(0),
+        FLAT_REVERSE(1),
+        STANDING(2),
+        STANDING_REVERSE(3),
+        UP(4),
+        DOWN(5);
+        public final int id;
+        Polarization(final int i) {
+            id = i;
+        }
+        public static Polarization of(int i) {
+            return switch (i) {
+                case 1 -> FLAT_REVERSE;
+                case 2 -> STANDING;
+                case 3 -> STANDING_REVERSE;
+                case 4 -> UP;
+                case 5 -> DOWN;
+                default -> FLAT;
+            };
+        }
     }
 
     public static TextData genData(int char_spacing, int max_width, String text) {
