@@ -108,6 +108,7 @@ public class ModPayloads {
     }
 
     public static ShaderRePayload setShaderFromWorld(ServerWorld destination) {
+        if (destination == null) return new ShaderRePayload(new NbtCompound());
         return new ShaderRePayload(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
     }
 

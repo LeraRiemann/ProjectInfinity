@@ -3,7 +3,6 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.ConfigManager;
 import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.util.TextData;
 import net.minecraft.nbt.NbtCompound;
 import org.apache.commons.io.FileUtils;
 
@@ -94,9 +93,9 @@ public class RandomText extends RandomStructure {
     }
 
     public static String genTextRandomly(Random random, int bound) {
-        Set<Character> s = TextData.storage.keySet();
+        String s = "1234567890QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
         StringBuilder res = new StringBuilder();
-        for (int j = 0; j<bound; j++) res.append(s.stream().toList().get(random.nextInt(s.size())));
+        for (int j = 0; j<bound; j++) res.append(s.charAt(random.nextInt(s.length())));
         return res.toString();
     }
 }
