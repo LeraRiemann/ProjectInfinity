@@ -3,10 +3,8 @@ package net.lerariemann.infinity.structure;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.lerariemann.infinity.features.TextFeature;
-import net.lerariemann.infinity.var.ModMaterialConditions;
+import net.lerariemann.infinity.util.TextData;
 import net.minecraft.structure.StructurePiecesCollector;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
@@ -29,7 +27,7 @@ public class TextStructure extends Structure {
     int ori;
     int line_spacing;
     int char_spacing;
-    Pair<Integer, Pair<List<List<Integer>>, List<List<Character>>>> data;
+    TextData data;
 
     TextStructure(Structure.Config config, String text, BlockStateProvider block, int ori, int line_spacing, int char_spacing) {
         super(config);
@@ -38,7 +36,7 @@ public class TextStructure extends Structure {
         this.ori = ori;
         this.line_spacing = line_spacing;
         this.char_spacing = char_spacing;
-        this.data = ModMaterialConditions.TextCondition.genData(char_spacing, 1000, text);
+        this.data = TextData.genData(char_spacing, 1000, text);
     }
 
     @Override
@@ -55,12 +53,12 @@ public class TextStructure extends Structure {
         BlockPos p = context.chunkPos().getStartPos().up(90);
         int linediff = (8 + line_spacing);
         int maxsize = 192;
-        int len = 0;
+        int len = -maxsize;
         int line = -maxsize;
         int i;
         for (i = 0; i < text.length(); i++) {
             Character c = text.charAt(i);
-            List<Integer> lst = ModMaterialConditions.TextCondition.storage.get(text.charAt(i));
+            List<Integer> lst = TextData.storage.get(text.charAt(i));
             if (lst == null) {
                 continue;
             }
@@ -70,7 +68,7 @@ public class TextStructure extends Structure {
                 len = -maxsize;
                 continue;
             }
-            BlockPos letterOrigin = TextFeature.mutate(p, ori, line, len);
+            BlockPos letterOrigin = TextData.mutate(p, ori, line, len);
             collector.addPiece(LetterPiece.of(letterOrigin, ori, c, block));
             len += lst.size() + char_spacing;
             if (len > maxsize) {

@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.structure;
 
-import net.lerariemann.infinity.features.TextFeature;
-import net.lerariemann.infinity.var.ModMaterialConditions;
+import net.lerariemann.infinity.util.TextData;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.structure.ShiftableStructurePiece;
@@ -33,8 +32,8 @@ public class LetterPiece extends ShiftableStructurePiece {
     }
 
     static LetterPiece of(BlockPos startcorner, int ori, Character letter, BlockStateProvider block) {
-        List<Integer> l = ModMaterialConditions.TextCondition.storage.get(letter);
-        if (l == null) l = ModMaterialConditions.TextCondition.storage.get(' ');
+        List<Integer> l = TextData.storage.get(letter);
+        if (l == null) l = TextData.storage.get(' ');
         BlockPos dims = getDimensions(ori, l.size());
         BlockPos othercoord = startcorner.add(dims);
         return new LetterPiece(ModStructureTypes.LETTER.get(),
@@ -45,7 +44,7 @@ public class LetterPiece extends ShiftableStructurePiece {
     }
 
     static BlockPos getDimensions(int ori, int letterwidth) {
-        return TextFeature.mutate(BlockPos.ORIGIN, ori, 8, letterwidth);
+        return TextData.mutate(BlockPos.ORIGIN, ori, 8, letterwidth);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class LetterPiece extends ShiftableStructurePiece {
         int j, k;
         if (letter != null) for (j = 0; j < letter.size(); j++) {
             for (k = 0; k < 8; k++) {
-                BlockPos bp = TextFeature.mutate(BlockPos.ORIGIN, ori, k, j);
+                BlockPos bp = TextData.mutate(BlockPos.ORIGIN, ori, k, j);
                 this.addBlock(world,
                         ((letter.get(j) >> k)%2 == 1) ? block.get(random, bp) : Blocks.AIR.getDefaultState(),
                         bp.getX(), bp.getY(), bp.getZ(), chunkBox);

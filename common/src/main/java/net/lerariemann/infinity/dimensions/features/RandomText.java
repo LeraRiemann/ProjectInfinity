@@ -2,7 +2,7 @@ package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.var.ModMaterialConditions;
+import net.lerariemann.infinity.util.TextData;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import org.apache.commons.io.FileUtils;
@@ -116,7 +116,7 @@ public class RandomText extends RandomisedFeature {
     }
 
     public static String genTextRandomly(Random random, int bound) {
-        Set<Character> s = ModMaterialConditions.TextCondition.storage.keySet();
+        Set<Character> s = TextData.storage.keySet();
         StringBuilder res = new StringBuilder();
         for (int j = 0; j<bound; j++) res.append(s.stream().toList().get(random.nextInt(s.size())));
         return res.toString();
