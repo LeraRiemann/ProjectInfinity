@@ -362,7 +362,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                     if (blockEntity instanceof NeitherPortalBlockEntity portal) {
                         Integer keycolor = WarpLogic.getKeyColorFromId(portal.getDimension(), world.getServer());
                         ComponentMap newMap = (ComponentMap.builder().add(ModComponentTypes.KEY_DESTINATION.get(), portal.getDimension())
-                                .add(ModComponentTypes.KEY_COLOR.get(), keycolor)).build();
+                                .add(ModComponentTypes.COLOR.get(), keycolor)).build();
                         resStack.applyComponentsFrom(newMap);
                     }
                 }

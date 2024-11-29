@@ -34,6 +34,8 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_BOMB = BLOCKS.register("timebomb", () ->
             new TimeBombBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(state -> 15)));
     public static final RegistrySupplier<FluidBlock> IRIDESCENCE = PlatformMethods.getIridBlockForReg();
+    public static final RegistrySupplier<Block> BIOME_BOTTLE = BLOCKS.register("biome_bottle", () ->
+            new BiomeBottle(AbstractBlock.Settings.copy(Blocks.BEACON).luminance(state -> 7)));
 
     public static void registerModBlocks() {
         BLOCKS.register();

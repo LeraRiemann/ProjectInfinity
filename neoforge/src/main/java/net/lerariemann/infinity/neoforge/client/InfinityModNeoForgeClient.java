@@ -47,10 +47,11 @@ public class InfinityModNeoForgeClient {
         event.register(PlatformMethods::getNeitherPortalColour, ModBlocks.NEITHER_PORTAL.get());
         event.register(PlatformMethods::getBookBoxColour, ModBlocks.BOOK_BOX.get());
         event.register(PlatformMethods::getBookBoxColour, ModBlocks.IRIDESCENCE.get());
+        event.register(PlatformMethods::getBiomeBottleColor, ModBlocks.BIOME_BOTTLE.get());
     }
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(PlatformMethods::getKeyColor, ModItems.TRANSFINITE_KEY.get());
+        event.register(PlatformMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get());
     }
     @SubscribeEvent
     public static void registerModelPredicates(FMLClientSetupEvent event) {

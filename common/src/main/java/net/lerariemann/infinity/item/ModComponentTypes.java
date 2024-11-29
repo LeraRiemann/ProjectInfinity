@@ -15,7 +15,9 @@ import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModComponentTypes {
     public static RegistrySupplier<ComponentType<Identifier>> KEY_DESTINATION;
-    public static RegistrySupplier<ComponentType<Integer>> KEY_COLOR;
+    public static RegistrySupplier<ComponentType<Identifier>> BIOME_CONTENTS;
+    public static RegistrySupplier<ComponentType<Integer>> COLOR;
+    public static RegistrySupplier<ComponentType<Integer>> CHARGE;
     public static RegistrySupplier<ComponentType<Boolean>> DO_NOT_OPEN;
     public static final DeferredRegister<ComponentType<?>> COMPONENT_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.DATA_COMPONENT_TYPE);
@@ -24,7 +26,11 @@ public class ModComponentTypes {
         InfinityMod.LOGGER.debug("Registering component types for " + InfinityMod.MOD_ID);
         KEY_DESTINATION = register("key_destination",
                 (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
-        KEY_COLOR = register("key_color",
+        BIOME_CONTENTS = register("biome_contents",
+                (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
+        COLOR = register("color",
+                (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+        CHARGE = register("charge",
                 (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
         DO_NOT_OPEN = register("do_not_open", (builder) -> builder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL));
         COMPONENT_TYPES.register();

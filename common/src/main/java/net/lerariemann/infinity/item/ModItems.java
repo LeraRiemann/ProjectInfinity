@@ -10,6 +10,7 @@ import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.minecraft.block.Block;
 import net.minecraft.component.DataComponentTypes;
@@ -44,7 +45,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM =
             registerBlockItem(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM =
-            registerBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR);
+            registerBlockItem(ModBlocks.TIME_BOMB, ItemGroups.OPERATOR, new Item.Settings());
     public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
     public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () ->
             new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0, 0xFFFFFF,
@@ -64,6 +65,7 @@ public class ModItems {
             registerItem("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
     public static final RegistrySupplier<Item> BLACK_MATTER =
             registerItem("black_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
+    public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM = registerBottleItem();
 
 
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {
@@ -74,46 +76,53 @@ public class ModItems {
         return ITEMS.register(item, () -> new Item(settings));
     }
 
-    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group) {
-       return registerBlockItem(block, new Item.Settings().arch$tab(group));
+    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item.Settings settings) {
+       return registerBlockItem(block, settings.arch$tab(group));
     }
 
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item) {
-        Item.Settings settings = new Item.Settings();
+        return registerBlockItem(block, group, item, new Item.Settings());
+    }
+
+    public static Item.Settings addFallbackTab(Item.Settings settings, RegistryKey<ItemGroup> group){
         if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
-            settings = settings.arch$tab(group);
-        RegistrySupplier<Item> registeredItem = registerBlockItem(block, settings);
+            return settings.arch$tab(group);
+        return settings;
+    }
+
+    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item, Item.Settings settings) {
+        RegistrySupplier<Item> registeredItem = registerBlockItem(block, addFallbackTab(settings, group));
         addAfter(registeredItem, group, item);
         return registeredItem;
     }
 
     public static RegistrySupplier<Item> registerItem(String id, RegistryKey<ItemGroup> group, Item item) {
-        Item.Settings settings = new Item.Settings();
-        if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
-            settings = settings.arch$tab(group);
-        RegistrySupplier<Item> registeredItem = register(id, settings);
+        RegistrySupplier<Item> registeredItem = register(id, addFallbackTab(new Item.Settings(), group));
         addAfter(registeredItem, group, item);
         return registeredItem;
     }
 
     public static RegistrySupplier<Item> registerKeyItem() {
-        Item.Settings settings = new Item.Settings();
-        if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
-            settings = settings.arch$tab(ItemGroups.INGREDIENTS);
-        final Item.Settings keySettings = settings;
+        final Item.Settings keySettings = addFallbackTab(new Item.Settings(), ItemGroups.INGREDIENTS);
         RegistrySupplier<Item> registeredItem = ITEMS.register("key", () -> new TransfiniteKeyItem(keySettings));
         addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.OMINOUS_TRIAL_KEY);
         return registeredItem;
     }
 
     public static RegistrySupplier<Item> registerHomeItem() {
-        Item.Settings settings = new Item.Settings();
-        if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
-            settings = settings.arch$tab(ItemGroups.INGREDIENTS);
-        final Item.Settings homeSettings = settings.component(DataComponentTypes.FOOD,
+        final Item.Settings homeSettings = addFallbackTab(new Item.Settings(), ItemGroups.INGREDIENTS).component(DataComponentTypes.FOOD,
                 new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of()));
         RegistrySupplier<Item> registeredItem = ITEMS.register("fine_item", () -> new HomeItem(homeSettings));
         addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
+        return registeredItem;
+    }
+
+    public static RegistrySupplier<Item> registerBottleItem() {
+        final Item.Settings bottlesettings = addFallbackTab(new Item.Settings(), ItemGroups.FUNCTIONAL)
+                .component(ModComponentTypes.CHARGE.get(), 0);
+        RegistrySupplier<Item> registeredItem = ITEMS.register("biome_bottle", () ->
+                new BiomeBottleItem(ModBlocks.BIOME_BOTTLE.get(), bottlesettings));
+        addAfter(registeredItem, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
         return registeredItem;
     }
 
@@ -140,5 +149,7 @@ public class ModItems {
                 default -> 0;
             };
         });
+        ItemPropertiesRegistry.register(BIOME_BOTTLE_ITEM.get(), InfinityMod.getId("bottle"),
+                (stack, world, entity, seed) -> Math.clamp(BiomeBottle.getLevel(BiomeBottle.getCharge(stack)) / 10.0f, 0f, 1f));
     }
 }

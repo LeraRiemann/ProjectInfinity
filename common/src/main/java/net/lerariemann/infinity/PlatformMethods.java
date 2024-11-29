@@ -6,6 +6,7 @@ import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.item.ModComponentTypes;
 import net.minecraft.block.BlockState;
@@ -88,10 +89,10 @@ public class PlatformMethods {
             return 16777215;
     }
 
-    public static int getKeyColor(ItemStack stack, int layer) {
-        Integer color = stack.getComponents().get(ModComponentTypes.KEY_COLOR.get());
+    public static int getOverlayColorFromComponents(ItemStack stack, int layer) {
+        int color = stack.getComponents().getOrDefault(ModComponentTypes.COLOR.get(), 0);
         if (layer == 1) {
-            return (color == null) ? 0 : color;
+            return ColorHelper.Argb.fullAlpha(color);
         }
         return ColorHelper.Argb.fullAlpha(0xFFFFFF);
     }
@@ -105,7 +106,19 @@ public class PlatformMethods {
                 return (int)j & 0xFFFFFF;
             }
         }
-        return 16777215;
+        return 0xFFFFFF;
+    }
+
+    public static int getBiomeBottleColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
+        if (world != null && pos != null) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof BiomeBottleBlockEntity be) {
+                Object j = be.getRenderData();
+                if (j == null) return 0;
+                return (int)j & 0xFFFFFF;
+            }
+        }
+        return 0xFFFFFF;
     }
 
     @ExpectPlatform
