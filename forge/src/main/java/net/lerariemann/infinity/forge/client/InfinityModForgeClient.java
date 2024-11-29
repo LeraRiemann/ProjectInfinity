@@ -4,7 +4,8 @@ import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.config.forge.ModConfigFactory;
+import net.lerariemann.infinity.compat.forge.ModConfigFactory;
+import net.lerariemann.infinity.item.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderLayers;
@@ -39,11 +40,12 @@ public class InfinityModForgeClient {
     }
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(PlatformMethods::getKeyColor, ModItems.TRANSFINITE_KEY.get());
+        event.register(PlatformMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get());
+        event.register(PlatformMethods::getOverlayColorFromComponents, ModItems.BIOME_BOTTLE_ITEM.get());
     }
     @SubscribeEvent
     public static void registerModelPredicates(FMLClientSetupEvent event) {
-        ModItems.registerModelPredicates();
+        ModItemFunctions.registerModelPredicates();
     }
 
     @SubscribeEvent
