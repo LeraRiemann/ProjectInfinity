@@ -6,6 +6,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.datafixer.TypeReferences;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Util;
@@ -17,9 +18,26 @@ public class ModBlockEntities {
     }
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(InfinityMod.MOD_ID, RegistryKeys.BLOCK_ENTITY_TYPE);
 
-    public static final RegistrySupplier<BlockEntityType<NeitherPortalBlockEntity>> NEITHER_PORTAL = BLOCK_ENTITY_TYPES.register("neither_portal", () -> BlockEntityType.Builder.create(NeitherPortalBlockEntity::new, ModBlocks.NEITHER_PORTAL.get()).build(type("neither_portal")));
-    public static final RegistrySupplier<BlockEntityType<TransfiniteAltarEntity>> ALTAR = BLOCK_ENTITY_TYPES.register("altar_block_entity", () -> BlockEntityType.Builder.create(TransfiniteAltarEntity::new, ModBlocks.ALTAR.get()).build(type("altar_block_entity")));
-    public static final RegistrySupplier<BlockEntityType<CosmicAltarEntity>> ALTAR_COSMIC = BLOCK_ENTITY_TYPES.register("cosmic_block_entity", () -> BlockEntityType.Builder.create(CosmicAltarEntity::new, ModBlocks.ALTAR_COSMIC.get()).build(type("cosmic_block_entity")));
+    public static final RegistrySupplier<BlockEntityType<NeitherPortalBlockEntity>> NEITHER_PORTAL =
+            BLOCK_ENTITY_TYPES.register("neither_portal", () ->
+                    BlockEntityType.Builder.create(NeitherPortalBlockEntity::new,
+                            ModBlocks.NEITHER_PORTAL.get()).build(type("neither_portal")));
+    public static final RegistrySupplier<BlockEntityType<TransfiniteAltarEntity>> ALTAR =
+            BLOCK_ENTITY_TYPES.register("altar_block_entity", () ->
+                    BlockEntityType.Builder.create(TransfiniteAltarEntity::new,
+                            ModBlocks.ALTAR.get()).build(type("altar_block_entity")));
+    public static final RegistrySupplier<BlockEntityType<CosmicAltarEntity>> ALTAR_COSMIC =
+            BLOCK_ENTITY_TYPES.register("cosmic_block_entity", () ->
+                    BlockEntityType.Builder.create(CosmicAltarEntity::new,
+                            ModBlocks.ALTAR_COSMIC.get()).build(type("cosmic_block_entity")));
+    public static final RegistrySupplier<BlockEntityType<BiomeBottleBlockEntity>> BIOME_BOTTLE =
+            BLOCK_ENTITY_TYPES.register("biome_bottle_block_entity", () ->
+                    BlockEntityType.Builder.create(BiomeBottleBlockEntity::new,
+                            ModBlocks.BIOME_BOTTLE.get()).build(type("biome_bottle_block_entity")));
+    public static final RegistrySupplier<BlockEntityType<IridescentBlockEntity>> IRIDESCENT =
+            BLOCK_ENTITY_TYPES.register("iridescent_block_entity", () ->
+                    BlockEntityType.Builder.create(IridescentBlockEntity::new,
+                            ModBlocks.IRIDESCENT_WOOL.get()).build(type("iridescent_block_entity")));
 
 
     public static void registerBlockEntities() {

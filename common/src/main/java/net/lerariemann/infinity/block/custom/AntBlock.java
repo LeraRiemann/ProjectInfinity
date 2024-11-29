@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.minecraft.block.*;
+import net.minecraft.client.render.block.entity.EndPortalBlockEntityRenderer;
+import net.minecraft.client.resource.metadata.AnimationResourceMetadata;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.Registries;

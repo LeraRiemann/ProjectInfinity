@@ -16,8 +16,10 @@ import net.minecraft.block.Block;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -26,6 +28,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
@@ -184,10 +187,25 @@ public class Iridescence {
                     RegistryEntry<Biome> b = creeper.getWorld().getBiome(creeper.getBlockPos());
                     creeper.setBiome(b.value().toString());
                     creeper.setColor(b.value().getFoliageColor());
+                    creeper.setRandomCharge();
                 }
                 currEntity.getWorld().spawnEntity(newEntity);
                 newEntity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
+                convTriggers(currEntity);
             }
+        }
+    }
+
+    public static void convTriggers(LivingEntity entity) {
+        triggerConversion(entity.getWorld().getClosestPlayer(entity.getX(), entity.getY(), entity.getZ(),
+                50, false), entity);
+        entity.getWorld().getPlayers(TargetPredicate.DEFAULT, entity, Box.of(entity.getPos(), 10,10, 10))
+                .forEach(p -> triggerConversion(p, entity));
+    }
+
+    public static void triggerConversion(PlayerEntity player, LivingEntity entity) {
+        if (player instanceof ServerPlayerEntity np) {
+            ModCriteria.CONVERT_MOB.get().trigger(np, entity);
         }
     }
 

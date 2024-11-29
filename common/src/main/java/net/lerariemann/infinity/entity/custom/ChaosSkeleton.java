@@ -145,7 +145,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
             ItemStack itemStack2 = setPotion(Items.POTION.getDefaultStack(), this.getEffectRawId(), this.getDuration() * 20);
             ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
             player.setStackInHand(hand, itemStack3);
-            this.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
+            this.playSound(SoundEvents.ITEM_BOTTLE_FILL, 1.0f, 1.0f);
             SkeletonEntity newSkeleton;
             if (!this.getWorld().isClient() && (newSkeleton = EntityType.SKELETON.create(this.getWorld())) != null) {
                 this.discard();

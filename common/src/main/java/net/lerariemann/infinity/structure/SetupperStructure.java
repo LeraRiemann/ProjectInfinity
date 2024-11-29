@@ -29,6 +29,6 @@ public class SetupperStructure extends Structure {
 
     @Override
     public StructureType<?> getType() {
-        return ModStructureType.SETUPPER.get();
+        return ModStructureTypes.SETUPPER.get();
     }
 }

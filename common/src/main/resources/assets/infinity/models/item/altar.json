@@ -1,3 +1,19 @@
 {
-  "parent": "infinity:block/altar/0"
+  "parent": "infinity:block/altar/0",
+  "overrides": [
+    { "predicate": { "minecraft:custom_model_data": 0 }, "model": "infinity:block/altar/0" },
+    { "predicate": { "minecraft:custom_model_data": 1 }, "model": "infinity:block/altar/1" },
+    { "predicate": { "minecraft:custom_model_data": 2 }, "model": "infinity:block/altar/2" },
+    { "predicate": { "minecraft:custom_model_data": 3 }, "model": "infinity:block/altar/3" },
+    { "predicate": { "minecraft:custom_model_data": 4 }, "model": "infinity:block/altar/4" },
+    { "predicate": { "minecraft:custom_model_data": 5 }, "model": "infinity:block/altar/5" },
+    { "predicate": { "minecraft:custom_model_data": 6 }, "model": "infinity:block/altar/6" },
+    { "predicate": { "minecraft:custom_model_data": 7 }, "model": "infinity:block/altar_flower/0" },
+    { "predicate": { "minecraft:custom_model_data": 8 }, "model": "infinity:block/altar_flower/1" },
+    { "predicate": { "minecraft:custom_model_data": 9 }, "model": "infinity:block/altar_flower/2" },
+    { "predicate": { "minecraft:custom_model_data": 10 }, "model": "infinity:block/altar_flower/3" },
+    { "predicate": { "minecraft:custom_model_data": 11 }, "model": "infinity:block/altar_flower/4" },
+    { "predicate": { "minecraft:custom_model_data": 12 }, "model": "infinity:block/altar_flower/5" },
+    { "predicate": { "minecraft:custom_model_data": 13 }, "model": "infinity:block/altar_flower/6" }
+  ]
 }

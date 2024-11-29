@@ -9,10 +9,12 @@ import net.minecraft.world.gen.structure.StructureType;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
-public class ModStructureType {
+public class ModStructureTypes {
     public static RegistrySupplier<StructurePieceType> PYRAMID_PIECE;
+    public static RegistrySupplier<StructurePieceType> LETTER;
     public static RegistrySupplier<StructureType<PyramidStructure>> PYRAMID;
     public static RegistrySupplier<StructureType<SetupperStructure>> SETUPPER;
+    public static RegistrySupplier<StructureType<TextStructure>> TEXT;
     public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(MOD_ID, RegistryKeys.STRUCTURE_TYPE);
     public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECES = DeferredRegister.create(MOD_ID, RegistryKeys.STRUCTURE_PIECE);
 
@@ -29,6 +31,7 @@ public class ModStructureType {
         PYRAMID = STRUCTURE_TYPES.register("pyramid", () -> PyramidStructure.CODEC::codec);
         SETUPPER = STRUCTURE_TYPES.register("setupper", () -> SetupperStructure.CODEC::codec);
         PYRAMID_PIECE = register(PyramidGenerator::new, "pypiece");
+        LETTER = register(LetterPiece::new, "letter");
 
         STRUCTURE_PIECES.register();
         STRUCTURE_TYPES.register();

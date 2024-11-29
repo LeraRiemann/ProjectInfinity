@@ -57,6 +57,16 @@ public class ModCriteria {
         }
     }
 
+    public static class BiomeBottleCriterion extends AbstractCriterion<ScoredConditions> {
+        @Override
+        public Codec<ScoredConditions> getConditionsCodec() {
+            return ScoredConditions.CODEC;
+        }
+
+        public void trigger(ServerPlayerEntity player, BiomeBottleBlockEntity be) {
+            this.trigger(player, (conditions) -> conditions.test(be.charge));
+        }
+    }
 
     public static class WhoRemainsCriterion extends AbstractCriterion<EmptyConditions> {
         static final Identifier ID = InfinityMod.getId("who_remains");
