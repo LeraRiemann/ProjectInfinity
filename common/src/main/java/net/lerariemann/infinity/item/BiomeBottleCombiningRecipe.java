@@ -54,7 +54,7 @@ public class BiomeBottleCombiningRecipe extends SpecialCraftingRecipe {
         }
         if (i < 2) return ModItems.BIOME_BOTTLE_ITEM.get().getDefaultStack();
         ItemStack result = stack1.copy();
-        BiomeBottle.updateLevel(result, charge);
+        BiomeBottle.updateCharge(result, charge);
         return result;
     }
 

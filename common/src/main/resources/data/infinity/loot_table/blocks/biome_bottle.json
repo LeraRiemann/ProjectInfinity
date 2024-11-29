@@ -13,7 +13,8 @@
               "include": [
                 "infinity:color",
                 "infinity:charge",
-                "infinity:biome_contents"
+                "infinity:biome_contents",
+                "minecraft:rarity"
               ],
               "source": "block_entity"
             },

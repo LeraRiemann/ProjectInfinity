@@ -27,7 +27,7 @@ public class SetLevelLootFunction extends ConditionalLootFunction {
 
     @Override
     protected ItemStack process(ItemStack stack, LootContext context) {
-        BiomeBottle.updateLevel(stack);
+        BiomeBottle.updateCharge(stack);
         return stack;
     }
 }

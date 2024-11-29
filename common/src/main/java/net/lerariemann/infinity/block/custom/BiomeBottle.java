@@ -21,6 +21,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -94,21 +95,21 @@ public class BiomeBottle extends BlockWithEntity {
         return Identifier.ofVanilla("plains");
     }
 
-    public static int getMaximumCharge(int level) {
-        return Math.clamp(level, 0, 10)*100;
+    public static Rarity getRarity(int charge) {
+        return charge < 1000 ? Rarity.COMMON : charge < 9000 ? Rarity.UNCOMMON : Rarity.RARE;
     }
-
-    public static void updateLevel(ItemStack stack, int charge) {
-        stack.applyComponentsFrom(ComponentMap.builder()
-                .add(ModItemFunctions.CHARGE.get(), charge)
+    public static ComponentMap.Builder updateCharge(ComponentMap.Builder builder, int charge) {
+        return builder.add(ModItemFunctions.CHARGE.get(), charge)
+                .add(DataComponentTypes.RARITY, getRarity(charge))
                 .add(DataComponentTypes.BLOCK_STATE, (new BlockStateComponent(Map.of()))
-                        .with(BiomeBottle.LEVEL, BiomeBottle.getLevel(charge))).build());
+                        .with(LEVEL, getLevel(charge)));
     }
-
-    public static void updateLevel(ItemStack stack) {
-        int charge = BiomeBottle.getCharge(stack);
-        if (charge > 0) stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.BLOCK_STATE,
-                (new BlockStateComponent(Map.of())).with(BiomeBottle.LEVEL, BiomeBottle.getLevel(charge))).build());
+    public static void updateCharge(ItemStack stack, int charge) {
+        stack.applyComponentsFrom(updateCharge(ComponentMap.builder(), charge).build());
+    }
+    public static void updateCharge(ItemStack stack) {
+        int charge = getCharge(stack);
+        if (charge > 0) updateCharge(stack, charge);
     }
 
     public static int getLevel(int charge) {
@@ -137,9 +138,7 @@ public class BiomeBottle extends BlockWithEntity {
                                      Identifier biome, int color, int charge) {
         componentMapBuilder.add(ModItemFunctions.BIOME_CONTENTS.get(), biome);
         componentMapBuilder.add(ModItemFunctions.COLOR.get(), color);
-        componentMapBuilder.add(ModItemFunctions.CHARGE.get(), charge);
-        componentMapBuilder.add(DataComponentTypes.BLOCK_STATE,
-                (new BlockStateComponent(Map.of())).with(BiomeBottle.LEVEL, BiomeBottle.getLevel(charge)));
+        updateCharge(componentMapBuilder, charge);
         return componentMapBuilder;
     }
 
