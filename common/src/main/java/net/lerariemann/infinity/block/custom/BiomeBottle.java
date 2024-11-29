@@ -3,7 +3,7 @@ package net.lerariemann.infinity.block.custom;
 import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
-import net.lerariemann.infinity.item.ModComponentTypes;
+import net.lerariemann.infinity.item.ModItemFunctions;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -12,6 +12,7 @@ import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BlockStateComponent;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -87,12 +88,27 @@ public class BiomeBottle extends BlockWithEntity {
                 : super.getPickStack(world, pos, state);
     }
 
+    public static final int maxAllowedCharge = 10000;
+
     public static Identifier defaultBiome() {
         return Identifier.ofVanilla("plains");
     }
 
     public static int getMaximumCharge(int level) {
         return Math.clamp(level, 0, 10)*100;
+    }
+
+    public static void updateLevel(ItemStack stack, int charge) {
+        stack.applyComponentsFrom(ComponentMap.builder()
+                .add(ModItemFunctions.CHARGE.get(), charge)
+                .add(DataComponentTypes.BLOCK_STATE, (new BlockStateComponent(Map.of()))
+                        .with(BiomeBottle.LEVEL, BiomeBottle.getLevel(charge))).build());
+    }
+
+    public static void updateLevel(ItemStack stack) {
+        int charge = BiomeBottle.getCharge(stack);
+        if (charge > 0) stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.BLOCK_STATE,
+                (new BlockStateComponent(Map.of())).with(BiomeBottle.LEVEL, BiomeBottle.getLevel(charge))).build());
     }
 
     public static int getLevel(int charge) {
@@ -103,19 +119,25 @@ public class BiomeBottle extends BlockWithEntity {
         return getCharge(stack) == 0;
     }
 
-    public static int getCharge(ItemStack stack) {
-        return stack.getComponents().getOrDefault(ModComponentTypes.CHARGE.get(), 0);
+    public static Identifier getBiome(ItemStack stack) {
+        return stack.getComponents().getOrDefault(ModItemFunctions.BIOME_CONTENTS.get(), defaultBiome());
     }
 
-    public static void playSploosh(World world, BlockPos pos) {
+    public static int getCharge(ItemStack stack) {
+        return stack.getComponents().getOrDefault(ModItemFunctions.CHARGE.get(), 0);
+    }
+
+    public static void playSploosh(ServerWorld world, BlockPos pos) {
         world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 1f, 1f);
+        world.spawnParticles(ParticleTypes.SPLASH, pos.getX() + 0.5,
+                pos.getY() + 0.5, pos.getZ() + 0.5, 30, 0.5, 0.5, 0.5, 0.2);
     }
 
     public static ComponentMap.Builder addComponents(ComponentMap.Builder componentMapBuilder,
                                      Identifier biome, int color, int charge) {
-        componentMapBuilder.add(ModComponentTypes.BIOME_CONTENTS.get(), biome);
-        componentMapBuilder.add(ModComponentTypes.COLOR.get(), color);
-        componentMapBuilder.add(ModComponentTypes.CHARGE.get(), charge);
+        componentMapBuilder.add(ModItemFunctions.BIOME_CONTENTS.get(), biome);
+        componentMapBuilder.add(ModItemFunctions.COLOR.get(), color);
+        componentMapBuilder.add(ModItemFunctions.CHARGE.get(), charge);
         componentMapBuilder.add(DataComponentTypes.BLOCK_STATE,
                 (new BlockStateComponent(Map.of())).with(BiomeBottle.LEVEL, BiomeBottle.getLevel(charge)));
         return componentMapBuilder;

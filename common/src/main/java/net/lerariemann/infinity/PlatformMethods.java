@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.item.ModComponentTypes;
+import net.lerariemann.infinity.item.ModItemFunctions;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -90,7 +90,7 @@ public class PlatformMethods {
     }
 
     public static int getOverlayColorFromComponents(ItemStack stack, int layer) {
-        int color = stack.getComponents().getOrDefault(ModComponentTypes.COLOR.get(), 0);
+        int color = stack.getComponents().getOrDefault(ModItemFunctions.COLOR.get(), 0);
         if (layer == 1) {
             return ColorHelper.Argb.fullAlpha(color);
         }

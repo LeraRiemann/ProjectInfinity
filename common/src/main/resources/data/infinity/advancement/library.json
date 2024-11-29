@@ -14,7 +14,7 @@
       "translate": "advancements.infinity.library.description"
     },
     "frame": "task",
-    "hidden": true,
+    "hidden": false,
     "icon": {
       "id": "infinity:book_box"
     },

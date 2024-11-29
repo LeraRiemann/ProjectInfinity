@@ -5,14 +5,15 @@ import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
-import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.var.ModCriteria;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -76,6 +77,7 @@ public class TransfiniteAltarBase extends Block {
         if (world instanceof ServerWorld serverWorld) {
             if (itemStack.isEmpty() && player.isSneaking() &&
                     world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
+                if (player instanceof ServerPlayerEntity spe) ModCriteria.BIOME_BOTTLE.get().trigger(spe, bbbe);
                 bbbe.startTicking();
             }
 
@@ -114,7 +116,7 @@ public class TransfiniteAltarBase extends Block {
                 world.playSound(null, pos, SoundEvents.BLOCK_AZALEA_LEAVES_PLACE, SoundCategory.BLOCKS, 1f, 1f);
             }
         }
-        if (itemStack.isOf(Items.SUNFLOWER) || itemStack.isOf(ModItems.BIOME_BOTTLE_ITEM.get())) return ActionResult.SUCCESS;
+        if (itemStack.isOf(Items.SUNFLOWER)) return ActionResult.SUCCESS;
         return super.onUse(state, world, pos, player, hit);
     }
 }

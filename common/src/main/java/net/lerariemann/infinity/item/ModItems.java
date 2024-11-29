@@ -119,7 +119,7 @@ public class ModItems {
 
     public static RegistrySupplier<Item> registerBottleItem() {
         final Item.Settings bottlesettings = addFallbackTab(new Item.Settings(), ItemGroups.FUNCTIONAL)
-                .component(ModComponentTypes.CHARGE.get(), 0);
+                .component(ModItemFunctions.CHARGE.get(), 0);
         RegistrySupplier<Item> registeredItem = ITEMS.register("biome_bottle", () ->
                 new BiomeBottleItem(ModBlocks.BIOME_BOTTLE.get(), bottlesettings));
         addAfter(registeredItem, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
@@ -138,7 +138,7 @@ public class ModItems {
     @Environment(EnvType.CLIENT)
     public static void registerModelPredicates() {
         ItemPropertiesRegistry.register(TRANSFINITE_KEY.get(), InfinityMod.getId("key"), (stack, world, entity, seed) -> {
-            Identifier id = stack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
+            Identifier id = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
             if (id == null) return 0.02f;
             String s = id.toString();
             if (s.contains("infinity:generated_")) return 0.01f;

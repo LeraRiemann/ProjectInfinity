@@ -11,11 +11,11 @@ import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
+import net.lerariemann.infinity.item.ModItemFunctions;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.item.ModComponentTypes;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.util.WarpLogic;
@@ -79,7 +79,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         ItemStack itemStack = entity.getStack();
 
         /* Check if the item provided is a transfinite key. */
-        Identifier key_dest = itemStack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
+        Identifier key_dest = itemStack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
         if ((entity.getStack().getItem().equals(ModItems.TRANSFINITE_KEY.get())) && key_dest == null) {
             key_dest = Identifier.of("minecraft:random");
         }
@@ -346,7 +346,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             Map.entry(Items.BOOKSHELF, "infinity:book_box"),
             Map.entry(Items.TNT, "infinity:timebomb"),
             Map.entry(Items.LECTERN, "infinity:altar"),
-            Map.entry(Items.AMETHYST_SHARD, "infinity:key")
+            Map.entry(Items.AMETHYST_SHARD, "infinity:key"),
+            Map.entry(Items.GLASS_BOTTLE, "infinity:biome_bottle")
     );
 
     /* Adds logic for portal-based recipes. */
@@ -361,8 +362,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                     BlockEntity blockEntity = world.getBlockEntity(pos);
                     if (blockEntity instanceof NeitherPortalBlockEntity portal) {
                         Integer keycolor = WarpLogic.getKeyColorFromId(portal.getDimension(), world.getServer());
-                        ComponentMap newMap = (ComponentMap.builder().add(ModComponentTypes.KEY_DESTINATION.get(), portal.getDimension())
-                                .add(ModComponentTypes.COLOR.get(), keycolor)).build();
+                        ComponentMap newMap = (ComponentMap.builder().add(ModItemFunctions.KEY_DESTINATION.get(), portal.getDimension())
+                                .add(ModItemFunctions.COLOR.get(), keycolor)).build();
                         resStack.applyComponentsFrom(newMap);
                     }
                 }

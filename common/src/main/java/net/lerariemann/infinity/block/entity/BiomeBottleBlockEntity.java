@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.entity;
 
 import net.lerariemann.infinity.block.custom.BiomeBottle;
-import net.lerariemann.infinity.item.ModComponentTypes;
+import net.lerariemann.infinity.item.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.block.BlockState;
@@ -24,7 +24,7 @@ public class BiomeBottleBlockEntity extends BlockEntity {
     private final PropertyDelegate propertyDelegate;
     private Identifier biome;
     private int color;
-    private int charge;
+    public int charge;
     private int from_charge;
 
     public BiomeBottleBlockEntity(BlockPos pos, BlockState state) {
@@ -84,9 +84,9 @@ public class BiomeBottleBlockEntity extends BlockEntity {
     @Override
     protected void readComponents(BlockEntity.ComponentsAccess components) {
         super.readComponents(components);
-        this.biome = components.getOrDefault(ModComponentTypes.BIOME_CONTENTS.get(), BiomeBottle.defaultBiome());
-        this.color = components.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
-        this.charge = components.getOrDefault(ModComponentTypes.CHARGE.get(), 0);
+        this.biome = components.getOrDefault(ModItemFunctions.BIOME_CONTENTS.get(), BiomeBottle.defaultBiome());
+        this.color = components.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF);
+        this.charge = components.getOrDefault(ModItemFunctions.CHARGE.get(), 0);
     }
 
     @Nullable
@@ -128,16 +128,19 @@ public class BiomeBottleBlockEntity extends BlockEntity {
     public static void serverTick(World world, BlockPos pos, BlockState state, BiomeBottleBlockEntity be) {
         if (be.isTicking() && world instanceof ServerWorld w) {
             if (w.getTime() % 20 == 0) {
-                int level = BiomeBottle.getLevel(be.charge);
-                if (level == 0) {
+                int level = be.charge/100;
+                if (level <= 0) {
                     be.empty();
                 }
                 else {
-                    int charge_new = BiomeBottle.getMaximumCharge(level - 1);
+                    int diff2 = be.charge > 1500 ? 500 : 100;
+                    int diff = be.charge%diff2;
+                    if (diff == 0) diff = diff2;
+                    int charge_new = be.charge - diff;
                     BiomeBottle.spreadRing(w, pos, be.biome, be.from_charge - be.charge, be.from_charge - charge_new);
                     be.charge = charge_new;
-                    world.setBlockState(pos, state.with(BiomeBottle.LEVEL, level - 1));
-                    BiomeBottle.playSploosh(world, pos);
+                    world.setBlockState(pos, state.with(BiomeBottle.LEVEL, Math.clamp(level - 1, 0, 10)));
+                    BiomeBottle.playSploosh(w, pos);
                 }
             }
         }

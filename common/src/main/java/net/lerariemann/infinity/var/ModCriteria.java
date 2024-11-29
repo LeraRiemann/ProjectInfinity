@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.Criterion;
 import net.minecraft.predicate.entity.EntityPredicate;
@@ -35,6 +36,17 @@ public class ModCriteria {
 
         public void trigger(ServerPlayerEntity player) {
             this.trigger(player, (conditions) -> conditions.test(player.getStatHandler().getStat(ModStats.WORLDS_DESTROYED_STAT)));
+        }
+    }
+
+    public static class BiomeBottleCriterion extends AbstractCriterion<ScoredConditions> {
+        @Override
+        public Codec<ScoredConditions> getConditionsCodec() {
+            return ScoredConditions.CODEC;
+        }
+
+        public void trigger(ServerPlayerEntity player, BiomeBottleBlockEntity be) {
+            this.trigger(player, (conditions) -> conditions.test(be.charge));
         }
     }
 
@@ -87,6 +99,7 @@ public class ModCriteria {
     public static RegistrySupplier<DimensionClosedCriterion> DIMS_CLOSED;
     public static RegistrySupplier<WhoRemainsCriterion> WHO_REMAINS;
     public static RegistrySupplier<IridescentCriterion> IRIDESCENT;
+    public static RegistrySupplier<BiomeBottleCriterion> BIOME_BOTTLE;
 
     public static final DeferredRegister<Criterion<?>> CRITERIA = DeferredRegister.create(MOD_ID, RegistryKeys.CRITERION);
 
@@ -95,6 +108,7 @@ public class ModCriteria {
         DIMS_CLOSED = CRITERIA.register("dims_closed", DimensionClosedCriterion::new);
         WHO_REMAINS = CRITERIA.register("who_remains", WhoRemainsCriterion::new);
         IRIDESCENT = CRITERIA.register("iridescence", IridescentCriterion::new);
+        BIOME_BOTTLE = CRITERIA.register("bottle", BiomeBottleCriterion::new);
         CRITERIA.register();
     }
 }

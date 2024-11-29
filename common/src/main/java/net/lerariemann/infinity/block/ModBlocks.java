@@ -35,7 +35,8 @@ public class ModBlocks {
             new TimeBombBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(state -> 15)));
     public static final RegistrySupplier<FluidBlock> IRIDESCENCE = PlatformMethods.getIridBlockForReg();
     public static final RegistrySupplier<Block> BIOME_BOTTLE = BLOCKS.register("biome_bottle", () ->
-            new BiomeBottle(AbstractBlock.Settings.copy(Blocks.BEACON).luminance(state -> 7).sounds(BlockSoundGroup.GLASS)));
+            new BiomeBottle(AbstractBlock.Settings.copy(Blocks.BEACON).luminance(state -> state.get(BiomeBottle.LEVEL))
+                    .sounds(BlockSoundGroup.GLASS)));
 
     public static void registerModBlocks() {
         BLOCKS.register();

@@ -18,7 +18,7 @@ public class TransfiniteKeyItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        Identifier dimension = stack.getComponents().get(ModComponentTypes.KEY_DESTINATION.get());
+        Identifier dimension = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
         if (dimension != null) {
             String s = dimension.toString();
             MutableText mutableText = Text.literal(s.equals("minecraft:random") ? "Dimension randomised" : s);
