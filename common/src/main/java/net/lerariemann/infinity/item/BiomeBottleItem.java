@@ -2,15 +2,15 @@ package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.minecraft.block.Block;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -20,9 +20,10 @@ public class BiomeBottleItem extends BlockItem {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        Identifier biome = stack.getComponents().get(ModItemFunctions.BIOME_CONTENTS.get());
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+        super.appendTooltip(stack, world, tooltip, context);
+        String s = ModItemFunctions.getBiomeComponents(stack);
+        Identifier biome = Identifier.tryParse(s);
         if (biome != null) {
             tooltip.add(Text.translatable(Util.createTranslationKey("biome", biome)).formatted(Formatting.GRAY));
         }
@@ -30,7 +31,7 @@ public class BiomeBottleItem extends BlockItem {
             MutableText mutableText = Text.literal("Empty");
             tooltip.add(mutableText.formatted(Formatting.GRAY));
         }
-        if (type.isAdvanced()) {
+        if (context.isAdvanced()) {
             tooltip.add(Text.literal("Charge: " + BiomeBottle.getCharge(stack)).formatted(Formatting.GRAY));
         }
     }

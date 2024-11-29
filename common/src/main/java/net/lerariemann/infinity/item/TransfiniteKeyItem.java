@@ -18,12 +18,11 @@ public class TransfiniteKeyItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        Identifier dimension = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+        super.appendTooltip(stack, world, tooltip, context);
+        String dimension = ModItemFunctions.getDimensionComponents(stack);
         if (dimension != null) {
-            String s = dimension.toString();
-            MutableText mutableText = Text.literal(s.equals("minecraft:random") ? "Dimension randomised" : s);
+            MutableText mutableText = Text.literal(dimension.equals("minecraft:random") ? "Dimension randomised" : dimension);
             tooltip.add(mutableText.formatted(Formatting.GRAY));
         }
         else {

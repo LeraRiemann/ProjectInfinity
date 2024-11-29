@@ -2,8 +2,6 @@ package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
-import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
-import net.lerariemann.infinity.block.entity.ModBlockEntities;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.var.ModCriteria;
@@ -76,13 +74,13 @@ public class TransfiniteAltarBase extends Block {
         if (world instanceof ServerWorld serverWorld) {
             if (itemStack.isEmpty() &&
                     world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
-                if (player instanceof ServerPlayerEntity spe) ModCriteria.BIOME_BOTTLE.get().trigger(spe, bbbe);
+                if (player instanceof ServerPlayerEntity spe) ModCriteria.BIOME_BOTTLE.trigger(spe, bbbe);
                 bbbe.startTicking();
             }
 
             //activation
             String s = RandomProvider.getProvider(serverWorld.getServer()).altarKey;
-            boolean bl0 = s.isBlank() ? itemStack.isEmpty() : itemStack.isOf(Registries.ITEM.get(Identifier.of(s)));
+            boolean bl0 = s.isBlank() ? itemStack.isEmpty() : itemStack.isOf(Registries.ITEM.get(new Identifier(s)));
             if (bl0) {
                 boolean bl = testSpace(world, pos);
                 if (!bl) {
@@ -118,6 +116,6 @@ public class TransfiniteAltarBase extends Block {
             }
         }
         if (itemStack.isOf(Items.SUNFLOWER)) return ActionResult.SUCCESS;
-        return super.onUse(state, world, pos, player, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 }

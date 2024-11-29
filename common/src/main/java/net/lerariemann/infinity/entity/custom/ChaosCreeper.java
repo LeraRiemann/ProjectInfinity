@@ -5,7 +5,6 @@ import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -22,6 +21,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -135,7 +135,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
         if (s != null) {
             ServerWorld serverWorld = s.getWorld(this.getWorld().getRegistryKey());
             if (serverWorld != null) {
-                BiomeBottle.spread(serverWorld, getBlockPos(), Identifier.of(getBiomeId()), getCharge());
+                BiomeBottle.spread(serverWorld, getBlockPos(), new Identifier(getBiomeId()), getCharge());
             }
         }
         this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), f, World.ExplosionSourceType.NONE);
@@ -154,8 +154,11 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
             this.playSound(SoundEvents.ITEM_BOTTLE_FILL, 1.0f, 1.0f);
             CreeperEntity newCreeper;
             if (!this.getWorld().isClient() && (newCreeper = EntityType.CREEPER.create(this.getWorld())) != null) {
-                itemStack2.applyComponentsFrom(BiomeBottle.addComponents(ComponentMap.builder(),
-                                Identifier.of(getBiomeId()), getColorRaw(), getCharge()).build());
+                NbtCompound compound = new NbtCompound();
+                compound.putString("bottle_biome", getBiomeId());
+                compound.putInt("bottle_color_raw", getColorRaw());
+                compound.putInt("bottle_charge", getCharge());
+                itemStack2.setNbt(compound);
                 ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
                 player.setStackInHand(hand, itemStack3);
                 this.discard();

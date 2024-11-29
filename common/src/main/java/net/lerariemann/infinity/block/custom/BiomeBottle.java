@@ -8,11 +8,10 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BlockStateComponent;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -24,6 +23,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -38,7 +38,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BiomeBottle extends BlockWithEntity {
-    public static final MapCodec<BiomeBottle> CODEC = createCodec(BiomeBottle::new);
     public static final IntProperty LEVEL = IntProperty.of("level", 0, 10);
     public static final VoxelShape MAIN = Block.createCuboidShape(2, 0, 2, 14, 12, 14);
     public static final VoxelShape TIP = Block.createCuboidShape(6, 12, 6, 10, 16, 10);
@@ -64,11 +63,6 @@ public class BiomeBottle extends BlockWithEntity {
     }
 
     @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CODEC;
-    }
-
-    @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
@@ -79,11 +73,11 @@ public class BiomeBottle extends BlockWithEntity {
     }
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, ModBlockEntities.BIOME_BOTTLE.get(), world.isClient ? null : BiomeBottleBlockEntity::serverTick);
+        return state.getBlock() instanceof BlockEntityProvider ? ((BlockEntityProvider)state.getBlock()).getTicker(world, state, type) : null;
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         return world.getBlockEntity(pos) instanceof BiomeBottleBlockEntity bbbe
                 ? bbbe.asStack()
                 : super.getPickStack(world, pos, state);
@@ -92,28 +86,26 @@ public class BiomeBottle extends BlockWithEntity {
     public static final int maxAllowedCharge = 10000;
 
     public static Identifier defaultBiome() {
-        return Identifier.ofVanilla("plains");
+        return new Identifier("plains");
     }
 
     public static Rarity getRarity(int charge) {
         return charge < 1000 ? Rarity.COMMON : charge < 9000 ? Rarity.UNCOMMON : Rarity.RARE;
     }
-    public static ComponentMap.Builder updateCharge(ComponentMap.Builder builder, int charge) {
-        return builder.add(ModItemFunctions.CHARGE.get(), charge)
-                .add(DataComponentTypes.RARITY, getRarity(charge))
-                .add(DataComponentTypes.BLOCK_STATE, (new BlockStateComponent(Map.of()))
-                        .with(LEVEL, getLevel(charge)));
-    }
+
     public static void updateCharge(ItemStack stack, int charge) {
-        stack.applyComponentsFrom(updateCharge(ComponentMap.builder(), charge).build());
+        NbtCompound compound = new NbtCompound();
+        compound.putInt("bottle_charge", charge);
+        stack.setNbt(compound);
     }
+
     public static void updateCharge(ItemStack stack) {
         int charge = getCharge(stack);
         if (charge > 0) updateCharge(stack, charge);
     }
 
     public static int getLevel(int charge) {
-        return Math.clamp(charge / 100, 0, 10);
+        return MathHelper.clamp(charge / 100, 0, 10);
     }
 
     public static boolean isEmpty(ItemStack stack) {
@@ -121,11 +113,17 @@ public class BiomeBottle extends BlockWithEntity {
     }
 
     public static Identifier getBiome(ItemStack stack) {
-        return stack.getComponents().getOrDefault(ModItemFunctions.BIOME_CONTENTS.get(), defaultBiome());
+        if (stack.getNbt() != null) {
+            return new Identifier(stack.getNbt().getString("bottle_biome"));
+        }
+        return defaultBiome();
     }
 
     public static int getCharge(ItemStack stack) {
-        return stack.getComponents().getOrDefault(ModItemFunctions.CHARGE.get(), 0);
+        if (stack.getNbt() != null) {
+            return stack.getNbt().getInt("bottle_charge");
+        }
+        return 0;
     }
 
     public static void playSploosh(ServerWorld world, BlockPos pos) {
@@ -134,17 +132,11 @@ public class BiomeBottle extends BlockWithEntity {
                 pos.getY() + 0.5, pos.getZ() + 0.5, 30, 0.5, 0.5, 0.5, 0.2);
     }
 
-    public static ComponentMap.Builder addComponents(ComponentMap.Builder componentMapBuilder,
-                                     Identifier biome, int color, int charge) {
-        componentMapBuilder.add(ModItemFunctions.BIOME_CONTENTS.get(), biome);
-        componentMapBuilder.add(ModItemFunctions.COLOR.get(), color);
-        updateCharge(componentMapBuilder, charge);
-        return componentMapBuilder;
-    }
-
-    public static RegistryEntry<Biome> biomeFromId(ServerWorld world, Identifier biome) {
-        Optional<RegistryEntry.Reference<Biome>> entry = world.getServer().getRegistryManager().get(RegistryKeys.BIOME).getEntry(biome);
-        return entry.orElse(null);
+    public static RegistryEntry<Biome> biomeFromId(ServerWorld world, Identifier id) {
+        Registry<Biome> registry = world.getServer().getRegistryManager().get(RegistryKeys.BIOME);
+        Biome biome = registry.get(id);
+        RegistryEntry<Biome> entry = registry.getEntry(biome);
+        return entry;
     }
 
     public static void spread(ServerWorld world, BlockPos origin, Identifier biomeId, int charge) {
@@ -198,7 +190,7 @@ public class BiomeBottle extends BlockWithEntity {
                 chunk.setNeedsSaving(true);
             }
         });
-        world.getChunkManager().chunkLoadingManager.sendChunkBiomePackets(set.stream().toList());
+        world.getChunkManager().threadedAnvilChunkStorage.sendChunkBiomePackets(set.stream().toList());
     }
 
     public static List<BlockPos> offsets(BlockPos origin, int i, int j) {

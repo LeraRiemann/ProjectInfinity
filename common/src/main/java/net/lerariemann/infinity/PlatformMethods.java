@@ -24,6 +24,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.poi.PointOfInterestType;
 
@@ -81,9 +82,11 @@ public class PlatformMethods {
     }
 
     public static int getOverlayColorFromComponents(ItemStack stack, int layer) {
-        int color = stack.getComponents().getOrDefault(ModItemFunctions.COLOR.get(), 0);
-        if (layer == 1) {
-            return ColorHelper.Argb.fullAlpha(color);
+        if (stack.getNbt() != null) {
+            int color = stack.getNbt().getInt("key_color");
+            if (layer == 1) {
+                return color;
+            }
         }
         return 0xFFFFFF;
     }

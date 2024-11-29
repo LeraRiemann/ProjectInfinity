@@ -205,7 +205,7 @@ public class Iridescence {
 
     public static void triggerConversion(PlayerEntity player, LivingEntity entity) {
         if (player instanceof ServerPlayerEntity np) {
-            ModCriteria.CONVERT_MOB.get().trigger(np, entity);
+            ModCriteria.CONVERT_MOB.trigger(np, entity);
         }
     }
 

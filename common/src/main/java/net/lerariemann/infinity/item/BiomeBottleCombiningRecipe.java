@@ -1,27 +1,29 @@
 package net.lerariemann.infinity.item;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.minecraft.block.Block;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class BiomeBottleCombiningRecipe extends SpecialCraftingRecipe {
-    public BiomeBottleCombiningRecipe(CraftingRecipeCategory craftingRecipeCategory) {
-        super(craftingRecipeCategory);
+    public BiomeBottleCombiningRecipe(Identifier id, CraftingRecipeCategory craftingRecipeCategory) {
+        super(id, craftingRecipeCategory);
     }
 
-    public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
+    public boolean matches(RecipeInputInventory inventory, World world) {
         ItemStack stack1 = null;
         boolean bl = true;
         int charge = 0;
-        for (int k = 0; k < craftingRecipeInput.getSize(); k++) {
+        for (int k = 0; k < inventory.getInputStacks().size(); k++) {
             if (!bl) return false;
-            ItemStack itemStack = craftingRecipeInput.getStackInSlot(k);
+            ItemStack itemStack = inventory.getStack(k);
             if (!itemStack.isEmpty()) {
                 if (Block.getBlockFromItem(itemStack.getItem()) instanceof BiomeBottle) {
                     charge += BiomeBottle.getCharge(itemStack);
@@ -38,12 +40,12 @@ public class BiomeBottleCombiningRecipe extends SpecialCraftingRecipe {
         return bl && (stack1 != null) && (charge < BiomeBottle.maxAllowedCharge);
     }
 
-    public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup wrapperLookup) {
+    public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
         ItemStack stack1 = ItemStack.EMPTY;
         int i = 0;
         int charge = 0;
-        for (int k = 0; k < craftingRecipeInput.getSize(); k++) {
-            ItemStack itemStack = craftingRecipeInput.getStackInSlot(k);
+        for (int k = 0; k < inventory.size(); k++) {
+            ItemStack itemStack = inventory.getStack(k);
             if (!itemStack.isEmpty()) {
                 if (Block.getBlockFromItem(itemStack.getItem()) instanceof BiomeBottle) {
                     if (stack1 == ItemStack.EMPTY) stack1 = itemStack;

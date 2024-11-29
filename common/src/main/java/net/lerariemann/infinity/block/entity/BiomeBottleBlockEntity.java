@@ -1,21 +1,19 @@
 package net.lerariemann.infinity.block.entity;
 
 import net.lerariemann.infinity.block.custom.BiomeBottle;
-import net.lerariemann.infinity.item.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
@@ -59,35 +57,35 @@ public class BiomeBottleBlockEntity extends BlockEntity {
         this.biome = i;
     }
 
-    public void writeNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(tag, registryLookup);
+    public void writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
         tag.putString("Biome", biome.toString());
         tag.putInt("Color", color);
         tag.putInt("Charge", charge);
         if (from_charge > 0) tag.putInt("from_charge", from_charge);
     }
 
-    public void readNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(tag, registryLookup);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         this.charge = tag.getInt("Charge");
-        this.biome = Identifier.of(tag.getString("Biome"));
+        this.biome = new Identifier(tag.getString("Biome"));
         this.color = tag.getInt("Color");
         this.from_charge = InfinityOptions.test(tag, "from_charge", 0);
     }
 
-    @Override
-    protected void addComponents(ComponentMap.Builder componentMapBuilder) {
-        super.addComponents(componentMapBuilder);
-        BiomeBottle.addComponents(componentMapBuilder, biome, color, charge);
-    }
-
-    @Override
-    protected void readComponents(BlockEntity.ComponentsAccess components) {
-        super.readComponents(components);
-        this.biome = components.getOrDefault(ModItemFunctions.BIOME_CONTENTS.get(), BiomeBottle.defaultBiome());
-        this.color = components.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF);
-        this.charge = components.getOrDefault(ModItemFunctions.CHARGE.get(), 0);
-    }
+//    @Override
+//    protected void addComponents(ComponentMap.Builder componentMapBuilder) {
+//        super.addComponents(componentMapBuilder);
+//        BiomeBottle.addComponents(componentMapBuilder, biome, color, charge);
+//    }
+//
+//    @Override
+//    protected void readComponents(BlockEntity.ComponentsAccess components) {
+//        super.readComponents(components);
+//        this.biome = components.getOrDefault(ModItemFunctions.BIOME_CONTENTS.get(), BiomeBottle.defaultBiome());
+//        this.color = components.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF);
+//        this.charge = components.getOrDefault(ModItemFunctions.CHARGE.get(), 0);
+//    }
 
     @Nullable
     @Override
@@ -96,8 +94,8 @@ public class BiomeBottleBlockEntity extends BlockEntity {
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        return createNbt(registryLookup);
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
     }
 
     public Object getRenderData() {
@@ -106,7 +104,7 @@ public class BiomeBottleBlockEntity extends BlockEntity {
 
     public ItemStack asStack() {
         ItemStack itemStack = ModItems.BIOME_BOTTLE_ITEM.get().getDefaultStack();
-        itemStack.applyComponentsFrom(this.createComponentMap());
+//        itemStack.applyComponentsFrom(this.createComponentMap());
         return itemStack;
     }
 
@@ -139,7 +137,7 @@ public class BiomeBottleBlockEntity extends BlockEntity {
                     int charge_new = be.charge - diff;
                     BiomeBottle.spreadRing(w, pos, be.biome, be.from_charge - be.charge, be.from_charge - charge_new);
                     be.charge = charge_new;
-                    world.setBlockState(pos, state.with(BiomeBottle.LEVEL, Math.clamp(level - 1, 0, 10)));
+                    world.setBlockState(pos, state.with(BiomeBottle.LEVEL, MathHelper.clamp(level - 1, 0, 10)));
                     BiomeBottle.playSploosh(w, pos);
                 }
             }

@@ -12,13 +12,12 @@ import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.block.BlockState;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.registry.CombinedDynamicRegistries;
-import net.minecraft.registry.ServerDynamicRegistryType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.PlayerSaveHandler;
+import net.minecraft.world.WorldSaveHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,17 +30,17 @@ public class PlayerManagerMixin {
     public boolean infinity$needsTpOut;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injected(MinecraftServer server, CombinedDynamicRegistries<ServerDynamicRegistryType> registryManager, PlayerSaveHandler saveHandler, int maxPlayers, CallbackInfo ci) {
+    private void injected(MinecraftServer server, CombinedDynamicRegistries registryManager, WorldSaveHandler saveHandler, int maxPlayers, CallbackInfo ci) {
         infinity$needsTpOut = false;
     }
 
     @Inject(method="onPlayerConnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getOverworld()Lnet/minecraft/server/world/ServerWorld;"))
-    void inj(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci) {
+    void inj(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
         infinity$needsTpOut = true;
     }
 
     @Inject(method="onPlayerConnect", at = @At(value = "TAIL"))
-    void inj2(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci) {
+    void inj2(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
         if (infinity$needsTpOut) {
             infinity$needsTpOut = false;
             WarpLogic.respawnAlive(player);

@@ -98,15 +98,14 @@ public class ModItems {
     public static RegistrySupplier<Item> registerKeyItem() {
         final Item.Settings keySettings = addFallbackTab(new Item.Settings(), ItemGroups.INGREDIENTS);
         RegistrySupplier<Item> registeredItem = ITEMS.register("key", () -> new TransfiniteKeyItem(keySettings));
-        addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.OMINOUS_TRIAL_KEY);
+        addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.AMETHYST_SHARD);
         return registeredItem;
     }
 
     public static RegistrySupplier<Item> registerHomeItem() {
-        final Item.Settings homeSettings = addFallbackTab(new Item.Settings(), ItemGroups.INGREDIENTS).component(DataComponentTypes.FOOD,
-                new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of()));
+        final Item.Settings homeSettings = new Item.Settings().food(new FoodComponent.Builder().build());
         RegistrySupplier<Item> registeredItem = ITEMS.register("fine_item", () -> new HomeItem(homeSettings));
-        addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
+        addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.RECOVERY_COMPASS);
         return registeredItem;
     }
 
