@@ -185,7 +185,7 @@ public class Iridescence {
                     RegistryEntry<Biome> b = creeper.getWorld().getBiome(creeper.getBlockPos());
                     creeper.setBiome(b.getIdAsString());
                     creeper.setColor(b.value().getFoliageColor());
-                    creeper.setRange(8 + creeper.getRandom().nextFloat() * 24);
+                    creeper.setRandomCharge();
                 }
                 currEntity.getWorld().spawnEntity(newEntity);
                 newEntity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);

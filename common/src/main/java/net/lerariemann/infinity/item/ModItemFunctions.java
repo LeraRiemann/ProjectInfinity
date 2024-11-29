@@ -1,9 +1,13 @@
 package net.lerariemann.infinity.item;
 
 import com.mojang.serialization.Codec;
+import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.minecraft.component.ComponentType;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.network.codec.PacketCodecs;
@@ -60,5 +64,26 @@ public class ModItemFunctions {
 
     private static <T> RegistrySupplier<ComponentType<T>> register(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
         return COMPONENT_TYPES.register(id, () -> (builderOperator.apply(ComponentType.builder())).build());
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static void registerModelPredicates() {
+        ItemPropertiesRegistry.register(ModItems.TRANSFINITE_KEY.get(), InfinityMod.getId("key"), (stack, world, entity, seed) -> {
+            Identifier id = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
+            if (id == null) return 0.02f;
+            String s = id.toString();
+            if (s.contains("infinity:generated_")) return 0.01f;
+            return switch(s) {
+                case "minecraft:random" -> 0.02f;
+                case "minecraft:the_end" -> 0.03f;
+                case "infinity:pride" -> 0.04f;
+                default -> 0;
+            };
+        });
+        ItemPropertiesRegistry.register(ModItems.BIOME_BOTTLE_ITEM.get(), InfinityMod.getId("bottle"),
+                (stack, world, entity, seed) -> {
+                    int charge = BiomeBottle.getCharge(stack);
+                    return Math.clamp(charge / 1000.0f, 0f, 1f);
+                });
     }
 }

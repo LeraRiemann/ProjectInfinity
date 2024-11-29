@@ -43,6 +43,10 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
         super(entityType, world);
     }
 
+    public void setRandomCharge() {
+        setRange((float)(10*(1 + random.nextFloat()*(Math.sqrt(10) - 1))));
+    }
+
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
@@ -52,7 +56,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
         String biomename = biomes != null ? biomes.getElement(world.getRandom().nextDouble()) : "minecraft:plains";
         Biome b = reg.get(Identifier.of(biomename));
         this.setColor(b != null ? b.getFoliageColor() : 7842607);
-        this.setRange(8 + random.nextFloat() * 24);
+        this.setRandomCharge();
         this.setBiome(biomename);
         return super.initialize(world, difficulty, spawnReason, entityData);
     }

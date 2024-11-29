@@ -2,15 +2,10 @@ package net.lerariemann.infinity.item;
 
 import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
-import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.minecraft.block.Block;
 import net.minecraft.component.DataComponentTypes;
@@ -18,7 +13,6 @@ import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
 
 import java.util.List;
 import java.util.Optional;
@@ -132,23 +126,5 @@ public class ModItems {
     public static void registerModItems() {
         addAfter(IRIDESCENCE_BUCKET, ItemGroups.TOOLS, Items.MILK_BUCKET);
         ITEMS.register();
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static void registerModelPredicates() {
-        ItemPropertiesRegistry.register(TRANSFINITE_KEY.get(), InfinityMod.getId("key"), (stack, world, entity, seed) -> {
-            Identifier id = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
-            if (id == null) return 0.02f;
-            String s = id.toString();
-            if (s.contains("infinity:generated_")) return 0.01f;
-            return switch(s) {
-                case "minecraft:random" -> 0.02f;
-                case "minecraft:the_end" -> 0.03f;
-                case "infinity:pride" -> 0.04f;
-                default -> 0;
-            };
-        });
-        ItemPropertiesRegistry.register(BIOME_BOTTLE_ITEM.get(), InfinityMod.getId("bottle"),
-                (stack, world, entity, seed) -> Math.clamp(BiomeBottle.getLevel(BiomeBottle.getCharge(stack)) / 10.0f, 0f, 1f));
     }
 }
