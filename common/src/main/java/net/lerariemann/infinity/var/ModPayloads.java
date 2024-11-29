@@ -25,7 +25,6 @@ public class ModPayloads {
     public static final Identifier WORLD_ADD = getId("reload_worlds");
     public static final Identifier SHADER_RELOAD = getId("reload_shader");
     public static final Identifier STARS_RELOAD = getId("reload_stars");
-    public static final Identifier RESPAWN_ALIVE = getId("respawn_alive");
 
     public static PacketByteBuf buildPacket(ServerWorld destination) {
         PacketByteBuf buf = PlatformMethods.createPacketByteBufs();
@@ -53,8 +52,4 @@ public class ModPayloads {
         ((WorldRendererAccess)(client.worldRenderer)).infinity$setNeedsStars(true);
     }
 
-    public static void recieveSpawnAlive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        assert client.player != null;
-        client.player.networkHandler.sendPacket(new ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.PERFORM_RESPAWN));
-    }
 }
