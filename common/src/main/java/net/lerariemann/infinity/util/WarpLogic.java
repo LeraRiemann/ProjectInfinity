@@ -53,7 +53,14 @@ public interface WarpLogic {
     static void respawnAlive(@Nullable ServerPlayerEntity player) {
         if (player == null) return;
         BlockPos targ = player.getSpawnPointPosition();
-        player.teleport(targ.getX(), targ.getY(), targ.getZ());
+
+        if (targ != null) {
+            player.teleport(targ.getX(), targ.getY(), targ.getZ());
+        }
+        else {
+            BlockPos spawnTarg = player.getServerWorld().getSpawnPos();
+            player.teleport(spawnTarg.getX(), spawnTarg.getY(), spawnTarg.getZ());
+        }
     }
 
     static void onInvocationNeedDetected(PlayerEntity player) {
