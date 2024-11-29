@@ -75,7 +75,7 @@ public class TransfiniteAltarBase extends Block {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
         if (world instanceof ServerWorld serverWorld) {
-            if (itemStack.isEmpty() && player.isSneaking() &&
+            if (itemStack.isEmpty() &&
                     world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
                 if (player instanceof ServerPlayerEntity spe) ModCriteria.BIOME_BOTTLE.get().trigger(spe, bbbe);
                 bbbe.startTicking();
@@ -110,10 +110,12 @@ public class TransfiniteAltarBase extends Block {
                     setColor(world, pos, state, i);
                     world.playSound(null, pos, SoundEvents.ITEM_DYE_USE, SoundCategory.BLOCKS, 1f, 1f);
                 }
+                return ActionResult.SUCCESS;
             }
             if (itemStack.isOf(Items.SUNFLOWER)) {
                 world.setBlockState(pos, state.with(FLOWER, !state.get(FLOWER)));
                 world.playSound(null, pos, SoundEvents.BLOCK_AZALEA_LEAVES_PLACE, SoundCategory.BLOCKS, 1f, 1f);
+                return ActionResult.SUCCESS;
             }
         }
         if (itemStack.isOf(Items.SUNFLOWER)) return ActionResult.SUCCESS;
