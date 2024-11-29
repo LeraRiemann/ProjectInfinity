@@ -29,11 +29,11 @@ public interface ShaderLoader {
         }
         Identifier iridShader = Iridescence.shouldApplyShader(client.player);
         if (iridShader != null) {
-            ((GameRendererAccess)(client.gameRenderer)).projectInfinity$loadPP(iridShader);
+            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(iridShader);
             return;
         }
         if(bl && shaderDir(client).resolve(FILENAME).toFile().exists()) {
-            ((GameRendererAccess)(client.gameRenderer)).projectInfinity$loadPP(InfinityMod.getId("shaders/" + FILENAME));
+            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMod.getId("shaders/" + FILENAME));
             return;
         }
         client.gameRenderer.disablePostProcessor();

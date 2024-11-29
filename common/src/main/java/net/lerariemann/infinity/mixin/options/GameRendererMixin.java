@@ -20,7 +20,7 @@ public class GameRendererMixin implements GameRendererAccess {
     }
 
     @Override
-    public void projectInfinity$loadPP(Identifier id) {
+    public void infinity$loadPP(Identifier id) {
         loadPostProcessor(id);
     }
 

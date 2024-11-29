@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.config;
+package net.lerariemann.infinity.compat;
 
 
 import com.google.gson.JsonElement;
