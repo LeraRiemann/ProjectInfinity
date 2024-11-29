@@ -36,7 +36,10 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         entity.setInvulnerable(false);
         switch (entity) {
             case ServerPlayerEntity player -> Iridescence.updateShader(player);
-            case ChaosPawn pawn -> pawn.unchess();
+            case ChaosPawn pawn -> {
+                pawn.unchess();
+                Iridescence.convTriggers(pawn);
+            }
             case MobEntity currEntity -> Iridescence.endConversion(currEntity);
             default -> {
             }
