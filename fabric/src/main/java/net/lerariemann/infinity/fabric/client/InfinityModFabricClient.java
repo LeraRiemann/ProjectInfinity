@@ -6,9 +6,12 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.entity.ModBlockEntities;
+import net.lerariemann.infinity.block.entity.render.IridescentBlockEntityRenderer;
 import net.lerariemann.infinity.item.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 
 public class InfinityModFabricClient implements ClientModInitializer {
     @Override

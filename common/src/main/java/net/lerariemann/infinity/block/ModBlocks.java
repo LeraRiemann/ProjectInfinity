@@ -37,6 +37,8 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> BIOME_BOTTLE = BLOCKS.register("biome_bottle", () ->
             new BiomeBottle(AbstractBlock.Settings.copy(Blocks.BEACON).luminance(state -> state.get(BiomeBottle.LEVEL))
                     .sounds(BlockSoundGroup.GLASS)));
+    public static final RegistrySupplier<Block> IRIDESCENT_WOOL = BLOCKS.register("iridescent_wool", () ->
+            new IridescentBlock(AbstractBlock.Settings.copy(Blocks.WHITE_WOOL)));
 
     public static void registerModBlocks() {
         BLOCKS.register();
