@@ -2,7 +2,7 @@
   "parent": "infinity:iridescence",
   "display": {
     "icon": {
-      "id": "infinity:key"
+      "item": "infinity:key"
     },
     "title": {
       "translate": "advancements.infinity.acid_test.title"

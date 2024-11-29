@@ -60,14 +60,14 @@ public class ModItemFunctions {
                     }
                 }));
         SET_ALTAR_STATE = LOOT_FUNCTION_TYPES.register("set_altar_state", () ->
-                new LootFunctionType(new JsonSerializer<LootFunction>() {
+                new LootFunctionType(new JsonSerializer<SetAltarStateLootFunction>() {
                     @Override
-                    public void toJson(JsonObject json, LootFunction object, JsonSerializationContext context) {
+                    public void toJson(JsonObject json, SetAltarStateLootFunction object, JsonSerializationContext context) {
 
                     }
 
                     @Override
-                    public LootFunction fromJson(JsonObject json, JsonDeserializationContext context) {
+                    public SetAltarStateLootFunction fromJson(JsonObject json, JsonDeserializationContext context) {
                         return null;
                     }
                 }));

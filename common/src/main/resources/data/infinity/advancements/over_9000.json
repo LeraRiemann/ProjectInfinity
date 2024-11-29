@@ -16,11 +16,7 @@
     "frame": "challenge",
     "hidden": false,
     "icon": {
-      "id": "infinity:biome_bottle",
-      "components": {
-        "infinity:charge": 9001,
-        "infinity:color": 9551193
-      }
+      "item": "infinity:biome_bottle"
     },
     "show_toast": true,
     "title": {

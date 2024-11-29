@@ -30,6 +30,7 @@ public class ModStructureTypes {
 
         PYRAMID = STRUCTURE_TYPES.register("pyramid", () -> PyramidStructure.CODEC::codec);
         SETUPPER = STRUCTURE_TYPES.register("setupper", () -> SetupperStructure.CODEC::codec);
+        TEXT = STRUCTURE_TYPES.register("text", () -> TextStructure.CODEC::codec);
         PYRAMID_PIECE = register(PyramidGenerator::new, "pypiece");
         LETTER = register(LetterPiece::new, "letter");
 
