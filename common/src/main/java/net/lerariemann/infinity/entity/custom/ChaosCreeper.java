@@ -19,27 +19,19 @@ import net.minecraft.item.ItemUsage;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockBox;
-import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeCoords;
-import net.minecraft.world.biome.source.BiomeSupplier;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public static TrackedData<Integer> color = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.INTEGER);
@@ -138,46 +130,15 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public void blow_up() {
         float f = 3 * this.getRange() / 16;
         this.dead = true;
-        int r = (int) (this.getRange());
         MinecraftServer s = this.getServer();
         if (s != null) {
             ServerWorld serverWorld = s.getWorld(this.getWorld().getRegistryKey());
             if (serverWorld != null) {
-                reg = s.getRegistryManager().get(RegistryKeys.BIOME);
-                BlockBox blockBox = new BlockBox(getBlockX() - r, getBlockY() - r, getBlockZ() - r,
-                        getBlockX() + r, getBlockY() + r, getBlockZ() + r);
-                ArrayList<Chunk> list = new ArrayList<>();
-                for (int k = ChunkSectionPos.getSectionCoord(blockBox.getMinZ()); k <= ChunkSectionPos.getSectionCoord(blockBox.getMaxZ()); ++k) {
-                    for (int l = ChunkSectionPos.getSectionCoord(blockBox.getMinX()); l <= ChunkSectionPos.getSectionCoord(blockBox.getMaxX()); ++l) {
-                        Chunk chunk = serverWorld.getChunk(l, k, ChunkStatus.FULL, false);
-                        if (chunk != null) {
-                            list.add(chunk);
-                        }
-                    }
-                }
-                for (Chunk chunk : list) {
-                    chunk.populateBiomes(createBiomeSupplier(chunk, blockBox, reg.getEntry(this.getBiome())),
-                            serverWorld.getChunkManager().getNoiseConfig().getMultiNoiseSampler());
-                    chunk.setNeedsSaving(true);
-                }
-                serverWorld.getChunkManager().chunkLoadingManager.sendChunkBiomePackets(list);
+                BiomeBottle.spread(serverWorld, getBlockPos(), Identifier.of(getBiomeId()), getCharge());
             }
         }
         this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), f, World.ExplosionSourceType.NONE);
         this.discard();
-    }
-
-    private static BiomeSupplier createBiomeSupplier(Chunk chunk, BlockBox box, RegistryEntry<Biome> biome) {
-        return (x, y, z, noise) -> {
-            int i = BiomeCoords.toBlock(x);
-            int j = BiomeCoords.toBlock(y);
-            int k = BiomeCoords.toBlock(z);
-            RegistryEntry<Biome> registryEntry2 = chunk.getBiomeForNoiseGen(x, y, z);
-            if (box.contains(i, j, k)) {
-                return biome;
-            }
-            return registryEntry2;
-        };
     }
 
     public int getCharge() {

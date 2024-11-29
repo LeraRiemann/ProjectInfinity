@@ -2,7 +2,6 @@ package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
-import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
 import net.lerariemann.infinity.item.ModComponentTypes;
 import net.minecraft.block.*;
@@ -16,6 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.Identifier;
@@ -29,7 +30,6 @@ import net.minecraft.world.WorldView;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeCoords;
 import net.minecraft.world.chunk.Chunk;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -77,7 +77,7 @@ public class BiomeBottle extends BlockWithEntity {
     }
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, ModBlockEntities.ALTAR_COSMIC.get(), world.isClient ? null : CosmicAltarEntity::serverTick);
+        return validateTicker(type, ModBlockEntities.BIOME_BOTTLE.get(), world.isClient ? null : BiomeBottleBlockEntity::serverTick);
     }
 
     @Override
@@ -91,6 +91,10 @@ public class BiomeBottle extends BlockWithEntity {
         return Identifier.ofVanilla("plains");
     }
 
+    public static int getMaximumCharge(int level) {
+        return Math.clamp(level, 0, 10)*100;
+    }
+
     public static int getLevel(int charge) {
         return Math.clamp(charge / 100, 0, 10);
     }
@@ -99,12 +103,12 @@ public class BiomeBottle extends BlockWithEntity {
         return getCharge(stack) == 0;
     }
 
-    public static Identifier getBiome(ItemStack stack) {
-        return stack.getComponents().getOrDefault(ModComponentTypes.BIOME_CONTENTS.get(), defaultBiome());
-    }
-
     public static int getCharge(ItemStack stack) {
         return stack.getComponents().getOrDefault(ModComponentTypes.CHARGE.get(), 0);
+    }
+
+    public static void playSploosh(World world, BlockPos pos) {
+        world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 1f, 1f);
     }
 
     public static ComponentMap.Builder addComponents(ComponentMap.Builder componentMapBuilder,
@@ -117,16 +121,18 @@ public class BiomeBottle extends BlockWithEntity {
         return componentMapBuilder;
     }
 
-    public static void spread(ServerWorld world, BlockPos origin, Identifier biome, int charge) {
-        LogManager.getLogger().info("Starting biome spread");
+    public static RegistryEntry<Biome> biomeFromId(ServerWorld world, Identifier biome) {
         Optional<RegistryEntry.Reference<Biome>> entry = world.getServer().getRegistryManager().get(RegistryKeys.BIOME).getEntry(biome);
-        if (entry.isEmpty()) return;
-        LogManager.getLogger().info("Step 1");
+        return entry.orElse(null);
+    }
+
+    public static void spread(ServerWorld world, BlockPos origin, Identifier biomeId, int charge) {
         Set<BlockPos> posSet = new HashSet<>();
         Set<Chunk> set = new HashSet<>();
+        origin = origin.down(origin.getY());
         double ra = charge / Math.PI;
-        for (int i = 0; i*i <= ra; i++) {
-            for (int j = 0; i*i + j*j <= ra; j++) {
+        for (int i = 0; i*i < ra; i++) {
+            for (int j = 0; i*i + j*j < ra; j++) {
                 List<BlockPos> signs = offsets(origin, i, j);
                 posSet.addAll(signs);
                 set.addAll(signs.stream().map(ChunkPos::new)
@@ -134,14 +140,37 @@ public class BiomeBottle extends BlockWithEntity {
                         .filter(Objects::nonNull).collect(Collectors.toSet()));
             }
         }
+        spread(world, set, posSet, biomeFromId(world, biomeId));
+    }
+
+    public static void spreadRing(ServerWorld world, BlockPos origin, Identifier biomeId, int chargemin, int chargemax) {
+        Set<BlockPos> posSet = new HashSet<>();
+        Set<Chunk> set = new HashSet<>();
+        origin = origin.down(origin.getY());
+        double ramax = chargemax / Math.PI;
+        double ramin = chargemin / Math.PI;
+        for (int i = 0; i*i < ramax; i++) {
+            for (int j = 0; i*i + j*j < ramax; j++) if (i*i + j*j >= ramin) {
+                List<BlockPos> signs = offsets(origin, i, j);
+                posSet.addAll(signs);
+                set.addAll(signs.stream().map(ChunkPos::new)
+                        .map(chunkPos -> world.getChunk(chunkPos.getStartPos()))
+                        .filter(Objects::nonNull).collect(Collectors.toSet()));
+            }
+        }
+        spread(world, set, posSet, biomeFromId(world, biomeId));
+    }
+
+    public static void spread(ServerWorld world, Set<Chunk> set, Set<BlockPos> posSet, RegistryEntry<Biome> biome) {
+        if (biome == null) return;
         set.forEach(chunk -> {
             if (chunk != null) {
                 chunk.populateBiomes((x, y, z, noise) -> {
                     int i = BiomeCoords.toBlock(x);
                     int k = BiomeCoords.toBlock(z);
                     RegistryEntry<Biome> registryEntry2 = chunk.getBiomeForNoiseGen(x, y, z);
-                    if (posSet.contains(new BlockPos(i, origin.getY(), k))) {
-                        return entry.get();
+                    if (posSet.contains(new BlockPos(i, 0, k))) {
+                        return biome;
                     }
                     return registryEntry2;
                 }, world.getChunkManager().getNoiseConfig().getMultiNoiseSampler());

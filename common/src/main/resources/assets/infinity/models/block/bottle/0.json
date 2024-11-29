@@ -4,7 +4,8 @@
 		"1": "infinity:block/bottle/side",
 		"3": "infinity:block/bottle/top",
 		"5": "infinity:block/bottle/cork",
-		"7": "infinity:block/bottle/tip"
+		"7": "infinity:block/bottle/tip",
+		"particle": "infinity:block/bottle/side"
 	},
 	"elements": [
 		{

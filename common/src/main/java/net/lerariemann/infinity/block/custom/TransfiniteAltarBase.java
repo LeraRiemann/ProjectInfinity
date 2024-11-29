@@ -1,17 +1,16 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.*;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
@@ -75,16 +74,9 @@ public class TransfiniteAltarBase extends Block {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
         if (world instanceof ServerWorld serverWorld) {
-            if (itemStack.isOf(ModItems.BIOME_BOTTLE_ITEM.get())) {
-                BiomeBottle.spread(serverWorld, pos, BiomeBottle.getBiome(itemStack),
-                        BiomeBottle.getCharge(itemStack));
-                ItemStack itemStack2 = new ItemStack(itemStack.getItem());
-                itemStack2.applyComponentsFrom(BiomeBottle.addComponents(ComponentMap.builder(),
-                        BiomeBottle.defaultBiome(), 0, 0).build());
-                ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
-                player.setStackInHand(Hand.MAIN_HAND, itemStack3);
-                world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 1f, 1f);
-                return ActionResult.SUCCESS;
+            if (itemStack.isEmpty() && player.isSneaking() &&
+                    world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
+                bbbe.startTicking();
             }
 
             //activation
