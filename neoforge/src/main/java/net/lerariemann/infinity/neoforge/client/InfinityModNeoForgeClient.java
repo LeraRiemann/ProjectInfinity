@@ -52,6 +52,7 @@ public class InfinityModNeoForgeClient {
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
         event.register(PlatformMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get());
+        event.register(PlatformMethods::getOverlayColorFromComponents, ModItems.BIOME_BOTTLE_ITEM.get());
     }
     @SubscribeEvent
     public static void registerModelPredicates(FMLClientSetupEvent event) {

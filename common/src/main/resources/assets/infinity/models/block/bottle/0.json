@@ -44,5 +44,6 @@
 			}
 		}
 	],
-	"display": {}
+	"display": {},
+	"render_type": "minecraft:translucent"
 }

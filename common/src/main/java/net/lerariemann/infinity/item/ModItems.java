@@ -118,8 +118,7 @@ public class ModItems {
     }
 
     public static RegistrySupplier<Item> registerBottleItem() {
-        final Item.Settings bottlesettings = addFallbackTab(new Item.Settings(), ItemGroups.FUNCTIONAL)
-                .component(ModItemFunctions.CHARGE.get(), 0);
+        final Item.Settings bottlesettings = addFallbackTab(new Item.Settings(), ItemGroups.FUNCTIONAL);
         RegistrySupplier<Item> registeredItem = ITEMS.register("biome_bottle", () ->
                 new BiomeBottleItem(ModBlocks.BIOME_BOTTLE.get(), bottlesettings));
         addAfter(registeredItem, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);

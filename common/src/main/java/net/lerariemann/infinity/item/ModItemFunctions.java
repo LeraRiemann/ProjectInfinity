@@ -26,6 +26,7 @@ public class ModItemFunctions {
             DeferredRegister.create(MOD_ID, RegistryKeys.DATA_COMPONENT_TYPE);
 
     public static RegistrySupplier<LootFunctionType<SetLevelLootFunction>> SET_BIOME_BOTTLE_LEVEL;
+    public static RegistrySupplier<LootFunctionType<SetAltarStateLootFunction>> SET_ALTAR_STATE;
     public static final DeferredRegister<LootFunctionType<?>> LOOT_FUNCTION_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.LOOT_FUNCTION_TYPE);
 
@@ -48,6 +49,8 @@ public class ModItemFunctions {
 
         SET_BIOME_BOTTLE_LEVEL = LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () ->
                 new LootFunctionType<>(SetLevelLootFunction.CODEC));
+        SET_ALTAR_STATE = LOOT_FUNCTION_TYPES.register("set_altar_state", () ->
+                new LootFunctionType<>(SetAltarStateLootFunction.CODEC));
         LOOT_FUNCTION_TYPES.register();
 
         BIOME_BOTTLE_COMBINING = RECIPE_SERIALIZERS.register("biome_bottle_combining", () ->
