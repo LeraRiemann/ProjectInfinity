@@ -17,7 +17,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
@@ -48,6 +50,18 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
             ci.cancel();
         }
     }
+    @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(intValue = 1500))
+    private int injected(int constant) {
+        return infinity$options().getNumStars();
+    }
+    @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(floatValue = 0.15f))
+    private float injected2(float constant) {
+        return infinity$options().getStarSizeBase();
+    }
+    @ModifyConstant(method = "renderStars(Lnet/minecraft/client/render/BufferBuilder;)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", constant = @Constant(floatValue = 0.1f))
+    private float injected3(float constant) {
+        return infinity$options().getStarSizeModifier();
+    }
 
     @Unique
     private void infinity$renderEntireSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback) {
@@ -68,13 +82,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     @Unique
     public void infinity$createStarsIfNeeded() {
         if (infinity$needsStars) {
-            if (this.starsBuffer != null) {
-                this.starsBuffer.close();
-            }
-            this.starsBuffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
-            this.starsBuffer.bind();
-            this.starsBuffer.upload(SkyRenderer.buildStarsBuffer(Tessellator.getInstance(), infinity$options()));
-            VertexBuffer.unbind();
+            renderStars();
             infinity$needsStars = false;
         }
     }
