@@ -37,40 +37,11 @@ public class ModItemFunctions {
 
     public static void registerComponentTypes() {
         InfinityMod.LOGGER.debug("Registering component types for " + MOD_ID);
-//        KEY_DESTINATION = register("key_destination",
-//                (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
-//        BIOME_CONTENTS = register("biome_contents",
-//                (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
-//        COLOR = register("color",
-//                (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
-//        CHARGE = register("charge",
-//                (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
-//        DO_NOT_OPEN = register("do_not_open", (builder) -> builder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL));
 
         SET_BIOME_BOTTLE_LEVEL = LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () ->
-                new LootFunctionType(new JsonSerializer<SetLevelLootFunction>() {
-                    @Override
-                    public void toJson(JsonObject json, SetLevelLootFunction object, JsonSerializationContext context) {
-
-                    }
-
-                    @Override
-                    public SetLevelLootFunction fromJson(JsonObject json, JsonDeserializationContext context) {
-                        return null;
-                    }
-                }));
+                new LootFunctionType(new SetLevelLootFunction.Serializer()));
         SET_ALTAR_STATE = LOOT_FUNCTION_TYPES.register("set_altar_state", () ->
-                new LootFunctionType(new JsonSerializer<SetAltarStateLootFunction>() {
-                    @Override
-                    public void toJson(JsonObject json, SetAltarStateLootFunction object, JsonSerializationContext context) {
-
-                    }
-
-                    @Override
-                    public SetAltarStateLootFunction fromJson(JsonObject json, JsonDeserializationContext context) {
-                        return null;
-                    }
-                }));
+                new LootFunctionType(new SetAltarStateLootFunction.Serializer()));
         LOOT_FUNCTION_TYPES.register();
 
         BIOME_BOTTLE_COMBINING = RECIPE_SERIALIZERS.register("biome_bottle_combining", () ->

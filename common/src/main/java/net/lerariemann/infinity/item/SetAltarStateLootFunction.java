@@ -1,5 +1,10 @@
 package net.lerariemann.infinity.item;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSyntaxException;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lerariemann.infinity.block.custom.TransfiniteAltar;
@@ -10,18 +15,36 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.function.ConditionalLootFunction;
 import net.minecraft.loot.function.LootFunctionType;
+import net.minecraft.loot.function.SetNbtLootFunction;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.util.JsonHelper;
 
 import java.util.List;
 import java.util.Map;
 
 public class SetAltarStateLootFunction extends ConditionalLootFunction {
-//    public static final MapCodec<SetAltarStateLootFunction> CODEC = RecordCodecBuilder.mapCodec(
-//            instance -> addConditionsField(instance).apply(instance, SetAltarStateLootFunction::new)
-//    );
+    public static class Serializer extends ConditionalLootFunction.Serializer<SetAltarStateLootFunction> {
+        public Serializer() {
+        }
 
-    private SetAltarStateLootFunction(List<LootCondition> conditions) {
-        super(conditions.toArray(new LootCondition[0]));
+        public void toJson(JsonObject jsonObject, SetAltarStateLootFunction setAltarStateLootFunction, JsonSerializationContext jsonSerializationContext) {
+            super.toJson(jsonObject, setAltarStateLootFunction, jsonSerializationContext);
+            jsonObject.addProperty("tag", setAltarStateLootFunction.nbt.toString());
+        }
+
+        public SetAltarStateLootFunction fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext, LootCondition[] lootConditions) {
+            try {
+                NbtCompound nbtCompound = StringNbtReader.parse(JsonHelper.getString(jsonObject, "tag"));
+                return new SetAltarStateLootFunction(lootConditions);
+            } catch (CommandSyntaxException commandSyntaxException) {
+                throw new JsonSyntaxException(commandSyntaxException.getMessage());
+            }
+        }
+    }
+
+    private SetAltarStateLootFunction(LootCondition[] conditions) {
+        super(conditions);
     }
 
     @Override
