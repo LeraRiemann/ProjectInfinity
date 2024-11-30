@@ -48,7 +48,8 @@
     "mobs.passive.WolfEntityMixin",
     "options.DimensionTypeMixin",
     "options.PlayerManagerMixin",
-    "options.ServerWorldMixin"
+    "options.ServerWorldMixin",
+    "HeightLimitViewMixin"
   ],
   "client": [
     "iridescence.LivingEntityRendererMixin",
