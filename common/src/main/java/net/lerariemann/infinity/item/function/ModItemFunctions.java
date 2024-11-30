@@ -9,29 +9,27 @@ import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.item.ModItems;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SpecialRecipeSerializer;
-import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
+import static net.lerariemann.infinity.item.ModItems.TRANSFINITE_KEY;
 
 public class ModItemFunctions {
     public static final DeferredRegister<ComponentType<?>> COMPONENT_TYPES =
@@ -43,17 +41,6 @@ public class ModItemFunctions {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_TYPE);
 
-
-    public static RegistrySupplier<ComponentType<Identifier>> KEY_DESTINATION = registerComponentType("key_destination",
-            (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
-    public static RegistrySupplier<ComponentType<Identifier>> BIOME_CONTENTS = registerComponentType("biome_contents",
-            (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
-    public static RegistrySupplier<ComponentType<Integer>> COLOR = registerComponentType("color",
-            (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
-    public static RegistrySupplier<ComponentType<Integer>> CHARGE = registerComponentType("charge",
-            (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
-    public static RegistrySupplier<ComponentType<Boolean>> DO_NOT_OPEN = registerComponentType("do_not_open",
-            (builder) -> builder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL));
 
     public static RegistrySupplier<LootFunctionType<SetLevelLootFunction>> SET_BIOME_BOTTLE_LEVEL =
             LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () -> new LootFunctionType<>(SetLevelLootFunction.CODEC));
@@ -107,14 +94,31 @@ public class ModItemFunctions {
         itemEntity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
     }
 
+    public static @Nullable String getBiomeComponents(ItemStack stack) {
+        if (stack.getNbt() != null) {
+            return stack.getNbt().getString("bottle_biome");
+        }
+        return null;
+    }
+
+    public static @Nullable String getDimensionComponents(ItemStack stack) {
+        if (stack.getNbt() != null) {
+            return stack.getNbt().getString("key_destination");
+        }
+        return null;
+    }
+
     @Environment(EnvType.CLIENT)
     public static void registerModelPredicates() {
-        ItemPropertiesRegistry.register(ModItems.TRANSFINITE_KEY.get(), InfinityMod.getId("key"), (stack, world, entity, seed) -> {
-            Identifier id = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
-            if (id == null) return 0.02f;
-            String s = id.toString();
-            if (s.contains("infinity:generated_")) return 0.01f;
-            return switch(s) {
+        ItemPropertiesRegistry.register(TRANSFINITE_KEY.get(), InfinityMod.getId("key"), (stack, world, entity, seed) -> {
+            String id;
+            if (stack.getNbt() != null) {
+                id = stack.getNbt().getString("key_destination");
+            }
+            else id = "minecraft:random";
+            if (id == null) return 0;
+            if (id.contains("infinity:generated_")) return 0.01f;
+            return switch(id) {
                 case "minecraft:random" -> 0.02f;
                 case "minecraft:the_end" -> 0.03f;
                 case "infinity:pride" -> 0.04f;
@@ -124,7 +128,7 @@ public class ModItemFunctions {
         ItemPropertiesRegistry.register(ModItems.BIOME_BOTTLE_ITEM.get(), InfinityMod.getId("bottle"),
                 (stack, world, entity, seed) -> {
                     int charge = BiomeBottle.getCharge(stack);
-                    return Math.clamp(charge / 1000.0f, 0f, 1f);
+                    return MathHelper.clamp(charge / 1000.0f, 0f, 1f);
                 });
     }
 }

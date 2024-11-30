@@ -118,7 +118,7 @@ public class Iridescence {
     }
 
     public static Phase getPhase(LivingEntity entity) {
-        StatusEffectInstance effect = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
+        StatusEffectInstance effect = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value());
         if (effect == null) return Phase.INITIAL;
         return getPhase(effect.getDuration(), effect.getAmplifier());
     }

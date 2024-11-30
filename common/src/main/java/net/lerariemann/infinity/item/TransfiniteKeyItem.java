@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.item;
 
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
