@@ -4,11 +4,11 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
-import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.PortalModifier;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
@@ -87,7 +87,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
                     pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
                 Identifier dimensionName = registryKey.getValue();
 
-                NeitherPortalBlock.modifyPortalRecursive(destination, pos2, destination.getBlockState(pos), dimensionName, true);
+                NeitherPortalBlock.modifyPortalRecursive(destination, pos2,
+                        PortalModifier.onInitialCollision(destination, destination.getBlockState(pos2), dimensionName, true));
                 break;
             }
         }
@@ -103,7 +104,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {
         /* Handle infinity options */
-        InfinityOptions opt = ((InfinityOptionsAccess)getWorld()).infinity$getOptions();
+        InfinityOptions opt = InfinityOptions.access(getWorld());
         if (!opt.effect.isEmpty()) {
             if (getWorld().getTime() % opt.effect.cooldown() == 0) {
                 addStatusEffect(new StatusEffectInstance(opt.effect.id(), opt.effect.duration(), opt.effect.amplifier()));
@@ -126,17 +127,17 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
         /* Handle effects from dimension deletion */
         int i = ((Timebombable)(getServerWorld())).infinity$isTimebombed();
-        if (i > 200) {
+        if (i > 3540) {
+            WarpLogic.respawnAlive((ServerPlayerEntity)(Object)this);
+        }
+        else if (i > 3500) {
+            ModCriteria.WHO_REMAINS.get().trigger((ServerPlayerEntity)(Object)this);
+        }
+        else if (i > 200) {
             if (i%4 == 0) {
                 Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE);
                 RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMod.getId("world_ceased")));
                 damage(new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
-            }
-            if (i > 3500) {
-                ModCriteria.WHO_REMAINS.get().trigger((ServerPlayerEntity)(Object)this);
-            }
-            if (i > 3540) {
-                WarpLogic.respawnAlive((ServerPlayerEntity)(Object)this);
             }
         }
     }

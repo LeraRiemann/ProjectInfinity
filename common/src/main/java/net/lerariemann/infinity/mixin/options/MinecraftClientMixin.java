@@ -31,7 +31,7 @@ public abstract class MinecraftClientMixin implements InfinityOptionsAccess {
 
     @Unique
     public InfinityOptions infinity$getOptions() {
-        return infinity$options;
+        return InfinityOptions.nullSafe(infinity$options);
     }
 
     @Unique

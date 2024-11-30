@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin.options;
 
-import net.lerariemann.infinity.access.InfinityOptionsAccess;
+import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +16,7 @@ public class EntityMixin {
 
     @Inject(method = "getFinalGravity", at = @At("RETURN"), cancellable = true)
     private void injected(CallbackInfoReturnable<Double> cir) {
-        double mavity = ((InfinityOptionsAccess)world).infinity$getOptions().getMavity();
+        double mavity = InfinityOptions.access(world).getMavity();
         cir.setReturnValue(cir.getReturnValue() * mavity);
     }
 }

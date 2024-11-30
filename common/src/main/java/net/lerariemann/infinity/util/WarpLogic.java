@@ -69,7 +69,7 @@ public interface WarpLogic {
         if(id.toString().equals("minecraft:the_end")) return new PortalColorApplier.Simple(0);
         NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.get(id.getPath());
         if (c == null) c = InfinityOptions.readData(server, id);
-        return InfinityOptions.extractApplier(c);
+        return PortalColorApplier.extract(c, (int)WarpLogic.getNumericFromId(id, server));
     }
 
     static long getNumericFromId(Identifier id, MinecraftServer server) {

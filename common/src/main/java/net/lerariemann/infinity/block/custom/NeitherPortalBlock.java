@@ -8,11 +8,10 @@ import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.item.ModItemFunctions;
-import net.lerariemann.infinity.options.PortalColorApplier;
+import net.lerariemann.infinity.util.PortalModifier;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
@@ -148,7 +147,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
             /* Set color and destination. Open status = the world that is being accessed exists already. */
             boolean dimensionExistsAlready = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, dimName)) != null;
-            NeitherPortalBlock.modifyPortalRecursive(world, pos, state, dimName, dimensionExistsAlready);
+            NeitherPortalBlock.modifyPortalRecursive(world, pos,
+                    PortalModifier.onInitialCollision(world, state, dimName, dimensionExistsAlready));
 
             if (dimensionExistsAlready) {
                 if (nearestPlayer != null) nearestPlayer.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
@@ -232,25 +232,24 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             }
 
             /* Set the portal's open status making it usable. */
-            modifyPortalRecursive(world, pos, world.getBlockState(pos), i, true);
+            modifyPortalRecursive(world, pos, new PortalModifier.Open(true));
             runAfterEffects(world, pos, bl);
         }
         return bl;
     }
 
-    /* Sets the portal color, destination and open status. Calls itself recursively for neighbouring blocks. */
-    public static void modifyPortalRecursive(World world, BlockPos pos, BlockState state, Identifier id, boolean open) {
+    /* Calls itself recursively for neighbouring blocks and for each of them executes an action. */
+    public static void modifyPortalRecursive(World world, BlockPos pos, PortalModifier modifier) {
         Set<BlockPos> set = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
         queue.add(pos);
         BlockPos blockPos;
-        Direction.Axis axis = state.get(AXIS);
-        PortalColorApplier applier = WarpLogic.getPortalColorApplier(id, world.getServer());
+        Direction.Axis axis = world.getBlockState(pos).get(AXIS);
         while ((blockPos = queue.poll()) != null) {
             set.add(blockPos);
             BlockState blockState = world.getBlockState(blockPos);
             if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof NeitherPortalBlock) {
-                modifyPortalBlock(world, blockPos, axis, id, open, applier.apply(id, world.getServer(), pos));
+                modifier.modify(world, blockPos);
                 Set<Direction> toCheck = (axis == Direction.Axis.Z) ?
                         Set.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH) :
                         Set.of(Direction.UP, Direction.DOWN, Direction.EAST, Direction.WEST);
@@ -261,17 +260,6 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                         queue.add(blockPos2);
                 }
             }
-        }
-    }
-
-    /* Sets the portal color, destination and open status for one portal block. */
-    private static void modifyPortalBlock(World world, BlockPos pos, Direction.Axis axis, Identifier id, boolean open,
-                                          int color) {
-        world.setBlockState(pos, ModBlocks.NEITHER_PORTAL.get().getDefaultState().with(AXIS, axis));
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity != null) {
-            ((NeitherPortalBlockEntity)blockEntity).setDimension(color, id);
-            ((NeitherPortalBlockEntity)blockEntity).setOpen(open);
         }
     }
 

@@ -103,13 +103,14 @@ public class ModPayloads {
             return ID;
         }
     }
+
     public static void receiveStars(StarsRePayLoad payload, Object context) {
         ((WorldRendererAccess)(client(context).worldRenderer)).infinity$setNeedsStars(true);
     }
 
     public static ShaderRePayload setShaderFromWorld(ServerWorld destination) {
         if (destination == null) return new ShaderRePayload(new NbtCompound());
-        return new ShaderRePayload(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
+        return new ShaderRePayload(InfinityOptions.access(destination).data());
     }
 
     public static void registerPayloadsServer() {
@@ -117,7 +118,6 @@ public class ModPayloads {
         PayloadTypeRegistry.playS2C().register(BiomeAddPayload.ID, BiomeAddPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ShaderRePayload.ID, ShaderRePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
-
     }
 
     public static void registerPayloadsClient() {

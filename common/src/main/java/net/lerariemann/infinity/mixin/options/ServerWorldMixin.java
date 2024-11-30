@@ -74,7 +74,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
 
     @Override
     public InfinityOptions infinity$getOptions() {
-        return infinity$options;
+        return InfinityOptions.nullSafe(infinity$options);
     }
     @Override
     public void infinity$setOptions(InfinityOptions options) {

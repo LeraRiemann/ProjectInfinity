@@ -61,12 +61,14 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     }
 
     public void setDimension(long c) {
-        setDimension((int)c, InfinityMod.getDimId(c));
+        setColor((int)c);
+        setDimension(InfinityMod.getDimId(c));
     }
-
-    public void setDimension(int c, Identifier i) {
-        this.portalColor = c;
+    public void setDimension(Identifier i) {
         this.dimension = i;
+    }
+    public void setColor(int c) {
+        this.portalColor = c;
     }
 
     public void setOpen(boolean i) {

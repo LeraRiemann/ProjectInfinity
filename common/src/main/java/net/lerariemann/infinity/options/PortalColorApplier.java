@@ -2,75 +2,61 @@ package net.lerariemann.infinity.options;
 
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.awt.*;
-import java.util.Objects;
+import java.util.Random;
 
-public abstract class PortalColorApplier {
-    public abstract int apply(Identifier id, MinecraftServer server, BlockPos pos);
-
-    public static class Empty extends PortalColorApplier {
-        @Override
-        public int apply(Identifier id, MinecraftServer server, BlockPos pos) {
-            return (int)WarpLogic.getNumericFromId(id, server);
-        }
+public interface PortalColorApplier {
+    static PortalColorApplier extract(NbtCompound data, int def) {
+        if (!data.contains("portal_color")) return new PortalColorApplier.Simple(def);
+        if (data.contains("portal_color", NbtElement.INT_TYPE)) return new PortalColorApplier.Simple(data.getInt("portal_color"));
+        NbtCompound applierData = data.getCompound("portal_color");
+        return switch (applierData.getString("type")) {
+            case "simple" -> new PortalColorApplier.Simple(applierData.getInt("value"));
+            case "checker" -> new PortalColorApplier.Checker(applierData.getList("values", NbtElement.INT_TYPE));
+            case "random_hue" -> new PortalColorApplier.RandomHue(applierData);
+            case "random" -> PortalColorApplier.RandomColor.INSTANCE;
+            default -> new PortalColorApplier.Simple(def);
+        };
     }
 
-    public static class Simple extends PortalColorApplier {
-        public int value;
+    int apply(BlockPos pos);
 
-        public Simple(int i) {
-            value = i;
-        }
-
+    record Simple(int value) implements PortalColorApplier {
         @Override
-        public int apply(Identifier id, MinecraftServer server, BlockPos pos) {
+        public int apply(BlockPos pos) {
             return value;
         }
     }
 
-    public static class Checker extends PortalColorApplier {
-        public NbtList values;
-
-        public Checker(NbtList lst) {
-            values = lst;
-        }
-
+    record Checker(NbtList values) implements PortalColorApplier {
         @Override
-        public int apply(Identifier id, MinecraftServer server, BlockPos pos) {
+        public int apply(BlockPos pos) {
             int mod = WarpLogic.properMod(pos.getX() + pos.getY() + pos.getZ(), values.size());
             return values.getInt(mod);
         }
     }
 
-    net.minecraft.util.math.random.Random randomExtract(MinecraftServer server) {
-        return Objects.requireNonNull(server.getWorld(World.OVERWORLD)).getRandom();
-    }
-
-    public static class Random extends PortalColorApplier {
+    enum RandomColor implements PortalColorApplier {
+        INSTANCE;
         @Override
-        public int apply(Identifier id, MinecraftServer server, BlockPos pos) {
-            return randomExtract(server).nextInt(16777216);
+        public int apply(BlockPos pos) {
+            return (new Random(pos.hashCode())).nextInt();
         }
     }
 
-    public static class RandomHue extends PortalColorApplier {
-        float saturation;
-        float brightness;
-
+    record RandomHue(float saturation, float brightness) implements PortalColorApplier {
         public RandomHue(NbtCompound applierData) {
-            saturation = InfinityOptions.test(applierData, "saturation", 1.0f);
-            brightness = InfinityOptions.test(applierData, "brightness", 1.0f);
+            this(InfinityOptions.test(applierData, "saturation", 1.0f),
+            InfinityOptions.test(applierData, "brightness", 1.0f));
         }
 
         @Override
-        public int apply(Identifier id, MinecraftServer server, BlockPos pos) {
-            return Color.HSBtoRGB(randomExtract(server).nextFloat(), saturation, brightness);
+        public int apply(BlockPos pos) {
+            return Color.HSBtoRGB((new Random(pos.hashCode())).nextFloat(), saturation, brightness);
         }
     }
 }
