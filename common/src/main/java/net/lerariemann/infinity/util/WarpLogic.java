@@ -5,7 +5,6 @@ import com.mojang.brigadier.context.CommandContext;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.var.ModStats;
@@ -45,7 +44,7 @@ public interface WarpLogic {
             onInvocationNeedDetected(player);
             return;
         }
-        boolean isThisANewDimension = NeitherPortalBlock.addInfinityDimension(s, value);
+        boolean isThisANewDimension = PortalCreationLogic.addInfinityDimension(s, value);
         if (isThisANewDimension && increaseStats) player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
         ((ServerPlayerEntityAccess)(player)).infinity$setWarpTimer(ticks, value);
     }

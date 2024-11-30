@@ -5,8 +5,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
@@ -30,7 +30,7 @@ public class NetherPortalBlockMixin {
 	@Inject(at = @At("HEAD"), method = "onEntityCollision(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V")
 	private void injected(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo info) {
 		if (!world.isClient() && entity instanceof ItemEntity e) {
-			NeitherPortalBlock.tryCreatePortalFromItem(state, world, pos, e);
+			PortalCreationLogic.tryCreatePortalFromItem(world, pos, e);
 		}
 	}
 
@@ -45,15 +45,15 @@ public class NetherPortalBlockMixin {
 			return world.getServer().getWorld(World.OVERWORLD); //when we return from another dimension
 		}
 
-		NeitherPortalBlockEntity e = ((NeitherPortalBlockEntity)world.getBlockEntity(pos));
-		if (e==null) return world;
-		Identifier id = e.getDimension();
+		if (world.getBlockEntity(pos) instanceof NeitherPortalBlockEntity e) {
+			Identifier id = e.getDimension();
 
-		RegistryKey<World> key2 = RegistryKey.of(RegistryKeys.WORLD, id);
-		ServerWorld serverWorld2 = world.getServer().getWorld(key2);
+			RegistryKey<World> key2 = RegistryKey.of(RegistryKeys.WORLD, id);
+			ServerWorld serverWorld2 = world.getServer().getWorld(key2);
 
-		if (serverWorld2 != null && e.getOpen() && ((Timebombable)serverWorld2).infinity$isTimebombed() == 0) {
-			return serverWorld2;
+			if (serverWorld2 != null && e.getOpen() && !((Timebombable)serverWorld2).infinity$isTimebombed()) {
+				return serverWorld2;
+			}
 		}
 		return world;
 	}

@@ -5,10 +5,9 @@ import com.mojang.authlib.GameProfile;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
-import net.lerariemann.infinity.util.PortalModifier;
+import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
@@ -71,7 +70,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method="findRespawnPosition", at = @At("HEAD"), cancellable = true)
     private static void injected(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> cir) {
-        if (((Timebombable)world).infinity$isTimebombed() > 0) cir.setReturnValue(Optional.empty());
+        if (((Timebombable)world).infinity$isTimebombed()) cir.setReturnValue(Optional.empty());
     }
 
     /* When the player is using the Infinity portal, this modifies the portal on the other side if needed. */
@@ -87,8 +86,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
                     pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
                 Identifier dimensionName = registryKey.getValue();
 
-                NeitherPortalBlock.modifyPortalRecursive(destination, pos2,
-                        PortalModifier.onInitialCollision(destination, destination.getBlockState(pos2), dimensionName, true));
+                PortalCreationLogic.modifyPortalRecursive(destination, pos2, dimensionName, true);
                 break;
             }
         }
@@ -126,7 +124,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
         }
 
         /* Handle effects from dimension deletion */
-        int i = ((Timebombable)(getServerWorld())).infinity$isTimebombed();
+        int i = ((Timebombable)(getServerWorld())).infinity$getTimebombProgress();
         if (i > 3540) {
             WarpLogic.respawnAlive((ServerPlayerEntity)(Object)this);
         }
