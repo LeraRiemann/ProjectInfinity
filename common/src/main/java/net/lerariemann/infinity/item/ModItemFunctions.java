@@ -8,14 +8,25 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
@@ -64,6 +75,24 @@ public class ModItemFunctions {
 
     private static <T> RegistrySupplier<ComponentType<T>> register(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
         return COMPONENT_TYPES.register(id, () -> (builderOperator.apply(ComponentType.builder())).build());
+    }
+
+    public static void checkCollisionRecipes(ServerWorld w, ItemEntity itemEntity,
+                                             Map<Item, String> recipes,
+                                             Function<Item, Optional<ComponentMap>> componentFunction) {
+        if (itemEntity.isRemoved()) return;
+        Item item = itemEntity.getStack().getItem();
+        if (!recipes.containsKey(item)) return;
+        Item newItem = Registries.ITEM.get(Identifier.of(recipes.get(item)));
+        ItemStack resStack = new ItemStack(newItem);
+        componentFunction.apply(newItem).ifPresent(resStack::applyComponentsFrom);
+
+        Vec3d v = itemEntity.getVelocity();
+        ItemEntity result = new ItemEntity(w, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(),
+                resStack.copyWithCount(itemEntity.getStack().getCount()),
+                -v.x, -v.y, -v.z);
+        w.spawnEntity(result);
+        itemEntity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
     }
 
     @Environment(EnvType.CLIENT)

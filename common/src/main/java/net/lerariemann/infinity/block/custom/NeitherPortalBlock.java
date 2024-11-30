@@ -156,34 +156,26 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
             Map.entry(Items.GLASS_BOTTLE, "infinity:biome_bottle")
     );
 
+    public static Optional<ComponentMap> getKeyComponents(Item item, Identifier dim, World w) {
+        if (!item.equals(ModItems.TRANSFINITE_KEY.get())) return Optional.empty();
+        Integer keycolor = WarpLogic.getKeyColorFromId(dim, w.getServer());
+        return Optional.of((ComponentMap.builder()
+                .add(ModItemFunctions.KEY_DESTINATION.get(), dim)
+                .add(ModItemFunctions.COLOR.get(), keycolor)).build());
+    }
+
     /* Adds logic for portal-based recipes. */
     @Override
     public void onEntityCollision(BlockState state, World w, BlockPos pos, Entity entity) {
-        if (w instanceof ServerWorld world && entity instanceof ItemEntity e && !e.isRemoved()) {
-            ItemStack itemStack = e.getStack();
-            if (recipes.containsKey(itemStack.getItem())) {
-                Vec3d v = entity.getVelocity();
-                ItemStack resStack = new ItemStack(Registries.ITEM.get(Identifier.of(recipes.get(itemStack.getItem()))));
-                if (resStack.isOf(ModItems.TRANSFINITE_KEY.get())) {
-                    BlockEntity blockEntity = world.getBlockEntity(pos);
-                    if (blockEntity instanceof NeitherPortalBlockEntity portal) {
-                        Integer keycolor = WarpLogic.getKeyColorFromId(portal.getDimension(), world.getServer());
-                        ComponentMap newMap = (ComponentMap.builder().add(ModItemFunctions.KEY_DESTINATION.get(), portal.getDimension())
-                                .add(ModItemFunctions.COLOR.get(), keycolor)).build();
-                        resStack.applyComponentsFrom(newMap);
-                    }
-                }
-                ItemEntity result = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(),
-                        resStack.copyWithCount(itemStack.getCount()),
-                        -v.x, -v.y, -v.z);
-                world.spawnEntity(result);
-                entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-            }
-        }
-        if (w instanceof ServerWorld world && entity instanceof PlayerEntity player &&
-                RandomProvider.getProvider(world.getServer()).portalKey.isBlank() &&
-                world.getBlockEntity(pos) instanceof NeitherPortalBlockEntity npbe && !npbe.getOpen()) {
-            PortalCreationLogic.openWithStatIncrease(player, world.getServer(), world, pos);
+        if (w instanceof ServerWorld world
+                && world.getBlockEntity(pos) instanceof NeitherPortalBlockEntity npbe) {
+            if (entity instanceof ItemEntity e)
+                ModItemFunctions.checkCollisionRecipes(world, e, recipes,
+                    item -> getKeyComponents(item, npbe.getDimension(), world));
+            if (entity instanceof PlayerEntity player
+                    && RandomProvider.getProvider(world.getServer()).portalKey.isBlank()
+                    && !npbe.getOpen())
+                PortalCreationLogic.openWithStatIncrease(player, world.getServer(), world, pos);
         }
         super.onEntityCollision(state, w, pos, entity);
     }

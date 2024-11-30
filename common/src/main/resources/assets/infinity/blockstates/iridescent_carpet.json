@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "color=0": {"model": "infinity:block/iridescent/carpet/0"},
+    "color=1": {"model": "infinity:block/iridescent/carpet/1"},
+    "color=2": {"model": "infinity:block/iridescent/carpet/2"},
+    "color=3": {"model": "infinity:block/iridescent/carpet/3"},
+    "color=4": {"model": "infinity:block/iridescent/carpet/4"},
+    "color=5": {"model": "infinity:block/iridescent/carpet/5"},
+    "color=6": {"model": "infinity:block/iridescent/carpet/6"},
+    "color=7": {"model": "infinity:block/iridescent/carpet/7"},
+    "color=8": {"model": "infinity:block/iridescent/carpet/8"},
+    "color=9": {"model": "infinity:block/iridescent/carpet/9"},
+    "color=10": {"model": "infinity:block/iridescent/carpet/10"},
+    "color=11": {"model": "infinity:block/iridescent/carpet/11"},
+    "color=12": {"model": "infinity:block/iridescent/carpet/12"},
+    "color=13": {"model": "infinity:block/iridescent/carpet/13"},
+    "color=14": {"model": "infinity:block/iridescent/carpet/14"},
+    "color=15": {"model": "infinity:block/iridescent/carpet/15"},
+    "color=16": {"model": "infinity:block/iridescent/carpet/16"},
+    "color=17": {"model": "infinity:block/iridescent/carpet/17"},
+    "color=18": {"model": "infinity:block/iridescent/carpet/18"},
+    "color=19": {"model": "infinity:block/iridescent/carpet/19"},
+    "color=20": {"model": "infinity:block/iridescent/carpet/20"},
+    "color=21": {"model": "infinity:block/iridescent/carpet/21"},
+    "color=22": {"model": "infinity:block/iridescent/carpet/22"},
+    "color=23": {"model": "infinity:block/iridescent/carpet/23"}
+  }
+}
