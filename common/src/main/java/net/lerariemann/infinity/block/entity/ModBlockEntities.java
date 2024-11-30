@@ -6,7 +6,6 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.datafixer.TypeReferences;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Util;
@@ -34,10 +33,6 @@ public class ModBlockEntities {
             BLOCK_ENTITY_TYPES.register("biome_bottle_block_entity", () ->
                     BlockEntityType.Builder.create(BiomeBottleBlockEntity::new,
                             ModBlocks.BIOME_BOTTLE.get()).build(type("biome_bottle_block_entity")));
-    public static final RegistrySupplier<BlockEntityType<IridescentBlockEntity>> IRIDESCENT =
-            BLOCK_ENTITY_TYPES.register("iridescent_block_entity", () ->
-                    BlockEntityType.Builder.create(IridescentBlockEntity::new,
-                            ModBlocks.IRIDESCENT_WOOL.get()).build(type("iridescent_block_entity")));
 
 
     public static void registerBlockEntities() {
