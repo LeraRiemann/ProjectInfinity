@@ -1,12 +1,17 @@
 package net.lerariemann.infinity.options;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.util.CommonIO;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
+import net.minecraft.world.World;
 import org.joml.Vector3f;
 
 import java.io.File;
@@ -16,24 +21,13 @@ public class InfinityOptions {
     public NbtCompound data;
     public PitchShifter shifter;
     public EffectGiver effect;
+    public IridescentMap iridMap;
 
     public InfinityOptions(NbtCompound data) {
         this.data = data;
-        this.shifter = data.contains("pitch_shift") ? new PitchShifter(data.getCompound("pitch_shift")) : new PitchShifter();
-        this.effect = data.contains("effect") ? EffectGiver.of(data.getCompound("effect")) : EffectGiver.empty();
-    }
-
-    public static PortalColorApplier extractApplier(NbtCompound data) {
-        if (!data.contains("portal_color")) return new PortalColorApplier.Empty();
-        if (data.contains("portal_color", NbtElement.INT_TYPE)) return new PortalColorApplier.Simple(data.getInt("portal_color"));
-        NbtCompound applierData = data.getCompound("portal_color");
-        return switch (applierData.getString("type")) {
-            case "simple" -> new PortalColorApplier.Simple(applierData.getInt("value"));
-            case "checker" -> new PortalColorApplier.Checker(applierData.getList("values", NbtElement.INT_TYPE));
-            case "random_hue" -> new PortalColorApplier.RandomHue(applierData);
-            case "random" -> new PortalColorApplier.Random();
-            default -> new PortalColorApplier.Empty();
-        };
+        this.shifter = PitchShifter.decode(test(data, "pitch_shift", new NbtCompound()));
+        this.effect = EffectGiver.of(test(data, "effect", new NbtCompound()));
+        this.iridMap = IridescentMap.decode(test(data, "iridescent_map", new NbtCompound()));
     }
 
     public NbtCompound data() {
@@ -56,6 +50,21 @@ public class InfinityOptions {
     }
     public static InfinityOptions generate(MinecraftServer server, Identifier worldId) {
         return new InfinityOptions(readData(server, worldId));
+    }
+
+    public static InfinityOptions access(World world) {
+        return ((InfinityOptionsAccess)world).infinity$getOptions();
+    }
+    @Environment(EnvType.CLIENT)
+    public static InfinityOptions ofClient() {
+        return ofClient(MinecraftClient.getInstance());
+    }
+    @Environment(EnvType.CLIENT)
+    public static InfinityOptions ofClient(MinecraftClient client) {
+        return ((InfinityOptionsAccess)client).infinity$getOptions();
+    }
+    public static InfinityOptions nullSafe(InfinityOptions options) {
+        return (options != null) ? options : InfinityOptions.empty();
     }
 
     public static String test(NbtCompound data, String key, String def) {

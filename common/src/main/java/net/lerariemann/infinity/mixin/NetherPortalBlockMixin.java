@@ -1,6 +1,12 @@
 package net.lerariemann.infinity.mixin;
 
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.Timebombable;
+import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;

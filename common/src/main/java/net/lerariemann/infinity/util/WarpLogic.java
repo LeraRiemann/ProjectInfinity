@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.var.ModStats;
@@ -45,7 +44,7 @@ public interface WarpLogic {
             onInvocationNeedDetected(player);
             return;
         }
-        boolean isThisANewDimension = NeitherPortalBlock.addInfinityDimension(s, value);
+        boolean isThisANewDimension = PortalCreationLogic.addInfinityDimension(s, value);
         if (isThisANewDimension && increaseStats) player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
         ((ServerPlayerEntityAccess)(player)).infinity$setWarpTimer(ticks, value);
     }
@@ -73,7 +72,7 @@ public interface WarpLogic {
         if(id.toString().equals("minecraft:the_end")) return new PortalColorApplier.Simple(0);
         NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.get(id.getPath());
         if (c == null) c = InfinityOptions.readData(server, id);
-        return InfinityOptions.extractApplier(c);
+        return PortalColorApplier.extract(c, (int)WarpLogic.getNumericFromId(id, server));
     }
 
     static long getNumericFromId(Identifier id, MinecraftServer server) {

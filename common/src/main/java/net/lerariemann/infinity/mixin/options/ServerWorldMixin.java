@@ -38,7 +38,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     @Unique
     public InfinityOptions infinity$options;
     @Unique
-    public int infinity$timebombed;
+    public int infinity$timebombProgress;
 
     protected ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, DynamicRegistryManager registryManager, RegistryEntry<DimensionType> dimensionEntry, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long biomeAccess, int maxChainedNeighborUpdates) {
         super(properties, registryRef, registryManager, dimensionEntry, profiler, isClient, debugWorld, biomeAccess, maxChainedNeighborUpdates);
@@ -49,12 +49,12 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
         infinity$options = InfinityOptions.generate(server, worldKey.getValue());
         DimensionType t = getDimension();
         ((InfinityOptionsAccess)(Object)t).infinity$setOptions(infinity$options);
-        infinity$timebombed = 0;
+        infinity$timebombProgress = 0;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void injected2(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        if (InfinityMod.isInfinity(getRegistryKey()) && infinity$timebombed > 0) infinity$timebombed++;
+        if (InfinityMod.isInfinity(getRegistryKey()) && infinity$timebombProgress > 0) infinity$timebombProgress++;
     }
 
     @Redirect(method="tickWeather", at=@At(value="INVOKE", target="Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
@@ -63,18 +63,22 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     }
 
     @Override
-    public void infinity$timebomb(int i) {
-        if(InfinityMod.isInfinity(getRegistryKey())) infinity$timebombed = i;
+    public void infinity$timebomb() {
+        if(InfinityMod.isInfinity(getRegistryKey())) infinity$timebombProgress = 1;
     }
 
     @Override
-    public int infinity$isTimebombed() {
-        return infinity$timebombed;
+    public boolean infinity$isTimebombed() {
+        return infinity$timebombProgress > 0;
+    }
+    @Override
+    public int infinity$getTimebombProgress() {
+        return infinity$timebombProgress;
     }
 
     @Override
     public InfinityOptions infinity$getOptions() {
-        return infinity$options;
+        return InfinityOptions.nullSafe(infinity$options);
     }
     @Override
     public void infinity$setOptions(InfinityOptions options) {

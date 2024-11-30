@@ -64,7 +64,7 @@ public class TimeBombBlock extends Block {
     }
 
     void activate(ServerWorld world, Path path) {
-        ((Timebombable)world).infinity$timebomb(1);
+        ((Timebombable)world).infinity$timebomb();
         try {
             FileUtils.deleteDirectory(path.toFile());
         } catch (IOException ignored) {
@@ -86,7 +86,7 @@ public class TimeBombBlock extends Block {
         if (!world.isClient()) {
             if (InfinityMod.isInfinity(world)) {
                 ServerWorld w = ((ServerPlayerEntity)player).getServerWorld();
-                if (((Timebombable)w).infinity$isTimebombed() == 0) {
+                if (!((Timebombable)w).infinity$isTimebombed()) {
                     if (state.get(ACTIVE)) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
                         world.getEntitiesByType(TypeFilter.instanceOf(AreaEffectCloudEntity.class), Box.of(pos.toCenterPos(), 1.0, 1.0, 1.0), Entity::isAlive).

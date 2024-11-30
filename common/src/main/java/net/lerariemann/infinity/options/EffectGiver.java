@@ -10,10 +10,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
 public record EffectGiver(RegistryEntry<StatusEffect> id, int duration, int amplifier, int cooldown) {
-    public static EffectGiver empty() {
-        return of(new NbtCompound());
-    }
-
     public static RegistryEntry<StatusEffect> effectOf(String id) {
         RegistryEntry<StatusEffect> entry = Registries.STATUS_EFFECT.entryOf(RegistryKey.of(RegistryKeys.STATUS_EFFECT, new Identifier(id)));
         if (entry == null || entry.value() instanceof InstantStatusEffect) return null;

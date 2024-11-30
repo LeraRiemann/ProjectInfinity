@@ -20,6 +20,7 @@
     "NetherPortalBlockMixin",
     "NetherPortalMixin",
     "PlayerEntityMixin",
+    "PointOfInterestStorageMixin",
     "PortalForcerMixin",
     "ServerPlayerEntityMixin",
     "SlimeEntityMixin",

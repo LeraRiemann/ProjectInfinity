@@ -1,40 +1,28 @@
 package net.lerariemann.infinity.block.custom;
 
-import com.google.common.collect.Queues;
-import com.google.common.collect.Sets;
-import dev.architectury.platform.Platform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
-import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.options.PortalColorApplier;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.util.WarpLogic;
-import net.lerariemann.infinity.var.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -42,17 +30,17 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -61,15 +49,21 @@ import org.joml.Vector3f;
 
 import java.util.*;
 
-import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPage;
-import static net.lerariemann.infinity.compat.ComputerCraftCompat.isPrintedPage;
-
 public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
     private static final Random RANDOM = new Random();
+    public static final BooleanProperty BOOP = BooleanProperty.of("boop");
 
     public NeitherPortalBlock(Settings settings) {
         super(settings);
+        this.setDefaultState(getDefaultState().with(BOOP, false));
     }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        super.appendProperties(builder);
+        builder.add(BOOP);
+    }
+
     @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new NeitherPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
@@ -180,16 +174,15 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (!world.isClient) {
             MinecraftServer s = world.getServer();
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (s!=null && blockEntity instanceof NeitherPortalBlockEntity) {
+            if (blockEntity instanceof NeitherPortalBlockEntity npbe) {
                 /* If the portal is open already, nothing should happen. */
-                if (((NeitherPortalBlockEntity)blockEntity).getOpen() &&
-                        world_exists(s, ((NeitherPortalBlockEntity)blockEntity).getDimension()))
+                if (npbe.getOpen() && world_exists(s, npbe.getDimension()))
                     return ActionResult.SUCCESS;
 
                 /* If the portal key is blank, open the portal on any right-click. */
                 RandomProvider prov = RandomProvider.getProvider(s);
                 if (prov.portalKey.isBlank()) {
-                    openWithStatIncrease(player, s, world, pos);
+                    PortalCreationLogic.openWithStatIncrease(player, s, world, pos);
                 }
 
                 /* Otherwise check if we're using the correct key. If so, open. */
@@ -200,7 +193,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                         if (!player.getAbilities().creativeMode && prov.rule("consumePortalKey")) {
                             usedKey.decrement(1); // Consume the key if needed
                         }
-                        openWithStatIncrease(player, s, world, pos);
+                        PortalCreationLogic.openWithStatIncrease(player, s, world, pos);
                     }
                 }
             }
@@ -348,8 +341,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
             ParticleEffect eff = ParticleTypes.PORTAL;
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof NeitherPortalBlockEntity) {
-                int colorInt = ((NeitherPortalBlockEntity)blockEntity).getPortalColor();
+            if (blockEntity instanceof NeitherPortalBlockEntity npbe) {
+                int colorInt = npbe.getPortalColor();
                 Vec3d vec3d = Vec3d.unpackRgb(colorInt);
                 double color = 1.0D + (colorInt >> 16 & 0xFF) / 255.0D;
                 eff = new DustParticleEffect(new Vector3f((float)vec3d.x, (float)vec3d.y, (float)vec3d.z), (float)color);
@@ -392,12 +385,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             }
         }
-        if (!world.isClient() && entity instanceof PlayerEntity player &&
-                RandomProvider.getProvider(world.getServer()).portalKey.isBlank() &&
-                world.getBlockEntity(pos) instanceof NeitherPortalBlockEntity be && !be.getOpen()) {
-            openWithStatIncrease(player, world.getServer(), world, pos);
-        }
-        super.onEntityCollision(state, world, pos, entity);
+        super.onEntityCollision(state, w, pos, entity);
     }
 
     /* Spawns chaos pawns in the portal. */
@@ -414,8 +402,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                     (entity = ModEntities.CHAOS_PAWN.get().spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());
-                if (blockEntity instanceof NeitherPortalBlockEntity) {
-                    int color = ((NeitherPortalBlockEntity)blockEntity).getPortalColor();
+                if (blockEntity instanceof NeitherPortalBlockEntity npbe) {
+                    int color = npbe.getPortalColor();
                     Vec3d c = Vec3d.unpackRgb(color);
                     entity.setAllColors((int)(256 * c.z) + 256 * (int)(256 * c.y) + 65536 * (int)(256 * c.x));
                 }

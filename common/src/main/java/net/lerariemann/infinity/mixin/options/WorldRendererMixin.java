@@ -2,7 +2,6 @@ package net.lerariemann.infinity.mixin.options;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.options.SkyRenderer;
@@ -78,7 +77,6 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         renderer.renderAllCelestialBodies(fogCallback);
         renderer.finish();
     }
-
     @Unique
     public void infinity$createStarsIfNeeded() {
         if (infinity$needsStars) {
@@ -86,11 +84,8 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
             infinity$needsStars = false;
         }
     }
-
     @Unique
     private InfinityOptions infinity$options() {
-        InfinityOptions options = ((InfinityOptionsAccess)client).infinity$getOptions();
-        if (options == null) options = InfinityOptions.empty();
-        return options;
+        return InfinityOptions.ofClient(client);
     }
 }

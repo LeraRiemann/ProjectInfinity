@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.item;
+package net.lerariemann.infinity.item.function;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
