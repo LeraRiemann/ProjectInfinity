@@ -4,13 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.world.gen.densityfunction.DensityFunction;
-
-import java.util.Arrays;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
@@ -263,14 +262,8 @@ public class ModDensityFunctionTypes {
     final static DoublePerlinNoiseSampler sampler, sampler2;
 
     static {
-        sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, gen(8));
-        sampler2 = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -6, gen(8));
-    }
-
-    static double[] gen(int octaves){
-        double[] a = new double[octaves];
-        Arrays.fill(a, 1);
-        return a;
+        sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, Iridescence.genOctaves(8));
+        sampler2 = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -6, Iridescence.genOctaves(8));
     }
 
     public record Classic(int sealevel) implements DensityFunction.Base {

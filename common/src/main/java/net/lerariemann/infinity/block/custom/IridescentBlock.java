@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
@@ -12,7 +13,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldAccess;
 
 public class IridescentBlock extends Block {
-    public static int num_models = 12;
+    public static int num_models = 24;
     public static final IntProperty COLOR_OFFSET = IntProperty.of("color", 0, num_models - 1);
 
     public IridescentBlock(AbstractBlock.Settings settings) {
@@ -49,6 +50,6 @@ public class IridescentBlock extends Block {
     }
 
     public static int getPosBasedOffset(BlockPos pos) {
-        return WarpLogic.properMod((int)(num_models*(Math.cos(pos.getX() / 16.0) + Math.cos(pos.getY() / 16.0) + Math.cos(pos.getZ() / 16.0))), num_models);
+        return WarpLogic.properMod((int)(num_models * Iridescence.sample(pos)), num_models);
     }
 }
