@@ -29,6 +29,8 @@ public class ModItems {
             registerBlockItem(ModBlocks.BOOK_BOX, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
     public static final RegistrySupplier<Item> CURSOR_ITEM  =
             registerBlockItem(ModBlocks.CURSOR, ItemGroups.COLORED_BLOCKS, Items.PINK_TERRACOTTA);
+    public static final RegistrySupplier<Item> IRIDESCENT_WOOL  =
+            registerBlockItem(ModBlocks.IRIDESCENT_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL);
     public static final RegistrySupplier<Item> FOOTPRINT =
             registerItem("footprint", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
     public static final RegistrySupplier<Item> FINE_ITEM = registerHomeItem();

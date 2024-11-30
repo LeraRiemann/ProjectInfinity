@@ -1,7 +1,16 @@
 {
   "variants": {
-    "": {
-      "model": "infinity:block/iridescent_wool"
-    }
+    "color=0": {"model": "infinity:block/iridescent/wool/0"},
+    "color=1": {"model": "infinity:block/iridescent/wool/1"},
+    "color=2": {"model": "infinity:block/iridescent/wool/2"},
+    "color=3": {"model": "infinity:block/iridescent/wool/3"},
+    "color=4": {"model": "infinity:block/iridescent/wool/4"},
+    "color=5": {"model": "infinity:block/iridescent/wool/5"},
+    "color=6": {"model": "infinity:block/iridescent/wool/6"},
+    "color=7": {"model": "infinity:block/iridescent/wool/7"},
+    "color=8": {"model": "infinity:block/iridescent/wool/8"},
+    "color=9": {"model": "infinity:block/iridescent/wool/9"},
+    "color=10": {"model": "infinity:block/iridescent/wool/10"},
+    "color=11": {"model": "infinity:block/iridescent/wool/11"}
   }
 }
