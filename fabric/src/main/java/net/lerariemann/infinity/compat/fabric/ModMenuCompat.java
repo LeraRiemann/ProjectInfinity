@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.config.fabric;
+package net.lerariemann.infinity.compat.fabric;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

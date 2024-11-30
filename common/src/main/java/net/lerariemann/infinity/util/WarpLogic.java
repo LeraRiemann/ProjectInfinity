@@ -47,7 +47,7 @@ public interface WarpLogic {
         }
         boolean isThisANewDimension = NeitherPortalBlock.addInfinityDimension(s, value);
         if (isThisANewDimension && increaseStats) player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
-        ((ServerPlayerEntityAccess)(player)).projectInfinity$setWarpTimer(ticks, value);
+        ((ServerPlayerEntityAccess)(player)).infinity$setWarpTimer(ticks, value);
     }
 
     static void respawnAlive(@Nullable ServerPlayerEntity player) {

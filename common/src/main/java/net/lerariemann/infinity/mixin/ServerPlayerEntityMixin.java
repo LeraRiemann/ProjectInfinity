@@ -147,7 +147,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     }
 
     @Override
-    public void projectInfinity$setWarpTimer(long ticks, Identifier dim) {
+    public void infinity$setWarpTimer(long ticks, Identifier dim) {
         this.infinity$ticksUntilWarp = ticks;
         this.infinity$idForWarp = dim;
     }

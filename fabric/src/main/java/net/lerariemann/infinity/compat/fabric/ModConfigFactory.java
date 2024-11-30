@@ -1,7 +1,7 @@
-package net.lerariemann.infinity.config.fabric;
+package net.lerariemann.infinity.compat.fabric;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-import net.lerariemann.infinity.config.ClothConfigFactory;
+import net.lerariemann.infinity.compat.ClothConfigFactory;
 import net.minecraft.client.gui.screen.Screen;
 
 public class ModConfigFactory implements ConfigScreenFactory<Screen> {
