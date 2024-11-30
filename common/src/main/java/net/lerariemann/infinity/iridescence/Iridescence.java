@@ -115,6 +115,12 @@ public class Iridescence {
         return ticksInHour * 24 * 7;
     }
 
+    public static Phase getPhase(LivingEntity entity) {
+        StatusEffectInstance effect = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
+        if (effect == null) return Phase.INITIAL;
+        return getPhase(effect.getDuration(), effect.getAmplifier());
+    }
+
     public static Phase getPhase(int duration, int amplifier) {
         int effect_length = getEffectLength(amplifier) - ticksInHour;
         int time_passed = effect_length - duration;

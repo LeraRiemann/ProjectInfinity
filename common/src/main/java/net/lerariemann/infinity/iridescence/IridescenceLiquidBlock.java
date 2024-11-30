@@ -5,6 +5,7 @@ import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
@@ -27,7 +28,8 @@ public class IridescenceLiquidBlock extends ArchitecturyLiquidBlock {
             case PlayerEntity player -> Iridescence.tryBeginJourney(player, 4);
             case MobEntity ent -> Iridescence.tryBeginConversion(ent);
             case ItemEntity item -> {
-                if (!Iridescence.isIridescentItem(item.getStack()))
+                if (!Iridescence.isIridescentItem(item.getStack()) && item.getOwner() instanceof LivingEntity le &&
+                !Iridescence.getPhase(le).equals(Iridescence.Phase.INITIAL))
                     ModItemFunctions.checkCollisionRecipes(w, item, ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get(),
                         i -> Optional.empty());
             }
