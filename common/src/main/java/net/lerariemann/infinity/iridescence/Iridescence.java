@@ -6,6 +6,7 @@ import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
+import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
@@ -19,6 +20,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -63,6 +65,9 @@ public class Iridescence {
     }
     public static boolean isIridescence(WorldView world, BlockPos pos) {
         return Iridescence.isIridescence(world.getFluidState(pos));
+    }
+    public static boolean isIridescentItem(ItemStack stack) {
+        return stack.isIn(ModItems.IRIDESCENT_TAG);
     }
 
     public static boolean isUnderEffect(LivingEntity entity) {

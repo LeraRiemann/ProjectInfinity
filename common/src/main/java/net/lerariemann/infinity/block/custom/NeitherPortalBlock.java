@@ -161,7 +161,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (w instanceof ServerWorld world
                 && world.getBlockEntity(pos) instanceof NeitherPortalBlockEntity npbe) {
             if (entity instanceof ItemEntity e)
-                ModItemFunctions.checkCollisionRecipes(world, e,
+                ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
                     item -> getKeyComponents(item, npbe.getDimension(), world));
             if (entity instanceof PlayerEntity player
                     && RandomProvider.getProvider(world.getServer()).portalKey.isBlank()

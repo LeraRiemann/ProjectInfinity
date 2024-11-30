@@ -61,12 +61,19 @@ public class ModItemFunctions {
             LOOT_FUNCTION_TYPES.register("set_altar_state", () -> new LootFunctionType<>(SetAltarStateLootFunction.CODEC));
 
     public static RegistrySupplier<RecipeSerializer<BiomeBottleCombiningRecipe>> BIOME_BOTTLE_COMBINING =
-            RECIPE_SERIALIZERS.register("biome_bottle_combining", () -> new SpecialRecipeSerializer<>(BiomeBottleCombiningRecipe::new));
-    public static RegistrySupplier<RecipeSerializer<CollisionCraftingRecipe>> COLLISION_CRAFTING =
-            RECIPE_SERIALIZERS.register("collision_portal", () -> new CollisionCraftingRecipe.Serializer(CollisionCraftingRecipe::new));
+            RECIPE_SERIALIZERS.register("biome_bottle_combining", () ->
+                    new SpecialRecipeSerializer<>(BiomeBottleCombiningRecipe::new));
+    public static RegistrySupplier<RecipeSerializer<CollisionCraftingRecipe>> PORTAL_CRAFTING =
+            RECIPE_SERIALIZERS.register("collision_portal", () ->
+                    new CollisionCraftingRecipe.Serializer(CollisionCraftingRecipe.OfPortal::new));
+    public static RegistrySupplier<RecipeSerializer<CollisionCraftingRecipe>> IRIDESCENCE_CRAFTING =
+            RECIPE_SERIALIZERS.register("collision_iridescence", () ->
+                    new CollisionCraftingRecipe.Serializer(CollisionCraftingRecipe.OfIridescence::new));
 
-    public static RegistrySupplier<RecipeType<CollisionCraftingRecipe>> COLLISION_CRAFTING_PORTAL =
+    public static RegistrySupplier<RecipeType<CollisionCraftingRecipe>> PORTAL_CRAFTING_TYPE =
             RECIPE_TYPES.register("collision_portal", () -> CollisionCraftingRecipe.Type.PORTAL);
+    public static RegistrySupplier<RecipeType<CollisionCraftingRecipe>> IRIDESCENCE_CRAFTING_TYPE =
+            RECIPE_TYPES.register("collision_iridescence", () -> CollisionCraftingRecipe.Type.IRIDESCENCE);
 
     public static void registerItemFunctions() {
         InfinityMod.LOGGER.debug("Registering component types for " + InfinityMod.MOD_ID);
@@ -81,12 +88,12 @@ public class ModItemFunctions {
     }
 
     public static void checkCollisionRecipes(ServerWorld w, ItemEntity itemEntity,
+                                             RecipeType<CollisionCraftingRecipe> recipeType,
                                              Function<Item, Optional<ComponentMap>> componentFunction) {
         if (itemEntity.isRemoved()) return;
         ItemStack itemStack = itemEntity.getStack();
         Optional<RecipeEntry<CollisionCraftingRecipe>> match = w.getRecipeManager()
-                .getFirstMatch(CollisionCraftingRecipe.Type.PORTAL,
-                        new SingleStackRecipeInput(itemStack), w);
+                .getFirstMatch(recipeType, new SingleStackRecipeInput(itemStack), w);
         if (match.isEmpty()) return;
 
         ItemStack resStack = match.get().value().getResult(w.getRegistryManager());

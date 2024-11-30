@@ -12,11 +12,11 @@ import net.minecraft.world.World;
 
 import java.util.function.BiFunction;
 
-public class CollisionCraftingRecipe implements Recipe<SingleStackRecipeInput> {
-    private final ItemStack input;
+public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecipeInput> {
+    private final Ingredient input;
     private final ItemStack output;
 
-    public CollisionCraftingRecipe(ItemStack input, ItemStack output) {
+    public CollisionCraftingRecipe(Ingredient input, ItemStack output) {
         this.input = input;
         this.output = output;
     }
@@ -24,7 +24,7 @@ public class CollisionCraftingRecipe implements Recipe<SingleStackRecipeInput> {
     @Override
     public boolean matches(SingleStackRecipeInput input, World world) {
         if (world.isClient) return false;
-        return this.input.isOf(input.item().getItem());
+        return this.input.test(input.item());
     }
 
     @Override
@@ -42,27 +42,18 @@ public class CollisionCraftingRecipe implements Recipe<SingleStackRecipeInput> {
         return output.copy();
     }
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return ModItemFunctions.COLLISION_CRAFTING.get();
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return ModItemFunctions.COLLISION_CRAFTING_PORTAL.get();
-    }
-
     public enum Type implements RecipeType<CollisionCraftingRecipe> {
-        PORTAL
+        PORTAL,
+        IRIDESCENCE
     }
 
-    public record Serializer(BiFunction<ItemStack, ItemStack, CollisionCraftingRecipe> func)
+    public record Serializer(BiFunction<Ingredient, ItemStack, CollisionCraftingRecipe> func)
             implements RecipeSerializer<CollisionCraftingRecipe> {
 
         @Override
         public MapCodec<CollisionCraftingRecipe> codec() {
             return RecordCodecBuilder.mapCodec(instance -> instance.group(
-                            ItemStack.VALIDATED_CODEC.fieldOf("input").forGetter(recipe -> recipe.input),
+                            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input").forGetter(recipe -> recipe.input),
                             ItemStack.VALIDATED_CODEC.fieldOf("output").forGetter(recipe -> recipe.output))
                     .apply(instance, func));
         }
@@ -73,14 +64,42 @@ public class CollisionCraftingRecipe implements Recipe<SingleStackRecipeInput> {
         }
 
         private CollisionCraftingRecipe read(RegistryByteBuf buf) {
-            ItemStack input = ItemStack.PACKET_CODEC.decode(buf);
+            Ingredient input = Ingredient.PACKET_CODEC.decode(buf);
             ItemStack output = ItemStack.PACKET_CODEC.decode(buf);
             return func.apply(input, output);
         }
 
         private void write(RegistryByteBuf buf, CollisionCraftingRecipe recipe) {
-            ItemStack.PACKET_CODEC.encode(buf, recipe.input);
+            Ingredient.PACKET_CODEC.encode(buf, recipe.input);
             ItemStack.PACKET_CODEC.encode(buf, recipe.output);
+        }
+    }
+
+    public static class OfPortal extends CollisionCraftingRecipe {
+        public OfPortal(Ingredient input, ItemStack output) {
+            super(input, output);
+        }
+        @Override
+        public RecipeSerializer<?> getSerializer() {
+            return ModItemFunctions.PORTAL_CRAFTING.get();
+        }
+        @Override
+        public RecipeType<?> getType() {
+            return ModItemFunctions.PORTAL_CRAFTING_TYPE.get();
+        }
+    }
+
+    public static class OfIridescence extends CollisionCraftingRecipe {
+        public OfIridescence(Ingredient input, ItemStack output) {
+            super(input, output);
+        }
+        @Override
+        public RecipeSerializer<?> getSerializer() {
+            return ModItemFunctions.IRIDESCENCE_CRAFTING.get();
+        }
+        @Override
+        public RecipeType<?> getType() {
+            return ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get();
         }
     }
 }

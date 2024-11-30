@@ -1,0 +1,9 @@
+{
+  "type": "infinity:collision_iridescence",
+  "input": {
+    "tag": "minecraft:wool"
+  },
+  "output": {
+    "id": "infinity:iridescent_wool"
+  }
+}

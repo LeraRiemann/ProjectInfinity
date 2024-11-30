@@ -13,6 +13,7 @@ import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +63,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> BLACK_MATTER =
             registerItem("black_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
     public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM = registerBottleItem();
+    public static TagKey<Item> IRIDESCENT_TAG;
 
 
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {

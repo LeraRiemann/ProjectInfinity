@@ -5,8 +5,10 @@ import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.fluids.FluidTypes;
 import net.lerariemann.infinity.fluids.ModEffectsNeoforge;
 import net.lerariemann.infinity.fluids.ModFluidsNeoforge;
+import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.neoforge.client.InfinityModNeoForgeClient;
 import net.lerariemann.infinity.var.ModStats;
+import net.minecraft.registry.tag.ItemTags;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -31,6 +33,7 @@ public final class InfinityModNeoForge {
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsNeoforge.registerModFluids();
         ModEffectsNeoforge.register(eventBus);
+        ModItems.IRIDESCENT_TAG = ItemTags.create(InfinityMod.getId("iridescent"));
     }
 
     @SubscribeEvent

@@ -1,7 +1,7 @@
 {
   "type": "infinity:collision_portal",
   "input": {
-    "id": "minecraft:tnt"
+    "item": "minecraft:tnt"
   },
   "output": {
     "id": "infinity:timebomb"
