@@ -25,6 +25,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.ServerWorldAccess;
 
+import static net.lerariemann.infinity.InfinityMod.LOGGER;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModEntities {
@@ -75,9 +76,24 @@ public class ModEntities {
         SpawnRestriction.register(CHAOS_SKELETON.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canChaosMonsterSpawn);
         SpawnRestriction.register(CHAOS_CREEPER.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ModEntities::canChaosMonsterSpawn);
         SpawnRestriction.register(CHAOS_PAWN.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChaosPawn::canSpawn);
-        SpawnRestriction.register(EntityType.SNIFFER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
-        SpawnRestriction.register(EntityType.CAMEL, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
-        SpawnRestriction.register(EntityType.ZOGLIN, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark);
+        try {
+            SpawnRestriction.register(EntityType.SNIFFER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
+        }
+        catch (IllegalStateException e) {
+            LOGGER.debug("Infinite Dimensions failed to restrict Sniffers!");
+        }
+        try {
+            SpawnRestriction.register(EntityType.CAMEL, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
+        }
+        catch (IllegalStateException e) {
+            LOGGER.debug("Infinite Dimensions failed to restrict Camels!");
+        }
+        try {
+            SpawnRestriction.register(EntityType.ZOGLIN, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark);
+        }
+        catch (IllegalStateException e) {
+            LOGGER.debug("Infinite Dimensions failed to restrict Zoglins!");
+        }
     }
 
     public static boolean canChaosMonsterSpawn(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
