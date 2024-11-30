@@ -23,8 +23,8 @@ public class BiomeBottleItem extends BlockItem {
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
         String s = ModItemFunctions.getBiomeComponents(stack);
-        Identifier biome = Identifier.tryParse(s);
-        if (biome != null) {
+        if (s != null) {
+            Identifier biome = Identifier.tryParse(s);
             tooltip.add(Text.translatable(Util.createTranslationKey("biome", biome)).formatted(Formatting.GRAY));
         }
         else {

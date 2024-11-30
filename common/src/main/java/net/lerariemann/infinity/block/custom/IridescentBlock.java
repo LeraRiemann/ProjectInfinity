@@ -14,7 +14,6 @@ import net.minecraft.world.WorldAccess;
 public class IridescentBlock extends Block {
     public static int num_models = 12;
     public static final IntProperty COLOR_OFFSET = IntProperty.of("color", 0, num_models - 1);
-    public static final MapCodec<IridescentBlock> CODEC = createCodec(IridescentBlock::new);
 
     public IridescentBlock(AbstractBlock.Settings settings) {
         super(settings);
@@ -32,7 +31,7 @@ public class IridescentBlock extends Block {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (!state.equals(getPosBased(pos))) {
             world.scheduleBlockTick(pos, this, 1);
         }
