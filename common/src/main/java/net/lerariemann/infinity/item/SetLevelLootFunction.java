@@ -28,7 +28,7 @@ public class SetLevelLootFunction extends ConditionalLootFunction {
 
         public void toJson(JsonObject jsonObject, SetLevelLootFunction setLevelLootFunction, JsonSerializationContext jsonSerializationContext) {
             super.toJson(jsonObject, setLevelLootFunction, jsonSerializationContext);
-            jsonObject.addProperty("tag", setLevelLootFunction.nbt.toString());
+//            jsonObject.addProperty("tag", setLevelLootFunction.nbt.toString());
         }
 
         public SetLevelLootFunction fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext, LootCondition[] lootConditions) {

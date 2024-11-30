@@ -30,7 +30,7 @@ public class SetAltarStateLootFunction extends ConditionalLootFunction {
 
         public void toJson(JsonObject jsonObject, SetAltarStateLootFunction setAltarStateLootFunction, JsonSerializationContext jsonSerializationContext) {
             super.toJson(jsonObject, setAltarStateLootFunction, jsonSerializationContext);
-            jsonObject.addProperty("tag", setAltarStateLootFunction.nbt.toString());
+//            jsonObject.addProperty("tag", setAltarStateLootFunction.nbt.toString());
         }
 
         public SetAltarStateLootFunction fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext, LootCondition[] lootConditions) {
