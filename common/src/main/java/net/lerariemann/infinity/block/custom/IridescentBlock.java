@@ -50,6 +50,6 @@ public class IridescentBlock extends Block {
     }
 
     public static int getPosBasedOffset(BlockPos pos) {
-        return WarpLogic.properMod(pos.getX() + pos.getY() + pos.getZ(), num_models);
+        return WarpLogic.properMod((int)(num_models*(Math.cos(pos.getX() / 16.0) + Math.cos(pos.getY() / 16.0) + Math.cos(pos.getZ() / 16.0))), num_models);
     }
 }
