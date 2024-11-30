@@ -29,8 +29,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class NetherPortalBlockMixin {
 	@Inject(at = @At("HEAD"), method = "onEntityCollision(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V")
 	private void injected(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo info) {
-		if (!world.isClient() && entity instanceof ItemEntity e) {
-			PortalCreationLogic.tryCreatePortalFromItem(world, pos, e);
+		if (world instanceof ServerWorld w && entity instanceof ItemEntity e) {
+			PortalCreationLogic.tryCreatePortalFromItem(w, pos, e);
 		}
 	}
 

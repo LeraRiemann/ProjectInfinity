@@ -32,6 +32,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -46,7 +47,7 @@ import java.util.function.Consumer;
 import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPage;
 
 public interface PortalCreationLogic {
-    static void tryCreatePortalFromItem(World world, BlockPos pos, ItemEntity entity) {
+    static void tryCreatePortalFromItem(ServerWorld world, BlockPos pos, ItemEntity entity) {
         ItemStack itemStack = entity.getStack();
 
         /* Check if the item provided is a transfinite key. */
@@ -55,12 +56,9 @@ public interface PortalCreationLogic {
             key_dest = Identifier.of("minecraft:random");
         }
         if (key_dest != null)  {
-            MinecraftServer server = world.getServer();
-            if (server != null) {
-                boolean bl = modifyOnInitialCollision(key_dest, world, pos);
-                if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-                return;
-            }
+            boolean bl = modifyOnInitialCollision(key_dest, world, pos);
+            if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+            return;
         }
 
         /* Check if the item provided is a book of some kind. */
@@ -72,12 +70,9 @@ public interface PortalCreationLogic {
         }
         if (writableComponent != null || writtenComponent != null || printedComponent != null) {
             String content = parseComponents(writableComponent, writtenComponent, printedComponent);
-            MinecraftServer server = world.getServer();
-            if (server != null) {
-                Identifier id = WarpLogic.getIdentifier(content, server);
-                boolean bl = modifyOnInitialCollision(id, world, pos);
-                if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-            }
+            Identifier id = WarpLogic.getIdentifier(content, world.getServer());
+            boolean bl = modifyOnInitialCollision(id, world, pos);
+            if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
         }
     }
 
@@ -104,38 +99,36 @@ public interface PortalCreationLogic {
 
     /* Sets the portal color and destination and calls to open the portal immediately if the portal key is blank.
      * Statistics for opening the portal are attributed to the nearest player. */
-    static boolean modifyOnInitialCollision(Identifier dimName, World world, BlockPos pos) {
+    static boolean modifyOnInitialCollision(Identifier dimName, ServerWorld world, BlockPos pos) {
         MinecraftServer server = world.getServer();
         if (dimName.toString().equals("minecraft:random")) {
             dimName = WarpLogic.getRandomId(world.getRandom());
         }
-        if (server != null) {
-            PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
+        PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
 
-            if (((MinecraftServerAccess)server).infinity$needsInvocation()) {
-                WarpLogic.onInvocationNeedDetected(nearestPlayer);
-                return false;
-            }
+        if (((MinecraftServerAccess)server).infinity$needsInvocation()) {
+            WarpLogic.onInvocationNeedDetected(nearestPlayer);
+            return false;
+        }
 
-            /* Set color and destination. Open status = the world that is being accessed exists already. */
-            boolean dimensionExistsAlready = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, dimName)) != null;
-            modifyPortalRecursive(world, pos, dimName, dimensionExistsAlready);
+        /* Set color and destination. Open status = the world that is being accessed exists already. */
+        boolean dimensionExistsAlready = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, dimName)) != null;
+        modifyPortalRecursive(world, pos, dimName, dimensionExistsAlready);
 
-            if (dimensionExistsAlready) {
-                if (nearestPlayer != null) nearestPlayer.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
-                runAfterEffects(world, pos, false);
-            }
+        if (dimensionExistsAlready) {
+            if (nearestPlayer != null) nearestPlayer.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
+            runAfterEffects(world, pos, false);
+        }
 
-            /* If the portal key is blank, open the portal immediately. */
-            else if (RandomProvider.getProvider(server).portalKey.isBlank()) {
-                openWithStatIncrease(nearestPlayer, server, world, pos);
-            }
+        /* If the portal key is blank, open the portal immediately. */
+        else if (RandomProvider.getProvider(server).portalKey.isBlank()) {
+            openWithStatIncrease(nearestPlayer, server, world, pos);
         }
         return true;
     }
 
     /* Calls to open the portal and attributes the relevant statistics to a player provided. */
-    static void openWithStatIncrease(PlayerEntity player, MinecraftServer s, World world, BlockPos pos) {
+    static void openWithStatIncrease(PlayerEntity player, MinecraftServer s, ServerWorld world, BlockPos pos) {
         if (((MinecraftServerAccess)s).infinity$needsInvocation()) {
             WarpLogic.onInvocationNeedDetected(player);
             return;
@@ -151,7 +144,7 @@ public interface PortalCreationLogic {
     }
 
     /* Opens the portal by trying to make it usable, including a call to generate a dimension if needed. */
-    static boolean open(MinecraftServer s, World world, BlockPos pos) {
+    static boolean open(MinecraftServer s, ServerWorld world, BlockPos pos) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         boolean bl = false;
         if (blockEntity instanceof NeitherPortalBlockEntity npbe) {
@@ -162,14 +155,16 @@ public interface PortalCreationLogic {
             }
 
             /* Set the portal's open status making it usable. */
-            modifyPortalRecursive(world, pos, new PortalModifier(be -> be.setOpen(true)));
+            modifyPortalRecursive(world, pos, new PortalModifierUnion()
+                    .addModifier(be -> be.setOpen(true))
+                    .addModifier(BlockEntity::markDirty));
             runAfterEffects(world, pos, bl);
         }
         return bl;
     }
 
     /* Recursively creates a queue of neighbouring portal blocks and for each of them executes an action. */
-    static void modifyPortalRecursive(World world, BlockPos pos, BiConsumer<World, BlockPos> modifier) {
+    static void modifyPortalRecursive(ServerWorld world, BlockPos pos, BiConsumer<World, BlockPos> modifier) {
         Set<BlockPos> set = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
         queue.add(pos);
@@ -194,7 +189,7 @@ public interface PortalCreationLogic {
     }
 
     /* Updates this and all neighbouring portal blocks with a new dimension and open status. */
-    static void modifyPortalRecursive(World world, BlockPos pos, Identifier id, boolean open) {
+    static void modifyPortalRecursive(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
         PortalColorApplier applier = WarpLogic.getPortalColorApplier(id, world.getServer());
         Direction.Axis axis = world.getBlockState(pos).get(NetherPortalBlock.AXIS);
         modifyPortalRecursive(world, pos, new PortalModifierUnion()
@@ -202,7 +197,8 @@ public interface PortalCreationLogic {
                         .getDefaultState().with(NetherPortalBlock.AXIS, axis)))
                 .addModifier(nbpe -> nbpe.setDimension(id))
                 .addModifier(npbe -> npbe.setColor(applier.apply(npbe.getPos())))
-                .addModifier(npbe -> npbe.setOpen(open)));
+                .addModifier(npbe -> npbe.setOpen(open))
+                .addModifier(BlockEntity::markDirty));
     }
 
     /* Calls to create the dimension based on its ID. Returns true if the dimension being opened is indeed brand new. */
@@ -230,17 +226,9 @@ public interface PortalCreationLogic {
     }
 
     /* Jingle signaling the portal is now usable. */
-    static void runAfterEffects(World world, BlockPos pos, boolean dimensionIsNew) {
+    static void runAfterEffects(ServerWorld world, BlockPos pos, boolean dimensionIsNew) {
         if (dimensionIsNew) world.playSound(null, pos, SoundEvents.BLOCK_VAULT_OPEN_SHUTTER, SoundCategory.BLOCKS, 1f, 1f);
         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
-    }
-
-    record PortalModifier(Consumer<NeitherPortalBlockEntity> consumer) implements BiConsumer<World, BlockPos> {
-        @Override
-        public void accept(World world, BlockPos pos) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof NeitherPortalBlockEntity npbe) consumer.accept(npbe);
-        }
     }
 
     record PortalModifierUnion(List<Consumer<BlockPos>> setuppers, List<Consumer<NeitherPortalBlockEntity>> modifiers)

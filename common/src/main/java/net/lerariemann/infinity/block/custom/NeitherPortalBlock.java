@@ -60,12 +60,12 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     /* This is being called when the portal is right-clicked. */
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos,
+    public ActionResult onUse(BlockState state, World w, BlockPos pos,
                               PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient) {
+        if (w instanceof ServerWorld world) {
             MinecraftServer s = world.getServer();
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (s!=null && blockEntity instanceof NeitherPortalBlockEntity npbe) {
+            if (blockEntity instanceof NeitherPortalBlockEntity npbe) {
                 /* If the portal is open already, nothing should happen. */
                 if (npbe.getOpen() && world_exists(s, npbe.getDimension()))
                     return ActionResult.SUCCESS;
@@ -146,8 +146,8 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     /* Adds logic for portal-based recipes. */
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (!world.isClient() && entity instanceof ItemEntity e && !e.isRemoved()) {
+    public void onEntityCollision(BlockState state, World w, BlockPos pos, Entity entity) {
+        if (w instanceof ServerWorld world && entity instanceof ItemEntity e && !e.isRemoved()) {
             ItemStack itemStack = e.getStack();
             if (recipes.containsKey(itemStack.getItem())) {
                 Vec3d v = entity.getVelocity();
@@ -168,12 +168,12 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                 entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             }
         }
-        if (!world.isClient() && entity instanceof PlayerEntity player &&
+        if (w instanceof ServerWorld world && entity instanceof PlayerEntity player &&
                 RandomProvider.getProvider(world.getServer()).portalKey.isBlank() &&
                 world.getBlockEntity(pos) instanceof NeitherPortalBlockEntity npbe && !npbe.getOpen()) {
             PortalCreationLogic.openWithStatIncrease(player, world.getServer(), world, pos);
         }
-        super.onEntityCollision(state, world, pos, entity);
+        super.onEntityCollision(state, w, pos, entity);
     }
 
     /* Spawns chaos pawns in the portal. */

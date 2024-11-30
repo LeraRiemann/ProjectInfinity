@@ -141,6 +141,7 @@ public class BiomeBottleBlockEntity extends BlockEntity {
                     be.charge = charge_new;
                     world.setBlockState(pos, state.with(BiomeBottle.LEVEL, Math.clamp(level - 1, 0, 10)));
                     BiomeBottle.playSploosh(w, pos);
+                    be.markDirty();
                 }
             }
         }
