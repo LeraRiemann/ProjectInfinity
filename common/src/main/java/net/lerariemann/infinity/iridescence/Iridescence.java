@@ -27,6 +27,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
+import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
@@ -34,11 +36,25 @@ import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 public class Iridescence {
+    public static final DoublePerlinNoiseSampler sampler =
+            DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, genOctaves(8));
+
+    public static double[] genOctaves(int octaves){
+        double[] a = new double[octaves];
+        Arrays.fill(a, 1);
+        return a;
+    }
+
+    public static double sample(BlockPos pos) {
+        return sampler.sample(pos.getX(), pos.getY(), pos.getZ());
+    }
+
     public static boolean isInfinite(World world) {
         return world.getRegistryKey().getValue().toString().equals("infinity:chaos");
     }
@@ -54,11 +70,10 @@ public class Iridescence {
     }
 
     public static int color(BlockPos pos) {
-        int i = pos.getX() + pos.getY() + pos.getZ();
-        return Color.HSBtoRGB(i / 600.0f + (float)((Math.sin(pos.getX()/12.0f) + Math.sin(pos.getY()/12.0f) + Math.sin(pos.getZ()/12.0f)) / 4) , 1.0F, 1.0F);
+        return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F);
     }
 
-    public static java.util.List<String> colors = List.of("minecraft:white_",
+    public static java.util.List<String> colors = List.of(
             "minecraft:red_",
             "minecraft:orange_",
             "minecraft:yellow_",
@@ -69,17 +84,13 @@ public class Iridescence {
             "minecraft:blue_",
             "minecraft:purple_",
             "minecraft:magenta_",
-            "minecraft:pink_",
-            "minecraft:gray_",
-            "minecraft:light_gray_",
-            "minecraft:black_",
-            "minecraft:brown_");
+            "minecraft:pink_");
 
     public static Block getRandomColorBlock(WorldAccess world, String str) {
         return Registries.BLOCK.get(Identifier.of(colors.get(world.getRandom().nextInt(16)) + str));
     }
     public static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*16)) + str));
+        return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*11)) + str));
     }
 
     public static final int ticksInHour = 1000;

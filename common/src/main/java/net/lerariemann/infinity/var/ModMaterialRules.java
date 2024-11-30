@@ -67,8 +67,7 @@ public class ModMaterialRules {
     {
         @Override
         public BlockState tryApply(int i, int j, int k) {
-            long seed = MathHelper.hashCode(i, j, k);
-            double d = (seed & 0xFFFL) / (double)0xFFFL;
+            double d = Iridescence.sampler.sample(i, j, k);
             d = d - Math.floor(d);
             BlockState st = Iridescence.getRandomColorBlock(d, str).getDefaultState();
             if(st.contains(Properties.PERSISTENT)) st = st.with(Properties.PERSISTENT, Boolean.TRUE);
