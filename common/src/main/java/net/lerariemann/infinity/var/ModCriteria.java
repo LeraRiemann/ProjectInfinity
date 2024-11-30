@@ -136,7 +136,7 @@ public class ModCriteria {
 
         @Override
         public Identifier getId() {
-            return null;
+            return ID;
         }
     }
 
