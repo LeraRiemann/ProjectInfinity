@@ -4,7 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.item.ModItemFunctions;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
@@ -23,7 +23,6 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -148,14 +147,6 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         }
     }
 
-    static Map<Item, String> recipes = Map.ofEntries(
-            Map.entry(Items.BOOKSHELF, "infinity:book_box"),
-            Map.entry(Items.TNT, "infinity:timebomb"),
-            Map.entry(Items.LECTERN, "infinity:altar"),
-            Map.entry(Items.AMETHYST_SHARD, "infinity:key"),
-            Map.entry(Items.GLASS_BOTTLE, "infinity:biome_bottle")
-    );
-
     public static Optional<ComponentMap> getKeyComponents(Item item, Identifier dim, World w) {
         if (!item.equals(ModItems.TRANSFINITE_KEY.get())) return Optional.empty();
         Integer keycolor = WarpLogic.getKeyColorFromId(dim, w.getServer());
@@ -170,7 +161,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (w instanceof ServerWorld world
                 && world.getBlockEntity(pos) instanceof NeitherPortalBlockEntity npbe) {
             if (entity instanceof ItemEntity e)
-                ModItemFunctions.checkCollisionRecipes(world, e, recipes,
+                ModItemFunctions.checkCollisionRecipes(world, e,
                     item -> getKeyComponents(item, npbe.getDimension(), world));
             if (entity instanceof PlayerEntity player
                     && RandomProvider.getProvider(world.getServer()).portalKey.isBlank()

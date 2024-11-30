@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.item.ModItemFunctions;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.block.entity.BlockEntity;

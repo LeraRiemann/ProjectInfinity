@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.custom.BiomeBottle;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;

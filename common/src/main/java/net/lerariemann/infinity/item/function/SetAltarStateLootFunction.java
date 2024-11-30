@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.item;
+package net.lerariemann.infinity.item.function;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

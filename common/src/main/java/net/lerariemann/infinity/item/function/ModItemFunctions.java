@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.item;
+package net.lerariemann.infinity.item.function;
 
 import com.mojang.serialization.Codec;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
@@ -8,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
+import net.lerariemann.infinity.item.ModItems;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
@@ -16,15 +17,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SpecialRecipeSerializer;
-import net.minecraft.registry.Registries;
+import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -32,60 +34,63 @@ import java.util.function.UnaryOperator;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModItemFunctions {
-    public static RegistrySupplier<ComponentType<Identifier>> KEY_DESTINATION;
-    public static RegistrySupplier<ComponentType<Identifier>> BIOME_CONTENTS;
-    public static RegistrySupplier<ComponentType<Integer>> COLOR;
-    public static RegistrySupplier<ComponentType<Integer>> CHARGE;
-    public static RegistrySupplier<ComponentType<Boolean>> DO_NOT_OPEN;
     public static final DeferredRegister<ComponentType<?>> COMPONENT_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.DATA_COMPONENT_TYPE);
-
-    public static RegistrySupplier<LootFunctionType<SetLevelLootFunction>> SET_BIOME_BOTTLE_LEVEL;
-    public static RegistrySupplier<LootFunctionType<SetAltarStateLootFunction>> SET_ALTAR_STATE;
     public static final DeferredRegister<LootFunctionType<?>> LOOT_FUNCTION_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.LOOT_FUNCTION_TYPE);
-
-    public static RegistrySupplier<RecipeSerializer<BiomeBottleCombiningRecipe>> BIOME_BOTTLE_COMBINING;
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS =
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_SERIALIZER);
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
+            DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_TYPE);
 
-    public static void registerComponentTypes() {
+
+    public static RegistrySupplier<ComponentType<Identifier>> KEY_DESTINATION = registerComponentType("key_destination",
+            (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
+    public static RegistrySupplier<ComponentType<Identifier>> BIOME_CONTENTS = registerComponentType("biome_contents",
+            (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
+    public static RegistrySupplier<ComponentType<Integer>> COLOR = registerComponentType("color",
+            (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+    public static RegistrySupplier<ComponentType<Integer>> CHARGE = registerComponentType("charge",
+            (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+    public static RegistrySupplier<ComponentType<Boolean>> DO_NOT_OPEN = registerComponentType("do_not_open",
+            (builder) -> builder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL));
+
+    public static RegistrySupplier<LootFunctionType<SetLevelLootFunction>> SET_BIOME_BOTTLE_LEVEL =
+            LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () -> new LootFunctionType<>(SetLevelLootFunction.CODEC));
+    public static RegistrySupplier<LootFunctionType<SetAltarStateLootFunction>> SET_ALTAR_STATE =
+            LOOT_FUNCTION_TYPES.register("set_altar_state", () -> new LootFunctionType<>(SetAltarStateLootFunction.CODEC));
+
+    public static RegistrySupplier<RecipeSerializer<BiomeBottleCombiningRecipe>> BIOME_BOTTLE_COMBINING =
+            RECIPE_SERIALIZERS.register("biome_bottle_combining", () -> new SpecialRecipeSerializer<>(BiomeBottleCombiningRecipe::new));
+    public static RegistrySupplier<RecipeSerializer<CollisionCraftingRecipe>> COLLISION_CRAFTING =
+            RECIPE_SERIALIZERS.register("collision_portal", () -> new CollisionCraftingRecipe.Serializer(CollisionCraftingRecipe::new));
+
+    public static RegistrySupplier<RecipeType<CollisionCraftingRecipe>> COLLISION_CRAFTING_PORTAL =
+            RECIPE_TYPES.register("collision_portal", () -> CollisionCraftingRecipe.Type.PORTAL);
+
+    public static void registerItemFunctions() {
         InfinityMod.LOGGER.debug("Registering component types for " + InfinityMod.MOD_ID);
-        KEY_DESTINATION = register("key_destination",
-                (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
-        BIOME_CONTENTS = register("biome_contents",
-                (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
-        COLOR = register("color",
-                (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
-        CHARGE = register("charge",
-                (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
-        DO_NOT_OPEN = register("do_not_open", (builder) -> builder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL));
         COMPONENT_TYPES.register();
-
-        SET_BIOME_BOTTLE_LEVEL = LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () ->
-                new LootFunctionType<>(SetLevelLootFunction.CODEC));
-        SET_ALTAR_STATE = LOOT_FUNCTION_TYPES.register("set_altar_state", () ->
-                new LootFunctionType<>(SetAltarStateLootFunction.CODEC));
         LOOT_FUNCTION_TYPES.register();
-
-        BIOME_BOTTLE_COMBINING = RECIPE_SERIALIZERS.register("biome_bottle_combining", () ->
-                new SpecialRecipeSerializer<>(BiomeBottleCombiningRecipe::new));
         RECIPE_SERIALIZERS.register();
+        RECIPE_TYPES.register();
     }
 
-    private static <T> RegistrySupplier<ComponentType<T>> register(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
+    private static <T> RegistrySupplier<ComponentType<T>> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
         return COMPONENT_TYPES.register(id, () -> (builderOperator.apply(ComponentType.builder())).build());
     }
 
     public static void checkCollisionRecipes(ServerWorld w, ItemEntity itemEntity,
-                                             Map<Item, String> recipes,
                                              Function<Item, Optional<ComponentMap>> componentFunction) {
         if (itemEntity.isRemoved()) return;
-        Item item = itemEntity.getStack().getItem();
-        if (!recipes.containsKey(item)) return;
-        Item newItem = Registries.ITEM.get(Identifier.of(recipes.get(item)));
-        ItemStack resStack = new ItemStack(newItem);
-        componentFunction.apply(newItem).ifPresent(resStack::applyComponentsFrom);
+        ItemStack itemStack = itemEntity.getStack();
+        Optional<RecipeEntry<CollisionCraftingRecipe>> match = w.getRecipeManager()
+                .getFirstMatch(CollisionCraftingRecipe.Type.PORTAL,
+                        new SingleStackRecipeInput(itemStack), w);
+        if (match.isEmpty()) return;
+
+        ItemStack resStack = match.get().value().getResult(w.getRegistryManager());
+        componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyComponentsFrom);
 
         Vec3d v = itemEntity.getVelocity();
         ItemEntity result = new ItemEntity(w, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(),

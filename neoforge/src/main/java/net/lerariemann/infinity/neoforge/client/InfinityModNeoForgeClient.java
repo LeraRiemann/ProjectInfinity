@@ -7,7 +7,7 @@ import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.compat.neoforge.ModConfigFactory;
 import net.lerariemann.infinity.iridescence.Iridescence;
-import net.lerariemann.infinity.item.ModItemFunctions;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.fluids.FluidTypes;
 import net.minecraft.fluid.FluidState;

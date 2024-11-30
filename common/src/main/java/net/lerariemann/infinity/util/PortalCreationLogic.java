@@ -10,7 +10,7 @@ import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.item.ModItemFunctions;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
