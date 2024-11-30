@@ -191,10 +191,13 @@ public interface PortalCreationLogic {
     /* Updates this and all neighbouring portal blocks with a new dimension and open status. */
     static void modifyPortalRecursive(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
         PortalColorApplier applier = WarpLogic.getPortalColorApplier(id, world.getServer());
-        Direction.Axis axis = world.getBlockState(pos).get(NetherPortalBlock.AXIS);
+        BlockState originalState = world.getBlockState(pos);
+        BlockState state = (originalState.isOf(ModBlocks.NEITHER_PORTAL)) ?
+                originalState.with(NeitherPortalBlock.BOOP, !originalState.get(NeitherPortalBlock.BOOP)) :
+                ModBlocks.NEITHER_PORTAL.get().getDefaultState()
+                        .with(NetherPortalBlock.AXIS, originalState.get(NetherPortalBlock.AXIS));
         modifyPortalRecursive(world, pos, new PortalModifierUnion()
-                .addSetupper(p -> world.setBlockState(p, ModBlocks.NEITHER_PORTAL.get()
-                        .getDefaultState().with(NetherPortalBlock.AXIS, axis)))
+                .addSetupper(p -> world.setBlockState(p, state))
                 .addModifier(nbpe -> nbpe.setDimension(id))
                 .addModifier(npbe -> npbe.setColor(applier.apply(npbe.getPos())))
                 .addModifier(npbe -> npbe.setOpen(open))

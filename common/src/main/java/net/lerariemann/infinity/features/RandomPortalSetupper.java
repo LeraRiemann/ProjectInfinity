@@ -86,6 +86,7 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupper.Config> {
                     if (structureWorldAccess.getBlockEntity(pos) instanceof NeitherPortalBlockEntity be) {
                         be.setDimension(dim);
                         be.setOpen(false);
+                        be.markDirty();
                     }
                     else return false;
                 }

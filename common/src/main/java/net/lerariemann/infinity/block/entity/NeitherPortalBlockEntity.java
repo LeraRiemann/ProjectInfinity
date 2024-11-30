@@ -70,10 +70,10 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     public void setColor(int c) {
         this.portalColor = c;
     }
-
     public void setOpen(boolean i) {
         this.isOpen = i;
     }
+
     public void writeNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(tag, registryLookup);
         tag.putLong("Dimension", this.portalColor);

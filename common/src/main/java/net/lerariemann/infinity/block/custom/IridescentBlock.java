@@ -24,6 +24,7 @@ public class IridescentBlock extends Block {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        super.appendProperties(builder);
         builder.add(COLOR_OFFSET);
     }
 

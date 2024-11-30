@@ -11,6 +11,7 @@ import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.util.WarpLogic;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
@@ -33,6 +34,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -49,10 +52,19 @@ import java.util.*;
 
 public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
     private static final Random RANDOM = new Random();
+    public static final BooleanProperty BOOP = BooleanProperty.of("boop");
 
     public NeitherPortalBlock(Settings settings) {
         super(settings);
+        this.setDefaultState(getDefaultState().with(BOOP, false));
     }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        super.appendProperties(builder);
+        builder.add(BOOP);
+    }
+
     @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new NeitherPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
