@@ -13,7 +13,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldAccess;
 
 public class IridescentBlock extends Block {
-    public static int num_models = 12;
+    public static int num_models = 24;
     public static final IntProperty COLOR_OFFSET = IntProperty.of("color", 0, num_models - 1);
     public static final MapCodec<IridescentBlock> CODEC = createCodec(IridescentBlock::new);
 

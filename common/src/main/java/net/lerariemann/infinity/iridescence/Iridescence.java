@@ -43,7 +43,7 @@ import java.util.Random;
 
 public class Iridescence {
     public static final DoublePerlinNoiseSampler sampler =
-            DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, genOctaves(8));
+            DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, genOctaves(2));
 
     public static double[] genOctaves(int octaves){
         double[] a = new double[octaves];

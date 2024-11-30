@@ -20,6 +20,7 @@
     "ServerPlayerEntityMixin",
     "SlimeEntityMixin",
     "WorldChunkMixin",
+    "iridescence.ConcretePowderBlockMixin",
     "iridescence.IridescenceMixin",
     "iridescence.LandPathNodeMakerMixin",
     "iridescence.LivingEntityMixin",
