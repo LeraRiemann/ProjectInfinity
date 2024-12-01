@@ -22,7 +22,6 @@ public class ModEffectsNeoforge {
                 () -> new IridescentSetupEffect(StatusEffectCategory.NEUTRAL, 0xFF00FF)).getDelegate();
         ModStatusEffects.IRIDESCENT_COOLDOWN = EFFECTS.register("iridescent_cooldown",
                 () -> new IridescentCooldownEffect(StatusEffectCategory.NEUTRAL, 0x884488)).getDelegate();
-        LogManager.getLogger().info("Registered effects!!");
         EFFECTS.register(eventBus);
     }
 }
