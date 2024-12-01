@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
+import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.var.ModStats;
@@ -121,6 +122,10 @@ public interface WarpLogic {
         if (text.isEmpty()) return InfinityMod.getId("missingno");
         if (RandomProvider.getProvider(s).easterizer.isEaster(text, RandomProvider.getProvider(s)) && !text.equals("missingno")) return InfinityMod.getId(text);
         return InfinityMod.getDimId(getDimensionSeed(text, s));
+    }
+
+    static boolean dimExists(ServerWorld world) {
+        return (world != null && !((Timebombable)world).infinity$isTimebombed());
     }
 
     static long getDimensionSeed(String text, MinecraftServer s) {

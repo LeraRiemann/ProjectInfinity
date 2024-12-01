@@ -63,7 +63,7 @@ public class InfinityPortalBlockEntity extends BlockEntity {
         return this.isOpen;
     }
     @Nullable
-    public BlockPos getBlockPos() { return this.otherSidePos; }
+    public BlockPos getOtherSidePos() { return this.otherSidePos; }
 
     public void setDimension(long c) {
         setColor((int)c);
@@ -88,6 +88,13 @@ public class InfinityPortalBlockEntity extends BlockEntity {
         tag.putLong("Dimension", this.portalColor);
         tag.putString("DimensionName", this.dimension.toString());
         tag.putBoolean("Open", this.isOpen);
+        if (otherSidePos != null) {
+            NbtCompound pos = new NbtCompound();
+            pos.putInt("x", otherSidePos.getX());
+            pos.putInt("y", otherSidePos.getY());
+            pos.putInt("z", otherSidePos.getZ());
+            tag.put("other_side", pos);
+        }
     }
 
     public void readNbt(NbtCompound tag) {
@@ -98,6 +105,10 @@ public class InfinityPortalBlockEntity extends BlockEntity {
         }
         else this.dimension = InfinityMod.getDimId(this.portalColor);
         this.isOpen = tag.getBoolean("Open");
+        if (tag.contains("other_side")) {
+            NbtCompound pos = tag.getCompound("other_side");
+            otherSidePos = new BlockPos(pos.getInt("x"), pos.getInt("y"), pos.getInt("z"));
+        }
     }
 
     @Nullable

@@ -25,11 +25,7 @@ public interface CommonIO {
 
     static void write(String source, Path dir, String filename) {
         List<String> lines = Collections.singletonList(source);
-        String finalFile = filename;
-        if (filename.contains("/")) {
-            finalFile = filename.substring(filename.lastIndexOf("/")+1);
-            dir = Path.of(dir + "/" + filename.substring(0, filename.lastIndexOf("/")));
-        }
+        filename = filename.replace("/", "_").replace("\\", "_");
         try {
             Files.createDirectories(dir);
             Path file = dir.resolve(finalFile);
