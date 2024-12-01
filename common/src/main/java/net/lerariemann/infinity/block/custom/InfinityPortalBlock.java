@@ -86,10 +86,6 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             MinecraftServer s = world.getServer();
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof InfinityPortalBlockEntity npbe) {
-                BlockPos p = npbe.getOtherSidePos();
-                if (p == null) LogManager.getLogger().info("no position set");
-                else LogManager.getLogger().info("position {} {} {}", p.getX(), p.getY(), p.getZ());
-
                 /* If the portal is open already, nothing should happen. */
                 if (npbe.getOpen() && world_exists(s, npbe.getDimension()))
                     return ActionResult.SUCCESS;
@@ -250,15 +246,17 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
 
     /* Filter for infinity portals of the correct destination. */
     public static boolean isValidDestinationStrong(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
-        return (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe
-                        && ipbe.getDimension() == worldFrom.getRegistryKey().getValue());
+        if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe) {
+            return ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString());
+        }
+        return false;
     }
 
     public static TeleportTarget findNewTeleportTarget(ServerWorld worldFrom, BlockPos posFrom, ServerWorld worldTo, Entity teleportingEntity) {
         WorldBorder wb = worldTo.getWorldBorder();
         double d = DimensionType.getCoordinateScaleFactor(worldFrom.getDimension(), worldTo.getDimension());
         BlockPos originOfTesting = wb.clamp(posFrom.getX() * d, posFrom.getY(), posFrom.getZ() * d);
-        int radiusOfTesting = Math.clamp((int)(128*d), 16, 128);
+        int radiusOfTesting = 128;
 
         PointOfInterestStorage poiStorage = worldTo.getPointOfInterestStorage();
         poiStorage.preloadChunks(worldTo, originOfTesting, radiusOfTesting);
@@ -302,7 +300,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             Optional<BlockLocating.Rectangle> optional2 = worldTo.getPortalForcer().createPortal(originOfTesting, axis);
             if (optional2.isEmpty()) {
                 LogManager.getLogger().error("Unable to create a portal, likely target out of worldborder");
-                return null;
+                return getExistingTarget(worldFrom, posFrom, teleportingEntity);
             }
             rectangleTo = optional2.get();
             posTo = rectangleTo.lowerLeft;
