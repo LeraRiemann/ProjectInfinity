@@ -24,6 +24,7 @@ public interface CommonIO {
 
     static void write(String source, Path dir, String filename) {
         List<String> lines = Collections.singletonList(source);
+        filename = filename.replace("/", "_").replace("\\", "_");
         try {
             Files.createDirectories(dir);
             Path file = dir.resolve(filename);
