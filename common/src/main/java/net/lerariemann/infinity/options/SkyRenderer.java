@@ -19,7 +19,7 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.awt.*;
+import java.awt.Color;
 
 @Environment(EnvType.CLIENT)
 public record SkyRenderer(InfinityOptions options, MinecraftClient client, ClientWorld world,

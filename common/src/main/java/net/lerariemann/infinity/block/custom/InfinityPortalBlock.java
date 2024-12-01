@@ -3,7 +3,8 @@ package net.lerariemann.infinity.block.custom;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.access.Timebombable;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
@@ -35,25 +36,33 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BlockLocating;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
+import net.minecraft.world.border.WorldBorder;
+import net.minecraft.world.dimension.DimensionType;
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.*;
 
-public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
+public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
     private static final Random RANDOM = new Random();
     public static final BooleanProperty BOOP = BooleanProperty.of("boop");
 
-    public NeitherPortalBlock(Settings settings) {
+    public InfinityPortalBlock(Settings settings) {
         super(settings);
         this.setDefaultState(getDefaultState().with(BOOP, false));
     }
@@ -66,7 +75,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
     @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new NeitherPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
+        return new InfinityPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
     }
 
     /* This is being called when the portal is right-clicked. */
@@ -76,7 +85,11 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
         if (w instanceof ServerWorld world) {
             MinecraftServer s = world.getServer();
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof NeitherPortalBlockEntity npbe) {
+            if (blockEntity instanceof InfinityPortalBlockEntity npbe) {
+                BlockPos p = npbe.getBlockPos();
+                if (p == null) LogManager.getLogger().info("no position set");
+                else LogManager.getLogger().info("position {} {} {}", p.getX(), p.getY(), p.getZ());
+
                 /* If the portal is open already, nothing should happen. */
                 if (npbe.getOpen() && world_exists(s, npbe.getDimension()))
                     return ActionResult.SUCCESS;
@@ -136,7 +149,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
 
             ParticleEffect eff = ParticleTypes.PORTAL;
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof NeitherPortalBlockEntity npbe) {
+            if (blockEntity instanceof InfinityPortalBlockEntity npbe) {
                 int colorInt = npbe.getPortalColor();
                 Vec3d vec3d = Vec3d.unpackRgb(colorInt);
                 double color = 1.0D + (colorInt >> 16 & 0xFF) / 255.0D;
@@ -159,7 +172,7 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
     @Override
     public void onEntityCollision(BlockState state, World w, BlockPos pos, Entity entity) {
         if (w instanceof ServerWorld world
-                && world.getBlockEntity(pos) instanceof NeitherPortalBlockEntity npbe) {
+                && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity npbe) {
             if (entity instanceof ItemEntity e)
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
                     item -> getKeyComponents(item, npbe.getDimension(), world));
@@ -185,12 +198,75 @@ public class NeitherPortalBlock extends NetherPortalBlock implements BlockEntity
                     (entity = ModEntities.CHAOS_PAWN.get().spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());
-                if (blockEntity instanceof NeitherPortalBlockEntity npbe) {
+                if (blockEntity instanceof InfinityPortalBlockEntity npbe) {
                     int color = npbe.getPortalColor();
                     Vec3d c = Vec3d.unpackRgb(color);
                     entity.setAllColors((int)(256 * c.z) + 256 * (int)(256 * c.y) + 65536 * (int)(256 * c.x));
                 }
             }
         }
+    }
+
+    @Nullable
+    @Override
+    public TeleportTarget createTeleportTarget(ServerWorld world, Entity entity, BlockPos pos) {
+        if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
+            LogManager.getLogger().info("1");
+            Identifier id = ipbe.getDimension();
+            RegistryKey<World> key2 = RegistryKey.of(RegistryKeys.WORLD, id);
+            ServerWorld targetDimension = world.getServer().getWorld(key2);
+
+            if (targetDimension != null && ipbe.getOpen() && !((Timebombable)targetDimension).infinity$isTimebombed()) {
+                LogManager.getLogger().info("2");
+                return getTarget(targetDimension, ipbe, entity).orElse(findNewTeleportTarget(world, targetDimension, entity, pos));
+            }
+        }
+        return new TeleportTarget(world, entity.getPos(), entity.getVelocity(), entity.getYaw(), entity.getPitch(), TeleportTarget.NO_OP);
+    }
+
+    public static Optional<TeleportTarget> getTarget(ServerWorld targetDimension, InfinityPortalBlockEntity ipbe, Entity teleportingEntity) {
+        LogManager.getLogger().info("3");
+        BlockPos pos = ipbe.getBlockPos();
+        if (pos == null) return Optional.empty();
+        BlockState blockState = targetDimension.getBlockState(pos);
+        if (!(blockState.getBlock() instanceof NetherPortalBlock)) return Optional.empty();
+        LogManager.getLogger().info("4");
+        BlockLocating.Rectangle rectangle = BlockLocating.getLargestRectangle(
+                pos, blockState.get(Properties.HORIZONTAL_AXIS), 21, Direction.Axis.Y, 21,
+                posx -> targetDimension.getBlockState(posx) == blockState
+        );
+        return Optional.of(NetherPortalBlock.getExitPortalTarget(teleportingEntity, pos, rectangle, targetDimension,
+                TeleportTarget.SEND_TRAVEL_THROUGH_PORTAL_PACKET.then(entityx -> entityx.addPortalChunkTicketAt(pos))));
+    }
+
+    public TeleportTarget findNewTeleportTarget(ServerWorld currentDimension, ServerWorld targetDimension,
+                                                Entity teleportingEntity, BlockPos startingPos) {
+        LogManager.getLogger().info("5");
+        WorldBorder worldBorder = targetDimension.getWorldBorder();
+        double d = DimensionType.getCoordinateScaleFactor(currentDimension.getDimension(), targetDimension.getDimension());
+        BlockPos blockPos = worldBorder.clamp(teleportingEntity.getX() * d, teleportingEntity.getY(), teleportingEntity.getZ() * d);
+        TeleportTarget target = getOrCreateExitPortalTarget(targetDimension, teleportingEntity, startingPos, blockPos, false, worldBorder);
+        if (target != null) {
+            LogManager.getLogger().info("6");
+            findPortalPos(targetDimension, BlockPos.ofFloored(target.pos())).ifPresent(bp -> {
+                LogManager.getLogger().info("7");
+                PortalCreationLogic.modifyPortalRecursive(currentDimension, startingPos, new PortalCreationLogic.PortalModifier(
+                        ipbe -> ipbe.setBlockPos(bp)));
+                //PortalCreationLogic.modifyPortalRecursive(targetDimension, bp, new PortalCreationLogic.PortalModifier(
+                 //       ipbe -> ipbe.setBlockPos(startingPos)));
+            });
+        }
+        return target;
+    }
+
+    Optional<BlockPos> findPortalPos(ServerWorld world, BlockPos start) {
+        List<BlockPos> lst = BlockPos.stream(BlockBox.create(start.add(-2, -2, -2), start.add(2, 2, 2))).toList();
+        for (BlockPos p : lst) {
+            if (world.getBlockState(p).getBlock() instanceof NetherPortalBlock) {
+                LogManager.getLogger().info(p.toShortString());
+                return Optional.of(p);
+            }
+        }
+        return Optional.empty();
     }
 }

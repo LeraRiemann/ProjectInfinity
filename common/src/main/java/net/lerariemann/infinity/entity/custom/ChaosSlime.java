@@ -29,7 +29,7 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Objects;
 import java.util.Random;
 

@@ -3,19 +3,13 @@ package net.lerariemann.infinity.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.access.Timebombable;
-import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -37,25 +31,13 @@ public class NetherPortalBlockMixin {
 	@ModifyExpressionValue(method = "createTeleportTarget", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/server/MinecraftServer;getWorld(Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/server/world/ServerWorld;"))
 	private @Nullable ServerWorld injected(@Nullable ServerWorld original,
-										   @Local(argsOnly = true) ServerWorld world, @Local(argsOnly = true) BlockPos pos) {
-		if (!world.getBlockState(pos).isOf(ModBlocks.NEITHER_PORTAL.get())) {
-			if (!InfinityMod.isInfinity(world)) {
-				return original; //when teleportation should not be redirected
-			}
-			return world.getServer().getWorld(World.OVERWORLD); //when we return from another dimension
+										   @Local(argsOnly = true) ServerWorld world,
+										   @Local(argsOnly = true) BlockPos pos,
+										   @Local(argsOnly = true) Entity entity) {
+		if (!InfinityMod.isInfinity(world)) {
+			return original; //when teleportation should not be redirected
 		}
-
-		if (world.getBlockEntity(pos) instanceof NeitherPortalBlockEntity e) {
-			Identifier id = e.getDimension();
-
-			RegistryKey<World> key2 = RegistryKey.of(RegistryKeys.WORLD, id);
-			ServerWorld serverWorld2 = world.getServer().getWorld(key2);
-
-			if (serverWorld2 != null && e.getOpen() && !((Timebombable)serverWorld2).infinity$isTimebombed()) {
-				return serverWorld2;
-			}
-		}
-		return world;
+		return world.getServer().getWorld(World.OVERWORLD); //when we return from another dimension
 	}
 
 	@Redirect(method="getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Direction;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;",
