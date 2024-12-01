@@ -5,6 +5,8 @@ import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.Random;
+
 import static net.lerariemann.infinity.block.custom.IridescentBlock.num_models;
 
 public interface IridescentMap {
@@ -21,6 +23,7 @@ public interface IridescentMap {
             case "linear" -> Linear.INSTANCE;
             case "circles" -> new PrettyCircles(InfinityOptions.test(data, "scale", num_models / 2.0f));
             case "static" -> new Static(InfinityOptions.test(data, "value", 0));
+            case "random" -> RandomMap.INSTANCE;
             default -> Perliny.INSTANCE;
         };
     }
@@ -33,6 +36,13 @@ public interface IridescentMap {
         @Override
         public int getColor(BlockPos pos) {
             return WarpLogic.properMod(pos.getX() + pos.getY() + pos.getZ(), num_models);
+        }
+    }
+    enum RandomMap implements IridescentMap {
+        INSTANCE;
+        @Override
+        public int getColor(BlockPos pos) {
+            return (new Random(pos.hashCode())).nextInt(num_models);
         }
     }
     record PrettyCircles(double scale) implements IridescentMap {
