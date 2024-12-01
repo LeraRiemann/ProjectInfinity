@@ -2,6 +2,7 @@ package net.lerariemann.infinity;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.lerariemann.infinity.dimensions.RandomText;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
 import net.lerariemann.infinity.iridescence.ModStatusEffects;
@@ -61,6 +62,7 @@ public class InfinityMod {
 		ModStats.registerStats();
 		ModCriteria.registerCriteria();
 		ModPayloads.registerPayloadsServer();
+		RandomText.walkPaths();
 	}
 
 	public static boolean isInfinity(World w) {
