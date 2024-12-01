@@ -64,6 +64,7 @@ public class RandomInfinityOptions {
         data.putDouble("mavity", prov.roll(r, "use_mavity") ? mavity(r) : 1.0);
         if (prov.roll(r, "pitch_shift")) data.put("pitch_shift", pitchShift(r));
         if (prov.roll(r, "give_effect")) data.put("effect", effect(r, prov));
+        data.put("iridescent_map", iridMap(r));
     }
 
     public static double timeScale(Random r) {
@@ -122,6 +123,17 @@ public class RandomInfinityOptions {
         int amplifier = Math.min(5, (int)(0.5*r.nextExponential()));
         res.putString("id", effect);
         res.putInt("amplifier", amplifier);
+        return res;
+    }
+
+    public static NbtCompound iridMap(Random r) {
+        NbtCompound res = new NbtCompound();
+        res.putString("type", switch (r.nextInt(4)) {
+            case 0 -> "static";
+            case 1 -> "linear";
+            case 2 -> "circles";
+            default -> "noise";
+        });
         return res;
     }
 }

@@ -19,7 +19,7 @@ public interface IridescentMap {
         if (!data.contains("type")) return Perliny.INSTANCE;
         return switch (data.getString("type")) {
             case "linear" -> Linear.INSTANCE;
-            case "circles" -> new PrettyCircles(InfinityOptions.test(data, "scale", 16.0));
+            case "circles" -> new PrettyCircles(InfinityOptions.test(data, "scale", num_models / 2.0f));
             case "static" -> new Static(InfinityOptions.test(data, "value", 0));
             default -> Perliny.INSTANCE;
         };
