@@ -5,7 +5,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
+import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
+import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.var.ModStats;
@@ -54,7 +55,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
                 String keystr = registryKey.getValue().getPath();
                 String is = keystr.substring(keystr.lastIndexOf("_") + 1);
                 Identifier dimensionName = registryKey.getValue();
-                NeitherPortalBlock.modifyPortalRecursive(destination, pos2, destination.getBlockState(pos), dimensionName, true);
+                PortalCreationLogic.modifyPortalRecursive(destination, pos2, dimensionName, true);
                 break;
             }
             if (bl) {
