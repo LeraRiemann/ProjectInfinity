@@ -24,9 +24,14 @@ public interface CommonIO {
 
     static void write(String source, Path dir, String filename) {
         List<String> lines = Collections.singletonList(source);
+        String finalFile = filename;
+        if (filename.contains("/")) {
+            finalFile = filename.substring(filename.lastIndexOf("/"));
+            dir = Path.of(filename.substring(0, filename.lastIndexOf("/")));
+        }
         try {
             Files.createDirectories(dir);
-            Path file = dir.resolve(filename);
+            Path file = dir.resolve(finalFile);
             Files.write(file, lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
