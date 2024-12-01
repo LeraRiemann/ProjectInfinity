@@ -188,20 +188,28 @@ public interface PortalCreationLogic {
         }
     }
 
-    /* Updates this and all neighbouring portal blocks with a new dimension and open status. */
-    static void modifyPortalRecursive(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
-        PortalColorApplier applier = WarpLogic.getPortalColorApplier(id, world.getServer());
+    static Consumer<BlockPos> infPortalSetupper(ServerWorld world, BlockPos pos) {
         BlockState originalState = world.getBlockState(pos);
-        BlockState state = (originalState.isOf(ModBlocks.NEITHER_PORTAL)) ?
+        BlockState state = (originalState.isOf(ModBlocks.PORTAL)) ?
                 originalState.with(InfinityPortalBlock.BOOP, !originalState.get(InfinityPortalBlock.BOOP)) :
-                ModBlocks.NEITHER_PORTAL.get().getDefaultState()
+                ModBlocks.PORTAL.get().getDefaultState()
                         .with(NetherPortalBlock.AXIS, originalState.get(NetherPortalBlock.AXIS));
-        modifyPortalRecursive(world, pos, new PortalModifierUnion()
-                .addSetupper(p -> world.setBlockState(p, state))
+        return p -> world.setBlockState(p, state);
+    }
+
+    static PortalModifierUnion forInitialSetupping(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
+        PortalColorApplier applier = WarpLogic.getPortalColorApplier(id, world.getServer());
+        return new PortalModifierUnion()
+                .addSetupper(infPortalSetupper(world, pos))
                 .addModifier(nbpe -> nbpe.setDimension(id))
                 .addModifier(npbe -> npbe.setColor(applier.apply(npbe.getPos())))
                 .addModifier(npbe -> npbe.setOpen(open))
-                .addModifier(BlockEntity::markDirty));
+                .addModifier(BlockEntity::markDirty);
+    }
+
+    /* Updates this and all neighbouring portal blocks with a new dimension and open status. */
+    static void modifyPortalRecursive(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
+        modifyPortalRecursive(world, pos, forInitialSetupping(world, pos, id, open));
     }
 
     /* Calls to create the dimension based on its ID. Returns true if the dimension being opened is indeed brand new. */
@@ -243,14 +251,14 @@ public interface PortalCreationLogic {
 
     record PortalModifierUnion(List<Consumer<BlockPos>> setuppers, List<Consumer<InfinityPortalBlockEntity>> modifiers)
             implements BiConsumer<World, BlockPos> {
-        PortalModifierUnion() {
+        public PortalModifierUnion() {
             this(new ArrayList<>(), new ArrayList<>());
         }
         PortalModifierUnion addSetupper(Consumer<BlockPos> setupper) {
             setuppers.add(setupper);
             return this;
         }
-        PortalModifierUnion addModifier(Consumer<InfinityPortalBlockEntity> modifier) {
+        public PortalModifierUnion addModifier(Consumer<InfinityPortalBlockEntity> modifier) {
             modifiers.add(modifier);
             return this;
         }

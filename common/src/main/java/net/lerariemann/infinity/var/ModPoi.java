@@ -28,7 +28,7 @@ public class ModPoi {
     // Deferred handling of Poi through Architectury API, works on NeoForge.
     public static void registerPoiArchitectury() {
         final DeferredRegister<PointOfInterestType> POI_TYPES = DeferredRegister.create(MOD_ID, RegistryKeys.POINT_OF_INTEREST_TYPE);
-        NEITHER_PORTAL = POI_TYPES.register("neither_portal", () -> new PointOfInterestType(ImmutableSet.copyOf(ModBlocks.NEITHER_PORTAL.get().getStateManager().getStates()), 0, 1));
+        NEITHER_PORTAL = POI_TYPES.register("neither_portal", () -> new PointOfInterestType(ImmutableSet.copyOf(ModBlocks.PORTAL.get().getStateManager().getStates()), 0, 1));
         POI_TYPES.register();
     }
 

@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class NetherPortalMixin {
     @Inject(method = "validStateInsidePortal(Lnet/minecraft/block/BlockState;)Z", at = @At("RETURN"), cancellable = true)
     private static void injected(BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(cir.getReturnValue() || state.isOf(ModBlocks.NEITHER_PORTAL));
+        cir.setReturnValue(cir.getReturnValue() || state.isOf(ModBlocks.PORTAL));
     }
 }

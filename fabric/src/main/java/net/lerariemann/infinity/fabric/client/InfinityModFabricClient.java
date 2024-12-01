@@ -14,7 +14,7 @@ public class InfinityModFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // Apply colour handlers to tint Neither Portals and Book Boxes.
-        ColorProviderRegistry.BLOCK.register(PlatformMethods::getNeitherPortalColour, ModBlocks.NEITHER_PORTAL.get());
+        ColorProviderRegistry.BLOCK.register(PlatformMethods::getNeitherPortalColour, ModBlocks.PORTAL.get());
         ColorProviderRegistry.BLOCK.register(PlatformMethods::getBookBoxColour, ModBlocks.BOOK_BOX.get());
         ColorProviderRegistry.BLOCK.register(PlatformMethods::getBookBoxColour, ModBlocks.IRIDESCENCE.get());
         ColorProviderRegistry.BLOCK.register(PlatformMethods::getBiomeBottleColor, ModBlocks.BIOME_BOTTLE.get());

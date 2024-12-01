@@ -81,7 +81,7 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupper.Config> {
                 for (int l = 1; l < width+1; l++) {
                     BlockPos pos = bpadd(blockPos, l, y, 0, axis_x);
                     setBlockState(structureWorldAccess, pos,
-                            ModBlocks.NEITHER_PORTAL.get().getDefaultState().with(
+                            ModBlocks.PORTAL.get().getDefaultState().with(
                                     NetherPortalBlock.AXIS, axis_x ? Direction.Axis.X : Direction.Axis.Z));
                     if (structureWorldAccess.getBlockEntity(pos) instanceof InfinityPortalBlockEntity be) {
                         be.setDimension(dim);

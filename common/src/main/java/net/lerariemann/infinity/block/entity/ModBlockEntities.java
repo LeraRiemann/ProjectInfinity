@@ -20,7 +20,7 @@ public class ModBlockEntities {
     public static final RegistrySupplier<BlockEntityType<InfinityPortalBlockEntity>> NEITHER_PORTAL =
             BLOCK_ENTITY_TYPES.register("neither_portal", () ->
                     BlockEntityType.Builder.create(InfinityPortalBlockEntity::new,
-                            ModBlocks.NEITHER_PORTAL.get()).build(type("neither_portal")));
+                            ModBlocks.PORTAL.get()).build(type("neither_portal")));
     public static final RegistrySupplier<BlockEntityType<TransfiniteAltarEntity>> ALTAR =
             BLOCK_ENTITY_TYPES.register("altar_block_entity", () ->
                     BlockEntityType.Builder.create(TransfiniteAltarEntity::new,

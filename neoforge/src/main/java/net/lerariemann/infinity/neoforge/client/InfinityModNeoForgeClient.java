@@ -45,7 +45,7 @@ public class InfinityModNeoForgeClient {
     // Apply colour handlers to tint Neither Portals and Book Boxes.
     @SubscribeEvent
     public static void registerBlockColorHandlers(RegisterColorHandlersEvent.Block event) {
-        event.register(PlatformMethods::getNeitherPortalColour, ModBlocks.NEITHER_PORTAL.get());
+        event.register(PlatformMethods::getNeitherPortalColour, ModBlocks.PORTAL.get());
         event.register(PlatformMethods::getBookBoxColour, ModBlocks.BOOK_BOX.get());
         event.register(PlatformMethods::getBookBoxColour, ModBlocks.IRIDESCENCE.get());
         event.register(PlatformMethods::getBiomeBottleColor, ModBlocks.BIOME_BOTTLE.get());
