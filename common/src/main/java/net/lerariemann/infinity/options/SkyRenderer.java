@@ -14,9 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import java.awt.Color;
@@ -241,30 +239,6 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
         float day = options.getDayStarBrightness();
         float night = options.getNightStarBrightness();
         return day + g*g*(night-day);
-    }
-
-    public static BuiltBuffer buildStarsBuffer(Tessellator tessellator, InfinityOptions options) {
-        Random random = Random.create(10842L);
-        int num_stars = options.getNumStars();
-        float distance_to_stars = 100.0F;
-        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
-        for (int star = 0; star < num_stars; star++) {
-            float star_x = random.nextFloat() * 2.0F - 1.0F;
-            float star_y = random.nextFloat() * 2.0F - 1.0F;
-            float star_z = random.nextFloat() * 2.0F - 1.0F;
-            float star_size = options.getStarSizeBase() + random.nextFloat() * options.getStarSizeModifier();
-            float m = MathHelper.magnitude(star_x, star_y, star_z);
-            if (!(m <= 0.010000001F) && !(m >= 1.0F)) {
-                Vector3f star_coords = new Vector3f(star_x, star_y, star_z).normalize(distance_to_stars);
-                float rotation_angle = (float)(random.nextDouble() * (float) Math.PI * 2.0);
-                Quaternionf quaternionf = new Quaternionf().rotateTo(new Vector3f(0.0F, 0.0F, -1.0F), star_coords).rotateZ(rotation_angle);
-                bufferBuilder.vertex(star_coords.add(new Vector3f(star_size, -star_size, 0.0F).rotate(quaternionf)));
-                bufferBuilder.vertex(star_coords.add(new Vector3f(star_size, star_size, 0.0F).rotate(quaternionf)));
-                bufferBuilder.vertex(star_coords.add(new Vector3f(-star_size, star_size, 0.0F).rotate(quaternionf)));
-                bufferBuilder.vertex(star_coords.add(new Vector3f(-star_size, -star_size, 0.0F).rotate(quaternionf)));
-            }
-        }
-        return bufferBuilder.end();
     }
     
     public void renderSkybox(Identifier texture, float copies, int brightness, int alpha) {
