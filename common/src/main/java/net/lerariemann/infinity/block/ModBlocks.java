@@ -26,7 +26,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CURSOR = BLOCKS.register("cursor", () ->
             new Block(AbstractBlock.Settings.create().strength(1.8f).mapColor(MapColor.GREEN).sounds(BlockSoundGroup.STONE)));
     public static final RegistrySupplier<Block> NEITHER_PORTAL = BLOCKS.register("neither_portal", () ->
-            new NeitherPortalBlock(AbstractBlock.Settings.copy(Blocks.NETHER_PORTAL)));
+            new InfinityPortalBlock(AbstractBlock.Settings.copy(Blocks.NETHER_PORTAL)));
     public static final RegistrySupplier<Block> NETHERITE_STAIRS = BLOCKS.register("netherite_stairs", () ->
             new ModStairs(Blocks.NETHERITE_BLOCK.getDefaultState(), AbstractBlock.Settings.copy(Blocks.NETHERITE_BLOCK)));
     public static final RegistrySupplier<Block> NETHERITE_SLAB = BLOCKS.register("netherite_slab", () ->
@@ -39,6 +39,9 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.GLASS)));
     public static final RegistrySupplier<Block> IRIDESCENT_WOOL = BLOCKS.register("iridescent_wool", () ->
             new IridescentBlock(AbstractBlock.Settings.copy(Blocks.MAGENTA_WOOL)));
+    public static final RegistrySupplier<Block> IRIDESCENT_CARPET = BLOCKS.register("iridescent_carpet", () ->
+            new IridescentBlock.Carpet(AbstractBlock.Settings.copy(Blocks.MAGENTA_CARPET)));
+
 
     public static void registerModBlocks() {
         BLOCKS.register();

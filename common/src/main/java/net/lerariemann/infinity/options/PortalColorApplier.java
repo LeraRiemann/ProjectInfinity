@@ -6,7 +6,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.BlockPos;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Random;
 
 public interface PortalColorApplier {

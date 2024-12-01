@@ -9,8 +9,11 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 
 public class IridescentBlock extends Block {
     public static int num_models = 24;
@@ -19,6 +22,11 @@ public class IridescentBlock extends Block {
     public IridescentBlock(AbstractBlock.Settings settings) {
         super(settings);
         this.setDefaultState(getDefaultState().with(COLOR_OFFSET, 0));
+    }
+
+    @Override
+    public MapCodec<? extends IridescentBlock> getCodec() {
+        return CODEC;
     }
 
     @Override
@@ -47,5 +55,30 @@ public class IridescentBlock extends Block {
 
     public BlockState getPosBased(World world, BlockPos pos) {
         return getDefaultState().with(COLOR_OFFSET, InfinityOptions.access(world).iridMap.getColor(pos));
+    }
+
+    public static class Carpet extends IridescentBlock {
+        protected static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
+
+        public Carpet(Settings settings) {
+            super(settings);
+        }
+
+        @Override
+        protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+            return SHAPE;
+        }
+
+        @Override
+        protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+            return !state.canPlaceAt(world, pos)
+                    ? Blocks.AIR.getDefaultState()
+                    : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        }
+
+        @Override
+        protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+            return !world.isAir(pos.down());
+        }
     }
 }

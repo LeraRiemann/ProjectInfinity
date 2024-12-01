@@ -10,25 +10,27 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class NeitherPortalBlockEntity extends BlockEntity {
+public class InfinityPortalBlockEntity extends BlockEntity {
     private final PropertyDelegate propertyDelegate;
     private Identifier dimension;
     private int portalColor;
     private boolean isOpen;
+    @Nullable
+    private BlockPos otherSidePos;
 
-    public NeitherPortalBlockEntity(BlockPos pos, BlockState state) {
+    public InfinityPortalBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.NEITHER_PORTAL.get(), pos, state);
         this.propertyDelegate = new PropertyDelegate() {
             public int get(int index) {
                 if (index == 0) {
-                    return NeitherPortalBlockEntity.this.portalColor;
+                    return InfinityPortalBlockEntity.this.portalColor;
                 }
                 return 0;
             }
 
             public void set(int index, int value) {
                 if (index == 0) {
-                    NeitherPortalBlockEntity.this.portalColor = value;
+                    InfinityPortalBlockEntity.this.portalColor = value;
                 }
 
             }
@@ -38,15 +40,16 @@ public class NeitherPortalBlockEntity extends BlockEntity {
         };
     }
 
-    public NeitherPortalBlockEntity(BlockPos pos, BlockState state, int i) {
+    public InfinityPortalBlockEntity(BlockPos pos, BlockState state, int i) {
         this(pos, state, i, InfinityMod.getDimId(i));
     }
 
-    public NeitherPortalBlockEntity(BlockPos pos, BlockState state, int i, Identifier id) {
+    public InfinityPortalBlockEntity(BlockPos pos, BlockState state, int i, Identifier id) {
         this(pos, state);
         this.dimension = id;
         this.portalColor = i;
         this.isOpen = false;
+        this.otherSidePos = null;
     }
 
     public Identifier getDimension() {
@@ -59,6 +62,8 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     public boolean getOpen() {
         return this.isOpen;
     }
+    @Nullable
+    public BlockPos getBlockPos() { return this.otherSidePos; }
 
     public void setDimension(long c) {
         setColor((int)c);
@@ -72,6 +77,10 @@ public class NeitherPortalBlockEntity extends BlockEntity {
     }
     public void setOpen(boolean i) {
         this.isOpen = i;
+    }
+    public void setBlockPos(BlockPos pos) {
+        this.otherSidePos = pos;
+        markDirty();
     }
 
     public void writeNbt(NbtCompound tag) {

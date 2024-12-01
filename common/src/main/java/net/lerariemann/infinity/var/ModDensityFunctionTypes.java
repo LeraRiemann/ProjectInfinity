@@ -259,12 +259,7 @@ public class ModDensityFunctionTypes {
         }
     }
 
-    final static DoublePerlinNoiseSampler sampler, sampler2;
-
-    static {
-        sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, Iridescence.genOctaves(8));
-        sampler2 = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -6, Iridescence.genOctaves(8));
-    }
+    static DoublePerlinNoiseSampler sampler, sampler2;
 
     public record Classic(int sealevel) implements DensityFunction.Base {
         public static final CodecHolder<Classic> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -309,6 +304,8 @@ public class ModDensityFunctionTypes {
     }
 
     public static void registerFunctions() {
+        sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, Iridescence.genOctaves(8));
+        sampler2 = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -6, Iridescence.genOctaves(8));
         for (NonbinaryOperation.Type enum_ : NonbinaryOperation.Type.values()) {
             register(enum_.name, enum_.codecHolder);
         }
@@ -319,5 +316,4 @@ public class ModDensityFunctionTypes {
         register("classic", Classic.CODEC_HOLDER);
         DENSITY_FUNCTION_TYPES.register();
     }
-
 }

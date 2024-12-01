@@ -16,12 +16,12 @@ import java.util.*;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class RandomText extends RandomStructure {
-    static List<Path> mod_resources;
-    static {
+    public static List<Path> mod_resources;
+    public static void walkPaths() {
         mod_resources = new ArrayList<>();
         try {
             Files.walk(InfinityMod.rootResPath).forEach(p -> {
-                if (!p.toString().endsWith(".ogg") && !p.toString().endsWith(".png")) mod_resources.add(p);
+                if (p.toString().endsWith(".json")) mod_resources.add(p);
             });
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -3,6 +3,7 @@ package net.lerariemann.infinity;
 import dev.architectury.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.lerariemann.infinity.dimensions.RandomText;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
 import net.lerariemann.infinity.iridescence.ModStatusEffects;
@@ -29,12 +30,6 @@ public class InfinityMod {
 	public static Path utilPath = Path.of("config/infinity/.util");
 	public static boolean longArithmeticEnabled = false;
 
-	static {
-		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
-		assert mc != null;
-		rootResPath = mc.getRootPaths().get(0);
-	}
-
 	public static Identifier getId(String value){
 		return Identifier.of(MOD_ID, value);
 	}
@@ -43,6 +38,9 @@ public class InfinityMod {
 	}
 
 	public static void init() {
+		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
+		assert mc != null;
+		rootResPath = mc.getRootPaths().getFirst();
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
 		ModItemFunctions.registerItemFunctions();
@@ -62,6 +60,7 @@ public class InfinityMod {
 		ModFeatures.registerFeatures();
 		ModStats.registerStats();
 		ModCriteria.registerCriteria();
+		RandomText.walkPaths();
 	}
 
 	public static boolean isInfinity(World w) {

@@ -10,6 +10,9 @@ import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
+
+import java.awt.Color;
 
 public class IridescentEffect extends StatusEffect implements ModStatusEffects.SpecialEffect {
     public IridescentEffect(StatusEffectCategory category, int color) {

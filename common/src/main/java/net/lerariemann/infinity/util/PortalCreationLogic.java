@@ -7,8 +7,8 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
-import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
@@ -147,7 +147,7 @@ public interface PortalCreationLogic {
     static boolean open(MinecraftServer s, ServerWorld world, BlockPos pos) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         boolean bl = false;
-        if (blockEntity instanceof NeitherPortalBlockEntity npbe) {
+        if (blockEntity instanceof InfinityPortalBlockEntity npbe) {
             /* Call dimension creation. */
             Identifier i = npbe.getDimension();
             if (i.getNamespace().equals(InfinityMod.MOD_ID)) {
@@ -173,7 +173,7 @@ public interface PortalCreationLogic {
         while ((blockPos = queue.poll()) != null) {
             set.add(blockPos);
             BlockState blockState = world.getBlockState(blockPos);
-            if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof NeitherPortalBlock) {
+            if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof InfinityPortalBlock) {
                 modifier.accept(world, blockPos);
                 Set<Direction> toCheck = (axis == Direction.Axis.Z) ?
                         Set.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH) :
@@ -193,7 +193,7 @@ public interface PortalCreationLogic {
         PortalColorApplier applier = WarpLogic.getPortalColorApplier(id, world.getServer());
         BlockState originalState = world.getBlockState(pos);
         BlockState state = (originalState.isOf(ModBlocks.NEITHER_PORTAL)) ?
-                originalState.with(NeitherPortalBlock.BOOP, !originalState.get(NeitherPortalBlock.BOOP)) :
+                originalState.with(InfinityPortalBlock.BOOP, !originalState.get(InfinityPortalBlock.BOOP)) :
                 ModBlocks.NEITHER_PORTAL.get().getDefaultState()
                         .with(NetherPortalBlock.AXIS, originalState.get(NetherPortalBlock.AXIS));
         modifyPortalRecursive(world, pos, new PortalModifierUnion()
@@ -234,7 +234,14 @@ public interface PortalCreationLogic {
         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
     }
 
-    record PortalModifierUnion(List<Consumer<BlockPos>> setuppers, List<Consumer<NeitherPortalBlockEntity>> modifiers)
+    record PortalModifier(Consumer<InfinityPortalBlockEntity> modifier) implements BiConsumer<World, BlockPos> {
+        @Override
+        public void accept(World world, BlockPos pos) {
+            if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity npbe) modifier.accept(npbe);
+        }
+    }
+
+    record PortalModifierUnion(List<Consumer<BlockPos>> setuppers, List<Consumer<InfinityPortalBlockEntity>> modifiers)
             implements BiConsumer<World, BlockPos> {
         PortalModifierUnion() {
             this(new ArrayList<>(), new ArrayList<>());
@@ -243,7 +250,7 @@ public interface PortalCreationLogic {
             setuppers.add(setupper);
             return this;
         }
-        PortalModifierUnion addModifier(Consumer<NeitherPortalBlockEntity> modifier) {
+        PortalModifierUnion addModifier(Consumer<InfinityPortalBlockEntity> modifier) {
             modifiers.add(modifier);
             return this;
         }
@@ -252,7 +259,7 @@ public interface PortalCreationLogic {
         public void accept(World world, BlockPos pos) {
             setuppers.forEach(setupper -> setupper.accept(pos));
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof NeitherPortalBlockEntity npbe)
+            if (blockEntity instanceof InfinityPortalBlockEntity npbe)
                 modifiers.forEach(modifier -> modifier.accept(npbe));
         }
     }

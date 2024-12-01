@@ -3,7 +3,7 @@ package net.lerariemann.infinity.features;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -83,7 +83,7 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupper.Config> {
                     setBlockState(structureWorldAccess, pos,
                             ModBlocks.NEITHER_PORTAL.get().getDefaultState().with(
                                     NetherPortalBlock.AXIS, axis_x ? Direction.Axis.X : Direction.Axis.Z));
-                    if (structureWorldAccess.getBlockEntity(pos) instanceof NeitherPortalBlockEntity be) {
+                    if (structureWorldAccess.getBlockEntity(pos) instanceof InfinityPortalBlockEntity be) {
                         be.setDimension(dim);
                         be.setOpen(false);
                         be.markDirty();

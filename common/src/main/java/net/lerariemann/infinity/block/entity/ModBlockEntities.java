@@ -17,9 +17,9 @@ public class ModBlockEntities {
     }
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(InfinityMod.MOD_ID, RegistryKeys.BLOCK_ENTITY_TYPE);
 
-    public static final RegistrySupplier<BlockEntityType<NeitherPortalBlockEntity>> NEITHER_PORTAL =
+    public static final RegistrySupplier<BlockEntityType<InfinityPortalBlockEntity>> NEITHER_PORTAL =
             BLOCK_ENTITY_TYPES.register("neither_portal", () ->
-                    BlockEntityType.Builder.create(NeitherPortalBlockEntity::new,
+                    BlockEntityType.Builder.create(InfinityPortalBlockEntity::new,
                             ModBlocks.NEITHER_PORTAL.get()).build(type("neither_portal")));
     public static final RegistrySupplier<BlockEntityType<TransfiniteAltarEntity>> ALTAR =
             BLOCK_ENTITY_TYPES.register("altar_block_entity", () ->
