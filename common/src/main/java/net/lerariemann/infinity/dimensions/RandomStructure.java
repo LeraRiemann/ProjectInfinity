@@ -30,7 +30,7 @@ public class RandomStructure {
     void addData() {
         data = (NbtCompound)(parent.PROVIDER.compoundRegistry.get("structures").getRandomElement(random));
         type = data.getString("id");
-        name = Identifier.of(type).getPath() + "_" + id;
+        name = Identifier.of(type).getPath().replace("/", "_").replace("\\", "_") + "_" + id;
 
         data.putString("type", "infinity:setupper");
         data.putString("biomes", parent.fullname);
