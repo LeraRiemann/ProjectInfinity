@@ -26,8 +26,8 @@ public interface CommonIO {
         List<String> lines = Collections.singletonList(source);
         String finalFile = filename;
         if (filename.contains("/")) {
-            finalFile = filename.substring(filename.lastIndexOf("/"));
-            dir = Path.of(filename.substring(0, filename.lastIndexOf("/")));
+            finalFile = filename.substring(filename.lastIndexOf("/")+1);
+            dir = Path.of(dir + "/" + filename.substring(0, filename.lastIndexOf("/")));
         }
         try {
             Files.createDirectories(dir);
