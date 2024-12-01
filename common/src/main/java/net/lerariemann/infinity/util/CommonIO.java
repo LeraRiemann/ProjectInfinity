@@ -28,7 +28,7 @@ public interface CommonIO {
         filename = filename.replace("/", "_").replace("\\", "_");
         try {
             Files.createDirectories(dir);
-            Path file = dir.resolve(finalFile);
+            Path file = dir.resolve(filename);
             Files.write(file, lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
