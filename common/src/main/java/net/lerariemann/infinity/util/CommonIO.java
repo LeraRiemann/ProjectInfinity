@@ -35,7 +35,6 @@ public interface CommonIO {
 
     static void writeSurfaceRule(NbtCompound base, String path, String filename) {
         String source = CompoundToString(base, 0);
-        source = source.replace(": Infinity", ": 2147483647");
         for (int j: (new Integer[]{31, 62})) for (int i = -5; i < 6; i++) {
             String z = Integer.toString(j+i);
             source = source.replace("\"absolute\": "+z, "\"absolute\": "+(i==0 ? "%SL%" : "%SL" + (i>0 ? "+" : "") + i + "%"));
@@ -191,17 +190,21 @@ public interface CommonIO {
             case NbtDouble nbtDouble -> String.valueOf(boundsCheck(nbtDouble.floatValue()));
             case NbtFloat nbtFloat -> String.valueOf(boundsCheck(nbtFloat.floatValue()));
             case NbtLong nbtLong -> String.valueOf(boundsCheck(nbtLong.longValue()));
+            case NbtInt nbtInt -> String.valueOf(boundsCheck(nbtInt.intValue()));
+            case NbtShort nbtShort -> String.valueOf(boundsCheck(nbtShort.shortValue()));
             case NbtString nbtString -> "\"" + nbtString.asString().replace("\"", "\\\"") + "\"";
             default -> base.toString();
         };
     }
 
     static float boundsCheck(float base) {
-        return Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, base));
+        return Math.clamp(base, -2048, 2048);
     }
-
-    static long boundsCheck(long base) {
-        return Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, base));
+    static int boundsCheck(long base) {
+        return Math.clamp(base, -2048, 2048);
+    }
+    static int boundsCheck(int base) {
+        return Math.clamp(base, -2048, 2048);
     }
 
     static String CompoundToString(NbtCompound base, int t) {
