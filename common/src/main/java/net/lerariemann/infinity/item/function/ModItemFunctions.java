@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.item.function;
 
-import com.mojang.serialization.Codec;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -11,30 +10,29 @@ import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.item.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.SingleStackInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.LootFunctionType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.UnaryOperator;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.item.ModItems.TRANSFINITE_KEY;
 
 public class ModItemFunctions {
-    public static final DeferredRegister<ComponentType<?>> COMPONENT_TYPES =
-            DeferredRegister.create(MOD_ID, RegistryKeys.DATA_COMPONENT_TYPE);
-    public static final DeferredRegister<LootFunctionType<?>> LOOT_FUNCTION_TYPES =
+    public static final DeferredRegister<LootFunctionType> LOOT_FUNCTION_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.LOOT_FUNCTION_TYPE);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS =
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_SERIALIZER);
@@ -42,10 +40,11 @@ public class ModItemFunctions {
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_TYPE);
 
 
-    public static RegistrySupplier<LootFunctionType<SetLevelLootFunction>> SET_BIOME_BOTTLE_LEVEL =
-            LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () -> new LootFunctionType<>(SetLevelLootFunction.CODEC));
-    public static RegistrySupplier<LootFunctionType<SetAltarStateLootFunction>> SET_ALTAR_STATE =
-            LOOT_FUNCTION_TYPES.register("set_altar_state", () -> new LootFunctionType<>(SetAltarStateLootFunction.CODEC));
+
+    public static final RegistrySupplier<LootFunctionType> SET_BIOME_BOTTLE_LEVEL = LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () ->
+            new LootFunctionType(new SetLevelLootFunction.Serializer()));
+    public static final RegistrySupplier<LootFunctionType> SET_ALTAR_STATE = LOOT_FUNCTION_TYPES.register("set_altar_state", () ->
+            new LootFunctionType(new SetAltarStateLootFunction.Serializer()));
 
     public static RegistrySupplier<RecipeSerializer<BiomeBottleCombiningRecipe>> BIOME_BOTTLE_COMBINING =
             RECIPE_SERIALIZERS.register("biome_bottle_combining", () ->
@@ -64,27 +63,47 @@ public class ModItemFunctions {
 
     public static void registerItemFunctions() {
         InfinityMod.LOGGER.debug("Registering component types for " + InfinityMod.MOD_ID);
-        COMPONENT_TYPES.register();
         LOOT_FUNCTION_TYPES.register();
         RECIPE_SERIALIZERS.register();
         RECIPE_TYPES.register();
     }
 
-    private static <T> RegistrySupplier<ComponentType<T>> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
-        return COMPONENT_TYPES.register(id, () -> (builderOperator.apply(ComponentType.builder())).build());
-    }
-
     public static void checkCollisionRecipes(ServerWorld w, ItemEntity itemEntity,
                                              RecipeType<CollisionCraftingRecipe> recipeType,
-                                             Function<Item, Optional<ComponentMap>> componentFunction) {
+                                             Function<Item, NbtCompound> componentFunction) {
         if (itemEntity.isRemoved()) return;
         ItemStack itemStack = itemEntity.getStack();
-        Optional<RecipeEntry<CollisionCraftingRecipe>> match = w.getRecipeManager()
-                .getFirstMatch(recipeType, new SingleStackRecipeInput(itemStack), w);
+        Optional<CollisionCraftingRecipe> match = w.getRecipeManager()
+                .getFirstMatch(recipeType, new SingleStackInventory() {
+                    @Override
+                    public ItemStack getStack(int slot) {
+                        return itemStack;
+                    }
+
+                    @Override
+                    public ItemStack removeStack(int slot, int amount) {
+                        return null;
+                    }
+
+                    @Override
+                    public void setStack(int slot, ItemStack stack) {
+
+                    }
+
+                    @Override
+                    public void markDirty() {
+
+                    }
+
+                    @Override
+                    public boolean canPlayerUse(PlayerEntity player) {
+                        return false;
+                    }
+                }, w);
         if (match.isEmpty()) return;
 
-        ItemStack resStack = match.get().value().getResult(w.getRegistryManager());
-        componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyComponentsFrom);
+        ItemStack resStack = match.get().getOutput(w.getRegistryManager());
+//        componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyComponentsFrom);
 
         Vec3d v = itemEntity.getVelocity();
         ItemEntity result = new ItemEntity(w, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(),
