@@ -42,7 +42,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -211,26 +210,22 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     @Override
     public TeleportTarget createTeleportTarget(ServerWorld world, Entity entity, BlockPos pos) {
         if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
-            LogManager.getLogger().info("1");
             Identifier id = ipbe.getDimension();
             RegistryKey<World> key2 = RegistryKey.of(RegistryKeys.WORLD, id);
             ServerWorld targetDimension = world.getServer().getWorld(key2);
 
             if (targetDimension != null && ipbe.getOpen() && !((Timebombable)targetDimension).infinity$isTimebombed()) {
-                LogManager.getLogger().info("2");
-                return getTarget(targetDimension, ipbe, entity).orElse(findNewTeleportTarget(world, targetDimension, entity, pos));
+                return findNewTeleportTarget(world, targetDimension, entity, pos);
             }
         }
-        return new TeleportTarget(world, entity.getPos(), entity.getVelocity(), entity.getYaw(), entity.getPitch(), TeleportTarget.NO_OP);
+        return findNewTeleportTarget(world, world, entity, pos);
     }
 
     public static Optional<TeleportTarget> getTarget(ServerWorld targetDimension, InfinityPortalBlockEntity ipbe, Entity teleportingEntity) {
-        LogManager.getLogger().info("3");
         BlockPos pos = ipbe.getBlockPos();
         if (pos == null) return Optional.empty();
         BlockState blockState = targetDimension.getBlockState(pos);
         if (!(blockState.getBlock() instanceof NetherPortalBlock)) return Optional.empty();
-        LogManager.getLogger().info("4");
         BlockLocating.Rectangle rectangle = BlockLocating.getLargestRectangle(
                 pos, blockState.get(Properties.HORIZONTAL_AXIS), 21, Direction.Axis.Y, 21,
                 posx -> targetDimension.getBlockState(posx) == blockState
@@ -241,32 +236,9 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
 
     public TeleportTarget findNewTeleportTarget(ServerWorld currentDimension, ServerWorld targetDimension,
                                                 Entity teleportingEntity, BlockPos startingPos) {
-        LogManager.getLogger().info("5");
         WorldBorder worldBorder = targetDimension.getWorldBorder();
         double d = DimensionType.getCoordinateScaleFactor(currentDimension.getDimension(), targetDimension.getDimension());
         BlockPos blockPos = worldBorder.clamp(teleportingEntity.getX() * d, teleportingEntity.getY(), teleportingEntity.getZ() * d);
-        TeleportTarget target = getOrCreateExitPortalTarget(targetDimension, teleportingEntity, startingPos, blockPos, false, worldBorder);
-        if (target != null) {
-            LogManager.getLogger().info("6");
-            findPortalPos(targetDimension, BlockPos.ofFloored(target.pos())).ifPresent(bp -> {
-                LogManager.getLogger().info("7");
-                PortalCreationLogic.modifyPortalRecursive(currentDimension, startingPos, new PortalCreationLogic.PortalModifier(
-                        ipbe -> ipbe.setBlockPos(bp)));
-                //PortalCreationLogic.modifyPortalRecursive(targetDimension, bp, new PortalCreationLogic.PortalModifier(
-                 //       ipbe -> ipbe.setBlockPos(startingPos)));
-            });
-        }
-        return target;
-    }
-
-    Optional<BlockPos> findPortalPos(ServerWorld world, BlockPos start) {
-        List<BlockPos> lst = BlockPos.stream(BlockBox.create(start.add(-2, -2, -2), start.add(2, 2, 2))).toList();
-        for (BlockPos p : lst) {
-            if (world.getBlockState(p).getBlock() instanceof NetherPortalBlock) {
-                LogManager.getLogger().info(p.toShortString());
-                return Optional.of(p);
-            }
-        }
-        return Optional.empty();
+        return getOrCreateExitPortalTarget(targetDimension, teleportingEntity, startingPos, blockPos, false, worldBorder);
     }
 }
