@@ -4,6 +4,6 @@
     "item": "minecraft:tnt"
   },
   "output": {
-    "id": "infinity:timebomb"
+    "item": "infinity:timebomb"
   }
 }

@@ -4,6 +4,6 @@
     "tag": "minecraft:wool"
   },
   "output": {
-    "id": "infinity:iridescent_wool"
+    "item": "infinity:iridescent_wool"
   }
 }

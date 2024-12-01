@@ -4,6 +4,6 @@
     "item": "minecraft:glass_bottle"
   },
   "output": {
-    "id": "infinity:biome_bottle"
+    "item": "infinity:biome_bottle"
   }
 }

@@ -4,6 +4,6 @@
     "tag": "minecraft:wool_carpets"
   },
   "output": {
-    "id": "infinity:iridescent_carpet"
+    "item": "infinity:iridescent_carpet"
   }
 }

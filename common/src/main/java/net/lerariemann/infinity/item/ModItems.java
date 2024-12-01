@@ -111,7 +111,7 @@ public class ModItems {
     public static RegistrySupplier<Item> registerHomeItem() {
         final Item.Settings homeSettings = new Item.Settings().food(new FoodComponent.Builder().build());
         RegistrySupplier<Item> registeredItem = ITEMS.register("fine_item", () -> new HomeItem(homeSettings));
-        addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.RECOVERY_COMPASS);
+        addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
         return registeredItem;
     }
 

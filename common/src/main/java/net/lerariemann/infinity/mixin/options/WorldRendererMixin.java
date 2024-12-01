@@ -34,9 +34,11 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
 
     @Shadow protected abstract void renderStars();
 
+    @Unique
+    public boolean infinity$needsStars;
     @Override
     public void infinity$setNeedsStars(boolean b) {
-        renderStars();
+        infinity$needsStars = b;
     }
 
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
@@ -70,11 +72,18 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
                 matrices, tickDelta, projectionMatrix,
                 lightSkyBuffer, starsBuffer);
         if (renderer.testAndRenderNonOverworldySkies()) return;
+        infinity$createStarsIfNeeded();
         renderer.setupOverworldySky();
         renderer.renderAllCelestialBodies(fogCallback);
         renderer.finish();
     }
-
+    @Unique
+    public void infinity$createStarsIfNeeded() {
+        if (infinity$needsStars) {
+            renderStars();
+            infinity$needsStars = false;
+        }
+    }
     @Unique
     private InfinityOptions infinity$options() {
         return InfinityOptions.ofClient(client);

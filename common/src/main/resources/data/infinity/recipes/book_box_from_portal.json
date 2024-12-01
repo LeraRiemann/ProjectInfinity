@@ -4,6 +4,6 @@
     "item": "minecraft:bookshelf"
   },
   "output": {
-    "id": "infinity:book_box"
+    "item": "infinity:book_box"
   }
 }
