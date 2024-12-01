@@ -28,11 +28,6 @@ public class InfinityMod {
 	public static Path rootResPath;
 	public static Path utilPath = Path.of("config/infinity/.util");
 	public static boolean longArithmeticEnabled = false;
-	static {
-		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
-		assert mc != null;
-		rootResPath = mc.getRootPaths().getFirst();
-	}
 
     public static Identifier getId(String value){
 		return Identifier.of(MOD_ID, value);
@@ -42,6 +37,9 @@ public class InfinityMod {
 	}
 
 	public static void init() {
+		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
+		assert mc != null;
+		rootResPath = mc.getRootPaths().getFirst();
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
 		ModItemFunctions.registerItemFunctions();
