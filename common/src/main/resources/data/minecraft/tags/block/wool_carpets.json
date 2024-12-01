@@ -1,6 +1,6 @@
 {
+  "replace": false,
   "values": [
-    "infinity:iridescent_wool",
     "infinity:iridescent_carpet"
   ]
 }

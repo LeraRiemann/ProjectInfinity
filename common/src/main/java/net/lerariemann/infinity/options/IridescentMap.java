@@ -19,7 +19,8 @@ public interface IridescentMap {
         if (!data.contains("type")) return Perliny.INSTANCE;
         return switch (data.getString("type")) {
             case "linear" -> Linear.INSTANCE;
-            case "circles" -> new PrettyCircles(data.getInt("scale"));
+            case "circles" -> new PrettyCircles(InfinityOptions.test(data, "scale", 16.0));
+            case "static" -> new Static(InfinityOptions.test(data, "value", 0));
             default -> Perliny.INSTANCE;
         };
     }
@@ -38,6 +39,12 @@ public interface IridescentMap {
         @Override
         public double getHue(BlockPos pos) {
             return (Math.cos(pos.getX()/scale) + Math.cos(pos.getY()/scale) + Math.cos(pos.getZ()/scale))/4;
+        }
+    }
+    record Static(int value) implements IridescentMap {
+        @Override
+        public int getColor(BlockPos pos) {
+            return WarpLogic.properMod(value, num_models);
         }
     }
 }

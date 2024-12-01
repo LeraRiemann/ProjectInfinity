@@ -9,10 +9,13 @@ import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.options.InfinityOptions;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.LootFunctionType;
@@ -26,6 +29,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -76,7 +80,7 @@ public class ModItemFunctions {
             RECIPE_TYPES.register("collision_iridescence", () -> CollisionCraftingRecipe.Type.IRIDESCENCE);
 
     public static void registerItemFunctions() {
-        InfinityMod.LOGGER.debug("Registering component types for " + InfinityMod.MOD_ID);
+        InfinityMod.LOGGER.debug("Registering component types for " + MOD_ID);
         COMPONENT_TYPES.register();
         LOOT_FUNCTION_TYPES.register();
         RECIPE_SERIALIZERS.register();
@@ -107,6 +111,11 @@ public class ModItemFunctions {
         itemEntity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
     }
 
+    public static float iridPredicate(@Nullable ItemStack stack, ClientWorld world, @Nullable LivingEntity entity, int seed) {
+        if (entity == null) return 0;
+        return (InfinityOptions.access(world).iridMap.getColor(entity.getBlockPos()) / 100.0f);
+    }
+
     @Environment(EnvType.CLIENT)
     public static void registerModelPredicates() {
         ItemPropertiesRegistry.register(ModItems.TRANSFINITE_KEY.get(), InfinityMod.getId("key"), (stack, world, entity, seed) -> {
@@ -126,5 +135,9 @@ public class ModItemFunctions {
                     int charge = BiomeBottle.getCharge(stack);
                     return Math.clamp(charge / 1000.0f, 0f, 1f);
                 });
+        ItemPropertiesRegistry.register(ModItems.IRIDESCENT_CARPET.get(), InfinityMod.getId("iridescent"),
+                ModItemFunctions::iridPredicate);
+        ItemPropertiesRegistry.register(ModItems.IRIDESCENT_WOOL.get(), InfinityMod.getId("iridescent"),
+                ModItemFunctions::iridPredicate);
     }
 }

@@ -10,7 +10,6 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.registry.Registries;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import org.apache.logging.log4j.LogManager;
 
 public class ModEffectsNeoforge {
     public static final DeferredRegister<StatusEffect> EFFECTS = DeferredRegister.create(Registries.STATUS_EFFECT, InfinityMod.MOD_ID);

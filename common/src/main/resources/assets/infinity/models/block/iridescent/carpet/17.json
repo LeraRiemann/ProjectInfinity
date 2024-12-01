@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/carpet",
   "textures": {
-    "all": "infinity:block/iridescent/wool/17"
+    "wool": "infinity:block/iridescent/wool/17"
   }
 }

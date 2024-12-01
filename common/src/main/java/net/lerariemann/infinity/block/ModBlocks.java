@@ -39,6 +39,9 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.GLASS)));
     public static final RegistrySupplier<Block> IRIDESCENT_WOOL = BLOCKS.register("iridescent_wool", () ->
             new IridescentBlock(AbstractBlock.Settings.copy(Blocks.MAGENTA_WOOL)));
+    public static final RegistrySupplier<Block> IRIDESCENT_CARPET = BLOCKS.register("iridescent_carpet", () ->
+            new IridescentBlock.Carpet(AbstractBlock.Settings.copy(Blocks.MAGENTA_CARPET)));
+
 
     public static void registerModBlocks() {
         BLOCKS.register();

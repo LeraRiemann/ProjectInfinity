@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2002000,
+  "infinity_version": 2002001,
   "easter-options": {
     "portal_color": {
       "type": "random_hue"
@@ -7,7 +7,10 @@
     "time_scale": 50.0,
     "sky_type": "rainbow",
     "star_brightness_day": 0.5,
-    "star_brightness_night": 1.0
+    "star_brightness_night": 1.0,
+    "iridescent_map": {
+      "type": "noise"
+    }
   },
   "easter-type": "chaos",
   "type": "minecraft:noise",
