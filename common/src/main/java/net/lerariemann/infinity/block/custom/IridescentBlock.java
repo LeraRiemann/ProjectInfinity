@@ -25,11 +25,6 @@ public class IridescentBlock extends Block {
     }
 
     @Override
-    public MapCodec<? extends IridescentBlock> getCodec() {
-        return CODEC;
-    }
-
-    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
         builder.add(COLOR_OFFSET);
@@ -65,19 +60,19 @@ public class IridescentBlock extends Block {
         }
 
         @Override
-        protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
             return SHAPE;
         }
 
         @Override
-        protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
             return !state.canPlaceAt(world, pos)
                     ? Blocks.AIR.getDefaultState()
                     : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         }
 
         @Override
-        protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
             return !world.isAir(pos.down());
         }
     }

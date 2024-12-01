@@ -40,7 +40,7 @@ public class InfinityMod {
 	public static void init() {
 		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
 		assert mc != null;
-		rootResPath = mc.getRootPaths().getFirst();
+		rootResPath = mc.getRootPaths().get(0);
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
 		ModItemFunctions.registerItemFunctions();

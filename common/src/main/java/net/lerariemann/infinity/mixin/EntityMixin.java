@@ -2,7 +2,7 @@ package net.lerariemann.infinity.mixin;
 
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -32,11 +32,11 @@ public class EntityMixin {
     private ServerWorld injected(ServerWorld serverWorld2) {
         ServerWorld serverWorld = (ServerWorld)this.world;
         if (serverWorld.getBlockState(this.lastNetherPortalPosition).isOf(ModBlocks.NEITHER_PORTAL.get())) {
-            NeitherPortalBlockEntity e = ((NeitherPortalBlockEntity)serverWorld.getBlockEntity(this.lastNetherPortalPosition));
+            InfinityPortalBlockEntity e = ((InfinityPortalBlockEntity)serverWorld.getBlockEntity(this.lastNetherPortalPosition));
             if (e == null) return serverWorld;
             Identifier d = e.getDimension();
             serverWorld2 = serverWorld.getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD,d));
-            return (serverWorld2 != null && e.getOpen() && ((Timebombable)serverWorld2).infinity$isTimebombed() == 0) ? serverWorld2 : serverWorld;
+            return (serverWorld2 != null && e.getOpen() && !((Timebombable) serverWorld2).infinity$isTimebombed()) ? serverWorld2 : serverWorld;
         }
         return (serverWorld2 != null) ? serverWorld2 : serverWorld;
     }

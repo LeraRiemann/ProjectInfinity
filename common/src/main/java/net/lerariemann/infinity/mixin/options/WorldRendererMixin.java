@@ -30,7 +30,6 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     @Shadow private VertexBuffer lightSkyBuffer;
     @Shadow private VertexBuffer starsBuffer;
 
-    @Shadow protected abstract void renderStars();
     @Shadow protected abstract boolean hasBlindnessOrDarkness(Camera camera);
 
     @Shadow protected abstract void renderStars();
@@ -75,13 +74,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         renderer.renderAllCelestialBodies(fogCallback);
         renderer.finish();
     }
-    @Unique
-    public void infinity$createStarsIfNeeded() {
-        if (infinity$needsStars) {
-            renderStars();
-            infinity$needsStars = false;
-        }
-    }
+
     @Unique
     private InfinityOptions infinity$options() {
         return InfinityOptions.ofClient(client);

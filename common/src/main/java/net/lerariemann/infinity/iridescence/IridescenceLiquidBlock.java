@@ -9,6 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -34,7 +35,7 @@ public class IridescenceLiquidBlock extends ArchitecturyLiquidBlock {
                 if (!Iridescence.isIridescentItem(item.getStack()) && item.getOwner() instanceof LivingEntity le &&
                         !Iridescence.getPhase(le).equals(Iridescence.Phase.INITIAL))
                     ModItemFunctions.checkCollisionRecipes(w, item, ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get(),
-                            i -> Optional.empty());
+                            i -> new NbtCompound());
             }
         }
     }

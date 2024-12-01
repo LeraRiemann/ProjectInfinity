@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import dev.architectury.platform.Platform;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
@@ -20,14 +21,16 @@ import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.WritableBookContentComponent;
-import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
@@ -45,56 +48,80 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPage;
+import static net.lerariemann.infinity.compat.ComputerCraftCompat.isPrintedPage;
 
 public interface PortalCreationLogic {
-    static void tryCreatePortalFromItem(ServerWorld world, BlockPos pos, ItemEntity entity) {
+    static void tryCreatePortalFromItem(BlockState state, World world, BlockPos pos, ItemEntity entity) {
         ItemStack itemStack = entity.getStack();
+        if (itemStack.getItem() == ModItems.TRANSFINITE_KEY.get()) {
+            Identifier key_dest;
+            if (itemStack.getNbt() != null) {
+                key_dest = Identifier.tryParse(itemStack.getNbt().getString("key_destination"));
+            }
+            else {
+                key_dest = Identifier.of("minecraft", "random");
+            }
+            if (key_dest != null) {
+                MinecraftServer server = world.getServer();
+                if (server != null) {
+                    if (world instanceof ServerWorld serverWorld) {
+                        boolean bl = modifyOnInitialCollision(key_dest, serverWorld, pos);
+                        if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                    }
+                }
+            }
+        }
+        else if (itemStack.getItem() == Items.WRITTEN_BOOK || itemStack.getItem() == Items.WRITABLE_BOOK) {
+            NbtCompound compound = itemStack.getNbt();
+            String content;
+            if (compound != null) {
+                content = parseComponents(compound, itemStack.getItem());
+            }
+            else content = "";
+            MinecraftServer server = world.getServer();
+            if (server != null) {
+                Identifier id = WarpLogic.getIdentifier(content, server);
+                if (world instanceof ServerWorld serverWorld) {
+                    boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
+                    if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                }
+            }
+        }
+        else if (Platform.isModLoaded("computercraft")) {
+            if (isPrintedPage(itemStack.getItem())) {
+                NbtCompound compound = itemStack.getNbt();
+                String content;
+                if (compound != null) {
+                    content = checkPrintedPage(compound);
+                }
+                else content = "";
+                MinecraftServer server = world.getServer();
+                if (server != null) {
+                    Identifier id = WarpLogic.getIdentifier(content, server);
+                    if (world instanceof ServerWorld serverWorld) {
+                        boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
+                        if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                    }
+                }
+            }
+        }
 
-        /* Check if the item provided is a transfinite key. */
-        Identifier key_dest = itemStack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
-        if ((entity.getStack().getItem().equals(ModItems.TRANSFINITE_KEY.get())) && key_dest == null) {
-            key_dest = Identifier.of("minecraft:random");
-        }
-        if (key_dest != null)  {
-            boolean bl = modifyOnInitialCollision(key_dest, world, pos);
-            if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-            return;
-        }
-
-        /* Check if the item provided is a book of some kind. */
-        WritableBookContentComponent writableComponent = itemStack.getComponents().get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
-        WrittenBookContentComponent writtenComponent = itemStack.getComponents().get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
-        String printedComponent = null;
-        if (Platform.isModLoaded("computercraft")) {
-            printedComponent = checkPrintedPage(itemStack);
-        }
-        if (writableComponent != null || writtenComponent != null || printedComponent != null) {
-            String content = parseComponents(writableComponent, writtenComponent, printedComponent);
-            Identifier id = WarpLogic.getIdentifier(content, world.getServer());
-            boolean bl = modifyOnInitialCollision(id, world, pos);
-            if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-        }
     }
 
     /* Extracts the string used to generate the dimension ID from component content. */
-    static String parseComponents(WritableBookContentComponent writableComponent, WrittenBookContentComponent writtenComponent, String printedComponent) {
-        String content = "";
-        try {
-            if (writableComponent != null) {
-                content = writableComponent.pages().getFirst().raw();
-            }
-            if (writtenComponent != null) {
-                content = writtenComponent.pages().getFirst().raw().getString();
-            }
+    static String parseComponents(NbtCompound compound, Item item) {
+        NbtList pages = compound.getList("pages", NbtElement.STRING_TYPE);
+        if (pages.isEmpty()) {
+            return "";
         }
-        catch (NoSuchElementException e) {
-            content = "";
+        else if (item == Items.WRITTEN_BOOK) {
+            String pagesString = pages.get(0).asString();
+            return pagesString.substring(pagesString.indexOf(':')+2, pagesString.length()-2);
         }
-
-        if (printedComponent != null) {
-            content = printedComponent;
+        else if (item == Items.WRITABLE_BOOK) {
+            return pages.get(0).asString();
         }
-        return content;
+        else return "";
     }
 
     /* Sets the portal color and destination and calls to open the portal immediately if the portal key is blank.
@@ -137,7 +164,7 @@ public interface PortalCreationLogic {
         if (player != null) {
             if (isDimensionNew) {
                 player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
-                ModCriteria.DIMS_OPENED.get().trigger((ServerPlayerEntity)player);
+                ModCriteria.DIMS_OPENED.trigger((ServerPlayerEntity)player);
             }
             player.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
         }
@@ -192,7 +219,7 @@ public interface PortalCreationLogic {
     static void modifyPortalRecursive(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
         PortalColorApplier applier = WarpLogic.getPortalColorApplier(id, world.getServer());
         BlockState originalState = world.getBlockState(pos);
-        BlockState state = (originalState.isOf(ModBlocks.NEITHER_PORTAL)) ?
+        BlockState state = (originalState.isOf(ModBlocks.NEITHER_PORTAL.get())) ?
                 originalState.with(InfinityPortalBlock.BOOP, !originalState.get(InfinityPortalBlock.BOOP)) :
                 ModBlocks.NEITHER_PORTAL.get().getDefaultState()
                         .with(NetherPortalBlock.AXIS, originalState.get(NetherPortalBlock.AXIS));
@@ -224,13 +251,25 @@ public interface PortalCreationLogic {
 
     /* Create and send S2C packets necessary for the client to process a freshly added dimension. */
     static void sendNewWorld(ServerPlayerEntity player, Identifier id, RandomDimension d) {
-        d.random_biomes.forEach(b -> PlatformMethods.sendS2CPayload(player, new ModPayloads.BiomeAddPayload(InfinityMod.getId(b.name), b.data)));
-        PlatformMethods.sendS2CPayload(player, new ModPayloads.WorldAddPayload(id, d.type != null ? d.type.data : new NbtCompound()));
+        ServerPlayNetworking.send(player, ModPayloads.WORLD_ADD, buildPacket(id, d));
+    }
+
+    /* Create and send S2C packets necessary for the client to process a freshly added dimension. */
+    static PacketByteBuf buildPacket(Identifier id, RandomDimension d) {
+        PacketByteBuf buf = PlatformMethods.createPacketByteBufs();
+        buf.writeIdentifier(id);
+        buf.writeNbt(d.type != null ? d.type.data : new NbtCompound());
+        buf.writeInt(d.random_biomes.size());
+        d.random_biomes.forEach(b -> {
+            buf.writeIdentifier(InfinityMod.getId(b.name));
+            buf.writeNbt(b.data);
+        });
+        return buf;
     }
 
     /* Jingle signaling the portal is now usable. */
     static void runAfterEffects(ServerWorld world, BlockPos pos, boolean dimensionIsNew) {
-        if (dimensionIsNew) world.playSound(null, pos, SoundEvents.BLOCK_VAULT_OPEN_SHUTTER, SoundCategory.BLOCKS, 1f, 1f);
+        if (dimensionIsNew) world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
     }
 
