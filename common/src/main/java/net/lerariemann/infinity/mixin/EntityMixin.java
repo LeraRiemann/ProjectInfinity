@@ -31,7 +31,7 @@ public class EntityMixin {
             target = "Lnet/minecraft/entity/Entity;moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;"), index = 0)
     private ServerWorld injected(ServerWorld serverWorld2) {
         ServerWorld serverWorld = (ServerWorld)this.world;
-        if (serverWorld.getBlockState(this.lastNetherPortalPosition).isOf(ModBlocks.NEITHER_PORTAL.get())) {
+        if (serverWorld.getBlockState(this.lastNetherPortalPosition).isOf(ModBlocks.PORTAL.get())) {
             InfinityPortalBlockEntity e = ((InfinityPortalBlockEntity)serverWorld.getBlockEntity(this.lastNetherPortalPosition));
             if (e == null) return serverWorld;
             Identifier d = e.getDimension();

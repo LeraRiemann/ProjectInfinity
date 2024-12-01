@@ -33,7 +33,7 @@ public class PointOfInterestTypesMixin {
     private static PointOfInterestType injected(Registry<PointOfInterestType> registry, RegistryKey<PointOfInterestType> portal, Set<BlockState> states, int i0, int i1) {
         if (portal == PointOfInterestTypes.NETHER_PORTAL) {
             Set<BlockState> set = new HashSet<>(Blocks.NETHER_PORTAL.getStateManager().getStates());
-            set.addAll(ModBlocks.NEITHER_PORTAL.get().getStateManager().getStates());
+            set.addAll(ModBlocks.PORTAL.get().getStateManager().getStates());
             return register(registry, portal, ImmutableSet.copyOf(set), i0, i1);
         }
         return register(registry, portal, states, i0, i1);

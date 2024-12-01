@@ -11,7 +11,6 @@ import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
@@ -219,9 +218,9 @@ public interface PortalCreationLogic {
     static void modifyPortalRecursive(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
         PortalColorApplier applier = WarpLogic.getPortalColorApplier(id, world.getServer());
         BlockState originalState = world.getBlockState(pos);
-        BlockState state = (originalState.isOf(ModBlocks.NEITHER_PORTAL.get())) ?
+        BlockState state = (originalState.isOf(ModBlocks.PORTAL.get())) ?
                 originalState.with(InfinityPortalBlock.BOOP, !originalState.get(InfinityPortalBlock.BOOP)) :
-                ModBlocks.NEITHER_PORTAL.get().getDefaultState()
+                ModBlocks.PORTAL.get().getDefaultState()
                         .with(NetherPortalBlock.AXIS, originalState.get(NetherPortalBlock.AXIS));
         modifyPortalRecursive(world, pos, new PortalModifierUnion()
                 .addSetupper(p -> world.setBlockState(p, state))
