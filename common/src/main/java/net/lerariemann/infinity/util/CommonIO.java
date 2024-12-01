@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.architectury.platform.Platform;
 import net.minecraft.nbt.*;
+import net.minecraft.util.math.MathHelper;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -40,7 +41,6 @@ public interface CommonIO {
 
     static void writeSurfaceRule(NbtCompound base, String path, String filename) {
         String source = CompoundToString(base, 0);
-        source = source.replace(": Infinity", ": 2147483647");
         for (int j: (new Integer[]{31, 62})) for (int i = -5; i < 6; i++) {
             String z = Integer.toString(j+i);
             source = source.replace("\"absolute\": "+z, "\"absolute\": "+(i==0 ? "%SL%" : "%SL" + (i>0 ? "+" : "") + i + "%"));
@@ -188,23 +188,38 @@ public interface CommonIO {
     }
 
     static String ElementToString(NbtElement base, int t) {
-        String str;
-        if (base == null) str = "!!NULL!!";
-        else if (base instanceof NbtCompound) str = CompoundToString((NbtCompound)base, t+1);
-        else if (base instanceof NbtList) str = ListToString((NbtList)base, t+1);
-        else if (base instanceof NbtByte) str = (((NbtByte)base).byteValue() != 0) ? "true" : "false";
-        else if (base instanceof NbtDouble) str = String.valueOf(((NbtDouble) base).floatValue());
-        else if (base instanceof NbtFloat) str = String.valueOf(((NbtFloat) base).floatValue());
-        else str = base.toString();
-        return str;
+        if (base == null) {
+            return "!!NULL!!";
+        } else if (base instanceof NbtCompound nbtCompound) {
+            return CompoundToString(nbtCompound, t + 1);
+        } else if (base instanceof NbtList nbtElements) {
+            return ListToString(nbtElements, t + 1);
+        } else if (base instanceof NbtByte nbtByte) {
+            return (nbtByte.byteValue() != 0) ? "true" : "false";
+        } else if (base instanceof NbtDouble nbtDouble) {
+            return String.valueOf(boundsCheck(nbtDouble.floatValue()));
+        } else if (base instanceof NbtFloat nbtFloat) {
+            return String.valueOf(boundsCheck(nbtFloat.floatValue()));
+        } else if (base instanceof NbtLong nbtLong) {
+            return String.valueOf(boundsCheck(nbtLong.longValue()));
+        } else if (base instanceof NbtInt nbtInt) {
+            return String.valueOf(boundsCheck(nbtInt.intValue()));
+        } else if (base instanceof NbtShort nbtShort) {
+            return String.valueOf(boundsCheck(nbtShort.shortValue()));
+        } else if (base instanceof NbtString nbtString) {
+            return "\"" + nbtString.asString().replace("\"", "\\\"") + "\"";
+        }
+        return base.toString();
     }
 
     static float boundsCheck(float base) {
-        return Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, base));
+        return MathHelper.clamp(base, -2048, 2048);
     }
-
-    static long boundsCheck(long base) {
-        return Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, base));
+    static float boundsCheck(long base) {
+        return MathHelper.clamp(base, -2048, 2048);
+    }
+    static int boundsCheck(int base) {
+        return MathHelper.clamp(base, -2048, 2048);
     }
 
     static String CompoundToString(NbtCompound base, int t) {
