@@ -4,7 +4,7 @@ import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.minecraft.block.Block;
@@ -13,11 +13,8 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 
-import java.util.List;
-import java.util.Optional;
-
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
-import static net.lerariemann.infinity.PlatformMethods.*;
+import static net.lerariemann.infinity.util.PlatformMethods.*;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, RegistryKeys.ITEM);

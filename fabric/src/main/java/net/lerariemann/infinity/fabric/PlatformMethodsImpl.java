@@ -5,7 +5,7 @@ import me.basiqueevangelist.dynreg.util.RegistryUtils;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.fluids.ModFluidsFabric;
 import net.lerariemann.infinity.iridescence.IridescenceLiquidBlock;
@@ -21,7 +21,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 /**
- * See {@link net.lerariemann.infinity.PlatformMethods} for usages.
+ * See {@link PlatformMethods} for usages.
  */
 @SuppressWarnings("unused")
 public class PlatformMethodsImpl {

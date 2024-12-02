@@ -2,7 +2,7 @@ package net.lerariemann.infinity.forge.client;
 
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityModClient;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.compat.forge.ModConfigFactory;
 import net.lerariemann.infinity.item.function.ModItemFunctions;

@@ -5,7 +5,6 @@ import com.google.common.collect.Sets;
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;

@@ -3,7 +3,6 @@ package net.lerariemann.infinity.forge;
 import dev.architectury.platform.Platform;
 import dev.architectury.platform.forge.EventBuses;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.compat.forge.CanaryCompat;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.fluids.FluidTypes;

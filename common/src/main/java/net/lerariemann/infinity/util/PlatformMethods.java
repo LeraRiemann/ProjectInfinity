@@ -1,14 +1,11 @@
-package net.lerariemann.infinity;
+package net.lerariemann.infinity.util;
 
 import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -17,14 +14,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.poi.PointOfInterestType;
 

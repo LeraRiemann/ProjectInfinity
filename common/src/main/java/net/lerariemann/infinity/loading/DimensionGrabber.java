@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.loading;
 
 import com.mojang.serialization.Codec;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.*;

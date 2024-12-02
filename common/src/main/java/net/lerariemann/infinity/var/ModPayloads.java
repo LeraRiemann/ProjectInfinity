@@ -2,7 +2,7 @@ package net.lerariemann.infinity.var;
 
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
@@ -12,7 +12,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 

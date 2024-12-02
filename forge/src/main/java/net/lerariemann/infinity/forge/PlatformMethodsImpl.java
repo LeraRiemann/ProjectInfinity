@@ -3,7 +3,7 @@ package net.lerariemann.infinity.forge;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.fluids.IridescenceLiquidBlockForge;
 import net.lerariemann.infinity.fluids.ModFluidsForge;
@@ -21,10 +21,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.registries.RegistryObject;
 
 /**
- * See {@link net.lerariemann.infinity.PlatformMethods} for usages.
+ * See {@link PlatformMethods} for usages.
  */
 @SuppressWarnings("unused")
 public class PlatformMethodsImpl {
