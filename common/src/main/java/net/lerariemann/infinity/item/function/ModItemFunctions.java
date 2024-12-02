@@ -111,6 +111,7 @@ public class ModItemFunctions {
         itemEntity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
     }
 
+    @Environment(EnvType.CLIENT)
     public static float iridPredicate(@Nullable ItemStack stack, ClientWorld world, @Nullable LivingEntity entity, int seed) {
         if (entity == null) return 0;
         return (InfinityOptions.access(world).iridMap.getColor(entity.getBlockPos()) / 100.0f);
