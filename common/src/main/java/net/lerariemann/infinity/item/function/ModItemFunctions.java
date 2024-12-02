@@ -43,13 +43,6 @@ public class ModItemFunctions {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_TYPE);
 
-
-
-    public static final RegistrySupplier<LootFunctionType> SET_BIOME_BOTTLE_LEVEL = LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () ->
-            new LootFunctionType(new SetLevelLootFunction.Serializer()));
-    public static final RegistrySupplier<LootFunctionType> SET_ALTAR_STATE = LOOT_FUNCTION_TYPES.register("set_altar_state", () ->
-            new LootFunctionType(new SetAltarStateLootFunction.Serializer()));
-
     public static RegistrySupplier<RecipeSerializer<BiomeBottleCombiningRecipe>> BIOME_BOTTLE_COMBINING =
             RECIPE_SERIALIZERS.register("biome_bottle_combining", () ->
                     new SpecialRecipeSerializer<>(BiomeBottleCombiningRecipe::new));
