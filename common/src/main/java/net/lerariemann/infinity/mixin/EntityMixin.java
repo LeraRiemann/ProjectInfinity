@@ -44,7 +44,7 @@ public class EntityMixin {
     @Redirect(method = "getTeleportTarget(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/world/TeleportTarget;",
     at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getRegistryKey()Lnet/minecraft/registry/RegistryKey;"),
             slice = @Slice(from = @At(
-                    value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;getZ()Lnet/minecraft/util/math/Vec3i;"
+                    value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;getZ()I"
             ), to = @At("TAIL")))
     RegistryKey<World> smuggle(World w) {
        if (w == this.world) return World.NETHER;
