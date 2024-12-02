@@ -1,12 +1,12 @@
 package net.lerariemann.infinity.iridescence;
 
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
@@ -141,7 +141,7 @@ public class Iridescence {
     }
 
     public static void updateShader(ServerPlayerEntity player) {
-        PlatformMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(player.getServerWorld()));
+        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(player.getServerWorld()));
     }
 
     @Nullable
@@ -150,7 +150,7 @@ public class Iridescence {
         StatusEffectInstance effect = player.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
         if (effect == null) return null;
         return (getPhase(effect.getDuration(), effect.getAmplifier()) != Phase.INITIAL) ?
-                InfinityMod.getId("shaders/post/iridescence.json") :
+                InfinityMethods.getId("shaders/post/iridescence.json") :
                 null;
     }
 

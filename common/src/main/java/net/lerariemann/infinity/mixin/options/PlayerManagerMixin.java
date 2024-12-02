@@ -2,10 +2,10 @@ package net.lerariemann.infinity.mixin.options;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.block.BlockState;
@@ -52,8 +52,8 @@ public class PlayerManagerMixin {
             target = "Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci, @Local(ordinal=0) ServerWorld serverWorld2) {
         if (serverWorld2 == null) return;
-        PlatformMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(serverWorld2));
-        PlatformMethods.sendS2CPayload(player, ModPayloads.StarsRePayLoad.INSTANCE);
+        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(serverWorld2));
+        InfinityMethods.sendS2CPayload(player, ModPayloads.StarsRePayLoad.INSTANCE);
         MinecraftServerAccess acc = ((MinecraftServerAccess)(serverWorld2.getServer()));
         if (acc.infinity$needsInvocation()) {
             int y = serverWorld2.getTopY() - 10;
@@ -70,7 +70,7 @@ public class PlayerManagerMixin {
 
     @Inject(method="sendWorldInfo", at = @At("TAIL"))
     private void injected2(ServerPlayerEntity player, ServerWorld world, CallbackInfo ci) {
-        PlatformMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(world));
-        PlatformMethods.sendS2CPayload(player, ModPayloads.StarsRePayLoad.INSTANCE);
+        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(world));
+        InfinityMethods.sendS2CPayload(player, ModPayloads.StarsRePayLoad.INSTANCE);
     }
 }

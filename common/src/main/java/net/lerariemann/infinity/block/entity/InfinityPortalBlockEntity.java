@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.block.entity;
 
-import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -42,7 +42,7 @@ public class InfinityPortalBlockEntity extends BlockEntity {
     }
 
     public InfinityPortalBlockEntity(BlockPos pos, BlockState state, int i) {
-        this(pos, state, i, InfinityMod.getDimId(i));
+        this(pos, state, i, InfinityMethods.getDimId(i));
     }
 
     public InfinityPortalBlockEntity(BlockPos pos, BlockState state, int i, Identifier id) {
@@ -67,7 +67,7 @@ public class InfinityPortalBlockEntity extends BlockEntity {
 
     public void setDimension(long c) {
         setColor((int)c);
-        setDimension(InfinityMod.getDimId(c));
+        setDimension(InfinityMethods.getDimId(c));
     }
     public void setDimension(Identifier i) {
         this.dimension = i;
@@ -103,7 +103,7 @@ public class InfinityPortalBlockEntity extends BlockEntity {
         if (tag.contains("DimensionName")) {
             this.dimension = Identifier.of(tag.getString("DimensionName"));
         }
-        else this.dimension = InfinityMod.getDimId(this.portalColor);
+        else this.dimension = InfinityMethods.getDimId(this.portalColor);
         this.isOpen = tag.getBoolean("Open");
         if (tag.contains("other_side")) {
             NbtCompound pos = tag.getCompound("other_side");

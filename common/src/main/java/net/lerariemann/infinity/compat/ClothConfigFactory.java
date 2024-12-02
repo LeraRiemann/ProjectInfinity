@@ -13,7 +13,6 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
@@ -34,6 +33,7 @@ import java.util.function.Consumer;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
+import static net.lerariemann.infinity.InfinityMod.rootConfigPath;
 import static net.minecraft.client.resource.language.I18n.hasTranslation;
 
 public class ClothConfigFactory {
@@ -310,7 +310,7 @@ public class ClothConfigFactory {
     }
 
     public static NbtCompound readDefaultConfig() {
-        Path tempfile = FabricLoader.getInstance().getModContainer(MOD_ID).orElse(null).getRootPaths().getFirst().resolve("config/infinity.json");
+        Path tempfile = rootConfigPath.resolve("infinity.json");
         try {
             Files.copy(tempfile, Path.of(configPath() + "/.infinity-default.json"), REPLACE_EXISTING);
         } catch (IOException e) {

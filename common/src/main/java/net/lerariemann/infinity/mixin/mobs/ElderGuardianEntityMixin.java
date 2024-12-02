@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.mixin.mobs;
 
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MobEntityAccess;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.ElderGuardianEntity;
 import net.minecraft.entity.mob.GuardianEntity;
@@ -19,7 +19,7 @@ public class ElderGuardianEntityMixin extends GuardianEntity {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     void injected(EntityType<? extends ElderGuardianEntity> entityType, World world, CallbackInfo ci) {
-        if (InfinityMod.isInfinity(world)) {
+        if (InfinityMethods.isInfinity(world)) {
             ((MobEntityAccess)this).infinity$setPersistent(false);
         }
     }

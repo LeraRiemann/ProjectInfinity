@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.var.ModSounds;
@@ -84,7 +84,7 @@ public class TimeBombBlock extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient()) {
-            if (InfinityMod.isInfinity(world)) {
+            if (InfinityMethods.isInfinity(world)) {
                 ServerWorld w = ((ServerPlayerEntity)player).getServerWorld();
                 if (!((Timebombable)w).infinity$isTimebombed()) {
                     if (state.get(ACTIVE)) {

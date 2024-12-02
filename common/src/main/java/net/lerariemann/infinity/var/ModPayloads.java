@@ -3,11 +3,11 @@ package net.lerariemann.infinity.var;
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.ShaderLoader;
 import net.lerariemann.infinity.util.CommonIO;
 import net.minecraft.client.MinecraftClient;
@@ -30,7 +30,7 @@ public class ModPayloads {
     }
 
     public record WorldAddPayload(Identifier world_id, NbtCompound world_data) implements CustomPayload {
-        public static final CustomPayload.Id<WorldAddPayload> ID = new CustomPayload.Id<>(InfinityMod.getId("add_world"));
+        public static final CustomPayload.Id<WorldAddPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("add_world"));
         public static final PacketCodec<RegistryByteBuf, WorldAddPayload> CODEC = PacketCodec.tuple(
                 Identifier.PACKET_CODEC, WorldAddPayload::world_id,
                 PacketCodecs.NBT_COMPOUND, WorldAddPayload::world_data,
@@ -47,7 +47,7 @@ public class ModPayloads {
     }
 
     public record BiomeAddPayload(Identifier biome_id, NbtCompound biome_data) implements CustomPayload {
-        public static final CustomPayload.Id<BiomeAddPayload> ID = new CustomPayload.Id<>(InfinityMod.getId("add_biome"));
+        public static final CustomPayload.Id<BiomeAddPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("add_biome"));
         public static final PacketCodec<RegistryByteBuf, BiomeAddPayload> CODEC = PacketCodec.tuple(
                 Identifier.PACKET_CODEC, BiomeAddPayload::biome_id,
                 PacketCodecs.NBT_COMPOUND, BiomeAddPayload::biome_data,
@@ -64,7 +64,7 @@ public class ModPayloads {
     }
 
     public record ShaderRePayload(NbtCompound shader_data) implements CustomPayload {
-        public static final CustomPayload.Id<ShaderRePayload> ID = new CustomPayload.Id<>(InfinityMod.getId("reload_shader"));
+        public static final CustomPayload.Id<ShaderRePayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("reload_shader"));
         public static final PacketCodec<RegistryByteBuf, ShaderRePayload> CODEC = PacketCodec.tuple(
                 PacketCodecs.NBT_COMPOUND, ShaderRePayload::shader_data,
                 ShaderRePayload::new);
@@ -96,7 +96,7 @@ public class ModPayloads {
 
     public record StarsRePayLoad() implements CustomPayload {
         public static final StarsRePayLoad INSTANCE = new StarsRePayLoad();
-        public static final CustomPayload.Id<StarsRePayLoad> ID = new CustomPayload.Id<>(InfinityMod.getId("reload_stars"));
+        public static final CustomPayload.Id<StarsRePayLoad> ID = new CustomPayload.Id<>(InfinityMethods.getId("reload_stars"));
         public static final PacketCodec<RegistryByteBuf, StarsRePayLoad> CODEC = PacketCodec.unit(INSTANCE);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {

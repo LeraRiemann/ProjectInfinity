@@ -7,6 +7,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.world.poi.PointOfInterestType;
@@ -21,7 +22,7 @@ public class ModPoi {
         InfinityMod.LOGGER.debug("Registering POI for " + InfinityMod.MOD_ID);
         if (Platform.isFabric()) registerPoiFabric();
         else registerPoiArchitectury();
-        NEITHER_PORTAL_KEY = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, InfinityMod.getId("neither_portal"));
+        NEITHER_PORTAL_KEY = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, InfinityMethods.getId("neither_portal"));
 
     }
 

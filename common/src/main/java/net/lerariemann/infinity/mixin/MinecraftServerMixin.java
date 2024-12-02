@@ -2,7 +2,7 @@ package net.lerariemann.infinity.mixin;
 
 import com.google.common.collect.ImmutableList;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.var.ModMaterialRules;
@@ -101,7 +101,7 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
             Path p = InfinityMod.invocationLock;
             if (!Files.exists(p)) {
                 Files.createDirectories(p.getParent());
-                Files.copy(InfinityMod.rootResPath.resolve("config/.util/invocation.lock"), p, REPLACE_EXISTING);
+                Files.copy(InfinityMod.rootConfigPath.resolve(".util/invocation.lock"), p, REPLACE_EXISTING);
             }
             infinity$setDimensionProvider();
             InfinityMod.LOGGER.info("Invocation complete");

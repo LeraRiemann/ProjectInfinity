@@ -2,7 +2,7 @@ package net.lerariemann.infinity.block;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.custom.*;
 import net.minecraft.block.*;
 import net.minecraft.registry.RegistryKeys;

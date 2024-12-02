@@ -1,12 +1,13 @@
-package net.lerariemann.infinity.neoforge;
+package net.lerariemann.infinity.util.neoforge;
 
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.fluids.IridescenceLiquidBlockNeoforge;
 import net.lerariemann.infinity.fluids.ModFluidsNeoforge;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,11 +21,15 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.level.LevelEvent;
+
+import java.nio.file.Path;
+
 /**
- * See {@link net.lerariemann.infinity.PlatformMethods} for usages.
+ * See {@link PlatformMethods} for usages.
  */
 @SuppressWarnings("unused")
 public class PlatformMethodsImpl {
@@ -45,13 +50,9 @@ public class PlatformMethodsImpl {
         writableRegistry.unfreeze();
     }
 
-    public static void freeze(Registry<?> registry) {
-        registry.freeze();
-    }
-
     //Optional, requires Item Group API.
     public static void addAfter(RegistrySupplier<Item> supplier, RegistryKey<ItemGroup> group, Item item) {
-        if (PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
+        if (InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
             ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, supplier.get()));
         }
     }
@@ -76,4 +77,9 @@ public class PlatformMethodsImpl {
         return ModBlocks.BLOCKS.register("iridescence", () ->
                 new IridescenceLiquidBlockNeoforge(PlatformMethods.getIridescenceStill(), AbstractBlock.Settings.copy(Blocks.WATER)));
     }
+
+    public static Path getRootConfigPath() {
+        return ModLoadingContext.get().getActiveContainer().getModInfo().getOwningFile().getFile().findResource("config");
+    }
+
 }

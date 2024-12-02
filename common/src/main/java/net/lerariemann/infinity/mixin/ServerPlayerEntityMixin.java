@@ -3,10 +3,10 @@ package net.lerariemann.infinity.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
@@ -95,8 +95,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Inject(method = "teleportTo",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerManager()Lnet/minecraft/server/PlayerManager;"))
     private void injected3(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir) {
-        PlatformMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(teleportTarget.world()));
-        PlatformMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.StarsRePayLoad.INSTANCE);
+        InfinityMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(teleportTarget.world()));
+        InfinityMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.StarsRePayLoad.INSTANCE);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -134,7 +134,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
         else if (i > 200) {
             if (i%4 == 0) {
                 Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE);
-                RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMod.getId("world_ceased")));
+                RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMethods.getId("world_ceased")));
                 damage(new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
             }
         }
@@ -142,7 +142,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method = "changeGameMode", at = @At("RETURN"))
     private void injected4(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) PlatformMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(this.getServerWorld()));
+        if (cir.getReturnValue()) InfinityMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(this.getServerWorld()));
     }
 
     @Override

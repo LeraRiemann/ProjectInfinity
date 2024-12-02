@@ -2,7 +2,6 @@ package net.lerariemann.infinity.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.GameRendererAccess;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.client.MinecraftClient;
@@ -33,7 +32,7 @@ public interface ShaderLoader {
             return;
         }
         if(bl && shaderDir(client).resolve(FILENAME).toFile().exists()) {
-            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMod.getId("shaders/" + FILENAME));
+            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMethods.getId("shaders/" + FILENAME));
             return;
         }
         client.gameRenderer.disablePostProcessor();

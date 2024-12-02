@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.mixin;
 
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -30,7 +30,7 @@ public class NetherPortalBlockMixin {
 
 	@Inject(method = "createTeleportTarget", at = @At(value = "HEAD"), cancellable = true)
 	private void injected(ServerWorld world, Entity entity, BlockPos pos, CallbackInfoReturnable<TeleportTarget> cir) {
-		if (InfinityMod.isInfinity(world)) {
+		if (InfinityMethods.isInfinity(world)) {
 			PortalCreationLogic.modifyPortalRecursive(world, pos, World.OVERWORLD.getValue(), true);
 			cir.setReturnValue(InfinityPortalBlock.findNewTeleportTarget(world, pos, world.getServer().getOverworld(), entity));
 		}

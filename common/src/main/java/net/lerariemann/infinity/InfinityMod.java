@@ -1,7 +1,5 @@
 package net.lerariemann.infinity;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.dimensions.RandomText;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
@@ -9,11 +7,9 @@ import net.lerariemann.infinity.iridescence.ModStatusEffects;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.structure.ModStructureTypes;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.var.*;
 import net.lerariemann.infinity.util.ConfigManager;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.lerariemann.infinity.block.ModBlocks;
@@ -25,21 +21,12 @@ public class InfinityMod {
 	public static final String MOD_ID = "infinity";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Infinite Dimensions");
 	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
-	public static Path rootResPath;
+	public static Path rootConfigPath;
 	public static Path utilPath = Path.of("config/infinity/.util");
 	public static boolean longArithmeticEnabled = false;
 
-    public static Identifier getId(String value){
-		return Identifier.of(MOD_ID, value);
-	}
-	public static Identifier getDimId(long value){
-		return getId("generated_" + value);
-	}
-
 	public static void init() {
-		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
-		assert mc != null;
-		rootResPath = mc.getRootPaths().getFirst();
+		rootConfigPath = PlatformMethods.getRootConfigPath();
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
 		ModItemFunctions.registerItemFunctions();
@@ -61,12 +48,5 @@ public class InfinityMod {
 		ModCriteria.registerCriteria();
 		ModPayloads.registerPayloadsServer();
 		RandomText.walkPaths();
-	}
-
-	public static boolean isInfinity(World w) {
-		return isInfinity(w.getRegistryKey());
-	}
-	public static boolean isInfinity(RegistryKey<World> key) {
-		return key.getValue().getNamespace().equals(MOD_ID);
 	}
 }

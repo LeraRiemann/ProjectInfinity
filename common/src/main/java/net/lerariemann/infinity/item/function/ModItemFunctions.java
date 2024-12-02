@@ -10,6 +10,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentType;
@@ -119,7 +120,7 @@ public class ModItemFunctions {
 
     @Environment(EnvType.CLIENT)
     public static void registerModelPredicates() {
-        ItemPropertiesRegistry.register(ModItems.TRANSFINITE_KEY.get(), InfinityMod.getId("key"), (stack, world, entity, seed) -> {
+        ItemPropertiesRegistry.register(ModItems.TRANSFINITE_KEY.get(), InfinityMethods.getId("key"), (stack, world, entity, seed) -> {
             Identifier id = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
             if (id == null) return 0.02f;
             String s = id.toString();
@@ -131,14 +132,14 @@ public class ModItemFunctions {
                 default -> 0;
             };
         });
-        ItemPropertiesRegistry.register(ModItems.BIOME_BOTTLE_ITEM.get(), InfinityMod.getId("bottle"),
+        ItemPropertiesRegistry.register(ModItems.BIOME_BOTTLE_ITEM.get(), InfinityMethods.getId("bottle"),
                 (stack, world, entity, seed) -> {
                     int charge = BiomeBottle.getCharge(stack);
                     return Math.clamp(charge / 1000.0f, 0f, 1f);
                 });
-        ItemPropertiesRegistry.register(ModItems.IRIDESCENT_CARPET.get(), InfinityMod.getId("iridescent"),
+        ItemPropertiesRegistry.register(ModItems.IRIDESCENT_CARPET.get(), InfinityMethods.getId("iridescent"),
                 ModItemFunctions::iridPredicate);
-        ItemPropertiesRegistry.register(ModItems.IRIDESCENT_WOOL.get(), InfinityMod.getId("iridescent"),
+        ItemPropertiesRegistry.register(ModItems.IRIDESCENT_WOOL.get(), InfinityMethods.getId("iridescent"),
                 ModItemFunctions::iridPredicate);
     }
 }

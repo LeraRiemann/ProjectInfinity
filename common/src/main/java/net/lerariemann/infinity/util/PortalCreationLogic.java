@@ -4,7 +4,6 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
@@ -232,8 +231,8 @@ public interface PortalCreationLogic {
 
     /* Create and send S2C packets necessary for the client to process a freshly added dimension. */
     static void sendNewWorld(ServerPlayerEntity player, Identifier id, RandomDimension d) {
-        d.random_biomes.forEach(b -> PlatformMethods.sendS2CPayload(player, new ModPayloads.BiomeAddPayload(InfinityMod.getId(b.name), b.data)));
-        PlatformMethods.sendS2CPayload(player, new ModPayloads.WorldAddPayload(id, d.type != null ? d.type.data : new NbtCompound()));
+        d.random_biomes.forEach(b -> InfinityMethods.sendS2CPayload(player, new ModPayloads.BiomeAddPayload(InfinityMethods.getId(b.name), b.data)));
+        InfinityMethods.sendS2CPayload(player, new ModPayloads.WorldAddPayload(id, d.type != null ? d.type.data : new NbtCompound()));
     }
 
     /* Jingle signaling the portal is now usable. */

@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
 
 public interface WarpLogic {
     static void warpId(CommandContext<ServerCommandSource> context, long value) {
-        warp(context, InfinityMod.getDimId(value));
+        warp(context, InfinityMethods.getDimId(value));
     }
 
     static void warp(CommandContext<ServerCommandSource> context, Identifier value) {
@@ -115,9 +115,9 @@ public interface WarpLogic {
 
     static Identifier getIdentifier(String text, MinecraftServer s) {
         if (text.equals("abatised redivides")) return World.END.getValue();
-        if (text.isEmpty()) return InfinityMod.getId("missingno");
-        if (RandomProvider.getProvider(s).easterizer.isEaster(text, RandomProvider.getProvider(s)) && !text.equals("missingno")) return InfinityMod.getId(text);
-        return InfinityMod.getDimId(getDimensionSeed(text, s));
+        if (text.isEmpty()) return InfinityMethods.getId("missingno");
+        if (RandomProvider.getProvider(s).easterizer.isEaster(text, RandomProvider.getProvider(s)) && !text.equals("missingno")) return InfinityMethods.getId(text);
+        return InfinityMethods.getDimId(getDimensionSeed(text, s));
     }
 
     static boolean dimExists(ServerWorld world) {
@@ -142,9 +142,9 @@ public interface WarpLogic {
     }
 
     static Identifier getRandomId(java.util.Random random) {
-        return InfinityMod.getDimId(getRandomSeed(random));
+        return InfinityMethods.getDimId(getRandomSeed(random));
     }
     static Identifier getRandomId(Random random) {
-        return InfinityMod.getDimId(getRandomSeed(random));
+        return InfinityMethods.getDimId(getRandomSeed(random));
     }
 }
