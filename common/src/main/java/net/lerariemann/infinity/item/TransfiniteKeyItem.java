@@ -10,6 +10,7 @@ import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -19,21 +20,20 @@ public class TransfiniteKeyItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        Identifier dimension = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+        super.appendTooltip(stack, world, tooltip, context);
+        String dimension = ModItemFunctions.getDimensionComponents(stack);
         MutableText mutableText;
         if (dimension != null) {
-            String s = dimension.toString();
-            if (s.contains("infinity:generated_")) mutableText
+            if (dimension.contains("infinity:generated_")) mutableText
                     = Text.translatable("dimension.infinity.generated")
-                    .append(s.replace("infinity:generated_", ""));
-            else if (s.equals("minecraft:random")) mutableText = Text.translatable("dimension.infinity.randomise");
+                    .append(dimension.replace("infinity:generated_", ""));
+            else if (dimension.equals("minecraft:random")) mutableText = Text.translatable("dimension.infinity.randomise");
             else {
-                String[] forFallback = dimension.getPath().replace("_", " ").split("\\s");
+                String[] forFallback = dimension.split(":")[0].replace("_", " ").split("\\s");
                 StringBuilder fallback = new StringBuilder();
                 for (String str: forFallback) fallback.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(" ");
-                mutableText = MutableText.of(new TranslatableTextContent(Util.createTranslationKey("dimension", dimension),
+                mutableText = MutableText.of(new TranslatableTextContent(Util.createTranslationKey("dimension", Identifier.tryParse(dimension)),
                         fallback.toString().trim(), TranslatableTextContent.EMPTY_ARGUMENTS));
             }
         }
