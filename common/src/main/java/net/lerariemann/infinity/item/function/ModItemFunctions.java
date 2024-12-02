@@ -90,14 +90,10 @@ public class ModItemFunctions {
                     }
 
                     @Override
-                    public void setStack(int slot, ItemStack stack) {
-
-                    }
+                    public void setStack(int slot, ItemStack stack) {}
 
                     @Override
-                    public void markDirty() {
-
-                    }
+                    public void markDirty() {}
 
                     @Override
                     public boolean canPlayerUse(PlayerEntity player) {
@@ -119,7 +115,7 @@ public class ModItemFunctions {
 
     public static @Nullable String getBiomeComponents(ItemStack stack) {
         if (stack.getNbt() != null) {
-            return stack.getNbt().getString("BlockEntityTag.Biome");
+            return stack.getNbt().getCompound("BlockEntityTag").getString("Biome");
         }
         return null;
     }

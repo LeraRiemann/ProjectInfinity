@@ -94,9 +94,11 @@ public class BiomeBottle extends BlockWithEntity {
     }
 
     public static void updateCharge(ItemStack stack, int charge) {
+        NbtCompound base = new NbtCompound();
         NbtCompound compound = new NbtCompound();
-        compound.putInt("BlockEntityTag.Charge", charge);
-        stack.setNbt(compound);
+        compound.putInt("Charge", charge);
+        compound.put("BlockEntityTag", base);
+        stack.setNbt(base);
     }
 
     public static void updateCharge(ItemStack stack) {
@@ -114,14 +116,14 @@ public class BiomeBottle extends BlockWithEntity {
 
     public static Identifier getBiome(ItemStack stack) {
         if (stack.getNbt() != null) {
-            return new Identifier(stack.getNbt().getString("BlockEntityTag.Biome"));
+            return new Identifier(stack.getNbt().getCompound("BlockEntityTag").getString("Biome"));
         }
         return defaultBiome();
     }
 
     public static int getCharge(ItemStack stack) {
         if (stack.getNbt() != null) {
-            return stack.getNbt().getInt("BlockEntityTag.Charge");
+            return stack.getNbt().getCompound("BlockEntityTag").getInt("Charge");
         }
         return 0;
     }
