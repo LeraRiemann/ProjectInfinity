@@ -11,7 +11,6 @@ import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.util.WarpLogic;
-import net.lerariemann.infinity.var.ModPoi;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -20,6 +19,7 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
@@ -42,12 +42,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
     private static final Random RANDOM = new Random();
@@ -148,9 +146,9 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         }
     }
 
-    public static NbtCompound getKeyComponents(Item item, Identifier dim, World w) {
+    public static NbtCompound putKeyComponents(Item item, Identifier dim, World w) {
         NbtCompound nbtCompound = new NbtCompound();
-        if (!item.equals(ModItems.TRANSFINITE_KEY.get())) return nbtCompound;
+        if (!item.equals(Items.AMETHYST_SHARD)) return nbtCompound;
         int keycolor = WarpLogic.getKeyColorFromId(dim, w.getServer());
         nbtCompound.putInt("key_color",keycolor);
         nbtCompound.putString("key_dimension", dim.toString());
@@ -164,7 +162,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity npbe) {
             if (entity instanceof ItemEntity e)
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
-                    item -> getKeyComponents(item, npbe.getDimension(), world));
+                    e.getStack().getItem(), putKeyComponents(e.getStack().getItem(), npbe.getDimension(), world));
             if (entity instanceof PlayerEntity player
                     && RandomProvider.getProvider(world.getServer()).portalKey.isBlank()
                     && !npbe.getOpen())

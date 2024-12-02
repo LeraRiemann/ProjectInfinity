@@ -35,7 +35,7 @@ public class IridescenceLiquidBlock extends ArchitecturyLiquidBlock {
                 if (!Iridescence.isIridescentItem(item.getStack()) && item.getOwner() instanceof LivingEntity le &&
                         !Iridescence.getPhase(le).equals(Iridescence.Phase.INITIAL))
                     ModItemFunctions.checkCollisionRecipes(w, item, ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get(),
-                            i -> new NbtCompound());
+                            item.getStack().getItem(), new NbtCompound());
             }
         }
     }

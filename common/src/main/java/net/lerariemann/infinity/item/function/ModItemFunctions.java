@@ -73,7 +73,7 @@ public class ModItemFunctions {
 
     public static void checkCollisionRecipes(ServerWorld w, ItemEntity itemEntity,
                                              RecipeType<CollisionCraftingRecipe> recipeType,
-                                             Function<Item, NbtCompound> componentFunction) {
+                                             Item item, NbtCompound compound) {
         if (itemEntity.isRemoved()) return;
         ItemStack itemStack = itemEntity.getStack();
         Optional<CollisionCraftingRecipe> match = w.getRecipeManager()
@@ -106,7 +106,7 @@ public class ModItemFunctions {
         if (match.isEmpty()) return;
 
         ItemStack resStack = match.get().getOutput(w.getRegistryManager());
-//        componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyComponentsFrom);
+        resStack.setNbt(compound);
 
         Vec3d v = itemEntity.getVelocity();
         ItemEntity result = new ItemEntity(w, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(),
@@ -125,7 +125,7 @@ public class ModItemFunctions {
 
     public static @Nullable String getDimensionComponents(ItemStack stack) {
         if (stack.getNbt() != null) {
-            return stack.getNbt().getString("key_destination");
+            return stack.getNbt().getString("key_dimension");
         }
         return null; 
     }

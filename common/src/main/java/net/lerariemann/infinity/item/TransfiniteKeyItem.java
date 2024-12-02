@@ -25,12 +25,15 @@ public class TransfiniteKeyItem extends Item {
         String dimension = ModItemFunctions.getDimensionComponents(stack);
         MutableText mutableText;
         if (dimension != null) {
-            if (dimension.contains("infinity:generated_")) mutableText
-                    = Text.translatable("dimension.infinity.generated")
-                    .append(dimension.replace("infinity:generated_", ""));
-            else if (dimension.equals("minecraft:random")) mutableText = Text.translatable("dimension.infinity.randomise");
+            if (dimension.contains("infinity:generated_")) {
+                mutableText = Text.translatable("dimension.infinity.generated")
+                        .append(dimension.replace("infinity:generated_", ""));
+            }
+            else if (dimension.equals("minecraft:random")) {
+                mutableText = Text.translatable("dimension.infinity.randomise");
+            }
             else {
-                String[] forFallback = dimension.split(":")[0].replace("_", " ").split("\\s");
+                String[] forFallback = dimension.split(":")[1].replace("_", " ").split("\\s");
                 StringBuilder fallback = new StringBuilder();
                 for (String str: forFallback) fallback.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(" ");
                 mutableText = MutableText.of(new TranslatableTextContent(Util.createTranslationKey("dimension", Identifier.tryParse(dimension)),
