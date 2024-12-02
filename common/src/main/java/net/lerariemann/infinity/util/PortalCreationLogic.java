@@ -2,6 +2,7 @@ package net.lerariemann.infinity.util;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
+import com.llamalad7.mixinextras.sugar.Local;
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
@@ -18,6 +19,7 @@ import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -40,7 +42,9 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -303,5 +307,21 @@ public interface PortalCreationLogic {
             if (blockEntity instanceof InfinityPortalBlockEntity npbe)
                 modifiers.forEach(modifier -> modifier.accept(npbe));
         }
+    }
+
+    static boolean convertReturnPortal(ServerWorld destination, MinecraftServer server, RegistryKey<World> registryKey, TeleportTarget teleportTarget) {
+        boolean bl = false;
+        if (RandomProvider.getProvider(server).rule("returnPortalsEnabled") &&
+                (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
+            BlockPos pos = BlockPos.ofFloored(teleportTarget.position);
+            for (BlockPos pos2: new BlockPos[] {pos, pos.add(1, 0, 0), pos.add(0, 0, 1),
+                    pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
+                bl = true;
+                Identifier dimensionName = registryKey.getValue();
+                PortalCreationLogic.modifyPortalRecursive(destination, pos2, dimensionName, true);
+                break;
+            }
+        }
+        return bl;
     }
 }
