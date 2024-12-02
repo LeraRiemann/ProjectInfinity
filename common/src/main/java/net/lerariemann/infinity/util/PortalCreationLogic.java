@@ -11,6 +11,7 @@ import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.var.ModCriteria;
@@ -52,20 +53,15 @@ public interface PortalCreationLogic {
     static void tryCreatePortalFromItem(BlockState state, World world, BlockPos pos, ItemEntity entity) {
         ItemStack itemStack = entity.getStack();
         if (itemStack.getItem() == ModItems.TRANSFINITE_KEY.get()) {
-            Identifier key_dest;
-            if (itemStack.getNbt() != null) {
-                key_dest = Identifier.tryParse(itemStack.getNbt().getString("key_destination"));
-            }
-            else {
+            Identifier key_dest = ModItemFunctions.getDimensionIdentifier(itemStack);
+            if (key_dest == null) {
                 key_dest = Identifier.of("minecraft", "random");
             }
-            if (key_dest != null) {
-                MinecraftServer server = world.getServer();
-                if (server != null) {
-                    if (world instanceof ServerWorld serverWorld) {
-                        boolean bl = modifyOnInitialCollision(key_dest, serverWorld, pos);
-                        if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-                    }
+            MinecraftServer server = world.getServer();
+            if (server != null) {
+                if (world instanceof ServerWorld serverWorld) {
+                    boolean bl = modifyOnInitialCollision(key_dest, serverWorld, pos);
+                    if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
                 }
             }
         }

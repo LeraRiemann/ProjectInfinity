@@ -36,8 +36,7 @@ public class TransfiniteKeyItem extends Item {
                 String[] forFallback = dimension.split(":")[1].replace("_", " ").split("\\s");
                 StringBuilder fallback = new StringBuilder();
                 for (String str: forFallback) fallback.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(" ");
-                mutableText = MutableText.of(new TranslatableTextContent(Util.createTranslationKey("dimension", Identifier.tryParse(dimension)),
-                        fallback.toString().trim(), TranslatableTextContent.EMPTY_ARGUMENTS));
+                mutableText = Text.translatableWithFallback(Util.createTranslationKey("dimension", Identifier.tryParse(dimension)), fallback.toString().trim());
             }
         }
         else {

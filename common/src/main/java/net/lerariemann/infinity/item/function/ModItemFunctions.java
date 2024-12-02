@@ -24,6 +24,7 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
@@ -125,9 +126,15 @@ public class ModItemFunctions {
 
     public static @Nullable String getDimensionComponents(ItemStack stack) {
         if (stack.getNbt() != null) {
-            return stack.getNbt().getString("key_dimension");
+            return stack.getNbt().getString("key_destination");
         }
         return null; 
+    }
+
+    public static @Nullable Identifier getDimensionIdentifier(ItemStack stack) {
+        String dimension = getDimensionComponents(stack);
+        if (dimension != null) return Identifier.tryParse(dimension);
+        else return null;
     }
 
     @Environment(EnvType.CLIENT)

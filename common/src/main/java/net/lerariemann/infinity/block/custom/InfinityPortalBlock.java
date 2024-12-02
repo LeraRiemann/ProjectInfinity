@@ -151,7 +151,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         if (!item.equals(Items.AMETHYST_SHARD)) return nbtCompound;
         int keycolor = WarpLogic.getKeyColorFromId(dim, w.getServer());
         nbtCompound.putInt("key_color",keycolor);
-        nbtCompound.putString("key_dimension", dim.toString());
+        nbtCompound.putString("key_destination", dim.toString());
         return nbtCompound;
     }
 
