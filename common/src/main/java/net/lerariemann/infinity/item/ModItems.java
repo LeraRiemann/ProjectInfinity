@@ -7,6 +7,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
@@ -81,7 +82,7 @@ public class ModItems {
     }
 
     public static Item.Settings addFallbackTab(Item.Settings settings, RegistryKey<ItemGroup> group){
-        if (!PlatformMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
+        if (!InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
             return settings.arch$tab(group);
         return settings;
     }

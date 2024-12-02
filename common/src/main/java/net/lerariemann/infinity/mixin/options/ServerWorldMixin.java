@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.mixin.options;
 
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -54,17 +54,17 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void injected2(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        if (InfinityMod.isInfinity(getRegistryKey()) && infinity$timebombProgress > 0) infinity$timebombProgress++;
+        if (InfinityMethods.isInfinity(getRegistryKey()) && infinity$timebombProgress > 0) infinity$timebombProgress++;
     }
 
     @Redirect(method="tickWeather", at=@At(value="INVOKE", target="Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
     private boolean injected3(GameRules instance, GameRules.Key<GameRules.BooleanRule> rule) {
-        return instance.getBoolean(rule) && !InfinityMod.isInfinity(getRegistryKey());
+        return instance.getBoolean(rule) && !InfinityMethods.isInfinity(getRegistryKey());
     }
 
     @Override
     public void infinity$timebomb() {
-        if(InfinityMod.isInfinity(getRegistryKey())) infinity$timebombProgress = 1;
+        if(InfinityMethods.isInfinity(getRegistryKey())) infinity$timebombProgress = 1;
     }
 
     @Override

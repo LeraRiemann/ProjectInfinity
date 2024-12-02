@@ -8,18 +8,19 @@ import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.render.RenderLayer;
 
 public class InfinityModFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // Apply colour handlers to tint Neither Portals and Book Boxes.
-        ColorProviderRegistry.BLOCK.register(PlatformMethods::getNeitherPortalColour, ModBlocks.PORTAL.get());
-        ColorProviderRegistry.BLOCK.register(PlatformMethods::getBookBoxColour, ModBlocks.BOOK_BOX.get());
-        ColorProviderRegistry.BLOCK.register(PlatformMethods::getBookBoxColour, ModBlocks.IRIDESCENCE.get());
-        ColorProviderRegistry.BLOCK.register(PlatformMethods::getBiomeBottleColor, ModBlocks.BIOME_BOTTLE.get());
-        ColorProviderRegistry.ITEM.register(PlatformMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get());
-        ColorProviderRegistry.ITEM.register(PlatformMethods::getOverlayColorFromComponents, ModItems.BIOME_BOTTLE_ITEM.get());
+        ColorProviderRegistry.BLOCK.register(InfinityMethods::getInfinityPortalColor, ModBlocks.PORTAL.get());
+        ColorProviderRegistry.BLOCK.register(InfinityMethods::getBookBoxColor, ModBlocks.BOOK_BOX.get());
+        ColorProviderRegistry.BLOCK.register(InfinityMethods::getBookBoxColor, ModBlocks.IRIDESCENCE.get());
+        ColorProviderRegistry.BLOCK.register(InfinityMethods::getBiomeBottleColor, ModBlocks.BIOME_BOTTLE.get());
+        ColorProviderRegistry.ITEM.register(InfinityMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get());
+        ColorProviderRegistry.ITEM.register(InfinityMethods::getOverlayColorFromComponents, ModItems.BIOME_BOTTLE_ITEM.get());
         // On Fabric, render layer maps are also applied to blocks with cutouts.
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX.get(), RenderLayer.getCutoutMipped());
         // On Fabric, render layer maps are also applied to blocks with translucency.

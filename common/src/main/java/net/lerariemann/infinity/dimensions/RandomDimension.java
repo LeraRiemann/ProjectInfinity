@@ -3,6 +3,7 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.*;
@@ -153,7 +154,7 @@ public class RandomDimension {
     }
 
     public <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key, String name) {
-        return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMod.getId(name))));
+        return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMethods.getId(name))));
     }
 
     boolean isOverworldLike() {

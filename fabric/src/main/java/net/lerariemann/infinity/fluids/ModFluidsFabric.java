@@ -5,10 +5,10 @@ import dev.architectury.core.fluid.ArchitecturyFluidAttributes;
 import dev.architectury.core.fluid.SimpleArchitecturyFluidAttributes;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.world.World;
@@ -21,9 +21,9 @@ public class ModFluidsFabric {
             SimpleArchitecturyFluidAttributes.ofSupplier(() -> ModFluidsFabric.IRIDESCENCE_FLOWING, () -> ModFluidsFabric.IRIDESCENCE_STILL)
                     .blockSupplier(() -> ModBlocks.IRIDESCENCE)
                     .bucketItemSupplier(() -> ModItems.IRIDESCENCE_BUCKET)
-                    .sourceTexture(InfinityMod.getId("block/iridescence"))
-                    .flowingTexture(InfinityMod.getId("block/iridescence"))
-                    .overlayTexture(InfinityMod.getId("block/iridescence"));
+                    .sourceTexture(InfinityMethods.getId("block/iridescence"))
+                    .flowingTexture(InfinityMethods.getId("block/iridescence"))
+                    .overlayTexture(InfinityMethods.getId("block/iridescence"));
     public static final RegistrySupplier<ArchitecturyFlowingFluid> IRIDESCENCE_FLOWING =
             FLUIDS.register("flowing_iridescence", () -> new IridescenceFlowing(iridescence_attributes));
     public static final RegistrySupplier<ArchitecturyFlowingFluid> IRIDESCENCE_STILL =

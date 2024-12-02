@@ -20,7 +20,7 @@ public class RandomText extends RandomStructure {
     public static void walkPaths() {
         mod_resources = new ArrayList<>();
         try {
-            Files.walk(InfinityMod.rootResPath).forEach(p -> {
+            Files.walk(InfinityMod.rootConfigPath).forEach(p -> {
                 if (p.toString().endsWith(".json")) mod_resources.add(p);
             });
         } catch (IOException e) {

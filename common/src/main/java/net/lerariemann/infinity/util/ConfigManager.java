@@ -72,7 +72,7 @@ public interface ConfigManager {
                 Files.createDirectories(path);
             }
 
-            Files.walk(InfinityMod.rootResPath.resolve("config")).forEach(p -> {
+            Files.walk(InfinityMod.rootConfigPath).forEach(p -> {
                 boolean bl = registerConfig(p, getConfigDir());
                 if (bl && p.toString().contains("evicted_files.json")) bl2.set(true);
             });
@@ -87,7 +87,7 @@ public interface ConfigManager {
         File invlock = InfinityMod.invocationLock.toFile();
         if (invlock.exists()) {
             try {
-                if (compareVersions(InfinityMod.invocationLock, InfinityMod.rootResPath.resolve( "config/.util/invocation.lock"))) {
+                if (compareVersions(InfinityMod.invocationLock, InfinityMod.rootConfigPath.resolve( ".util/invocation.lock"))) {
                     InfinityMod.LOGGER.info("Deleting outdated modular configs");
                     Files.walk(getConfigDir().resolve("modular")).forEach(p -> {
                         if (p.toFile().isFile()) {
