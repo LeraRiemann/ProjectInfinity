@@ -1,21 +1,15 @@
 package net.lerariemann.infinity.util;
 
 import dev.architectury.platform.Platform;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 
@@ -44,14 +38,6 @@ public interface InfinityMethods {
         else return Platform.isModLoaded(modID.replace("-", "_"));
     }
 
-    static void sendS2CPayload(ServerPlayerEntity entity, CustomPayload payload) {
-        ServerPlayNetworking.send(entity, payload);
-    }
-
-    static void sendC2SPayload(CustomPayload payload) {
-        ClientPlayNetworking.send(payload);
-    }
-
     static double sample(int x, int y, int z) {
         return sampler.sample(x, y, z);
     }
@@ -71,11 +57,13 @@ public interface InfinityMethods {
     }
 
     static int getOverlayColorFromComponents(ItemStack stack, int layer) {
-        int color = stack.getComponents().getOrDefault(ModItemFunctions.COLOR.get(), 0);
-        if (layer == 1) {
-            return ColorHelper.Argb.fullAlpha(color);
+        if (stack.getNbt() != null) {
+            int color = stack.getNbt().getInt("key_color");
+            if (layer == 1) {
+                return color;
+            }
         }
-        return ColorHelper.Argb.fullAlpha(0xFFFFFF);
+        return 0xFFFFFF;
     }
 
     static int getInfinityPortalColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {

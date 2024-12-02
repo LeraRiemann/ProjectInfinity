@@ -10,6 +10,7 @@ import net.lerariemann.infinity.iridescence.ModStatusEffects;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.structure.ModStructureTypes;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.var.*;
 import net.lerariemann.infinity.util.ConfigManager;
 import net.minecraft.registry.RegistryKey;
@@ -26,7 +27,7 @@ public class InfinityMod {
 	public static final String MOD_ID = "infinity";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Infinite Dimensions");
 	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
-	public static Path rootResPath;
+	public static Path rootConfigPath;
 	public static Path utilPath = Path.of("config/infinity/.util");
 	public static boolean longArithmeticEnabled = false;
 
@@ -38,9 +39,7 @@ public class InfinityMod {
 	}
 
 	public static void init() {
-		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
-		assert mc != null;
-		rootResPath = mc.getRootPaths().get(0);
+		rootConfigPath = PlatformMethods.getRootConfigPath();
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
 		ModItemFunctions.registerItemFunctions();

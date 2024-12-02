@@ -22,6 +22,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.poi.PointOfInterestType;
 
+import java.nio.file.Path;
+
 import static net.lerariemann.infinity.InfinityModClient.sampler;
 
 //Abstraction layer for classes from Fabric API and Forgified Fabric API, as well as Fabric Loader vs. NeoForge Loader.
@@ -118,10 +120,19 @@ public class PlatformMethods {
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceStill() {
         throw new AssertionError();
     }
+
     @ExpectPlatform
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
         throw new AssertionError();
     }
+
     @ExpectPlatform
-    public static RegistrySupplier<FluidBlock> getIridBlockForReg() { throw new AssertionError(); }
+    public static RegistrySupplier<FluidBlock> getIridBlockForReg() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static Path getRootConfigPath() {
+        throw new AssertionError();
+    }
 }

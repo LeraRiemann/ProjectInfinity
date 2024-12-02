@@ -94,7 +94,7 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
             Path p = InfinityMod.invocationLock;
             if (!Files.exists(p)) {
                 Files.createDirectories(p.getParent());
-                Files.copy(InfinityMod.rootResPath.resolve("config/.util/invocation.lock"), p, REPLACE_EXISTING);
+                Files.copy(InfinityMod.rootConfigPath.resolve(".util/invocation.lock"), p, REPLACE_EXISTING);
             }
             infinity$setDimensionProvider();
             InfinityMod.LOGGER.info("Invocation complete");
