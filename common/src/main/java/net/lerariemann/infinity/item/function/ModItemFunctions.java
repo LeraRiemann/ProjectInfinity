@@ -119,7 +119,7 @@ public class ModItemFunctions {
 
     public static @Nullable String getBiomeComponents(ItemStack stack) {
         if (stack.getNbt() != null) {
-            return stack.getNbt().getString("bottle_biome");
+            return stack.getNbt().getString("BlockEntityTag.Biome");
         }
         return null;
     }

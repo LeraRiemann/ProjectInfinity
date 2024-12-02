@@ -1,9 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
-import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -28,7 +26,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeCoords;
 import net.minecraft.world.chunk.Chunk;
@@ -43,10 +40,12 @@ public class BiomeBottle extends BlockWithEntity {
     public static final VoxelShape TIP = Block.createCuboidShape(6, 12, 6, 10, 16, 10);
     public static final VoxelShape CORK = Block.createCuboidShape(5, 14, 5, 11, 15, 11);
     public static final VoxelShape SHAPE = VoxelShapes.union(MAIN, TIP, CORK);
+
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
+
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
@@ -66,14 +65,15 @@ public class BiomeBottle extends BlockWithEntity {
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
-    @Nullable
-    @Override
+
+    @Nullable @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new BiomeBottleBlockEntity(pos, state);
     }
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return state.getBlock() instanceof BlockEntityProvider ? ((BlockEntityProvider)state.getBlock()).getTicker(world, state, type) : null;
+        return checkType(type, ModBlockEntities.BIOME_BOTTLE.get(), world.isClient ? null : BiomeBottleBlockEntity::serverTick);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class BiomeBottle extends BlockWithEntity {
 
     public static void updateCharge(ItemStack stack, int charge) {
         NbtCompound compound = new NbtCompound();
-        compound.putInt("bottle_charge", charge);
+        compound.putInt("BlockEntityTag.Charge", charge);
         stack.setNbt(compound);
     }
 
@@ -114,14 +114,14 @@ public class BiomeBottle extends BlockWithEntity {
 
     public static Identifier getBiome(ItemStack stack) {
         if (stack.getNbt() != null) {
-            return new Identifier(stack.getNbt().getString("bottle_biome"));
+            return new Identifier(stack.getNbt().getString("BlockEntityTag.Biome"));
         }
         return defaultBiome();
     }
 
     public static int getCharge(ItemStack stack) {
         if (stack.getNbt() != null) {
-            return stack.getNbt().getInt("bottle_charge");
+            return stack.getNbt().getInt("BlockEntityTag.Charge");
         }
         return 0;
     }

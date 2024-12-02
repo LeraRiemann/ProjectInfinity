@@ -155,9 +155,9 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
             CreeperEntity newCreeper;
             if (!this.getWorld().isClient() && (newCreeper = EntityType.CREEPER.create(this.getWorld())) != null) {
                 NbtCompound compound = new NbtCompound();
-                compound.putString("bottle_biome", getBiomeId());
-                compound.putInt("bottle_color_raw", getColorRaw());
-                compound.putInt("bottle_charge", getCharge());
+                compound.putString("BlockEntityTag.Biome", getBiomeId());
+                compound.putInt("BlockEntityTag.Color", getColorRaw());
+                compound.putInt("BlockEntityTag.Charge", getCharge());
                 itemStack2.setNbt(compound);
                 ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
                 player.setStackInHand(hand, itemStack3);
