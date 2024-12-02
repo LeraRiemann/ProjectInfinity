@@ -54,6 +54,8 @@
   "block.infinity.biome_bottle": "Biome Bottle",
   "death.attack.infinity.world_ceased": "%1$s was sent to the end of time",
   "death.attack.infinity.world_ceased.player": "%1$s was sent to the end of time by %2$s",
+  "dimension.infinity.randomise": "Dimension randomised",
+  "dimension.infinity.generated": "Dimension #",
   "effect.infinity.iridescence": "Iridescence",
   "effect.infinity.iridescent_cooldown": "Iridescent Cooldown",
   "effect.infinity.iridescent_setup": "Iridescent Setup",
