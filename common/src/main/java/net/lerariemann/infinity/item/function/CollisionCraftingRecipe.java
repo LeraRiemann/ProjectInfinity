@@ -83,6 +83,7 @@ public abstract class CollisionCraftingRecipe implements Recipe<Inventory> {
         public RecipeSerializer<?> getSerializer() {
             return ModItemFunctions.PORTAL_CRAFTING.get();
         }
+
         @Override
         public RecipeType<?> getType() {
             return ModItemFunctions.PORTAL_CRAFTING_TYPE.get();
@@ -103,6 +104,7 @@ public abstract class CollisionCraftingRecipe implements Recipe<Inventory> {
         public RecipeSerializer<?> getSerializer() {
             return ModItemFunctions.IRIDESCENCE_CRAFTING.get();
         }
+
         @Override
         public RecipeType<?> getType() {
             return ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get();

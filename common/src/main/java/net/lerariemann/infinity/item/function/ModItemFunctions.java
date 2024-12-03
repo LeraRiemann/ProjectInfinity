@@ -15,7 +15,6 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SingleStackInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.nbt.NbtCompound;
@@ -30,7 +29,6 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.item.ModItems.TRANSFINITE_KEY;
@@ -67,7 +65,7 @@ public class ModItemFunctions {
 
     public static void checkCollisionRecipes(ServerWorld w, ItemEntity itemEntity,
                                              RecipeType<CollisionCraftingRecipe> recipeType,
-                                             Item item, NbtCompound compound) {
+                                             NbtCompound compound) {
         if (itemEntity.isRemoved()) return;
         ItemStack itemStack = itemEntity.getStack();
         Optional<CollisionCraftingRecipe> match = w.getRecipeManager()

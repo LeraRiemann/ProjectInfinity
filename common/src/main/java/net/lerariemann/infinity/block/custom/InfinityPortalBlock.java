@@ -9,7 +9,6 @@ import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -162,7 +161,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity npbe) {
             if (entity instanceof ItemEntity e)
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
-                    e.getStack().getItem(), putKeyComponents(e.getStack().getItem(), npbe.getDimension(), world));
+                        putKeyComponents(e.getStack().getItem(), npbe.getDimension(), world));
             if (entity instanceof PlayerEntity player
                     && RandomProvider.getProvider(world.getServer()).portalKey.isBlank()
                     && !npbe.getOpen())

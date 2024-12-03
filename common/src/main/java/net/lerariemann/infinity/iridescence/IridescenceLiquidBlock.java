@@ -15,7 +15,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class IridescenceLiquidBlock extends ArchitecturyLiquidBlock {
@@ -32,10 +31,9 @@ public class IridescenceLiquidBlock extends ArchitecturyLiquidBlock {
             } else if (entity instanceof MobEntity ent) {
                 Iridescence.tryBeginConversion(ent);
             } else if (entity instanceof ItemEntity item) {
-                if (!Iridescence.isIridescentItem(item.getStack()) && item.getOwner() instanceof LivingEntity le &&
-                        !Iridescence.getPhase(le).equals(Iridescence.Phase.INITIAL))
-                    ModItemFunctions.checkCollisionRecipes(w, item, ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get(),
-                            item.getStack().getItem(), new NbtCompound());
+                if (!Iridescence.isIridescentItem(item.getStack()) && item.getOwner() instanceof LivingEntity le && !Iridescence.getPhase(le).equals(Iridescence.Phase.INITIAL)) {
+                    ModItemFunctions.checkCollisionRecipes(w, item, ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get(),new NbtCompound());
+                }
             }
         }
     }

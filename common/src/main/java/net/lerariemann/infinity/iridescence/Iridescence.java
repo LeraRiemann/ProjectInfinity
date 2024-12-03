@@ -61,12 +61,15 @@ public class Iridescence {
     public static boolean isInfinite(World world) {
         return world.getRegistryKey().getValue().toString().equals("infinity:chaos");
     }
+
     public static boolean isIridescence(FluidState st) {
         return st.isOf(PlatformMethods.getIridescenceStill().get()) || st.isOf(PlatformMethods.getIridescenceFlowing().get());
     }
+
     public static boolean isIridescence(WorldView world, BlockPos pos) {
         return Iridescence.isIridescence(world.getFluidState(pos));
     }
+
     public static boolean isIridescentItem(ItemStack stack) {
         return stack.isIn(ModItems.IRIDESCENT_TAG);
     }
