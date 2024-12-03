@@ -3,20 +3,209 @@
   "pools": [
     {
       "rolls": 1,
+      "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "infinity:altar",
           "functions": [
             {
-              "function": "infinity:set_altar_state"
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 0}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "false",
+                    "color": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 1}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "false",
+                    "color": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 2}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "false",
+                    "color": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 3}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "false",
+                    "color": "3"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 4}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "false",
+                    "color": "4"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 5}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "false",
+                    "color": "5"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 6}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "false",
+                    "color": "6"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 7}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "true",
+                    "color": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 8}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "true",
+                    "color": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 9}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "true",
+                    "color": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 10}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "true",
+                    "color": "3"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 11}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "true",
+                    "color": "4"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 12}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "true",
+                    "color": "5"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomModelData: 13}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "infinity:altar",
+                  "properties": {
+                    "flower": "true",
+                    "color": "6"
+                  }
+                }
+              ]
             }
-          ]
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
+          ],
+          "name": "infinity:altar"
         }
       ]
     }
