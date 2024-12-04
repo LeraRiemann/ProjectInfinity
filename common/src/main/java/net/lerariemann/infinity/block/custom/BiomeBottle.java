@@ -6,6 +6,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
@@ -59,6 +60,17 @@ public class BiomeBottle extends BlockWithEntity {
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(LEVEL);
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+        if (itemStack.hasNbt()) {
+            assert itemStack.getNbt() != null;
+            final int charge = itemStack.getNbt().getCompound("BlockEntityTag").getInt("Charge");
+            final int level = getLevel(charge);
+            state = state.with(LEVEL, level);
+            world.setBlockState(pos, state);
+        }
     }
 
     @Override
