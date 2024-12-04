@@ -11,14 +11,18 @@ import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.FluidModificationItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.recipe.RecipeEntry;
@@ -29,7 +33,10 @@ import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPointer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -86,6 +93,24 @@ public class ModItemFunctions {
         LOOT_FUNCTION_TYPES.register();
         RECIPE_SERIALIZERS.register();
         RECIPE_TYPES.register();
+    }
+
+    public static void registerDispenserBehaviour() {
+        DispenserBlock.registerBehavior(ModItems.IRIDESCENCE_BUCKET.get(), new ItemDispenserBehavior() {
+            private final ItemDispenserBehavior fallbackBehavior = new ItemDispenserBehavior();
+
+            public ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
+                FluidModificationItem fluidModificationItem = (FluidModificationItem)stack.getItem();
+                BlockPos blockPos = pointer.pos().offset(pointer.state().get(DispenserBlock.FACING));
+                World world = pointer.world();
+                if (fluidModificationItem.placeFluid(null, world, blockPos, null)) {
+                    fluidModificationItem.onEmptied(null, world, stack, blockPos);
+                    return this.decrementStackWithRemainder(pointer, stack, new ItemStack(Items.BUCKET));
+                } else {
+                    return this.fallbackBehavior.dispense(pointer, stack);
+                }
+            }
+        });
     }
 
     private static <T> RegistrySupplier<ComponentType<T>> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
