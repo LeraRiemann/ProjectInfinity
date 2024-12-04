@@ -3,6 +3,7 @@ package net.lerariemann.infinity.block.custom;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.util.PortalCreationLogic;
@@ -173,9 +174,17 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
                     item -> getKeyComponents(item, npbe.getDimension(), world));
             if (entity instanceof PlayerEntity player
-                    && RandomProvider.getProvider(world.getServer()).portalKey.isBlank()
-                    && !npbe.getOpen())
-                PortalCreationLogic.openWithStatIncrease(player, world.getServer(), world, pos);
+                    && RandomProvider.getProvider(world.getServer()).portalKey.isBlank()) {
+                ServerWorld world1 = world.getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
+                if ((world1 == null) || !npbe.getOpen())
+                    PortalCreationLogic.openWithStatIncrease(player, world.getServer(), world, pos);
+                else {
+                    Timebombable tw = (Timebombable)world1;
+                    if (tw.infinity$isTimebombed() && tw.infinity$tryRestore()) {
+                        PortalCreationLogic.openWithStatIncrease(player, world.getServer(), world, pos);
+                    }
+                }
+            }
         }
         super.onEntityCollision(state, w, pos, entity);
     }
