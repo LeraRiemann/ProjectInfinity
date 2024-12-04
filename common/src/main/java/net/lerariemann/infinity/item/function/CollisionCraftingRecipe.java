@@ -42,6 +42,11 @@ public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecip
         return output.copy();
     }
 
+
+    public Ingredient getInput() {
+        return input;
+    }
+
     public enum Type implements RecipeType<CollisionCraftingRecipe> {
         PORTAL,
         IRIDESCENCE

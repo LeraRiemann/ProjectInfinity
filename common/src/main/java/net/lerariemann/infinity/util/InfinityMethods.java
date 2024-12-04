@@ -84,6 +84,10 @@ public interface InfinityMethods {
         return ColorHelper.Argb.fullAlpha(0xFFFFFF);
     }
 
+    static int getInfinityPortalColor(ItemStack stack, int layer) {
+        return ColorHelper.Argb.fullAlpha(-16717057);
+    }
+
     static int getInfinityPortalColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
         if (world != null && pos != null) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -111,12 +115,15 @@ public interface InfinityMethods {
     static long getRandomSeed(java.util.Random random) {
         return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
     }
+
     static long getRandomSeed(Random random) {
         return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
     }
+
     static Identifier getRandomId(java.util.Random random) {
         return getDimId(getRandomSeed(random));
     }
+    
     static Identifier getRandomId(Random random) {
         return getDimId(getRandomSeed(random));
     }

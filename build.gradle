@@ -7,21 +7,26 @@ plugins {
 }
 
 architectury {
-    minecraft = project.minecraft_version
+    minecraft = minecraft_version
+}
+
+allprojects {
+    group = maven_group
+    version = "$mod_version+$minecraft_version"
 }
 
 forgix {
     group = "net.lerariemann.infinity"
-    mergedJarName = "infinite-dimensions-${mod_version}.jar"
+    mergedJarName = "infinite-dimensions-${version}.jar"
 
     neoforge {
         projectName = "neoforge"
-        jarLocation = "build/libs/infinity-neoforge-${mod_version}.jar"
+        jarLocation = "build/libs/infinity-neoforge-${version}.jar"
     }
 
     fabric {
         projectName = "fabric"
-        jarLocation = "build/libs/infinity-fabric-${mod_version}.jar"
+        jarLocation = "build/libs/infinity-fabric-${version}.jar"
     }
 
 }
@@ -34,11 +39,6 @@ wiki {
             root = file('docs')
         }
     }
-}
-
-allprojects {
-    group = rootProject.maven_group
-    version = rootProject.mod_version
 }
 
 subprojects {
