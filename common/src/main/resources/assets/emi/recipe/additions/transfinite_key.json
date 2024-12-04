@@ -1,8 +1,0 @@
-{
-    "type": "emi:info",
-    "stacks": [
-      "item:minecraft:amethyst_shard",
-      "item:infinity:key"
-    ],
-    "text": "emi.info.transfinite_key"
-  }

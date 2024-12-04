@@ -1,8 +1,0 @@
-{
-    "type": "emi:info",
-    "stacks": [
-      "item:minecraft:glass_bottle",
-      "item:infinity:biome_bottle"
-    ],
-    "text": "emi.info.biome_bottle"
-  }

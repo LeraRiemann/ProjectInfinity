@@ -1,8 +1,0 @@
-{
-    "type": "emi:info",
-    "stacks": [
-        "item:minecraft:bookshelf",
-      "item:infinity:book_box"
-    ],
-    "text": "emi.info.book_box"
-  }
