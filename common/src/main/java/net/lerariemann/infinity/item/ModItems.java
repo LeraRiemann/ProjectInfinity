@@ -20,6 +20,8 @@ import static net.lerariemann.infinity.util.PlatformMethods.*;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, RegistryKeys.ITEM);
 
+    public static final RegistrySupplier<Item> PORTAL_ITEM =
+            ITEMS.register(ModBlocks.PORTAL.getId(), () -> new BlockItem(ModBlocks.PORTAL.get(), new Item.Settings()));
     public static final RegistrySupplier<Item> ALTAR_ITEM =
             registerBlockItem(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN);
     public static final RegistrySupplier<Item> ANT_ITEM  =
