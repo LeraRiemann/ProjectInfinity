@@ -55,15 +55,16 @@ public class TransfiniteAltarBase extends Block {
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+        int colors = 6;
         if (itemStack.hasNbt()) {
             assert itemStack.getNbt() != null;
             int data = itemStack.getNbt().getInt("CustomModelData");
-            if (data <= 6) {
+            if (data <= colors) {
                 state = state.with(COLOR, data);
                 state = state.with(FLOWER, false);
             }
             else {
-                state = state.with(COLOR, data-7);
+                state = state.with(COLOR, data-colors-1);
                 state = state.with(FLOWER, true);
             }
             world.setBlockState(pos, state);
