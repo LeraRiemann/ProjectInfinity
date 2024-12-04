@@ -42,21 +42,25 @@ public class BiomeBottleCombiningRecipe extends SpecialCraftingRecipe {
 
     public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
         ItemStack stack1 = ItemStack.EMPTY;
-        int i = 0;
+        int bottles = 0;
         int charge = 0;
         for (int k = 0; k < inventory.size(); k++) {
             ItemStack itemStack = inventory.getStack(k);
             if (!itemStack.isEmpty()) {
-                if (Block.getBlockFromItem(itemStack.getItem()) instanceof BiomeBottle) {
+                if (itemStack.getItem().equals(ModItems.BIOME_BOTTLE_ITEM.get())) {
                     if (stack1 == ItemStack.EMPTY) stack1 = itemStack;
                     charge += BiomeBottle.getCharge(itemStack);
-                    i += 1;
+                    bottles += 1;
                 }
             }
         }
-        if (i < 2) return ModItems.BIOME_BOTTLE_ITEM.get().getDefaultStack();
+        if (bottles < 2) {
+            return ModItems.BIOME_BOTTLE_ITEM.get().getDefaultStack();
+        }
+
         ItemStack result = stack1.copy();
         BiomeBottle.updateCharge(result, charge);
+        result.setCount(1);
         return result;
     }
 
