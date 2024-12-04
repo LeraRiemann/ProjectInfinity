@@ -95,7 +95,7 @@ public class Iridescence {
         return Registries.BLOCK.get(Identifier.of(colors.get(world.getRandom().nextInt(colors.size())) + str));
     }
     public static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*11)) + str));
+        return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*colors.size())) + str));
     }
 
     public static final int ticksInHour = 1000;
