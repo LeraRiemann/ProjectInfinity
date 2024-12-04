@@ -12,7 +12,6 @@ import net.lerariemann.infinity.item.function.CollisionCraftingRecipe;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
@@ -39,10 +38,10 @@ public class EmiCompat implements EmiPlugin {
         RecipeManager manager = registry.getRecipeManager();
         DynamicRegistryManager registryManager = MinecraftClient.getInstance().world.getRegistryManager();
         // Use vanilla's concept of your recipes and pass them to your EmiRecipe representation
-        for (RecipeEntry<CollisionCraftingRecipe> recipe : manager.listAllOfType(ModItemFunctions.PORTAL_CRAFTING_TYPE.get())) {
+        for (CollisionCraftingRecipe recipe : manager.listAllOfType(ModItemFunctions.PORTAL_CRAFTING_TYPE.get())) {
             registry.addRecipe(new PortalCraftingEmiRecipe(recipe, registryManager));
         }
-        for (RecipeEntry<CollisionCraftingRecipe> recipe : manager.listAllOfType(ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get())) {
+        for (CollisionCraftingRecipe recipe : manager.listAllOfType(ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get())) {
             registry.addRecipe(new IridesenceCraftingEmiRecipe(recipe, registryManager));
         }
     }

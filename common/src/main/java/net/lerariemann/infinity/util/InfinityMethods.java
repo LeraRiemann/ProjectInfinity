@@ -73,7 +73,7 @@ public interface InfinityMethods {
     }
 
     static int getInfinityPortalColor(ItemStack stack, int layer) {
-        return ColorHelper.Argb.fullAlpha(-16717057);
+        return -16717057;
     }
 
     static int getInfinityPortalColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {

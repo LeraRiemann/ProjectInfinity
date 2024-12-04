@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
@@ -75,13 +76,16 @@ public abstract class CollisionCraftingRecipe implements Recipe<Inventory> {
     }
 
     public static class OfPortal extends CollisionCraftingRecipe {
+        ItemStack output;
         public OfPortal(Ingredient input, ItemStack output) {
             super(input, output);
+            this.output = output;
         }
 
         @Override
         public Identifier getId() {
-            return ModItemFunctions.PORTAL_CRAFTING_TYPE.getId();
+            Identifier id = Registries.ITEM.getId(output.getItem());
+            return Identifier.of(id.getNamespace(), id.getPath()+"_of_portal");
         }
 
         @Override
@@ -96,13 +100,17 @@ public abstract class CollisionCraftingRecipe implements Recipe<Inventory> {
     }
 
     public static class OfIridescence extends CollisionCraftingRecipe {
+        ItemStack output;
+
         public OfIridescence(Ingredient input, ItemStack output) {
             super(input, output);
+            this.output = output;
         }
 
         @Override
         public Identifier getId() {
-            return ModItemFunctions.IRIDESCENCE_CRAFTING.getId();
+            Identifier id = Registries.ITEM.getId(output.getItem());
+            return Identifier.of(id.getNamespace(), id.getPath()+"_of_iridescence");
         }
 
         @Override
