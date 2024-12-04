@@ -198,16 +198,16 @@ public class Iridescence {
             if (newEntity != null) {
                 currEntity.discard();
                 ModEntities.copy(currEntity, newEntity);
-                if (currEntity.getWorld() instanceof ServerWorld w)
-                    newEntity.initialize(w, w.getLocalDifficulty(currEntity.getBlockPos()), SpawnReason.CONVERSION, null);
-                if (currEntity instanceof SlimeEntity e1 && newEntity instanceof SlimeEntity e2) {
-                    e2.setSize(e1.getSize(), true);
-                }
                 if (newEntity instanceof ChaosCreeper creeper) {
                     RegistryEntry<Biome> b = creeper.getWorld().getBiome(creeper.getBlockPos());
                     creeper.setBiome(b.getIdAsString());
                     creeper.setColor(b.value().getFoliageColor());
                     creeper.setRandomCharge();
+                }
+                else if (currEntity.getWorld() instanceof ServerWorld w)
+                    newEntity.initialize(w, w.getLocalDifficulty(currEntity.getBlockPos()), SpawnReason.CONVERSION, null);
+                if (currEntity instanceof SlimeEntity e1 && newEntity instanceof SlimeEntity e2) {
+                    e2.setSize(e1.getSize(), true);
                 }
                 currEntity.getWorld().spawnEntity(newEntity);
                 newEntity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
