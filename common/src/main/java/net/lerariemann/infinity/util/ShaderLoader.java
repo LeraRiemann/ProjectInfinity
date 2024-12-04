@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.util;
 
-import dev.architectury.platform.Platform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.access.GameRendererAccess;
@@ -13,8 +12,6 @@ import net.minecraft.util.Identifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static net.lerariemann.infinity.var.ModPayloads.resourcesReloaded;
 
 @Environment(EnvType.CLIENT)
 public interface ShaderLoader {
@@ -31,6 +28,7 @@ public interface ShaderLoader {
         }
         Identifier iridShader = Iridescence.shouldApplyShader(client.player);
         if (iridShader != null) {
+            System.out.println(iridShader);
             ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(iridShader);
             return;
         }
@@ -39,10 +37,6 @@ public interface ShaderLoader {
             return;
         }
         client.gameRenderer.disablePostProcessor();
-        if (!resourcesReloaded) {
-            client.reloadResources();
-            resourcesReloaded = true;
-        }
     }
 
 

@@ -1,7 +1,9 @@
 package net.lerariemann.infinity.var;
 
 import dev.architectury.platform.Platform;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
@@ -16,6 +18,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.lerariemann.infinity.InfinityMod.getId;
 
@@ -41,6 +45,10 @@ public class ModPayloads {
             client.execute(() -> {
                 CommonIO.write(shader, ShaderLoader.shaderDir(client), ShaderLoader.FILENAME);
                 ShaderLoader.reloadShaders(client, true);
+                if (!resourcesReloaded) {
+                    client.reloadResources();
+                    resourcesReloaded = true;
+                }
             });
         }
     }
@@ -51,4 +59,20 @@ public class ModPayloads {
         ((WorldRendererAccess)(client.worldRenderer)).infinity$setNeedsStars(true);
     }
 
+    public static void registerPayloadsClient() {
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.WORLD_ADD, (client, handler, buf, responseSender) -> {
+            Identifier id = buf.readIdentifier();
+            NbtCompound optiondata = buf.readNbt();
+            int i = buf.readInt();
+            List<Identifier> biomeids = new ArrayList<>();
+            List<NbtCompound> biomes = new ArrayList<>();
+            for (int j = 0; j < i; j++) {
+                biomeids.add(buf.readIdentifier());
+                biomes.add(buf.readNbt());
+            }
+            client.execute(() -> (new DimensionGrabber(client.getNetworkHandler().getRegistryManager())).grab_for_client(id, optiondata, biomeids, biomes));
+        });
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.SHADER_RELOAD, ModPayloads::receiveShader);
+        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.STARS_RELOAD, ModPayloads::receiveStars);
+    }
 }
