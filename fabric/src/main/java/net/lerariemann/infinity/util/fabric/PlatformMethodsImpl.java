@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;

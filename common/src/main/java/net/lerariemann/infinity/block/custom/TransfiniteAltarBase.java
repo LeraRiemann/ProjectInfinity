@@ -6,6 +6,7 @@ import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.minecraft.block.*;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
@@ -50,6 +51,23 @@ public class TransfiniteAltarBase extends Block {
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(COLOR);
         builder.add(FLOWER);
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+        if (itemStack.hasNbt()) {
+            assert itemStack.getNbt() != null;
+            int data = itemStack.getNbt().getInt("CustomModelData");
+            if (data <= 6) {
+                state = state.with(COLOR, data);
+                state = state.with(FLOWER, false);
+            }
+            else {
+                state = state.with(COLOR, data-7);
+                state = state.with(FLOWER, true);
+            }
+            world.setBlockState(pos, state);
+        }
     }
 
     public void setColor(World world, BlockPos pos, BlockState state, int i) {
