@@ -97,17 +97,15 @@ public class ModItemFunctions {
 
     public static void registerDispenserBehaviour() {
         DispenserBlock.registerBehavior(ModItems.IRIDESCENCE_BUCKET.get(), new ItemDispenserBehavior() {
-            private final ItemDispenserBehavior fallbackBehavior = new ItemDispenserBehavior();
-
             public ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
                 FluidModificationItem fluidModificationItem = (FluidModificationItem)stack.getItem();
                 BlockPos blockPos = pointer.pos().offset(pointer.state().get(DispenserBlock.FACING));
                 World world = pointer.world();
                 if (fluidModificationItem.placeFluid(null, world, blockPos, null)) {
                     fluidModificationItem.onEmptied(null, world, stack, blockPos);
-                    return this.decrementStackWithRemainder(pointer, stack, new ItemStack(Items.BUCKET));
+                    return this.decrementStackWithRemainder(pointer, stack, stack.getRecipeRemainder());
                 } else {
-                    return this.fallbackBehavior.dispense(pointer, stack);
+                    return new ItemDispenserBehavior().dispense(pointer, stack);
                 }
             }
         });
