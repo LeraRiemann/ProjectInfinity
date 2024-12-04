@@ -208,14 +208,15 @@ public interface CommonIO {
         return base.toString();
     }
 
+    int maxBound = 20000000;
     static float boundsCheck(float base) {
-        return MathHelper.clamp(base, -2048, 2048);
+        return Math.clamp(base, -maxBound, maxBound);
     }
-    static float boundsCheck(long base) {
-        return MathHelper.clamp(base, -2048, 2048);
+    static int boundsCheck(long base) {
+        return Math.clamp(base, -maxBound, maxBound);
     }
     static int boundsCheck(int base) {
-        return MathHelper.clamp(base, -2048, 2048);
+        return Math.clamp(base, -maxBound, maxBound);
     }
 
     static String CompoundToString(NbtCompound base, int t) {

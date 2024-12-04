@@ -65,7 +65,6 @@ public interface WarpLogic {
     }
 
     static PortalColorApplier getPortalColorApplier(Identifier id, MinecraftServer server) {
-        if(id.toString().equals("minecraft:the_end")) return new PortalColorApplier.Simple(0);
         NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.get(id.getPath());
         if (c == null) c = InfinityOptions.readData(server, id);
         return PortalColorApplier.extract(c, (int)WarpLogic.getNumericFromId(id, server));

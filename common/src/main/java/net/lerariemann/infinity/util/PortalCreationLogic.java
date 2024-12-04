@@ -242,9 +242,11 @@ public interface PortalCreationLogic {
         /* checks if the dimension requested is valid and does not already exist */
         if (!id.getNamespace().equals(InfinityMod.MOD_ID)) return false;
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
-        if ((server.getWorld(key) != null) || ((MinecraftServerAccess)(server)).infinity$hasToAdd(key)) return false;
+        if (((MinecraftServerAccess)(server)).infinity$hasToAdd(key)) return false;
+        ServerWorld w = server.getWorld(key);
+        if (w!=null) return false;
 
-        /* creates the dimension datapack */
+                /* creates the dimension datapack */
         RandomDimension d = new RandomDimension(id, server);
 
         if (!RandomProvider.getProvider(server).rule("runtimeGenerationEnabled")) return false;

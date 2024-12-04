@@ -3,7 +3,9 @@ package net.lerariemann.infinity.block.custom;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
@@ -159,13 +161,23 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     public void onEntityCollision(BlockState state, World w, BlockPos pos, Entity entity) {
         if (w instanceof ServerWorld world
                 && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity npbe) {
+            MinecraftServer server = world.getServer();
             if (entity instanceof ItemEntity e)
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
                         putKeyComponents(e.getStack().getItem(), npbe.getDimension(), world));
             if (entity instanceof PlayerEntity player
-                    && RandomProvider.getProvider(world.getServer()).portalKey.isBlank()
-                    && !npbe.getOpen())
-                PortalCreationLogic.openWithStatIncrease(player, world.getServer(), world, pos);
+                    && RandomProvider.getProvider(server).portalKey.isBlank()) {
+                ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
+                if ((world1 == null) || !npbe.getOpen())
+                    PortalCreationLogic.openWithStatIncrease(player, server, world, pos);
+                else {
+                    Timebombable tw = (Timebombable)world1;
+                    if (tw.infinity$isTimebombed() && tw.infinity$tryRestore()) {
+                        new RandomDimension(npbe.getDimension(), server);
+                        PortalCreationLogic.openWithStatIncrease(player, server, world, pos);
+                    }
+                }
+            }
         }
         super.onEntityCollision(state, w, pos, entity);
     }

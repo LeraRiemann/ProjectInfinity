@@ -127,7 +127,8 @@ public class ModDensityFunctionTypes {
         }
 
         static double r(NoisePos pos) {
-            return Math.sqrt(pos.blockX()*pos.blockX() + pos.blockZ()*pos.blockZ());
+            double res = Math.sqrt(pos.blockX()*pos.blockX() + pos.blockZ()*pos.blockZ());
+            return Math.max(res, 0.01);
         }
     }
 
