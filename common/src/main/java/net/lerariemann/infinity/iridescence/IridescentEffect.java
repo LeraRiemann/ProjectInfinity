@@ -31,17 +31,15 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
 
     public void onRemoved(LivingEntity entity) {
         entity.setInvulnerable(false);
-        switch (entity) {
-            case ServerPlayerEntity player -> Iridescence.updateShader(player);
-            case ChaosPawn pawn -> {
-                if (pawn.getRandom().nextBoolean()) {
-                    pawn.unchess();
-                    Iridescence.convTriggers(pawn);
-                }
+        if (entity instanceof ServerPlayerEntity player) {
+            Iridescence.updateShader(player);
+        } else if (entity instanceof ChaosPawn pawn) {
+            if (pawn.getRandom().nextBoolean()) {
+                pawn.unchess();
+                Iridescence.convTriggers(pawn);
             }
-            case MobEntity currEntity -> Iridescence.endConversion(currEntity);
-            default -> {
-            }
+        } else if (entity instanceof MobEntity currEntity) {
+            Iridescence.endConversion(currEntity);
         }
     }
 

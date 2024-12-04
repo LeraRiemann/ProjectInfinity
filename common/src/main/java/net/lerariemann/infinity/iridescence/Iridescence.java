@@ -210,7 +210,7 @@ public class Iridescence {
                     creeper.setRandomCharge();
                 }
                 else if (currEntity.getWorld() instanceof ServerWorld w)
-                    newEntity.initialize(w, w.getLocalDifficulty(currEntity.getBlockPos()), SpawnReason.CONVERSION, null);
+                    newEntity.initialize(w, w.getLocalDifficulty(currEntity.getBlockPos()), SpawnReason.CONVERSION, null, null);
                 if (currEntity instanceof SlimeEntity e1 && newEntity instanceof SlimeEntity e2) {
                     e2.setSize(e1.getSize(), true);
                 }
