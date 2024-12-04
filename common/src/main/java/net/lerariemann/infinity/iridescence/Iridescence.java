@@ -184,17 +184,15 @@ public class Iridescence {
         return (convertibles.containsKey(entity.getType()) || (entity instanceof ChaosPawn pawn && pawn.isChess()));
     }
 
-    public static EntityType<? extends MobEntity> getConversion(MobEntity entity) {
-        return convertibles.get(entity.getType()).get();
-    }
-
     public static void tryBeginConversion(MobEntity ent) {
         if (isConvertible(ent) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT))
             ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0));
     }
 
     public static void endConversion(MobEntity currEntity) {
-        EntityType<? extends MobEntity> typeNew = Iridescence.getConversion(currEntity);
+        EntityType<?> type = currEntity.getType();
+        if (!convertibles.containsKey(type)) return;
+        EntityType<? extends MobEntity> typeNew = convertibles.get(type).get();
         if (typeNew != null) {
             MobEntity newEntity = typeNew.create(currEntity.getWorld());
             if (newEntity != null) {
