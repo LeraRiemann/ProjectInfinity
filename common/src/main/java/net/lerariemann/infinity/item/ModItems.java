@@ -75,7 +75,7 @@ public class ModItems {
             registerBlockItem(ModBlocks.IRIDESCENT_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL);
     public static final RegistrySupplier<Item> IRIDESCENT_CARPET  =
             registerBlockItem(ModBlocks.IRIDESCENT_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET);
-    public static TagKey<Item> IRIDESCENT_TAG;
+    public static TagKey<Item> IRIDESCENT_TAG = createItemTag("iridescent");
 
 
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {

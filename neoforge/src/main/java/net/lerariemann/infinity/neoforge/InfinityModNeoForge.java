@@ -35,7 +35,6 @@ public final class InfinityModNeoForge {
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsNeoforge.registerModFluids();
         ModEffectsNeoforge.register(eventBus);
-        ModItems.IRIDESCENT_TAG = ItemTags.create(InfinityMethods.getId("iridescent"));
     }
 
     @SubscribeEvent

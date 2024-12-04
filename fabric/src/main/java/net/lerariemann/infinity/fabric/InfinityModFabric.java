@@ -25,6 +25,5 @@ public final class  InfinityModFabric implements ModInitializer {
         ModEntities.registerSpawnRestrictions();
         ModStats.load();
         ModItemFunctions.registerDispenserBehaviour();
-        ModItems.IRIDESCENT_TAG = TagKey.of(RegistryKeys.ITEM, InfinityMethods.getId("iridescent"));
     }
 }
