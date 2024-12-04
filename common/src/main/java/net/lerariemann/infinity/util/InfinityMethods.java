@@ -4,6 +4,7 @@ import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.item.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
@@ -63,8 +64,13 @@ public interface InfinityMethods {
     }
 
     static int getOverlayColorFromComponents(ItemStack stack, int layer) {
+        int color = 0xFFFFFF;
         if (stack.getNbt() != null) {
-            int color = stack.getNbt().getInt("key_color");
+            if (stack.getItem().equals(ModItems.TRANSFINITE_KEY.get()))
+                color = stack.getNbt().getInt("key_color");
+            else if (stack.getItem().equals(ModItems.BIOME_BOTTLE_ITEM.get())) {
+                color = stack.getNbt().getCompound("BlockEntityTag").getInt("Color");
+            }
             if (layer == 1) {
                 return color;
             }
