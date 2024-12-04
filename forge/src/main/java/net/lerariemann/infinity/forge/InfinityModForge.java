@@ -5,12 +5,13 @@ import dev.architectury.platform.forge.EventBuses;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.compat.forge.CanaryCompat;
 import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.fluids.FluidTypes;
-import net.lerariemann.infinity.fluids.ModEffectsForge;
-import net.lerariemann.infinity.fluids.ModFluidsForge;
+import net.lerariemann.infinity.fluids.forge.FluidTypes;
+import net.lerariemann.infinity.fluids.forge.ModEffectsForge;
+import net.lerariemann.infinity.fluids.forge.ModFluidsForge;
 import net.lerariemann.infinity.forge.client.InfinityModForgeClient;
 import net.lerariemann.infinity.iridescence.ModStatusEffects;
 import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraftforge.api.distmarker.Dist;
@@ -58,5 +59,6 @@ public final class InfinityModForge {
         ModStatusEffects.IRIDESCENT_EFFECT = ModEffectsForge.IRIDESCENT_EFFECT.getHolder().get();
         ModStatusEffects.IRIDESCENT_SETUP = ModEffectsForge.IRIDESCENT_SETUP.getHolder().get();
         ModStatusEffects.IRIDESCENT_COOLDOWN = ModEffectsForge.IRIDESCENT_COOLDOWN.getHolder().get();
+        ModItemFunctions.registerDispenserBehaviour();
     }
 }

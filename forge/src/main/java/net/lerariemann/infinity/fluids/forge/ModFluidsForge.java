@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.fluids;
+package net.lerariemann.infinity.fluids.forge;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;

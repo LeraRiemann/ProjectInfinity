@@ -4,8 +4,9 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.fluids.IridescenceLiquidBlockForge;
-import net.lerariemann.infinity.fluids.ModFluidsForge;
+import net.lerariemann.infinity.fluids.forge.IridescenceLiquidBlockForge;
+import net.lerariemann.infinity.fluids.forge.ModFluidsForge;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
@@ -24,7 +25,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.nio.file.Path;
 

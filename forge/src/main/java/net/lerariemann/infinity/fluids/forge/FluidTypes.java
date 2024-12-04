@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.fluids.neoforge;
+package net.lerariemann.infinity.fluids.forge;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.iridescence.Iridescence;
@@ -11,7 +11,6 @@ import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.event.ForgeEventFactory;

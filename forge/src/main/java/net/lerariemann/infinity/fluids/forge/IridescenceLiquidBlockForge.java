@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.fluids.neoforge;
+package net.lerariemann.infinity.fluids.forge;
 
 import net.lerariemann.infinity.iridescence.IridescenceLiquidBlock;
 import net.minecraft.block.BlockState;

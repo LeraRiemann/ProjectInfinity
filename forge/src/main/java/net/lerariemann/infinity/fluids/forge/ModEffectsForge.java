@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.fluids;
+package net.lerariemann.infinity.fluids.forge;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.iridescence.IridescentCooldownEffect;
