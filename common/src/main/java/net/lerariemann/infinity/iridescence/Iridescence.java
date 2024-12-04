@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.*;
@@ -197,8 +198,10 @@ public class Iridescence {
             if (newEntity != null) {
                 currEntity.discard();
                 ModEntities.copy(currEntity, newEntity);
+                if (currEntity.getWorld() instanceof ServerWorld w)
+                    newEntity.initialize(w, w.getLocalDifficulty(currEntity.getBlockPos()), SpawnReason.CONVERSION, null);
                 if (currEntity instanceof SlimeEntity e1 && newEntity instanceof SlimeEntity e2) {
-                    e1.setSize(e2.getSize(), true);
+                    e2.setSize(e1.getSize(), true);
                 }
                 if (newEntity instanceof ChaosCreeper creeper) {
                     RegistryEntry<Biome> b = creeper.getWorld().getBiome(creeper.getBlockPos());
