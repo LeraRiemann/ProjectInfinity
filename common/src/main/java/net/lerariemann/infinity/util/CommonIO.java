@@ -210,13 +210,13 @@ public interface CommonIO {
 
     int maxBound = 20000000;
     static float boundsCheck(float base) {
-        return Math.clamp(base, -maxBound, maxBound);
+        return MathHelper.clamp(base, -maxBound, maxBound);
     }
     static int boundsCheck(long base) {
-        return Math.clamp(base, -maxBound, maxBound);
+        return (int) MathHelper.clamp(base, -maxBound, maxBound);
     }
     static int boundsCheck(int base) {
-        return Math.clamp(base, -maxBound, maxBound);
+        return MathHelper.clamp(base, -maxBound, maxBound);
     }
 
     static String CompoundToString(NbtCompound base, int t) {
