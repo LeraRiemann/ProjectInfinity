@@ -180,11 +180,9 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public void unchess() {
-        if (random.nextBoolean()) {
-            dataTracker.set(special_case, -1);
-            randomizeColors(new Random());
-            playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
-        }
+        dataTracker.set(special_case, -1);
+        randomizeColors(getRandom());
+        playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
     }
 
     public void randomizeColors(Random r) {
@@ -214,10 +212,10 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        Random r = new Random();
-        setAllColors(r, world.getBlockState(this.getBlockPos().down(2)));
-        double i = 15*r.nextExponential();
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(i);
+        Random r = getRandom();
+        setAllColors(r, world.getBlockState(this.getBlockPos().down()));
+        double i = r.nextDouble() * 40;
+        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
         this.setHealth((float)i);
         int a;
         if ((a = (int)(0.1*i)) > 0) {
