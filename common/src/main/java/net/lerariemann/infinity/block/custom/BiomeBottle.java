@@ -70,6 +70,9 @@ public class BiomeBottle extends BlockWithEntity {
             final int level = getLevel(charge);
             state = state.with(LEVEL, level);
             world.setBlockState(pos, state);
+            if (world.getBlockEntity(pos) instanceof BiomeBottleBlockEntity biomeBottleBlockEntity) {
+                biomeBottleBlockEntity.color = itemStack.getNbt().getCompound("BlockEntityTag").getInt("Color");
+            }
         }
     }
 
