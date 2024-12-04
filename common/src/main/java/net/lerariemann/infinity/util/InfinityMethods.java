@@ -98,9 +98,8 @@ public interface InfinityMethods {
         if (world != null && pos != null) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof BiomeBottleBlockEntity be) {
-                Object j = be.getRenderData();
-                if (j == null) return 0;
-                return (int)j & 0xFFFFFF;
+                int j = be.color;
+                return j & 0xFFFFFF;
             }
         }
         return 0xFFFFFF;

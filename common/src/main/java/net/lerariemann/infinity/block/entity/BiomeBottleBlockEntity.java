@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 public class BiomeBottleBlockEntity extends BlockEntity {
     private final PropertyDelegate propertyDelegate;
     private Identifier biome;
-    private int color;
+    public int color;
     public int charge;
     private int from_charge;
 
