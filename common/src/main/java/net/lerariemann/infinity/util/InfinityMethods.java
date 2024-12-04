@@ -16,6 +16,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 
@@ -54,6 +55,11 @@ public interface InfinityMethods {
 
     static double sample(int x, int y, int z) {
         return sampler.sample(x, y, z);
+    }
+
+    static int properMod(int a, int b) {
+        int res = a%b;
+        return (res >= 0) ? res : b + res;
     }
 
     static int posToColor(BlockPos pos) {
@@ -100,5 +106,18 @@ public interface InfinityMethods {
             }
         }
         return 0xFFFFFF;
+    }
+
+    static long getRandomSeed(java.util.Random random) {
+        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
+    }
+    static long getRandomSeed(Random random) {
+        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
+    }
+    static Identifier getRandomId(java.util.Random random) {
+        return getDimId(getRandomSeed(random));
+    }
+    static Identifier getRandomId(Random random) {
+        return getDimId(getRandomSeed(random));
     }
 }

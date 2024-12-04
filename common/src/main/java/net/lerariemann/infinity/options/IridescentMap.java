@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.options;
 
 import net.lerariemann.infinity.iridescence.Iridescence;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
@@ -11,7 +11,7 @@ import static net.lerariemann.infinity.block.custom.IridescentBlock.num_models;
 
 public interface IridescentMap {
     default int getColor(BlockPos pos) {
-        return WarpLogic.properMod((int)(num_models * getHue(pos)), num_models);
+        return InfinityMethods.properMod((int)(num_models * getHue(pos)), num_models);
     }
     default double getHue(BlockPos pos) {
         return Iridescence.sample(pos);
@@ -35,7 +35,7 @@ public interface IridescentMap {
         INSTANCE;
         @Override
         public int getColor(BlockPos pos) {
-            return WarpLogic.properMod(pos.getX() + pos.getY() + pos.getZ(), num_models);
+            return InfinityMethods.properMod(pos.getX() + pos.getY() + pos.getZ(), num_models);
         }
     }
     enum RandomMap implements IridescentMap {
@@ -54,7 +54,7 @@ public interface IridescentMap {
     record Static(int value) implements IridescentMap {
         @Override
         public int getColor(BlockPos pos) {
-            return WarpLogic.properMod(value, num_models);
+            return InfinityMethods.properMod(value, num_models);
         }
     }
 }

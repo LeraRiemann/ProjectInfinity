@@ -4,11 +4,9 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.*;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public abstract class RandomisedFeature {
     NbtList placement_data;
 
     public RandomisedFeature(RandomFeaturesList lst, String namecore) {
-        this(WarpLogic.getRandomSeed(lst.random), lst, namecore);
+        this(InfinityMethods.getRandomSeed(lst.random), lst, namecore);
     }
 
     public RandomisedFeature(long i, RandomFeaturesList lst, String namecore) {
@@ -45,12 +43,8 @@ public abstract class RandomisedFeature {
         return InfinityMod.MOD_ID + ":configured_" + name;
     }
 
-    <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key) {
-        return daddy.does_not_contain(key, name);
-    }
-
     void save_with_placement() {
-        if (does_not_contain(RegistryKeys.CONFIGURED_FEATURE)) CommonIO.write(feature(),
+        if (daddy.doesNotContain(RegistryKeys.CONFIGURED_FEATURE, name)) CommonIO.write(feature(),
                 parent.storagePath + "/worldgen/configured_feature", "configured_" + name + ".json");
         NbtCompound moredata = new NbtCompound();
         moredata.putString("feature", fullNameConfigured());

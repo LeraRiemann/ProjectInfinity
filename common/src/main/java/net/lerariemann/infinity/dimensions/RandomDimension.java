@@ -63,7 +63,7 @@ public class RandomDimension {
         type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
         data.put("generator", randomDimensionGenerator());
-        for (Long l: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+l)) {
+        for (Long l: random_biome_ids) if (doesNotContain(RegistryKeys.BIOME, "biome_"+l)) {
             RandomBiome b = new RandomBiome(l, this);
             random_biomes.add(b);
             addStructures(b);
@@ -153,7 +153,7 @@ public class RandomDimension {
         }
     }
 
-    public <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key, String name) {
+    public <T> boolean doesNotContain(RegistryKey<? extends Registry<T>> key, String name) {
         return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMethods.getId(name))));
     }
 
@@ -320,7 +320,7 @@ public class RandomDimension {
             vanilla_biomes.add(biome);
         }
         else {
-            long id = WarpLogic.getRandomSeed(random);
+            long id = InfinityMethods.getRandomSeed(random);
             random_biome_ids.add(id);
             biome = "infinity:biome_" + id;
         }

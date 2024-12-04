@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.options;
 
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -35,7 +35,7 @@ public interface PortalColorApplier {
     record Checker(NbtList values) implements PortalColorApplier {
         @Override
         public int apply(BlockPos pos) {
-            int mod = WarpLogic.properMod(pos.getX() + pos.getY() + pos.getZ(), values.size());
+            int mod = InfinityMethods.properMod(pos.getX() + pos.getY() + pos.getZ(), values.size());
             return values.getInt(mod);
         }
     }
