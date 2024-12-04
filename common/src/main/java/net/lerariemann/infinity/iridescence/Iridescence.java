@@ -96,7 +96,7 @@ public class Iridescence {
             "minecraft:pink_");
 
     public static Block getRandomColorBlock(WorldAccess world, String str) {
-        return Registries.BLOCK.get(new Identifier(colors.get(world.getRandom().nextInt(16)) + str));
+        return Registries.BLOCK.get(new Identifier(colors.get(world.getRandom().nextInt(colors.size())) + str));
     }
     public static Block getRandomColorBlock(double d, String str) {
         return Registries.BLOCK.get(new Identifier(colors.get((int)(d*11)) + str));

@@ -10,7 +10,7 @@ import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.fluids.ModFluidsFabric;
+import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
 import net.lerariemann.infinity.iridescence.IridescenceLiquidBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
@@ -21,6 +21,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 
@@ -65,5 +67,9 @@ public class PlatformMethodsImpl {
         ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
         assert mc != null;
         return mc.getRootPaths().get(0).resolve("config");
+    }
+
+    public static TagKey<Item> createItemTag(String id) {
+        return TagKey.of(RegistryKeys.ITEM, InfinityMethods.getId(id));
     }
 }

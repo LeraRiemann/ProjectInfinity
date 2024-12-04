@@ -16,6 +16,8 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.SimpleRegistry;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
@@ -73,4 +75,9 @@ public class PlatformMethodsImpl {
     public static Path getRootConfigPath() {
         return ModLoadingContext.get().getActiveContainer().getModInfo().getOwningFile().getFile().findResource("config");
     }
+
+    public static TagKey<Item> createItemTag(String id) {
+        return ItemTags.create(InfinityMethods.getId(id));
+    }
+
 }

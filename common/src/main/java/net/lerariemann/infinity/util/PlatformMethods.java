@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -133,6 +134,11 @@ public class PlatformMethods {
 
     @ExpectPlatform
     public static Path getRootConfigPath() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static TagKey<Item> createItemTag(String id) {
         throw new AssertionError();
     }
 }

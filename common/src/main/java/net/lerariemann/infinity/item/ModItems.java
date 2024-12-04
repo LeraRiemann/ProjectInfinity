@@ -9,10 +9,21 @@ import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.Block;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.dispenser.DispenserBehavior;
+import net.minecraft.block.dispenser.ItemDispenserBehavior;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPointer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.util.PlatformMethods.*;
@@ -61,7 +72,7 @@ public class ModItems {
             registerBlockItem(ModBlocks.IRIDESCENT_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL);
     public static final RegistrySupplier<Item> IRIDESCENT_CARPET  =
             registerBlockItem(ModBlocks.IRIDESCENT_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET);
-    public static TagKey<Item> IRIDESCENT_TAG;
+    public static TagKey<Item> IRIDESCENT_TAG = createItemTag("iridescent");
 
 
 
