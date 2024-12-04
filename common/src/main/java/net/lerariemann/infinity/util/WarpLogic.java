@@ -64,11 +64,6 @@ public interface WarpLogic {
         if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"));
     }
 
-    static int properMod(int a, int b) {
-        int res = a%b;
-        return (res >= 0) ? res : b + res;
-    }
-
     static PortalColorApplier getPortalColorApplier(Identifier id, MinecraftServer server) {
         if(id.toString().equals("minecraft:the_end")) return new PortalColorApplier.Simple(0);
         NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.get(id.getPath());
@@ -136,19 +131,5 @@ public interface WarpLogic {
     static long getDimensionSeed(String text, RandomProvider prov) {
         HashCode f = Hashing.sha256().hashString(text + prov.salt, StandardCharsets.UTF_8);
         return InfinityMod.longArithmeticEnabled ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
-    }
-
-    static long getRandomSeed(java.util.Random random) {
-        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
-    }
-    static long getRandomSeed(Random random) {
-        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
-    }
-
-    static Identifier getRandomId(java.util.Random random) {
-        return InfinityMethods.getDimId(getRandomSeed(random));
-    }
-    static Identifier getRandomId(Random random) {
-        return InfinityMethods.getDimId(getRandomSeed(random));
     }
 }

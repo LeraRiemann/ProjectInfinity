@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
@@ -28,7 +28,7 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupper.Config> {
 
     public static Set<Integer> tileChunkPositions(int start, int offset) {
         Set<Integer> ls = new HashSet<>();
-        int mod = WarpLogic.properMod(start, offset);
+        int mod = InfinityMethods.properMod(start, offset);
         int d_start = mod == 0 ? 0 : offset - mod;
         for (int d_curr = d_start; d_curr < 16; d_curr += offset) ls.add(start + d_curr);
         return ls;
@@ -70,7 +70,7 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupper.Config> {
 
     public boolean generateOnePortal(StructureWorldAccess structureWorldAccess, BlockPos blockPos, Random random,
                                      boolean axis_x, int width, int height, int sol, int soy) {
-        long dim = WarpLogic.getRandomSeed(random);
+        long dim = InfinityMethods.getRandomSeed(random);
         for (int y = 0; y < height+2; y++) {
             if (y == 0 || y == height+1) for (int l = 0; l < width+2; l++) {
                 setBlockState(structureWorldAccess, bpadd(blockPos, l, y, 0, axis_x), obs);

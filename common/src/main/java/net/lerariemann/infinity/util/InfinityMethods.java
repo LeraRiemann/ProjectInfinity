@@ -42,6 +42,11 @@ public interface InfinityMethods {
         return sampler.sample(x, y, z);
     }
 
+    static int properMod(int a, int b) {
+        int res = a%b;
+        return (res >= 0) ? res : b + res;
+    }
+
     static int posToColor(BlockPos pos) {
         double r = sample(pos.getX(), pos.getY() - 10000, pos.getZ());
         double g = sample(pos.getX(), pos.getY(), pos.getZ());
@@ -88,5 +93,18 @@ public interface InfinityMethods {
             }
         }
         return 0xFFFFFF;
+    }
+
+    static long getRandomSeed(java.util.Random random) {
+        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
+    }
+    static long getRandomSeed(Random random) {
+        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
+    }
+    static Identifier getRandomId(java.util.Random random) {
+        return getDimId(getRandomSeed(random));
+    }
+    static Identifier getRandomId(Random random) {
+        return getDimId(getRandomSeed(random));
     }
 }

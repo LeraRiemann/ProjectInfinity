@@ -8,7 +8,7 @@ import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
@@ -99,7 +99,7 @@ public class Iridescence {
         return Registries.BLOCK.get(new Identifier(colors.get(world.getRandom().nextInt(colors.size())) + str));
     }
     public static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(new Identifier(colors.get((int)(d*11)) + str));
+        return Registries.BLOCK.get(new Identifier(colors.get((int)(d*colors.size())) + str));
     }
 
     public static final int ticksInHour = 1000;
@@ -175,7 +175,7 @@ public class Iridescence {
 
     public static Identifier getIdForWarp(ServerPlayerEntity player) {
         ServerWorld w = player.getServerWorld().getServer().getOverworld();
-        return WarpLogic.getRandomId(new Random(w.getSeed() + w.getTime() / ticksInHour));
+        return InfinityMethods.getRandomId(new Random(w.getSeed() + w.getTime() / ticksInHour));
     }
 
     public static final Map<EntityType<? extends MobEntity>, RegistrySupplier<? extends EntityType<? extends MobEntity>>> convertibles =
@@ -188,17 +188,15 @@ public class Iridescence {
         return (convertibles.containsKey(entity.getType()) || (entity instanceof ChaosPawn pawn && pawn.isChess()));
     }
 
-    public static EntityType<? extends MobEntity> getConversion(MobEntity entity) {
-        return convertibles.get(entity.getType()).get();
-    }
-
     public static void tryBeginConversion(MobEntity ent) {
         if (isConvertible(ent) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value()))
             ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0));
     }
 
     public static void endConversion(MobEntity currEntity) {
-        EntityType<? extends MobEntity> typeNew = Iridescence.getConversion(currEntity);
+        EntityType<?> type = currEntity.getType();
+        if (!convertibles.containsKey(type)) return;
+        EntityType<? extends MobEntity> typeNew = convertibles.get(type).get();
         if (typeNew != null) {
             MobEntity newEntity = typeNew.create(currEntity.getWorld());
             if (newEntity != null) {

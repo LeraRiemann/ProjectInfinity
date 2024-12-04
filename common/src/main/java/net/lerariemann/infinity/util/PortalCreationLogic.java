@@ -127,7 +127,7 @@ public interface PortalCreationLogic {
     static boolean modifyOnInitialCollision(Identifier dimName, ServerWorld world, BlockPos pos) {
         MinecraftServer server = world.getServer();
         if (dimName.toString().equals("minecraft:random")) {
-            dimName = WarpLogic.getRandomId(world.getRandom());
+            dimName = InfinityMethods.getRandomId(world.getRandom());
         }
         PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
 
