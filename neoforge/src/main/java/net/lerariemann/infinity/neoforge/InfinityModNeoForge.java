@@ -2,9 +2,9 @@ package net.lerariemann.infinity.neoforge;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.fluids.FluidTypes;
-import net.lerariemann.infinity.fluids.ModEffectsNeoforge;
-import net.lerariemann.infinity.fluids.ModFluidsNeoforge;
+import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
+import net.lerariemann.infinity.fluids.neoforge.ModEffectsNeoforge;
+import net.lerariemann.infinity.fluids.neoforge.ModFluidsNeoforge;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.neoforge.client.InfinityModNeoForgeClient;
 import net.lerariemann.infinity.util.InfinityMethods;

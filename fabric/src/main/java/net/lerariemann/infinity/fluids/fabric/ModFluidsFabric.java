@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.fluids;
+package net.lerariemann.infinity.fluids.fabric;
 
 import dev.architectury.core.fluid.ArchitecturyFlowingFluid;
 import dev.architectury.core.fluid.ArchitecturyFluidAttributes;

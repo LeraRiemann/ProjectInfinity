@@ -3,7 +3,7 @@ package net.lerariemann.infinity.fabric;
 import net.fabricmc.api.ModInitializer;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.fluids.ModFluidsFabric;
+import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.var.ModStats;
