@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 
@@ -98,12 +99,15 @@ public interface InfinityMethods {
     static long getRandomSeed(java.util.Random random) {
         return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
     }
+
     static long getRandomSeed(Random random) {
         return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
     }
+
     static Identifier getRandomId(java.util.Random random) {
         return getDimId(getRandomSeed(random));
     }
+
     static Identifier getRandomId(Random random) {
         return getDimId(getRandomSeed(random));
     }
