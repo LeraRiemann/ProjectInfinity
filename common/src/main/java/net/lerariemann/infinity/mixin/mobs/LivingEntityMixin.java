@@ -36,7 +36,7 @@ public abstract class LivingEntityMixin extends Entity {
             else {
                 double f = getAttributeValue(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE);
                 double clampedMavity = Math.clamp(options.getMavity(), 0.01, 2);
-                double g = fallDistance * clampedMavity - f / clampedMavity;
+                double g = fallDistance * clampedMavity - f;
                 cir.setReturnValue(MathHelper.ceil(
                         (g * damageMultiplier) * this.getAttributeValue(EntityAttributes.GENERIC_FALL_DAMAGE_MULTIPLIER)));
             }
