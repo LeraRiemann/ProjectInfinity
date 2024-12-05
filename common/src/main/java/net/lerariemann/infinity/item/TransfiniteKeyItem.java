@@ -1,12 +1,11 @@
 package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.item.function.ModItemFunctions;
-import net.minecraft.client.item.TooltipContext;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -25,19 +24,18 @@ public class TransfiniteKeyItem extends Item {
         String dimension = ModItemFunctions.getDimensionComponents(stack);
         MutableText mutableText;
         if (dimension != null) {
-            if (dimension.contains("infinity:generated_")) {
+            // Keys to randomly generated dimensions.
+            if (dimension.contains("infinity:generated_"))
                 mutableText = Text.translatable("dimension.infinity.generated")
                         .append(dimension.replace("infinity:generated_", ""));
-            }
-            else if (dimension.equals("minecraft:random")) {
+            // Keys without a dimension attached.
+            else if (dimension.equals("minecraft:random"))
                 mutableText = Text.translatable("dimension.infinity.randomise");
-            }
-            else {
-                String[] forFallback = dimension.split(":")[1].replace("_", " ").split("\\s");
-                StringBuilder fallback = new StringBuilder();
-                for (String str: forFallback) fallback.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(" ");
-                mutableText = Text.translatableWithFallback(Util.createTranslationKey("dimension", Identifier.tryParse(dimension)), fallback.toString().trim());
-            }
+            // Easter Egg dimensions.
+            else
+                mutableText = Text.translatableWithFallback(
+                        Util.createTranslationKey("dimension", dimension),
+                        InfinityMethods.fallback(dimension.split(":")[1].getPath()));
         }
         else {
             mutableText = Text.translatable("dimension.infinity.randomise");

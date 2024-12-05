@@ -54,6 +54,10 @@ import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPa
 import static net.lerariemann.infinity.compat.ComputerCraftCompat.isPrintedPage;
 
 public interface PortalCreationLogic {
+    /**
+     * Check if the item that is colliding with the Portal can be used to
+     * transform it into an Infinity Portal.
+     */
     static void tryCreatePortalFromItem(BlockState state, World world, BlockPos pos, ItemEntity entity) {
         ItemStack itemStack = entity.getStack();
         if (itemStack.getItem() == ModItems.TRANSFINITE_KEY.get()) {
@@ -106,7 +110,9 @@ public interface PortalCreationLogic {
 
     }
 
-    /* Extracts the string used to generate the dimension ID from component content. */
+    /**
+     * Extracts the string used to generate the dimension ID from component content.
+     */
     static String parseComponents(NbtCompound compound, Item item) {
         NbtList pages = compound.getList("pages", NbtElement.STRING_TYPE);
         if (pages.isEmpty()) {
@@ -122,8 +128,10 @@ public interface PortalCreationLogic {
         else return "";
     }
 
-    /* Sets the portal color and destination and calls to open the portal immediately if the portal key is blank.
-     * Statistics for opening the portal are attributed to the nearest player. */
+    /**
+     * Sets the portal color and destination and calls to open the portal immediately if the portal key is blank.
+     * Statistics for opening the portal are attributed to the nearest player.
+     */
     static boolean modifyOnInitialCollision(Identifier dimName, ServerWorld world, BlockPos pos) {
         MinecraftServer server = world.getServer();
         if (dimName.toString().equals("minecraft:random")) {
@@ -168,7 +176,9 @@ public interface PortalCreationLogic {
         }
     }
 
-    /* Opens the portal by trying to make it usable, including a call to generate a dimension if needed. */
+    /**
+     * Opens the portal by trying to make it usable, including a call to generate a dimension if needed.
+     */
     static boolean open(MinecraftServer s, ServerWorld world, BlockPos pos) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         boolean bl = false;
@@ -188,7 +198,9 @@ public interface PortalCreationLogic {
         return bl;
     }
 
-    /* Recursively creates a queue of neighbouring portal blocks and for each of them executes an action. */
+    /**
+     * Recursively creates a queue of neighbouring portal blocks and for each of them executes an action.
+     */
     static void modifyPortalRecursive(ServerWorld world, BlockPos pos, BiConsumer<World, BlockPos> modifier) {
         Set<BlockPos> set = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
@@ -232,12 +244,16 @@ public interface PortalCreationLogic {
                 .addModifier(BlockEntity::markDirty);
     }
 
-    /* Updates this and all neighbouring portal blocks with a new dimension and open status. */
+    /**
+     * Updates this and all neighbouring portal blocks with a new dimension and open status.
+     */
     static void modifyPortalRecursive(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
         modifyPortalRecursive(world, pos, forInitialSetupping(world, pos, id, open));
     }
 
-    /* Calls to create the dimension based on its ID. Returns true if the dimension being opened is indeed brand new. */
+    /**
+     * Calls to create the dimension based on its ID. Returns true if the dimension being opened is indeed brand new.
+     */
     static boolean addInfinityDimension(MinecraftServer server, Identifier id) {
         /* checks if the dimension requested is valid and does not already exist */
         if (!id.getNamespace().equals(InfinityMod.MOD_ID)) return false;
@@ -257,7 +273,9 @@ public interface PortalCreationLogic {
         return true;
     }
 
-    /* Create and send S2C packets necessary for the client to process a freshly added dimension. */
+    /**
+     * Create and send S2C packets necessary for the client to process a freshly added dimension.
+     */
     static void sendNewWorld(ServerPlayerEntity player, Identifier id, RandomDimension d) {
         ServerPlayNetworking.send(player, ModPayloads.WORLD_ADD, buildPacket(id, d));
     }
@@ -275,7 +293,9 @@ public interface PortalCreationLogic {
         return buf;
     }
 
-    /* Jingle signaling the portal is now usable. */
+    /**
+     * Jingle signaling the portal is now usable.
+     */
     static void runAfterEffects(ServerWorld world, BlockPos pos, boolean dimensionIsNew) {
         if (dimensionIsNew) world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);

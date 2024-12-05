@@ -45,16 +45,27 @@ public class PlatformMethods {
         throw new AssertionError();
     }
 
+    /**
+     * On NeoForge, this allows the world to be ticked.
+     * On Fabric, this invokes a server world event in Fabric API.
+     */
     @ExpectPlatform
     public static void onWorldLoad(Object mixin, ServerWorld world) {
         throw new AssertionError();
     }
 
+    /**
+     * Unfreeze the registry while the game is running.
+     * This is through DynReg on Fabric and a NeoForge exclusive method.
+     */
     @ExpectPlatform
     public static void unfreeze(Registry<?> registry) {
         throw new AssertionError();
     }
 
+    /**
+     * Try and add an item to an Item Group using Fabric API.
+     */
     @ExpectPlatform
     public static void freeze(Registry<?> registry) {
         throw new AssertionError();
@@ -117,26 +128,41 @@ public class PlatformMethods {
         throw new AssertionError();
     }
 
+    /**
+     * Check if a block is in the Black Dyed Conventional Tag.
+     */
     @ExpectPlatform
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceStill() {
         throw new AssertionError();
     }
 
+    /**
+     * Get the flowing variant of Iridescence fluid.
+     */
     @ExpectPlatform
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
         throw new AssertionError();
     }
 
+    /**
+     * Get the registry supplier for Iridescence fluid.
+     */
     @ExpectPlatform
     public static RegistrySupplier<FluidBlock> getIridBlockForReg() {
         throw new AssertionError();
     }
 
+    /**
+     * Read from the config path inside the mod JAR.
+     */
     @ExpectPlatform
     public static Path getRootConfigPath() {
         throw new AssertionError();
     }
 
+    /**
+     * Create an Item Tag.
+     */
     @ExpectPlatform
     public static TagKey<Item> createItemTag(String id) {
         throw new AssertionError();

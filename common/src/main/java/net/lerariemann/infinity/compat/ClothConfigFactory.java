@@ -34,10 +34,15 @@ import java.util.function.Consumer;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
+import static net.lerariemann.infinity.InfinityMod.rootConfigPath;
+import static net.lerariemann.infinity.util.InfinityMethods.fallback;
 import static net.minecraft.client.resource.language.I18n.hasTranslation;
 
 public class ClothConfigFactory {
 
+    /**
+     * Add a config entry to the screen.
+     */
     static void addEntry(AbstractConfigListEntry<?> newOption, Object category) {
         if (category instanceof ConfigCategory configCategory) {
             configCategory.addEntry(newOption);
@@ -47,6 +52,9 @@ public class ClothConfigFactory {
         }
     }
 
+    /**
+     * Create a config entry from JSON. This will then be added to the screen via addEntry.
+     */
     static void addElement(Map.Entry<String, JsonElement> field, Map.Entry<String, JsonElement> prevField, ConfigBuilder builder, Map.Entry<String, JsonElement> prevPrevField, Object category) {
         String currentCategory;
         String nestedCurrentCategory = "";
@@ -128,6 +136,9 @@ public class ClothConfigFactory {
 
     }
 
+    /**
+     * Create a Cloth Config screen.
+     */
     public static Screen create(Screen parent) {
         final var builder = ConfigBuilder.create()
                 .setParentScreen(parent)
@@ -162,6 +173,9 @@ public class ClothConfigFactory {
         return builder.build();
     }
 
+    /**
+     * Create a translatable text name for a config entry.
+     */
     static Text fieldName(Map.Entry<String, JsonElement> field, String category) {
         if (category.equals("general")) {
             category = "";
@@ -170,6 +184,9 @@ public class ClothConfigFactory {
         return Text.translatableWithFallback("config."+MOD_ID + "." + category + field.getKey(), fallback(field.getKey()));
     }
 
+    /**
+     * Create a translatable text tooltip for a config entry.
+     */
     @Environment(EnvType.CLIENT)
     static Text[] fieldTooltip(Map.Entry<String, JsonElement> field, String category, String nested) {
         if (category.equals("general")) {
@@ -183,7 +200,11 @@ public class ClothConfigFactory {
         return createTooltip(translationKey).toArray(new Text[0]);
     }
 
-    // Create a custom, potentially multi-line tooltip.
+    /**
+     * Create a custom, potentially multi-line tooltip.
+     * This code was adapted from Item Descriptions, as
+     * Cloth Config's tooltip wrapper can sometimes cause a crash.
+    */
     @Environment(EnvType.CLIENT)
     public static List<Text> createTooltip(String loreKey) {
         //Setup list to store (potentially multi-line) tooltip.
@@ -212,7 +233,9 @@ public class ClothConfigFactory {
         return lines;
     }
 
-    //Handles detection of when a line break should be added in a tooltip.
+    /**
+    * Handles detection of when a line break should be added in a tooltip.
+     */
     public static int getIndex(String translatedKey, int maxLength) {
         String subKey = translatedKey.substring(0, maxLength);
         int index;
@@ -224,7 +247,9 @@ public class ClothConfigFactory {
         return index;
     }
 
-    // Enable and disable config elements.
+    /**
+     * Enable and disable config elements.
+     */
     static <T> Consumer<T> mapSetter(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField) {
         return t -> {
             NbtCompound rootConfig = readRootConfigNbt();
@@ -258,6 +283,9 @@ public class ClothConfigFactory {
         };
     }
 
+    /**
+     * Check a config entry's default value.
+     */
     static Object getDefaultValue(Map.Entry<String, JsonElement> field, String prevField, String prevPrevField, String type) {
         NbtCompound rootConfig = readDefaultConfig();
         NbtCompound configPath = rootConfig;
@@ -275,26 +303,6 @@ public class ClothConfigFactory {
             case "int" -> configPath.getInt(field.getKey());
             default -> false;
         };
-    }
-
-
-    //Create fallbacks for config options without translations.
-    public static String fallback(String text) {
-        text = text.replace("_", " ");
-        //i am sure java has a smarter way to do title case, but this works too
-        StringBuilder newText = new StringBuilder();
-        int i = 0;
-        for (Character c : text.toCharArray()) {
-            if (i == 0) {
-                c = c.toString().toUpperCase().charAt(0);
-            }
-            newText.append(c);
-            i++;
-            if (c == ' ') {
-                i = 0;
-            }
-        }
-        return newText.toString();
     }
 
     static Path configPath() {
@@ -319,26 +327,34 @@ public class ClothConfigFactory {
         return readNbt(configPath()+("/.infinity-default.json"));
     }
 
+    /**
+     * Reads a given file and converts it to a NbtCompound.
+     */
     public static NbtCompound readNbt(String file) {
-        File newFile = new File(file);
-        String content;
         try {
-            content = FileUtils.readFileToString(newFile, StandardCharsets.UTF_8);
-            return StringNbtReader.parse(content);
-        } catch (IOException | CommandSyntaxException e) {
+            return StringNbtReader.parse(readConfig(file));
+        } catch (CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static JsonElement readJson(String file) {
+    /**
+     * Reads a config file, and returns a string with its contents.
+     */
+    public static String readConfig(String file) {
         File newFile = new File(file);
-        String content;
         try {
-            content = FileUtils.readFileToString(newFile, StandardCharsets.UTF_8);
-            return JsonParser.parseString(content);
+            return FileUtils.readFileToString(newFile, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Reads a given file and converts it to JSON.
+     */
+    public static JsonElement readJson(String file) {
+        return JsonParser.parseString(readConfig(file));
     }
 
 }
