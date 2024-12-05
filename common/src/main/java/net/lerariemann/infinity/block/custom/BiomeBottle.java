@@ -112,7 +112,6 @@ public class BiomeBottle extends BlockWithEntity {
         if (stack.hasNbt()) {
             assert stack.getNbt() != null;
             stack.getNbt().getCompound("BlockEntityTag").putInt("Charge", charge);
-            System.out.println(stack.getNbt().getCompound("BlockEntityTag").getInt("Charge"));
         }
     }
 

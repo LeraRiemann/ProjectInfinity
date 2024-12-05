@@ -28,7 +28,6 @@ public interface ShaderLoader {
         }
         Identifier iridShader = Iridescence.shouldApplyShader(client.player);
         if (iridShader != null) {
-            System.out.println(iridShader);
             ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(iridShader);
             return;
         }
