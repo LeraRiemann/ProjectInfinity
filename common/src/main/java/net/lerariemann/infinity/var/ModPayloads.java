@@ -1,8 +1,8 @@
 package net.lerariemann.infinity.var;
 
+import dev.architectury.networking.NetworkManager;
 import dev.architectury.platform.Platform;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import dev.architectury.utils.Env;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.loading.DimensionGrabber;
@@ -25,8 +25,7 @@ import java.util.Objects;
 public class ModPayloads {
 
     public static MinecraftClient client(Object context) {
-        ClientPlayNetworking.Context clientContext = (ClientPlayNetworking.Context) context;
-        return clientContext.client();
+        return MinecraftClient.getInstance();
     }
 
     public record WorldAddPayload(Identifier world_id, NbtCompound world_data) implements CustomPayload {
@@ -114,16 +113,18 @@ public class ModPayloads {
     }
 
     public static void registerPayloadsServer() {
-        PayloadTypeRegistry.playS2C().register(WorldAddPayload.ID, WorldAddPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(BiomeAddPayload.ID, BiomeAddPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(ShaderRePayload.ID, ShaderRePayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
+        if (Platform.getEnvironment() == Env.SERVER) {
+            NetworkManager.registerS2CPayloadType(WorldAddPayload.ID, WorldAddPayload.CODEC);
+            NetworkManager.registerS2CPayloadType(BiomeAddPayload.ID, BiomeAddPayload.CODEC);
+            NetworkManager.registerS2CPayloadType(ShaderRePayload.ID, ShaderRePayload.CODEC);
+            NetworkManager.registerS2CPayloadType(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
+        }
     }
 
     public static void registerPayloadsClient() {
-        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.WorldAddPayload.ID, ModPayloads::addWorld);
-        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.BiomeAddPayload.ID, ModPayloads::addBiome);
-        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.ShaderRePayload.ID, ModPayloads::receiveShader);
-        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.StarsRePayLoad.ID, ModPayloads::receiveStars);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, WorldAddPayload.ID, WorldAddPayload.CODEC, ModPayloads::addWorld);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, BiomeAddPayload.ID, BiomeAddPayload.CODEC, ModPayloads::addBiome);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, ShaderRePayload.ID, ShaderRePayload.CODEC, ModPayloads::receiveShader);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, StarsRePayLoad.ID, StarsRePayLoad.CODEC, ModPayloads::receiveStars);
     }
 }

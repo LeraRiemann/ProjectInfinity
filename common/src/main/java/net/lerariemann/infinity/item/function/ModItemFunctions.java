@@ -103,7 +103,7 @@ public class ModItemFunctions {
                 World world = pointer.world();
                 if (fluidModificationItem.placeFluid(null, world, blockPos, null)) {
                     fluidModificationItem.onEmptied(null, world, stack, blockPos);
-                    return this.decrementStackWithRemainder(pointer, stack, stack.getRecipeRemainder());
+                    return this.decrementStackWithRemainder(pointer, stack, Items.BUCKET.getDefaultStack());
                 } else {
                     return new ItemDispenserBehavior().dispense(pointer, stack);
                 }

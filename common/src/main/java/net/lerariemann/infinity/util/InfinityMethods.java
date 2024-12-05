@@ -1,8 +1,7 @@
 package net.lerariemann.infinity.util;
 
+import dev.architectury.networking.NetworkManager;
 import dev.architectury.platform.Platform;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
@@ -63,12 +62,12 @@ public interface InfinityMethods {
     }
 
     static void sendS2CPayload(ServerPlayerEntity entity, CustomPayload payload) {
-        ServerPlayNetworking.send(entity, payload);
+        NetworkManager.sendToPlayer(entity, payload);
     }
 
-    static void sendC2SPayload(CustomPayload payload) {
-        ClientPlayNetworking.send(payload);
-    }
+//    static void sendC2SPayload(CustomPayload payload) {
+//        ClientPlayNetworking.send(payload);
+//    }
 
     static double sample(int x, int y, int z) {
         return sampler.sample(x, y, z);

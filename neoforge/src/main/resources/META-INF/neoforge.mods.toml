@@ -35,20 +35,6 @@ versionRange = "[13.0.2,)"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.infinity]]
-modId = "fabric_api_base"
-type = "required"
-versionRange = "*"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.infinity]]
-modId = "fabric_networking_api_v1"
-type = "required"
-versionRange = "*"
-ordering = "AFTER"
-side = "BOTH"
-
 [[mixins]]
 config = "infinity.mixins.json"
 

@@ -2,7 +2,6 @@ package net.lerariemann.infinity.util.neoforge;
 
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.fluids.neoforge.IridescenceLiquidBlockNeoforge;
@@ -54,9 +53,9 @@ public class PlatformMethodsImpl {
 
     //Optional, requires Item Group API.
     public static void addAfter(RegistrySupplier<Item> supplier, RegistryKey<ItemGroup> group, Item item) {
-        if (InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
-            ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, supplier.get()));
-        }
+//        if (InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
+//            ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, supplier.get()));
+//        }
     }
 
     public static boolean isInBlack(BlockState state) {
