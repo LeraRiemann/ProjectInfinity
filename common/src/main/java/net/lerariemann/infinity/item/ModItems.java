@@ -79,32 +79,50 @@ public class ModItems {
         return ITEMS.register(item, () -> new Item(settings));
     }
 
+    /**
+     * Registers a Block Item through Architectury API.
+     */
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item.Settings settings) {
        return registerBlockItem(block, settings.arch$tab(group));
     }
 
+    /**
+     * Registers a Block Item through Architectury API.
+     */
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item) {
         return registerBlockItem(block, group, item, new Item.Settings());
     }
 
+    /**
+     * Adds an item to an Item Group through Architectury API if Fabric API is not installed.
+     */
     public static Item.Settings addFallbackTab(Item.Settings settings, RegistryKey<ItemGroup> group){
         if (!InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
             return settings.arch$tab(group);
         return settings;
     }
 
+    /**
+     * Registers a Block Item via Architectury API.
+     */
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item, Item.Settings settings) {
         RegistrySupplier<Item> registeredItem = registerBlockItem(block, addFallbackTab(settings, group));
         addAfter(registeredItem, group, item);
         return registeredItem;
     }
 
+    /**
+     * Registers an item via Architectury API.
+     */
     public static RegistrySupplier<Item> registerItem(String id, RegistryKey<ItemGroup> group, Item item) {
         RegistrySupplier<Item> registeredItem = register(id, addFallbackTab(new Item.Settings(), group));
         addAfter(registeredItem, group, item);
         return registeredItem;
     }
 
+    /**
+     * Registers a Transfinite Key item.
+     */
     public static RegistrySupplier<Item> registerKeyItem() {
         final Item.Settings keySettings = addFallbackTab(new Item.Settings(), ItemGroups.INGREDIENTS);
         RegistrySupplier<Item> registeredItem = ITEMS.register("key", () -> new TransfiniteKeyItem(keySettings));
@@ -112,6 +130,9 @@ public class ModItems {
         return registeredItem;
     }
 
+    /**
+     * Registers a Home Sweet Home item.
+     */
     public static RegistrySupplier<Item> registerHomeItem() {
         final Item.Settings homeSettings = addFallbackTab(new Item.Settings(), ItemGroups.INGREDIENTS).component(DataComponentTypes.FOOD,
                 new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of()));
@@ -120,6 +141,9 @@ public class ModItems {
         return registeredItem;
     }
 
+    /**
+     * Registers a Biome Bottle item.
+     */
     public static RegistrySupplier<Item> registerBottleItem() {
         final Item.Settings bottlesettings = addFallbackTab(new Item.Settings(), ItemGroups.FUNCTIONAL);
         RegistrySupplier<Item> registeredItem = ITEMS.register("biome_bottle", () ->
@@ -128,6 +152,9 @@ public class ModItems {
         return registeredItem;
     }
 
+    /**
+     * Creates item settings for Spawn Egg items.
+     */
     public static Item.Settings createSpawnEggSettings() {
         return new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
     }

@@ -28,14 +28,26 @@ import java.nio.charset.StandardCharsets;
 
 
 public interface WarpLogic {
+    /**
+     * Handles the /warpid command, converting their numeric ID to an Identifier
+     * and passing the data along to /warp.
+     */
     static void warpId(CommandContext<ServerCommandSource> context, long value) {
         warp(context, InfinityMethods.getDimId(value));
     }
 
+    /**
+     * Handles the /warp command, warping the player to their specified dimension.
+     * The player-provided text should have already been converted to an Identifier.
+     */
     static void warp(CommandContext<ServerCommandSource> context, Identifier value) {
         warpWithTimer(context.getSource().getPlayer(), value, 20, true);
     }
 
+    /**
+     * Handles moving a specified player to a specified dimension.
+     * This is used by both the warp commands and Iridescence.
+     */
     static void warpWithTimer(@Nullable ServerPlayerEntity player, Identifier value, int ticks, boolean increaseStats) {
         if (player == null) return;
         MinecraftServer s = player.getServer();
@@ -49,6 +61,9 @@ public interface WarpLogic {
         ((ServerPlayerEntityAccess)(player)).infinity$setWarpTimer(ticks, value);
     }
 
+    /**
+     * Teleport a player to their respawn point.
+     */
     static void respawnAlive(@Nullable ServerPlayerEntity player) {
         if (player == null) return;
         TeleportTarget targ = player.getRespawnTarget(true, TeleportTarget.NO_OP);
@@ -106,6 +121,10 @@ public interface WarpLogic {
         return (!bl3 && bl2 && bl);
     }
 
+    /**
+     * Convert a provided string into a dimension ID.
+     * This also checks if it matches an Easter Egg dimension.
+     */
     static Identifier getIdentifier(String text, MinecraftServer s) {
         if (text.equals("abatised redivides")) return World.END.getValue();
         if (text.isEmpty()) return InfinityMethods.getId("missingno");
@@ -113,15 +132,23 @@ public interface WarpLogic {
         return InfinityMethods.getDimId(getDimensionSeed(text, s));
     }
 
+    /**
+     * Check if a dimension exists and has not been timebombed.
+     */
     static boolean dimExists(ServerWorld world) {
         return (world != null && !((Timebombable)world).infinity$isTimebombed());
     }
 
+    /**
+     * Hashes text into dimension ID.
+     */
     static long getDimensionSeed(String text, MinecraftServer s) {
         return getDimensionSeed(text, RandomProvider.getProvider(s));
     }
 
-    /* Hashes text into dimension ID. */
+    /**
+     * Hashes text into dimension ID.
+     */
     static long getDimensionSeed(String text, RandomProvider prov) {
         HashCode f = Hashing.sha256().hashString(text + prov.salt, StandardCharsets.UTF_8);
         return InfinityMod.longArithmeticEnabled ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;

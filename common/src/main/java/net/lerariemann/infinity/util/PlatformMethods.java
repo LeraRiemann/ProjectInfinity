@@ -18,9 +18,15 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 import java.nio.file.Path;
 
-// Methods that are dependent on ExpectPlatform, and require a different implementation to work on both Fabric and NeoForge.
+/**
+ * Methods that are dependent on ExpectPlatform, and require a different implementation to work on both Fabric and NeoForge.
+ */
 public class PlatformMethods {
 
+    /**
+     * Creates an empty PacketByteBuf - intended to replace the method
+     * in Fabric API.
+     */
     @ExpectPlatform
     public static PacketByteBuf createPacketByteBufs() {
         throw new AssertionError();
@@ -31,51 +37,83 @@ public class PlatformMethods {
         throw new AssertionError();
     }
 
+    /**
+     * On NeoForge, this allows the world to be ticked.
+     * On Fabric, this invokes a server world event in Fabric API.
+     */
     @ExpectPlatform
     public static void onWorldLoad(Object mixin, ServerWorld world) {
         throw new AssertionError();
     }
 
+    /**
+     * Unfreeze the registry while the game is running.
+     * This is through DynReg on Fabric and a NeoForge exclusive method.
+     */
     @ExpectPlatform
     public static void unfreeze(Registry<?> registry) {
         throw new AssertionError();
     }
 
+    /**
+     * Try and add an item to an Item Group using Fabric API.
+     */
     @ExpectPlatform
     public static void addAfter(RegistrySupplier<Item> blockItem, RegistryKey<ItemGroup> group, Item item) {
         throw new AssertionError();
     }
 
+    /**
+     * Check if a block is in the Black Dyed Conventional Tag.
+     */
     @ExpectPlatform
     public static boolean isInBlack(BlockState state) {
         throw new AssertionError();
     }
 
+    /**
+     * Check if a block is in the White Dyed Conventional Tag.
+     */
     @ExpectPlatform
     public static boolean isInWhite(BlockState state) {
         throw new AssertionError();
     }
 
+    /**
+     * Get the still variant of Iridescence fluid.
+     */
     @ExpectPlatform
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceStill() {
         throw new AssertionError();
     }
 
+    /**
+     * Get the flowing variant of Iridescence fluid.
+     */
     @ExpectPlatform
     public static RegistrySupplier<? extends FlowableFluid> getIridescenceFlowing() {
         throw new AssertionError();
     }
 
+    /**
+     * Get the registry supplier for Iridescence fluid.
+     */
     @ExpectPlatform
     public static RegistrySupplier<FluidBlock> getIridBlockForReg() {
         throw new AssertionError();
     }
 
+    /**
+     * Read from the config path inside the mod JAR.
+     */
     @ExpectPlatform
     public static Path getRootConfigPath() {
         throw new AssertionError();
     }
 
+    /**
+     * Create an Item Tag.
+     */
     @ExpectPlatform
     public static TagKey<Item> createItemTag(String id) {
         throw new AssertionError();

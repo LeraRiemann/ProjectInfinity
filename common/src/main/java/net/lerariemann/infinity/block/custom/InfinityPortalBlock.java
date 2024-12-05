@@ -80,7 +80,9 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         return new InfinityPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
     }
 
-    /* This is being called when the portal is right-clicked. */
+    /**
+     * This is being called when the portal is right-clicked.
+     */
     @Override
     public ActionResult onUse(BlockState state, World w, BlockPos pos,
                               PlayerEntity player, BlockHitResult hit) {
@@ -121,9 +123,10 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 s.getWorld(RegistryKey.of(RegistryKeys.WORLD, l)) != null;
     }
 
-    /* Spawns colourful particles. */
-    @Environment(EnvType.CLIENT)
-    @Override
+    /**
+     * Spawns colourful particles.
+     */
+    @Environment(EnvType.CLIENT) @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, net.minecraft.util.math.random.Random random) {
         if (random.nextInt(100) == 0) {
             world.playSound((double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F, false);
@@ -166,7 +169,9 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 .add(ModItemFunctions.COLOR.get(), keycolor)).build());
     }
 
-    /* Adds logic for portal-based recipes. */
+    /**
+     * Adds logic for portal-based recipes.
+     */
     @Override
     public void onEntityCollision(BlockState state, World w, BlockPos pos, Entity entity) {
         if (w instanceof ServerWorld world
@@ -192,7 +197,9 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         super.onEntityCollision(state, w, pos, entity);
     }
 
-    /* Spawns chaos pawns in the portal. */
+    /**
+     * Spawns chaos pawns in the portal.
+     */
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random) {
         if (world.getDimension().natural() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)
@@ -215,9 +222,10 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         }
     }
 
-    /* This is called when something's trying to use the portal and returns the data on where they end up. */
-    @Nullable
-    @Override
+    /**
+     * This is called when something's trying to use the portal and returns the data on where they end up.
+     */
+    @Nullable @Override
     public TeleportTarget createTeleportTarget(ServerWorld worldFrom, Entity entity, BlockPos posFrom) {
         if (worldFrom.getBlockEntity(posFrom) instanceof InfinityPortalBlockEntity ipbe) {
             Identifier id = ipbe.getDimension();
@@ -233,13 +241,17 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         return getExistingTarget(worldFrom, posFrom, entity); //if something goes wrong, don't teleport anywhere
     }
 
-    /* Checks that synchronisation isn't broken. */
+    /**
+     * Checks that synchronisation isn't broken.
+     */
     static boolean isPosValid(ServerWorld worldTo, BlockPos posTo) {
         if (!WarpLogic.dimExists(worldTo)) return false;
         return ((posTo != null) && (worldTo.getBlockState(posTo).getBlock() instanceof NetherPortalBlock));
     }
 
-    /* Teleporting to already recorded coordinates. */
+    /**
+     * Teleporting to already recorded coordinates.
+     */
     public static TeleportTarget getExistingTarget(ServerWorld worldTo, BlockPos posTo, Entity teleportingEntity) {
         BlockState blockState = worldTo.getBlockState(posTo);
         BlockLocating.Rectangle rectangle = BlockLocating.getLargestRectangle(
@@ -251,12 +263,16 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 TeleportTarget.SEND_TRAVEL_THROUGH_PORTAL_PACKET.then(entityx -> entityx.addPortalChunkTicketAt(posTo)));
     }
 
-    /* Filter for portal blocks except infinity portals of other destinations. */
+    /**
+     * Filter for portal blocks except infinity portals of other destinations.
+     */
     public static boolean isValidDestinationWeak(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
         return (worldTo.getBlockState(posTo).isOf(Blocks.NETHER_PORTAL)) || isValidDestinationStrong(worldFrom, worldTo, posTo);
     }
 
-    /* Filter for infinity portals of the correct destination. */
+    /**
+     * Filter for infinity portals of the correct destination.
+     */
     public static boolean isValidDestinationStrong(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
         if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe) {
             return ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString());

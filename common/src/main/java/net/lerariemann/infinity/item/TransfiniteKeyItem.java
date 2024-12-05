@@ -1,12 +1,12 @@
 package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -25,17 +25,18 @@ public class TransfiniteKeyItem extends Item {
         MutableText mutableText;
         if (dimension != null) {
             String s = dimension.toString();
-            if (s.contains("infinity:generated_")) mutableText
-                    = Text.translatable("dimension.infinity.generated")
-                    .append(s.replace("infinity:generated_", ""));
-            else if (s.equals("minecraft:random")) mutableText = Text.translatable("dimension.infinity.randomise");
-            else {
-                String[] forFallback = dimension.getPath().replace("_", " ").split("\\s");
-                StringBuilder fallback = new StringBuilder();
-                for (String str: forFallback) fallback.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(" ");
-                mutableText = MutableText.of(new TranslatableTextContent(Util.createTranslationKey("dimension", dimension),
-                        fallback.toString().trim(), TranslatableTextContent.EMPTY_ARGUMENTS));
-            }
+            // Keys to randomly generated dimensions.
+            if (s.contains("infinity:generated_"))
+                mutableText = Text.translatable("dimension.infinity.generated")
+                        .append(s.replace("infinity:generated_", ""));
+            // Keys without a dimension attached.
+            else if (s.equals("minecraft:random"))
+                mutableText = Text.translatable("dimension.infinity.randomise");
+            // Easter Egg dimensions.
+            else
+                mutableText = Text.translatableWithFallback(
+                        Util.createTranslationKey("dimension", dimension),
+                        InfinityMethods.fallback(dimension.getPath()));
         }
         else {
             mutableText = Text.translatable("dimension.infinity.randomise");
