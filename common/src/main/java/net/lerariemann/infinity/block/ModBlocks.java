@@ -2,6 +2,7 @@ package net.lerariemann.infinity.block;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.custom.*;
 import net.minecraft.block.*;
@@ -15,7 +16,7 @@ import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(MOD_ID, RegistryKeys.BLOCK);
     public static RegistryKey<Block> registryKey(String s) {
-        Identifier id = InfinityMod.getId(s);
+        Identifier id = InfinityMethods.getId(s);
         return RegistryKey.of(RegistryKeys.BLOCK, id);
     }
 
@@ -38,23 +39,23 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> BOOK_BOX = BLOCKS.register("book_box", () ->
             new BookBoxBlock(copy("book_box", Blocks.BOOKSHELF)));
     public static final RegistrySupplier<Block> CURSOR = BLOCKS.register("cursor", () ->
-            new Block(AbstractBlock.Settings.create().strength(1.8f).mapColor(MapColor.GREEN).sounds(BlockSoundGroup.STONE)));
+            new Block(create("cursor").strength(1.8f).mapColor(MapColor.GREEN).sounds(BlockSoundGroup.STONE)));
     public static final RegistrySupplier<Block> PORTAL = BLOCKS.register("neither_portal", () ->
-            new InfinityPortalBlock(AbstractBlock.Settings.copy(Blocks.NETHER_PORTAL)));
+            new InfinityPortalBlock(copy("neither_portal", Blocks.NETHER_PORTAL)));
     public static final RegistrySupplier<Block> NETHERITE_STAIRS = BLOCKS.register("netherite_stairs", () ->
             new ModStairs(Blocks.NETHERITE_BLOCK.getDefaultState(), copy("netherite_stairs", Blocks.NETHERITE_BLOCK)));
     public static final RegistrySupplier<Block> NETHERITE_SLAB = BLOCKS.register("netherite_slab", () ->
             new SlabBlock(copy("netherite_slab", Blocks.NETHERITE_BLOCK)));
     public static final RegistrySupplier<Block> TIME_BOMB = BLOCKS.register("timebomb", () ->
-            new TimeBombBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(state -> 15)));
+            new TimeBombBlock(copy("timebomb", Blocks.BEDROCK).nonOpaque().luminance(state -> 15)));
     public static final RegistrySupplier<FluidBlock> IRIDESCENCE = PlatformMethods.getIridBlockForReg();
     public static final RegistrySupplier<Block> BIOME_BOTTLE = BLOCKS.register("biome_bottle", () ->
-            new BiomeBottle(AbstractBlock.Settings.copy(Blocks.BEACON).luminance(state -> state.get(BiomeBottle.LEVEL))
+            new BiomeBottle(copy("biome_bottle", Blocks.BEACON).luminance(state -> state.get(BiomeBottle.LEVEL))
                     .sounds(BlockSoundGroup.GLASS)));
     public static final RegistrySupplier<Block> IRIDESCENT_WOOL = BLOCKS.register("iridescent_wool", () ->
-            new IridescentBlock(AbstractBlock.Settings.copy(Blocks.MAGENTA_WOOL)));
+            new IridescentBlock(copy("iridescent_wool", Blocks.MAGENTA_WOOL)));
     public static final RegistrySupplier<Block> IRIDESCENT_CARPET = BLOCKS.register("iridescent_carpet", () ->
-            new IridescentBlock.Carpet(AbstractBlock.Settings.copy(Blocks.MAGENTA_CARPET)));
+            new IridescentBlock.Carpet(copy("iridescent_carpet", Blocks.MAGENTA_CARPET)));
 
 
     public static void registerModBlocks() {

@@ -309,7 +309,7 @@ public interface ConfigGenerator {
         registry.getKeys().forEach(key -> {
             Identifier id = key.getValue();
             if (!id.getNamespace().equals("infinity") || !id.getPath().contains("_") || id.getPath().equals("indev_house")) {
-                Optional<Structure> o = registry.getOrEmpty(key);
+                Optional<Structure> o = registry.getOptionalValue(key);
                 o.ifPresent(structure -> {
                     String step = structure.getFeatureGenerationStep().name().toLowerCase();
                     String adaptation = structure.getTerrainAdaptation().name().toLowerCase();
@@ -360,7 +360,7 @@ public interface ConfigGenerator {
         generateBlocks(w, inAir, onStone);
         MinecraftServer s = Objects.requireNonNull(w.getServer());
         SurfaceRuleScanner.scan(s);
-        generate(s.getRegistryManager().get(RegistryKeys.BIOME), "misc", "biomes", true);
+        generate(s.getRegistryManager().getOrThrow(RegistryKeys.BIOME), "misc", "biomes", true);
         generateStructures(s);
     }
 

@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 
 public record EffectGiver(RegistryEntry<StatusEffect> id, int duration, int amplifier, int cooldown) {
     public static RegistryEntry<StatusEffect> effectOf(String id) {
-        RegistryEntry<StatusEffect> entry = Registries.STATUS_EFFECT.entryOf(RegistryKey.of(RegistryKeys.STATUS_EFFECT, Identifier.of(id)));
+        RegistryEntry<StatusEffect> entry = Registries.STATUS_EFFECT.getOrThrow(RegistryKey.of(RegistryKeys.STATUS_EFFECT, Identifier.of(id)));
         if (entry == null || entry.value() instanceof InstantStatusEffect) return null;
         return entry;
     }

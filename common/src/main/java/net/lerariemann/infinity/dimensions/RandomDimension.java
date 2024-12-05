@@ -154,7 +154,7 @@ public class RandomDimension {
     }
 
     public <T> boolean doesNotContain(RegistryKey<? extends Registry<T>> key, String name) {
-        return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMethods.getId(name))));
+        return !(server.getRegistryManager().getOrThrow(key).contains(RegistryKey.of(key, InfinityMethods.getId(name))));
     }
 
     boolean isOverworldLike() {

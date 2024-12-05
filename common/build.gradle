@@ -34,7 +34,7 @@ dependencies {
 //    modImplementation("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cct_version")
 
     // EMI
-    modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version+$minecraft_version:api")
+//    modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version+$minecraft_version:api")
 
 }
 

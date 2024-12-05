@@ -54,8 +54,8 @@ dependencies {
     }
 
     // EMI
-    modCompileOnly("dev.emi:emi-fabric:$emi_version+$minecraft_version:api")
-    modLocalRuntime("dev.emi:emi-fabric:$emi_version+$minecraft_version")
+//    modCompileOnly("dev.emi:emi-fabric:$emi_version+$minecraft_version:api")
+//    modLocalRuntime("dev.emi:emi-fabric:$emi_version+$minecraft_version")
 
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }

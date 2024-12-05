@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(LavaFluid.class)
 public class LavaFluidMixin {
     @ModifyExpressionValue(method = "onRandomTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
-    boolean inj(boolean original, @Local(argsOnly = true) World world) {
+    boolean inj(boolean original, @Local(argsOnly = true) ServerWorld world) {
         if (InfinityMethods.isInfinity(world)) return false;
         return original;
     }

@@ -47,18 +47,18 @@ public class ModItems {
     public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
     public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () ->
             new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0, 0xFFFFFF,
-                    createSpawnEggSettings()));
+                    createSpawnEggSettings("chaos_pawn_spawn_egg")));
     public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = ITEMS.register("chaos_creeper_spawn_egg", () ->
             new ArchitecturySpawnEggItem(ModEntities.CHAOS_CREEPER, 0x91BD59, 0x78A7FF,
-                    createSpawnEggSettings()));
+                    createSpawnEggSettings("chaos_creeper_spawn_egg")));
     public static final RegistrySupplier<Item> CHAOS_SKELETON_SPAWN_EGG = ITEMS.register("chaos_skeleton_spawn_egg", () ->
             new ArchitecturySpawnEggItem(ModEntities.CHAOS_SKELETON, 0xF3CFB9, 0x87A363,
-                    createSpawnEggSettings()));
+                    createSpawnEggSettings("chaos_skeleton_spawn_egg")));
     public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = ITEMS.register("chaos_slime_spawn_egg",  () ->
             new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME, 0xAA77DD, 0xFF66FF,
-                    createSpawnEggSettings()));
+                    createSpawnEggSettings("chaos_slime_spawn_egg")));
     public static final RegistrySupplier<Item> IRIDESCENCE_BUCKET = ITEMS.register("iridescence_bucket", () ->
-            new ArchitecturyBucketItem(PlatformMethods.getIridescenceStill(), new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1)));
+            new ArchitecturyBucketItem(PlatformMethods.getIridescenceStill(), settings("iridescence_bucket").recipeRemainder(Items.BUCKET).maxCount(1)));
     public static final RegistrySupplier<Item> WHITE_MATTER =
             registerItem("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
     public static final RegistrySupplier<Item> BLACK_MATTER =
@@ -79,6 +79,14 @@ public class ModItems {
         return ITEMS.register(item, () -> new Item(settings));
     }
 
+    public static Item.Settings settings(String id) {
+        return new Item.Settings().registryKey(registryKey(id));
+    }
+
+    public static RegistryKey<Item> registryKey(String id) {
+        return RegistryKey.of(RegistryKeys.ITEM, InfinityMethods.getId(id));
+    }
+
     /**
      * Registers a Block Item through Architectury API.
      */
@@ -90,7 +98,7 @@ public class ModItems {
      * Registers a Block Item through Architectury API.
      */
     public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item) {
-        return registerBlockItem(block, group, item, new Item.Settings());
+        return registerBlockItem(block, group, item, settings(block.getId().getPath()));
     }
 
     /**
@@ -115,7 +123,7 @@ public class ModItems {
      * Registers an item via Architectury API.
      */
     public static RegistrySupplier<Item> registerItem(String id, RegistryKey<ItemGroup> group, Item item) {
-        RegistrySupplier<Item> registeredItem = register(id, addFallbackTab(new Item.Settings(), group));
+        RegistrySupplier<Item> registeredItem = register(id, addFallbackTab(settings(id), group));
         addAfter(registeredItem, group, item);
         return registeredItem;
     }
@@ -124,7 +132,7 @@ public class ModItems {
      * Registers a Transfinite Key item.
      */
     public static RegistrySupplier<Item> registerKeyItem() {
-        final Item.Settings keySettings = addFallbackTab(new Item.Settings(), ItemGroups.INGREDIENTS);
+        final Item.Settings keySettings = addFallbackTab(settings("key"), ItemGroups.INGREDIENTS);
         RegistrySupplier<Item> registeredItem = ITEMS.register("key", () -> new TransfiniteKeyItem(keySettings));
         addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.OMINOUS_TRIAL_KEY);
         return registeredItem;
@@ -134,9 +142,10 @@ public class ModItems {
      * Registers a Home Sweet Home item.
      */
     public static RegistrySupplier<Item> registerHomeItem() {
-        final Item.Settings homeSettings = addFallbackTab(new Item.Settings(), ItemGroups.INGREDIENTS).component(DataComponentTypes.FOOD,
-                new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of()));
-        RegistrySupplier<Item> registeredItem = ITEMS.register("fine_item", () -> new HomeItem(homeSettings));
+        String id = "fine_item";
+        final Item.Settings homeSettings = addFallbackTab(settings(id), ItemGroups.INGREDIENTS).component(DataComponentTypes.FOOD,
+                new FoodComponent(0, 0, true));
+        RegistrySupplier<Item> registeredItem = ITEMS.register(id, () -> new HomeItem(homeSettings));
         addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
         return registeredItem;
     }
@@ -145,8 +154,9 @@ public class ModItems {
      * Registers a Biome Bottle item.
      */
     public static RegistrySupplier<Item> registerBottleItem() {
-        final Item.Settings bottlesettings = addFallbackTab(new Item.Settings(), ItemGroups.FUNCTIONAL);
-        RegistrySupplier<Item> registeredItem = ITEMS.register("biome_bottle", () ->
+        String id = "biome_bottle";
+        final Item.Settings bottlesettings = addFallbackTab(settings(id), ItemGroups.FUNCTIONAL);
+        RegistrySupplier<Item> registeredItem = ITEMS.register(id, () ->
                 new BiomeBottleItem(ModBlocks.BIOME_BOTTLE.get(), bottlesettings));
         addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE);
         return registeredItem;
@@ -155,8 +165,8 @@ public class ModItems {
     /**
      * Creates item settings for Spawn Egg items.
      */
-    public static Item.Settings createSpawnEggSettings() {
-        return new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
+    public static Item.Settings createSpawnEggSettings(String id) {
+        return settings(id).arch$tab(ItemGroups.SPAWN_EGGS);
     }
 
     public static void registerModItems() {
