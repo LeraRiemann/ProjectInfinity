@@ -1,8 +1,0 @@
-{
-    "type": "emi:info",
-    "stacks": [
-        "item:minecraft:lectern",
-      "item:infinity:altar"
-    ],
-    "text": "emi.info.altar"
-  }

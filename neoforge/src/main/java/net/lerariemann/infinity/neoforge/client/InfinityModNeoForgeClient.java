@@ -3,12 +3,14 @@ package net.lerariemann.infinity.neoforge.client;
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.InfinityModClient;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.config.neoforge.ModConfigFactory;
+import net.lerariemann.infinity.compat.neoforge.ModConfigFactory;
 import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.fluids.FluidTypes;
+import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -44,17 +46,19 @@ public class InfinityModNeoForgeClient {
     // Apply colour handlers to tint Neither Portals and Book Boxes.
     @SubscribeEvent
     public static void registerBlockColorHandlers(RegisterColorHandlersEvent.Block event) {
-        event.register(PlatformMethods::getNeitherPortalColour, ModBlocks.NEITHER_PORTAL.get());
-        event.register(PlatformMethods::getBookBoxColour, ModBlocks.BOOK_BOX.get());
-        event.register(PlatformMethods::getBookBoxColour, ModBlocks.IRIDESCENCE.get());
+        event.register(InfinityMethods::getInfinityPortalColor, ModBlocks.PORTAL.get());
+        event.register(InfinityMethods::getBookBoxColor, ModBlocks.BOOK_BOX.get());
+        event.register(InfinityMethods::getBookBoxColor, ModBlocks.IRIDESCENCE.get());
+        event.register(InfinityMethods::getBiomeBottleColor, ModBlocks.BIOME_BOTTLE.get());
     }
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(PlatformMethods::getKeyColor, ModItems.TRANSFINITE_KEY.get());
+        event.register(InfinityMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get());
+        event.register(InfinityMethods::getOverlayColorFromComponents, ModItems.BIOME_BOTTLE_ITEM.get());
     }
     @SubscribeEvent
     public static void registerModelPredicates(FMLClientSetupEvent event) {
-        ModItems.registerModelPredicates();
+        ModItemFunctions.registerModelPredicates();
     }
 
     @SubscribeEvent
@@ -68,7 +72,7 @@ public class InfinityModNeoForgeClient {
         @SubscribeEvent
         static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
             event.registerFluidType(new IClientFluidTypeExtensions() {
-                private static final Identifier IRIDESCENCE = InfinityMod.getId("block/iridescence");
+                private static final Identifier IRIDESCENCE = InfinityMethods.getId("block/iridescence");
 
                 @Override
                 public @NotNull Identifier getStillTexture() {

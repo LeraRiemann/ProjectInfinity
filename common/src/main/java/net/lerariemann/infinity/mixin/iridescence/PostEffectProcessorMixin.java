@@ -29,8 +29,8 @@ public abstract class PostEffectProcessorMixin {
         if (name.contains("infinity")) {
             time += tickDelta;
 
-            while (time > 200.0F) {
-                time -= 200.0F;
+            while (time > 2000.0F) {
+                time -= 2000.0F;
             }
 
             int i = 9728;
@@ -42,7 +42,7 @@ public abstract class PostEffectProcessorMixin {
                     i = j;
                 }
 
-                postEffectPass.render(this.time / 200.0F);
+                postEffectPass.render(this.time / 2000.0F);
             }
 
             this.setTexFilter(9728);

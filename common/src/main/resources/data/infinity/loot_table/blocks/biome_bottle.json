@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "infinity:biome_bottle",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "infinity:color",
+                "infinity:charge",
+                "infinity:biome_contents",
+                "minecraft:rarity"
+              ],
+              "source": "block_entity"
+            },
+            {
+              "function": "infinity:set_biome_bottle_level"
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

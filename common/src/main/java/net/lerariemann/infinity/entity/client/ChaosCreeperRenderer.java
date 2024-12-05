@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.entity.client;
 
-import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.render.entity.CreeperEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.model.CreeperEntityModel;
@@ -11,7 +11,7 @@ import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.util.Identifier;
 
 public class ChaosCreeperRenderer extends CreeperEntityRenderer {
-    private static final Identifier TEXTURE2 = InfinityMod.getId("textures/entity/creeper.png");
+    private static final Identifier TEXTURE2 = InfinityMethods.getId("textures/entity/creeper.png");
 
     @Override
     public Identifier getTexture(CreeperEntityRenderState creeperEntityRenderState) {

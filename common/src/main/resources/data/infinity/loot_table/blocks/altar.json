@@ -6,7 +6,12 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "infinity:altar"
+          "name": "infinity:altar",
+          "functions": [
+            {
+              "function": "infinity:set_altar_state"
+            }
+          ]
         }
       ],
       "conditions": [

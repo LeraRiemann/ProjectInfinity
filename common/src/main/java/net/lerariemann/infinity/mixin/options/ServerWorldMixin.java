@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.mixin.options;
 
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -41,7 +41,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     @Unique
     public InfinityOptions infinity$options;
     @Unique
-    public int infinity$timebombed;
+    public int infinity$timebombProgress;
 
     protected ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, DynamicRegistryManager registryManager, RegistryEntry<DimensionType> dimensionEntry, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long biomeAccess, long seed, int maxChainedNeighborUpdates) {
         super(properties, registryRef, registryManager, dimensionEntry, isClient, debugWorld, seed, maxChainedNeighborUpdates);
@@ -49,35 +49,49 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injected(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<SpecialSpawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
-        infinity$options = InfinityOptions.generate(server, worldKey);
+        infinity$options = InfinityOptions.generate(server, worldKey.getValue());
         DimensionType t = getDimension();
         ((InfinityOptionsAccess)(Object)t).infinity$setOptions(infinity$options);
-        infinity$timebombed = 0;
+        infinity$timebombProgress = 0;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void injected2(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        if (InfinityMod.isInfinity(getRegistryKey()) && infinity$timebombed > 0) infinity$timebombed++;
+        if (InfinityMethods.isInfinity(getRegistryKey()) && infinity$timebombProgress > 0) infinity$timebombProgress++;
     }
 
     @Redirect(method="tickWeather", at=@At(value="INVOKE", target="Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
     private boolean injected3(GameRules instance, GameRules.Key<GameRules.BooleanRule> rule) {
-        return instance.getBoolean(rule) && !InfinityMod.isInfinity(getRegistryKey());
+        return instance.getBoolean(rule) && !InfinityMethods.isInfinity(getRegistryKey());
     }
 
     @Override
-    public void infinity$timebomb(int i) {
-        if(InfinityMod.isInfinity(getRegistryKey())) infinity$timebombed = i;
+    public void infinity$timebomb() {
+        if(InfinityMethods.isInfinity(getRegistryKey())) {
+            infinity$timebombProgress = 1;
+        }
+    }
+    @Override
+    public boolean infinity$tryRestore() {
+        if(InfinityMethods.isInfinity(getRegistryKey()) && (infinity$timebombProgress > Timebombable.cooldownTicks)) {
+            infinity$timebombProgress = 0;
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public int infinity$isTimebombed() {
-        return infinity$timebombed;
+    public boolean infinity$isTimebombed() {
+        return infinity$timebombProgress > 0;
+    }
+    @Override
+    public int infinity$getTimebombProgress() {
+        return infinity$timebombProgress;
     }
 
     @Override
     public InfinityOptions infinity$getOptions() {
-        return infinity$options;
+        return InfinityOptions.nullSafe(infinity$options);
     }
     @Override
     public void infinity$setOptions(InfinityOptions options) {

@@ -2,11 +2,15 @@ package net.lerariemann.infinity.neoforge;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.fluids.FluidTypes;
-import net.lerariemann.infinity.fluids.ModEffectsNeoforge;
-import net.lerariemann.infinity.fluids.ModFluidsNeoforge;
+import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
+import net.lerariemann.infinity.fluids.neoforge.ModEffectsNeoforge;
+import net.lerariemann.infinity.fluids.neoforge.ModFluidsNeoforge;
+import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.neoforge.client.InfinityModNeoForgeClient;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.var.ModStats;
+import net.minecraft.registry.tag.ItemTags;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,7 +29,7 @@ public final class InfinityModNeoForge {
         if (FMLEnvironment.dist == Dist.CLIENT) InfinityModNeoForgeClient.initializeClient(eventBus);
         // Run any remaining tasks that require waiting for the registry to freeze on NeoForge.
         eventBus.addListener(InfinityModNeoForge::registerSpawns);
-        eventBus.addListener(InfinityModNeoForge::loadStats);
+        eventBus.addListener(InfinityModNeoForge::commonSetup);
         eventBus.addListener(FluidTypes::registerFluidInteractions);
 
         FluidTypes.registerFluidTypes(eventBus);
@@ -39,8 +43,9 @@ public final class InfinityModNeoForge {
     }
 
     @SubscribeEvent
-    public static void loadStats(FMLCommonSetupEvent event) {
+    public static void commonSetup(FMLCommonSetupEvent event) {
         ModStats.load();
+        ModItemFunctions.registerDispenserBehaviour();
     }
 
 }

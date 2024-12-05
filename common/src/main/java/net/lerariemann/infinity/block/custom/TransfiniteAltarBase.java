@@ -1,16 +1,20 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
 import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.var.ModCriteria;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -24,8 +28,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-
-import java.util.Objects;
 
 public class TransfiniteAltarBase extends Block {
     public static final BooleanProperty FLOWER = TransfiniteAltar.FLOWER;
@@ -72,8 +74,15 @@ public class TransfiniteAltarBase extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
-        if (!world.isClient) {
-            String s = RandomProvider.getProvider(Objects.requireNonNull(world.getServer())).altarKey;
+        if (world instanceof ServerWorld serverWorld) {
+            if (itemStack.isEmpty() &&
+                    world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
+                if (player instanceof ServerPlayerEntity spe) ModCriteria.BIOME_BOTTLE.get().trigger(spe, bbbe);
+                bbbe.startTicking();
+            }
+
+            //activation
+            String s = RandomProvider.getProvider(serverWorld.getServer()).altarKey;
             boolean bl0 = s.isBlank() ? itemStack.isEmpty() : itemStack.isOf(Registries.ITEM.get(Identifier.of(s)));
             if (bl0) {
                 boolean bl = testSpace(world, pos);
@@ -86,6 +95,8 @@ public class TransfiniteAltarBase extends Block {
                 ignite(world, pos, state);
                 return ActionResult.SUCCESS;
             }
+
+            //coloration
             if (itemStack.getItem() instanceof DyeItem) {
                 int i = -1;
                 if (itemStack.isOf(Items.RED_DYE)) i = 1;
@@ -99,12 +110,15 @@ public class TransfiniteAltarBase extends Block {
                     setColor(world, pos, state, i);
                     world.playSound(null, pos, SoundEvents.ITEM_DYE_USE, SoundCategory.BLOCKS, 1f, 1f);
                 }
+                return ActionResult.SUCCESS;
             }
             if (itemStack.isOf(Items.SUNFLOWER)) {
                 world.setBlockState(pos, state.with(FLOWER, !state.get(FLOWER)));
                 world.playSound(null, pos, SoundEvents.BLOCK_AZALEA_LEAVES_PLACE, SoundCategory.BLOCKS, 1f, 1f);
+                return ActionResult.SUCCESS;
             }
         }
-        return ActionResult.FAIL;
+        if (itemStack.isOf(Items.SUNFLOWER)) return ActionResult.SUCCESS;
+        return super.onUse(state, world, pos, player, hit);
     }
 }

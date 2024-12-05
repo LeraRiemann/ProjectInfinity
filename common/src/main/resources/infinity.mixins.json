@@ -16,11 +16,13 @@
     "MobEntityMixin",
     "NetherPortalBlockMixin",
     "NetherPortalMixin",
-    "PortalForcerMixin",
+    "PointOfInterestStorageMixin",
     "ServerPlayerEntityMixin",
     "SlimeEntityMixin",
     "WorldChunkMixin",
+    "iridescence.ConcretePowderBlockMixin",
     "iridescence.IridescenceMixin",
+    "iridescence.LandPathNodeMakerMixin",
     "iridescence.LivingEntityMixin",
     "iridescence.StatusEffectInstanceMixin",
     "mobs.ElderGuardianEntityMixin",
@@ -40,21 +42,19 @@
     "mobs.passive.TurtleEntityMixin",
     "mobs.passive.WolfEntityMixin",
     "options.DimensionTypeMixin",
+    "options.EntityMixin",
     "options.PlayerManagerMixin",
     "options.ServerWorldMixin"
   ],
   "client": [
-    "client.EntityMixin",
     "iridescence.LivingEntityRendererMixin",
     "iridescence.PostEffectProcessorMixin",
     "options.BackgroundRendererMixin",
     "options.ClientWorldMixin",
     "options.GameRendererMixin",
     "options.MinecraftClientMixin",
+    "options.SoundSystemMixin",
     "options.WorldRendererMixin"
-  ],
-  "server": [
-    "options.EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

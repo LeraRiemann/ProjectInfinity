@@ -4,13 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.world.gen.densityfunction.DensityFunction;
-
-import java.util.Arrays;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
@@ -128,7 +127,8 @@ public class ModDensityFunctionTypes {
         }
 
         static double r(NoisePos pos) {
-            return Math.sqrt(pos.blockX()*pos.blockX() + pos.blockZ()*pos.blockZ());
+            double res = Math.sqrt(pos.blockX()*pos.blockX() + pos.blockZ()*pos.blockZ());
+            return Math.max(res, 0.01);
         }
     }
 
@@ -260,18 +260,7 @@ public class ModDensityFunctionTypes {
         }
     }
 
-    final static DoublePerlinNoiseSampler sampler, sampler2;
-
-    static {
-        sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, gen(8));
-        sampler2 = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -6, gen(8));
-    }
-
-    static double[] gen(int octaves){
-        double[] a = new double[octaves];
-        Arrays.fill(a, 1);
-        return a;
-    }
+    static DoublePerlinNoiseSampler sampler, sampler2;
 
     public record Classic(int sealevel) implements DensityFunction.Base {
         public static final CodecHolder<Classic> CODEC_HOLDER = CodecHolder.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -316,6 +305,8 @@ public class ModDensityFunctionTypes {
     }
 
     public static void registerFunctions() {
+        sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, Iridescence.genOctaves(8));
+        sampler2 = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -6, Iridescence.genOctaves(8));
         for (NonbinaryOperation.Type enum_ : NonbinaryOperation.Type.values()) {
             register(enum_.name, enum_.codecHolder);
         }
@@ -326,5 +317,4 @@ public class ModDensityFunctionTypes {
         register("classic", Classic.CODEC_HOLDER);
         DENSITY_FUNCTION_TYPES.register();
     }
-
 }

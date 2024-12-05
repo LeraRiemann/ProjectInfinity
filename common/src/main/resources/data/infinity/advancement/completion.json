@@ -158,7 +158,7 @@
       "translate": "advancements.infinity.completion.description"
     },
     "frame": "goal",
-    "hidden": true,
+    "hidden": false,
     "icon": {
       "id": "minecraft:nether_star"
     },

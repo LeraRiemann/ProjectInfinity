@@ -1,0 +1,44 @@
+{
+  "parent": "infinity:iridescence",
+  "display": {
+    "icon": {
+      "id": "infinity:key"
+    },
+    "title": {
+      "translate": "advancements.infinity.acid_test.title"
+    },
+    "description": {
+      "translate": "advancements.infinity.acid_test.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "creeper": {
+      "trigger": "infinity:convert_mob",
+      "conditions": {
+        "data": "minecraft:creeper"
+      }
+    },
+    "skeleton": {
+      "trigger": "infinity:convert_mob",
+      "conditions": {
+        "data": "minecraft:skeleton"
+      }
+    },
+    "slime": {
+      "trigger": "infinity:convert_mob",
+      "conditions": {
+        "data": "minecraft:slime"
+      }
+    },
+    "pawn": {
+      "trigger": "infinity:convert_mob",
+      "conditions": {
+        "data": "infinity:chaos_pawn"
+      }
+    }
+  }
+}

@@ -1,5 +1,20 @@
 {
-  "infinity_version": 1010006,
+  "infinity_version": 2002001,
+  "easter-options": {
+    "portal_color": {
+      "type": "checker",
+      "values": [
+        7848414,
+        14331317,
+        16777215
+      ]
+    },
+    "star_brightness_night": 1.0,
+    "num_stars": 3000,
+    "iridescent_map": {
+      "type": "linear"
+    }
+  },
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 25,

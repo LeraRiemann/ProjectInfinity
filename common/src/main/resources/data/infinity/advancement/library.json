@@ -1,5 +1,5 @@
 {
-  "parent": "infinity:book_box",
+  "parent": "infinity:multiverse_root",
   "criteria": {
     "library": {
       "conditions": {
@@ -14,7 +14,7 @@
       "translate": "advancements.infinity.library.description"
     },
     "frame": "task",
-    "hidden": true,
+    "hidden": false,
     "icon": {
       "id": "infinity:book_box"
     },

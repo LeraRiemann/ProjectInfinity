@@ -1,0 +1,28 @@
+{
+  "parent": "infinity:multiverse_root",
+  "display": {
+    "icon": {
+      "id": "infinity:fine_item"
+    },
+    "title": {
+      "translate": "advancements.infinity.home_sweet_home.title"
+    },
+    "description": {
+      "translate": "advancements.infinity.home_sweet_home.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "hsh": {
+      "conditions": {
+        "item": {
+          "items": "infinity:fine_item"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "minecraft:light_gray_stained_glass_pane"
+    },
+    "M": {
+      "item": "infinity:black_matter"
+    }
+  },
+  "pattern": [
+    "PPP",
+    "PMP",
+    "PPP"
+  ],
+  "result": {
+    "count": 8,
+    "id": "infinity:footprint"
+  },
+  "show_notification": true
+}

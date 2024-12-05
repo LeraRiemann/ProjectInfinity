@@ -3,10 +3,11 @@ package net.lerariemann.infinity.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
+import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
@@ -16,6 +17,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.Registry;
@@ -23,7 +25,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -71,7 +72,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method="findRespawnPosition", at = @At("HEAD"), cancellable = true)
     private static void injected(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> cir) {
-        if (((Timebombable)world).infinity$isTimebombed() > 0) cir.setReturnValue(Optional.empty());
+        if (((Timebombable)world).infinity$isTimebombed()) cir.setReturnValue(Optional.empty());
     }
 
     /* When the player is using the Infinity portal, this modifies the portal on the other side if needed. */
@@ -87,7 +88,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
                     pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
                 Identifier dimensionName = registryKey.getValue();
 
-                NeitherPortalBlock.modifyPortalRecursive(destination, pos2, destination.getBlockState(pos), dimensionName, true);
+                PortalCreationLogic.modifyPortalRecursive(destination, pos2, dimensionName, true);
                 break;
             }
         }
@@ -96,12 +97,20 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Inject(method = "teleportTo(Lnet/minecraft/world/TeleportTarget;)Lnet/minecraft/server/network/ServerPlayerEntity;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerManager()Lnet/minecraft/server/PlayerManager;"))
     private void injected3(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir) {
-        PlatformMethods.sendServerPlayerEntity(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(teleportTarget.world()));
-        PlatformMethods.sendServerPlayerEntity(((ServerPlayerEntity)(Object)this), ModPayloads.StarsRePayLoad.INSTANCE);
+        InfinityMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(teleportTarget.world()));
+        InfinityMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.StarsRePayLoad.INSTANCE);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {
+        /* Handle infinity options */
+        InfinityOptions opt = InfinityOptions.access(getWorld());
+        if (!opt.effect.isEmpty()) {
+            if (getWorld().getTime() % opt.effect.cooldown() == 0) {
+                addStatusEffect(new StatusEffectInstance(opt.effect.id(), opt.effect.duration(), opt.effect.amplifier()));
+            }
+        }
+
         /* Handle the warp command */
         if (--this.infinity$ticksUntilWarp == 0L) {
             MinecraftServer s = this.getServerWorld().getServer();
@@ -117,29 +126,29 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
         }
 
         /* Handle effects from dimension deletion */
-        int i = ((Timebombable)(getServerWorld())).infinity$isTimebombed();
-        if (i > 200) {
+        int i = ((Timebombable)(getServerWorld())).infinity$getTimebombProgress();
+        if (i > 3540) {
+            WarpLogic.respawnAlive((ServerPlayerEntity)(Object)this);
+        }
+        else if (i > 3500) {
+            ModCriteria.WHO_REMAINS.get().trigger((ServerPlayerEntity)(Object)this);
+        }
+        else if (i > 200) {
             if (i%4 == 0) {
-                Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().getOrThrow(RegistryKeys.DAMAGE_TYPE);
-                RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMod.getId("world_ceased")));
-                damage(getServerWorld(), new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
-            }
-            if (i > 3500) {
-                ModCriteria.WHO_REMAINS.get().trigger((ServerPlayerEntity)(Object)this);
-            }
-            if (i > 3540) {
-                WarpLogic.respawnAlive((ServerPlayerEntity)(Object)this);
+                Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE);
+                RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMethods.getId("world_ceased")));
+                damage(new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
             }
         }
     }
 
     @Inject(method = "changeGameMode", at = @At("RETURN"))
     private void injected4(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) PlatformMethods.sendServerPlayerEntity(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(this.getServerWorld()));
+        if (cir.getReturnValue()) InfinityMethods.sendS2CPayload(((ServerPlayerEntity)(Object)this), ModPayloads.setShaderFromWorld(this.getServerWorld()));
     }
 
     @Override
-    public void projectInfinity$setWarpTimer(long ticks, Identifier dim) {
+    public void infinity$setWarpTimer(long ticks, Identifier dim) {
         this.infinity$ticksUntilWarp = ticks;
         this.infinity$idForWarp = dim;
     }

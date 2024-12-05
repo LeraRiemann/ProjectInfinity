@@ -3,6 +3,7 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.*;
@@ -62,7 +63,7 @@ public class RandomDimension {
         type = new RandomDimensionType(this);
         data.putString("type", type.fullname);
         data.put("generator", randomDimensionGenerator());
-        for (Long l: random_biome_ids) if (does_not_contain(RegistryKeys.BIOME, "biome_"+l)) {
+        for (Long l: random_biome_ids) if (doesNotContain(RegistryKeys.BIOME, "biome_"+l)) {
             RandomBiome b = new RandomBiome(l, this);
             random_biomes.add(b);
             addStructures(b);
@@ -118,6 +119,7 @@ public class RandomDimension {
     }
 
     void wrap_up(boolean isEasterDim) {
+        if (!isEasterDim) (new DimensionData(this)).save();
         (new RandomInfinityOptions(this, isEasterDim)).save();
         CommonIO.write(data, getStoragePath() + "/dimension", getName() + ".json");
         if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
@@ -151,8 +153,8 @@ public class RandomDimension {
         }
     }
 
-    public <T> boolean does_not_contain(RegistryKey<? extends Registry<T>> key, String name) {
-        return !(server.getRegistryManager().getOrThrow(key).contains(RegistryKey.of(key, InfinityMod.getId(name))));
+    public <T> boolean doesNotContain(RegistryKey<? extends Registry<T>> key, String name) {
+        return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMethods.getId(name))));
     }
 
     boolean isOverworldLike() {
@@ -318,7 +320,7 @@ public class RandomDimension {
             vanilla_biomes.add(biome);
         }
         else {
-            long id = PROVIDER.rule("longArithmeticEnabled") ? random.nextLong() : random.nextInt();
+            long id = InfinityMethods.getRandomSeed(random);
             random_biome_ids.add(id);
             biome = "infinity:biome_" + id;
         }
@@ -334,13 +336,18 @@ public class RandomDimension {
         int numstructures = random.nextInt(1, 5);
         Set<String> temp = new HashSet<>();
         for (int i = 0; i < numstructures; i++) {
-            RandomStructure s = new RandomStructure(random.nextInt(), b);
-            if (!temp.contains(s.name)) {
-                temp.add(s.name);
-                s.save();
-                if (!structure_ids.containsKey(s.type)) structure_ids.put(s.type, new ArrayList<>());
-                structure_ids.get(s.type).add(s.fullname);
-            }
+            addStructure(new RandomStructure(random.nextInt(), b), temp);
+        }
+        if (PROVIDER.roll( random, "text")) {
+            addStructure(new RandomText(random.nextInt(), b), temp);
+        }
+    }
+    void addStructure(RandomStructure s, Set<String> temp) {
+        if (!temp.contains(s.name)) {
+            temp.add(s.name);
+            s.save();
+            if (!structure_ids.containsKey(s.type)) structure_ids.put(s.type, new ArrayList<>());
+            structure_ids.get(s.type).add(s.fullname);
         }
     }
 
@@ -353,8 +360,8 @@ public class RandomDimension {
         }
         NbtCompound dictionary = CommonIO.read(InfinityMod.utilPath + "/structure_tags.json");
         Map<String, NbtList> tags = new HashMap<>();
-        for (String s : structure_ids.keySet()) if (dictionary.contains(s)) {
-            for (NbtElement e : (NbtList) Objects.requireNonNull(dictionary.get(s))) {
+        for (String s : structure_ids.keySet()) for (String ss : dictionary.getKeys()) if (s.contains(ss)) {
+            for (NbtElement e : (NbtList) Objects.requireNonNull(dictionary.get(ss))) {
                 String t = e.asString();
                 if (!tags.containsKey(t)) tags.put(t, new NbtList());
                 structure_ids.get(s).forEach(fullname -> tags.get(t).add(NbtString.of(fullname)));

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:grass_block"
+    },
+    "M": {
+      "item": "infinity:white_matter"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "GMG",
+    "GGG"
+  ],
+  "result": {
+    "id": "infinity:fine_item"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "minecraft:black_concrete"
+    },
+    "W": {
+      "item": "minecraft:white_concrete"
+    },
+    "M": {
+      "item": "infinity:white_matter"
+    }
+  },
+  "pattern": [
+    "WBW",
+    "BMB",
+    "WBW"
+  ],
+  "result": {
+    "id": "infinity:ant"
+  },
+  "show_notification": true
+}

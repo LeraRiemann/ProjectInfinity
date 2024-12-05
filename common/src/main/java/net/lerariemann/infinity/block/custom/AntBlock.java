@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;

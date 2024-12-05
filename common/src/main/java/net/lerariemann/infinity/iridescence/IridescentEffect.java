@@ -1,10 +1,12 @@
 package net.lerariemann.infinity.iridescence;
 
+import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
@@ -13,7 +15,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class IridescentEffect extends StatusEffect implements ModStatusEffects.SpecialEffect {
     public IridescentEffect(StatusEffectCategory category, int color) {
@@ -26,15 +28,23 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         if (entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_SETUP)) {
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP);
         }
+        if (entity instanceof Angerable ang) ang.stopAnger();
+        if (entity instanceof ServerPlayerEntity player) Iridescence.updateShader(player);
     }
 
     public void onRemoved(LivingEntity entity) {
         entity.setInvulnerable(false);
-        if (entity instanceof ServerPlayerEntity player) {
-            Iridescence.updateShader(player);
-        }
-        else if (entity instanceof MobEntity currEntity) {
-            Iridescence.endConversion(currEntity);
+        switch (entity) {
+            case ServerPlayerEntity player -> Iridescence.updateShader(player);
+            case ChaosPawn pawn -> {
+                if (pawn.getRandom().nextBoolean()) {
+                    pawn.unchess();
+                    Iridescence.convTriggers(pawn);
+                }
+            }
+            case MobEntity currEntity -> Iridescence.endConversion(currEntity);
+            default -> {
+            }
         }
     }
 
@@ -50,7 +60,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
                 player.setInvulnerable(false);
                 WarpLogic.respawnAlive(player);
             }
-            if (Iridescence.shouldUpdateShader(duration)) {
+            if (Iridescence.shouldUpdateShader(duration, amplifier)) {
                 Iridescence.updateShader(player);
             }
         }

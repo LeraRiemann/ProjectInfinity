@@ -19,7 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static net.lerariemann.infinity.PlatformMethods.unfreeze;
+import static net.lerariemann.infinity.util.PlatformMethods.unfreeze;
 
 public class DimensionGrabber {
     RegistryOps.RegistryInfoGetter registryInfoGetter;

@@ -1,0 +1,29 @@
+{
+  "parent": "infinity:block/iridescent/carpet/0",
+  "overrides": [
+    { "predicate": { "infinity:iridescent": 0 }, "model": "infinity:block/iridescent/carpet/0" },
+    { "predicate": { "infinity:iridescent": 0.01 }, "model": "infinity:block/iridescent/carpet/1" },
+    { "predicate": { "infinity:iridescent": 0.02 }, "model": "infinity:block/iridescent/carpet/2" },
+    { "predicate": { "infinity:iridescent": 0.03 }, "model": "infinity:block/iridescent/carpet/3" },
+    { "predicate": { "infinity:iridescent": 0.04 }, "model": "infinity:block/iridescent/carpet/4" },
+    { "predicate": { "infinity:iridescent": 0.05 }, "model": "infinity:block/iridescent/carpet/5" },
+    { "predicate": { "infinity:iridescent": 0.06 }, "model": "infinity:block/iridescent/carpet/6" },
+    { "predicate": { "infinity:iridescent": 0.07 }, "model": "infinity:block/iridescent/carpet/7" },
+    { "predicate": { "infinity:iridescent": 0.08 }, "model": "infinity:block/iridescent/carpet/8" },
+    { "predicate": { "infinity:iridescent": 0.09 }, "model": "infinity:block/iridescent/carpet/9" },
+    { "predicate": { "infinity:iridescent": 0.10 }, "model": "infinity:block/iridescent/carpet/10" },
+    { "predicate": { "infinity:iridescent": 0.11 }, "model": "infinity:block/iridescent/carpet/11" },
+    { "predicate": { "infinity:iridescent": 0.12 }, "model": "infinity:block/iridescent/carpet/12" },
+    { "predicate": { "infinity:iridescent": 0.13 }, "model": "infinity:block/iridescent/carpet/13" },
+    { "predicate": { "infinity:iridescent": 0.14 }, "model": "infinity:block/iridescent/carpet/14" },
+    { "predicate": { "infinity:iridescent": 0.15 }, "model": "infinity:block/iridescent/carpet/15" },
+    { "predicate": { "infinity:iridescent": 0.16 }, "model": "infinity:block/iridescent/carpet/16" },
+    { "predicate": { "infinity:iridescent": 0.17 }, "model": "infinity:block/iridescent/carpet/17" },
+    { "predicate": { "infinity:iridescent": 0.18 }, "model": "infinity:block/iridescent/carpet/18" },
+    { "predicate": { "infinity:iridescent": 0.19 }, "model": "infinity:block/iridescent/carpet/19" },
+    { "predicate": { "infinity:iridescent": 0.20 }, "model": "infinity:block/iridescent/carpet/20" },
+    { "predicate": { "infinity:iridescent": 0.21 }, "model": "infinity:block/iridescent/carpet/21" },
+    { "predicate": { "infinity:iridescent": 0.22 }, "model": "infinity:block/iridescent/carpet/22" },
+    { "predicate": { "infinity:iridescent": 0.23 }, "model": "infinity:block/iridescent/carpet/23" }
+  ]
+}

@@ -1,18 +1,12 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.ColorHelper;
 import org.joml.Vector3f;
 
-import java.awt.*;
-
 public interface TintableEntity {
-    boolean hasCustomName();
-    Text getName();
     int getId();
-    int getAge();
 
     default Vector3f colorFromInt(int i) {
         float f = (float)(i >> 16 & 0xFF) / 255.0f;
@@ -32,21 +26,8 @@ public interface TintableEntity {
         return ColorHelper.lerp(r, s, t);
     }
 
-    default int getColorNamed() {
-        if (hasCustomName()) {
-            String s = getName().getString();
-            if ("jeb_".equals(s)) {
-                return TintableEntity.getColorJeb(getAge(), getId());
-            }
-            if ("hue".equals(s)) {
-                int n = getAge() + 400*getId();
-                float hue = n / 400.f;
-                hue = hue - (int) hue;
-                return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
-            }
-        }
-        return -1;
-    }
+    int getColorNamed();
+
     default int getColorForRender() {
         int v = getColorNamed();
         if (v!=-1) return v;

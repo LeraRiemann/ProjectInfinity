@@ -2,7 +2,6 @@ package net.lerariemann.infinity.mixin.options;
 
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
@@ -30,13 +29,13 @@ public abstract class ClientWorldMixin extends World implements InfinityOptionsA
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injected(ClientPlayNetworkHandler networkHandler, ClientWorld.Properties properties, RegistryKey registryRef, RegistryEntry dimensionType, int loadDistance, int simulationDistance, WorldRenderer worldRenderer, boolean debugWorld, long seed, int seaLevel, CallbackInfo ci) {
-        infinity$setOptions(((InfinityOptionsAccess)MinecraftClient.getInstance()).infinity$getOptions());
+    private void injected(ClientPlayNetworkHandler networkHandler, ClientWorld.Properties properties, RegistryKey<World> registryRef, RegistryEntry<DimensionType> dimensionTypeEntry, int loadDistance, int simulationDistance, Supplier<Profiler> profiler, WorldRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
+        infinity$setOptions(InfinityOptions.ofClient());
     }
 
     @Override
     public InfinityOptions infinity$getOptions() {
-        return infinity$options;
+        return InfinityOptions.nullSafe(infinity$options);
     }
     @Override
     public void infinity$setOptions(InfinityOptions options) {
