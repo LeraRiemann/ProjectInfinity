@@ -6,6 +6,7 @@
   "plugin": "net.lerariemann.infinity.mixin.fabric.InfinityMixinPlugin",
   "mixins": [
     "EntityMixin",
+    "HeightLimitViewMixin",
     "ServerPlayerEntityMixin",
     "mavity.LivingEntityMixin"
   ],

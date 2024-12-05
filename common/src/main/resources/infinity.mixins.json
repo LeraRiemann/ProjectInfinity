@@ -12,7 +12,6 @@
     "EntityMixin",
     "FireBlockMixin",
     "FluidBlockMixin",
-    "HeightLimitViewMixin",
     "LavaFluidMixin",
     "MaterialRuleContextAccess",
     "MinecraftServerMixin",

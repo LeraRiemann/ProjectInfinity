@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.fabric;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.HeightLimitView;
