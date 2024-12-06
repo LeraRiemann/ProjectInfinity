@@ -41,7 +41,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM =
             registerBlockItem(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM =
-            registerBlockItem(ModBlocks.TIME_BOMB, ItemGroups.FUNCTIONAL, Items.FURNACE);
+            registerBlockItem(ModBlocks.TIME_BOMB, ItemGroups.FUNCTIONAL, Items.BEACON);
     public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
     public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () ->
             new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0, 0xFFFFFF,
