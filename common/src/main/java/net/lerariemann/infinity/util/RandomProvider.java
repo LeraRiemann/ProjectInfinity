@@ -407,7 +407,12 @@ public class RandomProvider {
                 max_inclusive.putInt("absolute", max);
                 res.put("min_inclusive", min_inclusive);
                 res.put("max_inclusive", max_inclusive);
-                if (i==3 && random.nextBoolean()) res.putInt("plateau", random.nextInt(1, max - min));
+                int randomBound = max - min;
+                if (randomBound <= 1) {
+                    InfinityMod.LOGGER.debug("Corrected random bound of: {} to 2!", randomBound);
+                    randomBound = 2;
+                }   
+                if (i==3 && random.nextBoolean()) res.putInt("plateau", random.nextInt(1, randomBound));
                 else if (i!=0) res.putInt("inner", 1 + (int)Math.floor(random.nextExponential()));
             }
             case 5 -> {
