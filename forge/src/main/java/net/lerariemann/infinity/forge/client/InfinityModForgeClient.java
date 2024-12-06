@@ -20,10 +20,10 @@ public class InfinityModForgeClient {
 
     public static void initializeClient(IEventBus eventBus) {
         InfinityModClient.initializeClient();
-        net.lerariemann.infinity.forge.client.InfinityModForgeClient.registerModsPage();
-        eventBus.addListener(net.lerariemann.infinity.forge.client.InfinityModForgeClient::registerBlockColorHandlers);
-        eventBus.addListener(net.lerariemann.infinity.forge.client.InfinityModForgeClient::registerItemColorHandlers);
-        eventBus.addListener(net.lerariemann.infinity.forge.client.InfinityModForgeClient::registerModelPredicates);
+        InfinityModForgeClient.registerModsPage();
+        eventBus.addListener(InfinityModForgeClient::registerBlockColorHandlers);
+        eventBus.addListener(InfinityModForgeClient::registerItemColorHandlers);
+        eventBus.addListener(InfinityModForgeClient::registerModelPredicates);
     }
 
     //Integrate Cloth Config screen (if mod present) with Forge mod menu.
@@ -35,13 +35,11 @@ public class InfinityModForgeClient {
     @SubscribeEvent
     public static void registerBlockColorHandlers(RegisterColorHandlersEvent.Block event) {
         event.register(PlatformMethods::getNeitherPortalColour, ModBlocks.PORTAL.get());
-        event.register(PlatformMethods::getBookBoxColour, ModBlocks.BOOK_BOX.get());
-        event.register(PlatformMethods::getBookBoxColour, ModBlocks.IRIDESCENCE.get());
+        event.register(PlatformMethods::getBookBoxColour, ModBlocks.BOOK_BOX.get(), ModBlocks.IRIDESCENCE.get());
     }
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(PlatformMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get());
-        event.register(PlatformMethods::getOverlayColorFromComponents, ModItems.BIOME_BOTTLE_ITEM.get());
+        event.register(PlatformMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get(), ModItems.BIOME_BOTTLE_ITEM.get());
     }
     @SubscribeEvent
     public static void registerModelPredicates(FMLClientSetupEvent event) {
