@@ -361,7 +361,8 @@ public interface ConfigGenerator {
         MinecraftServer s = Objects.requireNonNull(w.getServer());
         SurfaceRuleScanner.scan(s);
         generate(s.getRegistryManager().get(RegistryKeys.BIOME), "misc", "biomes", true);
-        generateStructures(s);
+        if (InfinityMethods.canUseSetupperStructure())
+            generateStructures(s);
     }
 
     static void generateAllNoWorld() {

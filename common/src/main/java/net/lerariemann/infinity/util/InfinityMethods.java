@@ -171,4 +171,13 @@ public interface InfinityMethods {
         }
         return newText.toString();
     }
+
+    /**
+     * Random structure generation has been temporarily disabled
+     * on Forge, it will temporarily be Fabric exclusive
+     * until a root cause can be found.
+     */
+    static boolean canUseSetupperStructure() {
+        return Platform.isFabric();
+    }
 }

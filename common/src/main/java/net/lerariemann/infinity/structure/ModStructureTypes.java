@@ -3,6 +3,7 @@ package net.lerariemann.infinity.structure;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.structure.StructurePieceType;
 import net.minecraft.world.gen.structure.StructureType;
@@ -29,7 +30,8 @@ public class ModStructureTypes {
         InfinityMod.LOGGER.debug("Registering processors for " + InfinityMod.MOD_ID);
 
         PYRAMID = STRUCTURE_TYPES.register("pyramid", () -> PyramidStructure.CODEC::codec);
-        SETUPPER = STRUCTURE_TYPES.register("setupper", () -> SetupperStructure.CODEC::codec);
+        if (InfinityMethods.canUseSetupperStructure())
+            SETUPPER = STRUCTURE_TYPES.register("setupper", () -> SetupperStructure.CODEC::codec);
         TEXT = STRUCTURE_TYPES.register("text", () -> TextStructure.CODEC::codec);
         PYRAMID_PIECE = register(PyramidGenerator::new, "pypiece");
         LETTER = register(LetterPiece::new, "letter");

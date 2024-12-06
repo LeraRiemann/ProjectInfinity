@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
@@ -38,6 +39,8 @@ public class RandomStructure {
             data.remove("spawn_overrides");
             data.put("spawn_overrides", spawnOverrides());
         }
+
+
     }
 
     void save() {
