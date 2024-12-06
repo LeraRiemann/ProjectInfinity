@@ -4,6 +4,7 @@ import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.client.ChaosPawnRenderer;
@@ -54,7 +55,7 @@ public class ModEntities {
 
     public static final DeferredRegister<EntityType<?>> INFINITY_ENTITIES = DeferredRegister.create(MOD_ID, RegistryKeys.ENTITY_TYPE);
 
-    public static final RegistrySupplier<EntityType<ChaosSlime>> CHAOS_SLIME = INFINITY_ENTITIES.register("chaos_slime", () -> EntityType.Builder.create(ChaosSlime::new, SpawnGroup.MONSTER).setDimensions(0.52f, 0.52f).maxTrackingRange(10).build("chaos_slime"));
+    public static final RegistrySupplier<EntityType<ChaosSlime>> CHAOS_SLIME = INFINITY_ENTITIES.register("chaos_slime", () -> FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, ChaosSlime::new).dimensions(EntityDimensions.changing(2.04f, 2.04f)).trackRangeBlocks(10).build());
     public static final RegistrySupplier<EntityType<ChaosSkeleton>> CHAOS_SKELETON = INFINITY_ENTITIES.register("chaos_skeleton", () -> EntityType.Builder.create(ChaosSkeleton::new, SpawnGroup.MONSTER).setDimensions(0.6f, 1.99f).maxTrackingRange(8).build("chaos_skeleton"));
     public static final RegistrySupplier<EntityType<ChaosCreeper>> CHAOS_CREEPER = INFINITY_ENTITIES.register("chaos_creeper", () ->EntityType.Builder.create(ChaosCreeper::new, SpawnGroup.MONSTER).setDimensions(0.6f, 1.7f).maxTrackingRange(8).build("chaos_creeper"));
     public static final RegistrySupplier<EntityType<ChaosPawn>> CHAOS_PAWN = INFINITY_ENTITIES.register("chaos_pawn", () -> EntityType.Builder.create(ChaosPawn::new, SpawnGroup.MONSTER).setDimensions(0.6f, 1.8f).maxTrackingRange(10).build("chaos_pawn"));
