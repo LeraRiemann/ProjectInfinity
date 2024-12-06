@@ -241,11 +241,14 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
         super.dropEquipment(source, lootingMultiplier, allowDrops);
         if (!this.isChess()) {
-            String s = RandomProvider.getProvider(Objects.requireNonNull(source.getSource().getServer())).registry.get("items").getRandomElement(source.getSource().getWorld().random);
-            double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
-            ItemStack stack = Registries.ITEM.get(new Identifier(s)).getDefaultStack().copyWithCount((int)(i*i));
+            if (source.getSource() != null) {
+                String s = RandomProvider.getProvider(Objects.requireNonNull(source.getSource().getServer())).registry.get("items").getRandomElement(source.getSource().getWorld().random);
+                double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
+                ItemStack stack = Registries.ITEM.get(new Identifier(s)).getDefaultStack().copyWithCount((int)(i*i));
 //            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
-            this.dropStack(stack);
+                this.dropStack(stack);
+            }
+
         }
     }
 
