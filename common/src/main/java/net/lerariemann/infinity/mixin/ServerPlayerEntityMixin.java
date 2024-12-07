@@ -8,7 +8,6 @@ import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;
-import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
@@ -78,7 +77,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V")
     )
     private void injected2(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir, @Local(ordinal = 0) ServerWorld serverWorld, @Local RegistryKey<World> registryKey) {
-        if (RandomProvider.getProvider(serverWorld.getServer()).rule("returnPortalsEnabled") &&
+        if (InfinityMod.provider.rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = BlockPos.ofFloored(teleportTarget.pos());
             ServerWorld destination = teleportTarget.world();

@@ -48,9 +48,9 @@ public class RandomDimension {
 
     public RandomDimension(Identifier id, MinecraftServer server) {
         this.server = server;
-        PROVIDER = RandomProvider.getProvider(server);
+        PROVIDER = InfinityMod.provider;
         identifier = id;
-        numericId = WarpLogic.getNumericFromId(identifier, server);
+        numericId = WarpLogic.getNumericFromId(identifier);
         random = new Random(numericId);
         initializeStorage();
         /* Code for easter dimensions */

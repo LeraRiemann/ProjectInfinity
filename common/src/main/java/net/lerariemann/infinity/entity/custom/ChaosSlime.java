@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -30,7 +30,6 @@ import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
-import java.util.Objects;
 import java.util.Random;
 
 public class ChaosSlime extends SlimeEntity implements TintableEntity {
@@ -72,9 +71,8 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
-        RandomProvider p = RandomProvider.getProvider(Objects.requireNonNull(world.getServer()));
         Random r = new Random();
-        this.dataTracker.set(core, Registries.BLOCK.get(Identifier.of(p.randomName(r, "all_blocks"))).getDefaultState());
+        this.dataTracker.set(core, Registries.BLOCK.get(Identifier.of(InfinityMod.provider.randomName(r, "all_blocks"))).getDefaultState());
         this.dataTracker.set(color, r.nextInt(16777216));
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
@@ -146,7 +144,7 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     }
 
     public static boolean canSpawn(EntityType<ChaosSlime> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        if (world.getDifficulty() != Difficulty.PEACEFUL && ModEntities.chaosMobsEnabled(world)) {
+        if (world.getDifficulty() != Difficulty.PEACEFUL && InfinityMethods.chaosMobsEnabled()) {
             if (!(world instanceof StructureWorldAccess)) {
                 return false;
             }

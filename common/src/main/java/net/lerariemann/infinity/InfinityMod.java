@@ -1,5 +1,6 @@
 package net.lerariemann.infinity;
 
+import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.dimensions.RandomText;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
@@ -8,8 +9,11 @@ import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.structure.ModStructureTypes;
 import net.lerariemann.infinity.util.PlatformMethods;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.var.*;
 import net.lerariemann.infinity.util.ConfigManager;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.WorldSavePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.lerariemann.infinity.block.ModBlocks;
@@ -23,7 +27,15 @@ public class InfinityMod {
 	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
 	public static Path rootConfigPath;
 	public static Path utilPath = Path.of("config/infinity/.util");
-	public static boolean longArithmeticEnabled = false;
+	public static RandomProvider provider;
+
+	public static void updateProvider(MinecraftServer server) {
+		RandomProvider p = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
+				server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
+		p.kickGhostsOut(server.getRegistryManager());
+		provider = p;
+		if (!((MinecraftServerAccess)server).infinity$needsInvocation()) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
+	}
 
 	public static void init() {
 		rootConfigPath = PlatformMethods.getRootConfigPath();
@@ -48,5 +60,6 @@ public class InfinityMod {
 		ModCriteria.registerCriteria();
 		ModPayloads.registerPayloadsServer();
 		RandomText.walkPaths();
+		provider = new RandomProvider("config/" + InfinityMod.MOD_ID + "/");
 	}
 }

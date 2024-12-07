@@ -3,9 +3,7 @@ package net.lerariemann.infinity.mixin;
 import com.google.common.collect.ImmutableList;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.PlatformMethods;
-import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.var.ModMaterialRules;
 import net.minecraft.network.QueryableServer;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
@@ -16,7 +14,6 @@ import net.minecraft.server.WorldGenerationProgressListenerFactory;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.world.ChunkErrorHandler;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.random.RandomSequencesState;
 import net.minecraft.util.thread.ReentrantThreadExecutor;
 import net.minecraft.world.SaveProperties;
@@ -71,17 +68,11 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
     protected ServerTask createTask(Runnable runnable) {
         return null;
     }
-    @Shadow
-    public Path getSavePath(WorldSavePath worldSavePath) {
-        return null;
-    }
 
     @Shadow public abstract DynamicRegistryManager.Immutable getRegistryManager();
 
     @Unique
     public Map<RegistryKey<World>, ServerWorld> infinity$worldsToAdd;
-    @Unique
-    public RandomProvider infinity$dimensionProvider;
     @Unique
     public boolean infinity$needsInvocation;
 
@@ -109,18 +100,10 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
             throw new RuntimeException(e);
         }
     }
-    @Override
-    public RandomProvider infinity$getDimensionProvider() {
-        return infinity$dimensionProvider;
-    }
 
     @Override
     public void infinity$setDimensionProvider() {
-        RandomProvider p = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
-                getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
-        p.kickGhostsOut(getRegistryManager());
-        infinity$dimensionProvider = p;
-        if (!infinity$needsInvocation) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
+        InfinityMod.updateProvider((MinecraftServer)(Object)this);
     }
 
     @Override

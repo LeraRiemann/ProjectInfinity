@@ -1,13 +1,11 @@
 package net.lerariemann.infinity.util;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
@@ -28,14 +26,8 @@ public class RandomProvider {
     public String savingPath;
     public String portalKey;
     public String altarKey;
-
-    public NbtCompound noise;
     public String salt;
     public Easterizer easterizer;
-
-    public static RandomProvider getProvider(MinecraftServer server) {
-        return ((MinecraftServerAccess)(server)).infinity$getDimensionProvider();
-    }
 
     public RandomProvider(String configpath, String savingpath) {
         this(configpath);
@@ -45,14 +37,17 @@ public class RandomProvider {
 
     public RandomProvider(String configpath) {
         configPath = configpath;
+        initStorage();
+        register_all();
+        easterizer = new Easterizer(this);
+    }
+
+    void initStorage() {
         registry = new HashMap<>();
         compoundRegistry = new HashMap<>();
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
         gameRulesInt = new HashMap<>();
-        register_all();
-        easterizer = new Easterizer(this);
-        InfinityMod.longArithmeticEnabled = rule("longArithmeticEnabled");
     }
 
     void register_all() {
@@ -66,7 +61,6 @@ public class RandomProvider {
         register_category(compoundRegistry, path, "extra", CommonIO::compoundListReader);
         extract_mobs();
         register_category_hardcoded(configPath + "hardcoded");
-        noise = CommonIO.read(InfinityMod.utilPath + "/noise.json");
     }
 
     void read_root_config() {
@@ -128,10 +122,10 @@ public class RandomProvider {
     }
 
     public boolean roll(Random random, String key) {
-        return (random.nextDouble() < rootChances.get(key));
+        return (random.nextDouble() < rootChances.getOrDefault(key, 0.0));
     }
     public boolean rule(String key) {
-        return gameRules.get(key);
+        return gameRules.getOrDefault(key, false);
     }
 
     void extract_blocks() {
@@ -256,13 +250,38 @@ public class RandomProvider {
         else return e.asString();
     }
 
+    public String getOrDefault(Random random, String key, String def) {
+        if (!registry.containsKey(key)) return def;
+        return registry.get(key).getRandomElement(random);
+    }
+
+    public static Map<String, String> defaultMap = Map.ofEntries(
+            Map.entry("all_blocks", "minecraft:stone"),
+            Map.entry("top_blocks", "minecraft:stone"),
+            Map.entry("blocks_features", "minecraft:stone"),
+            Map.entry("full_blocks", "minecraft:stone"),
+            Map.entry("full_blocks_worldgen", "minecraft:stone"),
+            Map.entry("fluids", "minecraft:water"),
+            Map.entry("items", "minecraft:stick"),
+            Map.entry("sounds", "minecraft:block.stone.step"),
+            Map.entry("music", "minecraft:music.game"),
+            Map.entry("particles", "minecraft:heart"),
+            Map.entry("biomes", "minecraft:plains"),
+            Map.entry("mobs", "minecraft:pig"),
+            Map.entry("tags", "#minecraft:air"));
+
     public String randomName(Random random, String key) {
+        return randomName(random, key, defaultMap.get(key));
+    }
+
+    public String randomName(Random random, String key, String def) {
         switch (key) {
             case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
+                if (!compoundRegistry.containsKey(key)) return def;
                 return blockElementToName(compoundRegistry.get(key).getRandomElement(random));
             }
             default -> {
-                return registry.get(key).getRandomElement(random);
+                return getOrDefault(random, key, def);
             }
         }
     }
@@ -274,11 +293,12 @@ public class RandomProvider {
             else return Block(compound.asString());
         }
         else {
-            return Block(registry.get(key).getRandomElement(random));
+            return Block(randomName(random, key));
         }
     }
 
     public NbtCompound randomFluid(Random random) {
+        if (!compoundRegistry.containsKey("fluids")) return Fluid("minecraft:water");
         NbtElement compound = compoundRegistry.get("fluids").getRandomElement(random);
         if (compound instanceof NbtCompound) return ((NbtCompound)compound);
         else return Fluid(compound.asString());
@@ -297,7 +317,7 @@ public class RandomProvider {
                 res.putInt("seed", 0);
                 res.putDouble("scale", 4.0);
                 res.put("states", lst);
-                res.put("noise", noise);
+                res.put("noise", CommonIO.read(InfinityMod.utilPath + "/noise.json"));
             }
             if (key.equals("weighted_state_provider")) {
                 NbtList entries = new NbtList();

@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.entity.custom;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.EntityData;
@@ -52,7 +52,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         MinecraftServer s = world.toServerWorld().getServer();
         reg = s.getRegistryManager().get(RegistryKeys.BIOME);
-        WeighedStructure<String> biomes = RandomProvider.getProvider(s).registry.get("biomes");
+        WeighedStructure<String> biomes = InfinityMod.provider.registry.get("biomes");
         String biomename = biomes != null ? biomes.getElement(world.getRandom().nextDouble()) : "minecraft:plains";
         Biome b = reg.get(Identifier.of(biomename));
         this.setColor(b != null ? b.getFoliageColor() : 7842607);

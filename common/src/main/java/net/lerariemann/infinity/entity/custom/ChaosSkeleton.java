@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.entity.custom;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -97,7 +97,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         Random r = new Random();
-        NbtElement effect = RandomProvider.getProvider(world.getServer()).compoundRegistry.get("effects").getRandomElement(world.getRandom());
+        NbtElement effect = InfinityMod.provider.compoundRegistry.get("effects").getRandomElement(world.getRandom());
         Identifier e = Identifier.of(((NbtCompound)effect).getString("Name"));
         this.setEffect(e);
         this.setColorRaw(Objects.requireNonNull(reg.get(e)).getColor());

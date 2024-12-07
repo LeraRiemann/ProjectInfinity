@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.block.entity;
 
-import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.TransfiniteAltar;
 import net.lerariemann.infinity.util.ConfigGenerator;
 import net.minecraft.block.BlockState;
@@ -34,7 +34,6 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
         }
     }
     public static void serverTick(World world, BlockPos pos, BlockState state, TransfiniteAltarEntity be) {
-        MinecraftServerAccess a = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer())));
         int stage = state.get(TransfiniteAltar.COLOR);
         if (be.time >= 20) {
             if (stage == 6) {
@@ -56,7 +55,7 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
             }
             if(be.time == 10) {
                 ConfigGenerator.generateAll(world, pos.up(2), pos.up());
-                a.infinity$setDimensionProvider();
+                InfinityMod.updateProvider(Objects.requireNonNull(world.getServer()));
             }
         }
         if(stage == 0 && be.time == 19) for (int i : offsets) for (int k : offsets)
@@ -66,7 +65,7 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
             for (int i : offsets) for (int k : offsets) {
                 if (i == 0 && k == 0) world.setBlockState(pos.add(i, -1, k), Blocks.STONE.getDefaultState());
                 else world.setBlockState(pos.add(i, -1, k), Registries.BLOCK.get(Identifier.of(
-                        a.infinity$getDimensionProvider().randomName(r, "full_blocks"))).getDefaultState());
+                        InfinityMod.provider.randomName(r, "full_blocks"))).getDefaultState());
             }
         }
         if (be.time >= 0) be.time+=1;

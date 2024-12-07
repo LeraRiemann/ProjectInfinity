@@ -7,6 +7,7 @@ import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
@@ -95,7 +96,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                     return ActionResult.SUCCESS;
 
                 /* If the portal key is blank, open the portal on any right-click. */
-                RandomProvider prov = RandomProvider.getProvider(s);
+                RandomProvider prov = InfinityMod.provider;
                 if (prov.portalKey.isBlank()) {
                     PortalCreationLogic.openWithStatIncrease(player, s, world, pos);
                 }
@@ -161,9 +162,9 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         }
     }
 
-    public static Optional<ComponentMap> getKeyComponents(Item item, Identifier dim, World w) {
+    public static Optional<ComponentMap> getKeyComponents(Item item, Identifier dim) {
         if (!item.equals(ModItems.TRANSFINITE_KEY.get())) return Optional.empty();
-        Integer keycolor = WarpLogic.getKeyColorFromId(dim, w.getServer());
+        Integer keycolor = WarpLogic.getKeyColorFromId(dim);
         return Optional.of((ComponentMap.builder()
                 .add(ModItemFunctions.KEY_DESTINATION.get(), dim)
                 .add(ModItemFunctions.COLOR.get(), keycolor)).build());
@@ -179,9 +180,9 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             MinecraftServer server = world.getServer();
             if (entity instanceof ItemEntity e)
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
-                    item -> getKeyComponents(item, npbe.getDimension(), world));
+                    item -> getKeyComponents(item, npbe.getDimension()));
             if (entity instanceof PlayerEntity player
-                    && RandomProvider.getProvider(server).portalKey.isBlank()) {
+                    && InfinityMod.provider.portalKey.isBlank()) {
                 ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
                 if ((world1 == null) || !npbe.getOpen())
                     PortalCreationLogic.openWithStatIncrease(player, server, world, pos);
@@ -209,7 +210,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 pos = pos.down();
             }
             if (world.getBlockState(pos).allowsSpawning(world, pos, ModEntities.CHAOS_PAWN.get()) &&
-                    ModEntities.chaosMobsEnabled(world) &&
+                    InfinityMethods.chaosMobsEnabled() &&
                     (entity = ModEntities.CHAOS_PAWN.get().spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());
