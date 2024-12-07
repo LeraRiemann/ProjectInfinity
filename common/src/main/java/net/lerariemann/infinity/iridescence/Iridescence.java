@@ -205,7 +205,7 @@ public class Iridescence {
                 ModEntities.copy(currEntity, newEntity);
                 if (newEntity instanceof ChaosCreeper creeper) {
                     RegistryEntry<Biome> b = creeper.getWorld().getBiome(creeper.getBlockPos());
-                    creeper.setBiome(b.value().toString());
+                    creeper.setBiome(b.getKey().map(key -> key.getValue().toString()).orElse("[unregistered]"));
                     creeper.setColor(b.value().getFoliageColor());
                     creeper.setRandomCharge();
                 }
