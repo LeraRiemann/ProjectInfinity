@@ -69,6 +69,10 @@ public interface WarpLogic {
         TeleportTarget targ = player.getRespawnTarget(true, TeleportTarget.NO_OP);
         player.teleport(targ.world(), targ.pos().x, targ.pos().y, targ.pos().z, targ.yaw(), targ.pitch());
     }
+    /* will implement a proper end-of-time dimension later */
+    static void sendToMissingno(ServerPlayerEntity player) {
+        warpWithTimer(player, InfinityMethods.getId("missingno"), 2, false);
+    }
 
     static void onInvocationNeedDetected(PlayerEntity player) {
         if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"));

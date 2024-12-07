@@ -45,6 +45,7 @@ public class PlayerManagerMixin {
         if (infinity$needsTpOut) {
             infinity$needsTpOut = false;
             WarpLogic.respawnAlive(player);
+            WarpLogic.sendToMissingno(player);
         }
     }
 
