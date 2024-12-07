@@ -154,7 +154,7 @@ public interface PortalCreationLogic {
         }
 
         /* If the portal key is blank, open the portal immediately. */
-        else if (RandomProvider.getProvider(server).portalKey.isBlank()) {
+        else if (InfinityMod.provider.portalKey.isBlank()) {
             openWithStatIncrease(nearestPlayer, server, world, pos);
         }
         return true;
@@ -265,7 +265,7 @@ public interface PortalCreationLogic {
                 /* creates the dimension datapack */
         RandomDimension d = new RandomDimension(id, server);
 
-        if (!RandomProvider.getProvider(server).rule("runtimeGenerationEnabled")) return false;
+        if (!InfinityMod.provider.rule("runtimeGenerationEnabled")) return false;
         ((MinecraftServerAccess)(server)).infinity$addWorld(
                 key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d)); // create the dimension
         server.getPlayerManager().getPlayerList().forEach(

@@ -15,7 +15,6 @@ import net.minecraft.server.ServerTask;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.server.WorldGenerationProgressListenerFactory;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.random.RandomSequencesState;
 import net.minecraft.world.SaveProperties;
 import net.minecraft.world.World;
@@ -64,17 +63,11 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
     protected ServerTask createTask(Runnable runnable) {
         return null;
     }
-    @Shadow
-    public Path getSavePath(WorldSavePath worldSavePath) {
-        return null;
-    }
 
     @Shadow public abstract DynamicRegistryManager.Immutable getRegistryManager();
 
     @Unique
     public Map<RegistryKey<World>, ServerWorld> infinity$worldsToAdd;
-    @Unique
-    public RandomProvider infinity$dimensionProvider;
     @Unique
     public boolean infinity$needsInvocation;
 
@@ -102,18 +95,10 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
             throw new RuntimeException(e);
         }
     }
-    @Override
-    public RandomProvider infinity$getDimensionProvider() {
-        return infinity$dimensionProvider;
-    }
 
     @Override
     public void infinity$setDimensionProvider() {
-        RandomProvider p = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
-                getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
-        p.kickGhostsOut(getRegistryManager());
-        infinity$dimensionProvider = p;
-        if (!infinity$needsInvocation) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
+        InfinityMod.updateProvider((MinecraftServer)(Object)this);
     }
 
     @Override

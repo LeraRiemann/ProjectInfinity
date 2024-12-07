@@ -22,7 +22,7 @@ public class ModCommands {
                 .requires(source -> source.hasPermissionLevel(2))
                 .then(argument("text", StringArgumentType.string()).executes(context -> {
                     final String text = StringArgumentType.getString(context, "text");
-                    warp(context, getIdentifier(text, context.getSource().getServer()));
+                    WarpLogic.warp(context, WarpLogic.getIdentifier(text));
                     return 1;
                 }))));
 

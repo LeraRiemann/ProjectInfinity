@@ -80,12 +80,12 @@ public interface WarpLogic {
     }
 
     static PortalColorApplier getPortalColorApplier(Identifier id, MinecraftServer server) {
-        NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.get(id.getPath());
+        NbtCompound c = InfinityMod.provider.easterizer.optionmap.get(id.getPath());
         if (c == null) c = InfinityOptions.readData(server, id);
-        return PortalColorApplier.extract(c, (int)WarpLogic.getNumericFromId(id, server));
+        return PortalColorApplier.extract(c, (int)WarpLogic.getNumericFromId(id));
     }
 
-    static long getNumericFromId(Identifier id, MinecraftServer server) {
+    static long getNumericFromId(Identifier id) {
         String dimensionName = id.getPath();
         String numericId = dimensionName.substring(dimensionName.lastIndexOf("_") + 1);
         long i;
@@ -93,12 +93,12 @@ public interface WarpLogic {
             i = Long.parseLong(numericId);
         } catch (Exception e) {
             /* Simply hash the name if it isn't of "generated_..." format. */
-            i = WarpLogic.getDimensionSeed(numericId, server);
+            i = WarpLogic.getDimensionSeed(numericId);
         }
         return i;
     }
 
-    static int getKeyColorFromId(Identifier id, MinecraftServer server) {
+    static int getKeyColorFromId(Identifier id) {
         if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
             return Math.toIntExact(getNumericFromId(id, server) & 0xFFFFFF);
         return 0;
@@ -130,11 +130,11 @@ public interface WarpLogic {
      * Convert a provided string into a dimension ID.
      * This also checks if it matches an Easter Egg dimension.
      */
-    static Identifier getIdentifier(String text, MinecraftServer s) {
+    static Identifier getIdentifier(String text) {
         if (text.equals("abatised redivides")) return World.END.getValue();
         if (text.isEmpty()) return InfinityMethods.getId("missingno");
-        if (RandomProvider.getProvider(s).easterizer.isEaster(text, RandomProvider.getProvider(s)) && !text.equals("missingno")) return InfinityMethods.getId(text);
-        return InfinityMethods.getDimId(getDimensionSeed(text, s));
+        if (InfinityMod.provider.easterizer.isEaster(text, InfinityMod.provider) && !text.equals("missingno")) return InfinityMethods.getId(text);
+        return InfinityMethods.getDimId(getDimensionSeed(text));
     }
 
     /**
@@ -147,15 +147,8 @@ public interface WarpLogic {
     /**
      * Hashes text into dimension ID.
      */
-    static long getDimensionSeed(String text, MinecraftServer s) {
-        return getDimensionSeed(text, RandomProvider.getProvider(s));
-    }
-
-    /**
-     * Hashes text into dimension ID.
-     */
-    static long getDimensionSeed(String text, RandomProvider prov) {
-        HashCode f = Hashing.sha256().hashString(text + prov.salt, StandardCharsets.UTF_8);
-        return InfinityMod.longArithmeticEnabled ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
+    static long getDimensionSeed(String text) {
+        HashCode f = Hashing.sha256().hashString(text + InfinityMod.provider.salt, StandardCharsets.UTF_8);
+        return InfinityMethods.longArithmeticEnabled() ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
     }
 }

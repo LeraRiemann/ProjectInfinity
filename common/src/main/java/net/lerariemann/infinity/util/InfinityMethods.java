@@ -136,11 +136,11 @@ public interface InfinityMethods {
     }
 
     static long getRandomSeed(java.util.Random random) {
-        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
+        return longArithmeticEnabled() ? random.nextLong() : random.nextInt();
     }
 
     static long getRandomSeed(Random random) {
-        return InfinityMod.longArithmeticEnabled ? random.nextLong() : random.nextInt();
+        return longArithmeticEnabled() ? random.nextLong() : random.nextInt();
     }
 
     static Identifier getRandomId(java.util.Random random) {
@@ -178,6 +178,13 @@ public interface InfinityMethods {
      * until a root cause can be found.
      */
     static boolean canUseSetupperStructure() {
-        return Platform.isFabric();
+        return Platform.isFabric(); 
+    }
+    static boolean chaosMobsEnabled() {
+        return InfinityMod.provider.rule("chaosMobsEnabled");
+    }
+
+    static boolean longArithmeticEnabled() {
+        return InfinityMod.provider.rule("longArithmeticEnabled");
     }
 }

@@ -6,20 +6,18 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.client.ChaosPawnRenderer;
 import net.lerariemann.infinity.entity.client.ChaosCreeperRenderer;
 import net.lerariemann.infinity.entity.client.ChaosSkeletonRenderer;
 import net.lerariemann.infinity.entity.client.ChaosSlimeRenderer;
 import net.lerariemann.infinity.entity.custom.*;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -30,12 +28,6 @@ import static net.lerariemann.infinity.InfinityMod.LOGGER;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModEntities {
-    public static Text removeClickEvents(Text textComponent) {
-        MutableText mutableText = textComponent.copyContentOnly().setStyle(textComponent.getStyle().withClickEvent(null));
-        for (Text text : textComponent.getSiblings()) mutableText.append(removeClickEvents(text));
-        return mutableText;
-    }
-
     public static void copy(MobEntity from, MobEntity e) {
         e.refreshPositionAndAngles(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch());
         e.setHealth(from.getHealth());
@@ -89,11 +81,7 @@ public class ModEntities {
     }
 
     public static boolean canChaosMonsterSpawn(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random) && chaosMobsEnabled(world);
-    }
-    
-    public static boolean chaosMobsEnabled(ServerWorldAccess world) {
-        return RandomProvider.getProvider(world.getServer()).rule("chaosMobsEnabled");
+        return HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random) && InfinityMethods.chaosMobsEnabled();
     }
 
     public static void registerEntityRenderers() {

@@ -7,6 +7,7 @@ import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.entity.ModEntities;
@@ -82,7 +83,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                     return ActionResult.SUCCESS;
 
                 /* If the portal key is blank, open the portal on any right-click. */
-                RandomProvider prov = RandomProvider.getProvider(s);
+                RandomProvider prov = InfinityMod.provider;
                 if (prov.portalKey.isBlank()) {
                     if (world instanceof ServerWorld serverWorld) {
                         PortalCreationLogic.openWithStatIncrease(player, s, serverWorld, pos);
@@ -171,7 +172,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
                         putKeyComponents(e.getStack().getItem(), npbe.getDimension(), world));
             if (entity instanceof PlayerEntity player
-                    && RandomProvider.getProvider(server).portalKey.isBlank()) {
+                    && InfinityMod.provider.portalKey.isBlank()) {
                 ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
                 if ((world1 == null) || !npbe.getOpen())
                     PortalCreationLogic.openWithStatIncrease(player, server, world, pos);
@@ -199,7 +200,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 pos = pos.down();
             }
             if (world.getBlockState(pos).allowsSpawning(world, pos, ModEntities.CHAOS_PAWN.get()) &&
-                    ModEntities.chaosMobsEnabled(world) &&
+                    InfinityMethods.chaosMobsEnabled() &&
                     (entity = ModEntities.CHAOS_PAWN.get().spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());

@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.block.custom;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
-import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
@@ -90,7 +90,7 @@ public class TransfiniteAltarBase extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
-        if (world instanceof ServerWorld serverWorld) {
+        if (world instanceof ServerWorld) {
             if (itemStack.isEmpty() &&
                     world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
                 if (player instanceof ServerPlayerEntity spe) ModCriteria.BIOME_BOTTLE.trigger(spe, bbbe);
@@ -98,7 +98,7 @@ public class TransfiniteAltarBase extends Block {
             }
 
             //activation
-            String s = RandomProvider.getProvider(serverWorld.getServer()).altarKey;
+            String s = InfinityMod.provider.altarKey;
             boolean bl0 = s.isBlank() ? itemStack.isEmpty() : itemStack.isOf(Registries.ITEM.get(new Identifier(s)));
             if (bl0) {
                 boolean bl = testSpace(world, pos);

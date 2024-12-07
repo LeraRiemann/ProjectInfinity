@@ -1,12 +1,8 @@
 package net.lerariemann.infinity.entity.custom;
 
-
-
-import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.access.MobEntityAccess;
-import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.iridescence.Iridescence;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -234,21 +230,18 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public static boolean canSpawn(EntityType<ChaosPawn> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        return world.getDifficulty() != Difficulty.PEACEFUL && ModEntities.chaosMobsEnabled(world);
+        return world.getDifficulty() != Difficulty.PEACEFUL && InfinityMethods.chaosMobsEnabled();
     }
 
     @Override
     protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
         super.dropEquipment(source, lootingMultiplier, allowDrops);
         if (!this.isChess()) {
-            if (source.getSource() != null) {
-                String s = RandomProvider.getProvider(Objects.requireNonNull(source.getSource().getServer())).registry.get("items").getRandomElement(source.getSource().getWorld().random);
-                double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
-                ItemStack stack = Registries.ITEM.get(new Identifier(s)).getDefaultStack().copyWithCount((int)(i*i));
-//            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
-                this.dropStack(stack);
-            }
-
+            String s = InfinityMod.provider.registry.get("items").getRandomElement(world.random);
+            double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
+            ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i));
+            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
+            this.dropStack(stack);
         }
     }
 
