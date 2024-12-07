@@ -82,7 +82,7 @@ public interface PortalCreationLogic {
             else content = "";
             MinecraftServer server = world.getServer();
             if (server != null) {
-                Identifier id = WarpLogic.getIdentifier(content, server);
+                Identifier id = WarpLogic.getIdentifier(content);
                 if (world instanceof ServerWorld serverWorld) {
                     boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
                     if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
@@ -99,7 +99,7 @@ public interface PortalCreationLogic {
                 else content = "";
                 MinecraftServer server = world.getServer();
                 if (server != null) {
-                    Identifier id = WarpLogic.getIdentifier(content, server);
+                    Identifier id = WarpLogic.getIdentifier(content);
                     if (world instanceof ServerWorld serverWorld) {
                         boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
                         if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
@@ -333,7 +333,7 @@ public interface PortalCreationLogic {
 
     static boolean convertReturnPortal(ServerWorld destination, MinecraftServer server, RegistryKey<World> registryKey, TeleportTarget teleportTarget) {
         boolean bl = false;
-        if (RandomProvider.getProvider(server).rule("returnPortalsEnabled") &&
+        if (InfinityMod.provider.rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = BlockPos.ofFloored(teleportTarget.position);
             for (BlockPos pos2: new BlockPos[] {pos, pos.add(1, 0, 0), pos.add(0, 0, 1),

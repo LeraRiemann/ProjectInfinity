@@ -96,7 +96,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random r = new Random();
         NbtElement effect = InfinityMod.provider.compoundRegistry.get("effects").getRandomElement(world.getRandom());
-        Identifier e = Identifier.of(((NbtCompound)effect).getString("Name"));
+        Identifier e = new Identifier(((NbtCompound)effect).getString("Name"));
         this.setEffect(e);
         this.setColorRaw(Objects.requireNonNull(reg.get(e)).getColor());
         this.setDuration(r.nextInt(600));

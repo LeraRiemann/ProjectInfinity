@@ -2,6 +2,7 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -67,11 +68,12 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
 
     @Override
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random r = new Random();
-        this.dataTracker.set(core, Registries.BLOCK.get(Identifier.of(InfinityMod.provider.randomName(r, "all_blocks"))).getDefaultState());
-        this.dataTracker.set(color, r.nextInt(16777216));
-        return super.initialize(world, difficulty, spawnReason, entityData);
+        this.dataTracker.set(core, Registries.BLOCK.get(new Identifier(InfinityMod.provider.randomName(r, "all_blocks"))).getDefaultState());
+        Vector3f c = new Vector3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
+        this.dataTracker.set(color, c);
+        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override

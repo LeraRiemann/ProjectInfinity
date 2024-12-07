@@ -100,7 +100,7 @@ public interface WarpLogic {
 
     static int getKeyColorFromId(Identifier id) {
         if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
-            return Math.toIntExact(getNumericFromId(id, server) & 0xFFFFFF);
+            return Math.toIntExact(getNumericFromId(id) & 0xFFFFFF);
         return 0;
     }
 

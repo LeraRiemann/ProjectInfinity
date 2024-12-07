@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.access.MobEntityAccess;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;
@@ -215,9 +217,9 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         this.setHealth((float)i);
         int a;
         if ((a = (int)(0.1*i)) > 0) {
-            this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(new Identifier(
-                            ((MinecraftServerAccess)Objects.requireNonNull(world.getServer())).infinity$getDimensionProvider().randomName(r, "items")))
-                    .getDefaultStack().copyWithCount(a));
+            this.equipLootStack(
+                    EquipmentSlot.HEAD,
+                    Registries.ITEM.get(new Identifier(InfinityMod.provider.randomName(r, "items"))).getDefaultStack().copyWithCount(a));
             ((MobEntityAccess)this).infinity$setPersistent(false);
         }
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
@@ -237,10 +239,10 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
         super.dropEquipment(source, lootingMultiplier, allowDrops);
         if (!this.isChess()) {
-            String s = InfinityMod.provider.registry.get("items").getRandomElement(world.random);
+            String s = InfinityMod.provider.registry.get("items").getRandomElement(getWorld().random);
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
-            ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i));
-            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
+            ItemStack stack = Registries.ITEM.get(new Identifier(s)).getDefaultStack().copyWithCount((int)(i*i));
+//            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
             this.dropStack(stack);
         }
     }
