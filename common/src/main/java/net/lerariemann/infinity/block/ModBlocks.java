@@ -2,6 +2,7 @@ package net.lerariemann.infinity.block;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.custom.*;
 import net.minecraft.block.*;
@@ -45,5 +46,10 @@ public class ModBlocks {
 
     public static void registerModBlocks() {
         BLOCKS.register();
+    }
+
+    public static void registerFlammableBlocks() {
+        PlatformMethods.registerFlammableBlock(ModBlocks.IRIDESCENT_WOOL, 60, 30);
+        PlatformMethods.registerFlammableBlock(ModBlocks.IRIDESCENT_CARPET, 20, 60);
     }
 }

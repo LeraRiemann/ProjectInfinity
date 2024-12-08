@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util;
 import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.FlowableFluid;
@@ -116,6 +117,14 @@ public class PlatformMethods {
      */
     @ExpectPlatform
     public static TagKey<Item> createItemTag(String id) {
+        throw new AssertionError();
+    }
+
+    /**
+     * Register a Flammable Block (how does Architectury API not have a helper for this)
+     */
+    @ExpectPlatform
+    public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
         throw new AssertionError();
     }
 }
