@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public interface SurfaceRuleScanner {
-    static void scan(MinecraftServer server) {
+    static Set<String> scan(MinecraftServer server) {
         Map<String, NbtCompound> map = new HashMap<>();
         Registry<ChunkGeneratorSettings> registry = server.getRegistryManager().get(RegistryKeys.CHUNK_GENERATOR_SETTINGS);
         registry.getKeys().forEach(key -> {
@@ -34,6 +34,7 @@ public interface SurfaceRuleScanner {
             String path = "config/infinity/modular/" + modname + "/surface_rule";
             CommonIO.writeSurfaceRule(value, path, biomename);
         });
+        return map.keySet();
     }
 
     class Tree{

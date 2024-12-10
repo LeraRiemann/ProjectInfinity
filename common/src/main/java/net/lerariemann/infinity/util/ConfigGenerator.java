@@ -388,7 +388,8 @@ public interface ConfigGenerator {
         DynamicRegistryManager manager = s.getRegistryManager();
         generateAllNoWorld();
         generateBlocksAndFluids(w, inAir, onStone);
-        SurfaceRuleScanner.scan(s);
+        Set<String> registeredRules = SurfaceRuleScanner.scan(s);
+        info(registeredRules.size(), "surface rules");
         generate(manager.get(RegistryKeys.BIOME), "misc", "biomes", key ->
                 key.getValue().getNamespace().equals(InfinityMod.MOD_ID) ? null : key.getValue().toString());
         generate(manager.get(RegistryKeys.STRUCTURE), "extra", "structures", ConfigGenerator::extractStructure);
