@@ -107,7 +107,7 @@ public interface ConfigGenerator {
         InfinityMod.LOGGER.info("Registered {} {}", count, type);
     }
 
-    static <T> void generate(Registry<T> r, String additionalPath, String name) {
+    static <S> void generate(Registry<S> r, String additionalPath, String name) {
         generate(r, additionalPath, name, key -> key.getValue().toString());
     }
 
