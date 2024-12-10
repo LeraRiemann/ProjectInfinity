@@ -89,7 +89,9 @@ public class RandomProvider {
     }
 
     void saveTrees() {
-        List<String> trees = registry.get("trees").keys;
+        WeighedStructure<NbtElement> treesReg = compoundRegistry.get("trees");
+        if (treesReg == null) return;
+        List<String> trees = treesReg.keys.stream().map(compound -> ((NbtCompound)compound).getString("Name")).toList();
         double size = trees.size();
         NbtCompound c = new NbtCompound();
         NbtList l = new NbtList();
@@ -268,7 +270,8 @@ public class RandomProvider {
             Map.entry("particles", "minecraft:heart"),
             Map.entry("biomes", "minecraft:plains"),
             Map.entry("mobs", "minecraft:pig"),
-            Map.entry("tags", "#minecraft:air"));
+            Map.entry("tags", "#minecraft:air"),
+            Map.entry("trees", "#minecraft:oak"));
 
     public String randomName(Random random, String key) {
         return randomName(random, key, defaultMap.get(key));

@@ -8,8 +8,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -30,7 +30,10 @@ import net.minecraft.world.StructureSpawns;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.biome.SpawnSettings;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.structure.Structure;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -121,11 +124,13 @@ public interface ConfigGenerator {
         return res;
     }
 
-    static NbtCompound fluid(RegistryKey<Fluid> key) {
+    static NbtCompound fluid(RegistryKey<Fluid> key, Set<String> blocknames) {
         Fluid b = Registries.FLUID.get(key);
         assert b!= null;
         NbtCompound res = new NbtCompound();
-        res.putString("Name", Registries.BLOCK.getId(b.getDefaultState().getBlockState().getBlock()).toString());
+        String name = Registries.BLOCK.getId(b.getDefaultState().getBlockState().getBlock()).toString();
+        blocknames.add(name);
+        res.putString("Name", name);
         res.putString("fluidName", key.getValue().toString());
         return res;
     }
@@ -152,31 +157,40 @@ public interface ConfigGenerator {
         });
     }
 
+    static <T> void writeMap(Map<String, WeighedStructure<T>> m, String addpath, String name, AtomicInteger i) {
+        writeMap(m, addpath, name);
+        LogManager.getLogger().info("Registered {} {}", i.get(), name);
+    }
+
     static <T> void generate(Registry<T> r, String additionalPath, String name) {
         generate(r, additionalPath, name, false);
     }
 
     static <T> void generate(Registry<T> r, String additionalPath, String name, boolean excludeInfinity) {
         Map<String, WeighedStructure<String>> m = new HashMap<>();
+        AtomicInteger i = new AtomicInteger();
         r.getKeys().forEach(key -> {
             String namespace = key.getValue().getNamespace();
             if (!excludeInfinity || !(namespace.contains("infinity"))) {
                 checkAndAddElement(m, key.getValue());
+                i.getAndIncrement();
             }
         });
-        writeMap(m, additionalPath, name);
+        writeMap(m, additionalPath, name, i);
     }
 
     static void generateParticles() {
         Registry<ParticleType<?>> r = Registries.PARTICLE_TYPE;
         Map<String, WeighedStructure<String>> m = new HashMap<>();
+        AtomicInteger i = new AtomicInteger();
         r.getKeys().forEach(a -> {
             Identifier id = a.getValue();
             if (id.getNamespace().equals("minecraft") || r.get(id) instanceof SimpleParticleType) {
                 checkAndAddElement(m, id);
+                i.getAndIncrement();
             }
         });
-        writeMap(m, "misc", "particles");
+        writeMap(m, "misc", "particles", i);
     }
 
     static void generateBlockTags() {
@@ -188,31 +202,21 @@ public interface ConfigGenerator {
         writeMap(tagMap, "misc", "tags");
     }
 
-    static void generateFluids() {
-        Registry<Fluid> r = Registries.FLUID;
-        Map<String, WeighedStructure<NbtCompound>> m = new HashMap<>();
-        r.getKeys().forEach(a -> {
-            String b = a.getValue().toString();
-            String namespace = a.getValue().getNamespace();
-            checkAndAddWS(m, namespace);
-            if (!b.contains("flowing"))
-                m.get(namespace).add(fluid(a), 1.0);
-        });
-        writeMap(m, "blocks", "fluids");
-    }
-
     static void generateMobs() {
         Map<String, WeighedStructure<NbtCompound>> allMobs = new HashMap<>();
+        AtomicInteger i = new AtomicInteger();
         Registries.ENTITY_TYPE.getKeys().forEach(key -> {
             NbtCompound mob = mob(key);
             if (mob != null) {
                 checkAndAddElement(allMobs, key.getValue().getNamespace(), mob);
+                i.getAndIncrement();
             }
         });
-        writeMap(allMobs, "extra", "mobs");
+        writeMap(allMobs, "extra", "mobs", i);
     }
 
     static NbtCompound mob(RegistryKey<EntityType<?>> key) {
+        if (key.getValue().getNamespace().equals("minecolonies")) return null; //this mod's mobs crash the game when spawned from the biome
         SpawnGroup sg = Registries.ENTITY_TYPE.get(key.getValue()).getSpawnGroup();
         if (sg != SpawnGroup.MISC) {
             NbtCompound mob = new NbtCompound();
@@ -225,8 +229,12 @@ public interface ConfigGenerator {
 
     static void generateEffects() {
         Map<String, WeighedStructure<NbtCompound>> allEffects = new HashMap<>();
-        Registries.STATUS_EFFECT.getKeys().forEach(key -> checkAndAddElement(allEffects, key.getValue().getNamespace(), effect(key)));
-        writeMap(allEffects, "extra", "effects");
+        AtomicInteger i = new AtomicInteger();
+        Registries.STATUS_EFFECT.getKeys().forEach(key -> {
+            checkAndAddElement(allEffects, key.getValue().getNamespace(), effect(key));
+            i.getAndIncrement();
+        });
+        writeMap(allEffects, "extra", "effects", i);
     }
 
     static NbtCompound effect(RegistryKey<StatusEffect> key) {
@@ -241,17 +249,40 @@ public interface ConfigGenerator {
         return res;
     }
 
-    static void generateBlocks(WorldView w, BlockPos inAir, BlockPos onStone) {
+    static Set<String> generateFluids() {
+        Registry<Fluid> r = Registries.FLUID;
+        Map<String, WeighedStructure<NbtCompound>> m = new HashMap<>();
+        AtomicInteger i = new AtomicInteger();
+        Set<String> blocknames = new HashSet<>();
+        r.getKeys().forEach(a -> {
+            NbtCompound data = fluid(a, blocknames);
+            Fluid f = r.get(a.getValue());
+            if (f instanceof FlowableFluid fl) {
+                String namespace = a.getValue().getNamespace();
+                checkAndAddWS(m, namespace);
+                if (fl.equals(fl.getStill())) {
+                    m.get(namespace).add(data, 1.0);
+                    i.getAndIncrement();
+                }
+            }
+        });
+        writeMap(m, "blocks", "fluids", i);
+        return blocknames;
+    }
+
+    static void generateBlocksAndFluids(WorldView w, BlockPos inAir, BlockPos onStone) {
         Registry<Block> r = Registries.BLOCK;
         Map<String, WeighedStructure<NbtCompound>> blockMap = new HashMap<>();
         Map<String, WeighedStructure<NbtList>> colorPresetMap = new HashMap<>();
         Map<String, WeighedStructure<String>> airMap = new HashMap<>();
         Map<String, WeighedStructure<String>> flowerMap = new HashMap<>();
+        Set<String> fluidBlockNames = generateFluids();
+        AtomicInteger i = new AtomicInteger();
         r.getKeys().forEach(key -> {
-            Block block = r.get(key);
-            assert block != null;
-            if(block.getDefaultState().getFluidState().isOf(Fluids.EMPTY)) {
-                String blockName = key.getValue().toString();
+            String blockName = key.getValue().toString();
+            if(!fluidBlockNames.contains(blockName)) {
+                Block block = r.get(key);
+                assert block != null;
                 String namespace = key.getValue().getNamespace();
                 checkAndAddWS(blockMap, namespace);
                 checkAndAddWS(colorPresetMap, namespace);
@@ -260,9 +291,10 @@ public interface ConfigGenerator {
                     checkColorSet(blockName, colorPresetMap.get(namespace));
                 if (block.getDefaultState().isIn(BlockTags.AIR)) checkAndAddElement(airMap, key.getValue());
                 if (block.getDefaultState().isIn(BlockTags.SMALL_FLOWERS)) checkAndAddElement(flowerMap, key.getValue());
+                i.getAndIncrement();
             }
         });
-        writeMap(blockMap, "blocks", "blocks");
+        writeMap(blockMap, "blocks", "blocks", i);
         writeMap(colorPresetMap, "extra", "color_presets");
         writeMap(airMap, "blocks", "airs");
         writeMap(flowerMap, "blocks", "flowers");
@@ -290,22 +322,28 @@ public interface ConfigGenerator {
         Registry<SoundEvent> r = Registries.SOUND_EVENT;
         Map<String, WeighedStructure<String>> music = new HashMap<>();
         Map<String, WeighedStructure<String>> sounds = new HashMap<>();
+        AtomicInteger i = new AtomicInteger();
+        AtomicInteger j = new AtomicInteger();
         r.getKeys().forEach(a -> {
             Identifier id = a.getValue();
             if (id.toString().contains("music")) {
                 checkAndAddElement(music, id);
+                i.getAndIncrement();
             }
             else {
                 checkAndAddElement(sounds, id);
+                j.getAndIncrement();
             }
         });
-        writeMap(sounds, "misc", "sounds");
+        writeMap(sounds, "misc", "sounds", j);
         writeMap(music, "misc", "music");
+        LogManager.getLogger().info("Registered {} music tracks", i.get());
     }
 
     static void generateStructures(MinecraftServer server) {
         Map<String, WeighedStructure<NbtCompound>> map = new HashMap<>();
         Registry<Structure> registry = server.getRegistryManager().get(RegistryKeys.STRUCTURE);
+        AtomicInteger i = new AtomicInteger();
         registry.getKeys().forEach(key -> {
             Identifier id = key.getValue();
             if (!id.getNamespace().equals("infinity") || !id.getPath().contains("_") || id.getPath().equals("indev_house")) {
@@ -320,10 +358,11 @@ public interface ConfigGenerator {
                     res.put("spawn_overrides", overrides);
                     res.putString("terrain_adaptation", adaptation);
                     checkAndAddElement(map, id.getNamespace(), res);
+                    i.getAndIncrement();
                 });
             }
         });
-        writeMap(map, "extra", "structures");
+        writeMap(map, "extra", "structures", i);
     }
 
     static NbtCompound genOverrides(Map<SpawnGroup, StructureSpawns> overrides) {
@@ -355,13 +394,46 @@ public interface ConfigGenerator {
         return res;
     }
 
+    static String getFeatureType(Feature<?> type) {
+        if (type.equals(Feature.TREE)) return "tree";
+        if (type.equals(Feature.HUGE_FUNGUS)) return "huge_fungus";
+        if (type.equals(Feature.HUGE_BROWN_MUSHROOM)) return "huge_brown_mushroom";
+        if (type.equals(Feature.HUGE_RED_MUSHROOM)) return "huge_red_mushroom";
+        return "";
+    }
+
+    static void generateFeatures(MinecraftServer server) {
+        Map<String, WeighedStructure<NbtCompound>> map = new HashMap<>();
+        Registry<ConfiguredFeature<?,?>> registry =
+                server.getRegistryManager().get(RegistryKeys.CONFIGURED_FEATURE);
+        AtomicInteger i = new AtomicInteger();
+        registry.getKeys().forEach(key -> {
+            Identifier id = key.getValue();
+            if (!id.getNamespace().equals("infinity") && !id.toString().contains("bees")) {
+                Optional<ConfiguredFeature<?,? extends Feature<?>>> o = registry.getOrEmpty(key);
+                o.ifPresent(feature -> {
+                    String type = getFeatureType(feature.feature());
+                    if (!type.isEmpty()) {
+                        NbtCompound res = new NbtCompound();
+                        res.putString("Name", id.toString());
+                        res.putString("Type", type);
+                        checkAndAddElement(map, id.getNamespace(), res);
+                        i.getAndIncrement();
+                    }
+                });
+            }
+        });
+        writeMap(map, "extra", "trees", i);
+    }
+
     static void generateAll(World w, BlockPos inAir, BlockPos onStone) {
         generateAllNoWorld();
-        generateBlocks(w, inAir, onStone);
+        generateBlocksAndFluids(w, inAir, onStone);
         MinecraftServer s = Objects.requireNonNull(w.getServer());
         SurfaceRuleScanner.scan(s);
         generate(s.getRegistryManager().get(RegistryKeys.BIOME), "misc", "biomes", true);
         generateStructures(s);
+        generateFeatures(s);
     }
 
     static void generateAllNoWorld() {
@@ -369,7 +441,6 @@ public interface ConfigGenerator {
         generate(Registries.ITEM, "misc", "items");
         generateParticles();
         generateMobs();
-        generateFluids();
         generateBlockTags();
         generateEffects();
     }
