@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.neoforge;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
 import net.lerariemann.infinity.fluids.neoforge.ModEffectsNeoforge;
@@ -45,6 +46,7 @@ public final class InfinityModNeoForge {
     @SubscribeEvent
     public static void commonSetup(FMLCommonSetupEvent event) {
         ModStats.load();
+        ModBlocks.registerFlammableBlocks();
         ModItemFunctions.registerDispenserBehaviour();
     }
 

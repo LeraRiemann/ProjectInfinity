@@ -5,6 +5,7 @@ import me.basiqueevangelist.dynreg.util.RegistryUtils;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -14,10 +15,7 @@ import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
 import net.lerariemann.infinity.iridescence.IridescenceLiquidBlock;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FluidBlock;
+import net.minecraft.block.*;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -85,5 +83,9 @@ public class PlatformMethodsImpl {
 
     public static TagKey<Item> createItemTag(String id) {
         return TagKey.of(RegistryKeys.ITEM, InfinityMethods.getId(id));
+    }
+
+    public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
+        FlammableBlockRegistry.getDefaultInstance().add(block.get(), burn, spread);
     }
 }

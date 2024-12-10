@@ -8,10 +8,7 @@ import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.fluids.neoforge.IridescenceLiquidBlockNeoforge;
 import net.lerariemann.infinity.fluids.neoforge.ModFluidsNeoforge;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FluidBlock;
+import net.minecraft.block.*;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -86,6 +83,10 @@ public class PlatformMethodsImpl {
 
     public static TagKey<Item> createItemTag(String id) {
         return ItemTags.create(InfinityMethods.getId(id));
+    }
+
+    public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
+//        FlammableBlockRegistry.getDefaultInstance().add(block.get(), burn, spread);
     }
 
 }
