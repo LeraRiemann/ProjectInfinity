@@ -55,3 +55,6 @@ config = "infinity.mixins.json"
 [modproperties.infinity]
 catalogueItemIcon="infinity:book_box"
 catalogueBackground="background.png"
+
+["lithium:options"]
+"mixin.ai.poi.fast_portals" = false
