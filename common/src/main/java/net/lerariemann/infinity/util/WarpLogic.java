@@ -74,6 +74,10 @@ public interface WarpLogic {
         player.teleport(targ.getX(), targ.getY(), targ.getZ());
 
     }
+    /* will implement a proper end-of-time dimension later */
+    static void sendToMissingno(ServerPlayerEntity player) {
+        warpWithTimer(player, InfinityMethods.getId("missingno"), 2, false);
+    }
 
     static void onInvocationNeedDetected(PlayerEntity player) {
         if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"));

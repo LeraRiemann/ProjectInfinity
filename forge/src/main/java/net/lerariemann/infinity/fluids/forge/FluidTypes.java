@@ -3,6 +3,7 @@ package net.lerariemann.infinity.fluids.forge;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -39,7 +40,7 @@ public class FluidTypes {
             .sound(SoundActions.BUCKET_FILL, SoundEvents.ITEM_BUCKET_FILL)
             .sound(SoundActions.BUCKET_EMPTY, SoundEvents.ITEM_BUCKET_EMPTY)
             .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.BLOCK_FIRE_EXTINGUISH)
-            .canHydrate(true)) {
+            .canHydrate(true).pathType(PathNodeType.WATER).adjacentPathType(PathNodeType.WATER)) {
         @Override
         public boolean canConvertToSource(@NotNull FluidState state, @NotNull WorldView reader, @NotNull BlockPos pos) {
             if (reader instanceof World level) {
