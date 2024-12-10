@@ -4,6 +4,7 @@ import dev.architectury.platform.Platform;
 import dev.architectury.platform.forge.EventBuses;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.compat.forge.CanaryCompat;
+import net.lerariemann.infinity.compat.forge.RadiumCompat;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.fluids.forge.FluidTypes;
 import net.lerariemann.infinity.fluids.forge.ModEffectsForge;
@@ -29,6 +30,9 @@ public final class InfinityModForge {
         // Register compat file ASAP to prevent a Canary crash.
         if (Platform.isModLoaded("canary"))
             CanaryCompat.writeCompatFile();
+        // Register compat file ASAP to prevent a Radium crash.
+        if (Platform.isModLoaded("radium"))
+            RadiumCompat.writeCompatFile();
         // Submit our event bus to let Architectury API register our content on the right time.
         EventBuses.registerModEventBus(InfinityMod.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
