@@ -3,6 +3,7 @@ package net.lerariemann.infinity.forge;
 import dev.architectury.platform.Platform;
 import dev.architectury.platform.forge.EventBuses;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.compat.forge.CanaryCompat;
 import net.lerariemann.infinity.compat.forge.RadiumCompat;
 import net.lerariemann.infinity.entity.ModEntities;
@@ -63,6 +64,7 @@ public final class InfinityModForge {
         ModStatusEffects.IRIDESCENT_EFFECT = ModEffectsForge.IRIDESCENT_EFFECT.getHolder().get();
         ModStatusEffects.IRIDESCENT_SETUP = ModEffectsForge.IRIDESCENT_SETUP.getHolder().get();
         ModStatusEffects.IRIDESCENT_COOLDOWN = ModEffectsForge.IRIDESCENT_COOLDOWN.getHolder().get();
+        ModBlocks.registerFlammableBlocks();
         ModItemFunctions.registerDispenserBehaviour();
     }
 }

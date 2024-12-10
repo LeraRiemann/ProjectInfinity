@@ -15,10 +15,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundEvent;
@@ -206,7 +203,7 @@ public interface ConfigGenerator {
                 blockMap.get(namespace).add(extractBlock(key, w, inAir, onStone), 1.0);
                 if (blockName.contains("magenta") && !isLaggy(block) && isFloat(block.getDefaultState(), w, inAir))
                     checkColorSet(blockName, colorPresetMap.get(namespace));
-                if (block.getDefaultState().isIn(BlockTags.AIR)) checkAndAddElement(airMap, key.getValue());
+                if (block.getDefaultState().isAir()) checkAndAddElement(airMap, key.getValue());
                 if (block.getDefaultState().isIn(BlockTags.SMALL_FLOWERS)) checkAndAddElement(flowerMap, key.getValue());
                 i.getAndIncrement();
             }
@@ -225,7 +222,7 @@ public interface ConfigGenerator {
         Arrays.stream(colors).forEach(color -> {
             int i = block.lastIndexOf("magenta");
             String blockColored = block.substring(0, i) + color + block.substring(i+7);
-            if (Registries.BLOCK.containsId(Identifier.of(blockColored))) {
+            if (Registries.BLOCK.containsId(new Identifier(blockColored))) {
                 successCounter.addAndGet(1);
                 NbtCompound c = new NbtCompound();
                 c.putString("Name", blockColored);
@@ -257,9 +254,9 @@ public interface ConfigGenerator {
         NbtCompound properties = new NbtCompound();
         if (bs.contains(Properties.PERSISTENT)) properties.putString("persistent", "true");
         if (bs.contains(Properties.LIT)) properties.putString("lit", "false");
-        if (bs.contains(Properties.BLOCK_FACE)) {
+        if (bs.contains(Properties.WALL_MOUNT_LOCATION)) {
             properties.putString("face", "floor");
-            bs = bs.with(Properties.BLOCK_FACE, BlockFace.FLOOR);
+            bs = bs.with(Properties.WALL_MOUNT_LOCATION, WallMountLocation.FLOOR);
         }
         res.putBoolean("top", isTop(bs, w, onStone));
         if (!properties.isEmpty()) res.put("Properties", properties);
@@ -292,7 +289,7 @@ public interface ConfigGenerator {
 
     static String extractParticle(RegistryKey<ParticleType<?>> key) {
         Identifier id = key.getValue();
-        if (!id.getNamespace().equals("minecraft") && !(Registries.PARTICLE_TYPE.get(id) instanceof SimpleParticleType)) return null;
+        if (!id.getNamespace().equals("minecraft") && !(Registries.PARTICLE_TYPE.get(id) instanceof DefaultParticleType)) return null;
         return id.toString();
     }
 
