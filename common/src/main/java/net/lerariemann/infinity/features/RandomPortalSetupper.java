@@ -1,9 +1,10 @@
 package net.lerariemann.infinity.features;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
@@ -13,27 +14,28 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class RandomPortalSetupper extends Feature<RandomPortalSetupperConfig> {
-    public RandomPortalSetupper(Codec<RandomPortalSetupperConfig> configCodec) {
+public class RandomPortalSetupper extends Feature<RandomPortalSetupper.Config> {
+    public RandomPortalSetupper(Codec<Config> configCodec) {
         super(configCodec);
     }
 
 
     public static Set<Integer> tileChunkPositions(int start, int offset) {
         Set<Integer> ls = new HashSet<>();
-        int mod = WarpLogic.properMod(start, offset);
+        int mod = InfinityMethods.properMod(start, offset);
         int d_start = mod == 0 ? 0 : offset - mod;
         for (int d_curr = d_start; d_curr < 16; d_curr += offset) ls.add(start + d_curr);
         return ls;
     }
 
     @Override
-    public boolean generate(FeatureContext<RandomPortalSetupperConfig> context) {
+    public boolean generate(FeatureContext<Config> context) {
         StructureWorldAccess structureWorldAccess = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         int y = context.getConfig().y();
@@ -68,7 +70,7 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupperConfig> {
 
     public boolean generateOnePortal(StructureWorldAccess structureWorldAccess, BlockPos blockPos, Random random,
                                      boolean axis_x, int width, int height, int sol, int soy) {
-        int dim = random.nextInt();
+        long dim = InfinityMethods.getRandomSeed(random);
         for (int y = 0; y < height+2; y++) {
             if (y == 0 || y == height+1) for (int l = 0; l < width+2; l++) {
                 setBlockState(structureWorldAccess, bpadd(blockPos, l, y, 0, axis_x), obs);
@@ -79,11 +81,12 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupperConfig> {
                 for (int l = 1; l < width+1; l++) {
                     BlockPos pos = bpadd(blockPos, l, y, 0, axis_x);
                     setBlockState(structureWorldAccess, pos,
-                            ModBlocks.NEITHER_PORTAL.get().getDefaultState().with(
+                            ModBlocks.PORTAL.get().getDefaultState().with(
                                     NetherPortalBlock.AXIS, axis_x ? Direction.Axis.X : Direction.Axis.Z));
-                    if (structureWorldAccess.getBlockEntity(pos) instanceof NeitherPortalBlockEntity be) {
+                    if (structureWorldAccess.getBlockEntity(pos) instanceof InfinityPortalBlockEntity be) {
                         be.setDimension(dim);
                         be.setOpen(false);
+                        be.markDirty();
                     }
                     else return false;
                 }
@@ -93,5 +96,19 @@ public class RandomPortalSetupper extends Feature<RandomPortalSetupperConfig> {
                 bpadd(blockPos, sol, soy, i, axis_x),
                 axis_x ? sign : sign.with(Properties.ROTATION, 4));
         return true;
+    }
+
+    public record Config(boolean axis_x, int width, int height, int offset_l, int offset_t,
+                                              int sign_offset_l, int sign_offset_y, int y) implements FeatureConfig {
+        public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                (Codec.BOOL.fieldOf("axis_x")).orElse(Boolean.TRUE).forGetter(a -> a.axis_x),
+                (Codec.INT.fieldOf("width")).orElse(2).forGetter(a -> a.width),
+                (Codec.INT.fieldOf("height")).orElse(3).forGetter(a -> a.height),
+                (Codec.INT.fieldOf("offset_l")).orElse(8).forGetter(a -> a.offset_l),
+                (Codec.INT.fieldOf("offset_t")).orElse(8).forGetter(a -> a.offset_t),
+                (Codec.INT.fieldOf("sign_offset_l")).orElse(0).forGetter(a -> a.sign_offset_l),
+                (Codec.INT.fieldOf("sign_offset_y")).orElse(0).forGetter(a -> a.sign_offset_y),
+                (Codec.INT.fieldOf("y")).orElse(16).forGetter(a -> a.y)).apply(
+                instance, Config::new));
     }
 }

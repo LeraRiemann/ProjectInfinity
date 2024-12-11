@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "Biome",
+                  "target": "BlockEntityTag.Biome"
+                },
+                {
+                  "op": "replace",
+                  "source": "Charge",
+                  "target": "BlockEntityTag.Charge"
+                },
+                {
+                  "source": "Color",
+                  "target": "BlockEntityTag.Color",
+                  "op": "replace"
+                }
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "infinity:biome_bottle"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

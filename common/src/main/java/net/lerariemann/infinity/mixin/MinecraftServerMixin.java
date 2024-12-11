@@ -3,7 +3,7 @@ package net.lerariemann.infinity.mixin;
 import com.google.common.collect.ImmutableList;
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.compat.GravityChangerCompat;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
@@ -15,7 +15,6 @@ import net.minecraft.server.ServerTask;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.server.WorldGenerationProgressListenerFactory;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.random.RandomSequencesState;
 import net.minecraft.world.SaveProperties;
 import net.minecraft.world.World;
@@ -25,7 +24,6 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.level.ServerWorldProperties;
 import net.minecraft.world.level.storage.LevelStorage;
 import net.minecraft.world.spawner.Spawner;
-import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -65,17 +63,11 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
     protected ServerTask createTask(Runnable runnable) {
         return null;
     }
-    @Shadow
-    public Path getSavePath(WorldSavePath worldSavePath) {
-        return null;
-    }
 
     @Shadow public abstract DynamicRegistryManager.Immutable getRegistryManager();
 
     @Unique
     public Map<RegistryKey<World>, ServerWorld> infinity$worldsToAdd;
-    @Unique
-    public RandomProvider infinity$dimensionProvider;
     @Unique
     public boolean infinity$needsInvocation;
 
@@ -95,7 +87,7 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
             Path p = InfinityMod.invocationLock;
             if (!Files.exists(p)) {
                 Files.createDirectories(p.getParent());
-                Files.copy(InfinityMod.rootResPath.resolve("config/.util/invocation.lock"), p, REPLACE_EXISTING);
+                Files.copy(InfinityMod.rootConfigPath.resolve(".util/invocation.lock"), p, REPLACE_EXISTING);
             }
             infinity$setDimensionProvider();
             InfinityMod.LOGGER.info("Invocation complete");
@@ -103,18 +95,10 @@ public abstract class MinecraftServerMixin implements MinecraftServerAccess {
             throw new RuntimeException(e);
         }
     }
-    @Override
-    public RandomProvider infinity$getDimensionProvider() {
-        return infinity$dimensionProvider;
-    }
 
     @Override
     public void infinity$setDimensionProvider() {
-        RandomProvider p = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
-                getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
-        p.kickGhostsOut(getRegistryManager());
-        infinity$dimensionProvider = p;
-        if (!infinity$needsInvocation) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
+        InfinityMod.updateProvider((MinecraftServer)(Object)this);
     }
 
     @Override

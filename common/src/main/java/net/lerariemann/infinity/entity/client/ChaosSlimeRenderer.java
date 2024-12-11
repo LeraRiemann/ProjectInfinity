@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.entity.client;
 
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.custom.ChaosSlime;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 public class ChaosSlimeRenderer extends MobEntityRenderer<ChaosSlime, SlimeEntityModel<ChaosSlime>> {
-    private static final Identifier TEXTURE = InfinityMod.getId("textures/entity/slime.png");
+    private static final Identifier TEXTURE = InfinityMethods.getId("textures/entity/slime.png");
 
     public ChaosSlimeRenderer(EntityRendererFactory.Context context) {
         super(context, new SlimeEntityModel<>(context.getPart(EntityModelLayers.SLIME)), 0.25f);

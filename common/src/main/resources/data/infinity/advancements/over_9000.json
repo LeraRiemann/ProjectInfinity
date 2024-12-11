@@ -1,0 +1,26 @@
+{
+  "parent": "infinity:biome_spreader",
+  "criteria": {
+    "bottle": {
+      "trigger": "infinity:bottle",
+      "conditions": {
+        "amount": 9001
+      }
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.infinity.over_9000.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "infinity:biome_bottle"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.infinity.over_9000.title"
+    }
+  }
+}

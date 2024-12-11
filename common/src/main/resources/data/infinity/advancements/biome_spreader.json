@@ -1,0 +1,26 @@
+{
+  "parent": "infinity:multiverse_root",
+  "criteria": {
+    "bottle": {
+      "trigger": "infinity:bottle",
+      "conditions": {
+        "amount": 0
+      }
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.infinity.biome_spreader.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "infinity:biome_bottle"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.infinity.biome_spreader.title"
+    }
+  }
+}

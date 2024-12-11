@@ -3,21 +3,26 @@ package net.lerariemann.infinity.iridescence;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
+import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
-import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Block;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -25,26 +30,49 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
+import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Color;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 public class Iridescence {
+    public static final DoublePerlinNoiseSampler sampler =
+            DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, genOctaves(2));
+
+    public static double[] genOctaves(int octaves){
+        double[] a = new double[octaves];
+        Arrays.fill(a, 1);
+        return a;
+    }
+
+    public static double sample(BlockPos pos) {
+        return sampler.sample(pos.getX(), pos.getY(), pos.getZ());
+    }
+
     public static boolean isInfinite(World world) {
         return world.getRegistryKey().getValue().toString().equals("infinity:chaos");
     }
+
     public static boolean isIridescence(FluidState st) {
         return st.isOf(PlatformMethods.getIridescenceStill().get()) || st.isOf(PlatformMethods.getIridescenceFlowing().get());
     }
+
     public static boolean isIridescence(WorldView world, BlockPos pos) {
         return Iridescence.isIridescence(world.getFluidState(pos));
+    }
+
+    public static boolean isIridescentItem(ItemStack stack) {
+        return stack.isIn(ModItems.IRIDESCENT_TAG);
     }
 
     public static boolean isUnderEffect(LivingEntity entity) {
@@ -52,11 +80,10 @@ public class Iridescence {
     }
 
     public static int color(BlockPos pos) {
-        int i = pos.getX() + pos.getY() + pos.getZ();
-        return Color.HSBtoRGB(i / 600.0f + (float)((Math.sin(pos.getX()/12.0f) + Math.sin(pos.getY()/12.0f) + Math.sin(pos.getZ()/12.0f)) / 4) , 1.0F, 1.0F);
+        return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F);
     }
 
-    public static java.util.List<String> colors = List.of("minecraft:white_",
+    public static java.util.List<String> colors = List.of(
             "minecraft:red_",
             "minecraft:orange_",
             "minecraft:yellow_",
@@ -67,17 +94,13 @@ public class Iridescence {
             "minecraft:blue_",
             "minecraft:purple_",
             "minecraft:magenta_",
-            "minecraft:pink_",
-            "minecraft:gray_",
-            "minecraft:light_gray_",
-            "minecraft:black_",
-            "minecraft:brown_");
+            "minecraft:pink_");
 
     public static Block getRandomColorBlock(WorldAccess world, String str) {
-        return Registries.BLOCK.get(new Identifier(colors.get(world.getRandom().nextInt(16)) + str));
+        return Registries.BLOCK.get(new Identifier(colors.get(world.getRandom().nextInt(colors.size())) + str));
     }
     public static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(new Identifier(colors.get((int)(d*16)) + str));
+        return Registries.BLOCK.get(new Identifier(colors.get((int)(d*colors.size())) + str));
     }
 
     public static final int ticksInHour = 1000;
@@ -95,6 +118,12 @@ public class Iridescence {
 
     public static int getCooldownDuration() {
         return ticksInHour * 24 * 7;
+    }
+
+    public static Phase getPhase(LivingEntity entity) {
+        StatusEffectInstance effect = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value());
+        if (effect == null) return Phase.INITIAL;
+        return getPhase(effect.getDuration(), effect.getAmplifier());
     }
 
     public static Phase getPhase(int duration, int amplifier) {
@@ -147,7 +176,7 @@ public class Iridescence {
 
     public static Identifier getIdForWarp(ServerPlayerEntity player) {
         ServerWorld w = player.getServerWorld().getServer().getOverworld();
-        return InfinityMod.getDimId(new Random(w.getSeed() + w.getTime() / ticksInHour).nextInt());
+        return InfinityMethods.getRandomId(new Random(w.getSeed() + w.getTime() / ticksInHour));
     }
 
     public static final Map<EntityType<? extends MobEntity>, RegistrySupplier<? extends EntityType<? extends MobEntity>>> convertibles =
@@ -160,33 +189,48 @@ public class Iridescence {
         return (convertibles.containsKey(entity.getType()) || (entity instanceof ChaosPawn pawn && pawn.isChess()));
     }
 
-    public static EntityType<? extends MobEntity> getConversion(MobEntity entity) {
-        return convertibles.get(entity.getType()).get();
-    }
-
     public static void tryBeginConversion(MobEntity ent) {
         if (isConvertible(ent) && !ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value()))
             ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0));
     }
 
     public static void endConversion(MobEntity currEntity) {
-        EntityType<? extends MobEntity> typeNew = Iridescence.getConversion(currEntity);
+        EntityType<?> type = currEntity.getType();
+        if (!convertibles.containsKey(type)) return;
+        EntityType<? extends MobEntity> typeNew = convertibles.get(type).get();
         if (typeNew != null) {
             MobEntity newEntity = typeNew.create(currEntity.getWorld());
             if (newEntity != null) {
                 currEntity.discard();
                 ModEntities.copy(currEntity, newEntity);
-                if (currEntity instanceof SlimeEntity e1 && newEntity instanceof SlimeEntity e2) {
-                    e1.setSize(e2.getSize(), true);
-                }
                 if (newEntity instanceof ChaosCreeper creeper) {
                     RegistryEntry<Biome> b = creeper.getWorld().getBiome(creeper.getBlockPos());
-                    creeper.setBiome(b.value().toString());
+                    creeper.setBiome(b.getKey().map(key -> key.getValue().toString()).orElse("[unregistered]"));
                     creeper.setColor(b.value().getFoliageColor());
+                    creeper.setRandomCharge();
+                }
+                else if (currEntity.getWorld() instanceof ServerWorld w)
+                    newEntity.initialize(w, w.getLocalDifficulty(currEntity.getBlockPos()), SpawnReason.CONVERSION, null, null);
+                if (currEntity instanceof SlimeEntity e1 && newEntity instanceof SlimeEntity e2) {
+                    e2.setSize(e1.getSize(), true);
                 }
                 currEntity.getWorld().spawnEntity(newEntity);
                 newEntity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
+                convTriggers(currEntity);
             }
+        }
+    }
+
+    public static void convTriggers(LivingEntity entity) {
+        triggerConversion(entity.getWorld().getClosestPlayer(entity.getX(), entity.getY(), entity.getZ(),
+                50, false), entity);
+        entity.getWorld().getPlayers(TargetPredicate.DEFAULT, entity, Box.of(entity.getPos(), 10,10, 10))
+                .forEach(p -> triggerConversion(p, entity));
+    }
+
+    public static void triggerConversion(PlayerEntity player, LivingEntity entity) {
+        if (player instanceof ServerPlayerEntity np) {
+            ModCriteria.CONVERT_MOB.trigger(np, entity);
         }
     }
 

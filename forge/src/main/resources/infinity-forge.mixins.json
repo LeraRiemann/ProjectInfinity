@@ -4,6 +4,7 @@
   "package": "net.lerariemann.infinity.mixin.forge",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "EntityMixin",
     "ServerPlayerEntityMixin"
   ],
   "client": [],

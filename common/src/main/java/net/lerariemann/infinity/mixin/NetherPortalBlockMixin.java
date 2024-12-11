@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin;
 
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
+import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
@@ -20,7 +20,7 @@ public class NetherPortalBlockMixin {
 	@Inject(at = @At("HEAD"), method = "onEntityCollision(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V")
 	private void injected(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo info) {
 		if (!world.isClient() && entity instanceof ItemEntity itemEntity) {
-			NeitherPortalBlock.tryCreatePortalFromItem(state,world,pos,itemEntity);
+			PortalCreationLogic.tryCreatePortalFromItem(state,world,pos,itemEntity);
 		}
 	}
 

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L": {
+      "item": "minecraft:lime_concrete"
+    },
+    "B": {
+      "item": "minecraft:black_concrete"
+    },
+    "M": {
+      "item": "infinity:black_matter"
+    }
+  },
+  "pattern": [
+    "BLB",
+    "LML",
+    "BLB"
+  ],
+  "result": {
+    "count": 8,
+    "item": "infinity:cursor"
+  },
+  "show_notification": true
+}

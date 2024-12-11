@@ -6,8 +6,9 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.block.custom.NeitherPortalBlock;
+import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -24,20 +25,30 @@ import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 
 public interface WarpLogic {
+    /**
+     * Handles the /warpid command, converting their numeric ID to an Identifier
+     * and passing the data along to /warp.
+     */
     static void warpId(CommandContext<ServerCommandSource> context, long value) {
-        warp(context, InfinityMod.getDimId(value));
+        warp(context, InfinityMethods.getDimId(value));
     }
 
+    /**
+     * Handles the /warp command, warping the player to their specified dimension.
+     * The player-provided text should have already been converted to an Identifier.
+     */
     static void warp(CommandContext<ServerCommandSource> context, Identifier value) {
         warpWithTimer(context.getSource().getPlayer(), value, 20, true);
     }
 
+    /**
+     * Handles moving a specified player to a specified dimension.
+     * This is used by both the warp commands and Iridescence.
+     */
     static void warpWithTimer(@Nullable ServerPlayerEntity player, Identifier value, int ticks, boolean increaseStats) {
         if (player == null) return;
         MinecraftServer s = player.getServer();
@@ -46,53 +57,39 @@ public interface WarpLogic {
             onInvocationNeedDetected(player);
             return;
         }
-        boolean isThisANewDimension = NeitherPortalBlock.addInfinityDimension(s, value);
+        boolean isThisANewDimension = PortalCreationLogic.addInfinityDimension(s, value);
         if (isThisANewDimension && increaseStats) player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
-        ((ServerPlayerEntityAccess)(player)).projectInfinity$setWarpTimer(ticks, value);
+        ((ServerPlayerEntityAccess)(player)).infinity$setWarpTimer(ticks, value);
     }
 
+    /**
+     * Teleport a player to their respawn point.
+     */
     static void respawnAlive(@Nullable ServerPlayerEntity player) {
         if (player == null) return;
         BlockPos targ = player.getSpawnPointPosition();
+        if (targ == null) {
+            targ = player.getServerWorld().getSpawnPos();
+        }
         player.teleport(targ.getX(), targ.getY(), targ.getZ());
-    }
 
-    static Identifier getRandomId(MinecraftServer server, Random random) {
-        return InfinityMod.getDimId(RandomProvider.getProvider(server).rule("longArithmeticEnabled") ?
-                random.nextLong() : random.nextInt());
+    }
+    /* will implement a proper end-of-time dimension later */
+    static void sendToMissingno(ServerPlayerEntity player) {
+        warpWithTimer(player, InfinityMethods.getId("missingno"), 2, false);
     }
 
     static void onInvocationNeedDetected(PlayerEntity player) {
         if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"));
     }
 
-    static int properMod(int a, int b) {
-        int res = a%b;
-        return (res >= 0) ? res : b + res;
+    static PortalColorApplier getPortalColorApplier(Identifier id, MinecraftServer server) {
+        NbtCompound c = InfinityMod.provider.easterizer.optionmap.get(id.getPath());
+        if (c == null) c = InfinityOptions.readData(server, id);
+        return PortalColorApplier.extract(c, (int)WarpLogic.getNumericFromId(id));
     }
 
-    static long getPortalColorFromId(Identifier id, MinecraftServer server, BlockPos pos) {
-        return switch(id.toString()) {
-            case "minecraft:the_end" -> 0;
-            case "infinity:chaos" -> Color.HSBtoRGB(Objects.requireNonNull(server.getWorld(World.OVERWORLD)).getRandom().nextFloat(),
-                    1.0f, 1.0f);
-            case "infinity:chess" -> (properMod(pos.getX() + pos.getY() + pos.getZ(), 2) == 0 ? 0 : 0xffffff);
-            case "infinity:pride" -> switch(properMod(pos.getX() + pos.getY() + pos.getZ(), 3)) {
-                    case 0 -> 0x77c1de;
-                    case 1 -> 0xdaadb5;
-                    default -> 0xffffff;
-                };
-            default -> defaultColorLogic(id, server);
-        };
-    }
-
-    static int defaultColorLogic(Identifier id, MinecraftServer server) {
-        NbtCompound c = RandomProvider.getProvider(server).easterizer.optionmap.getOrDefault(id.getPath(), new NbtCompound());
-        int color = (new InfinityOptions(c)).getPortalColor();
-        return (color == -1) ? (int)getNumericFromId(id, server) : color;
-    }
-
-    static long getNumericFromId(Identifier id, MinecraftServer server) {
+    static long getNumericFromId(Identifier id) {
         String dimensionName = id.getPath();
         String numericId = dimensionName.substring(dimensionName.lastIndexOf("_") + 1);
         long i;
@@ -100,14 +97,14 @@ public interface WarpLogic {
             i = Long.parseLong(numericId);
         } catch (Exception e) {
             /* Simply hash the name if it isn't of "generated_..." format. */
-            i = WarpLogic.getDimensionSeed(numericId, server);
+            i = WarpLogic.getDimensionSeed(numericId);
         }
         return i;
     }
 
-    static int getKeyColorFromId(Identifier id, MinecraftServer server) {
+    static int getKeyColorFromId(Identifier id) {
         if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
-            return Math.toIntExact(getNumericFromId(id, server) & 0xFFFFFF);
+            return Math.toIntExact(getNumericFromId(id) & 0xFFFFFF);
         return 0;
     }
 
@@ -133,20 +130,29 @@ public interface WarpLogic {
         return (!bl3 && bl2 && bl);
     }
 
-    static Identifier getIdentifier(String text, MinecraftServer s) {
+    /**
+     * Convert a provided string into a dimension ID.
+     * This also checks if it matches an Easter Egg dimension.
+     */
+    static Identifier getIdentifier(String text) {
         if (text.equals("abatised redivides")) return World.END.getValue();
-        if (text.isEmpty()) return InfinityMod.getId("missingno");
-        if (RandomProvider.getProvider(s).easterizer.isEaster(text) && !text.equals("missingno")) return InfinityMod.getId(text);
-        return InfinityMod.getDimId(getDimensionSeed(text, s));
+        if (text.isEmpty()) return InfinityMethods.getId("missingno");
+        if (InfinityMod.provider.easterizer.isEaster(text, InfinityMod.provider) && !text.equals("missingno")) return InfinityMethods.getId(text);
+        return InfinityMethods.getDimId(getDimensionSeed(text));
     }
 
-    static long getDimensionSeed(String text, MinecraftServer s) {
-        return getDimensionSeed(text, RandomProvider.getProvider(s));
+    /**
+     * Check if a dimension exists and has not been timebombed.
+     */
+    static boolean dimExists(ServerWorld world) {
+        return (world != null && !((Timebombable)world).infinity$isTimebombed());
     }
 
-    /* Hashes text into dimension ID. */
-    static long getDimensionSeed(String text, RandomProvider prov) {
-        HashCode f = Hashing.sha256().hashString(text + prov.salt, StandardCharsets.UTF_8);
-        return prov.rule("longArithmeticEnabled") ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
+    /**
+     * Hashes text into dimension ID.
+     */
+    static long getDimensionSeed(String text) {
+        HashCode f = Hashing.sha256().hashString(text + InfinityMod.provider.salt, StandardCharsets.UTF_8);
+        return InfinityMethods.longArithmeticEnabled() ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
     }
 }

@@ -34,11 +34,11 @@ public abstract class PostEffectProcessorMixin {
                 this.time += tickDelta - this.lastTickDelta;
             }
 
-            for(this.lastTickDelta = tickDelta; this.time > 2.0F; this.time -= 400.0F) {
+            for(this.lastTickDelta = tickDelta; this.time > 2.0F; this.time -= 4000.0F) {
             }
 
             for(PostEffectPass postEffectPass : this.passes) {
-                postEffectPass.render(this.time / 400.0F);
+                postEffectPass.render(this.time / 4000.0F);
             }
             ci.cancel();
         }

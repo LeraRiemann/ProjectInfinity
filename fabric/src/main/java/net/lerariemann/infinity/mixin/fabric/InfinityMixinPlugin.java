@@ -1,8 +1,6 @@
 package net.lerariemann.infinity.mixin.fabric;
 
 import dev.architectury.platform.Platform;
-import net.lerariemann.infinity.PlatformMethods;
-import org.apache.logging.log4j.LogManager;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;

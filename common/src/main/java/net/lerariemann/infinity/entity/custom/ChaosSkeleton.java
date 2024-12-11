@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.enchantment.Enchantment;
@@ -40,6 +41,7 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.Color;
 import java.util.*;
 
 public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
@@ -93,11 +95,8 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random r = new Random();
-        List<Identifier> a = new ArrayList<>();
-        reg.getIds().forEach(i -> {
-            if (Objects.requireNonNull(reg.get(i)).getCategory().equals(StatusEffectCategory.HARMFUL)) a.add(i);
-        });
-        Identifier e = a.get(r.nextInt(a.size()));
+        NbtElement effect = InfinityMod.provider.compoundRegistry.get("effects").getRandomElement(world.getRandom());
+        Identifier e = new Identifier(((NbtCompound)effect).getString("Name"));
         this.setEffect(e);
         this.setColorRaw(Objects.requireNonNull(reg.get(e)).getColor());
         this.setDuration(r.nextInt(600));
@@ -145,7 +144,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
             ItemStack itemStack2 = setPotion(Items.POTION.getDefaultStack(), this.getEffectRawId(), this.getDuration() * 20);
             ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
             player.setStackInHand(hand, itemStack3);
-            this.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
+            this.playSound(SoundEvents.ITEM_BOTTLE_FILL, 1.0f, 1.0f);
             SkeletonEntity newSkeleton;
             if (!this.getWorld().isClient() && (newSkeleton = EntityType.SKELETON.create(this.getWorld())) != null) {
                 this.discard();

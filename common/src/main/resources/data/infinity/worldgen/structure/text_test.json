@@ -1,0 +1,19 @@
+{
+  "type": "infinity:text",
+  "biomes": "infinity:classic",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "text": "We apologize for the inconvenience.",
+  "block": {
+    "type": "simple_state_provider",
+    "state": {
+      "Name": "minecraft:fire"
+    }
+  },
+  "y": {
+    "type": "constant",
+    "value": {
+      "absolute": 80
+    }
+  }
+}

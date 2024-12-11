@@ -5,50 +5,39 @@ import net.minecraft.nbt.NbtElement;
 
 import java.util.function.Function;
 
-public class PitchShifter {
-    Type type;
-    float value;
+public interface PitchShifter {
+    Function<Float, Float> applier();
 
-    String getString(NbtCompound comp, String s) {
-        if (!comp.contains(s, NbtElement.STRING_TYPE)) return "empty";
-        return comp.getString(s);
+    enum Empty implements PitchShifter {
+        INSTANCE;
+        @Override
+        public Function<Float, Float> applier() {
+            return Function.identity();
+        }
     }
-
-    float getFloat(NbtCompound comp, String s) {
-        if (!comp.contains(s, NbtElement.FLOAT_TYPE)) return 1;
-        return comp.getFloat(s);
+    record Constant(float value) implements PitchShifter {
+        @Override
+        public Function<Float, Float> applier() {
+            return f -> value;
+        }
     }
-
-    PitchShifter(NbtCompound comp) {
-        type = decodeType(getString(comp, "type"));
-        if (type != Type.EMPTY) {
-            value = getFloat(comp, "value");
+    record Add(float value) implements PitchShifter {
+        @Override
+        public Function<Float, Float> applier() {
+            return f -> f + value;
         }
     }
 
-    PitchShifter() {
-        type = Type.EMPTY;
-    }
-
-    Function<Float, Float> applier() {
-        return switch (type) {
-            case EMPTY -> f -> f;
-            case CONSTANT -> f -> value;
-            case ADD -> f -> f + value;
+    static PitchShifter decode(NbtCompound comp) {
+        return switch(comp.getString("type")) {
+            case "constant" -> new Constant(getFloat(comp, "value"));
+            case "add" -> new Add(getFloat(comp, "value"));
+            default -> Empty.INSTANCE;
         };
     }
 
-    Type decodeType(String s) {
-        return switch (s) {
-            case "constant" -> Type.CONSTANT;
-            case "add" -> Type.ADD;
-            default -> Type.EMPTY;
-        };
-    }
-
-    enum Type {
-        EMPTY,
-        CONSTANT,
-        ADD
+    static float getFloat(NbtCompound comp, String s) {
+        if (!comp.contains(s, NbtElement.FLOAT_TYPE)) return 1;
+        return comp.getFloat(s);
     }
 }

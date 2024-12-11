@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:black_concrete"
+    }
+  },
+  "pattern": [
+    "BBB",
+    "B B",
+    "BBB"
+  ],
+  "result": {
+    "item": "infinity:black_matter"
+  },
+  "show_notification": true
+}

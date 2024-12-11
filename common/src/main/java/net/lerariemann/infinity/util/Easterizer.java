@@ -18,6 +18,8 @@ public class Easterizer {
     public Map<String, Pair<NbtCompound, String>> map;
     public Map<String, NbtCompound> optionmap;
     public Map<String, Integer> colormap;
+    public static final Set<String> disabledUntilReview = Set.of("ant", "bash", "checkerboard", "custom",
+            "isolation", "missing", "perfection", "terminal");
 
     public Easterizer(RandomProvider prov) {
         map = new HashMap<>();
@@ -56,13 +58,17 @@ public class Easterizer {
 
     public boolean easterize(RandomDimension d) {
         String name = d.getName();
-        if (!d.PROVIDER.easterizer.isEaster(d.getName())) return false;
+        if (!d.PROVIDER.easterizer.isEaster(d.getName(), d.PROVIDER)) return false;
         d.data.putString("type", InfinityMod.MOD_ID + ":" + map.get(name).getRight() + "_type");
         d.data.put("generator", map.get(name).getLeft());
         return true;
     }
 
-    public boolean isEaster(String name) {
-        return map.containsKey(name);
+    public static boolean isDisabled(String name, RandomProvider provider) {
+        return disabledUntilReview.contains(name) && provider.rule("disabledUntilReview");
+    }
+
+    public boolean isEaster(String name, RandomProvider provider) {
+        return map.containsKey(name) && !isDisabled(name, provider);
     }
 }

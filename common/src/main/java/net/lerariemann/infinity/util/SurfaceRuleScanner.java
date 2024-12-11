@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class SurfaceRuleScanner {
-    public static void scan(MinecraftServer server) {
+public interface SurfaceRuleScanner {
+    static Set<String> scan(MinecraftServer server) {
         Map<String, NbtCompound> map = new HashMap<>();
         Registry<ChunkGeneratorSettings> registry = server.getRegistryManager().get(RegistryKeys.CHUNK_GENERATOR_SETTINGS);
         registry.getKeys().forEach(key -> {
@@ -34,12 +34,13 @@ public class SurfaceRuleScanner {
             String path = "config/infinity/modular/" + modname + "/surface_rule";
             CommonIO.writeSurfaceRule(value, path, biomename);
         });
+        return map.keySet();
     }
 }
 
-class Tree{
-    ArrayList<TreeLeaf> registry;
-    HashMap<String, ArrayList<Integer>> biomeLocations;
+    class Tree{
+        ArrayList<TreeLeaf> registry;
+        HashMap<String, ArrayList<Integer>> biomeLocations;
 
     Tree(NbtCompound surfaceRule) {
         registry = new ArrayList<>();

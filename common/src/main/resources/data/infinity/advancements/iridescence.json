@@ -2,7 +2,7 @@
   "parent": "infinity:multiverse_root",
   "display": {
     "icon": {
-      "id": "infinity:iridescence_bucket"
+      "item": "infinity:iridescence_bucket"
     },
     "title": {
       "translate": "advancements.infinity.iridescence.title"
@@ -13,7 +13,7 @@
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
-    "hidden": true
+    "hidden": false
   },
   "criteria": {
     "who_remains": {

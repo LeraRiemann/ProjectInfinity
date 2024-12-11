@@ -23,7 +23,7 @@ public abstract class DimensionTypeMixin implements InfinityOptionsAccess {
         }
     }
     public InfinityOptions infinity$getOptions() {
-        return infinity$options;
+        return InfinityOptions.nullSafe(infinity$options);
     }
     @Override
     public void infinity$setOptions(InfinityOptions options) {

@@ -1,16 +1,24 @@
 package net.lerariemann.infinity;
 
+import dev.architectury.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.dimensions.RandomText;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.features.ModFeatures;
 import net.lerariemann.infinity.iridescence.ModStatusEffects;
+import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.structure.ModStructureType;
+import net.lerariemann.infinity.structure.ModStructureTypes;
+import net.lerariemann.infinity.util.PlatformMethods;
+import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.var.*;
 import net.lerariemann.infinity.util.ConfigManager;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,25 +31,30 @@ public class InfinityMod {
 	public static final String MOD_ID = "infinity";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Infinite Dimensions");
 	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
-	public static Path rootResPath;
+	public static Path rootConfigPath;
 	public static Path utilPath = Path.of("config/infinity/.util");
-	static {
-		ModContainer mc = FabricLoader.getInstance().getModContainer(InfinityMod.MOD_ID).orElse(null);
-		assert mc != null;
-		rootResPath = mc.getRootPaths().get(0);
+	public static RandomProvider provider;
+
+	public static void updateProvider(MinecraftServer server) {
+		RandomProvider p = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
+				server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
+		p.kickGhostsOut(server.getRegistryManager());
+		provider = p;
+		if (!((MinecraftServerAccess)server).infinity$needsInvocation()) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
 	}
 
 	public static Identifier getId(String value){
 		return Identifier.of(MOD_ID, value);
 	}
-
 	public static Identifier getDimId(long value){
 		return getId("generated_" + value);
 	}
 
 	public static void init() {
+		rootConfigPath = PlatformMethods.getRootConfigPath();
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
+		ModItemFunctions.registerItemFunctions();
 		ModEntities.registerEntities();
 		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
@@ -53,11 +66,13 @@ public class InfinityMod {
 		ModMaterialConditions.registerConditions();
 		ModMaterialRules.registerRules();
 		ModPlacementModifiers.registerModifiers();
-		ModStructureType.registerStructures();
+		ModStructureTypes.registerStructures();
 		ModSounds.registerSounds();
 		ModFeatures.registerFeatures();
 		ModStats.registerStats();
 		ModCriteria.registerCriteria();
+		RandomText.walkPaths();
+		provider = new RandomProvider("config/" + InfinityMod.MOD_ID + "/");
 	}
 
 	public static boolean isInfinity(World w) {

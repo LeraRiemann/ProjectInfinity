@@ -10,6 +10,9 @@ import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
+
+import java.awt.Color;
 
 public class IridescentEffect extends StatusEffect implements ModStatusEffects.SpecialEffect {
     public IridescentEffect(StatusEffectCategory category, int color) {
@@ -31,7 +34,10 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         if (entity instanceof ServerPlayerEntity player) {
             Iridescence.updateShader(player);
         } else if (entity instanceof ChaosPawn pawn) {
-            pawn.unchess();
+            if (pawn.getRandom().nextBoolean()) {
+                pawn.unchess();
+                Iridescence.convTriggers(pawn);
+            }
         } else if (entity instanceof MobEntity currEntity) {
             Iridescence.endConversion(currEntity);
         }

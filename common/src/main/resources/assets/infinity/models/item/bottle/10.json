@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "infinity:item/bottle/bottle",
+    "layer1": "infinity:item/bottle/overlay10"
+  }
+}

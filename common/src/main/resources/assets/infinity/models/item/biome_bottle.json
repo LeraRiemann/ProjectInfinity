@@ -1,0 +1,19 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "infinity:item/bottle/bottle"
+  },
+  "overrides": [
+    { "predicate": { "infinity:bottle": 0 }, "model": "infinity:item/biome_bottle" },
+    { "predicate": { "infinity:bottle": 0.1 }, "model": "infinity:item/bottle/1" },
+    { "predicate": { "infinity:bottle": 0.2 }, "model": "infinity:item/bottle/2" },
+    { "predicate": { "infinity:bottle": 0.3 }, "model": "infinity:item/bottle/3" },
+    { "predicate": { "infinity:bottle": 0.4 }, "model": "infinity:item/bottle/4" },
+    { "predicate": { "infinity:bottle": 0.5 }, "model": "infinity:item/bottle/5" },
+    { "predicate": { "infinity:bottle": 0.6 }, "model": "infinity:item/bottle/6" },
+    { "predicate": { "infinity:bottle": 0.7 }, "model": "infinity:item/bottle/7" },
+    { "predicate": { "infinity:bottle": 0.8 }, "model": "infinity:item/bottle/8" },
+    { "predicate": { "infinity:bottle": 0.9 }, "model": "infinity:item/bottle/9" },
+    { "predicate": { "infinity:bottle": 1.0 }, "model": "infinity:item/bottle/10" }
+  ]
+}

@@ -1,12 +1,10 @@
 package net.lerariemann.infinity.entity.custom;
 
-
-
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.MobEntityAccess;
-import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.iridescence.Iridescence;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -178,13 +176,11 @@ public class ChaosPawn extends HostileEntity implements Angerable {
         dataTracker.set(special_case, white ? 1 : 0);
         setAllColors(white ? 0xFFFFFF : 0);
     }
-    
+
     public void unchess() {
-        if (random.nextBoolean()) {
-            dataTracker.set(special_case, -1);
-            randomizeColors(new Random());
-            playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
-        }
+        dataTracker.set(special_case, -1);
+        randomizeColors(new Random());
+        playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
     }
 
     public void randomizeColors(Random r) {
@@ -215,15 +211,15 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random r = new Random();
-        setAllColors(r, world.getBlockState(this.getBlockPos().down(2)));
-        double i = 15*r.nextExponential();
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(i);
+        setAllColors(r, world.getBlockState(this.getBlockPos().down()));
+        double i = r.nextDouble() * 40;
+        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
         this.setHealth((float)i);
         int a;
         if ((a = (int)(0.1*i)) > 0) {
-            this.equipLootStack(EquipmentSlot.HEAD, Registries.ITEM.get(new Identifier(
-                            ((MinecraftServerAccess)Objects.requireNonNull(world.getServer())).infinity$getDimensionProvider().randomName(r, "items")))
-                    .getDefaultStack().copyWithCount(a));
+            this.equipLootStack(
+                    EquipmentSlot.HEAD,
+                    Registries.ITEM.get(new Identifier(InfinityMod.provider.randomName(r, "items"))).getDefaultStack().copyWithCount(a));
             ((MobEntityAccess)this).infinity$setPersistent(false);
         }
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
@@ -236,14 +232,14 @@ public class ChaosPawn extends HostileEntity implements Angerable {
     }
 
     public static boolean canSpawn(EntityType<ChaosPawn> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        return world.getDifficulty() != Difficulty.PEACEFUL && ModEntities.chaosMobsEnabled(world);
+        return world.getDifficulty() != Difficulty.PEACEFUL && InfinityMethods.chaosMobsEnabled();
     }
 
     @Override
     protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
         super.dropEquipment(source, lootingMultiplier, allowDrops);
         if (!this.isChess()) {
-            String s = RandomProvider.getProvider(Objects.requireNonNull(source.getSource().getServer())).registry.get("items").getRandomElement(source.getSource().getWorld().random);
+            String s = InfinityMod.provider.registry.get("items").getRandomElement(getWorld().random);
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
             ItemStack stack = Registries.ITEM.get(new Identifier(s)).getDefaultStack().copyWithCount((int)(i*i));
 //            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "infinity:iridescent_wool"
+    }
+  },
+  "pattern": [
+    "## "
+  ],
+  "result": {
+    "count": 3,
+    "item": "infinity:iridescent_carpet"
+  }
+}

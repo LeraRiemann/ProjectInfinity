@@ -1,4 +1,10 @@
 {
+  "infinity_version": 2002001,
+  "easter-options": {
+    "iridescent_map": {
+      "type": "circles"
+    }
+  },
   "type": "minecraft:noise",
   "settings": {
     "sea_level": 64,
@@ -76,7 +82,7 @@
                 "type": "infinity:coordinate",
                 "axis": 1
               },
-              "type": "infinity:sin"
+              "type": "infinity:cos"
             },
             "argument2": {
               "argument": {

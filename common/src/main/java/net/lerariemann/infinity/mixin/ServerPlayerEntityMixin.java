@@ -3,15 +3,19 @@ package net.lerariemann.infinity.mixin;
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.PlatformMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.var.ModPayloads;
+import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModCriteria;
+import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.Registry;
@@ -57,6 +61,15 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {
+        /* Handle infinity options */
+        InfinityOptions opt = InfinityOptions.access(getWorld());
+        if (!opt.effect.isEmpty()) {
+            if (getWorld().getTime() % opt.effect.cooldown() == 0) {
+                addStatusEffect(new StatusEffectInstance(opt.effect.id().value(), opt.effect.duration(), opt.effect.amplifier()));
+            }
+        }
+
+        /* Handle the warp command */
         if (--this.infinity$ticksUntilWarp == 0L) {
             MinecraftServer s = this.getServerWorld().getServer();
             ServerWorld w = s.getWorld(RegistryKey.of(RegistryKeys.WORLD, this.infinity$idForWarp));
@@ -67,16 +80,20 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             BlockPos blockPos2 = WarpLogic.getPosForWarp(w.getWorldBorder().clamp(self.getX() * d, y, self.getZ() * d), w);
             this.teleport(w, blockPos2.getX(), blockPos2.getY(), blockPos2.getZ(), new HashSet<>(), self.getYaw(), self.getPitch());
         }
-        int i = ((Timebombable)(getServerWorld())).infinity$isTimebombed();
-        if (i > 200) {
+
+        /* Handle effects from dimension deletion */
+        int i = ((Timebombable)(getServerWorld())).infinity$getTimebombProgress();
+        if (i > 3540) {
+            WarpLogic.respawnAlive((ServerPlayerEntity)(Object)this);
+        }
+        else if (i > 3500) {
+            ModCriteria.WHO_REMAINS.trigger((ServerPlayerEntity)(Object)this);
+        }
+        else if (i > 200) {
             if (i%4 == 0) {
                 Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE);
                 RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMod.getId("world_ceased")));
                 damage(new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
-            }
-            if (i > 3500) ModCriteria.WHO_REMAINS.trigger((ServerPlayerEntity)(Object)this);
-            if (i > 3540) {
-                WarpLogic.respawnAlive((ServerPlayerEntity)(Object)this);
             }
         }
     }
@@ -94,7 +111,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
 
     @Override
-    public void projectInfinity$setWarpTimer(long ticks, Identifier dim) {
+    public void infinity$setWarpTimer(long ticks, Identifier dim) {
         this.infinity$ticksUntilWarp = ticks;
         this.infinity$idForWarp = dim;
     }

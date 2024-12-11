@@ -17,6 +17,7 @@ public class RandomBiome {
     public final Random random;
     public Set<String> mobs;
     public NbtCompound data;
+    public NbtCompound colors;
 
     RandomBiome(long i, RandomDimension dim) {
         id = i;
@@ -66,6 +67,7 @@ public class RandomBiome {
         res.put("water_fog_color", randomColor());
         if (random.nextBoolean()) res.put("foliage_color", randomColor());
         if (random.nextBoolean()) res.put("grass_color", randomColor());
+        colors = res.copy();
         if (random.nextBoolean()) res.put("grass_color_modifier", NbtString.of(random.nextBoolean() ? "dark_forest" : "swamp"));
         if (roll("use_particles")) res.put("particle", randomParticle());
         if (roll("ambient_sound")) res.put("ambient_sound", randomSound());

@@ -25,7 +25,10 @@
       "net.lerariemann.infinity.fabric.client.InfinityModFabricClient"
     ],
     "modmenu": [
-      "net.lerariemann.infinity.config.fabric.ModMenuCompat"
+      "net.lerariemann.infinity.compat.fabric.ModMenuCompat"
+    ],
+    "emi": [
+      "net.lerariemann.infinity.compat.emi.EmiCompat"
     ]
   },
   "mixins": [

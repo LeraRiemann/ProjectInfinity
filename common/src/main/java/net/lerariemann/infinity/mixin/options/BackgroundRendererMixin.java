@@ -3,7 +3,6 @@ package net.lerariemann.infinity.mixin.options;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
@@ -17,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.awt.*;
+import java.awt.Color;
 
 @Mixin(BackgroundRenderer.class)
 public class BackgroundRendererMixin {
@@ -32,7 +31,7 @@ public class BackgroundRendererMixin {
     @Inject(method = "render(Lnet/minecraft/client/render/Camera;FLnet/minecraft/client/world/ClientWorld;IF)V",
             at= @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BackgroundRenderer;getFogModifier(Lnet/minecraft/entity/Entity;F)Lnet/minecraft/client/render/BackgroundRenderer$StatusEffectFogModifier;"))
     private static void injected(Camera camera, float tickDelta, ClientWorld world, int viewDistance, float skyDarkness, CallbackInfo ci) {
-        InfinityOptions options = infinity$options(world);
+        InfinityOptions options = InfinityOptions.access(world);
         if (options.getSkyType().equals("rainbow") && camera.getSubmersionType() == CameraSubmersionType.NONE) {
             infinity$applyRainbowFog(world, tickDelta);
         }
@@ -43,14 +42,7 @@ public class BackgroundRendererMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getHorizonShadingRatio()F"))
     private static float inj(float original, @Local(argsOnly = true) ClientWorld world) {
         if (!InfinityMod.isInfinity(world)) return original;
-        return ((InfinityOptionsAccess)world).infinity$getOptions().getHorizonShadingRatio();
-    }
-
-    @Unique
-    private static InfinityOptions infinity$options(ClientWorld world) {
-        InfinityOptions options = ((InfinityOptionsAccess)world).infinity$getOptions();
-        if (options == null) options = InfinityOptions.empty();
-        return options;
+        return InfinityOptions.access(world).getHorizonShadingRatio();
     }
 
     @Unique

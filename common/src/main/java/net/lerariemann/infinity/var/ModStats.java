@@ -7,7 +7,7 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
-import static net.lerariemann.infinity.InfinityMod.getId;
+import static net.lerariemann.infinity.util.InfinityMethods.getId;
 
 public class ModStats {
     public static Identifier DIMS_OPENED = getId("dimensions_opened_stat");

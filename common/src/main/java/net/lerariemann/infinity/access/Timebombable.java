@@ -1,7 +1,11 @@
 package net.lerariemann.infinity.access;
 
 public interface Timebombable {
-    void infinity$timebomb(int i);
+    int cooldownTicks = 6000;
 
-    int infinity$isTimebombed();
+    void infinity$timebomb();
+    boolean infinity$tryRestore();
+
+    boolean infinity$isTimebombed();
+    int infinity$getTimebombProgress();
 }
