@@ -335,10 +335,8 @@ public class RandomDimension {
     void addStructures(RandomBiome b) {
         int numstructures = random.nextInt(1, 5);
         Set<String> temp = new HashSet<>();
-        if (InfinityMethods.canUseSetupperStructure()) {
-            for (int i = 0; i < numstructures; i++) {
-                addStructure(new RandomStructure(random.nextInt(), b), temp);
-            }
+        for (int i = 0; i < numstructures; i++) {
+            addStructure(new RandomStructure(random.nextInt(), b), temp);
         }
         if (PROVIDER.roll( random, "text")) {
             addStructure(new RandomText(random.nextInt(), b), temp);

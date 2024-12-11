@@ -30,8 +30,7 @@ public class ModStructureTypes {
         InfinityMod.LOGGER.debug("Registering processors for " + InfinityMod.MOD_ID);
 
         PYRAMID = STRUCTURE_TYPES.register("pyramid", () -> PyramidStructure.CODEC::codec);
-        if (InfinityMethods.canUseSetupperStructure())
-            SETUPPER = STRUCTURE_TYPES.register("setupper", () -> SetupperStructure.CODEC::codec);
+        SETUPPER = STRUCTURE_TYPES.register("setupper", () -> SetupperStructure.CODEC::codec);
         TEXT = STRUCTURE_TYPES.register("text", () -> TextStructure.CODEC::codec);
         PYRAMID_PIECE = register(PyramidGenerator::new, "pypiece");
         LETTER = register(LetterPiece::new, "letter");
