@@ -5,7 +5,7 @@ import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Pair;
 import io.github.fabricators_of_create.porting_lib.entity.ITeleporter;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.entity.NeitherPortalBlockEntity;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -18,7 +18,7 @@ import static com.simibubi.create.content.trains.track.AllPortalTracks.standardP
 public class CreateFabricCompat {
 
     public static void register() {
-        AllPortalTracks.registerIntegration(ModBlocks.NEITHER_PORTAL.get(), CreateFabricCompat::infinity);
+        AllPortalTracks.registerIntegration(ModBlocks.PORTAL.get(), CreateFabricCompat::infinity);
     }
 
     public static Pair<ServerWorld, BlockFace> infinity(Pair<ServerWorld, BlockFace> inbound) {
@@ -33,8 +33,8 @@ public class CreateFabricCompat {
         ServerWorld world = inbound.getFirst();
         BlockFace blockFace = inbound.getSecond();
         BlockEntity blockEntity = world.getBlockEntity(blockFace.getConnectedPos());
-        if (blockEntity instanceof NeitherPortalBlockEntity neitherPortalBlockEntity) {
-            Identifier id = neitherPortalBlockEntity.getDimension();
+        if (blockEntity instanceof InfinityPortalBlockEntity portalEntity) {
+            Identifier id = portalEntity.getDimension();
             return RegistryKey.of(RegistryKeys.WORLD, id);
         }
         return null;
