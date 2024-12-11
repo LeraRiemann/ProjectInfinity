@@ -84,6 +84,7 @@ shadowJar {
 
 remapJar {
     input.set shadowJar.archiveFile
+    atAccessWideners.add("infinity.accesswidener")
 }
 
 loom {

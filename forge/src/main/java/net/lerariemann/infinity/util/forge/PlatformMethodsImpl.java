@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util.forge;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.fluids.forge.IridescenceLiquidBlockForge;
 import net.lerariemann.infinity.fluids.forge.ModFluidsForge;
@@ -82,7 +83,7 @@ public class PlatformMethodsImpl {
     }
 
     public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
-//        FlammableBlockRegistry.getDefaultInstance().add(block.get(), burn, spread);
+        FlammableBlockRegistry.getDefaultInstance().add(block.get(), burn, spread);
     }
 
 }

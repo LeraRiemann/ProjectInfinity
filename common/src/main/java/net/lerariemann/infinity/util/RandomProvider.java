@@ -271,7 +271,7 @@ public class RandomProvider {
             Map.entry("biomes", "minecraft:plains"),
             Map.entry("mobs", "minecraft:pig"),
             Map.entry("tags", "#minecraft:air"),
-            Map.entry("trees", "#minecraft:oak"));
+            Map.entry("trees", "minecraft:oak"));
 
     public String randomName(Random random, String key) {
         return randomName(random, key, defaultMap.get(key));
