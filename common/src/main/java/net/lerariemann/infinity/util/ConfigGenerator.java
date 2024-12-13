@@ -98,12 +98,12 @@ public interface ConfigGenerator {
         });
     }
 
-    static <T> void writeMap(Map<String, WeighedStructure<T>> m, String addpath, String name, AtomicInteger i) {
+    static <T> void writeMapWithLoggerOutput(Map<String, WeighedStructure<T>> m, String addpath, String name, AtomicInteger i) {
         writeMap(m, addpath, name);
-        info(i.get(), name);
+        loggerOutput(i.get(), name);
     }
 
-    static void info(int count, String type) {
+    static void loggerOutput(int count, String type) {
         InfinityMod.LOGGER.info("Registered {} {}", count, type);
     }
 
@@ -125,7 +125,7 @@ public interface ConfigGenerator {
                 i.getAndIncrement();
             }
         });
-        writeMap(map, additionalPath, name, i);
+        writeMapWithLoggerOutput(map, additionalPath, name, i);
     }
 
     static void generateSounds() {
@@ -145,9 +145,9 @@ public interface ConfigGenerator {
                 j.getAndIncrement();
             }
         });
-        writeMap(sounds, "misc", "sounds", j);
+        writeMapWithLoggerOutput(sounds, "misc", "sounds", j);
         writeMap(music, "misc", "music");
-        info(i.get(), "music tracks");
+        loggerOutput(i.get(), "music tracks");
     }
 
     static void generateBlockTags() {
@@ -159,7 +159,7 @@ public interface ConfigGenerator {
             i.getAndIncrement();
         });
         writeMap(tagMap, "misc", "tags");
-        info(i.get(), "block tags");
+        loggerOutput(i.get(), "block tags");
     }
 
     static Set<String> generateFluids() {
@@ -180,7 +180,7 @@ public interface ConfigGenerator {
                 }
             }
         });
-        writeMap(fluidMap, "blocks", "fluids", i);
+        writeMapWithLoggerOutput(fluidMap, "blocks", "fluids", i);
         return blocknames;
     }
 
@@ -208,7 +208,7 @@ public interface ConfigGenerator {
                 i.getAndIncrement();
             }
         });
-        writeMap(blockMap, "blocks", "blocks", i);
+        writeMapWithLoggerOutput(blockMap, "blocks", "blocks", i);
         writeMap(colorPresetMap, "extra", "color_presets");
         writeMap(airMap, "blocks", "airs");
         writeMap(flowerMap, "blocks", "flowers");
@@ -363,7 +363,8 @@ public interface ConfigGenerator {
 
     static NbtCompound extractFeature(Registry<ConfiguredFeature<?,?>> registry, RegistryKey<ConfiguredFeature<?,?>> key) {
         Identifier id = key.getValue();
-        if (id.getNamespace().equals("infinity") || id.toString().contains("bees")) return null;
+        if (id.getNamespace().equals("infinity")) return null; //our mod's custom trees
+        if (id.toString().contains("bees")) return null; //bees lag the game -_-
         Optional<ConfiguredFeature<?,? extends Feature<?>>> o = registry.getOrEmpty(key);
         if (o.isEmpty()) return null;
         ConfiguredFeature<?,? extends Feature<?>> feature = o.get();
@@ -389,7 +390,7 @@ public interface ConfigGenerator {
         generateAllNoWorld();
         generateBlocksAndFluids(w, inAir, onStone);
         Set<String> registeredRules = SurfaceRuleScanner.scan(s);
-        info(registeredRules.size(), "surface rules");
+        loggerOutput(registeredRules.size(), "surface rules");
         generate(manager.get(RegistryKeys.BIOME), "misc", "biomes", key ->
                 key.getValue().getNamespace().equals(InfinityMod.MOD_ID) ? null : key.getValue().toString());
         generate(manager.get(RegistryKeys.STRUCTURE), "extra", "structures", ConfigGenerator::extractStructure);
