@@ -319,7 +319,7 @@ public interface ConfigGenerator {
 
     static NbtCompound extractStructure(Registry<Structure> registry, RegistryKey<Structure> key) {
         Identifier id = key.getValue();
-        if (id.getNamespace().equals("infinity") && id.getPath().contains("_") && !id.getPath().equals("indev_house")) return null;
+        if (id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("_")) return null;
         Optional<Structure> o = registry.getOrEmpty(key);
         if (o.isEmpty()) return null;
         Structure structure = o.get();
@@ -365,7 +365,7 @@ public interface ConfigGenerator {
 
     static NbtCompound extractFeature(Registry<ConfiguredFeature<?,?>> registry, RegistryKey<ConfiguredFeature<?,?>> key) {
         Identifier id = key.getValue();
-        if (id.getNamespace().equals("infinity")) return null; //our mod's custom trees
+        if (id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("_")) return null; //our mod's custom trees
         if (id.toString().contains("bees")) return null; //bees lag the game -_-
         Optional<ConfiguredFeature<?,? extends Feature<?>>> o = registry.getOrEmpty(key);
         if (o.isEmpty()) return null;
