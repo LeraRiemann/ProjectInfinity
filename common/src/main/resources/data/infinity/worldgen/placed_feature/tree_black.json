@@ -1,5 +1,5 @@
 {
-  "feature": "infinity:blacktree",
+  "feature": "infinity:tree_black",
   "placement": [
     {
       "type": "count_on_every_layer",
