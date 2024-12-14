@@ -41,7 +41,6 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Color;
 import java.util.*;
 
 public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
@@ -87,8 +86,8 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     }
 
     @Override
-    public Text getName() {
-        return super.getName();
+    public int getColorNamed() {
+        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : -1;
     }
 
     @Override

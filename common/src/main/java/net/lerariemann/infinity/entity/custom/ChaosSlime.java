@@ -29,7 +29,6 @@ import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.awt.Color;
 import java.util.Random;
 
 public class ChaosSlime extends SlimeEntity implements TintableEntity {
@@ -46,8 +45,8 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
 
 
     @Override
-    public boolean hasCustomName() {
-        return super.hasCustomName();
+    public int getColorNamed() {
+        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : -1;
     }
 
     @Override

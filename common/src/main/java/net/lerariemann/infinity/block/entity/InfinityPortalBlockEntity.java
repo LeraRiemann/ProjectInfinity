@@ -1,14 +1,18 @@
 package net.lerariemann.infinity.block.entity;
 
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 public class InfinityPortalBlockEntity extends BlockEntity {
     private final PropertyDelegate propertyDelegate;
@@ -84,9 +88,9 @@ public class InfinityPortalBlockEntity extends BlockEntity {
     }
 
     public void writeNbt(NbtCompound tag) {
-        super.writeNbt(tag);
-        tag.putLong("Dimension", this.portalColor);
-        tag.putString("DimensionName", this.dimension.toString());
+        super.writeNbt(tag, registryLookup);
+        tag.putInt("Color", this.portalColor);
+        tag.putString("Dimension", this.dimension.toString());
         tag.putBoolean("Open", this.isOpen);
         if (otherSidePos != null) {
             NbtCompound pos = new NbtCompound();
@@ -98,12 +102,24 @@ public class InfinityPortalBlockEntity extends BlockEntity {
     }
 
     public void readNbt(NbtCompound tag) {
-        super.readNbt(tag);
-        this.portalColor = tag.getInt("Dimension");
-        if (tag.contains("DimensionName")) {
-            this.dimension = Identifier.tryParse(tag.getString("DimensionName"));
+        super.readNbt(tag, registryLookup);
+        if (tag.contains("Dimension", NbtElement.NUMBER_TYPE)) { //conversion from legacy formats
+            this.portalColor = tag.getInt("Dimension");
+            if (tag.contains("DimensionName")) {
+                this.dimension = Identifier.of(tag.getString("DimensionName"));
+            }
+            else this.dimension = InfinityMethods.getDimId(this.portalColor);
         }
-        else this.dimension = InfinityMethods.getDimId(this.portalColor);
+        else if (tag.contains("Dimension", NbtElement.STRING_TYPE)) { //new better format
+            this.dimension = Identifier.of(tag.getString("Dimension"));
+            this.portalColor = tag.contains("Color", NbtElement.INT_TYPE) ?
+                    tag.getInt("Color") :
+                    (world != null ? WarpLogic.getPortalColorApplier(dimension, world.getServer()) :
+                            WarpLogic.getPortalColorApplier(dimension, new NbtCompound())).apply(pos);
+        }
+        else {
+            setDimension(InfinityMethods.getRandomSeed(new Random())); //random by default
+        }
         this.isOpen = tag.getBoolean("Open");
         if (tag.contains("other_side")) {
             NbtCompound pos = tag.getCompound("other_side");

@@ -83,7 +83,9 @@ public class PlatformMethodsImpl {
     }
 
     public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
-        FlammableBlockRegistry.getDefaultInstance().add(block.get(), burn, spread);
+        if (InfinityMethods.isFabricApiLoaded("fabric-content-registries-v0")) {
+            FlammableBlockRegistry.getDefaultInstance().add(block.get(), burn, spread);
+        }
     }
 
 }

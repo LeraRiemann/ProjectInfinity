@@ -247,16 +247,6 @@ public class RandomProvider {
         return res;
     }
 
-    public static String blockElementToName(NbtElement e) {
-        if (e instanceof NbtCompound) return ((NbtCompound)e).getString("Name");
-        else return e.asString();
-    }
-
-    public String getOrDefault(Random random, String key, String def) {
-        if (!registry.containsKey(key)) return def;
-        return registry.get(key).getRandomElement(random);
-    }
-
     public static Map<String, String> defaultMap = Map.ofEntries(
             Map.entry("all_blocks", "minecraft:stone"),
             Map.entry("top_blocks", "minecraft:stone"),
@@ -278,15 +268,16 @@ public class RandomProvider {
     }
 
     public String randomName(Random random, String key, String def) {
-        switch (key) {
-            case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
-                if (!compoundRegistry.containsKey(key)) return def;
-                return blockElementToName(compoundRegistry.get(key).getRandomElement(random));
-            }
-            default -> {
-                return getOrDefault(random, key, def);
-            }
-        }
+        if (compoundRegistry.containsKey(key))
+            return elementToName(compoundRegistry.get(key).getRandomElement(random));
+        if (registry.containsKey(key))
+            return registry.get(key).getRandomElement(random);
+        return def;
+    }
+
+    public static String elementToName(NbtElement e) {
+        if (e instanceof NbtCompound) return ((NbtCompound)e).getString("Name");
+        else return e.asString();
     }
 
     public NbtCompound randomBlock(Random random, String key) {

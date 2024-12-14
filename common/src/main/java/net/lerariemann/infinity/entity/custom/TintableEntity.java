@@ -45,10 +45,24 @@ public interface TintableEntity {
         return null;
     }
 
-    default Vector3f getColor() {
-        Vector3f v = getColorNamed();
-        if (v!=null) return v;
-        return colorFromInt(this.getColorRaw());
+    int getColorNamed();
+
+    static int getColorNamed(String name, int age, int id) {
+        if ("jeb_".equals(name)) {
+            return TintableEntity.getColorJeb(age, id);
+        }
+        if ("hue".equals(name)) {
+            float hue = age / 400.f + id;
+            hue = hue - (int) hue;
+            return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
+        }
+        return -1;
+    }
+
+    default int getColorForRender() {
+        int v = getColorNamed();
+        if (v!=-1) return v;
+        return ColorHelper.Argb.fullAlpha(this.getColorRaw());
     }
     default int getColorRaw() {
         return 0;

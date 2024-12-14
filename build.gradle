@@ -63,6 +63,17 @@ subprojects {
                 includeGroup("com.jozufozu.flywheel")
             }
         }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Modrinth"
+                    url = "https://api.modrinth.com/maven"
+                }
+            }
+            filter {
+                includeGroup "maven.modrinth"
+            }
+        }
     }
 
     dependencies {

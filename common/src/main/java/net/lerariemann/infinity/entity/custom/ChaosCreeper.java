@@ -31,8 +31,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Color;
-
 public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public static TrackedData<Integer> color = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.INTEGER);
     public static TrackedData<Float> range = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.FLOAT);
@@ -86,17 +84,8 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     }
 
     @Override
-    public int getAge() {
-        return age;
-    }
-    @Override
-    public boolean hasCustomName() {
-        return super.hasCustomName();
-    }
-
-    @Override
-    public Text getName() {
-        return super.getName();
+    public int getColorNamed() {
+        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : -1;
     }
 
     @Override
