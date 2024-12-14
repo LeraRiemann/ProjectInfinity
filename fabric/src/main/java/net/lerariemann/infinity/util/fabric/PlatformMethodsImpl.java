@@ -16,6 +16,7 @@ import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
 import net.lerariemann.infinity.iridescence.IridescenceLiquidBlock;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -87,5 +88,12 @@ public class PlatformMethodsImpl {
 
     public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
         FlammableBlockRegistry.getDefaultInstance().add(block.get(), burn, spread);
+    }
+
+    public static boolean acidTest(Entity entity, boolean output) {
+        return false;
+    }
+    public static double acidHeightTest(Entity entity) {
+        return -1;
     }
 }

@@ -8,6 +8,7 @@
     "AquifierSamplerImplMixin",
     "ChunkRegionMixin",
     "CreeperEntityMixin",
+    "EntityMixin",
     "FireBlockMixin",
     "FluidBlockMixin",
     "LavaFluidMixin",

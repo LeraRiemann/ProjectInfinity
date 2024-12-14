@@ -6,6 +6,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -125,6 +126,16 @@ public class PlatformMethods {
      */
     @ExpectPlatform
     public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static boolean acidTest(Entity entity, boolean eyes) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static double acidHeightTest(Entity entity) {
         throw new AssertionError();
     }
 }
