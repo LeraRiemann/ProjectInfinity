@@ -6,11 +6,9 @@ import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.custom.*;
 import net.minecraft.block.*;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.BlockSoundGroup;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
-import static net.lerariemann.infinity.util.PlatformMethods.createBlockTag;
 
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(MOD_ID, RegistryKeys.BLOCK);
@@ -43,7 +41,6 @@ public class ModBlocks {
             new IridescentBlock(AbstractBlock.Settings.copy(Blocks.MAGENTA_WOOL)));
     public static final RegistrySupplier<Block> IRIDESCENT_CARPET = BLOCKS.register("iridescent_carpet", () ->
             new IridescentBlock.Carpet(AbstractBlock.Settings.copy(Blocks.MAGENTA_CARPET)));
-    public static TagKey<Block> SWIMMABLE = createBlockTag("swimmable");
 
 
     public static void registerModBlocks() {
