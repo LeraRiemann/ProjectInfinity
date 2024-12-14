@@ -34,8 +34,7 @@ public class TintedLayerRenderer<T extends MobEntity, S extends EntityModel<T>> 
         Vector3f color = new Vector3f(1.0f, 1.0f, 1.0f);
         float alpha = 1.0f;
         if (livingEntity instanceof TintableEntity) {
-            color = ((TintableEntity)livingEntity).getColor();
-            alpha = ((TintableEntity)livingEntity).getAlpha();
+            color = ((TintableEntity)livingEntity).getColorNamed();
         }
         this.model.render(matrixStack, vertexConsumer, i, LivingEntityRenderer.getOverlay(livingEntity, 0.0f), color.x, color.y, color.z, alpha);
     }

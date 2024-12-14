@@ -2,9 +2,6 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.util.RandomProvider;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -13,7 +10,6 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -27,8 +23,6 @@ import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
@@ -40,6 +34,7 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -76,18 +71,15 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     public ChaosSkeleton(EntityType<? extends SkeletonEntity> entityType, World world) {
         super(entityType, world);
     }
-    @Override
-    public int getAge() {
-        return age;
-    }
+
     @Override
     public boolean hasCustomName() {
         return super.hasCustomName();
     }
 
     @Override
-    public int getColorNamed() {
-        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : -1;
+    public Vector3f getColorNamed() {
+        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : null;
     }
 
     @Override

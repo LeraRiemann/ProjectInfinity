@@ -88,7 +88,7 @@ public class InfinityPortalBlockEntity extends BlockEntity {
     }
 
     public void writeNbt(NbtCompound tag) {
-        super.writeNbt(tag, registryLookup);
+        super.writeNbt(tag);
         tag.putInt("Color", this.portalColor);
         tag.putString("Dimension", this.dimension.toString());
         tag.putBoolean("Open", this.isOpen);
@@ -102,16 +102,16 @@ public class InfinityPortalBlockEntity extends BlockEntity {
     }
 
     public void readNbt(NbtCompound tag) {
-        super.readNbt(tag, registryLookup);
+        super.readNbt(tag);
         if (tag.contains("Dimension", NbtElement.NUMBER_TYPE)) { //conversion from legacy formats
             this.portalColor = tag.getInt("Dimension");
             if (tag.contains("DimensionName")) {
-                this.dimension = Identifier.of(tag.getString("DimensionName"));
+                this.dimension = new Identifier(tag.getString("DimensionName"));
             }
             else this.dimension = InfinityMethods.getDimId(this.portalColor);
         }
         else if (tag.contains("Dimension", NbtElement.STRING_TYPE)) { //new better format
-            this.dimension = Identifier.of(tag.getString("Dimension"));
+            this.dimension = new Identifier(tag.getString("Dimension"));
             this.portalColor = tag.contains("Color", NbtElement.INT_TYPE) ?
                     tag.getInt("Color") :
                     (world != null ? WarpLogic.getPortalColorApplier(dimension, world.getServer()) :

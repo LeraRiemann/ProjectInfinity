@@ -38,15 +38,10 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     public ChaosSlime(EntityType<? extends ChaosSlime> entityType, World world) {
         super(entityType, world);
     }
-    @Override
-    public int getAge() {
-        return age;
-    }
-
 
     @Override
-    public int getColorNamed() {
-        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : -1;
+    public Vector3f getColorNamed() {
+        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : null;
     }
 
     @Override
@@ -86,14 +81,12 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     public void setCore(BlockState c) {
         this.dataTracker.set(core, c);
     }
-    @Override
+
     public Vector3f getColor() {
         Vector3f v = getColorNamed();
         if (v!=null) return v;
         return this.dataTracker.get(color);
     }
-    @Override
-    public float getAlpha() {return 1.0f;}
 
     public BlockState getCore() {
         return this.dataTracker.get(core);

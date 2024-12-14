@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.block.enums.WallMountLocation;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffect;

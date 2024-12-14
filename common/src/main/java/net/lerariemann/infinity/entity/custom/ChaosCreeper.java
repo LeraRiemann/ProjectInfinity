@@ -30,6 +30,7 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public static TrackedData<Integer> color = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.INTEGER);
@@ -84,8 +85,8 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     }
 
     @Override
-    public int getColorNamed() {
-        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : -1;
+    public Vector3f getColorNamed() {
+        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : null;
     }
 
     @Override
