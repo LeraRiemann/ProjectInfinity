@@ -278,15 +278,9 @@ public class RandomProvider {
     }
 
     public String randomName(Random random, String key, String def) {
-        switch (key) {
-            case "all_blocks", "top_blocks", "blocks_features", "full_blocks", "full_blocks_worldgen" -> {
-                if (!compoundRegistry.containsKey(key)) return def;
-                return blockElementToName(compoundRegistry.get(key).getRandomElement(random));
-            }
-            default -> {
-                return getOrDefault(random, key, def);
-            }
-        }
+        if (compoundRegistry.containsKey(key))
+            return blockElementToName(compoundRegistry.get(key).getRandomElement(random));
+        return getOrDefault(random, key, def);
     }
 
     public NbtCompound randomBlock(Random random, String key) {

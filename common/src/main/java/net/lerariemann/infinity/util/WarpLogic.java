@@ -79,8 +79,11 @@ public interface WarpLogic {
     }
 
     static PortalColorApplier getPortalColorApplier(Identifier id, MinecraftServer server) {
+        return getPortalColorApplier(id, InfinityOptions.readData(server, id));
+    }
+    static PortalColorApplier getPortalColorApplier(Identifier id, NbtCompound def) {
         NbtCompound c = InfinityMod.provider.easterizer.optionmap.get(id.getPath());
-        if (c == null) c = InfinityOptions.readData(server, id);
+        if (c == null) c = def;
         return PortalColorApplier.extract(c, (int)WarpLogic.getNumericFromId(id));
     }
 
