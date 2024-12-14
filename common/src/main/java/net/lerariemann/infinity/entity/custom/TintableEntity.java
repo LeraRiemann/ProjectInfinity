@@ -5,6 +5,8 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.ColorHelper;
 import org.joml.Vector3f;
 
+import java.awt.*;
+
 public interface TintableEntity {
     int getId();
 
@@ -27,6 +29,18 @@ public interface TintableEntity {
     }
 
     int getColorNamed();
+
+    static int getColorNamed(String name, int age, int id) {
+        if ("jeb_".equals(name)) {
+            return TintableEntity.getColorJeb(age, id);
+        }
+        if ("hue".equals(name)) {
+            float hue = age / 400.f + id;
+            hue = hue - (int) hue;
+            return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
+        }
+        return -1;
+    }
 
     default int getColorForRender() {
         int v = getColorNamed();

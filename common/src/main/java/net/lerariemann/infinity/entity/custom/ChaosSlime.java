@@ -29,7 +29,6 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Color;
 import java.util.Random;
 
 public class ChaosSlime extends SlimeEntity implements TintableEntity {
@@ -42,19 +41,7 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
 
     @Override
     public int getColorNamed() {
-        if (hasCustomName()) {
-            String s = getName().getString();
-            if ("jeb_".equals(s)) {
-                return TintableEntity.getColorJeb(age, getId());
-            }
-            if ("hue".equals(s)) {
-                int n = age + 400*getId();
-                float hue = n / 400.f;
-                hue = hue - (int) hue;
-                return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
-            }
-        }
-        return -1;
+        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : -1;
     }
 
     @Override
