@@ -18,7 +18,9 @@ public abstract class LandPathNodeMakerMixin extends PathNodeMaker {
     @Inject(method = "getNodeType(Lnet/minecraft/entity/ai/pathing/PathContext;IIILnet/minecraft/entity/mob/MobEntity;)Lnet/minecraft/entity/ai/pathing/PathNodeType;",
             at = @At("HEAD"), cancellable = true)
     private void inj(PathContext context, int x, int y, int z, MobEntity mob, CallbackInfoReturnable<PathNodeType> cir) {
-        if (entity instanceof ChaosPawn pawn && pawn.isChess() && Iridescence.isIridescence(pawn.getWorld(), new BlockPos(x, y, z)))
-            cir.setReturnValue(PathNodeType.BLOCKED);
+        if (Iridescence.isIridescence(entity.getWorld(), new BlockPos(x, y, z))) {
+            if (entity instanceof ChaosPawn pawn && pawn.isChess())
+                cir.setReturnValue(PathNodeType.BLOCKED);
+        }
     }
 }

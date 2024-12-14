@@ -90,7 +90,7 @@ public class PlatformMethodsImpl {
         FlammableBlockRegistry.getDefaultInstance().add(block.get(), burn, spread);
     }
 
-    public static boolean acidTest(Entity entity, boolean output) {
+    public static boolean acidTest(Entity entity, boolean eyes) {
         return false;
     }
     public static double acidHeightTest(Entity entity) {
