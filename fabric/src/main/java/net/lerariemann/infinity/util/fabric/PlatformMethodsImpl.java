@@ -85,6 +85,9 @@ public class PlatformMethodsImpl {
     public static TagKey<Item> createItemTag(String id) {
         return TagKey.of(RegistryKeys.ITEM, InfinityMethods.getId(id));
     }
+    public static TagKey<Block> createBlockTag(String id) {
+        return TagKey.of(RegistryKeys.BLOCK, InfinityMethods.getId(id));
+    }
 
     public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
         FlammableBlockRegistry.getDefaultInstance().add(block.get(), burn, spread);

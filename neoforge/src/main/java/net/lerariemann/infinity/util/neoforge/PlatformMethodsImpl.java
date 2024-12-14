@@ -20,6 +20,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.SimpleRegistry;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
@@ -87,6 +88,9 @@ public class PlatformMethodsImpl {
 
     public static TagKey<Item> createItemTag(String id) {
         return ItemTags.create(InfinityMethods.getId(id));
+    }
+    public static TagKey<Block> createBlockTag(String id) {
+        return BlockTags.create(InfinityMethods.getId(id));
     }
 
     public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {

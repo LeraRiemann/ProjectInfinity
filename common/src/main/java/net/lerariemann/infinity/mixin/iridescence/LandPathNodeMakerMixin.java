@@ -1,7 +1,11 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.iridescence.Iridescence;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.pathing.LandPathNodeMaker;
 import net.minecraft.entity.ai.pathing.PathContext;
 import net.minecraft.entity.ai.pathing.PathNodeMaker;
@@ -22,5 +26,11 @@ public abstract class LandPathNodeMakerMixin extends PathNodeMaker {
             if (entity instanceof ChaosPawn pawn && pawn.isChess())
                 cir.setReturnValue(PathNodeType.BLOCKED);
         }
+    }
+
+    @ModifyExpressionValue(method= "getStart()Lnet/minecraft/entity/ai/pathing/PathNode;",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
+    boolean inj(boolean original, @Local BlockState blockState) {
+        return original || blockState.isIn(ModBlocks.SWIMMABLE);
     }
 }

@@ -120,6 +120,10 @@ public class PlatformMethods {
     public static TagKey<Item> createItemTag(String id) {
         throw new AssertionError();
     }
+    @ExpectPlatform
+    public static TagKey<Block> createBlockTag(String id) {
+        throw new AssertionError();
+    }
 
     /**
      * Register a Flammable Block (how does Architectury API not have a helper for this)

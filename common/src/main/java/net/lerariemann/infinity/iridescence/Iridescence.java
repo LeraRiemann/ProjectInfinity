@@ -58,7 +58,10 @@ public class Iridescence {
     }
 
     public static boolean isInfinite(World world) {
-        return world.getRegistryKey().getValue().toString().equals("infinity:chaos");
+        return switch (world.getRegistryKey().getValue().toString()) {
+            case "infinity:chaos", "infinity:colors" -> true;
+            default -> false;
+        };
     }
     public static boolean isIridescence(FluidState st) {
         return st.isOf(PlatformMethods.getIridescenceStill().get()) || st.isOf(PlatformMethods.getIridescenceFlowing().get());
