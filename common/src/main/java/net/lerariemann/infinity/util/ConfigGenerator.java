@@ -284,7 +284,7 @@ public interface ConfigGenerator {
         }
     }
     static boolean isFull(BlockState bs, WorldView w, BlockPos inAir) {
-        return bs.isFullCube(w, inAir);
+        return Block.isShapeFullCube(bs.getCollisionShape(w, inAir));
     }
 
     static String extractParticle(RegistryKey<ParticleType<?>> key) {
