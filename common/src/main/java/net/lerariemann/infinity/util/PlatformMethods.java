@@ -176,4 +176,18 @@ public class PlatformMethods {
     public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
         throw new AssertionError();
     }
+
+    /**
+     * Neoforge-exclusive method of testing if a mob is located in iridescence as far as fluid types are concerned.
+     * Used only in mixins, to fix the neoforge loader stripping mobs of ability to swim in non-water fluids.
+     * On Fabric, returns false.
+     */
+    @ExpectPlatform
+    public static boolean acidTest(Entity entity, boolean eyes) {
+        throw new AssertionError();
+    }
+    @ExpectPlatform
+    public static double acidHeightTest(Entity entity) {
+        throw new AssertionError();
+    }
 }

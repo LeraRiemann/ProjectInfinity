@@ -28,6 +28,7 @@
     "iridescence.IridescenceMixin",
     "iridescence.LandPathNodeMakerMixin",
     "iridescence.LivingEntityMixin",
+    "iridescence.MobNavigationMixin",
     "iridescence.StatusEffectInstanceMixin",
     "mavity.BoatEntityMixin",
     "mavity.LivingEntityMixin",

@@ -4,6 +4,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.pathing.PathNodeType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -23,6 +24,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -88,5 +90,28 @@ public class FluidTypes {
     }
     public static void registerFluidInteractions(FMLCommonSetupEvent event) {
         FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), getIridescentInteraction(IRIDESCENCE_TYPE.get()));
+    }
+
+    public static class IridescentFluidType extends FluidType {
+        public IridescentFluidType(Properties properties) {
+            super(properties);
+        }
+        @Override
+        public PathNodeType getBlockPathType(@NotNull FluidState state, @NotNull BlockView level, @NotNull BlockPos pos,
+                                             @Nullable MobEntity mob, boolean canFluidLog) {
+            return canFluidLog ? super.getBlockPathType(state, level, pos, mob, true) : null;
+        }
+        @Override
+        public boolean canConvertToSource(@NotNull FluidState state, @NotNull WorldView reader, @NotNull BlockPos pos) {
+            if (reader instanceof World level) {
+                return Iridescence.isInfinite(level);
+            }
+            //Best guess fallback to default (true)
+            return super.canConvertToSource(state, reader, pos);
+        }
+        @Override
+        public boolean isVaporizedOnPlacement(@NotNull World w, @NotNull BlockPos pos, @NotNull FluidStack stack) {
+            return false;
+        }
     }
 }

@@ -88,4 +88,14 @@ public class PlatformMethodsImpl {
         }
     }
 
+    public static boolean acidTest(Entity entity, boolean eyes) {
+        if (entity instanceof PlayerEntity) return false;
+        if (eyes) return entity.isEyeInFluidType(FluidTypes.IRIDESCENCE_TYPE.value());
+        return entity.isInFluidType(FluidTypes.IRIDESCENCE_TYPE.value());
+    }
+
+    public static double acidHeightTest(Entity entity) {
+        if (entity instanceof PlayerEntity) return -1;
+        return entity.getFluidTypeHeight(FluidTypes.IRIDESCENCE_TYPE.value());
+    }
 }
