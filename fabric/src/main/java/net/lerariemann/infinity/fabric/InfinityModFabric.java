@@ -1,8 +1,10 @@
 package net.lerariemann.infinity.fabric;
 
+import dev.architectury.platform.Platform;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.compat.fabric.CreateFabricCompat;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
@@ -25,6 +27,8 @@ public final class  InfinityModFabric implements ModInitializer {
         InfinityMod.init();
         // Run any remaining tasks that require waiting for the registry to freeze on NeoForge.
         ModEntities.registerSpawnRestrictions();
+        if (Platform.isModLoaded("create"))
+            CreateFabricCompat.register();
         ModStats.load();
         ModBlocks.registerFlammableBlocks();
         ModItemFunctions.registerDispenserBehaviour();
