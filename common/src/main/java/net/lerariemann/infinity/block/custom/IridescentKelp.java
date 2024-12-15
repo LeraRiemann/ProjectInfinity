@@ -37,7 +37,7 @@ public class IridescentKelp extends KelpBlock {
 
         @Override
         protected AbstractPlantStemBlock getStem() {
-            return (AbstractPlantStemBlock)ModBlocks.IRIDESCENT_KELP.get();
+            return ModBlocks.IRIDESCENT_KELP.get();
         }
     }
 }
