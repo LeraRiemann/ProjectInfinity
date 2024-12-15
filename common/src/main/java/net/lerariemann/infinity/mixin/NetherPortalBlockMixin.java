@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,11 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(NetherPortalBlock.class)
 public class NetherPortalBlockMixin {
-
 	@Inject(at = @At("HEAD"), method = "onEntityCollision(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V")
 	private void injected(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo info) {
-		if (!world.isClient() && entity instanceof ItemEntity itemEntity) {
-			PortalCreationLogic.tryCreatePortalFromItem(state,world,pos,itemEntity);
+		if (world instanceof ServerWorld serverWorld && entity instanceof ItemEntity itemEntity) {
+			PortalCreationLogic.tryCreatePortalFromItem(state, serverWorld, pos, itemEntity);
 		}
 	}
 

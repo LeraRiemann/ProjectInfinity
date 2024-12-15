@@ -2,6 +2,9 @@ package net.lerariemann.infinity.mixin;
 
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.PortalCreationLogic;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -30,20 +33,21 @@ public abstract class EntityMixin {
     @Shadow public abstract World getWorld();
 
     @ModifyArg(method = "tickPortal()V", at = @At(value = "INVOKE", target =
-            "Lnet/minecraft/server/MinecraftServer;getWorld(Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/server/world/ServerWorld;"),
-    index = 0)
-    private RegistryKey<World> injected(RegistryKey<World> key) {
-        return getWorld().getRegistryKey() == World.OVERWORLD ? World.NETHER : World.OVERWORLD;
-    }
-
-    @ModifyArg(method = "tickPortal()V", at = @At(value = "INVOKE", target =
             "Lnet/minecraft/entity/Entity;moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;"))
     private ServerWorld injected(ServerWorld originalWorldTo) {
-        if (getWorld() instanceof ServerWorld worldFrom
-                && worldFrom.getBlockEntity(this.lastNetherPortalPosition) instanceof InfinityPortalBlockEntity portal) {
-            RegistryKey<World> keyTo = RegistryKey.of(RegistryKeys.WORLD, portal.getDimension());
-            ServerWorld worldTo = worldFrom.getServer().getWorld(keyTo);
-            return Objects.requireNonNullElse(worldTo, worldFrom);
+        if (getWorld() instanceof ServerWorld worldFrom) {
+            BlockPos pos = this.lastNetherPortalPosition;
+            RegistryKey<World> keyTo;
+            if (worldFrom.getBlockEntity(pos) instanceof InfinityPortalBlockEntity portal) {
+                keyTo = RegistryKey.of(RegistryKeys.WORLD, portal.getDimension()); //redirect teleportation to infdims
+            }
+            else if (worldFrom.getBlockState(pos).isOf(Blocks.NETHER_PORTAL)
+                    && InfinityMethods.isInfinity(worldFrom)) { //redirect returning from infdims and make portals in them infinity (for sync reasons)
+                keyTo = World.OVERWORLD;
+                PortalCreationLogic.modifyPortalRecursive(worldFrom, pos, keyTo.getValue(), true);
+            }
+            else return originalWorldTo;
+            return Objects.requireNonNullElse(worldFrom.getServer().getWorld(keyTo), worldFrom);
         }
         return originalWorldTo;
     }
@@ -58,7 +62,8 @@ public abstract class EntityMixin {
             }
         }
     }
-    
+
+    /* Forge-specific mixins to allow mobs to swim in iridescence */
     @Inject(method="updateMovementInFluid", at = @At(value = "RETURN"), cancellable = true)
     void inj(TagKey<Fluid> tag, double speed, CallbackInfoReturnable<Boolean> cir) {
         if (tag.equals(FluidTags.WATER))

@@ -48,15 +48,17 @@ public interface PortalColorApplier {
         }
     }
 
-    record RandomHue(float saturation, float brightness) implements PortalColorApplier {
+    record RandomHue(float saturation, float brightness, float detail) implements PortalColorApplier {
         public RandomHue(NbtCompound applierData) {
             this(InfinityOptions.test(applierData, "saturation", 1.0f),
-            InfinityOptions.test(applierData, "brightness", 1.0f));
+            InfinityOptions.test(applierData, "brightness", 1.0f),
+            InfinityOptions.test(applierData, "detail", 12.0f));
         }
 
         @Override
         public int apply(BlockPos pos) {
-            return Color.HSBtoRGB((new Random(pos.hashCode())).nextFloat(), saturation, brightness);
+            float hue = (pos.getX() + pos.getY() + pos.getZ()) / detail;
+            return Color.HSBtoRGB(hue - (int)hue, saturation, brightness);
         }
     }
 }
