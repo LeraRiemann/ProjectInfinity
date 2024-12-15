@@ -191,12 +191,12 @@ public class Iridescence {
     }
 
     public static void tryApplyEffect(MobEntity ent) {
-        if (!ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT)) {
+        if (!ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value())) {
             if (ent instanceof FishEntity)
-                ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0,
+                ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0,
                         true, false));
             else if (isConvertible(ent))
-                ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0));
+                ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0));
         }
     }
 

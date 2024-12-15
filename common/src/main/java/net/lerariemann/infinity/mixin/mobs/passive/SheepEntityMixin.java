@@ -40,7 +40,7 @@ public abstract class SheepEntityMixin extends LivingEntityMixin implements Shea
     @Shadow public abstract boolean isSheared();
 
     @Inject(method = "initialize", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/SheepEntity;setColor(Lnet/minecraft/util/DyeColor;)V", shift = At.Shift.AFTER))
-    private void injected(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> cir) {
+    private void injected(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cir) {
         if (world.getBiome(getBlockPos()).matchesId(InfinityMethods.getId("classic"))) {
             setColor(DyeColor.WHITE);
         }

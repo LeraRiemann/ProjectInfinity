@@ -16,7 +16,7 @@ public class IridescentKelp extends KelpBlock {
     }
 
     @Override
-    protected FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return PlatformMethods.getIridescenceStill().get().getStill(false);
     }
 
@@ -31,7 +31,7 @@ public class IridescentKelp extends KelpBlock {
         }
 
         @Override
-        protected FluidState getFluidState(BlockState state) {
+        public FluidState getFluidState(BlockState state) {
             return PlatformMethods.getIridescenceStill().get().getStill(false);
         }
 
