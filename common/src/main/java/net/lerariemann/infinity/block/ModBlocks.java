@@ -41,6 +41,10 @@ public class ModBlocks {
             new IridescentBlock(AbstractBlock.Settings.copy(Blocks.MAGENTA_WOOL)));
     public static final RegistrySupplier<Block> IRIDESCENT_CARPET = BLOCKS.register("iridescent_carpet", () ->
             new IridescentBlock.Carpet(AbstractBlock.Settings.copy(Blocks.MAGENTA_CARPET)));
+    public static final RegistrySupplier<IridescentKelp> IRIDESCENT_KELP = BLOCKS.register("iridescent_kelp", () ->
+            new IridescentKelp(AbstractBlock.Settings.copy(Blocks.KELP).mapColor(MapColor.MAGENTA)));
+    public static final RegistrySupplier<IridescentKelp.Plant> IRIDESCENT_KELP_PLANT = BLOCKS.register("iridescent_kelp_plant", () ->
+            new IridescentKelp.Plant(AbstractBlock.Settings.copy(Blocks.KELP).mapColor(MapColor.MAGENTA)));
 
 
     public static void registerModBlocks() {

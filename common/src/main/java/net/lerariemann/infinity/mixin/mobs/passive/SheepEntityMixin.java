@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.mixin.mobs.passive;
 
+import net.lerariemann.infinity.access.SpawnableInterface;
 import net.lerariemann.infinity.mixin.mobs.LivingEntityMixin;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.*;
@@ -39,11 +40,11 @@ public abstract class SheepEntityMixin extends LivingEntityMixin implements Shea
     @Shadow public abstract boolean isSheared();
 
     @Inject(method = "initialize", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/SheepEntity;setColor(Lnet/minecraft/util/DyeColor;)V", shift = At.Shift.AFTER))
-    private void injected(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cir) {
-        if (world.toServerWorld().getRegistryKey().getValue().toString().contains("infinity:classic")) {
+    private void injected(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> cir) {
+        if (world.getBiome(getBlockPos()).matchesId(InfinityMethods.getId("classic"))) {
             setColor(DyeColor.WHITE);
         }
-        else if (InfinityMethods.isInfinity(world.toServerWorld())) {
+        else if (SpawnableInterface.isBiomeInfinity(world, getBlockPos())) {
             setColor(DyeColor.byId(world.getRandom().nextInt(16)));
         }
     }

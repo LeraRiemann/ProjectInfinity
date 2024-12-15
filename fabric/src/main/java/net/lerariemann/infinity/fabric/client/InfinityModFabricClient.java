@@ -20,9 +20,11 @@ public class InfinityModFabricClient implements ClientModInitializer {
         ColorProviderRegistry.BLOCK.register(InfinityMethods::getBiomeBottleColor, ModBlocks.BIOME_BOTTLE.get());
         ColorProviderRegistry.ITEM.register(InfinityMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get(), ModItems.BIOME_BOTTLE_ITEM.get());
         ColorProviderRegistry.ITEM.register(InfinityMethods::getInfinityPortalColor, ModItems.PORTAL_ITEM.get());
-        // On Fabric, render layer maps are also applied to blocks with cutouts.
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOOK_BOX.get(), RenderLayer.getCutoutMipped());
-        // On Fabric, render layer maps are also applied to blocks with translucency.
+        // On Fabric, render layer maps are also applied to blocks.
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutoutMipped(),
+                ModBlocks.BOOK_BOX.get(),
+                ModBlocks.IRIDESCENT_KELP.get(),
+                ModBlocks.IRIDESCENT_KELP_PLANT.get());
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(),
                 ModBlocks.TIME_BOMB.get(),
                 ModBlocks.BIOME_BOTTLE.get());

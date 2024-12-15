@@ -74,7 +74,8 @@ public class PlatformMethodsImpl {
 
     public static RegistrySupplier<FluidBlock> getIridBlockForReg() {
         return ModBlocks.BLOCKS.register("iridescence", () ->
-                new IridescenceLiquidBlockForge(getIridescenceStill(), AbstractBlock.Settings.copy(Blocks.WATER)));
+                new IridescenceLiquidBlockForge(PlatformMethods.getIridescenceStill(), AbstractBlock.Settings.copy(Blocks.WATER)
+                                .mapColor(MapColor.MAGENTA)));
     }
 
     public static Path getRootConfigPath() {

@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.mixin.mobs;
 
 import net.lerariemann.infinity.access.SpawnableInterface;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;
@@ -20,7 +19,10 @@ public class WaterCreaturesMixin {
     @Inject(method = "canSpawn(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/entity/SpawnReason;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/random/Random;)Z", at = @At("HEAD"), cancellable = true)
     private static void injected(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
         if (SpawnableInterface.isBiomeInfinity(world, pos)) {
-            cir.setReturnValue(spawnReason == SpawnReason.SPAWNER || (MobEntity.canMobSpawn(type, world, spawnReason, pos, random) && world.getFluidState(pos).isIn(FluidTags.WATER) && world.getBlockState(pos.up()).isOf(Blocks.WATER)));
+            cir.setReturnValue(spawnReason == SpawnReason.SPAWNER ||
+                    (MobEntity.canMobSpawn(type, world, spawnReason, pos, random)
+                            && world.getFluidState(pos).isIn(FluidTags.WATER)
+                            && world.getFluidState(pos.up()).isIn(FluidTags.WATER)));
         }
     }
 }
