@@ -45,10 +45,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.BlockLocating;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.TeleportTarget;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.poi.PointOfInterest;
@@ -117,6 +114,15 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         return ActionResult.SUCCESS;
     }
 
+    @Override
+    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+        if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
+            ItemStack stack = ModItems.TRANSFINITE_KEY.get().getDefaultStack();
+            stack.applyComponentsFrom(getKeyComponents(ipbe.getDimension()));
+            return stack;
+        }
+        return ItemStack.EMPTY;
+    }
 
     static boolean world_exists(MinecraftServer s, Identifier l) {
         return (!l.getNamespace().equals(InfinityMod.MOD_ID)) ||
@@ -164,10 +170,14 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
 
     public static Optional<ComponentMap> getKeyComponents(Item item, Identifier dim) {
         if (!item.equals(ModItems.TRANSFINITE_KEY.get())) return Optional.empty();
+        return Optional.of(getKeyComponents(dim));
+    }
+
+    public static ComponentMap getKeyComponents(Identifier dim) {
         Integer keycolor = WarpLogic.getKeyColorFromId(dim);
-        return Optional.of((ComponentMap.builder()
+        return (ComponentMap.builder()
                 .add(ModItemFunctions.KEY_DESTINATION.get(), dim)
-                .add(ModItemFunctions.COLOR.get(), keycolor)).build());
+                .add(ModItemFunctions.COLOR.get(), keycolor)).build();
     }
 
     /**
