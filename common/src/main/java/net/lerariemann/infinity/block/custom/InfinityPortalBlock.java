@@ -97,7 +97,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof InfinityPortalBlockEntity npbe) {
                 /* If the portal is open already, nothing should happen. */
-                if (npbe.getOpen() && world_exists(s, npbe.getDimension()))
+                if (npbe.isOpen() && world_exists(s, npbe.getDimension()))
                     return ActionResult.SUCCESS;
 
                 /* If the portal key is blank, open the portal on any right-click. */
@@ -192,7 +192,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             if (entity instanceof PlayerEntity player
                     && InfinityMod.provider.portalKey.isBlank()) {
                 ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
-                if ((world1 == null) || !npbe.getOpen())
+                if ((world1 == null) || !npbe.isOpen())
                     PortalCreationLogic.openWithStatIncrease(player, server, world, pos);
                 else {
                     Timebombable tw = (Timebombable)world1;
@@ -247,7 +247,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         Vec3d offset = entity.positionInPortal(axisFrom, portalFrom);
         if (!worldTo.getRegistryKey().equals(worldFrom.getRegistryKey())
                 && WarpLogic.dimExists(worldTo)
-                && portal.getOpen()) {
+                && portal.isOpen()) {
             BlockPos posTo = portal.getOtherSidePos();
             if (isValidDestinationStrong(worldFrom, worldTo, posTo)) {
                 createTicket(worldTo, posTo);

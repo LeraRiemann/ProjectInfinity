@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.utility.Pair;
 import io.github.fabricators_of_create.porting_lib.entity.ITeleporter;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -33,9 +34,10 @@ public class CreateFabricCompat {
         ServerWorld world = inbound.getFirst();
         BlockFace blockFace = inbound.getSecond();
         BlockEntity blockEntity = world.getBlockEntity(blockFace.getConnectedPos());
-        if (blockEntity instanceof InfinityPortalBlockEntity portalEntity) {
+        if (blockEntity instanceof InfinityPortalBlockEntity portalEntity && portalEntity.isOpen()) {
             Identifier id = portalEntity.getDimension();
-            return RegistryKey.of(RegistryKeys.WORLD, id);
+            RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
+            if (WarpLogic.dimExists(world.getServer().getWorld(key))) return key;
         }
         return null;
     }

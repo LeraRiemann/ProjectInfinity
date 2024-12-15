@@ -63,7 +63,7 @@ public class InfinityPortalBlockEntity extends BlockEntity {
         return this.portalColor;
     }
 
-    public boolean getOpen() {
+    public boolean isOpen() {
         return this.isOpen;
     }
     @Nullable
