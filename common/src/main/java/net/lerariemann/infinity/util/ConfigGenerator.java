@@ -5,7 +5,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.block.enums.WallMountLocation;
-import net.minecraft.client.render.RenderLayers;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffect;
@@ -260,7 +259,6 @@ public interface ConfigGenerator {
             bs = bs.with(Properties.WALL_MOUNT_LOCATION, WallMountLocation.FLOOR);
         }
         res.putBoolean("top", isTop(bs, w, onStone));
-        res.putString("rendertype", RenderLayers.getBlockLayer(bs).toString());
         if (!properties.isEmpty()) res.put("Properties", properties);
         return res;
     }

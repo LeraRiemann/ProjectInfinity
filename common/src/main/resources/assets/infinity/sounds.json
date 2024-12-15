@@ -10,5 +10,11 @@
     "sounds": [
       "infinity:ivory_challenger"
     ]
+  },
+  "backport.vault.open_shutter": {
+    "subtitle": "subtitles.infinity.dimension_open",
+    "sounds": [
+      "infinity:backport_vault"
+    ]
   }
 }

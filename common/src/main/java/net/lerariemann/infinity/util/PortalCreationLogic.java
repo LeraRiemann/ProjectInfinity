@@ -2,7 +2,6 @@ package net.lerariemann.infinity.util;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
-import com.llamalad7.mixinextras.sugar.Local;
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
@@ -17,6 +16,7 @@ import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
+import net.lerariemann.infinity.var.ModSounds;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -44,7 +44,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -297,7 +296,7 @@ public interface PortalCreationLogic {
      * Jingle signaling the portal is now usable.
      */
     static void runAfterEffects(ServerWorld world, BlockPos pos, boolean dimensionIsNew) {
-        if (dimensionIsNew) world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
+        if (dimensionIsNew) world.playSound(null, pos, ModSounds.BACKPORT_VAULT_EVENT, SoundCategory.BLOCKS, 1f, 1f);
         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
     }
 
