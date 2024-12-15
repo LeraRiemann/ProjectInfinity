@@ -235,19 +235,11 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
 
             if (WarpLogic.dimExists(worldTo) && ipbe.getOpen()) {
                 BlockPos targetPos = ipbe.getOtherSidePos();
-                if (isPosValid(worldTo, targetPos)) return getExistingTarget(worldTo, targetPos, entity);
+                if (isValidDestinationStrong(worldFrom, worldTo, targetPos)) return getExistingTarget(worldTo, targetPos, entity);
                 return findNewTeleportTarget(worldFrom, posFrom, worldTo, entity);
             }
         }
         return getExistingTarget(worldFrom, posFrom, entity); //if something goes wrong, don't teleport anywhere
-    }
-
-    /**
-     * Checks that synchronisation isn't broken.
-     */
-    static boolean isPosValid(ServerWorld worldTo, BlockPos posTo) {
-        if (!WarpLogic.dimExists(worldTo)) return false;
-        return ((posTo != null) && (worldTo.getBlockState(posTo).getBlock() instanceof NetherPortalBlock));
     }
 
     /**
@@ -268,17 +260,19 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
      * Filter for portal blocks except infinity portals of other destinations.
      */
     public static boolean isValidDestinationWeak(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
-        return (worldTo.getBlockState(posTo).isOf(Blocks.NETHER_PORTAL)) || isValidDestinationStrong(worldFrom, worldTo, posTo);
+        if (posTo == null || !WarpLogic.dimExists(worldTo)) return false;
+        return (worldTo.getBlockState(posTo).isOf(Blocks.NETHER_PORTAL))
+                || (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe
+                && ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString()));
     }
 
     /**
      * Filter for infinity portals of the correct destination.
      */
     public static boolean isValidDestinationStrong(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
-        if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe) {
-            return ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString());
-        }
-        return false;
+        if (posTo == null || !WarpLogic.dimExists(worldTo)) return false;
+        return (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe
+                && ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString()));
     }
 
     public static TeleportTarget findNewTeleportTarget(ServerWorld worldFrom, BlockPos posFrom, ServerWorld worldTo, Entity teleportingEntity) {
@@ -349,7 +343,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         Identifier idFrom = worldFrom.getRegistryKey().getValue();
 
         if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe) {
-            if (ipbe.getDimension() != idFrom || isPosValid(worldFrom, ipbe.getOtherSidePos())) return; //don't resync what's already synced
+            if (ipbe.getDimension() != idFrom || isValidDestinationStrong(worldTo, worldFrom, ipbe.getOtherSidePos())) return; //don't resync what's already synced
         }
         else {
             otherSideModifier = PortalCreationLogic.forInitialSetupping(worldTo, posTo, idFrom, true); //make it an infinity portal while you're at it
