@@ -31,6 +31,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -42,6 +43,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockLocating;
@@ -247,10 +249,20 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 && WarpLogic.dimExists(worldTo)
                 && portal.getOpen()) {
             BlockPos posTo = portal.getOtherSidePos();
-            if (isValidDestinationStrong(worldFrom, worldTo, posTo)) return getExistingTarget(worldTo, posTo, entity, axisFrom, offset);
+            if (isValidDestinationStrong(worldFrom, worldTo, posTo)) {
+                createTicket(worldTo, posTo);
+                return getExistingTarget(worldTo, posTo, entity, axisFrom, offset);
+            }
             return findNewTeleportTarget(worldFrom, posFrom, worldTo, entity, axisFrom, offset);
         }
         return getExistingTarget(worldFrom, posFrom, entity, axisFrom, offset); //if something goes wrong, don't teleport anywhere
+    }
+
+    /**
+     * Loads the other side of the portal for 300 ticks like nether portals do.
+     */
+    public static void createTicket(ServerWorld worldTo, BlockPos posTo) {
+        worldTo.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(posTo), 3, posTo);
     }
 
     /**
@@ -322,6 +334,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             posTo = portalTo.lowerLeft;
         }
 
+        createTicket(worldTo, posTo);
         trySyncPortals(worldFrom, posFrom, worldTo, posTo);
 
         return NetherPortal.getNetherTeleportTarget(worldTo, portalTo, axisFrom, offset,
