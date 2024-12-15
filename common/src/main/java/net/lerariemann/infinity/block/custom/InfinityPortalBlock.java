@@ -238,18 +238,34 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
      */
     @Nullable @Override
     public TeleportTarget createTeleportTarget(ServerWorld worldFrom, Entity entity, BlockPos posFrom) {
-        if (worldFrom.getBlockEntity(posFrom) instanceof InfinityPortalBlockEntity ipbe) {
-            Identifier id = ipbe.getDimension();
-            RegistryKey<World> keyTo = RegistryKey.of(RegistryKeys.WORLD, id);
-            ServerWorld worldTo = worldFrom.getServer().getWorld(keyTo);
+        try {
+            if (worldFrom.getBlockEntity(posFrom) instanceof InfinityPortalBlockEntity ipbe) {
+                Identifier id = ipbe.getDimension();
+                RegistryKey<World> keyTo = RegistryKey.of(RegistryKeys.WORLD, id);
+                ServerWorld worldTo = worldFrom.getServer().getWorld(keyTo);
 
-            if (WarpLogic.dimExists(worldTo) && ipbe.getOpen()) {
-                BlockPos targetPos = ipbe.getOtherSidePos();
-                if (isValidDestinationStrong(worldFrom, worldTo, targetPos)) return getExistingTarget(worldTo, targetPos, entity);
-                return findNewTeleportTarget(worldFrom, posFrom, worldTo, entity);
+                if (WarpLogic.dimExists(worldTo) && ipbe.getOpen()) {
+                    BlockPos targetPos = ipbe.getOtherSidePos();
+                    if (isValidDestinationStrong(worldFrom, worldTo, targetPos))
+                        return getExistingTarget(worldTo, targetPos, entity);
+                    return findNewTeleportTarget(worldFrom, posFrom, worldTo, entity);
+                }
             }
         }
-        return getExistingTarget(worldFrom, posFrom, entity); //if something goes wrong, don't teleport anywhere
+        catch (Exception ignored) {}
+        return emptyTarget(entity); //if anything goes wrong, don't teleport anywhere
+    }
+
+    static Direction.Axis getAxisOrDefault(BlockState state) {
+        if (state.getProperties().contains(Properties.HORIZONTAL_AXIS))
+            return state.get(Properties.HORIZONTAL_AXIS);
+        return Direction.Axis.X;
+    }
+
+    public static TeleportTarget emptyTarget(Entity entity) {
+        return new TeleportTarget((ServerWorld)entity.getWorld(), entity.getPos(),
+                entity.getVelocity(), entity.getYaw(), entity.getPitch(),
+                TeleportTarget.NO_OP);
     }
 
     /**
@@ -258,7 +274,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     public static TeleportTarget getExistingTarget(ServerWorld worldTo, BlockPos posTo, Entity teleportingEntity) {
         BlockState blockState = worldTo.getBlockState(posTo);
         BlockLocating.Rectangle rectangle = BlockLocating.getLargestRectangle(
-                posTo, blockState.get(Properties.HORIZONTAL_AXIS),
+                posTo, getAxisOrDefault(blockState),
                 21, Direction.Axis.Y, 21,
                 posx -> worldTo.getBlockState(posx) == blockState
         );
@@ -320,7 +336,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             BlockState blockState = worldTo.getBlockState(posTo);
             rectangleTo = BlockLocating.getLargestRectangle(
                     posTo,
-                    blockState.get(Properties.HORIZONTAL_AXIS),
+                    getAxisOrDefault(blockState),
                     21, Direction.Axis.Y, 21,
                     posx -> worldTo.getBlockState(posx) == blockState
             );
@@ -333,7 +349,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             Optional<BlockLocating.Rectangle> optional2 = worldTo.getPortalForcer().createPortal(originOfTesting, axis);
             if (optional2.isEmpty()) {
                 LogManager.getLogger().error("Unable to create a portal, likely target out of worldborder");
-                return getExistingTarget(worldFrom, posFrom, teleportingEntity);
+                return emptyTarget(teleportingEntity);
             }
             rectangleTo = optional2.get();
             posTo = rectangleTo.lowerLeft;
