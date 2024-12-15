@@ -9,6 +9,5 @@ accessible class net/minecraft/world/gen/surfacebuilder/MaterialRules$SimpleBloc
 accessible method net/minecraft/entity/effect/StatusEffect <init> (Lnet/minecraft/entity/effect/StatusEffectCategory;I)V
 accessible method net/minecraft/world/gen/structure/Structure getStructurePosition (Lnet/minecraft/world/gen/structure/Structure$Context;)Ljava/util/Optional;
 accessible field net/minecraft/entity/SpawnRestriction RESTRICTIONS Ljava/util/Map;
-accessible method net/minecraft/block/NetherPortalBlock getExitPortalTarget (Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/BlockLocating$Rectangle;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/world/TeleportTarget$PostDimensionTransition;)Lnet/minecraft/world/TeleportTarget;
-accessible method net/minecraft/block/NetherPortalBlock getOrCreateExitPortalTarget (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;ZLnet/minecraft/world/border/WorldBorder;)Lnet/minecraft/world/TeleportTarget;
 accessible class net/minecraft/entity/passive/FishEntity$FishMoveControl
+accessible method net/minecraft/entity/Entity positionInPortal (Lnet/minecraft/util/math/Direction$Axis;Lnet/minecraft/world/BlockLocating$Rectangle;)Lnet/minecraft/util/math/Vec3d;
