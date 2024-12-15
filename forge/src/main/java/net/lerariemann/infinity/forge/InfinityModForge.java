@@ -48,7 +48,7 @@ public final class InfinityModForge {
         eventBus.addListener(FluidTypes::registerFluidInteractions);
         
         FluidTypes.registerFluidTypes(eventBus);
-        ModFluidsForge.registerModFluids(eventBus);
+        ModFluidsForge.registerModFluids();
         ModEffectsForge.register(eventBus);
         ModItems.IRIDESCENT_TAG = ItemTags.create(InfinityMod.getId("iridescent"));
     }

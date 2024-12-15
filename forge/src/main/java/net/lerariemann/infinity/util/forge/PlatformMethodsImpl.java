@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.fluids.forge.FluidTypes;
 import net.lerariemann.infinity.fluids.forge.IridescenceLiquidBlockForge;
 import net.lerariemann.infinity.fluids.forge.ModFluidsForge;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -13,6 +14,8 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
@@ -90,12 +93,12 @@ public class PlatformMethodsImpl {
 
     public static boolean acidTest(Entity entity, boolean eyes) {
         if (entity instanceof PlayerEntity) return false;
-        if (eyes) return entity.isEyeInFluidType(FluidTypes.IRIDESCENCE_TYPE.value());
-        return entity.isInFluidType(FluidTypes.IRIDESCENCE_TYPE.value());
+        if (eyes) return entity.isEyeInFluidType(FluidTypes.IRIDESCENCE_TYPE.get());
+        return entity.isInFluidType(FluidTypes.IRIDESCENCE_TYPE.get());
     }
 
     public static double acidHeightTest(Entity entity) {
         if (entity instanceof PlayerEntity) return -1;
-        return entity.getFluidTypeHeight(FluidTypes.IRIDESCENCE_TYPE.value());
+        return entity.getFluidTypeHeight(FluidTypes.IRIDESCENCE_TYPE.get());
     }
 }

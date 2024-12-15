@@ -23,6 +23,7 @@ public class InfinityModForgeClient {
         InfinityModForgeClient.registerModsPage();
         eventBus.addListener(InfinityModForgeClient::registerBlockColorHandlers);
         eventBus.addListener(InfinityModForgeClient::registerItemColorHandlers);
+        eventBus.addListener(InfinityModForgeClient::registerFluidRenderLayers);
         eventBus.addListener(InfinityModForgeClient::registerModelPredicates);
     }
 
@@ -47,7 +48,7 @@ public class InfinityModForgeClient {
     }
 
     @SubscribeEvent
-    public static void onClientSetup(FMLClientSetupEvent event) {
+    public static void registerFluidRenderLayers(FMLClientSetupEvent event) {
         RenderLayers.setRenderLayer(PlatformMethods.getIridescenceStill().get(), RenderLayer.getTranslucent());
         RenderLayers.setRenderLayer(PlatformMethods.getIridescenceFlowing().get(), RenderLayer.getTranslucent());
     }
