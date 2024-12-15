@@ -25,6 +25,7 @@
     "iridescence.FishEntityMixin",
     "iridescence.FishEntityMixin$FishMoveControlMixin",
     "iridescence.IridescenceMixin",
+    "iridescence.KelpBlockMixin",
     "iridescence.LandPathNodeMakerMixin",
     "iridescence.LivingEntityMixin",
     "iridescence.MobNavigationMixin",
