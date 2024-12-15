@@ -74,6 +74,7 @@ public class InfinityModNeoForgeClient {
         static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
             event.registerFluidType(new IClientFluidTypeExtensions() {
                 private static final Identifier IRIDESCENCE = InfinityMethods.getId("block/iridescence");
+                private static final Identifier IRIDESCENCE_OVERLAY = InfinityMethods.getId("block/iridescence_overlay");
 
                 @Override
                 public @NotNull Identifier getStillTexture() {
@@ -83,6 +84,11 @@ public class InfinityModNeoForgeClient {
                 @Override
                 public @NotNull Identifier getFlowingTexture() {
                     return IRIDESCENCE;
+                }
+
+                @Override
+                public @NotNull Identifier getOverlayTexture() {
+                    return IRIDESCENCE_OVERLAY;
                 }
 
                 @Override

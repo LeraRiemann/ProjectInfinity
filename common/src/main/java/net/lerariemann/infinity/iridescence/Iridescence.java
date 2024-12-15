@@ -32,9 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.random.CheckedRandom;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.*;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,7 +65,7 @@ public class Iridescence {
     public static boolean isIridescence(FluidState st) {
         return st.isOf(PlatformMethods.getIridescenceStill().get()) || st.isOf(PlatformMethods.getIridescenceFlowing().get());
     }
-    public static boolean isIridescence(WorldView world, BlockPos pos) {
+    public static boolean isIridescence(BlockView world, BlockPos pos) {
         return Iridescence.isIridescence(world.getFluidState(pos));
     }
     public static boolean isIridescentItem(ItemStack stack) {

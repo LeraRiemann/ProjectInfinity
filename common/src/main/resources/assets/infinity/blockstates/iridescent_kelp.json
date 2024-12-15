@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/kelp"
+      "model": "infinity:block/iridescent_kelp"
     }
   }
 }

@@ -23,7 +23,7 @@ public class ModFluidsFabric {
                     .bucketItemSupplier(() -> ModItems.IRIDESCENCE_BUCKET)
                     .sourceTexture(InfinityMethods.getId("block/iridescence"))
                     .flowingTexture(InfinityMethods.getId("block/iridescence"))
-                    .overlayTexture(InfinityMethods.getId("block/iridescence"));
+                    .overlayTexture(InfinityMethods.getId("block/iridescence_overlay"));
     public static final RegistrySupplier<ArchitecturyFlowingFluid> IRIDESCENCE_FLOWING =
             FLUIDS.register("flowing_iridescence", () -> new IridescenceFlowing(iridescence_attributes));
     public static final RegistrySupplier<ArchitecturyFlowingFluid> IRIDESCENCE_STILL =
