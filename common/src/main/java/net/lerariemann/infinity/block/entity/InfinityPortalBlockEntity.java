@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.block.entity;
 
+import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;
@@ -7,8 +8,11 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
@@ -86,6 +90,32 @@ public class InfinityPortalBlockEntity extends BlockEntity {
         this.otherSidePos = pos;
         markDirty();
     }
+
+    public ServerWorld getDimensionAsWorld() {
+        if (getWorld() instanceof ServerWorld serverWorld)
+            return serverWorld.getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD, getDimension()));
+        return null;
+    }
+    public boolean isConnected() {
+        if (!isOpen()) return false;
+        if (getWorld() instanceof ServerWorld worldFrom && InfinityMethods.dimExists(worldFrom)) {
+            return InfinityPortalBlock.isValidDestinationStrong(worldFrom, getDimensionAsWorld(), getOtherSidePos());
+        }
+        return false;
+    }
+    public boolean isConnectedBothSides() {
+        if (!isOpen()) return false;
+        if (getWorld() instanceof ServerWorld worldFrom && InfinityMethods.dimExists(worldFrom)) {
+            ServerWorld worldTo = getDimensionAsWorld();
+            BlockPos posTo = getOtherSidePos();
+            if (posTo == null || !InfinityMethods.dimExists(worldTo)) return false;
+            return (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe
+                    && ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString())
+                    && ipbe.isConnected());
+        }
+        return false;
+    }
+
 
     public void writeNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(tag, registryLookup);
