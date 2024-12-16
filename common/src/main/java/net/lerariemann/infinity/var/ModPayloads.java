@@ -31,7 +31,8 @@ public class ModPayloads {
 
     public static PacketByteBuf buildPacket(ServerWorld destination) {
         PacketByteBuf buf = PlatformMethods.createPacketByteBufs();
-        buf.writeNbt(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
+        if (destination == null) buf.writeNbt(new NbtCompound());
+        else buf.writeNbt(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
         return buf;
     }
 

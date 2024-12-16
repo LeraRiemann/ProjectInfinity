@@ -51,6 +51,7 @@ public class PlayerManagerMixin {
     @Inject(method = "onPlayerConnect", at = @At(value="INVOKE",
             target = "Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci, @Local(ordinal=0) ServerWorld serverWorld2) {
+        if (serverWorld2 == null) return;
         ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(serverWorld2));
         ServerPlayNetworking.send(player, ModPayloads.STARS_RELOAD, PacketByteBufs.create());
         MinecraftServerAccess acc = ((MinecraftServerAccess)(serverWorld2.getServer()));

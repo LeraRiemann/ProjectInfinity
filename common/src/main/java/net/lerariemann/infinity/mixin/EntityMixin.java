@@ -23,8 +23,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Objects;
-
 @Mixin(Entity.class)
 public abstract class EntityMixin {
     @Shadow
@@ -37,17 +35,19 @@ public abstract class EntityMixin {
     private ServerWorld injected(ServerWorld originalWorldTo) {
         if (getWorld() instanceof ServerWorld worldFrom) {
             BlockPos pos = this.lastNetherPortalPosition;
-            RegistryKey<World> keyTo;
             if (worldFrom.getBlockEntity(pos) instanceof InfinityPortalBlockEntity portal) {
-                keyTo = RegistryKey.of(RegistryKeys.WORLD, portal.getDimension()); //redirect teleportation to infdims
+                RegistryKey<World> keyTo = RegistryKey.of(RegistryKeys.WORLD,
+                        portal.getDimension()); //redirect teleportation to infdims
+                ServerWorld worldTo = worldFrom.getServer().getWorld(keyTo);
+                return (InfinityMethods.dimExists(worldTo)
+                        && portal.isOpen()) ? worldTo : worldFrom;
             }
             else if (worldFrom.getBlockState(pos).isOf(Blocks.NETHER_PORTAL)
                     && InfinityMethods.isInfinity(worldFrom)) { //redirect returning from infdims and make portals in them infinity (for sync reasons)
-                keyTo = World.OVERWORLD;
-                PortalCreationLogic.modifyPortalRecursive(worldFrom, pos, keyTo.getValue(), true);
+                PortalCreationLogic.modifyPortalRecursive(worldFrom, pos, World.OVERWORLD.getValue(), true);
+                return worldFrom.getServer().getOverworld();
             }
             else return originalWorldTo;
-            return Objects.requireNonNullElse(worldFrom.getServer().getWorld(keyTo), worldFrom);
         }
         return originalWorldTo;
     }
@@ -58,7 +58,7 @@ public abstract class EntityMixin {
             BlockPos posFrom = lastNetherPortalPosition;
             if (worldFrom.getBlockEntity(posFrom) instanceof InfinityPortalBlockEntity ipbe) {
                 cir.setReturnValue(InfinityPortalBlock.getTeleportTarget((Entity)(Object)this, ipbe,
-                        worldFrom, posFrom, destination));
+                        worldFrom, posFrom));
             }
         }
     }
