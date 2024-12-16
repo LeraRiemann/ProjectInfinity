@@ -26,7 +26,12 @@ public class GameRendererMixin implements GameRendererAccess {
 
     @Override
     public void infinity$loadPP(Identifier id) {
-        if (resourceManager.getResource(id).isPresent()) loadPostProcessor(id);
+        if (resourceManager.getResource(id).isPresent()) {
+            loadPostProcessor(id);
+        }
+        else {
+            MinecraftClient.getInstance().options.refreshResourcePacks(MinecraftClient.getInstance().getResourcePackManager());
+        }
     }
 
     @Inject(method = "onCameraEntitySet", at = @At("TAIL"), cancellable = true)

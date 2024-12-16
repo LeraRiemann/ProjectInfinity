@@ -79,7 +79,9 @@ public class ModPayloads {
         ((InfinityOptionsAccess)client).infinity$setOptions(options);
         NbtCompound shader = options.getShader();
         boolean bl = shader.isEmpty();
-        if (bl) client.execute(() -> ShaderLoader.reloadShaders(client, false));
+        if (bl) client.execute(() -> {
+            ShaderLoader.reloadShaders(client, false);
+        });
         else {
             client.execute(() -> {
                 CommonIO.write(shader, ShaderLoader.shaderDir(client), ShaderLoader.FILENAME);
