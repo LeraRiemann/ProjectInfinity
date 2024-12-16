@@ -25,6 +25,7 @@
     "WorldChunkMixin",
     "iridescence.ConcretePowderBlockMixin",
     "iridescence.FishEntityMixin",
+    "iridescence.FishEntityMixin$FishMoveControlMixin",
     "iridescence.IridescenceMixin",
     "iridescence.KelpBlockMixin",
     "iridescence.LandPathNodeMakerMixin",

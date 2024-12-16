@@ -8,8 +8,7 @@
     "EntityMixin",
     "HeightLimitViewMixin",
     "ServerPlayerEntityMixin",
-    "mavity.LivingEntityMixin",
-    "iridescence.FishMoveControlMixin"
+    "mavity.LivingEntityMixin"
   ],
   "client": [],
   "injectors": {
