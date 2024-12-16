@@ -2,35 +2,25 @@ package net.lerariemann.infinity.mixin;
 
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
-import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.WarpLogic;
-import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.s2c.play.EntityStatusEffectS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlayerAbilitiesS2CPacket;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -39,7 +29,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Mixin(ServerPlayerEntity.class)
@@ -54,6 +43,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Shadow public abstract boolean damage(DamageSource source, float amount);
 
+    @Shadow public ServerPlayNetworkHandler networkHandler;
+    @Shadow private int syncedExperience;
+    @Shadow private float syncedHealth;
+    @Shadow private int syncedFoodLevel;
     @Unique private long infinity$ticksUntilWarp;
     @Unique private Identifier infinity$idForWarp;
 
@@ -81,6 +74,19 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
         ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), ModPayloads.STARS_RELOAD, PlatformMethods.createPacketByteBufs());
     }
 
+    // Backport for a Mojang bugfix in 1.21; important for iridescence to work properly
+    @Inject(method = "teleport(Lnet/minecraft/server/world/ServerWorld;DDDFF)V",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/server/PlayerManager;sendPlayerStatus(Lnet/minecraft/server/network/ServerPlayerEntity;)V",
+                    shift = At.Shift.AFTER))
+    void inj(ServerWorld targetWorld, double x, double y, double z, float yaw, float pitch, CallbackInfo ci) {
+        this.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(getAbilities()));
+        for(StatusEffectInstance effect: getStatusEffects())
+            networkHandler.sendPacket(new EntityStatusEffectS2CPacket(getId(), effect));
+        syncedExperience = -1;
+        syncedHealth = -1.0F;
+        syncedFoodLevel = -1;
+    }
 
     @Override
     public void infinity$setWarpTimer(long ticks, Identifier dim) {
