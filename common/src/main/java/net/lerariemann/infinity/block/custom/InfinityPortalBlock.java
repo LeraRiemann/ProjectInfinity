@@ -53,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
@@ -182,12 +183,32 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
      */
     @Override
     public void onEntityCollision(BlockState state, World w, BlockPos pos, Entity entity) {
+        AtomicBoolean bl = new AtomicBoolean(false);
         if (w instanceof ServerWorld world
                 && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity npbe) {
             MinecraftServer server = world.getServer();
-            if (entity instanceof ItemEntity e)
+            if (!npbe.isOpen() ^ server.getWorld(RegistryKey.of(RegistryKeys.WORLD,
+                    npbe.getDimension())) == null) { //a portal should be open if and only if it has a valid destination
+                PortalCreationLogic.modifyPortalRecursive(world, pos,
+                        new PortalCreationLogic.PortalModifier(e -> e.setOpen(!npbe.isOpen())));
+            }
+            if (entity instanceof ItemEntity e) {
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
-                    item -> getKeyComponents(item, npbe.getDimension()));
+                        item -> getKeyComponents(item, npbe.getDimension()));
+                InfinityMod.provider.getPortalKeyAsItem().ifPresent(item -> { //opening a portal by tossing a key in
+                    if (e.getStack().isOf(item)) {
+                        tryUpdateOpenStatus(npbe, world, server, pos);
+                        if (npbe.isOpen()) return;
+                        PlayerEntity nearestPlayer =
+                                world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
+                        PortalCreationLogic.openWithStatIncrease(nearestPlayer, server, world, pos);
+                        e.getStack().decrement(1);
+                        e.setVelocity(e.getVelocity().multiply(-1));
+                        e.setPortalCooldown(200);
+                        bl.set(true);
+                    }
+                });
+            }
             if (entity instanceof PlayerEntity player
                     && InfinityMod.provider.isPortalKeyBlank()) {
                 ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
@@ -202,7 +223,20 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 }
             }
         }
-        super.onEntityCollision(state, w, pos, entity);
+        if (!bl.get()) super.onEntityCollision(state, w, pos, entity);
+    }
+
+    public static void tryUpdateOpenStatus(InfinityPortalBlockEntity npbe, ServerWorld worldFrom,
+                                           MinecraftServer server, BlockPos pos) {
+        tryUpdateOpenStatus(npbe, worldFrom, server.getWorld(
+                RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension())), pos);
+    }
+    public static void tryUpdateOpenStatus(InfinityPortalBlockEntity npbe, ServerWorld worldFrom,
+                                           ServerWorld worldTo, BlockPos pos) {
+        if (!npbe.isOpen() ^ worldTo == null) { //a portal should be open if and only if it has a valid destination
+            PortalCreationLogic.modifyPortalRecursive(worldFrom, pos,
+                    new PortalCreationLogic.PortalModifier(e -> e.setOpen(!npbe.isOpen())));
+        }
     }
 
     /**
@@ -240,20 +274,18 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             RegistryKey<World> keyTo = RegistryKey.of(RegistryKeys.WORLD, id);
             ServerWorld worldTo = worldFrom.getServer().getWorld(keyTo);
 
-            if (InfinityMethods.dimExists(worldTo) && ipbe.isOpen()) {
+            tryUpdateOpenStatus(ipbe, worldFrom, worldTo, posFrom);
+            if (InfinityMethods.dimExists(worldTo)
+                    && ipbe.isOpen()
+                    && !worldTo.getRegistryKey().equals(worldFrom.getRegistryKey())) {
                 BlockPos targetPos = ipbe.getOtherSidePos();
                 if (isValidDestinationStrong(worldFrom, worldTo, targetPos))
                     return getExistingTarget(worldTo, targetPos, entity);
                 return findNewTeleportTarget(worldFrom, posFrom, worldTo, entity);
             }
-
             //below this point is error handling. note that not all such errors are bugs
-            if (worldTo == null && ipbe.isOpen()) { //an open portal with no destination? close that
-                PortalCreationLogic.modifyPortalRecursive(worldFrom, posFrom,
-                        new PortalCreationLogic.PortalModifier(e -> e.setOpen(false)));
-            }
             if (entity instanceof ServerPlayerEntity player) {
-                sendErrors(player, worldTo, ipbe);
+                sendErrors(player, worldFrom, worldTo, ipbe);
             }
         }
         else if (entity instanceof ServerPlayerEntity player)
@@ -261,16 +293,19 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         return emptyTarget(entity); //if anything goes wrong, don't teleport anywhere
     }
 
-    static void sendErrors(ServerPlayerEntity player, ServerWorld worldTo, InfinityPortalBlockEntity ipbe) {
-        if (worldTo != null && ((Timebombable)worldTo).infinity$isTimebombed())
-            player.sendMessage(Text.translatable("error.infinity.portal.deleted"));
+    static void sendErrors(ServerPlayerEntity player, ServerWorld worldFrom, ServerWorld worldTo, InfinityPortalBlockEntity ipbe) {
+        if (worldTo != null) {
+            if (worldTo.getRegistryKey().equals(worldFrom.getRegistryKey()))
+                player.sendMessage(Text.translatable("error.infinity.portal.matching_ends"));
+            else if (((Timebombable)worldTo).infinity$isTimebombed())
+                player.sendMessage(Text.translatable("error.infinity.portal.deleted"));
+            else InfinityMethods.sendUnexpectedError(player, "portal");
+        }
         else if (!ipbe.isOpen())
             InfinityMod.provider.getPortalKeyAsItem().ifPresent(item -> player.sendMessage(
                     Text.translatable("error.infinity.portal.closed",
                             ((MutableText)item.getName()).formatted(Formatting.AQUA))));
-        else if (worldTo == null)
-            player.sendMessage(Text.translatable("error.infinity.portal.null"));
-        else InfinityMethods.sendUnexpectedError(player, "portal");
+        else player.sendMessage(Text.translatable("error.infinity.portal.null"));
     }
 
     static Direction.Axis getAxisOrDefault(BlockState state) {
