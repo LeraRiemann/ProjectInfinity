@@ -3,9 +3,11 @@
   "minVersion": "0.8",
   "package": "net.lerariemann.infinity.mixin.forge",
   "compatibilityLevel": "JAVA_17",
+  "plugin": "net.lerariemann.infinity.mixin.forge.InfinityMixinPlugin",
   "mixins": [
     "EntityMixin",
-    "ServerPlayerEntityMixin"
+    "ServerPlayerEntityMixin",
+    "iridescence.FishMoveControlMixin"
   ],
   "client": [],
   "injectors": {
