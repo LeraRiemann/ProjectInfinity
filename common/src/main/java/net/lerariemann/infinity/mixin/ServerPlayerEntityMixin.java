@@ -70,16 +70,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method= "teleport(Lnet/minecraft/server/world/ServerWorld;DDDFF)V", at = @At(value="INVOKE", target ="Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected5(ServerWorld targetWorld, double x, double y, double z, float yaw, float pitch, CallbackInfo ci) {
-        ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(targetWorld));
-        ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), ModPayloads.STARS_RELOAD, PlatformMethods.createPacketByteBufs());
-    }
-
-    // Backport for a Mojang bugfix in 1.21; important for iridescence to work properly
-    @Inject(method = "teleport(Lnet/minecraft/server/world/ServerWorld;DDDFF)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/server/PlayerManager;sendPlayerStatus(Lnet/minecraft/server/network/ServerPlayerEntity;)V",
-                    shift = At.Shift.AFTER))
-    void inj(ServerWorld targetWorld, double x, double y, double z, float yaw, float pitch, CallbackInfo ci) {
+        ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
+        ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(targetWorld));
+        ServerPlayNetworking.send(player, ModPayloads.STARS_RELOAD, PlatformMethods.createPacketByteBufs());
         this.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(getAbilities()));
         for(StatusEffectInstance effect: getStatusEffects())
             networkHandler.sendPacket(new EntityStatusEffectS2CPacket(getId(), effect));
