@@ -4,8 +4,8 @@ import dev.architectury.platform.Platform;
 import dev.architectury.platform.forge.EventBuses;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.compat.CreateCompat;
 import net.lerariemann.infinity.compat.forge.CanaryCompat;
-import net.lerariemann.infinity.compat.forge.CreateForgeCompat;
 import net.lerariemann.infinity.compat.forge.RadiumCompat;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.fluids.forge.FluidTypes;
@@ -68,6 +68,6 @@ public final class InfinityModForge {
         ModBlocks.registerFlammableBlocks();
         ModItemFunctions.registerDispenserBehaviour();
         if (Platform.isModLoaded("create"))
-            CreateForgeCompat.register();
+            CreateCompat.register();
     }
 }

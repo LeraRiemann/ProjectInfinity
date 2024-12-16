@@ -59,10 +59,7 @@ import net.minecraft.state.property.Properties;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.util.Comparator;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
@@ -273,9 +270,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     }
 
     static Direction.Axis getAxisOrDefault(BlockState state) {
-        if (state.getProperties().contains(Properties.HORIZONTAL_AXIS))
-            return state.get(Properties.HORIZONTAL_AXIS);
-        return Direction.Axis.X;
+        return state.getOrEmpty(AXIS).orElse(Direction.Axis.X);
     }
 
     public static TeleportTarget emptyTarget(Entity entity) {
@@ -334,16 +329,17 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         if (optional.isPresent()) { //we found a portal to hook up to
             posTo = optional.get();
             BlockState blockState = worldTo.getBlockState(posTo);
+            Direction.Axis axisTo = getAxisOrDefault(blockState);
             portalTo = BlockLocating.getLargestRectangle(
-                    posTo,
-                    getAxisOrDefault(blockState),
+                    posTo, axisTo,
                     21, Direction.Axis.Y, 21,
                     posx -> worldTo.getBlockState(posx) == blockState
             );
+            posTo = lowerCenterPos(portalTo, axisTo);
         }
         else { //we found nothing and will create a new portal
-            Direction.Axis axis = worldFrom.getBlockState(posFrom).getOrEmpty(AXIS).orElse(Direction.Axis.X);
-            Optional<BlockLocating.Rectangle> optional2 = worldTo.getPortalForcer().createPortal(originOfTesting, axis);
+            Direction.Axis axisTo = getAxisOrDefault(worldFrom.getBlockState(posFrom));
+            Optional<BlockLocating.Rectangle> optional2 = worldTo.getPortalForcer().createPortal(originOfTesting, axisTo);
             if (optional2.isEmpty()) {
                 if (teleportingEntity instanceof ServerPlayerEntity player) {
                     player.sendMessage(Text.translatable("error.infinity.portal.cannot_create"));
@@ -351,7 +347,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 return emptyTarget(teleportingEntity);
             }
             portalTo = optional2.get();
-            posTo = portalTo.lowerLeft;
+            posTo = lowerCenterPos(portalTo, axisTo);
         }
 
         createTicket(worldTo, posTo);
@@ -361,6 +357,12 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 teleportingEntity, teleportingEntity.getVelocity(), teleportingEntity.getYaw(), teleportingEntity.getPitch());
     }
 
+    static BlockPos lowerCenterPos(BlockLocating.Rectangle rect, Direction.Axis axis) {
+        boolean bl = axis.equals(Direction.Axis.X);
+        int i = rect.width / 2;
+        return rect.lowerLeft.add(bl ? i : 0, 0, bl ? 0 : i);
+    }
+
     static Optional<BlockPos> findNewExitPortalPosition(ServerWorld worldFrom, ServerWorld worldTo, WorldBorder wbTo,
                                                         BlockPos originOfTesting) {
         int radiusOfTesting = 128;
@@ -368,7 +370,8 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         poiStorage.preloadChunks(worldTo, originOfTesting, radiusOfTesting);
 
         Set<BlockPos> allPortalsInRange = poiStorage.getInSquare(poiType ->
-                                poiType.matchesKey(PointOfInterestTypes.NETHER_PORTAL) || poiType.matchesKey(ModPoi.NEITHER_PORTAL_KEY),
+                                poiType.matchesKey(PointOfInterestTypes.NETHER_PORTAL)
+                                        || poiType.matchesKey(ModPoi.NEITHER_PORTAL_KEY),
                         originOfTesting, radiusOfTesting, PointOfInterestStorage.OccupationStatus.ANY)
                 .map(PointOfInterest::getPos)
                 .filter(wbTo::contains)
@@ -396,8 +399,8 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         Identifier idFrom = worldFrom.getRegistryKey().getValue();
 
         if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe) {
-            if (ipbe.getDimension() != idFrom) return;
-            if (isValidDestinationStrong(worldTo, worldFrom, ipbe.getOtherSidePos())) return; //don't resync what's already synced
+            if (!Objects.equals(ipbe.getDimension().toString(), idFrom.toString())) return; //fyi, this should never happen
+            if (ipbe.isConnectedBothSides()) return; //don't resync what's already synced
         }
         else {
             otherSideModifier = PortalCreationLogic.forInitialSetupping(worldTo, posTo, idFrom, true); //make it an infinity portal while you're at it
