@@ -187,11 +187,6 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         if (w instanceof ServerWorld world
                 && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity npbe) {
             MinecraftServer server = world.getServer();
-            if (!npbe.isOpen() ^ server.getWorld(RegistryKey.of(RegistryKeys.WORLD,
-                    npbe.getDimension())) == null) { //a portal should be open if and only if it has a valid destination
-                PortalCreationLogic.modifyPortalRecursive(world, pos,
-                        new PortalCreationLogic.PortalModifier(e -> e.setOpen(!npbe.isOpen())));
-            }
             if (entity instanceof ItemEntity e) {
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
                         item -> getKeyComponents(item, npbe.getDimension()));
