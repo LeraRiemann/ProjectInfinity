@@ -6,6 +6,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
+import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;
@@ -30,12 +31,14 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -53,7 +56,6 @@ import net.minecraft.world.poi.PointOfInterest;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import net.minecraft.world.poi.PointOfInterestTypes;
 import net.minecraft.state.property.Properties;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -99,8 +101,8 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 /* If the portal key is blank, open the portal on any right-click. */
                 RandomProvider prov = InfinityMod.provider;
                 Optional<Item> key = prov.getPortalKeyAsItem();
-                if (key.isEmpty()) {
-                    PortalCreationLogic.openWithStatIncrease(player, s, world, pos);
+                if (key.isEmpty() && world instanceof ServerWorld serverWorld) {
+                    PortalCreationLogic.openWithStatIncrease(player, s, serverWorld, pos);
                 }
                 /* Otherwise check if we're using the correct key. If so, open. */
                 else {
@@ -120,10 +122,11 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
             ItemStack stack = ModItems.TRANSFINITE_KEY.get().getDefaultStack();
-            stack.applyComponentsFrom(getKeyComponents(ipbe.getDimension()));
+            NbtCompound compound = putKeyComponents(Items.AMETHYST_SHARD, ipbe.getDimension());
+            stack.setNbt(compound);
             return stack;
         }
         return ItemStack.EMPTY;
@@ -250,7 +253,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         );
         Vec3d offset = entity.positionInPortal(axisFrom, portalFrom);
         if (!worldTo.getRegistryKey().equals(worldFrom.getRegistryKey())
-                && WarpLogic.dimExists(worldTo)
+                && InfinityMethods.dimExists(worldTo)
                 && portal.isOpen()) {
             BlockPos posTo = portal.getOtherSidePos();
             if (isValidDestinationStrong(worldFrom, worldTo, posTo)) {
@@ -269,11 +272,22 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         worldTo.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(posTo), 3, posTo);
     }
 
+    static Direction.Axis getAxisOrDefault(BlockState state) {
+        if (state.getProperties().contains(Properties.HORIZONTAL_AXIS))
+            return state.get(Properties.HORIZONTAL_AXIS);
+        return Direction.Axis.X;
+    }
+
+    public static TeleportTarget emptyTarget(Entity entity) {
+        return new TeleportTarget(entity.getPos(),
+                entity.getVelocity(), entity.getYaw(), entity.getPitch());
+    }
+
     /**
      *  Teleporting to already recorded coordinates.
      */
     public static TeleportTarget getExistingTarget(ServerWorld worldTo, BlockPos posTo,
-                                                   Entity entity,
+                                                   Entity teleportingEntity,
                                                    Direction.Axis axisFrom, Vec3d offset) {
         BlockState blockStateTo = worldTo.getBlockState(posTo);
         Direction.Axis axisTo = blockStateTo.get(Properties.HORIZONTAL_AXIS);
@@ -283,7 +297,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 posx -> worldTo.getBlockState(posx) == blockStateTo
         );
         return NetherPortal.getNetherTeleportTarget(worldTo, portalTo, axisFrom, offset,
-                entity, entity.getVelocity(), entity.getYaw(), entity.getPitch());
+                teleportingEntity, teleportingEntity.getVelocity(), teleportingEntity.getYaw(), teleportingEntity.getPitch());
     }
 
     /**
@@ -307,7 +321,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
 
     public static TeleportTarget findNewTeleportTarget(ServerWorld worldFrom, BlockPos posFrom,
                                                        ServerWorld worldTo,
-                                                       Entity entity,
+                                                       Entity teleportingEntity,
                                                        Direction.Axis axisFrom, Vec3d offset) {
         WorldBorder wb = worldTo.getWorldBorder();
         double d = DimensionType.getCoordinateScaleFactor(worldFrom.getDimension(), worldTo.getDimension());
@@ -344,7 +358,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         trySyncPortals(worldFrom, posFrom, worldTo, posTo);
 
         return NetherPortal.getNetherTeleportTarget(worldTo, portalTo, axisFrom, offset,
-                entity, entity.getVelocity(), entity.getYaw(), entity.getPitch());
+                teleportingEntity, teleportingEntity.getVelocity(), teleportingEntity.getYaw(), teleportingEntity.getPitch());
     }
 
     static Optional<BlockPos> findNewExitPortalPosition(ServerWorld worldFrom, ServerWorld worldTo, WorldBorder wbTo,

@@ -87,7 +87,7 @@ public class RandomProvider {
 
     public Optional<Item> getPortalKeyAsItem() {
         if (portalKey.isBlank()) return Optional.empty();
-        return Registries.ITEM.getOrEmpty(Identifier.of(portalKey));
+        return Registries.ITEM.getOrEmpty(new Identifier(portalKey));
     }
     public boolean isPortalKeyBlank() {
         return getPortalKeyAsItem().isEmpty();

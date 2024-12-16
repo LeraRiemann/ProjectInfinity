@@ -25,7 +25,7 @@ public interface Timebombable {
             WarpLogic.respawnAlive(player);
         }
         else if (i > 3500) {
-            ModCriteria.WHO_REMAINS.get().trigger(player);
+            ModCriteria.WHO_REMAINS.trigger(player);
         }
         else if (i > 200) {
             if (i%4 == 0) {

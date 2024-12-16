@@ -188,7 +188,7 @@ public interface InfinityMethods {
 
     static int getKeyColorFromId(Identifier id) {
         if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
-            return ColorHelper.Argb.fullAlpha((int) getNumericFromId(id) & 0xFFFFFF);
+            return Math.toIntExact(getNumericFromId(id));
         return 0;
     }
 

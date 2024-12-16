@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.util;
 
 import com.mojang.brigadier.context.CommandContext;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.var.ModStats;
@@ -27,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+
+import static net.lerariemann.infinity.util.InfinityMethods.getNumericFromId;
 
 public interface WarpLogic {
     /**

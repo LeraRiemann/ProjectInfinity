@@ -82,7 +82,7 @@ public interface PortalCreationLogic {
             else content = "";
             MinecraftServer server = world.getServer();
             if (server != null) {
-                Identifier id = WarpLogic.getIdentifier(content);
+                Identifier id = InfinityMethods.getIdentifier(content);
                 if (world instanceof ServerWorld serverWorld) {
                     boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
                     if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
@@ -99,7 +99,7 @@ public interface PortalCreationLogic {
                 else content = "";
                 MinecraftServer server = world.getServer();
                 if (server != null) {
-                    Identifier id = WarpLogic.getIdentifier(content);
+                    Identifier id = InfinityMethods.getIdentifier(content);
                     if (world instanceof ServerWorld serverWorld) {
                         boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
                         if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);

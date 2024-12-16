@@ -28,7 +28,7 @@ public record EffectGiver(RegistryEntry<StatusEffect> id, int duration, int ampl
 
     public void tryGiveEffect(ServerPlayerEntity player) {
         if (!isEmpty() && player.getWorld().getTime() % cooldown == 0) {
-            player.addStatusEffect(new StatusEffectInstance(id, duration, amplifier));
+            player.addStatusEffect(new StatusEffectInstance(id.value(), duration, amplifier));
         }
     }
 

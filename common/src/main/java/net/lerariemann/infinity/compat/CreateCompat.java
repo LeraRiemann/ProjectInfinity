@@ -3,6 +3,7 @@ package net.lerariemann.infinity.compat;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Pair;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.registry.RegistryKey;
@@ -20,7 +21,7 @@ public class CreateCompat {
         if (blockEntity instanceof InfinityPortalBlockEntity portalEntity && portalEntity.isOpen()) {
             Identifier id = portalEntity.getDimension();
             RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
-            if (WarpLogic.dimExists(world.getServer().getWorld(key))) return key;
+            if (InfinityMethods.dimExists(world.getServer().getWorld(key))) return key;
         }
         return null;
     }
