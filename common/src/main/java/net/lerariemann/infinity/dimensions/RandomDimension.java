@@ -5,7 +5,6 @@ import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -50,7 +49,7 @@ public class RandomDimension {
         this.server = server;
         PROVIDER = InfinityMod.provider;
         identifier = id;
-        numericId = WarpLogic.getNumericFromId(identifier);
+        numericId = InfinityMethods.getNumericFromId(identifier);
         random = new Random(numericId);
         initializeStorage();
         /* Code for easter dimensions */

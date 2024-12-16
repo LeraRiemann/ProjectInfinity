@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.entity;
 
+import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -63,7 +63,7 @@ public class InfinityPortalBlockEntity extends BlockEntity {
     public int getPortalColor() {
         return this.portalColor;
     }
-    public boolean getOpen() {
+    public boolean isOpen() {
         return this.isOpen;
     }
     @Nullable
@@ -114,8 +114,8 @@ public class InfinityPortalBlockEntity extends BlockEntity {
             this.dimension = Identifier.of(tag.getString("Dimension"));
             this.portalColor = tag.contains("Color", NbtElement.INT_TYPE) ?
                     tag.getInt("Color") :
-                    (world != null ? WarpLogic.getPortalColorApplier(dimension, world.getServer()) :
-                            WarpLogic.getPortalColorApplier(dimension, new NbtCompound())).apply(pos);
+                    (world != null ? PortalColorApplier.of(dimension, world.getServer()) :
+                            PortalColorApplier.of(dimension, new NbtCompound())).apply(pos);
         }
         else {
             setDimension(InfinityMethods.getRandomSeed(new Random())); //random by default

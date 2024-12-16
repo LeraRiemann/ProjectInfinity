@@ -1,9 +1,12 @@
 package net.lerariemann.infinity.util;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
@@ -13,12 +16,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
+
+import java.nio.charset.StandardCharsets;
 
 import static net.lerariemann.infinity.InfinityModClient.sampler;
 
@@ -77,6 +84,49 @@ public interface InfinityMethods {
     static int properMod(int a, int b) {
         int res = a%b;
         return (res >= 0) ? res : b + res;
+    }
+
+    static void sendUnexpectedError(ServerPlayerEntity player, String type) {
+        player.sendMessage(Text.translatable("error.infinity." + type + ".unexpected"));
+    }
+
+    /**
+     * Convert a provided string into a dimension ID.
+     * This also checks if it matches an Easter Egg dimension.
+     */
+    static Identifier getIdentifier(String text) {
+        if (text.equals("abatised redivides")) return World.END.getValue();
+        if (text.isEmpty()) return InfinityMethods.getId("missingno");
+        if (InfinityMod.provider.easterizer.isEaster(text, InfinityMod.provider) && !text.equals("missingno")) return InfinityMethods.getId(text);
+        return InfinityMethods.getDimId(getDimensionSeed(text));
+    }
+
+    /**
+     * Check if a dimension exists and has not been timebombed.
+     */
+    static boolean dimExists(ServerWorld world) {
+        return (world != null && !((Timebombable)world).infinity$isTimebombed());
+    }
+
+    /**
+     * Hashes text into dimension ID.
+     */
+    static long getDimensionSeed(String text) {
+        HashCode f = Hashing.sha256().hashString(text + InfinityMod.provider.salt, StandardCharsets.UTF_8);
+        return InfinityMethods.longArithmeticEnabled() ? f.asLong() & Long.MAX_VALUE : f.asInt() & Integer.MAX_VALUE;
+    }
+
+    static long getNumericFromId(Identifier id) {
+        String dimensionName = id.getPath();
+        String numericId = dimensionName.substring(dimensionName.lastIndexOf("_") + 1);
+        long i;
+        try {
+            i = Long.parseLong(numericId);
+        } catch (Exception e) {
+            /* Simply hash the name if it isn't of "generated_..." format. */
+            i = getDimensionSeed(numericId);
+        }
+        return i;
     }
 
     /**
@@ -140,6 +190,12 @@ public interface InfinityMethods {
             }
         }
         return 0xFFFFFF;
+    }
+
+    static int getKeyColorFromId(Identifier id) {
+        if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
+            return ColorHelper.Argb.fullAlpha((int) getNumericFromId(id) & 0xFFFFFF);
+        return 0;
     }
 
     static long getRandomSeed(java.util.Random random) {

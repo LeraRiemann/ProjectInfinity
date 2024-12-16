@@ -1,17 +1,28 @@
 package net.lerariemann.infinity.options;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import java.awt.Color;
 import java.util.Random;
 
 public interface PortalColorApplier {
-    static PortalColorApplier extract(NbtCompound data, int def) {
-        if (!data.contains("portal_color")) return new PortalColorApplier.Simple(def);
+    static PortalColorApplier of(Identifier id, MinecraftServer server) {
+        return of(id, InfinityOptions.readData(server, id));
+    }
+    static PortalColorApplier of(Identifier id, NbtCompound defaultData) {
+        NbtCompound data = InfinityMod.provider.easterizer.optionmap.get(id.getPath());
+        if (data == null) data = defaultData;
+        return of(data, (int)InfinityMethods.getNumericFromId(id));
+    }
+    static PortalColorApplier of(NbtCompound data, int defaultColor) {
+        if (!data.contains("portal_color")) return new PortalColorApplier.Simple(defaultColor);
         if (data.contains("portal_color", NbtElement.INT_TYPE)) return new PortalColorApplier.Simple(data.getInt("portal_color"));
         NbtCompound applierData = data.getCompound("portal_color");
         return switch (applierData.getString("type")) {
@@ -19,7 +30,7 @@ public interface PortalColorApplier {
             case "checker" -> new PortalColorApplier.Checker(applierData.getList("values", NbtElement.INT_TYPE));
             case "random_hue" -> new PortalColorApplier.RandomHue(applierData);
             case "random" -> PortalColorApplier.RandomColor.INSTANCE;
-            default -> new PortalColorApplier.Simple(def);
+            default -> new PortalColorApplier.Simple(defaultColor);
         };
     }
 
