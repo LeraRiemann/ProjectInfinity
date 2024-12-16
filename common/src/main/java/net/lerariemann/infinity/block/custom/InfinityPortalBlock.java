@@ -27,7 +27,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
@@ -46,10 +45,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.BlockLocating;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.TeleportTarget;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.NetherPortal;
@@ -102,16 +98,14 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
 
                 /* If the portal key is blank, open the portal on any right-click. */
                 RandomProvider prov = InfinityMod.provider;
-                if (prov.portalKey.isBlank()) {
-                    if (world instanceof ServerWorld serverWorld) {
-                        PortalCreationLogic.openWithStatIncrease(player, s, serverWorld, pos);
-                    }
+                Optional<Item> key = prov.getPortalKeyAsItem();
+                if (key.isEmpty()) {
+                    PortalCreationLogic.openWithStatIncrease(player, s, world, pos);
                 }
                 /* Otherwise check if we're using the correct key. If so, open. */
                 else {
                     ItemStack usedKey = player.getStackInHand(Hand.MAIN_HAND);
-                    Item correctKey = Registries.ITEM.get(Identifier.tryParse(prov.portalKey));
-                    if (usedKey.isOf(correctKey)) {
+                    if (usedKey.isOf(key.get())) {
                         if (!player.getAbilities().creativeMode && prov.rule("consumePortalKey")) {
                             usedKey.decrement(1); // Consume the key if needed
                         }
@@ -125,7 +119,17 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         return ActionResult.SUCCESS;
     }
 
-    public static boolean world_exists(MinecraftServer s, Identifier l) {
+    @Override
+    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+        if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
+            ItemStack stack = ModItems.TRANSFINITE_KEY.get().getDefaultStack();
+            stack.applyComponentsFrom(getKeyComponents(ipbe.getDimension()));
+            return stack;
+        }
+        return ItemStack.EMPTY;
+    }
+
+    static boolean world_exists(MinecraftServer s, Identifier l) {
         return (!l.getNamespace().equals(InfinityMod.MOD_ID)) ||
                 s.getSavePath(WorldSavePath.DATAPACKS).resolve(l.getPath()).toFile().exists() ||
                 s.getWorld(RegistryKey.of(RegistryKeys.WORLD, l)) != null;
@@ -190,7 +194,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
                         putKeyComponents(e.getStack().getItem(), npbe.getDimension()));
             if (entity instanceof PlayerEntity player
-                    && InfinityMod.provider.portalKey.isBlank()) {
+                    && InfinityMod.provider.isPortalKeyBlank()) {
                 ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
                 if ((world1 == null) || !npbe.isOpen())
                     PortalCreationLogic.openWithStatIncrease(player, server, world, pos);
@@ -286,7 +290,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
      * Filter for portal blocks except infinity portals of other destinations.
      */
     public static boolean isValidDestinationWeak(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
-        if (posTo == null || !WarpLogic.dimExists(worldTo)) return false;
+        if (posTo == null || !InfinityMethods.dimExists(worldTo)) return false;
         return (worldTo.getBlockState(posTo).isOf(Blocks.NETHER_PORTAL))
                 || (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe
                 && ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString()));
@@ -296,7 +300,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
      * Filter for infinity portals of the correct destination.
      */
     public static boolean isValidDestinationStrong(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
-        if (posTo == null || !WarpLogic.dimExists(worldTo)) return false;
+        if (posTo == null || !InfinityMethods.dimExists(worldTo)) return false;
         return (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe
                 && ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString()));
     }
@@ -318,7 +322,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             BlockState blockState = worldTo.getBlockState(posTo);
             portalTo = BlockLocating.getLargestRectangle(
                     posTo,
-                    blockState.get(Properties.HORIZONTAL_AXIS),
+                    getAxisOrDefault(blockState),
                     21, Direction.Axis.Y, 21,
                     posx -> worldTo.getBlockState(posx) == blockState
             );
@@ -326,9 +330,11 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         else { //we found nothing and will create a new portal
             Direction.Axis axis = worldFrom.getBlockState(posFrom).getOrEmpty(AXIS).orElse(Direction.Axis.X);
             Optional<BlockLocating.Rectangle> optional2 = worldTo.getPortalForcer().createPortal(originOfTesting, axis);
-            if (optional2.isEmpty()) { //if even this goes wrong, don't teleport
-                LogManager.getLogger().error("Unable to create a portal, likely target out of worldborder");
-                return getExistingTarget(worldFrom, posFrom, entity, axisFrom, offset);
+            if (optional2.isEmpty()) {
+                if (teleportingEntity instanceof ServerPlayerEntity player) {
+                    player.sendMessage(Text.translatable("error.infinity.portal.cannot_create"));
+                }
+                return emptyTarget(teleportingEntity);
             }
             portalTo = optional2.get();
             posTo = portalTo.lowerLeft;
@@ -376,7 +382,8 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         Identifier idFrom = worldFrom.getRegistryKey().getValue();
 
         if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe) {
-            if (ipbe.getDimension() != idFrom || isValidDestinationStrong(worldTo, worldFrom, ipbe.getOtherSidePos())) return; //don't resync what's already synced
+            if (ipbe.getDimension() != idFrom) return;
+            if (isValidDestinationStrong(worldTo, worldFrom, ipbe.getOtherSidePos())) return; //don't resync what's already synced
         }
         else {
             otherSideModifier = PortalCreationLogic.forInitialSetupping(worldTo, posTo, idFrom, true); //make it an infinity portal while you're at it

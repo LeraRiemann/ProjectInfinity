@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.util;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
@@ -82,6 +83,14 @@ public class RandomProvider {
                 rootChances.put(s, rootchances.getCompound(c).getDouble(s));
             }
         }
+    }
+
+    public Optional<Item> getPortalKeyAsItem() {
+        if (portalKey.isBlank()) return Optional.empty();
+        return Registries.ITEM.getOrEmpty(Identifier.of(portalKey));
+    }
+    public boolean isPortalKeyBlank() {
+        return getPortalKeyAsItem().isEmpty();
     }
 
     public NbtCompound notRandomTree(String tree, String block) {

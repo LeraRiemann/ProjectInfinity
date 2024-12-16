@@ -39,6 +39,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -139,7 +140,7 @@ public interface PortalCreationLogic {
         PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
 
         if (((MinecraftServerAccess)server).infinity$needsInvocation()) {
-            WarpLogic.onInvocationNeedDetected(nearestPlayer);
+            onInvocationNeedDetected(nearestPlayer);
             return false;
         }
 
@@ -153,7 +154,7 @@ public interface PortalCreationLogic {
         }
 
         /* If the portal key is blank, open the portal immediately. */
-        else if (InfinityMod.provider.portalKey.isBlank()) {
+        else if (InfinityMod.provider.isPortalKeyBlank()) {
             openWithStatIncrease(nearestPlayer, server, world, pos);
         }
         return true;
@@ -162,7 +163,7 @@ public interface PortalCreationLogic {
     /* Calls to open the portal and attributes the relevant statistics to a player provided. */
     static void openWithStatIncrease(PlayerEntity player, MinecraftServer s, ServerWorld world, BlockPos pos) {
         if (((MinecraftServerAccess)s).infinity$needsInvocation()) {
-            WarpLogic.onInvocationNeedDetected(player);
+            onInvocationNeedDetected(player);
             return;
         }
         boolean isDimensionNew = open(s, world, pos);
@@ -173,6 +174,10 @@ public interface PortalCreationLogic {
             }
             player.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
         }
+    }
+
+    static void onInvocationNeedDetected(PlayerEntity player) {
+        if (player != null) player.sendMessage(Text.translatable("error.infinity.invocation_needed"));
     }
 
     /**
@@ -234,7 +239,7 @@ public interface PortalCreationLogic {
     }
 
     static PortalModifierUnion forInitialSetupping(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
-        PortalColorApplier applier = WarpLogic.getPortalColorApplier(id, world.getServer());
+        PortalColorApplier applier = PortalColorApplier.of(id, world.getServer());
         return new PortalModifierUnion()
                 .addSetupper(infPortalSetupper(world, pos))
                 .addModifier(nbpe -> nbpe.setDimension(id))

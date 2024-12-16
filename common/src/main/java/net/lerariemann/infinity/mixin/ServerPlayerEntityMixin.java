@@ -10,19 +10,12 @@ import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.WarpLogic;
-import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -52,8 +45,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Shadow public abstract boolean teleport(ServerWorld world, double destX, double destY, double destZ, Set<PositionFlag> flags, float yaw, float pitch);
 
-    @Shadow public abstract Entity getCameraEntity();
-
     @Shadow public abstract boolean damage(DamageSource source, float amount);
 
     @Unique private long infinity$ticksUntilWarp;
@@ -61,6 +52,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {
+        ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
+
         /* Handle infinity options */
         InfinityOptions opt = InfinityOptions.access(getWorld());
         if (!opt.effect.isEmpty()) {
