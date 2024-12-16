@@ -33,6 +33,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -125,12 +126,15 @@ public interface PortalCreationLogic {
 
         if (dimensionExistsAlready) {
             if (nearestPlayer != null) nearestPlayer.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
-            runAfterEffects(world, pos, false);
+            runAfterEffects(world, pos, false, true);
         }
 
         /* If the portal key is blank, open the portal immediately. */
         else if (InfinityMod.provider.isPortalKeyBlank()) {
             openWithStatIncrease(nearestPlayer, server, world, pos);
+        }
+        else {
+            runAfterEffects(world, pos, false, false);
         }
         return true;
     }
@@ -172,7 +176,7 @@ public interface PortalCreationLogic {
             modifyPortalRecursive(world, pos, new PortalModifierUnion()
                     .addModifier(be -> be.setOpen(true))
                     .addModifier(BlockEntity::markDirty));
-            runAfterEffects(world, pos, bl);
+            runAfterEffects(world, pos, bl, true);
         }
         return bl;
     }
@@ -261,11 +265,17 @@ public interface PortalCreationLogic {
     }
 
     /**
-     * Jingle signaling the portal is now usable.
+     * Jingle signaling if the portal is usable or not.
      */
-    static void runAfterEffects(ServerWorld world, BlockPos pos, boolean dimensionIsNew) {
-        if (dimensionIsNew) world.playSound(null, pos, SoundEvents.BLOCK_VAULT_OPEN_SHUTTER, SoundCategory.BLOCKS, 1f, 1f);
-        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
+    static void runAfterEffects(ServerWorld world, BlockPos pos, boolean dimensionIsNew, boolean portalWorks) {
+        if (!portalWorks) playSound(world, pos, SoundEvents.BLOCK_VAULT_REJECT_REWARDED_PLAYER);
+        else {
+            if (dimensionIsNew) playSound(world, pos, SoundEvents.BLOCK_VAULT_OPEN_SHUTTER);
+            playSound(world, pos, SoundEvents.BLOCK_BEACON_ACTIVATE);
+        }
+    }
+    static void playSound(ServerWorld world, BlockPos pos, SoundEvent soundEvent) {
+        world.playSound(null, pos, soundEvent, SoundCategory.BLOCKS, 1f, 1f);
     }
 
     record PortalModifier(Consumer<InfinityPortalBlockEntity> modifier) implements BiConsumer<World, BlockPos> {
