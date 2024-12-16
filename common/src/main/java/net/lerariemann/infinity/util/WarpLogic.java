@@ -21,7 +21,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import org.jetbrains.annotations.NotNull;
@@ -71,10 +70,13 @@ public interface WarpLogic {
     static void respawnAlive(@Nullable ServerPlayerEntity player) {
         if (player == null) return;
         BlockPos targ = player.getSpawnPointPosition();
-        if (targ == null) {
-            targ = player.getServerWorld().getSpawnPos();
+        ServerWorld serverWorld = player.server.getWorld(player.getSpawnPointDimension());
+        if (targ == null || serverWorld == null) {
+            serverWorld = player.server.getOverworld();
+            targ = serverWorld.getSpawnPos();
         }
-        player.teleport(targ.getX(), targ.getY(), targ.getZ());
+        player.teleport(serverWorld, targ.getX() + 0.5, targ.getY(), targ.getZ() + 0.5,
+                new HashSet<>(), player.getYaw(), player.getPitch());
 
     }
     /* will implement a proper end-of-time dimension later */
