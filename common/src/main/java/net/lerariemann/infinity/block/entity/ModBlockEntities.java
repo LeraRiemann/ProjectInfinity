@@ -5,6 +5,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.custom.RailHelper;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.datafixer.TypeReferences;
 import net.minecraft.registry.RegistryKeys;
@@ -33,6 +34,10 @@ public class ModBlockEntities {
             BLOCK_ENTITY_TYPES.register("biome_bottle_block_entity", () ->
                     BlockEntityType.Builder.create(BiomeBottleBlockEntity::new,
                             ModBlocks.BIOME_BOTTLE.get()).build(type("biome_bottle_block_entity")));
+    public static final RegistrySupplier<BlockEntityType<RailHelper.RHBEntity>> RAIL_HELPER =
+            BLOCK_ENTITY_TYPES.register("rail_helper_block_entity", () ->
+                    BlockEntityType.Builder.create(RailHelper.RHBEntity::new,
+                            ModBlocks.RAIL_HELPER.get()).build(type("rail_helper_block_entity")));
 
 
     public static void registerBlockEntities() {

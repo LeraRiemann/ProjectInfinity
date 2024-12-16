@@ -14,6 +14,7 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockLocating;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
@@ -112,6 +113,19 @@ public class InfinityPortalBlockEntity extends BlockEntity {
             return (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe
                     && ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString())
                     && ipbe.isConnected());
+        }
+        return false;
+    }
+
+    public boolean trySync() {
+        if (getWorld() instanceof ServerWorld worldFrom) {
+            ServerWorld worldTo = getDimensionAsWorld();
+            if (worldTo == null) return false;
+            BlockPos posFrom = getPos();
+            BlockLocating.Rectangle portalTo =
+                    InfinityPortalBlock.findOrCreateExitPortal(worldFrom, posFrom, worldTo);
+            BlockPos posTo = InfinityPortalBlock.lowerCenterPos(portalTo, worldTo);
+            return InfinityPortalBlock.trySyncPortals(worldFrom, posFrom, worldTo, posTo);
         }
         return false;
     }

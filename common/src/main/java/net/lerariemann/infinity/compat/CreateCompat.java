@@ -2,13 +2,16 @@ package net.lerariemann.infinity.compat;
 
 import com.simibubi.create.content.trains.track.AllPortalTracks;
 import com.simibubi.create.content.trains.track.TrackBlock;
-import com.simibubi.create.content.trains.track.TrackBlockEntity;
+import com.simibubi.create.content.trains.track.TrackShape;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Pair;
 import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.custom.RailHelper;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
@@ -16,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.Optional;
 import java.util.Set;
 
 public class CreateCompat {
@@ -62,16 +66,23 @@ public class CreateCompat {
 
     public static void modifyRails(InfinityPortalBlockEntity ipbe, ServerWorld worldFrom,
                                    BlockPos posTrack, BlockState bs) {
-        if (!bs.contains(TrackBlock.SHAPE)) return;
-        //ipbe.trySync();
-        if (worldFrom.getBlockEntity(posTrack) instanceof TrackBlockEntity tbe) {
-            ServerWorld worldTo = worldFrom.getServer().getWorld(tbe.boundLocation.getFirst());
-            BlockPos posTo = tbe.boundLocation.getSecond();
-            if (worldTo != null
-                    && worldTo.getBlockState(posTo).getBlock() instanceof TrackBlock) {
-                //worldTo.setBlockState(posTo, Blocks.AIR.getDefaultState());
-            }
+        if (ipbe.trySync()) {
+            if (!bs.contains(TrackBlock.SHAPE)) return;
+            worldFrom.setBlockState(posTrack, ModBlocks.RAIL_HELPER.get().getDefaultState());
+            RailHelper.RHBEntity e = RailHelper.getBlockEntity(worldFrom, posTrack);
+            e.trackBlock = Registries.BLOCK.getId(bs.getBlock());
+            e.shape = switch (bs.get(TrackBlock.SHAPE)) {
+                case TN, TS -> "zo";
+                default -> "xo";
+            };
         }
         worldFrom.setBlockState(posTrack, Blocks.AIR.getDefaultState());
+    }
+    public static void reattachRails(ServerWorld world, BlockPos pos, RailHelper.RHBEntity e) {
+        BlockState bs;
+        Optional<Block> b = Registries.BLOCK.getOrEmpty(e.trackBlock);
+        if (b.isEmpty() || !(b.get() instanceof TrackBlock)) bs = Blocks.AIR.getDefaultState();
+        else bs = b.get().getDefaultState().with(TrackBlock.SHAPE, e.shape.equals("zo") ? TrackShape.ZO : TrackShape.XO);
+        world.setBlockState(pos, bs);
     }
 }

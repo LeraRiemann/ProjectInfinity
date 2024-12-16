@@ -45,6 +45,8 @@ public class ModBlocks {
             new IridescentKelp(AbstractBlock.Settings.copy(Blocks.KELP).mapColor(MapColor.MAGENTA)));
     public static final RegistrySupplier<IridescentKelp.Plant> IRIDESCENT_KELP_PLANT = BLOCKS.register("iridescent_kelp_plant", () ->
             new IridescentKelp.Plant(AbstractBlock.Settings.copy(Blocks.KELP).mapColor(MapColor.MAGENTA)));
+    public static final RegistrySupplier<RailHelper> RAIL_HELPER = BLOCKS.register("rail_helper", () ->
+            new RailHelper(AbstractBlock.Settings.copy(Blocks.BARRIER)));
 
 
     public static void registerModBlocks() {
