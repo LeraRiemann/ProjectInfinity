@@ -41,6 +41,12 @@ dependencies {
     modImplementation "dev.su5ed.sinytra.fabric-api:fabric-api:${forgified_fabric_api_version}"
     modImplementation "dev.architectury:architectury-forge:$rootProject.architectury_api_version"
 
+    // Create
+    modImplementation("com.simibubi.create:create-$minecraft_version:$create_forge_version:slim") { transitive = false }
+    modImplementation("com.tterrag.registrate:Registrate:$registrate_forge_version")
+    modImplementation("com.jozufozu.flywheel:flywheel-forge-$minecraft_version:$flywheel_forge_version")
+
+
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
     implementation(include("io.github.llamalad7:mixinextras-forge:0.4.1"))
 }
@@ -66,7 +72,7 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-
+    maven { url = "https://maven.tterrag.com/" } // Flywheel on both, Create and Registrate on forge
 }
 
 processResources {

@@ -8,8 +8,7 @@
     "EntityMixin",
     "HeightLimitViewMixin",
     "ServerPlayerEntityMixin",
-    "mavity.LivingEntityMixin",
-    "TrackBlockMixin"
+    "mavity.LivingEntityMixin"
   ],
   "client": [],
   "injectors": {

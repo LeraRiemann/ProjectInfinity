@@ -32,6 +32,23 @@ repositories {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Fabricators of Create"
+                url = "https://mvn.devos.one/snapshots"
+            }
+        }
+        filter {
+            includeGroup "io.github.fabricators_of_create"
+            includeGroup "io.github.fabricators_of_create.Porting-Lib"
+            includeGroup "com.tterrag.registrate_fabric"
+            includeGroup "io.github.tropheusj"
+            includeGroup "com.simibubi.create"
+        }
+    }
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // Forge Config API Port
+    maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
 }
 
 dependencies {
@@ -57,6 +74,10 @@ dependencies {
 
     // EMI
     modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version+$minecraft_version:api")
+
+    // Create
+    modCompileOnly("com.simibubi.create:create-fabric-${minecraft_version}:${create_fabric_version}")
+
 
 }
 
