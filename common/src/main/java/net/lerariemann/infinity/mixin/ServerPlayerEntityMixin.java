@@ -62,40 +62,12 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
         ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
 
         /* Handle infinity options */
-        InfinityOptions opt = InfinityOptions.access(getWorld());
-        if (!opt.effect.isEmpty()) {
-            if (getWorld().getTime() % opt.effect.cooldown() == 0) {
-                addStatusEffect(new StatusEffectInstance(opt.effect.id().value(), opt.effect.duration(), opt.effect.amplifier()));
-            }
-        }
-
+        InfinityOptions.access(getWorld()).effect.tryGiveEffect(player);
         /* Handle the warp command */
-        if (--this.infinity$ticksUntilWarp == 0L) {
-            MinecraftServer s = this.getServerWorld().getServer();
-            ServerWorld w = s.getWorld(RegistryKey.of(RegistryKeys.WORLD, this.infinity$idForWarp));
-            if (w==null) return;
-            double d = DimensionType.getCoordinateScaleFactor(this.getServerWorld().getDimension(), w.getDimension());
-            Entity self = player.getCameraEntity();
-            double y = MathHelper.clamp(self.getY(), w.getBottomY(), w.getTopY());
-            BlockPos blockPos2 = WarpLogic.getPosForWarp(w.getWorldBorder().clamp(self.getX() * d, y, self.getZ() * d), w);
-            this.teleport(w, blockPos2.getX(), blockPos2.getY(), blockPos2.getZ(), new HashSet<>(), self.getYaw(), self.getPitch());
-        }
-
+        if (--this.infinity$ticksUntilWarp == 0L)
+            WarpLogic.performWarp(player, infinity$idForWarp);
         /* Handle effects from dimension deletion */
-        int i = ((Timebombable)(getServerWorld())).infinity$getTimebombProgress();
-        if (i > 3540) {
-            WarpLogic.respawnAlive((ServerPlayerEntity)(Object)this);
-        }
-        else if (i > 3500) {
-            ModCriteria.WHO_REMAINS.trigger((ServerPlayerEntity)(Object)this);
-        }
-        else if (i > 200) {
-            if (i%4 == 0) {
-                Registry<DamageType> r = getServerWorld().getServer().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE);
-                RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMod.getId("world_ceased")));
-                damage(new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
-            }
-        }
+        ((Timebombable)getServerWorld()).tickTimebombProgress(player);
     }
 
     @Inject(method = "changeGameMode", at = @At("RETURN"))
