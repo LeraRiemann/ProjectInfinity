@@ -42,9 +42,9 @@ dependencies {
     modImplementation "dev.architectury:architectury-forge:$rootProject.architectury_api_version"
 
     // Create
-    modImplementation("com.simibubi.create:create-$minecraft_version:$create_forge_version:slim") { transitive = false }
-    modImplementation("com.tterrag.registrate:Registrate:$registrate_forge_version")
-    modImplementation("com.jozufozu.flywheel:flywheel-forge-$minecraft_version:$flywheel_forge_version")
+    modCompileOnly("com.simibubi.create:create-$minecraft_version:$create_forge_version:slim") { transitive = false }
+    modCompileOnly("com.tterrag.registrate:Registrate:$registrate_forge_version")
+    modCompileOnly("com.jozufozu.flywheel:flywheel-forge-$minecraft_version:$flywheel_forge_version")
 
 
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
