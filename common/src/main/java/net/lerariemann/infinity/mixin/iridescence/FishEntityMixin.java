@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(FishEntity.class)
 public class FishEntityMixin extends WaterCreatureEntity {
@@ -42,15 +40,21 @@ public class FishEntityMixin extends WaterCreatureEntity {
             super(entity);
         }
 
-        @ModifyArgs(method = "tick", at= @At(value = "INVOKE",
-                target = "Lnet/minecraft/util/math/MathHelper;atan2(DD)D"))
-        void inj(Args args) {
+        @ModifyArg(method = "tick", at= @At(value = "INVOKE",
+                target = "Lnet/minecraft/util/math/MathHelper;atan2(DD)D"), index = 0)
+        double inj(double y) {
             if (Iridescence.isUnderEffect(fish)) {
-                double g = args.get(0);
-                double d = args.get(1);
-                args.set(0, -1*g);
-                args.set(1, -1*d);
+                return -y;
             }
+            return y;
+        }
+        @ModifyArg(method = "tick", at= @At(value = "INVOKE",
+                target = "Lnet/minecraft/util/math/MathHelper;atan2(DD)D"), index = 1)
+        double inj2(double y) {
+            if (Iridescence.isUnderEffect(fish)) {
+                return -y;
+            }
+            return y;
         }
     }
 }
