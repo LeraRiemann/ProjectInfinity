@@ -41,6 +41,7 @@ public class InfinityPortal {
     @Nullable BlockPos posTo;
     @Nullable BlockLocating.Rectangle portalTo;
     boolean unableToCreatePortalFlag = false;
+    boolean syncFlag = true;
 
     public InfinityPortal(InfinityPortalBlockEntity ipbe, ServerWorld worldFrom, BlockPos startingPos) {
         this.ipbe = ipbe;
@@ -167,7 +168,7 @@ public class InfinityPortal {
         findOrCreateExitPortal();
         if (portalTo == null) return;
         posTo = lowerCenterPos(portalTo, worldTo);
-        trySyncPortals(worldFrom, posFrom, worldTo, posTo);
+        if (syncFlag) trySyncPortals(worldFrom, posFrom, worldTo, posTo);
     }
 
     /** Searches for a rectangle of portal blocks to teleport to */
@@ -188,19 +189,30 @@ public class InfinityPortal {
         }
     }
 
-    /** Trying to scan for any valid portal block */
+    /** Trying to scan for any valid portal block. */
     private Optional<BlockPos> findNewExitPortalPosition(WorldBorder wbTo, BlockPos originOfTesting) {
         assert worldTo != null;
         int radiusOfTesting = 128;
         PointOfInterestStorage poiStorage = worldTo.getPointOfInterestStorage();
         poiStorage.preloadChunks(worldTo, originOfTesting, radiusOfTesting);
 
-        return poiStorage.getInSquare(poiType ->
-                                poiType.matchesKey(PointOfInterestTypes.NETHER_PORTAL) || poiType.matchesKey(ModPoi.NEITHER_PORTAL_KEY),
+        //First scan for valid infinity portals
+        Optional<BlockPos> portal = poiStorage.getInSquare(poiType ->
+                                poiType.matchesKey(ModPoi.NEITHER_PORTAL_KEY),
                         originOfTesting, radiusOfTesting, PointOfInterestStorage.OccupationStatus.ANY)
                 .map(PointOfInterest::getPos)
                 .filter(wbTo::contains)
                 .filter(pos -> isValidDestination(worldFrom, worldTo, pos))
+                .min(Comparator.comparingDouble(posTo -> posTo.getSquaredDistance(originOfTesting)));
+        if (portal.isPresent()) return portal;
+
+        //If one wasn't found, find a nether portal instead and ensure it will not be overwritten
+        syncFlag = false;
+        return poiStorage.getInSquare(poiType ->
+                                poiType.matchesKey(PointOfInterestTypes.NETHER_PORTAL),
+                        originOfTesting, radiusOfTesting, PointOfInterestStorage.OccupationStatus.ANY)
+                .map(PointOfInterest::getPos)
+                .filter(wbTo::contains)
                 .min(Comparator.comparingDouble(posTo -> posTo.getSquaredDistance(originOfTesting)));
     }
 
