@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -16,6 +17,7 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 
@@ -63,10 +65,11 @@ public class ModPayloads {
                         .grab_biome_for_client(payload.biome_id, payload.biome_data));
     }
 
-    public record ShaderRePayload(NbtCompound shader_data) implements CustomPayload {
+    public record ShaderRePayload(NbtCompound shader_data, boolean iridescence) implements CustomPayload {
         public static final CustomPayload.Id<ShaderRePayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("reload_shader"));
         public static final PacketCodec<RegistryByteBuf, ShaderRePayload> CODEC = PacketCodec.tuple(
                 PacketCodecs.NBT_COMPOUND, ShaderRePayload::shader_data,
+                PacketCodecs.BOOL, ShaderRePayload::iridescence,
                 ShaderRePayload::new);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {
@@ -110,9 +113,15 @@ public class ModPayloads {
         ((WorldRendererAccess)(client(context).worldRenderer)).infinity$setNeedsStars(true);
     }
 
-    public static ShaderRePayload setShaderFromWorld(ServerWorld destination) {
-        if (destination == null) return new ShaderRePayload(new NbtCompound());
-        return new ShaderRePayload(InfinityOptions.access(destination).data());
+    public static ShaderRePayload setShader(ServerPlayerEntity player) {
+        return setShaderFromWorld(player.getServerWorld(), player);
+    }
+    public static ShaderRePayload setShaderFromWorld(ServerWorld destination, ServerPlayerEntity player) {
+        return setShaderFromWorld(destination, Iridescence.shouldApplyShader(player));
+    }
+    public static ShaderRePayload setShaderFromWorld(ServerWorld destination, boolean bl) {
+        if (destination == null) return new ShaderRePayload(new NbtCompound(), bl);
+        return new ShaderRePayload(InfinityOptions.access(destination).data(), bl);
     }
 
     public static void registerPayloadsServer() {

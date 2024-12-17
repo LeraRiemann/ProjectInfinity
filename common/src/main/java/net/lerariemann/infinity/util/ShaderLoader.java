@@ -7,7 +7,6 @@ import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.resource.ResourcePackManager;
-import net.minecraft.util.Identifier;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,14 +20,17 @@ public interface ShaderLoader {
     }
 
     static void reloadShaders(MinecraftClient client, boolean bl) {
+        reloadShaders(client, bl, Iridescence.shouldApplyShader(client.player));
+    }
+
+    static void reloadShaders(MinecraftClient client, boolean bl, boolean iridescence) {
         try {
             load(client);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Identifier iridShader = Iridescence.shouldApplyShader(client.player);
-        if (iridShader != null) {
-            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(iridShader);
+        if (iridescence) {
+            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMethods.getId("shaders/post/iridescence.json"));
             return;
         }
         if(bl && shaderDir(client).resolve(FILENAME).toFile().exists()) {

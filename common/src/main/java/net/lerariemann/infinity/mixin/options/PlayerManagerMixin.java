@@ -53,7 +53,7 @@ public class PlayerManagerMixin {
             target = "Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci, @Local(ordinal=0) ServerWorld serverWorld2) {
         if (serverWorld2 == null) return;
-        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(serverWorld2));
+        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(serverWorld2, player));
         InfinityMethods.sendS2CPayload(player, ModPayloads.StarsRePayLoad.INSTANCE);
         MinecraftServerAccess acc = ((MinecraftServerAccess)(serverWorld2.getServer()));
         if (acc.infinity$needsInvocation()) {
@@ -71,7 +71,7 @@ public class PlayerManagerMixin {
 
     @Inject(method="sendWorldInfo", at = @At("TAIL"))
     private void injected2(ServerPlayerEntity player, ServerWorld world, CallbackInfo ci) {
-        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(world));
+        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(world, player));
         InfinityMethods.sendS2CPayload(player, ModPayloads.StarsRePayLoad.INSTANCE);
     }
 }

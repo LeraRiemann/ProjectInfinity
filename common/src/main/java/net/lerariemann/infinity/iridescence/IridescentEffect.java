@@ -29,13 +29,13 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP);
         }
         if (entity instanceof Angerable ang) ang.stopAnger();
-        if (entity instanceof ServerPlayerEntity player) Iridescence.updateShader(player);
+        if (entity instanceof ServerPlayerEntity player) Iridescence.loadShader(player);
     }
 
     public void onRemoved(LivingEntity entity) {
         entity.setInvulnerable(false);
         switch (entity) {
-            case ServerPlayerEntity player -> Iridescence.updateShader(player);
+            case ServerPlayerEntity player -> Iridescence.unloadShader(player);
             case ChaosPawn pawn -> {
                 if (pawn.getRandom().nextBoolean()) {
                     pawn.unchess();
@@ -59,9 +59,6 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             if (Iridescence.shouldReturn(duration, amplifier)) {
                 player.setInvulnerable(false);
                 WarpLogic.respawnAlive(player);
-            }
-            if (Iridescence.shouldUpdateShader(duration, amplifier)) {
-                Iridescence.updateShader(player);
             }
         }
     }

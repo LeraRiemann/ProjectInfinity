@@ -11,7 +11,6 @@ import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Block;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -138,22 +137,17 @@ public class Iridescence {
         return (amplifier > 0) && (duration == ticksInHour);
     }
 
-    public static boolean shouldUpdateShader(int duration, int amplifier) {
-        return getEffectLength(amplifier) - duration == ticksInHour - 1;
+    public static void loadShader(ServerPlayerEntity player) {
+        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(player.getServerWorld(), true));
+    }
+    public static void unloadShader(ServerPlayerEntity player) {
+        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(player.getServerWorld(), false));
     }
 
-    public static void updateShader(ServerPlayerEntity player) {
-        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(player.getServerWorld()));
-    }
-
-    @Nullable
-    public static Identifier shouldApplyShader(@Nullable ClientPlayerEntity player) {
-        if (player == null) return null;
+    public static boolean shouldApplyShader(@Nullable PlayerEntity player) {
+        if (player == null) return false;
         StatusEffectInstance effect = player.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
-        if (effect == null) return null;
-        return (getPhase(effect.getDuration(), effect.getAmplifier()) != Phase.INITIAL) ?
-                InfinityMethods.getId("shaders/post/iridescence.json") :
-                null;
+        return (effect != null);
     }
 
     public static void tryBeginJourney(LivingEntity entity, int amplifier) {
