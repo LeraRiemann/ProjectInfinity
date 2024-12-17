@@ -23,17 +23,23 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP.value());
         }
         if (entity instanceof Angerable ang) ang.stopAnger();
-        if (entity instanceof ServerPlayerEntity player) Iridescence.loadShader(player);
+        if (entity instanceof ServerPlayerEntity player
+                && Iridescence.shouldApplyShader(player))
+            Iridescence.loadShader(player);
     }
 
     public void onRemoved(LivingEntity entity) {
         entity.setInvulnerable(false);
-        if (entity instanceof ServerPlayerEntity player) {
-            Iridescence.unloadShader(player);
-        } else if (entity instanceof ChaosPawn pawn) {
-            if (pawn.getRandom().nextBoolean()) {
-                pawn.unchess();
-                Iridescence.convTriggers(pawn);
+        switch (entity) {
+            case ServerPlayerEntity player -> Iridescence.unloadShader(player);
+            case ChaosPawn pawn -> {
+                if (pawn.getRandom().nextBoolean()) {
+                    pawn.unchess();
+                    Iridescence.convTriggers(pawn);
+                }
+            }
+            case MobEntity currEntity -> Iridescence.endConversion(currEntity);
+            default -> {
             }
         } else if (entity instanceof MobEntity currEntity) {
             Iridescence.endConversion(currEntity);
@@ -52,6 +58,8 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
                 player.setInvulnerable(false);
                 WarpLogic.respawnAlive(player);
             }
+            if (Iridescence.shouldRequestShaderLoad(duration, amplifier))
+                Iridescence.loadShader(player);
         }
     }
 

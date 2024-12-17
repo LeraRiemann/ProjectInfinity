@@ -102,7 +102,7 @@ public class Iridescence {
         return Registries.BLOCK.get(new Identifier(colors.get((int)(d*colors.size())) + str));
     }
 
-    public static final int ticksInHour = 1000;
+    public static final int ticksInHour = 1200;
 
     public static int getAmplifierOnApply(LivingEntity entity, int original) {
         StatusEffectInstance cooldown = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
@@ -116,7 +116,11 @@ public class Iridescence {
     }
 
     public static int getCooldownDuration() {
-        return ticksInHour * 24 * 7;
+        return ticksInHour * InfinityMod.provider.gameRulesInt.get("iridescenceCooldownDuration");
+    }
+
+    public static int getInitialPhaseLength() {
+        return ticksInHour * InfinityMod.provider.gameRulesInt.get("iridescenceInitialDuration");
     }
 
     public static Phase getPhase(LivingEntity entity) {
@@ -126,8 +130,7 @@ public class Iridescence {
     }
 
     public static Phase getPhase(int duration, int amplifier) {
-        int effect_length = getEffectLength(amplifier) - ticksInHour;
-        int time_passed = effect_length - duration;
+        int time_passed = getEffectLength(amplifier) - getInitialPhaseLength() - duration;
         if (time_passed < 0) return Phase.INITIAL;
         return (time_passed < ticksInHour) ? Phase.UPWARDS : (duration <= ticksInHour || amplifier == 0) ? Phase.DOWNWARDS : Phase.PLATEAU;
     }
@@ -135,7 +138,6 @@ public class Iridescence {
     public static boolean shouldWarp(int duration, int amplifier) {
         return (Iridescence.getPhase(duration, amplifier) == Iridescence.Phase.PLATEAU) && (duration % ticksInHour == 0);
     }
-
     public static boolean shouldReturn(int duration, int amplifier) {
         return (amplifier > 0) && (duration == ticksInHour);
     }

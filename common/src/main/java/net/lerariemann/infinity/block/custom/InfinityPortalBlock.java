@@ -222,6 +222,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         if (!bl.get()) super.onEntityCollision(state, w, pos, entity);
     }
 
+    /** A portal should be open if and only if it has a valid destination. These functions are here to ensure it */
     public static void tryUpdateOpenStatus(InfinityPortalBlockEntity npbe, ServerWorld worldFrom,
                                            MinecraftServer server, BlockPos pos) {
         tryUpdateOpenStatus(npbe, worldFrom, server.getWorld(
@@ -329,6 +330,9 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         return state.getOrEmpty(AXIS).orElse(Direction.Axis.X);
     }
 
+    /**
+     * If teleportation failed for any reason, this ensures the entity does not teleport anywhere.
+     */
     public static TeleportTarget emptyTarget(Entity entity) {
         return new TeleportTarget(entity.getPos(),
                 entity.getVelocity(), entity.getYaw(), entity.getPitch());
@@ -466,8 +470,8 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         Identifier idFrom = worldFrom.getRegistryKey().getValue();
 
         if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe) {
-            if (!Objects.equals(ipbe.getDimension().toString(), idFrom.toString())) return false; //fyi, this should never happen
-            if (ipbe.isConnectedBothSides()) return false; //don't resync what's already synced
+            if (ipbe.getDimension() != idFrom) return;
+            if (ipbe.isConnectedBothSides()) return; //don't resync what's already synced
         }
         else {
             otherSideModifier = PortalCreationLogic.forInitialSetupping(worldTo, posTo, idFrom, true); //make it an infinity portal while you're at it

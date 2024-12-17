@@ -35,7 +35,7 @@ public interface ShaderLoader {
             throw new RuntimeException(e);
         }
         if (iridescence) {
-            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMod.getId("shaders/post/iridescence.json"));
+            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMethods.getId("shaders/post/iridescence.json"));
             return;
         }
         if(bl && shaderDir(client).resolve(FILENAME).toFile().exists()) {

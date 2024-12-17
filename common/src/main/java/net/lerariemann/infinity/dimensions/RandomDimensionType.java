@@ -14,7 +14,7 @@ public class RandomDimensionType {
     public RandomDimension parent;
     public NbtCompound data;
     public boolean ultrawarm, foggy;
-    static double SQRT8 = Math.sqrt(8);
+    public static int scaleCap = 100000;
 
     RandomDimensionType(RandomDimension dim) {
         parent = dim;
@@ -60,8 +60,12 @@ public class RandomDimensionType {
     }
 
     double coordinateScale() {
-        double random1 = random.nextBoolean() ? 1.0 : Math.max(SQRT8*random.nextDouble(), 0.00001);
-        double random2 = 8 / random1;
+        int scaleMax = parent.PROVIDER.gameRulesInt.get("maxDimensionScale");
+        if (scaleMax <= 0 || scaleMax > scaleCap) scaleMax = scaleCap;
+        int distribParam = Math.min(scaleMax, 8);
+        double scaleMin = 1.0 / scaleMax;
+        double random1 = random.nextBoolean() ? 1.0 : scaleMin + (Math.sqrt(distribParam) - scaleMin)*random.nextDouble();
+        double random2 = distribParam / random1;
         return random.nextBoolean() ? random1 : random2;
     }
 }
