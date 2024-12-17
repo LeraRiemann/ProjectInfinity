@@ -28,11 +28,11 @@ public class BiomeBottleItem extends BlockItem {
             tooltip.add(Text.translatable(Util.createTranslationKey("biome", biome)).formatted(Formatting.GRAY));
         }
         else {
-            MutableText mutableText = Text.literal("Empty");
+            MutableText mutableText = Text.translatable("caption.infinity.biomebottle.empty");
             tooltip.add(mutableText.formatted(Formatting.GRAY));
         }
         if (type.isAdvanced()) {
-            tooltip.add(Text.literal("Charge: " + BiomeBottle.getCharge(stack)).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("caption.infinity.biomebottle.charge", BiomeBottle.getCharge(stack)).formatted(Formatting.GRAY));
         }
     }
 }
