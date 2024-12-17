@@ -47,6 +47,7 @@
     "mobs.passive.SheepEntityMixin",
     "mobs.passive.TurtleEntityMixin",
     "mobs.passive.WolfEntityMixin",
+    "options.AbstractBlockMixin",
     "options.DimensionTypeMixin",
     "options.EntityMixin",
     "options.PlayerManagerMixin",

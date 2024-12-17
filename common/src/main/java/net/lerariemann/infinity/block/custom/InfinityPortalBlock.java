@@ -57,7 +57,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
-    private static final Random RANDOM = new Random();
     public static final BooleanProperty BOOP = BooleanProperty.of("boop");
 
     public InfinityPortalBlock(Settings settings) {
@@ -73,7 +72,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
 
     @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new InfinityPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
+        return new InfinityPortalBlockEntity(pos, state, World.OVERWORLD.getValue());
     }
 
     /**

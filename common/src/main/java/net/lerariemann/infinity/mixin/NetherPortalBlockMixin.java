@@ -1,18 +1,28 @@
 package net.lerariemann.infinity.mixin;
 
+import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.mixin.options.AbstractBlockMixin;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -20,7 +30,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(NetherPortalBlock.class)
-public class NetherPortalBlockMixin {
+public class NetherPortalBlockMixin extends AbstractBlockMixin {
+	@Shadow @Final public static EnumProperty<Direction.Axis> AXIS;
+
 	@Inject(at = @At("HEAD"), method = "onEntityCollision(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V")
 	private void injected(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo info) {
 		if (world instanceof ServerWorld w && entity instanceof ItemEntity e) {
@@ -40,5 +52,26 @@ public class NetherPortalBlockMixin {
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
 	private boolean injected(BlockState neighborState, Block block) {
 		return (neighborState.getBlock() instanceof NetherPortalBlock);
+	}
+
+	@Override
+	protected void injected_onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify, CallbackInfo ci) {
+		if (state.isOf(Blocks.NETHER_PORTAL) &&
+				(InfinityMod.provider.rule("randomizeAllNetherPortals")
+						|| InfinityMethods.isInfinity(world)))
+			world.scheduleBlockTick(pos, Blocks.NETHER_PORTAL, 2);
+	}
+	@Override
+	protected void injected_scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
+		if (state.isOf(Blocks.NETHER_PORTAL)) {
+			boolean bl = InfinityMod.provider.rule("randomizeAllNetherPortals");
+			if (!bl && !InfinityMethods.isInfinity(world)) return;
+			world.setBlockState(pos, ModBlocks.PORTAL.get().getDefaultState().
+					with(AXIS, state.get(AXIS)));
+			if (bl && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
+				long l = InfinityMethods.getRandomSeed(new java.util.Random(world.getTime()));
+				ipbe.setDimension(l);
+			}
+		}
 	}
 }

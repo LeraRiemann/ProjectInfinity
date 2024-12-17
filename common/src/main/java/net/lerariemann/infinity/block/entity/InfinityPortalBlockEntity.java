@@ -49,8 +49,8 @@ public class InfinityPortalBlockEntity extends BlockEntity {
         };
     }
 
-    public InfinityPortalBlockEntity(BlockPos pos, BlockState state, int i) {
-        this(pos, state, i, InfinityMethods.getDimId(i));
+    public InfinityPortalBlockEntity(BlockPos pos, BlockState state, Identifier id) {
+        this(pos, state, (int)InfinityMethods.getNumericFromId(id), id);
     }
 
     public InfinityPortalBlockEntity(BlockPos pos, BlockState state, int i, Identifier id) {

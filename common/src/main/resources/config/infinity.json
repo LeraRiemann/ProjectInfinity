@@ -8,6 +8,7 @@
     "chaosMobsEnabled": true,
     "consumePortalKey": true,
     "disabledUntilReview": true,
+    "randomizeAllNetherPortals": false,
     "maxBiomeCount": 6,
     "maxDimensionScale": 0,
     "iridescenceInitialDuration": 1,
