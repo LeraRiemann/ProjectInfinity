@@ -41,7 +41,7 @@ public class InfinityMod {
 		provider = p;
 		if (!((MinecraftServerAccess)server).infinity$needsInvocation()) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
 	}
-	
+
 	public static void init() {
 		rootConfigPath = PlatformMethods.getRootConfigPath();
 		ConfigManager.updateInvocationLock();

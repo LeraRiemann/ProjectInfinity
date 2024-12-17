@@ -39,8 +39,6 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             }
         } else if (entity instanceof MobEntity currEntity) {
             Iridescence.endConversion(currEntity);
-        } else if (entity instanceof MobEntity currEntity) {
-            Iridescence.endConversion(currEntity);
         }
     }
 
