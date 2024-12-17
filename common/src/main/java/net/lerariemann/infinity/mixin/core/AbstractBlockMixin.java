@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/* Provides hooks for NetherPortalBlockMixin. */
 @Mixin(AbstractBlock.class)
 public class AbstractBlockMixin {
     @Inject(method = "onBlockAdded", at = @At("RETURN"))

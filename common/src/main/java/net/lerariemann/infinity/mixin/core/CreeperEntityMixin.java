@@ -14,6 +14,7 @@ public abstract class CreeperEntityMixin {
     @Shadow
     private void spawnEffectsCloud(){}
 
+    /* A hook for chaos creepers' explosion logic. */
     @Inject(method = "explode()V", at = @At("HEAD"), cancellable = true)
     private void injected(CallbackInfo ci) {
         if (((CreeperEntity)(Object)this) instanceof ChaosCreeper) {

@@ -10,6 +10,7 @@ import static net.lerariemann.infinity.entity.custom.ChaosSlime.color;
 
 @Mixin(SlimeEntity.class)
 public class SlimeEntityMixin {
+    /* Allows chaos slimes to correctly inherit their additional data when split. */
     @Redirect(method = "remove(Lnet/minecraft/entity/Entity$RemovalReason;)V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/entity/mob/SlimeEntity;setAiDisabled(Z)V"))
     private void injected(SlimeEntity instance, boolean b) {

@@ -106,6 +106,7 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
         InfinityMod.updateProvider((MinecraftServer)(Object)this);
     }
 
+    /* Ensure newly created dimensions are accessible, will tick, etc. */
     @Override
     public void infinity$addWorld(RegistryKey<World> key, DimensionOptions options) {
         ServerWorldProperties serverWorldProperties = saveProperties.getMainWorldProperties();
@@ -121,12 +122,12 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
         PlatformMethods.onWorldLoad(this, world);
     }
 
-
     @Override
     public boolean infinity$hasToAdd(RegistryKey<World> key) {
         return (infinity$worldsToAdd.containsKey(key));
     }
 
+    /* Makes weather properly work in infdims. */
     @Redirect(method="createWorlds", at=@At(value="NEW", target="(Lnet/minecraft/server/MinecraftServer;Ljava/util/concurrent/Executor;Lnet/minecraft/world/level/storage/LevelStorage$Session;Lnet/minecraft/world/level/ServerWorldProperties;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/world/dimension/DimensionOptions;Lnet/minecraft/server/WorldGenerationProgressListener;ZJLjava/util/List;ZLnet/minecraft/util/math/random/RandomSequencesState;)Lnet/minecraft/server/world/ServerWorld;"))
     public ServerWorld create(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<SpecialSpawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState) {
         ServerWorldProperties prop = (worldKey.getValue().toString().contains("infinity")) ? saveProperties.getMainWorldProperties() : properties;

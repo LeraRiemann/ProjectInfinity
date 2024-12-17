@@ -2,7 +2,6 @@ package net.lerariemann.infinity.mixin.core;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;
@@ -17,7 +16,6 @@ import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,12 +24,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(NetherPortalBlock.class)
 public class NetherPortalBlockMixin extends AbstractBlockMixin {
 	@Shadow @Final public static EnumProperty<Direction.Axis> AXIS;
 
+	/* The root hook for "throw a book in the portal" logic. */
 	@Inject(at = @At("HEAD"), method = "onEntityCollision(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V")
 	private void injected(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo info) {
 		if (world instanceof ServerWorld w && entity instanceof ItemEntity e) {
@@ -39,21 +37,14 @@ public class NetherPortalBlockMixin extends AbstractBlockMixin {
 		}
 	}
 
-	@Inject(method = "createTeleportTarget", at = @At(value = "HEAD"), cancellable = true)
-	private void injected(ServerWorld world, Entity entity, BlockPos pos, CallbackInfoReturnable<TeleportTarget> cir) {
-		if (InfinityMethods.isInfinity(world)) {
-			PortalCreationLogic.modifyPortalRecursive(world, pos, World.OVERWORLD.getValue(), true);
-			cir.setReturnValue(InfinityPortalBlock.findNewTeleportTarget(world, pos, world.getServer().getOverworld(), entity));
-		}
-	}
-
+	/* Allows infinity portals to consider themselves valid block configurations. */
 	@Redirect(method="getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Direction;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
 	private boolean injected(BlockState neighborState, Block block) {
 		return (neighborState.getBlock() instanceof NetherPortalBlock);
 	}
 
-	/* This makes sure that newly portals in infdims become infinity portals. */
+	/* Makes sure that newly lit portals in infdims become infinity portals. */
 	@Override
 	protected void injected_onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify, CallbackInfo ci) {
 		if (state.isOf(Blocks.NETHER_PORTAL) &&
