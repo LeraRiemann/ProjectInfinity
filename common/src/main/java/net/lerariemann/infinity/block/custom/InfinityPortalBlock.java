@@ -181,7 +181,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                         item -> getKeyComponents(item, npbe.getDimension()));
                 InfinityMod.provider.getPortalKeyAsItem().ifPresent(item -> { //opening a portal by tossing a key in
                     if (e.getStack().isOf(item)) {
-                        InfinityPortal.tryUpdateOpenStatus(npbe, world, server, pos);
+                        InfinityPortal.tryUpdateOpenStatus(npbe, world, pos, server);
                         if (npbe.isOpen()) return;
                         PlayerEntity nearestPlayer =
                                 world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
@@ -241,7 +241,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     @Nullable @Override
     public TeleportTarget createTeleportTarget(ServerWorld worldFrom, Entity entity, BlockPos posFrom) {
         if (worldFrom.getBlockEntity(posFrom) instanceof InfinityPortalBlockEntity ipbe) {
-            return InfinityPortal.createTeleportTarget(ipbe, worldFrom, posFrom, entity);
+            return (new InfinityPortal(ipbe, worldFrom, posFrom)).getTeleportTarget(entity);
         }
         else if (entity instanceof ServerPlayerEntity player)
             InfinityMethods.sendUnexpectedError(player, "portal");
