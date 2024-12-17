@@ -9,6 +9,7 @@
     "consumePortalKey": true,
     "disabledUntilReview": true,
     "maxBiomeCount": 6,
+    "maxDimensionScale": 0,
     "iridescenceInitialDuration": 1,
     "iridescenceDurationPerLevel": 168,
     "iridescenceCooldownDuration": 168

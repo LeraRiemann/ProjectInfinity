@@ -164,8 +164,10 @@ public class Iridescence {
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
                     Iridescence.getEffectLength(amplifier1), amplifier1));
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
-                    Iridescence.getCooldownDuration(), amplifier1 > 0 ? 1 : 0, false, false, false));
+            int cooldownDuration = Iridescence.getCooldownDuration();
+            if (cooldownDuration > 0)
+                entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
+                        cooldownDuration, amplifier1 > 0 ? 1 : 0, false, false, false));
             if (entity instanceof ServerPlayerEntity player) {
                 player.increaseStat(ModStats.IRIDESCENCE, 1);
                 ModCriteria.IRIDESCENT.get().trigger(player);
