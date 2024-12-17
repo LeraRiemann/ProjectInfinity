@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.advancement.criterion.Criteria;
@@ -17,7 +18,7 @@ import net.minecraft.util.Identifier;
 
 public class ModCriteria {
     public static class DimensionOpenedCriterion extends AbstractCriterion<ScoredConditions> {
-        static final Identifier ID = InfinityMod.getId("dims_open");
+        static final Identifier ID = InfinityMethods.getId("dims_open");
 
         public DimensionOpenedCriterion() {
             super();
@@ -39,7 +40,7 @@ public class ModCriteria {
     }
 
     public static class DimensionClosedCriterion extends AbstractCriterion<ScoredConditions> {
-        static final Identifier ID = InfinityMod.getId("dims_closed");
+        static final Identifier ID = InfinityMethods.getId("dims_closed");
 
         public DimensionClosedCriterion() {
             super();
@@ -61,7 +62,7 @@ public class ModCriteria {
     }
 
     public static class BiomeBottleCriterion extends AbstractCriterion<ScoredConditions> {
-        static final Identifier ID = InfinityMod.getId("bottle");
+        static final Identifier ID = InfinityMethods.getId("bottle");
 
         public BiomeBottleCriterion() {
             super();
@@ -83,7 +84,7 @@ public class ModCriteria {
     }
 
     public static class WhoRemainsCriterion extends AbstractCriterion<EmptyConditions> {
-        static final Identifier ID = InfinityMod.getId("who_remains");
+        static final Identifier ID = InfinityMethods.getId("who_remains");
 
         public WhoRemainsCriterion() {
             super();
@@ -104,7 +105,7 @@ public class ModCriteria {
     }
 
     public static class IridescentCriterion extends AbstractCriterion<EmptyConditions> {
-        static final Identifier ID = InfinityMod.getId("iridescence");
+        static final Identifier ID = InfinityMethods.getId("iridescence");
 
         public void trigger(ServerPlayerEntity player) {
             this.trigger(player, (conditions) -> true);
@@ -122,7 +123,7 @@ public class ModCriteria {
     }
 
     public static class ConvertMobCriterion extends AbstractCriterion<DataConditions> {
-        static final Identifier ID = InfinityMod.getId("convert_mob");
+        static final Identifier ID = InfinityMethods.getId("convert_mob");
 
 
         public void trigger(ServerPlayerEntity player, LivingEntity e) {

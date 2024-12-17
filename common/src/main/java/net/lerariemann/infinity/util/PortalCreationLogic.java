@@ -300,7 +300,7 @@ public interface PortalCreationLogic {
         buf.writeNbt(d.type != null ? d.type.data : new NbtCompound());
         buf.writeInt(d.random_biomes.size());
         d.random_biomes.forEach(b -> {
-            buf.writeIdentifier(InfinityMod.getId(b.name));
+            buf.writeIdentifier(InfinityMethods.getId(b.name));
             buf.writeNbt(b.data);
         });
         return buf;

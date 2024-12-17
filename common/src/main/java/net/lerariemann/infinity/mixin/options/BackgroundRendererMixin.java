@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.CameraSubmersionType;
@@ -41,7 +42,7 @@ public class BackgroundRendererMixin {
     @ModifyExpressionValue(method = "render(Lnet/minecraft/client/render/Camera;FLnet/minecraft/client/world/ClientWorld;IF)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getHorizonShadingRatio()F"))
     private static float inj(float original, @Local(argsOnly = true) ClientWorld world) {
-        if (!InfinityMod.isInfinity(world)) return original;
+        if (!InfinityMethods.isInfinity(world)) return original;
         return InfinityOptions.access(world).getHorizonShadingRatio();
     }
 

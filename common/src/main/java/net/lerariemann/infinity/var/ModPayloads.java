@@ -23,7 +23,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.lerariemann.infinity.InfinityMod.getId;
+import static net.lerariemann.infinity.util.InfinityMethods.getId;
 
 public class ModPayloads {
     public static final Identifier WORLD_ADD = getId("reload_worlds");

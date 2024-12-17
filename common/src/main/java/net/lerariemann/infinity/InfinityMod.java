@@ -41,11 +41,7 @@ public class InfinityMod {
 		provider = p;
 		if (!((MinecraftServerAccess)server).infinity$needsInvocation()) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
 	}
-
-	public static Identifier getId(String value){
-		return Identifier.of(MOD_ID, value);
-	}
-
+	
 	public static void init() {
 		rootConfigPath = PlatformMethods.getRootConfigPath();
 		ConfigManager.updateInvocationLock();
@@ -70,12 +66,5 @@ public class InfinityMod {
 		RandomText.walkPaths();
 		provider = new RandomProvider("config/" + InfinityMod.MOD_ID + "/");
 		InfinityOptions.defaultShader = CommonIO.read(InfinityMod.utilPath + "/default_shader.json");
-	}
-
-	public static boolean isInfinity(World w) {
-		return isInfinity(w.getRegistryKey());
-	}
-	public static boolean isInfinity(RegistryKey<World> key) {
-		return key.getValue().getNamespace().equals(MOD_ID);
 	}
 }

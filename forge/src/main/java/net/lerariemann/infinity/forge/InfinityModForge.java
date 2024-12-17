@@ -15,6 +15,7 @@ import net.lerariemann.infinity.forge.client.InfinityModForgeClient;
 import net.lerariemann.infinity.iridescence.ModStatusEffects;
 import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraftforge.api.distmarker.Dist;
@@ -51,7 +52,7 @@ public final class InfinityModForge {
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsForge.registerModFluids();
         ModEffectsForge.register(eventBus);
-        ModItems.IRIDESCENT_TAG = ItemTags.create(InfinityMod.getId("iridescent"));
+        ModItems.IRIDESCENT_TAG = ItemTags.create(InfinityMethods.getId("iridescent"));
     }
 
     @SubscribeEvent

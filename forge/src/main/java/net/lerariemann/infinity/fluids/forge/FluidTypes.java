@@ -2,6 +2,7 @@ package net.lerariemann.infinity.fluids.forge;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.mob.MobEntity;
@@ -51,7 +52,7 @@ public class FluidTypes {
         @Override
         public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
             consumer.accept(new IClientFluidTypeExtensions() {
-                private static final Identifier IRIDESCENCE = InfinityMod.getId("block/iridescence");
+                private static final Identifier IRIDESCENCE = InfinityMethods.getId("block/iridescence");
 
                 @Override
                 public @NotNull Identifier getStillTexture() {

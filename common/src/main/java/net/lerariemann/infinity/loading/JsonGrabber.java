@@ -8,6 +8,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.Lifecycle;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.*;
 import net.minecraft.util.Identifier;
@@ -49,7 +50,7 @@ public class JsonGrabber<E> {
             String fullname = path1.substring(path1.lastIndexOf("/") + 1, path1.length() - 5);
             int i = fullname.lastIndexOf("\\");
             if (i>=0) fullname = fullname.substring(i + 1);
-            RegistryKey<E> key = RegistryKey.of(registry.getKey(), InfinityMod.getId(fullname));
+            RegistryKey<E> key = RegistryKey.of(registry.getKey(), InfinityMethods.getId(fullname));
             grab(path1, key, bl);
         }
     }
@@ -80,7 +81,7 @@ public class JsonGrabber<E> {
 
     E grab_with_return(String rootdir, String i, boolean register) {
         String path = rootdir + "/" + i + ".json";
-        RegistryKey<E> key = RegistryKey.of(registry.getKey(), InfinityMod.getId("generated_"+i));
+        RegistryKey<E> key = RegistryKey.of(registry.getKey(), InfinityMethods.getId("generated_"+i));
         File file = new File(path);
         String content;
         try {
