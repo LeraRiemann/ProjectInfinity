@@ -21,6 +21,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import org.jetbrains.annotations.NotNull;
@@ -84,7 +85,7 @@ public interface WarpLogic {
     }
     /* will implement a proper end-of-time dimension later */
     static void sendToMissingno(ServerPlayerEntity player) {
-        requestWarpWithTimer(player, InfinityMethods.getId("missingno"), 2, false);
+        requestWarp(player, InfinityMethods.getId("missingno"), false);
     }
 
     static void performWarp(ServerPlayerEntity player, Identifier idForWarp) {
@@ -114,29 +115,10 @@ public interface WarpLogic {
         return 0;
     }
 
-
-    static void ensureSafety(ServerWorld world, BlockPos pos, Block fallback) {
-        BlockState fb = fallback.getDefaultState();
-        if (!isSafe(world.getBlockState(pos), fb))
-            world.setBlockState(pos, fb);
-    }
-
     static boolean isSafe(BlockState state, BlockState fallback) {
         if (state.isAir()) return fallback.isAir();
         FluidState fluidState = state.getFluidState();
         return (fluidState.isOf(Fluids.EMPTY) || fluidState.isIn(FluidTags.WATER)); 
-    }
-    /**
-     * Teleport a player to their respawn point.
-     */
-    static void respawnAlive(@Nullable ServerPlayerEntity player) {
-        if (player == null) return;
-        TeleportTarget targ = player.getRespawnTarget(true, TeleportTarget.NO_OP);
-        player.teleport(targ.world(), targ.pos().x, targ.pos().y, targ.pos().z, targ.yaw(), targ.pitch());
-    }
-    /* will implement a proper end-of-time dimension later */
-    static void sendToMissingno(ServerPlayerEntity player) {
-        requestWarp(player, InfinityMethods.getId("missingno"), false);
     }
 
     /**

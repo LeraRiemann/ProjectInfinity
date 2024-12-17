@@ -1,9 +1,11 @@
 package net.lerariemann.infinity.mixin.mobs;
 
+import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,9 +20,9 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     /* Hook to allow unconventional effect removal logic */
-    @Inject(method = "onStatusEffectRemoved", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateAttributes()V"))
+    @Inject(method = "onStatusEffectRemoved", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getAttributes()Lnet/minecraft/entity/attribute/AttributeContainer;"))
     void inj(StatusEffectInstance effect, CallbackInfo ci) {
-        if (effect.getEffectType().value() instanceof ModStatusEffects.SpecialEffect eff) {
+        if (effect.getEffectType() instanceof ModStatusEffects.SpecialEffect eff) {
             eff.onRemoved((LivingEntity)(Object)this);
         }
     }

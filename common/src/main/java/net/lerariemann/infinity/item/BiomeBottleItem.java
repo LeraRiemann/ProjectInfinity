@@ -21,8 +21,8 @@ public class BiomeBottleItem extends BlockItem {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-        super.appendTooltip(stack, world, tooltip, context);
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext type) {
+        super.appendTooltip(stack, world, tooltip, type);
         String s = ModItemFunctions.getBiomeComponents(stack);
         if (s != null) {
             Identifier biome = Identifier.tryParse(s);

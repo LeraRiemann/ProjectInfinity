@@ -17,6 +17,7 @@ import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.lerariemann.infinity.registry.var.ModPayloads;
+import net.lerariemann.infinity.registry.var.ModSounds;
 import net.lerariemann.infinity.registry.var.ModStats;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -59,7 +60,7 @@ public interface PortalCreator {
      * Check if the item that is colliding with the Portal can be used to
      * transform it into an Infinity Portal.
      */
-    static void tryCreatePortalFromItem(BlockState state, World world, BlockPos pos, ItemEntity entity) {
+    static void tryCreatePortalFromItem(World world, BlockPos pos, ItemEntity entity) {
         ItemStack itemStack = entity.getStack();
         if (itemStack.getItem() == ModItems.TRANSFINITE_KEY.get()) {
             Identifier key_dest = ModItemFunctions.getDimensionIdentifier(itemStack);
@@ -362,7 +363,7 @@ public interface PortalCreator {
                     pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
                 bl = true;
                 Identifier dimensionName = registryKey.getValue();
-                PortalCreationLogic.modifyPortalRecursive(destination, pos2, dimensionName, true);
+                PortalCreator.modifyPortalRecursive(destination, pos2, dimensionName, true);
                 break;
             }
         }

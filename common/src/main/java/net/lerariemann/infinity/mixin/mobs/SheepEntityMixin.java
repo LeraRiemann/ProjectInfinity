@@ -32,7 +32,7 @@ public abstract class SheepEntityMixin extends LivingEntityMixin implements Shea
     protected void injected_sheep(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if(cir.getReturnValue() && !this.isSheared() && source.getAttacker() != null &&
                 source.getAttacker() instanceof PlayerEntity &&
-                getWorld().getBiome(getBlockPos()).getIdAsString().equals("infinity:classic")) {
+                getWorld().getBiome(getBlockPos()).matchesId(InfinityMethods.getId("classic"))) {
             this.sheared(SoundCategory.AMBIENT);
         }
     }

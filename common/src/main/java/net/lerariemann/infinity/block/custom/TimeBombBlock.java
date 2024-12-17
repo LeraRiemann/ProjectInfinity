@@ -2,7 +2,6 @@ package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
-import net.lerariemann.infinity.item.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.lerariemann.infinity.registry.core.ModItems;

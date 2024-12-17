@@ -97,7 +97,7 @@ public class InfinityPortal {
     /** Finding where to teleport stuff. The constructor ensures all scanning is already done by this point */
     public TeleportTarget getTeleportTarget(Entity entity) {
         if (portalShouldWork() && portalTo != null && worldTo != null) {
-            return NetherPortalBlock.getExitPortalTarget(entity, posTo, portalTo, worldTo,
+            return NetherPortalBlock.gete(entity, posTo, portalTo, worldTo,
                     TeleportTarget.SEND_TRAVEL_THROUGH_PORTAL_PACKET.then(entityx -> entityx.addPortalChunkTicketAt(posTo)));
         }
         //below this point is error handling. note that not all such errors are bugs
@@ -139,9 +139,8 @@ public class InfinityPortal {
 
     /** If teleportation failed for any reason, this ensures the entity does not teleport anywhere. */
     public static TeleportTarget emptyTarget(Entity entity) {
-        return new TeleportTarget((ServerWorld)entity.getWorld(), entity.getPos(),
-                entity.getVelocity(), entity.getYaw(), entity.getPitch(),
-                TeleportTarget.NO_OP);
+        return new TeleportTarget(entity.getPos(),
+                entity.getVelocity(), entity.getYaw(), entity.getPitch());
     }
 
     /** Filter for infinity portals of the correct destination. */

@@ -3,7 +3,7 @@ package net.lerariemann.infinity.mixin.fixes;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.PortalCreationLogic;
+import net.lerariemann.infinity.util.PortalCreator;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.RegistryKey;
@@ -44,7 +44,7 @@ public abstract class EntityMixin {
             }
             else if (worldFrom.getBlockState(pos).isOf(Blocks.NETHER_PORTAL)
                     && InfinityMethods.isInfinity(worldFrom)) { //redirect returning from infdims and make portals in them infinity (for sync reasons)
-                PortalCreationLogic.modifyPortalRecursive(worldFrom, pos, World.OVERWORLD.getValue(), true);
+                PortalCreator.modifyPortalRecursive(worldFrom, pos, World.OVERWORLD.getValue(), true);
                 return worldFrom.getServer().getOverworld();
             }
             else return originalWorldTo;

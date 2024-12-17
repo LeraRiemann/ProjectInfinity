@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
-import static net.lerariemann.infinity.item.ModItems.TRANSFINITE_KEY;
+import static net.lerariemann.infinity.registry.core.ModItems.TRANSFINITE_KEY;
 
 public class ModItemFunctions {
     public static final DeferredRegister<LootFunctionType> LOOT_FUNCTION_TYPES =

@@ -2,12 +2,12 @@ package net.lerariemann.infinity.mixin.core;
 
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.WarpLogic;
-import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;

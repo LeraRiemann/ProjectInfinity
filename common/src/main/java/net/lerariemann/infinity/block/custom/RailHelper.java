@@ -1,8 +1,8 @@
 package net.lerariemann.infinity.block.custom;
 
 import dev.architectury.platform.Platform;
-import net.lerariemann.infinity.block.entity.ModBlockEntities;
 import net.lerariemann.infinity.compat.CreateCompat;
+import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Blocks;

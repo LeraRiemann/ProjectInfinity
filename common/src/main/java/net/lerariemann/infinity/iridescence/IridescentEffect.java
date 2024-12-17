@@ -4,6 +4,7 @@ import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.InstantStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
@@ -60,7 +61,6 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         }
     }
 
-    // TODO fix, this method just doesn't exist yet?
 //    @Override
 //    public ParticleEffect createParticle(StatusEffectInstance effect) {
 //        float hue = effect.getDuration() / 13.0f;
@@ -68,4 +68,16 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
 //                ParticleTypes.ENTITY_EFFECT, ColorHelper.Argb.withAlpha(255,
 //                        Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
 //    }
+
+    public static class Setup extends InstantStatusEffect {
+        public Setup(StatusEffectCategory category, int color) {
+            super(category, color);
+        }
+
+        @Override
+        public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
+            super.onApplied(entity, attributes, amplifier);
+            Iridescence.tryBeginJourney(entity, amplifier);
+        }
+    }
 }

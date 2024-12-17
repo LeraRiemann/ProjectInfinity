@@ -4,6 +4,7 @@ import com.mojang.datafixers.types.Type;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.block.custom.RailHelper;
 import net.lerariemann.infinity.block.entity.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.datafixer.TypeReferences;
