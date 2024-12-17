@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.iridescence;
 
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
@@ -99,7 +100,7 @@ public class Iridescence {
         return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*colors.size())) + str));
     }
 
-    public static final int ticksInHour = 1000;
+    public static final int ticksInHour = 1200;
 
     public static int getAmplifierOnApply(LivingEntity entity, int original) {
         StatusEffectInstance cooldown = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
@@ -113,7 +114,11 @@ public class Iridescence {
     }
 
     public static int getCooldownDuration() {
-        return ticksInHour * 24 * 7;
+        return ticksInHour * InfinityMod.provider.gameRulesInt.get("iridescenceCooldownDuration");
+    }
+
+    public static int getInitialPhaseLength() {
+        return ticksInHour * InfinityMod.provider.gameRulesInt.get("iridescenceInitialDuration");
     }
 
     public static Phase getPhase(LivingEntity entity) {
@@ -123,8 +128,7 @@ public class Iridescence {
     }
 
     public static Phase getPhase(int duration, int amplifier) {
-        int effect_length = getEffectLength(amplifier) - ticksInHour;
-        int time_passed = effect_length - duration;
+        int time_passed = getEffectLength(amplifier) - getInitialPhaseLength() - duration;
         if (time_passed < 0) return Phase.INITIAL;
         return (time_passed < ticksInHour) ? Phase.UPWARDS : (duration <= ticksInHour || amplifier == 0) ? Phase.DOWNWARDS : Phase.PLATEAU;
     }
@@ -132,9 +136,12 @@ public class Iridescence {
     public static boolean shouldWarp(int duration, int amplifier) {
         return (Iridescence.getPhase(duration, amplifier) == Iridescence.Phase.PLATEAU) && (duration % ticksInHour == 0);
     }
-
     public static boolean shouldReturn(int duration, int amplifier) {
         return (amplifier > 0) && (duration == ticksInHour);
+    }
+    public static boolean shouldRequestShaderLoad(int duration, int amplifier) {
+        int time_passed = getEffectLength(amplifier) - getInitialPhaseLength() - duration;
+        return (time_passed == 0);
     }
 
     public static void loadShader(ServerPlayerEntity player) {
@@ -147,7 +154,8 @@ public class Iridescence {
     public static boolean shouldApplyShader(@Nullable PlayerEntity player) {
         if (player == null) return false;
         StatusEffectInstance effect = player.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
-        return (effect != null);
+        return (effect != null && effect.getDuration() > 20
+                && getPhase(effect.getDuration(), effect.getAmplifier()) != Phase.INITIAL);
     }
 
     public static void tryBeginJourney(LivingEntity entity, int amplifier) {

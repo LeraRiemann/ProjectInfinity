@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2001005,
+  "infinity_version": 2003008,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "returnPortalsEnabled": true,
@@ -8,7 +8,10 @@
     "chaosMobsEnabled": true,
     "consumePortalKey": true,
     "disabledUntilReview": true,
-    "maxBiomeCount": 6
+    "maxBiomeCount": 6,
+    "iridescenceInitialDuration": 1,
+    "iridescenceDurationPerLevel": 168,
+    "iridescenceCooldownDuration": 168
   },
   "portalKey": "",
   "altarKey": "minecraft:diamond",

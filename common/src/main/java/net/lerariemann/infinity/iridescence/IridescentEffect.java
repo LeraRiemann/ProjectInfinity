@@ -29,7 +29,9 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP);
         }
         if (entity instanceof Angerable ang) ang.stopAnger();
-        if (entity instanceof ServerPlayerEntity player) Iridescence.loadShader(player);
+        if (entity instanceof ServerPlayerEntity player
+                && Iridescence.shouldApplyShader(player))
+            Iridescence.loadShader(player);
     }
 
     public void onRemoved(LivingEntity entity) {
@@ -60,6 +62,8 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
                 player.setInvulnerable(false);
                 WarpLogic.respawnAlive(player);
             }
+            if (Iridescence.shouldRequestShaderLoad(duration, amplifier))
+                Iridescence.loadShader(player);
         }
     }
 
