@@ -3,6 +3,7 @@ package net.lerariemann.infinity.block.entity;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.TransfiniteAltar;
 import net.lerariemann.infinity.util.ConfigGenerator;
+import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;

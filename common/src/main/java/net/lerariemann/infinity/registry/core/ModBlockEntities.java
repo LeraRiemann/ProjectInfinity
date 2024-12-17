@@ -1,10 +1,10 @@
-package net.lerariemann.infinity.block.entity;
+package net.lerariemann.infinity.registry.core;
 
 import com.mojang.datafixers.types.Type;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.block.entity.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.datafixer.TypeReferences;
 import net.minecraft.registry.RegistryKeys;

@@ -1,14 +1,10 @@
-package net.lerariemann.infinity.entity;
+package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.entity.client.ChaosPawnRenderer;
-import net.lerariemann.infinity.entity.client.ChaosCreeperRenderer;
-import net.lerariemann.infinity.entity.client.ChaosSkeletonRenderer;
-import net.lerariemann.infinity.entity.client.ChaosSlimeRenderer;
+import net.lerariemann.infinity.entity.client.*;
 import net.lerariemann.infinity.entity.custom.*;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.*;

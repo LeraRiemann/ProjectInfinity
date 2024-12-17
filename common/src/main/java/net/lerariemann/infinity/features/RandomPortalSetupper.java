@@ -2,7 +2,7 @@ package net.lerariemann.infinity.features;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;

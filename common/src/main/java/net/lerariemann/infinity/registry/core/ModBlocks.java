@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.block;
+package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;

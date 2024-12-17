@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.var;
+package net.lerariemann.infinity.registry.var;
 
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

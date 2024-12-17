@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
 import net.lerariemann.infinity.util.PlatformMethods;
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.neoforge.IridescenceLiquidBlockNeoforge;
 import net.lerariemann.infinity.fluids.neoforge.ModFluidsNeoforge;
 import net.lerariemann.infinity.util.InfinityMethods;

@@ -1,17 +1,14 @@
 package net.lerariemann.infinity.neoforge;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.registry.core.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
 import net.lerariemann.infinity.fluids.neoforge.ModEffectsNeoforge;
 import net.lerariemann.infinity.fluids.neoforge.ModFluidsNeoforge;
-import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.neoforge.client.InfinityModNeoForgeClient;
-import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.var.ModStats;
-import net.minecraft.registry.tag.ItemTags;
+import net.lerariemann.infinity.registry.var.ModStats;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;

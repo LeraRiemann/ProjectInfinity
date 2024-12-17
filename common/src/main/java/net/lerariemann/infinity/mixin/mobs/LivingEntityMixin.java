@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin.mobs;
 
-import net.lerariemann.infinity.iridescence.ModStatusEffects;
+import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

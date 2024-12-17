@@ -1,6 +1,8 @@
-package net.lerariemann.infinity.iridescence;
+package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.platform.Platform;
+import net.lerariemann.infinity.iridescence.IridescentCooldownEffect;
+import net.lerariemann.infinity.iridescence.IridescentEffect;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;

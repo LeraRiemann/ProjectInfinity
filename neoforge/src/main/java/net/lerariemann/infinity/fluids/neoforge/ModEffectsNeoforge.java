@@ -3,7 +3,7 @@ package net.lerariemann.infinity.fluids.neoforge;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.iridescence.IridescentCooldownEffect;
 import net.lerariemann.infinity.iridescence.IridescentEffect;
-import net.lerariemann.infinity.iridescence.ModStatusEffects;
+import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.registry.Registries;

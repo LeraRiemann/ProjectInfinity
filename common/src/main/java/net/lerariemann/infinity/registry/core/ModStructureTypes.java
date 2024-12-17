@@ -1,8 +1,9 @@
-package net.lerariemann.infinity.structure;
+package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.structure.*;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.structure.StructurePieceType;
 import net.minecraft.world.gen.structure.StructureType;
@@ -38,13 +39,4 @@ public class ModStructureTypes {
         STRUCTURE_PIECES.register();
         STRUCTURE_TYPES.register();
     }
-
-
-
-
-
-
-
-
-
 }

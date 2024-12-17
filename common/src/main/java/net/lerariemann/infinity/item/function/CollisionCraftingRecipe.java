@@ -2,6 +2,7 @@ package net.lerariemann.infinity.item.function;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;

@@ -2,8 +2,8 @@ package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
-import net.lerariemann.infinity.block.entity.ModBlockEntities;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModBlockEntities;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;

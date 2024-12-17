@@ -1,7 +1,8 @@
 package net.lerariemann.infinity.item.function;
 
 import net.lerariemann.infinity.block.custom.BiomeBottle;
-import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;

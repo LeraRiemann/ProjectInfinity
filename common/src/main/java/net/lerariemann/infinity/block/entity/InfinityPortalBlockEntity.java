@@ -3,6 +3,7 @@ package net.lerariemann.infinity.block.entity;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;

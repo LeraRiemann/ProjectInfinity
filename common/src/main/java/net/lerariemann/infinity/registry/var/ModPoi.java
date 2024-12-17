@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.var;
+package net.lerariemann.infinity.registry.var;
 
 import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
@@ -6,7 +6,7 @@ import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;

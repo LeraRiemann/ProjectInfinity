@@ -2,7 +2,7 @@ package net.lerariemann.infinity.mixin.qol;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;

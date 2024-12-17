@@ -3,7 +3,7 @@ package net.lerariemann.infinity.util;
 import com.mojang.brigadier.context.CommandContext;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.var.ModStats;
+import net.lerariemann.infinity.registry.var.ModStats;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

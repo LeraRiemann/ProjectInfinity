@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.var;
+package net.lerariemann.infinity.registry.var;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;

@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.var;
+package net.lerariemann.infinity.registry.var;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import net.minecraft.registry.RegistryKeys;

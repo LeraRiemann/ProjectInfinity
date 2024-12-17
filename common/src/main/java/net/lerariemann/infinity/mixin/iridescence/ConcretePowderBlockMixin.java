@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ConcretePowderBlock;
 import org.spongepowered.asm.mixin.Mixin;

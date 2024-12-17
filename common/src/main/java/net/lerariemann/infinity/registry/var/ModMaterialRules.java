@@ -1,11 +1,11 @@
-package net.lerariemann.infinity.var;
+package net.lerariemann.infinity.registry.var;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
-import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.block.BlockState;

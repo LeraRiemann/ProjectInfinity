@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.mixin.core;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;

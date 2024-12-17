@@ -1,12 +1,11 @@
-package net.lerariemann.infinity.item;
+package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.item.*;
 import net.lerariemann.infinity.util.PlatformMethods;
-import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.Block;
 import net.minecraft.component.DataComponentTypes;

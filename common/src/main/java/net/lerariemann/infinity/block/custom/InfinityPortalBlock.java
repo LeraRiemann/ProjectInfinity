@@ -6,14 +6,14 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.var.ModPoi;
+import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.registry.var.ModPoi;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.ComponentMap;
@@ -54,7 +54,6 @@ import org.joml.Vector3f;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
     public static final BooleanProperty BOOP = BooleanProperty.of("boop");

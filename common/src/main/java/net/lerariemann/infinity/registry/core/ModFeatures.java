@@ -1,8 +1,9 @@
-package net.lerariemann.infinity.features;
+package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.features.*;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
@@ -24,12 +25,9 @@ public class ModFeatures {
 
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(MOD_ID, RegistryKeys.FEATURE);
 
-
     public static <C extends FeatureConfig, F extends Feature<C>> RegistrySupplier<F> register(String name, F feature) {
         return FEATURES.register(name, () -> feature);
     }
-
-
     public static void registerFeatures() {
         InfinityMod.LOGGER.debug("Registering features for " + InfinityMod.MOD_ID);
         RANDOM_END_ISLAND = register("random_end_island", new RandomEndIslandFeature(SingleStateFeatureConfig.CODEC));

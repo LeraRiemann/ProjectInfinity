@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.item.function;
+package net.lerariemann.infinity.registry.core;
 
 import com.mojang.serialization.Codec;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
@@ -8,7 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
-import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.item.function.*;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.DispenserBlock;
@@ -22,7 +22,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.FluidModificationItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.recipe.RecipeEntry;

@@ -5,9 +5,9 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.util.PlatformMethods;
-import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
-import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.registry.core.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.render.RenderLayer;
 

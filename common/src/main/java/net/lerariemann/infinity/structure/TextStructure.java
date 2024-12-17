@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lerariemann.infinity.util.TextData;
+import net.lerariemann.infinity.registry.core.ModStructureTypes;
 import net.minecraft.structure.StructurePiecesCollector;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;

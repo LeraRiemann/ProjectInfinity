@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.AbstractPlantStemBlock;
 import net.minecraft.block.BlockState;

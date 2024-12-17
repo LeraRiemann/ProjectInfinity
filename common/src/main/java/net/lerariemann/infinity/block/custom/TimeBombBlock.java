@@ -2,10 +2,10 @@ package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.var.ModCriteria;
-import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.var.ModSounds;
-import net.lerariemann.infinity.var.ModStats;
+import net.lerariemann.infinity.registry.var.ModCriteria;
+import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.registry.var.ModSounds;
+import net.lerariemann.infinity.registry.var.ModStats;
 import net.minecraft.block.*;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;

@@ -1,8 +1,8 @@
-package net.lerariemann.infinity.var.fabric;
+package net.lerariemann.infinity.registry.var.fabric;
 
 import com.google.common.collect.ImmutableSet;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.util.InfinityMethods;
 
 @SuppressWarnings("unused")

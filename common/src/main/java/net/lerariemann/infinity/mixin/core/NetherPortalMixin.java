@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin.core;
 
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.dimension.NetherPortal;
 import org.spongepowered.asm.mixin.Mixin;
