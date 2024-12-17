@@ -1,4 +1,7 @@
 {
+  "modmenu.nameTranslation.infinity": "Infinite Dimensions",
+  "modmenu.descriptionTranslation.infinity": "Inspired by 2020's April Fools' 20w14infinite Snapshot, this mod brings endless randomly generated dimensions into Minecraft.",
+  "modmenu.summaryTranslation.infinity": "Adds endless randomly generated dimensions, inspired by 20w14infinite.",
   "advancements.infinity.multiverse_start.title": "Welcome to the Multiverse",
   "advancements.infinity.multiverse_start.description": "Throw a written book into a Nether Portal",
   "advancements.infinity.library.title": "Tomes on Tomes",
@@ -134,6 +137,8 @@
   "config.infinity.gameRules.iridescenceCooldownDuration.description": "Duration of the iridescent cooldown effect in minutes. The full cooldown is twice this, the second half limiting the player to level I of the effect. Set to 0 to disable the cooldown.",
   "config.infinity.gameRules.returnPortalsEnabled": "Enable Return Portals",
   "config.infinity.gameRules.returnPortalsEnabled.description": "If enabled, every time you go through a portal from a custom dimension and generate a new portal, it will link back to a dimension you came from. If changed to false, all portals created this way will be normal Nether Portals.",
+  "config.infinity.gameRules.randomizeAllNetherPortals": "Randomize All Nether Portals",
+  "config.infinity.gameRules.randomizeAllNetherPortals.description": "If enabled, this will fully replace Nether Portals with randomized Infinity Portals, for use in challenge runs.",
   "config.infinity.gameRules.runtimeGenerationEnabled": "Enable Runtime Generation",
   "config.infinity.gameRules.runtimeGenerationEnabled.description": "If disabled, registration of dimensions and features in runtime will no longer occur, meaning you need to quit to title and enter the world again to access dimensions after tossing the book. Included for compatibility reasons.",
   "config.infinity.gameRules.chaosMobsEnabled": "Enable Chaos Mobs",
