@@ -8,7 +8,7 @@ import net.lerariemann.infinity.util.TextData;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
-import net.lerariemann.infinity.mixin.MaterialRuleContextAccess;
+import net.lerariemann.infinity.mixin.core.MaterialRuleContextAccess;
 
 import java.util.*;
 

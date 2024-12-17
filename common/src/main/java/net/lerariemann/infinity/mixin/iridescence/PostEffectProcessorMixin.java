@@ -24,6 +24,7 @@ public abstract class PostEffectProcessorMixin {
 
     @Shadow protected abstract void setTexFilter(int texFilter);
 
+    /* Hook for the iridescence shader to receive the time uniform */
     @Inject(method="render", at = @At("HEAD"), cancellable = true)
     void inj(float tickDelta, CallbackInfo ci) {
         if (name.contains("infinity")) {

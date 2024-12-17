@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.core;
 
 import net.lerariemann.infinity.block.ModBlocks;
 import net.minecraft.block.BlockState;

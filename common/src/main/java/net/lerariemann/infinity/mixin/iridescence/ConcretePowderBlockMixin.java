@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ConcretePowderBlock.class)
 public class ConcretePowderBlockMixin {
+    /* Iridescence should not convert concrete powder */
     @Inject(method= "hardensIn(Lnet/minecraft/block/BlockState;)Z",
     at = @At("RETURN"), cancellable = true)
     private static void inj(BlockState state, CallbackInfoReturnable<Boolean> cir) {

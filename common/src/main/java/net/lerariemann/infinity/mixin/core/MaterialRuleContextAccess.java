@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.core;
 
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.core;
 
 import com.google.common.collect.ImmutableList;
 import net.lerariemann.infinity.InfinityMod;

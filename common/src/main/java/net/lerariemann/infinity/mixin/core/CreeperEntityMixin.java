@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.core;
 
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.minecraft.entity.mob.CreeperEntity;

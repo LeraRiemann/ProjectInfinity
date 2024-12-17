@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.core;
 
 import com.mojang.authlib.GameProfile;
 import net.lerariemann.infinity.access.Timebombable;

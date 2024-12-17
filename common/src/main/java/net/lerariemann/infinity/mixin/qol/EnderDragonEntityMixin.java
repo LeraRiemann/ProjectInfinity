@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.qol;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -14,6 +14,7 @@ public abstract class EnderDragonEntityMixin extends MobEntity {
     protected EnderDragonEntityMixin(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
+    /* Don't destroy blocks in infdims */
     @ModifyExpressionValue(method = "destroyBlocks", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
     boolean mev(boolean original) {

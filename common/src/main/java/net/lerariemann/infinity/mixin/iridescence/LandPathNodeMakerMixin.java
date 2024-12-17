@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LandPathNodeMaker.class)
 public abstract class LandPathNodeMakerMixin extends PathNodeMaker {
+    /* Chess-type pawns avoid iridescence */
     @Inject(method = "getNodeType(Lnet/minecraft/entity/ai/pathing/PathContext;IIILnet/minecraft/entity/mob/MobEntity;)Lnet/minecraft/entity/ai/pathing/PathNodeType;",
             at = @At("HEAD"), cancellable = true)
     private void inj(PathContext context, int x, int y, int z, MobEntity mob, CallbackInfoReturnable<PathNodeType> cir) {
@@ -28,6 +29,7 @@ public abstract class LandPathNodeMakerMixin extends PathNodeMaker {
         }
     }
 
+    /* This allows other mobs pathfind when swimming in iridescence */
     @ModifyExpressionValue(method= "getStart()Lnet/minecraft/entity/ai/pathing/PathNode;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
     boolean inj(boolean original, @Local BlockState blockState) {

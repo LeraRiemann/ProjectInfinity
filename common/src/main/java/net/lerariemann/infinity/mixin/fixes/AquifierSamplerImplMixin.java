@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.fixes;
 
 import net.minecraft.world.gen.chunk.AquiferSampler;
 import org.spongepowered.asm.mixin.Final;

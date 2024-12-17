@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.mixin.mobs.passive;
 
 import net.lerariemann.infinity.access.SpawnableInterface;
-import net.lerariemann.infinity.mixin.mobs.LivingEntityMixin;
+import net.lerariemann.infinity.mixin.options.LivingEntityMixin;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;

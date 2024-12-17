@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin.options;
+package net.lerariemann.infinity.mixin.core;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;

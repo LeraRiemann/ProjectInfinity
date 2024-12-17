@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SimpleArchitecturyFluidAttributes.class)
 public class IridescenceMixin {
+    /* This tints iridescence on Fabric */
     @Inject(method = "getColor(Ldev/architectury/fluid/FluidStack;Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/util/math/BlockPos;)I",
             at = @At("HEAD"), cancellable = true)
     void inj(@Nullable FluidStack stack, @Nullable BlockRenderView level, @Nullable BlockPos pos, CallbackInfoReturnable<Integer> cir) {

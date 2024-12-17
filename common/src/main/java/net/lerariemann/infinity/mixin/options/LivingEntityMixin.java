@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin.mobs;
+package net.lerariemann.infinity.mixin.options;
 
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.entity.Entity;

@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.fixes;
 
 import net.lerariemann.infinity.access.MobEntityAccess;
 import net.minecraft.entity.mob.MobEntity;

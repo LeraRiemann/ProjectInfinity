@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
+/* These two mixin classes are to make fish swim backwards in iridescence */
 @Mixin(FishEntity.class)
 public class FishEntityMixin extends WaterCreatureEntity {
     protected FishEntityMixin(EntityType<? extends WaterCreatureEntity> entityType, World world) {

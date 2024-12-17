@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin.mobs;
+package net.lerariemann.infinity.mixin.fixes;
 
 import net.lerariemann.infinity.access.MobEntityAccess;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -17,6 +17,7 @@ public class ElderGuardianEntityMixin extends GuardianEntity {
         super(entityType, world);
     }
 
+    /* Vanilla assumes all elder guardians are exempt from mobcap logic. This allows me to actually spawn them in infdims */
     @Inject(method = "<init>", at = @At("TAIL"))
     void injected(EntityType<? extends ElderGuardianEntity> entityType, World world, CallbackInfo ci) {
         if (InfinityMethods.isInfinity(world)) {

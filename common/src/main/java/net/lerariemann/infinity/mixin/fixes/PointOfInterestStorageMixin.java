@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.fixes;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -24,6 +24,7 @@ public abstract class PointOfInterestStorageMixin extends SerializingRegionBased
         super(storageAccess, codecFactory, factory, registryManager, errorHandler, world);
     }
 
+    /* There's null-unsafe inner-minecraft code that can crash if we don't do this */
     @Inject(method = "add", at = @At("HEAD"), cancellable = true)
     void inj(BlockPos pos, RegistryEntry<PointOfInterestType> type, CallbackInfo ci) {
         if (world.isOutOfHeightLimit(pos.getY())) ci.cancel();

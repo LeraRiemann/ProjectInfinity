@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.iridescence;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.iridescence.Iridescence;

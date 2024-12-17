@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.fixes;
 
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.minecraft.entity.Entity;
@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
+    /* Neoforge-exclusive mixins working around its code (which causes mobs to be unable to swim in iridescence) */
     @Inject(method="updateMovementInFluid", at = @At(value = "RETURN"), cancellable = true)
     void inj(TagKey<Fluid> tag, double speed, CallbackInfoReturnable<Boolean> cir) {
         if (tag.equals(FluidTags.WATER))

@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin;
+package net.lerariemann.infinity.mixin.core;
 
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.AbstractFireBlock;
