@@ -3,6 +3,7 @@ package net.lerariemann.infinity.iridescence;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.InstantStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -73,5 +74,17 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         return EntityEffectParticleEffect.create(
                 ParticleTypes.ENTITY_EFFECT, ColorHelper.Argb.withAlpha(255,
                         Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
+    }
+
+    public static class Setup extends InstantStatusEffect {
+        public Setup(StatusEffectCategory category, int color) {
+            super(category, color);
+        }
+
+        @Override
+        public void onApplied(LivingEntity entity, int amplifier) {
+            super.onApplied(entity, amplifier);
+            Iridescence.tryBeginJourney(entity, amplifier);
+        }
     }
 }

@@ -51,16 +51,11 @@ public interface InfinityMethods {
     static boolean isInfinity(World w) {
         return isInfinity(w.getRegistryKey());
     }
-
-    static boolean isBiomeInfinity(WorldAccess world, BlockPos pos) {
-        return world.getBiome(pos).getIdAsString().contains("infinity");
-    }
-
-    /**
-     * Checks if a dimension is an Infinite Dimension.
-     */
     static boolean isInfinity(RegistryKey<World> key) {
         return key.getValue().getNamespace().equals(InfinityMod.MOD_ID);
+    }
+    static boolean isBiomeInfinity(WorldAccess world, BlockPos pos) {
+        return world.getBiome(pos).getIdAsString().contains("infinity");
     }
 
     /**

@@ -18,7 +18,7 @@ public class ModStatusEffects {
         IRIDESCENT_EFFECT = Registry.registerReference(Registries.STATUS_EFFECT, InfinityMethods.getId("iridescence"),
                 new IridescentEffect(StatusEffectCategory.NEUTRAL, 0xFF00FF));
         IRIDESCENT_SETUP = Registry.registerReference(Registries.STATUS_EFFECT, InfinityMethods.getId("iridescent_setup"),
-                new IridescentSetupEffect(StatusEffectCategory.NEUTRAL, 0xFF00FF));
+                new IridescentEffect.Setup(StatusEffectCategory.NEUTRAL, 0xFF00FF));
         IRIDESCENT_COOLDOWN = Registry.registerReference(Registries.STATUS_EFFECT, InfinityMethods.getId("iridescent_cooldown"),
                 new IridescentCooldownEffect(StatusEffectCategory.NEUTRAL, 0x884488));
     }
