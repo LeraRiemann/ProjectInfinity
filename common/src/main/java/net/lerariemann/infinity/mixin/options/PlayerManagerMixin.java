@@ -7,7 +7,6 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.ModBlocks;
 import net.lerariemann.infinity.block.entity.ModBlockEntities;
-import net.lerariemann.infinity.util.ShaderLoader;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.block.BlockState;
@@ -53,7 +52,7 @@ public class PlayerManagerMixin {
             target = "Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci, @Local(ordinal=0) ServerWorld serverWorld2) {
         if (serverWorld2 == null) return;
-        ShaderLoader.sendReloadPacket(player, serverWorld2);
+        ModPayloads.sendReloadPacket(player, serverWorld2);
         ServerPlayNetworking.send(player, ModPayloads.STARS_RELOAD, PacketByteBufs.create());
         MinecraftServerAccess acc = ((MinecraftServerAccess)(serverWorld2.getServer()));
         if (acc.infinity$needsInvocation()) {
@@ -71,7 +70,7 @@ public class PlayerManagerMixin {
 
     @Inject(method="sendWorldInfo", at = @At("TAIL"))
     private void injected2(ServerPlayerEntity player, ServerWorld world, CallbackInfo ci) {
-        ShaderLoader.sendReloadPacket(player, world);
+        ModPayloads.sendReloadPacket(player, world);
         ServerPlayNetworking.send(player, ModPayloads.STARS_RELOAD, PacketByteBufs.create());
     }
 }

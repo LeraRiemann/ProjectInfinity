@@ -6,7 +6,6 @@ import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
-import net.lerariemann.infinity.util.ShaderLoader;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.entity.damage.DamageSource;
@@ -68,13 +67,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     private void injected4(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
         ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
         if (cir.getReturnValue())
-            ShaderLoader.sendReloadPacket(player, player.getServerWorld());
+            ModPayloads.sendReloadPacket(player, player.getServerWorld());
     }
 
     @Inject(method= "teleport(Lnet/minecraft/server/world/ServerWorld;DDDFF)V", at = @At(value="INVOKE", target ="Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected5(ServerWorld targetWorld, double x, double y, double z, float yaw, float pitch, CallbackInfo ci) {
         ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
-        ShaderLoader.sendReloadPacket(player, targetWorld);
+        ModPayloads.sendReloadPacket(player, targetWorld);
         ServerPlayNetworking.send(player, ModPayloads.STARS_RELOAD, PlatformMethods.createPacketByteBufs());
         this.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(getAbilities()));
         for(StatusEffectInstance effect: getStatusEffects())

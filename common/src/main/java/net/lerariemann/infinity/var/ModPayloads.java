@@ -3,6 +3,7 @@ package net.lerariemann.infinity.var;
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.util.PlatformMethods;
@@ -39,6 +40,10 @@ public class ModPayloads {
         if (destination == null) buf.writeNbt(new NbtCompound());
         else buf.writeNbt(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
         return buf;
+    }
+    public static void sendReloadPacket(ServerPlayerEntity player, ServerWorld world) {
+        ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD,
+                ModPayloads.buildPacket(world, player));
     }
 
     public static void receiveShader(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {

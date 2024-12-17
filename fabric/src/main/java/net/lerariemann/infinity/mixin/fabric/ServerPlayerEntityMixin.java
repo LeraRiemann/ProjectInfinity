@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.util.PortalCreationLogic;
-import net.lerariemann.infinity.util.ShaderLoader;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.entity.Entity;
@@ -52,7 +51,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerManager()Lnet/minecraft/server/PlayerManager;"))
     private void changeDimensionReload(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
         ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
-        ShaderLoader.sendReloadPacket(player, destination);
+        ModPayloads.sendReloadPacket(player, destination);
         ServerPlayNetworking.send(player, ModPayloads.STARS_RELOAD, PacketByteBufs.create());
     }
 
