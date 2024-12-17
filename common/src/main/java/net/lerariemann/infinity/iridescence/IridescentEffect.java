@@ -58,7 +58,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             if (Iridescence.shouldWarp(duration, amplifier)) {
                 player.setInvulnerable(true);
                 Identifier id = Iridescence.getIdForWarp(player);
-                WarpLogic.requestWarpWithTimer(player, id, 10, false);
+                WarpLogic.requestWarp(player, id, false);
             }
             if (Iridescence.shouldReturn(duration, amplifier)) {
                 player.setInvulnerable(false);

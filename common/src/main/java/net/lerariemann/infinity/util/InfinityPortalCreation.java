@@ -169,7 +169,7 @@ public interface InfinityPortalCreation {
             /* Call dimension creation. */
             Identifier i = npbe.getDimension();
             if (i.getNamespace().equals(InfinityMod.MOD_ID)) {
-                bl = addInfinityDimension(s, i);
+                bl = tryAddInfinityDimension(s, i);
             }
 
             /* Set the portal's open status making it usable. */
@@ -241,7 +241,7 @@ public interface InfinityPortalCreation {
     /**
      * Calls to create the dimension based on its ID. Returns true if the dimension being opened is indeed brand new.
      */
-    static boolean addInfinityDimension(MinecraftServer server, Identifier id) {
+    static boolean tryAddInfinityDimension(MinecraftServer server, Identifier id) {
         /* checks if the dimension requested is valid and does not already exist */
         if (!id.getNamespace().equals(InfinityMod.MOD_ID)) return false;
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
@@ -249,7 +249,7 @@ public interface InfinityPortalCreation {
         ServerWorld w = server.getWorld(key);
         if (w!=null) return false;
 
-                /* creates the dimension datapack */
+        /* creates the dimension datapack */
         RandomDimension d = new RandomDimension(id, server);
 
         if (!InfinityMod.provider.rule("runtimeGenerationEnabled")) return false;
