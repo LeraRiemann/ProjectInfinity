@@ -54,10 +54,10 @@ public interface WarpLogic {
         MinecraftServer s = player.getServer();
         if (s == null) return;
         if (((MinecraftServerAccess)s).infinity$needsInvocation()) {
-            PortalCreationLogic.onInvocationNeedDetected(player);
+            InfinityPortalCreation.onInvocationNeedDetected(player);
             return;
         }
-        boolean isThisANewDimension = PortalCreationLogic.addInfinityDimension(s, value);
+        boolean isThisANewDimension = InfinityPortalCreation.addInfinityDimension(s, value);
         if (isThisANewDimension && increaseStats) player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
         ((ServerPlayerEntityAccess)(player)).infinity$setWarpTimer(ticks, value);
     }
