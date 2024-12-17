@@ -1,6 +1,6 @@
-package net.lerariemann.infinity.mixin.mobs.passive;
+package net.lerariemann.infinity.mixin.mobs.spawnrestrictions;
 
-import net.lerariemann.infinity.access.SpawnableInterface;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.*;
@@ -13,15 +13,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(FrogEntity.class)
-public abstract class FrogEntityMixin extends AnimalEntity {
-    protected FrogEntityMixin(EntityType<? extends AnimalEntity> entityType, World world) {
+@Mixin(PolarBearEntity.class)
+public abstract class PolarBearEntityMixin extends AnimalEntity {
+    protected PolarBearEntityMixin(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
     }
 
     @Inject(method = "canSpawn", at = @At("HEAD"), cancellable = true)
     private static void injected(EntityType<? extends AnimalEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
-        if (SpawnableInterface.isBiomeInfinity(world, pos)) {
+        if (InfinityMethods.isBiomeInfinity(world, pos)) {
             cir.setReturnValue(canMobSpawn(type, world, spawnReason, pos, random));
         }
     }

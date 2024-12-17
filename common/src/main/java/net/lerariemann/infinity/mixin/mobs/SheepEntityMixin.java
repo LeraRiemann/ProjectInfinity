@@ -1,7 +1,5 @@
-package net.lerariemann.infinity.mixin.mobs.passive;
+package net.lerariemann.infinity.mixin.mobs;
 
-import net.lerariemann.infinity.access.SpawnableInterface;
-import net.lerariemann.infinity.mixin.options.LivingEntityMixin;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -24,26 +22,27 @@ public abstract class SheepEntityMixin extends LivingEntityMixin implements Shea
         super(entityType, world);
     }
 
+    @Shadow public abstract void setColor(DyeColor color);
+    @Shadow public abstract void sheared(SoundCategory shearedSoundCategory);
+    @Shadow public abstract boolean isSheared();
+
+    /* Makes sheep drop their wool when punched in the Classic biome. */
     @Override
     protected void injected_sheep(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if(cir.getReturnValue() && !this.isSheared() && source.getAttacker() != null &&
-                source.getAttacker() instanceof PlayerEntity && getWorld().getRegistryKey().getValue().toString().contains("infinity:classic")) {
+                source.getAttacker() instanceof PlayerEntity &&
+                getWorld().getBiome(getBlockPos()).getIdAsString().equals("infinity:classic")) {
             this.sheared(SoundCategory.AMBIENT);
         }
     }
 
-    @Shadow public abstract void setColor(DyeColor color);
-
-    @Shadow public abstract void sheared(SoundCategory shearedSoundCategory);
-
-    @Shadow public abstract boolean isSheared();
-
+    /* Controls wool color with which sheep spawn based on the biome. */
     @Inject(method = "initialize", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/SheepEntity;setColor(Lnet/minecraft/util/DyeColor;)V", shift = At.Shift.AFTER))
     private void injected(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> cir) {
         if (world.getBiome(getBlockPos()).matchesId(InfinityMethods.getId("classic"))) {
             setColor(DyeColor.WHITE);
         }
-        else if (SpawnableInterface.isBiomeInfinity(world, getBlockPos())) {
+        else if (InfinityMethods.isBiomeInfinity(world, getBlockPos())) {
             setColor(DyeColor.byId(world.getRandom().nextInt(16)));
         }
     }

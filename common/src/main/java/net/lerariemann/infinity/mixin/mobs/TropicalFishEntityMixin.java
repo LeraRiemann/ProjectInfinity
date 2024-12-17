@@ -2,7 +2,7 @@ package net.lerariemann.infinity.mixin.mobs;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.lerariemann.infinity.access.SpawnableInterface;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;
@@ -25,15 +25,17 @@ public abstract class TropicalFishEntityMixin extends SchoolingFishEntity {
         super(entityType, world);
     }
 
+    /* In infinity biomes, tropical fish spawn in a fully random variant. */
     @ModifyExpressionValue(method="initialize", at= @At(value = "INVOKE", target = "Lnet/minecraft/util/math/random/Random;nextFloat()F"))
     float mev(float original, @Local(argsOnly = true) ServerWorldAccess world){
-        if (SpawnableInterface.isBiomeInfinity(world, getBlockPos())) return 1.0f;
+        if (InfinityMethods.isBiomeInfinity(world, getBlockPos())) return 1.0f;
         return original;
     }
 
+    /* Allows fish to spawn in iridescence. */
     @Inject(method = "canTropicalFishSpawn", at=@At("HEAD"), cancellable = true)
     private static void inj(EntityType<TropicalFishEntity> type, WorldAccess world, SpawnReason reason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
-        if (SpawnableInterface.isBiomeInfinity(world, pos)) {
+        if (InfinityMethods.isBiomeInfinity(world, pos)) {
             cir.setReturnValue(reason == SpawnReason.SPAWNER ||
                     (MobEntity.canMobSpawn(type, world, reason, pos, random)
                             && world.getFluidState(pos).isIn(FluidTags.WATER)

@@ -3,7 +3,6 @@ package net.lerariemann.infinity.util;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import dev.architectury.platform.Platform;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
@@ -24,6 +23,7 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
 import java.nio.charset.StandardCharsets;
 
@@ -52,6 +52,10 @@ public interface InfinityMethods {
         return isInfinity(w.getRegistryKey());
     }
 
+    static boolean isBiomeInfinity(WorldAccess world, BlockPos pos) {
+        return world.getBiome(pos).getIdAsString().contains("infinity");
+    }
+
     /**
      * Checks if a dimension is an Infinite Dimension.
      */
@@ -71,10 +75,6 @@ public interface InfinityMethods {
 
     static void sendS2CPayload(ServerPlayerEntity entity, CustomPayload payload) {
         ServerPlayNetworking.send(entity, payload);
-    }
-
-    static void sendC2SPayload(CustomPayload payload) {
-        ClientPlayNetworking.send(payload);
     }
 
     static double sample(int x, int y, int z) {
