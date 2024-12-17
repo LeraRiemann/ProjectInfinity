@@ -54,6 +54,7 @@ public class NetherPortalBlockMixin extends AbstractBlockMixin {
 		return (neighborState.getBlock() instanceof NetherPortalBlock);
 	}
 
+	/* This makes sure that newly portals in infdims become infinity portals. */
 	@Override
 	protected void injected_onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify, CallbackInfo ci) {
 		if (state.isOf(Blocks.NETHER_PORTAL) &&

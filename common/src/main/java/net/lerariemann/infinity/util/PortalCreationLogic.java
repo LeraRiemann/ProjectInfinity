@@ -173,17 +173,28 @@ public interface PortalCreationLogic {
             }
 
             /* Set the portal's open status making it usable. */
-            modifyPortalRecursive(world, pos, new PortalModifierUnion()
-                    .addModifier(be -> be.setOpen(true))
-                    .addModifier(BlockEntity::markDirty));
+            modifyPortalRecursive(world, pos, be -> {
+                be.setOpen(true);
+                be.markDirty();
+            });
             runAfterEffects(world, pos, bl, true);
         }
         return bl;
     }
 
     /**
+     * Updates this and all neighbouring portal blocks with a new dimension and open status.
+     */
+    static void modifyPortalRecursive(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
+        modifyPortalRecursive(world, pos, forInitialSetupping(world, pos, id, open));
+    }
+
+    /**
      * Recursively creates a queue of neighbouring portal blocks and for each of them executes an action.
      */
+    static void modifyPortalRecursive(ServerWorld world, BlockPos pos, Consumer<InfinityPortalBlockEntity> consumer) {
+        modifyPortalRecursive(world, pos, new PortalModifier(consumer));
+    }
     static void modifyPortalRecursive(ServerWorld world, BlockPos pos, BiConsumer<World, BlockPos> modifier) {
         Set<BlockPos> set = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
@@ -225,13 +236,6 @@ public interface PortalCreationLogic {
                 .addModifier(npbe -> npbe.setColor(applier.apply(npbe.getPos())))
                 .addModifier(npbe -> npbe.setOpen(open))
                 .addModifier(BlockEntity::markDirty);
-    }
-
-    /**
-     * Updates this and all neighbouring portal blocks with a new dimension and open status.
-     */
-    static void modifyPortalRecursive(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
-        modifyPortalRecursive(world, pos, forInitialSetupping(world, pos, id, open));
     }
 
     /**

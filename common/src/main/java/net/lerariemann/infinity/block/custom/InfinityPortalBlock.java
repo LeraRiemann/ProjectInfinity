@@ -229,8 +229,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     public static void tryUpdateOpenStatus(InfinityPortalBlockEntity npbe, ServerWorld worldFrom,
                                            ServerWorld worldTo, BlockPos pos) {
         if (!npbe.isOpen() ^ worldTo == null) {
-            PortalCreationLogic.modifyPortalRecursive(worldFrom, pos,
-                    new PortalCreationLogic.PortalModifier(e -> e.setOpen(!npbe.isOpen())));
+            PortalCreationLogic.modifyPortalRecursive(worldFrom, pos, e -> e.setOpen(!npbe.isOpen()));
         }
     }
 
@@ -336,16 +335,6 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     }
 
     /**
-     * Filter for portal blocks except infinity portals of other destinations.
-     */
-    public static boolean isValidDestinationWeak(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
-        if (posTo == null || !InfinityMethods.dimExists(worldTo)) return false;
-        return (worldTo.getBlockState(posTo).isOf(Blocks.NETHER_PORTAL))
-                || (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe
-                && ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString()));
-    }
-
-    /**
      * Filter for infinity portals of the correct destination.
      */
     public static boolean isValidDestinationStrong(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
@@ -413,25 +402,12 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         PointOfInterestStorage poiStorage = worldTo.getPointOfInterestStorage();
         poiStorage.preloadChunks(worldTo, originOfTesting, radiusOfTesting);
 
-        Set<BlockPos> allPortalsInRange = poiStorage.getInSquare(poiType ->
+        return poiStorage.getInSquare(poiType ->
                                 poiType.matchesKey(PointOfInterestTypes.NETHER_PORTAL) || poiType.matchesKey(ModPoi.NEITHER_PORTAL_KEY),
                         originOfTesting, radiusOfTesting, PointOfInterestStorage.OccupationStatus.ANY)
                 .map(PointOfInterest::getPos)
                 .filter(wbTo::contains)
-                .collect(Collectors.toSet());
-
-        Set<BlockPos> matchingPortalsInRange = allPortalsInRange
-                .stream()
                 .filter(pos -> isValidDestinationStrong(worldFrom, worldTo, pos))
-                .collect(Collectors.toSet()); //try a stronger selector first (only infinity portals of matching dimension)
-
-        if (matchingPortalsInRange.isEmpty())
-            matchingPortalsInRange = allPortalsInRange
-                    .stream()
-                    .filter(pos -> isValidDestinationWeak(worldFrom, worldTo, pos))
-                    .collect(Collectors.toSet()); //try a weaker selector (which also accepts nether portals)
-
-        return matchingPortalsInRange.stream()
                 .min(Comparator.comparingDouble(posTo -> posTo.getSquaredDistance(originOfTesting)));
     }
 
@@ -446,12 +422,12 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             if (ipbe.isConnectedBothSides()) return; //don't resync what's already synced
         }
         else {
-            otherSideModifier = PortalCreationLogic.forInitialSetupping(worldTo, posTo, idFrom, true); //make it an infinity portal while you're at it
+            otherSideModifier = PortalCreationLogic.forInitialSetupping(worldTo, posTo, idFrom, true);
+            //make it an infinity portal while you're at it
         }
 
         otherSideModifier.addModifier(ipbe1 -> ipbe1.setBlockPos(posFrom));
-        PortalCreationLogic.modifyPortalRecursive(worldFrom, posFrom,
-                new PortalCreationLogic.PortalModifier(ipbe -> ipbe.setBlockPos(posTo)));
+        PortalCreationLogic.modifyPortalRecursive(worldFrom, posFrom, ipbe -> ipbe.setBlockPos(posTo));
         PortalCreationLogic.modifyPortalRecursive(worldTo, posTo, otherSideModifier);
     }
 }

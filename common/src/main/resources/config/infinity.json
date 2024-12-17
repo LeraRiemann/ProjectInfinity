@@ -2,7 +2,6 @@
   "infinity_version": 2003008,
   "gameRules": {
     "runtimeGenerationEnabled": true,
-    "returnPortalsEnabled": true,
     "longArithmeticEnabled": false,
     "forceSolidSurface": false,
     "chaosMobsEnabled": true,

@@ -1,21 +1,16 @@
 package net.lerariemann.infinity.mixin;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.PortalCreationLogic;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.lerariemann.infinity.var.ModPayloads;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -57,25 +52,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Inject(method="findRespawnPosition", at = @At("HEAD"), cancellable = true)
     private static void injected(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> cir) {
         if (((Timebombable)world).infinity$isTimebombed()) cir.setReturnValue(Optional.empty());
-    }
-
-    /* When the player is using the Infinity portal, this modifies the portal on the other side if needed. */
-    @Inject(method = "teleportTo",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V")
-    )
-    private void injected2(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir, @Local(ordinal = 0) ServerWorld serverWorld, @Local RegistryKey<World> registryKey) {
-        if (InfinityMod.provider.rule("returnPortalsEnabled") &&
-                (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
-            BlockPos pos = BlockPos.ofFloored(teleportTarget.pos());
-            ServerWorld destination = teleportTarget.world();
-            for (BlockPos pos2: new BlockPos[] {pos, pos.add(1, 0, 0), pos.add(0, 0, 1),
-                    pos.add(-1, 0, 0), pos.add(0, 0, -1)}) if (destination.getBlockState(pos2).isOf(Blocks.NETHER_PORTAL)) {
-                Identifier dimensionName = registryKey.getValue();
-
-                PortalCreationLogic.modifyPortalRecursive(destination, pos2, dimensionName, true);
-                break;
-            }
-        }
     }
 
     @Inject(method = "teleportTo",
