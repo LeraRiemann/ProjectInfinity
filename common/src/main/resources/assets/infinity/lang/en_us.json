@@ -1,4 +1,7 @@
 {
+  "modmenu.nameTranslation.infinity": "Infinite Dimensions",
+  "modmenu.descriptionTranslation.infinity": "Inspired by 2020's April Fools' 20w14infinite Snapshot, this mod brings endless randomly generated dimensions into Minecraft.",
+  "modmenu.summaryTranslation.infinity": "Adds endless randomly generated dimensions, inspired by 20w14infinite.",
   "advancements.infinity.multiverse_start.title": "Welcome to the Multiverse",
   "advancements.infinity.multiverse_start.description": "Throw a written book into a Nether Portal",
   "advancements.infinity.library.title": "Tomes on Tomes",
@@ -132,7 +135,9 @@
   "config.infinity.gameRules.iridescenceInitialDuration.description": "How long it takes for the visual aspects of the iridescent effect to start, in minutes. Set to 0 to start them immediately.",
   "config.infinity.gameRules.iridescenceCooldownDuration": "Iridescence - cooldown duration",
   "config.infinity.gameRules.iridescenceCooldownDuration.description": "Duration of the iridescent cooldown effect in minutes. The full cooldown is twice this, the second half limiting the player to level I of the effect. Set to 0 to disable the cooldown.",
- "config.infinity.gameRules.runtimeGenerationEnabled": "Enable Runtime Generation",
+  "config.infinity.gameRules.randomizeAllNetherPortals": "Randomize All Nether Portals",
+  "config.infinity.gameRules.randomizeAllNetherPortals.description": "If enabled, this will fully replace Nether Portals with randomized Infinity Portals, for use in challenge runs.",
+  "config.infinity.gameRules.runtimeGenerationEnabled": "Enable Runtime Generation",
   "config.infinity.gameRules.runtimeGenerationEnabled.description": "If disabled, registration of dimensions and features in runtime will no longer occur, meaning you need to quit to title and enter the world again to access dimensions after tossing the book. Included for compatibility reasons.",
   "config.infinity.gameRules.chaosMobsEnabled": "Enable Chaos Mobs",
   "config.infinity.gameRules.chaosMobsEnabled.description": "If disabled, this mod's Chaos Mobs will no longer spawn, both in dimensions and inside your portals.",
