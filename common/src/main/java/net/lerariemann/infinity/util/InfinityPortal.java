@@ -42,33 +42,34 @@ public class InfinityPortal {
     @Nullable BlockLocating.Rectangle portalTo;
     boolean unableToCreatePortalFlag = false;
 
-    /** A portal should be open if and only if it has a valid destination. These functions are here to ensure it */
-    public static void tryUpdateOpenStatus(InfinityPortalBlockEntity ipbe, ServerWorld worldFrom, BlockPos posFrom,
-                                           MinecraftServer server) {
-        ServerWorld worldTo = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, ipbe.getDimension()));
-        tryUpdateOpenStatus(ipbe, worldFrom, posFrom, worldTo);
-    }
-    public static void tryUpdateOpenStatus(InfinityPortalBlockEntity ipbe, ServerWorld worldFrom, BlockPos posFrom,
-                                    ServerWorld worldTo) {
-        if (!ipbe.isOpen() ^ worldTo == null) {
-            InfinityPortalCreation.modifyPortalRecursive(worldFrom, posFrom, e -> e.setOpen(!ipbe.isOpen()));
-        }
-    }
-
     public InfinityPortal(InfinityPortalBlockEntity ipbe, ServerWorld worldFrom, BlockPos startingPos) {
         this.ipbe = ipbe;
         this.worldFrom = worldFrom;
         portalFrom = getRect(worldFrom, startingPos);
         posFrom = lowerCenterPos(portalFrom, worldFrom);
-        tryUpdateOpenStatus(ipbe, worldFrom, startingPos, worldFrom.getServer());
+        worldTo = worldFrom.getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD, ipbe.getDimension()));
+        tryUpdateOpenStatus(ipbe, worldFrom, startingPos, worldTo);
 
-        if (portalWorks()) {
+        if (portalShouldWork()) {
             BlockPos targetPos = ipbe.getOtherSidePos();
             if (isValidDestination(worldFrom, worldTo, targetPos)) {
                 posTo = targetPos;
                 scanExistingTarget();
             }
             scanNewTeleportTarget();
+        }
+    }
+
+    /** A portal should be marked as "open" if and only if it has a non-null destination dimension. These functions are here to ensure it */
+    public static void tryUpdateOpenStatus(InfinityPortalBlockEntity ipbe, ServerWorld worldFrom, BlockPos posFrom,
+                                           MinecraftServer server) {
+        ServerWorld worldTo = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, ipbe.getDimension()));
+        tryUpdateOpenStatus(ipbe, worldFrom, posFrom, worldTo);
+    }
+    public static void tryUpdateOpenStatus(InfinityPortalBlockEntity ipbe, ServerWorld worldFrom, BlockPos posFrom,
+                                           ServerWorld worldTo) {
+        if (!ipbe.isOpen() ^ worldTo == null) {
+            InfinityPortalCreation.modifyPortalRecursive(worldFrom, posFrom, e -> e.setOpen(!ipbe.isOpen()));
         }
     }
 
@@ -94,7 +95,7 @@ public class InfinityPortal {
 
     /** Finding where to teleport stuff. The constructor ensures all scanning is already done by this point */
     public TeleportTarget getTeleportTarget(Entity entity) {
-        if (portalWorks() && portalTo != null && worldTo != null) {
+        if (portalShouldWork() && portalTo != null && worldTo != null) {
             return NetherPortalBlock.getExitPortalTarget(entity, posTo, portalTo, worldTo,
                     TeleportTarget.SEND_TRAVEL_THROUGH_PORTAL_PACKET.then(entityx -> entityx.addPortalChunkTicketAt(posTo)));
         }
@@ -105,7 +106,7 @@ public class InfinityPortal {
         return emptyTarget(entity);
     }
 
-    public boolean portalWorks() {
+    public boolean portalShouldWork() {
         return (InfinityMethods.dimExists(worldTo) //dimension exists and is not timebombed
                 && ipbe.isOpen() //the portal is not closed
                 && !worldTo.getRegistryKey().equals(worldFrom.getRegistryKey())); //the portal does not lead back to its own dimension
