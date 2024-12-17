@@ -2,6 +2,7 @@ package net.lerariemann.infinity.iridescence;
 
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
@@ -62,14 +63,12 @@ public class Iridescence {
             default -> false;
         };
     }
-
     public static boolean isIridescence(FluidState st) {
         return st.isOf(PlatformMethods.getIridescenceStill().get()) || st.isOf(PlatformMethods.getIridescenceFlowing().get());
     }
     public static boolean isIridescence(BlockView world, BlockPos pos) {
         return Iridescence.isIridescence(world.getFluidState(pos));
     }
-
     public static boolean isIridescentItem(ItemStack stack) {
         return stack.isIn(ModItems.IRIDESCENT_TAG);
     }
@@ -141,6 +140,10 @@ public class Iridescence {
     public static boolean shouldReturn(int duration, int amplifier) {
         return (amplifier > 0) && (duration == ticksInHour);
     }
+    public static boolean shouldRequestShaderLoad(int duration, int amplifier) {
+        int time_passed = getEffectLength(amplifier) - getInitialPhaseLength() - duration;
+        return (time_passed == 0);
+    }
 
     public static void loadShader(ServerPlayerEntity player) {
         ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(player.getServerWorld(), true));
@@ -152,7 +155,8 @@ public class Iridescence {
     public static boolean shouldApplyShader(@Nullable PlayerEntity player) {
         if (player == null) return false;
         StatusEffectInstance effect = player.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value());
-        return (effect != null && effect.getDuration() > 20);
+        return (effect != null && effect.getDuration() > 20
+                && getPhase(effect.getDuration(), effect.getAmplifier()) != Phase.INITIAL);
     }
 
     public static void tryBeginJourney(LivingEntity entity, int amplifier) {
@@ -161,8 +165,10 @@ public class Iridescence {
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(),
                     Iridescence.getEffectLength(amplifier1), amplifier1));
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN.value(),
-                    Iridescence.getCooldownDuration(), amplifier1 > 0 ? 1 : 0, false, false, false));
+            int cooldownDuration = Iridescence.getCooldownDuration();
+            if (cooldownDuration > 0)
+                entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN.value(),
+                        cooldownDuration, amplifier1 > 0 ? 1 : 0, false, false, false));
             if (entity instanceof ServerPlayerEntity player) {
                 player.increaseStat(ModStats.IRIDESCENCE, 1);
                 ModCriteria.IRIDESCENT.trigger(player);
@@ -177,9 +183,9 @@ public class Iridescence {
 
     public static final Map<EntityType<? extends MobEntity>, RegistrySupplier<? extends EntityType<? extends MobEntity>>> convertibles =
             Map.ofEntries(Map.entry(EntityType.SKELETON, ModEntities.CHAOS_SKELETON),
-            Map.entry(EntityType.CREEPER, ModEntities.CHAOS_CREEPER),
-            Map.entry(EntityType.SLIME, ModEntities.CHAOS_SLIME)
-    );
+                    Map.entry(EntityType.CREEPER, ModEntities.CHAOS_CREEPER),
+                    Map.entry(EntityType.SLIME, ModEntities.CHAOS_SLIME)
+            );
 
     public static boolean isConvertible(MobEntity entity) {
         return (convertibles.containsKey(entity.getType()) || (entity instanceof ChaosPawn pawn && pawn.isChess()));

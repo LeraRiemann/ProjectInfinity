@@ -470,8 +470,8 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         Identifier idFrom = worldFrom.getRegistryKey().getValue();
 
         if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe) {
-            if (ipbe.getDimension() != idFrom) return;
-            if (ipbe.isConnectedBothSides()) return; //don't resync what's already synced
+            if (!Objects.equals(ipbe.getDimension().toString(), idFrom.toString())) return false; //fyi, this should never happen
+            if (ipbe.isConnectedBothSides()) return false; //don't resync what's already synced
         }
         else {
             otherSideModifier = PortalCreationLogic.forInitialSetupping(worldTo, posTo, idFrom, true); //make it an infinity portal while you're at it
