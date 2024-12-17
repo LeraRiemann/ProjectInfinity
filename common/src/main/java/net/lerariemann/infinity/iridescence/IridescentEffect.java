@@ -2,8 +2,9 @@ package net.lerariemann.infinity.iridescence;
 
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
+import net.minecraft.entity.effect.InstantStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.mob.Angerable;
@@ -48,7 +49,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             if (Iridescence.shouldWarp(duration, amplifier)) {
                 player.setInvulnerable(true);
                 Identifier id = Iridescence.getIdForWarp(player);
-                WarpLogic.requestWarpWithTimer(player, id, 10, false);
+                WarpLogic.requestWarp(player, id, false);
             }
             if (Iridescence.shouldReturn(duration, amplifier)) {
                 player.setInvulnerable(false);

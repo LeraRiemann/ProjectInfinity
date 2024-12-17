@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
 import net.lerariemann.infinity.iridescence.Iridescence;
-import net.lerariemann.infinity.iridescence.ModStatusEffects;
+import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;

@@ -3,11 +3,12 @@ package net.lerariemann.infinity.util;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import dev.architectury.platform.Platform;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
 import java.nio.charset.StandardCharsets;
 
@@ -47,12 +49,11 @@ public interface InfinityMethods {
     static boolean isInfinity(World w) {
         return isInfinity(w.getRegistryKey());
     }
-
-    /**
-     * Checks if a dimension is an Infinite Dimension.
-     */
     static boolean isInfinity(RegistryKey<World> key) {
         return key.getValue().getNamespace().equals(InfinityMod.MOD_ID);
+    }
+    static boolean isBiomeInfinity(WorldAccess world, BlockPos pos) {
+        return world.getBiome(pos).getIdAsString().contains("infinity");
     }
 
     /**

@@ -6,15 +6,14 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.PortalCreationLogic;
+import net.lerariemann.infinity.util.InfinityPortal;
+import net.lerariemann.infinity.util.PortalCreator;
 import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.util.WarpLogic;
-import net.lerariemann.infinity.var.ModPoi;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -38,31 +37,18 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.*;
-import net.minecraft.world.border.WorldBorder;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.dimension.NetherPortal;
-import net.minecraft.world.poi.PointOfInterest;
-import net.minecraft.world.poi.PointOfInterestStorage;
-import net.minecraft.world.poi.PointOfInterestTypes;
-import net.minecraft.state.property.Properties;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
-    private static final Random RANDOM = new Random();
     public static final BooleanProperty BOOP = BooleanProperty.of("boop");
 
     public InfinityPortalBlock(Settings settings) {
@@ -78,7 +64,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
 
     @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new InfinityPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
+        return new InfinityPortalBlockEntity(pos, state, World.OVERWORLD.getValue());
     }
 
     /**
@@ -98,7 +84,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 RandomProvider prov = InfinityMod.provider;
                 Optional<Item> key = prov.getPortalKeyAsItem();
                 if (key.isEmpty()) {
-                    PortalCreationLogic.openWithStatIncrease(player, s, serverWorld, pos);
+                    PortalCreator.openWithStatIncrease(player, s, world, pos);
                 }
                 /* Otherwise check if we're using the correct key. If so, open. */
                 else {
@@ -107,7 +93,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                         if (!player.getAbilities().creativeMode && prov.rule("consumePortalKey")) {
                             usedKey.decrement(1); // Consume the key if needed
                         }
-                        PortalCreationLogic.openWithStatIncrease(player, s, serverWorld, pos);
+                        PortalCreator.openWithStatIncrease(player, s, world, pos);
                     }
                 }
             }
@@ -193,11 +179,11 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                         putKeyComponents(e.getStack().getItem(), npbe.getDimension()));
                 InfinityMod.provider.getPortalKeyAsItem().ifPresent(item -> {
                     if (e.getStack().isOf(item)) {
-                        tryUpdateOpenStatus(npbe, world, server, pos);
+                        InfinityPortal.tryUpdateOpenStatus(npbe, world, pos, server);
                         if (npbe.isOpen()) return;
                         PlayerEntity nearestPlayer =
                                 world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
-                        PortalCreationLogic.openWithStatIncrease(nearestPlayer, server, world, pos);
+                        PortalCreator.openWithStatIncrease(nearestPlayer, server, world, pos);
                         e.getStack().decrement(1);
                         e.setVelocity(e.getVelocity().multiply(-1));
                         e.setPortalCooldown(200);
@@ -209,12 +195,12 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                     && InfinityMod.provider.isPortalKeyBlank()) {
                 ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
                 if ((world1 == null) || !npbe.isOpen())
-                    PortalCreationLogic.openWithStatIncrease(player, server, world, pos);
+                    PortalCreator.openWithStatIncrease(player, server, world, pos);
                 else {
                     Timebombable tw = (Timebombable)world1;
                     if (tw.infinity$isTimebombed() && tw.infinity$tryRestore()) {
                         new RandomDimension(npbe.getDimension(), server);
-                        PortalCreationLogic.openWithStatIncrease(player, server, world, pos);
+                        PortalCreator.openWithStatIncrease(player, server, world, pos);
                     }
                 }
             }

@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
-import net.lerariemann.infinity.block.entity.ModBlockEntities;
+import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;

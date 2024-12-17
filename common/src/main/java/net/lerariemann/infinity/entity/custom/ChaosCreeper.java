@@ -2,8 +2,8 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
-import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.registry.core.ModEntities;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;

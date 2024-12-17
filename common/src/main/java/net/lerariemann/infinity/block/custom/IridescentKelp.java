@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.block.custom;
 
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.minecraft.block.*;
 import net.minecraft.fluid.FluidState;

@@ -1,8 +1,9 @@
 package net.lerariemann.infinity.block.entity;
 
-import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.registry.core.ModBlockEntities;
+import net.lerariemann.infinity.util.InfinityPortal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -49,8 +50,8 @@ public class InfinityPortalBlockEntity extends BlockEntity {
         };
     }
 
-    public InfinityPortalBlockEntity(BlockPos pos, BlockState state, int i) {
-        this(pos, state, i, InfinityMethods.getDimId(i));
+    public InfinityPortalBlockEntity(BlockPos pos, BlockState state, Identifier id) {
+        this(pos, state, (int)InfinityMethods.getNumericFromId(id), id);
     }
 
     public InfinityPortalBlockEntity(BlockPos pos, BlockState state, int i, Identifier id) {
@@ -100,7 +101,7 @@ public class InfinityPortalBlockEntity extends BlockEntity {
     public boolean isConnected() {
         if (!isOpen()) return false;
         if (getWorld() instanceof ServerWorld worldFrom && InfinityMethods.dimExists(worldFrom)) {
-            return InfinityPortalBlock.isValidDestinationStrong(worldFrom, getDimensionAsWorld(), getOtherSidePos());
+            return InfinityPortal.isValidDestination(worldFrom, getDimensionAsWorld(), getOtherSidePos());
         }
         return false;
     }

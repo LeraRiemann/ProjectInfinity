@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.iridescence;
 
 import dev.architectury.core.block.ArchitecturyLiquidBlock;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;

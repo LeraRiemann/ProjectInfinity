@@ -2,9 +2,8 @@ package net.lerariemann.infinity.fluids.forge;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.fluids.forge.FluidTypes;
-import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.registry.core.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraftforge.fluids.ForgeFlowingFluid;

@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.custom.BiomeBottle;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BlockItem;
@@ -29,11 +29,11 @@ public class BiomeBottleItem extends BlockItem {
             tooltip.add(Text.translatable(Util.createTranslationKey("biome", biome)).formatted(Formatting.GRAY));
         }
         else {
-            MutableText mutableText = Text.literal("Empty");
+            MutableText mutableText = Text.translatable("caption.infinity.biomebottle.empty");
             tooltip.add(mutableText.formatted(Formatting.GRAY));
         }
-        if (context.isAdvanced()) {
-            tooltip.add(Text.literal("Charge: " + BiomeBottle.getCharge(stack)).formatted(Formatting.GRAY));
+        if (type.isAdvanced()) {
+            tooltip.add(Text.translatable("caption.infinity.biomebottle.charge", BiomeBottle.getCharge(stack)).formatted(Formatting.GRAY));
         }
     }
 }

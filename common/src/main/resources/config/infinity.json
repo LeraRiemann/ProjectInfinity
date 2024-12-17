@@ -2,12 +2,12 @@
   "infinity_version": 2003008,
   "gameRules": {
     "runtimeGenerationEnabled": true,
-    "returnPortalsEnabled": true,
     "longArithmeticEnabled": false,
     "forceSolidSurface": false,
     "chaosMobsEnabled": true,
     "consumePortalKey": true,
     "disabledUntilReview": true,
+    "randomizeAllNetherPortals": false,
     "maxBiomeCount": 6,
     "maxDimensionScale": 0,
     "iridescenceInitialDuration": 1,

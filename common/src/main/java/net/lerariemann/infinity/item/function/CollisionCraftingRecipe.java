@@ -1,7 +1,8 @@
 package net.lerariemann.infinity.item.function;
 
-import com.google.gson.JsonObject;
-import net.minecraft.inventory.Inventory;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;

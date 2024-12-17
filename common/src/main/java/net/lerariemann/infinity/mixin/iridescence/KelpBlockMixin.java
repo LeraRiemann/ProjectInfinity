@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.AbstractPlantStemBlock;
 import net.minecraft.block.BlockState;
@@ -19,6 +19,7 @@ public abstract class KelpBlockMixin extends AbstractPlantStemBlock {
         super(settings, growthDirection, outlineShape, tickWater, growthChance);
     }
 
+    /* A hook to correctly place kelp in iridescence (see IridescentKelp) */
     @Inject(method="getPlacementState", at= @At(value = "HEAD"), cancellable = true)
     void inj(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
         if (Iridescence.isIridescence(ctx.getWorld(), ctx.getBlockPos())) {

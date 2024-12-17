@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
-import net.lerariemann.infinity.iridescence.ModStatusEffects;
+import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -19,6 +19,7 @@ public abstract class StatusEffectInstanceMixin {
 
     @Shadow private int amplifier;
 
+    /* Hook for unconventional status effect ticking logic */
     @Inject(method = "update", at = @At(target = "Lnet/minecraft/entity/effect/StatusEffectInstance;updateDuration()I", value = "INVOKE"))
     void inj(LivingEntity entity, Runnable overwriteCallback, CallbackInfoReturnable<Boolean> cir) {
         if (getEffectType() instanceof ModStatusEffects.SpecialEffect eff) {

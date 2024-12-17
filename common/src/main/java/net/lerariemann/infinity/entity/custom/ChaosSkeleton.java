@@ -1,8 +1,9 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.registry.core.ModEntities;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityData;

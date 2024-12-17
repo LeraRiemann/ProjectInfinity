@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.item;
 
-import net.lerariemann.infinity.item.function.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;

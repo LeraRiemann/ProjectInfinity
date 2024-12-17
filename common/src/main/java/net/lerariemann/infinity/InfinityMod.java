@@ -2,17 +2,10 @@ package net.lerariemann.infinity;
 
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.dimensions.RandomText;
-import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.features.ModFeatures;
-import net.lerariemann.infinity.iridescence.ModStatusEffects;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
-import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.options.InfinityOptions;
-import net.lerariemann.infinity.structure.ModStructureTypes;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.registry.core.*;
+import net.lerariemann.infinity.registry.var.*;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.var.*;
 import net.lerariemann.infinity.util.ConfigManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
@@ -21,8 +14,6 @@ import net.minecraft.util.WorldSavePath;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.block.entity.ModBlockEntities;
 
 import java.nio.file.Path;
 

@@ -5,7 +5,7 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.item.function.CollisionCraftingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 

@@ -3,12 +3,11 @@ package net.lerariemann.infinity.fabric;
 import dev.architectury.platform.Platform;
 import net.fabricmc.api.ModInitializer;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.compat.CreateCompat;
-import net.lerariemann.infinity.block.ModBlocks;
-import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.registry.core.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
-import net.lerariemann.infinity.var.ModStats;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.var.ModStats;
 
 public final class InfinityModFabric implements ModInitializer {
     @Override

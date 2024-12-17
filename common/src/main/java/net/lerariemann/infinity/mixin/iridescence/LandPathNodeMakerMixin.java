@@ -28,6 +28,7 @@ public abstract class LandPathNodeMakerMixin extends PathNodeMaker {
         }
     }
 
+    /* This allows other mobs pathfind when swimming in iridescence */
     @ModifyExpressionValue(method= "getStart()Lnet/minecraft/entity/ai/pathing/PathNode;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
     boolean inj(boolean original, @Local BlockState blockState) {

@@ -1,10 +1,12 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.block.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
+import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
+import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
-import net.lerariemann.infinity.var.ModCriteria;
+import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

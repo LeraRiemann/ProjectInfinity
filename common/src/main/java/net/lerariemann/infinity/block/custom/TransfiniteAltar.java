@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
-import net.lerariemann.infinity.block.entity.ModBlockEntities;
+import com.mojang.serialization.MapCodec;
+import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
