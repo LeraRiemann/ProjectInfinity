@@ -12,6 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
 import org.joml.Vector3f;
 
 import java.io.File;
@@ -22,6 +23,8 @@ public class InfinityOptions {
     public PitchShifter shifter;
     public EffectGiver effect;
     public IridescentMap iridMap;
+
+    public static NbtCompound defaultShader = new NbtCompound();
 
     public InfinityOptions(NbtCompound data) {
         this.data = data;
@@ -91,7 +94,8 @@ public class InfinityOptions {
     }
 
     public NbtCompound getShader() {
-        return test(data, "shader", new NbtCompound());
+        LogManager.getLogger().info(defaultShader);
+        return test(data, "shader", defaultShader);
     }
 
     public double getTimeScale() {

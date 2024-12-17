@@ -1,0 +1,17 @@
+{
+  "passes": [
+    {
+      "intarget": "minecraft:main",
+      "name": "blit",
+      "outtarget": "swap"
+    },
+    {
+      "intarget": "swap",
+      "name": "blit",
+      "outtarget": "minecraft:main"
+    }
+  ],
+  "targets": [
+    "swap"
+  ]
+}

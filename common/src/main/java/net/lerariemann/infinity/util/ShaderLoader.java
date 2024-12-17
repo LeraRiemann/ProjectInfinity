@@ -2,12 +2,16 @@ package net.lerariemann.infinity.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.GameRendererAccess;
 import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.var.ModPayloads;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.resource.ResourcePackManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,14 +25,17 @@ public interface ShaderLoader {
     }
 
     static void reloadShaders(MinecraftClient client, boolean bl) {
+        reloadShaders(client, bl, Iridescence.shouldApplyShader(client.player));
+    }
+
+    static void reloadShaders(MinecraftClient client, boolean bl, boolean iridescence) {
         try {
             load(client);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Identifier iridShader = Iridescence.shouldApplyShader(client.player);
-        if (iridShader != null) {
-            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(iridShader);
+        if (iridescence) {
+            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMod.getId("shaders/post/iridescence.json"));
             return;
         }
         if(bl && shaderDir(client).resolve(FILENAME).toFile().exists()) {
@@ -36,6 +43,11 @@ public interface ShaderLoader {
             return;
         }
         client.gameRenderer.disablePostProcessor();
+    }
+
+    static void sendReloadPacket(ServerPlayerEntity player, ServerWorld world) {
+        ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD,
+                ModPayloads.buildPacket(world, player));
     }
 
 

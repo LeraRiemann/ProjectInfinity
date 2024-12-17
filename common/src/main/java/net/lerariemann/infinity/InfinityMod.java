@@ -1,8 +1,5 @@
 package net.lerariemann.infinity;
 
-import dev.architectury.platform.Platform;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.dimensions.RandomText;
 import net.lerariemann.infinity.entity.ModEntities;
@@ -10,7 +7,9 @@ import net.lerariemann.infinity.features.ModFeatures;
 import net.lerariemann.infinity.iridescence.ModStatusEffects;
 import net.lerariemann.infinity.item.function.ModItemFunctions;
 import net.lerariemann.infinity.item.ModItems;
+import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.structure.ModStructureTypes;
+import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.var.*;
@@ -46,9 +45,6 @@ public class InfinityMod {
 	public static Identifier getId(String value){
 		return Identifier.of(MOD_ID, value);
 	}
-	public static Identifier getDimId(long value){
-		return getId("generated_" + value);
-	}
 
 	public static void init() {
 		rootConfigPath = PlatformMethods.getRootConfigPath();
@@ -73,6 +69,7 @@ public class InfinityMod {
 		ModCriteria.registerCriteria();
 		RandomText.walkPaths();
 		provider = new RandomProvider("config/" + InfinityMod.MOD_ID + "/");
+		InfinityOptions.defaultShader = CommonIO.read(InfinityMod.utilPath + "/default_shader.json");
 	}
 
 	public static boolean isInfinity(World w) {

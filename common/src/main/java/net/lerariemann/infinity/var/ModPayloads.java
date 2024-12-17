@@ -3,6 +3,7 @@ package net.lerariemann.infinity.var;
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
@@ -14,6 +15,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 
@@ -24,28 +26,35 @@ import java.util.List;
 import static net.lerariemann.infinity.InfinityMod.getId;
 
 public class ModPayloads {
-
     public static final Identifier WORLD_ADD = getId("reload_worlds");
     public static final Identifier SHADER_RELOAD = getId("reload_shader");
     public static final Identifier STARS_RELOAD = getId("reload_stars");
 
-    public static PacketByteBuf buildPacket(ServerWorld destination) {
+    public static PacketByteBuf buildPacket(ServerWorld destination, ServerPlayerEntity player) {
+        return buildPacket(destination, Iridescence.shouldApplyShader(player));
+    }
+    public static PacketByteBuf buildPacket(ServerWorld destination, boolean bl) {
         PacketByteBuf buf = PlatformMethods.createPacketByteBufs();
+        buf.writeBoolean(bl);
         if (destination == null) buf.writeNbt(new NbtCompound());
         else buf.writeNbt(((InfinityOptionsAccess)(destination)).infinity$getOptions().data());
         return buf;
     }
 
     public static void receiveShader(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        if (buf.readBoolean()) {
+            client.execute(() -> ShaderLoader.reloadShaders(client, true, true));
+            return;
+        }
         InfinityOptions options = new InfinityOptions(buf.readNbt());
         ((InfinityOptionsAccess)client).infinity$setOptions(options);
         NbtCompound shader = options.getShader();
         boolean bl = shader.isEmpty();
-        if (bl) client.execute(() -> ShaderLoader.reloadShaders(client, false));
+        if (bl) client.execute(() -> ShaderLoader.reloadShaders(client, false, false));
         else {
             client.execute(() -> {
                 CommonIO.write(shader, ShaderLoader.shaderDir(client), ShaderLoader.FILENAME);
-                ShaderLoader.reloadShaders(client, true);
+                ShaderLoader.reloadShaders(client, true,false);
                 if (!resourcesReloaded) {
                     client.reloadResources();
                     resourcesReloaded = true;

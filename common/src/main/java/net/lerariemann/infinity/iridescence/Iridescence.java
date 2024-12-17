@@ -2,7 +2,6 @@ package net.lerariemann.infinity.iridescence;
 
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
@@ -13,7 +12,6 @@ import net.lerariemann.infinity.var.ModCriteria;
 import net.lerariemann.infinity.var.ModPayloads;
 import net.lerariemann.infinity.var.ModStats;
 import net.minecraft.block.Block;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -142,22 +140,17 @@ public class Iridescence {
         return (amplifier > 0) && (duration == ticksInHour);
     }
 
-    public static boolean shouldUpdateShader(int duration, int amplifier) {
-        return getEffectLength(amplifier) - duration == ticksInHour - 1;
+    public static void loadShader(ServerPlayerEntity player) {
+        ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(player.getServerWorld(), true));
+    }
+    public static void unloadShader(ServerPlayerEntity player) {
+        ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(player.getServerWorld(), false));
     }
 
-    public static void updateShader(ServerPlayerEntity player) {
-        ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD, ModPayloads.buildPacket(player.getServerWorld()));
-    }
-
-    @Nullable
-    public static Identifier shouldApplyShader(@Nullable ClientPlayerEntity player) {
-        if (player == null) return null;
+    public static boolean shouldApplyShader(@Nullable PlayerEntity player) {
+        if (player == null) return false;
         StatusEffectInstance effect = player.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value());
-        if (effect == null) return null;
-        return (getPhase(effect.getDuration(), effect.getAmplifier()) != Phase.INITIAL) ?
-                InfinityMod.getId("shaders/post/iridescence.json") :
-                null;
+        return (effect != null && effect.getDuration() > 20);
     }
 
     public static void tryBeginJourney(LivingEntity entity, int amplifier) {

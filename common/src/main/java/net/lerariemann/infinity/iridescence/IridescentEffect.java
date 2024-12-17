@@ -10,9 +10,6 @@ import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.ColorHelper;
-
-import java.awt.Color;
 
 public class IridescentEffect extends StatusEffect implements ModStatusEffects.SpecialEffect {
     public IridescentEffect(StatusEffectCategory category, int color) {
@@ -26,13 +23,13 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP.value());
         }
         if (entity instanceof Angerable ang) ang.stopAnger();
-        if (entity instanceof ServerPlayerEntity player) Iridescence.updateShader(player);
+        if (entity instanceof ServerPlayerEntity player) Iridescence.loadShader(player);
     }
 
     public void onRemoved(LivingEntity entity) {
         entity.setInvulnerable(false);
         if (entity instanceof ServerPlayerEntity player) {
-            Iridescence.updateShader(player);
+            Iridescence.unloadShader(player);
         } else if (entity instanceof ChaosPawn pawn) {
             if (pawn.getRandom().nextBoolean()) {
                 pawn.unchess();
@@ -54,9 +51,6 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             if (Iridescence.shouldReturn(duration, amplifier)) {
                 player.setInvulnerable(false);
                 WarpLogic.respawnAlive(player);
-            }
-            if (Iridescence.shouldUpdateShader(duration, amplifier)) {
-                Iridescence.updateShader(player);
             }
         }
     }
