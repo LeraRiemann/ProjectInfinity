@@ -54,10 +54,10 @@ public interface WarpLogic {
         MinecraftServer s = player.getServer();
         if (s == null) return;
         if (((MinecraftServerAccess)s).infinity$needsInvocation()) {
-            InfinityPortalCreation.onInvocationNeedDetected(player);
+            PortalCreator.onInvocationNeedDetected(player);
             return;
         }
-        boolean isThisANewDimension = InfinityPortalCreation.tryAddInfinityDimension(s, value);
+        boolean isThisANewDimension = PortalCreator.tryAddInfinityDimension(s, value);
         if (isThisANewDimension) { //the server needs a bit of time to process the dim-adding request, hence the 2-tick wait
             if (increaseStats) player.increaseStat(ModStats.DIMS_OPENED_STAT, 1);
             ((ServerPlayerEntityAccess)(player)).infinity$setWarpTimer(2, value);

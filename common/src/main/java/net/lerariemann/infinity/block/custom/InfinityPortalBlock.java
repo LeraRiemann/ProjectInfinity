@@ -9,7 +9,7 @@ import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.InfinityPortal;
-import net.lerariemann.infinity.util.InfinityPortalCreation;
+import net.lerariemann.infinity.util.PortalCreator;
 import net.lerariemann.infinity.util.RandomProvider;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
@@ -83,7 +83,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 RandomProvider prov = InfinityMod.provider;
                 Optional<Item> key = prov.getPortalKeyAsItem();
                 if (key.isEmpty()) {
-                    InfinityPortalCreation.openWithStatIncrease(player, s, world, pos);
+                    PortalCreator.openWithStatIncrease(player, s, world, pos);
                 }
 
                 /* Otherwise check if we're using the correct key. If so, open. */
@@ -93,7 +93,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                         if (!player.getAbilities().creativeMode && prov.rule("consumePortalKey")) {
                             usedKey.decrement(1); // Consume the key if needed
                         }
-                        InfinityPortalCreation.openWithStatIncrease(player, s, world, pos);
+                        PortalCreator.openWithStatIncrease(player, s, world, pos);
                     }
                 }
             }
@@ -185,7 +185,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                         if (npbe.isOpen()) return;
                         PlayerEntity nearestPlayer =
                                 world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
-                        InfinityPortalCreation.openWithStatIncrease(nearestPlayer, server, world, pos);
+                        PortalCreator.openWithStatIncrease(nearestPlayer, server, world, pos);
                         e.getStack().decrement(1);
                         e.setVelocity(e.getVelocity().multiply(-1));
                         e.setPortalCooldown(200);
@@ -197,12 +197,12 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                     && InfinityMod.provider.isPortalKeyBlank()) {
                 ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
                 if ((world1 == null) || !npbe.isOpen())
-                    InfinityPortalCreation.openWithStatIncrease(player, server, world, pos);
+                    PortalCreator.openWithStatIncrease(player, server, world, pos);
                 else {
                     Timebombable tw = (Timebombable)world1;
                     if (tw.infinity$isTimebombed() && tw.infinity$tryRestore()) {
                         new RandomDimension(npbe.getDimension(), server);
-                        InfinityPortalCreation.openWithStatIncrease(player, server, world, pos);
+                        PortalCreator.openWithStatIncrease(player, server, world, pos);
                     }
                 }
             }

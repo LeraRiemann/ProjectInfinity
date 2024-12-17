@@ -69,7 +69,7 @@ public class InfinityPortal {
     public static void tryUpdateOpenStatus(InfinityPortalBlockEntity ipbe, ServerWorld worldFrom, BlockPos posFrom,
                                            ServerWorld worldTo) {
         if (!ipbe.isOpen() ^ worldTo == null) {
-            InfinityPortalCreation.modifyPortalRecursive(worldFrom, posFrom, e -> e.setOpen(!ipbe.isOpen()));
+            PortalCreator.modifyPortalRecursive(worldFrom, posFrom, e -> e.setOpen(!ipbe.isOpen()));
         }
     }
 
@@ -210,7 +210,7 @@ public class InfinityPortal {
         if (worldTo == null || posTo == null
                 || !(worldTo.getBlockState(posTo).getBlock() instanceof NetherPortalBlock)) return;
 
-        InfinityPortalCreation.PortalModifierUnion otherSideModifier = new InfinityPortalCreation.PortalModifierUnion();
+        PortalCreator.PortalModifierUnion otherSideModifier = new PortalCreator.PortalModifierUnion();
         Identifier idFrom = worldFrom.getRegistryKey().getValue();
 
         if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbeTo) {
@@ -218,12 +218,12 @@ public class InfinityPortal {
             if (ipbeTo.isConnectedBothSides()) return; //don't resync what's already synced
         }
         else {
-            otherSideModifier = InfinityPortalCreation.forInitialSetupping(worldTo, posTo, idFrom, true);
+            otherSideModifier = PortalCreator.forInitialSetupping(worldTo, posTo, idFrom, true);
             //make it an infinity portal while you're at it
         }
 
         otherSideModifier.addModifier(ipbe1 -> ipbe1.setBlockPos(posFrom));
-        InfinityPortalCreation.modifyPortalRecursive(worldFrom, posFrom, ipbe -> ipbe.setBlockPos(posTo));
-        InfinityPortalCreation.modifyPortalRecursive(worldTo, posTo, otherSideModifier);
+        PortalCreator.modifyPortalRecursive(worldFrom, posFrom, ipbe -> ipbe.setBlockPos(posTo));
+        PortalCreator.modifyPortalRecursive(worldTo, posTo, otherSideModifier);
     }
 }

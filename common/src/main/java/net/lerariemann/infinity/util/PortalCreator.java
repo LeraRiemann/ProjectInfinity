@@ -47,7 +47,7 @@ import java.util.function.Consumer;
 
 import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPage;
 
-public interface InfinityPortalCreation {
+public interface PortalCreator {
     /**
      * Check if the item that is colliding with the Portal can be used to
      * transform it into an Infinity Portal.
