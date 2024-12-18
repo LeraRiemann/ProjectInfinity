@@ -53,6 +53,7 @@ public interface PortalCreator {
      * transform it into an Infinity Portal.
      */
     static void tryCreatePortalFromItem(ServerWorld world, BlockPos pos, ItemEntity entity) {
+        if (entity.isRemoved()) return;
         ItemStack itemStack = entity.getStack();
 
         /* Check if the item provided is a transfinite key. */
@@ -219,19 +220,20 @@ public interface PortalCreator {
         }
     }
 
-    static Consumer<BlockPos> infPortalSetupper(ServerWorld world, BlockPos pos) {
+    static Consumer<BlockPos> infPortalSetupper(ServerWorld world, BlockPos pos, boolean boop) {
         BlockState originalState = world.getBlockState(pos);
-        BlockState state = (originalState.isOf(ModBlocks.PORTAL)) ?
-                originalState.with(InfinityPortalBlock.BOOP, !originalState.get(InfinityPortalBlock.BOOP)) :
-                ModBlocks.PORTAL.get().getDefaultState()
-                        .with(NetherPortalBlock.AXIS, originalState.get(NetherPortalBlock.AXIS));
+        BlockState state = ModBlocks.PORTAL.get().getDefaultState()
+                .with(NetherPortalBlock.AXIS, originalState.get(NetherPortalBlock.AXIS))
+                .with(InfinityPortalBlock.BOOP, boop);
         return p -> world.setBlockState(p, state);
     }
 
     static PortalModifierUnion forInitialSetupping(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
+        BlockState bs = world.getBlockState(pos);
+        boolean boop = bs.contains(InfinityPortalBlock.BOOP) ? bs.get(InfinityPortalBlock.BOOP) : false;
         PortalColorApplier applier = PortalColorApplier.of(id, world.getServer());
         return new PortalModifierUnion()
-                .addSetupper(infPortalSetupper(world, pos))
+                .addSetupper(infPortalSetupper(world, pos, boop))
                 .addModifier(nbpe -> nbpe.setDimension(id))
                 .addModifier(npbe -> npbe.setColor(applier.apply(npbe.getPos())))
                 .addModifier(npbe -> npbe.setOpen(open))

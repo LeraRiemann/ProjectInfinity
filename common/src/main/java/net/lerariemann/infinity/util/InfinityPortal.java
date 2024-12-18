@@ -227,7 +227,7 @@ public class InfinityPortal {
         Identifier idFrom = worldFrom.getRegistryKey().getValue();
 
         if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbeTo) {
-            if (ipbeTo.getDimension() != idFrom) return;
+            if (!ipbeTo.getDimension().toString().equals(idFrom.toString())) return;
             if (ipbeTo.isConnectedBothSides()) return; //don't resync what's already synced
         }
         else {
