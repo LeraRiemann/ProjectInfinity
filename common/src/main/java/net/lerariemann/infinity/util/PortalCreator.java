@@ -61,16 +61,15 @@ public interface PortalCreator {
      * transform it into an Infinity Portal.
      */
     static void tryCreatePortalFromItem(World world, BlockPos pos, ItemEntity entity) {
+        if (entity.isRemoved()) return;
         ItemStack itemStack = entity.getStack();
         if (itemStack.getItem() == ModItems.TRANSFINITE_KEY.get()) {
             Identifier key_dest = ModItemFunctions.getDimensionIdentifier(itemStack);
-            if (key_dest == null) {
-                key_dest = Identifier.of("minecraft", "random");
-            }
             MinecraftServer server = world.getServer();
             if (server != null) {
                 if (world instanceof ServerWorld serverWorld) {
-                    boolean bl = modifyOnInitialCollision(key_dest, serverWorld, pos);
+                    boolean bl = modifyOnInitialCollision(Objects.requireNonNullElse(key_dest, Identifier.of("minecraft", "random")),
+                            serverWorld, pos);
                     if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
                 }
             }
@@ -245,19 +244,20 @@ public interface PortalCreator {
         }
     }
 
-    static Consumer<BlockPos> infPortalSetupper(ServerWorld world, BlockPos pos) {
+    static Consumer<BlockPos> infPortalSetupper(ServerWorld world, BlockPos pos, boolean boop) {
         BlockState originalState = world.getBlockState(pos);
-        BlockState state = (originalState.isOf(ModBlocks.PORTAL.get())) ?
-                originalState.with(InfinityPortalBlock.BOOP, !originalState.get(InfinityPortalBlock.BOOP)) :
-                ModBlocks.PORTAL.get().getDefaultState()
-                        .with(NetherPortalBlock.AXIS, originalState.get(NetherPortalBlock.AXIS));
+        BlockState state = ModBlocks.PORTAL.get().getDefaultState()
+                .with(NetherPortalBlock.AXIS, originalState.get(NetherPortalBlock.AXIS))
+                .with(InfinityPortalBlock.BOOP, boop);
         return p -> world.setBlockState(p, state);
     }
 
     static PortalModifierUnion forInitialSetupping(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
+        BlockState bs = world.getBlockState(pos);
+        boolean boop = bs.contains(InfinityPortalBlock.BOOP) ? bs.get(InfinityPortalBlock.BOOP) : false;
         PortalColorApplier applier = PortalColorApplier.of(id, world.getServer());
         PortalModifierUnion union = new PortalModifierUnion()
-                .addSetupper(infPortalSetupper(world, pos))
+                .addSetupper(infPortalSetupper(world, pos, !boop))
                 .addModifier(nbpe -> nbpe.setDimension(id))
                 .addModifier(npbe -> npbe.setColor(applier.apply(npbe.getPos())))
                 .addModifier(npbe -> npbe.setOpen(open))

@@ -3,12 +3,10 @@ package net.lerariemann.infinity.util;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import dev.architectury.platform.Platform;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -25,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.lerariemann.infinity.InfinityModClient.sampler;
 
@@ -54,7 +53,10 @@ public interface InfinityMethods {
         return key.getValue().getNamespace().equals(InfinityMod.MOD_ID);
     }
     static boolean isBiomeInfinity(WorldAccess world, BlockPos pos) {
-        return world.getBiome(pos).getIdAsString().contains("infinity");
+        AtomicBoolean bl = new AtomicBoolean(false);
+        world.getBiome(pos).getKey().ifPresent(key ->
+                        bl.set(key.getValue().getNamespace().equals("infinity")));
+        return bl.get();
     }
 
     /**

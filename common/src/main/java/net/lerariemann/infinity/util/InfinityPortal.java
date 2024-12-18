@@ -11,6 +11,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.MutableText;
@@ -18,12 +19,14 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.dimension.NetherPortal;
 import net.minecraft.world.poi.PointOfInterest;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import net.minecraft.world.poi.PointOfInterestTypes;
@@ -36,6 +39,7 @@ public class InfinityPortal {
     InfinityPortalBlockEntity ipbe;
     ServerWorld worldFrom;
     BlockPos posFrom;
+    Direction.Axis axisFrom;
     BlockLocating.Rectangle portalFrom;
     @Nullable ServerWorld worldTo;
     @Nullable BlockPos posTo;
@@ -48,6 +52,7 @@ public class InfinityPortal {
         this.worldFrom = worldFrom;
         portalFrom = getRect(worldFrom, startingPos);
         posFrom = lowerCenterPos(portalFrom, worldFrom);
+        axisFrom = worldFrom.getBlockState(posFrom).get(Properties.HORIZONTAL_AXIS);
         worldTo = worldFrom.getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD, ipbe.getDimension()));
         tryUpdateOpenStatus(ipbe, worldFrom, startingPos, worldTo);
 
@@ -96,9 +101,10 @@ public class InfinityPortal {
 
     /** Finding where to teleport stuff. The constructor ensures all scanning is already done by this point */
     public TeleportTarget getTeleportTarget(Entity entity) {
-        if (portalShouldWork() && portalTo != null && worldTo != null) {
-            return NetherPortalBlock.gete(entity, posTo, portalTo, worldTo,
-                    TeleportTarget.SEND_TRAVEL_THROUGH_PORTAL_PACKET.then(entityx -> entityx.addPortalChunkTicketAt(posTo)));
+        if (portalShouldWork() && portalTo != null && worldTo != null && posTo != null) {
+            createTicket(worldTo, posTo);
+            return NetherPortal.getNetherTeleportTarget(worldTo, portalTo, axisFrom, entity.positionInPortal(axisFrom, portalFrom),
+                    entity, entity.getVelocity(), entity.getYaw(), entity.getPitch());
         }
         //below this point is error handling. note that not all such errors are bugs
         if (entity instanceof ServerPlayerEntity player) {
@@ -129,6 +135,13 @@ public class InfinityPortal {
                     Text.translatable("error.infinity.portal.closed",
                             ((MutableText)item.getName()).formatted(Formatting.AQUA))));
         else player.sendMessage(Text.translatable("error.infinity.portal.null"));
+    }
+
+    /**
+     * Loads the other side of the portal for 300 ticks like nether portals do.
+     */
+    public static void createTicket(ServerWorld worldTo, BlockPos posTo) {
+        worldTo.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(posTo), 3, posTo);
     }
 
     public static Direction.Axis getAxisOrDefault(BlockState state) {
@@ -206,13 +219,14 @@ public class InfinityPortal {
         if (portal.isPresent()) return portal;
 
         //If one wasn't found, find a nether portal instead and ensure it will not be overwritten
-        syncFlag = false;
-        return poiStorage.getInSquare(poiType ->
+        portal = poiStorage.getInSquare(poiType ->
                                 poiType.matchesKey(PointOfInterestTypes.NETHER_PORTAL),
                         originOfTesting, radiusOfTesting, PointOfInterestStorage.OccupationStatus.ANY)
                 .map(PointOfInterest::getPos)
                 .filter(wbTo::contains)
                 .min(Comparator.comparingDouble(posTo -> posTo.getSquaredDistance(originOfTesting)));
+        if (portal.isPresent()) syncFlag = false;
+        return portal;
     }
 
     /** Establishing a mutual connection between two portals */
@@ -225,7 +239,7 @@ public class InfinityPortal {
         Identifier idFrom = worldFrom.getRegistryKey().getValue();
 
         if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbeTo) {
-            if (ipbeTo.getDimension() != idFrom) return;
+            if (!ipbeTo.getDimension().toString().equals(idFrom.toString())) return;
             if (ipbeTo.isConnectedBothSides()) return; //don't resync what's already synced
         }
         else {

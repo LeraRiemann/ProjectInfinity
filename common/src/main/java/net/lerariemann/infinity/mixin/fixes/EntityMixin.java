@@ -1,8 +1,8 @@
 package net.lerariemann.infinity.mixin.fixes;
 
-import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.InfinityPortal;
 import net.lerariemann.infinity.util.PortalCreator;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -57,8 +57,7 @@ public abstract class EntityMixin {
         if (getWorld() instanceof ServerWorld worldFrom) {
             BlockPos posFrom = lastNetherPortalPosition;
             if (worldFrom.getBlockEntity(posFrom) instanceof InfinityPortalBlockEntity ipbe) {
-                cir.setReturnValue(InfinityPortalBlock.getTeleportTarget((Entity)(Object)this, ipbe,
-                        worldFrom, posFrom));
+                cir.setReturnValue((new InfinityPortal(ipbe, worldFrom, posFrom)).getTeleportTarget((Entity)(Object)this));
             }
         }
     }

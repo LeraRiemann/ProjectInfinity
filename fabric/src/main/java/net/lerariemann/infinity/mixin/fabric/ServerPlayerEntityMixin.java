@@ -5,9 +5,9 @@ import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
-import net.lerariemann.infinity.util.PortalCreationLogic;
-import net.lerariemann.infinity.var.ModPayloads;
-import net.lerariemann.infinity.var.ModStats;
+import net.lerariemann.infinity.util.PortalCreator;
+import net.lerariemann.infinity.registry.var.ModPayloads;
+import net.lerariemann.infinity.registry.var.ModStats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -41,7 +41,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method = "moveToWorld(Lnet/minecraft/server/world/ServerWorld;)Lnet/minecraft/entity/Entity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setServerWorld(Lnet/minecraft/server/world/ServerWorld;)V"))
     private void convertReturnPortal(ServerWorld destination, CallbackInfoReturnable<Entity> ci, @Local RegistryKey<World> registryKey, @Local TeleportTarget teleportTarget) {
-        boolean bl = PortalCreationLogic.convertReturnPortal(destination, server, registryKey, teleportTarget);
+        boolean bl = PortalCreator.convertReturnPortal(destination, server, registryKey, teleportTarget);
         if (bl) {
             this.increaseStat(ModStats.PORTALS_OPENED_STAT, 1);
         }

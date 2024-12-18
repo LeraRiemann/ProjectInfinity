@@ -23,15 +23,17 @@ import java.util.*;
 public class DimensionGrabber {
     RegistryOps.RegistryInfoGetter registryInfoGetter;
     DynamicRegistryManager baseRegistryManager;
+    Map<RegistryKey<? extends Registry<?>>, MutableRegistry<?>> mutableRegistries;
 
     public DimensionGrabber(DynamicRegistryManager brm) {
         baseRegistryManager = brm;
-        List<MutableRegistry<?>> entries = new ArrayList<>();
+        mutableRegistries = new HashMap<>();
         baseRegistryManager.streamAllRegistries().forEach((entry) -> {
-            PlatformMethods.unfreeze(entry.value());
-            entries.add((MutableRegistry<?>)entry.value());
+            Registry<?> reg = entry.value();
+            PlatformMethods.unfreeze(reg);
+            mutableRegistries.put(entry.key(), (MutableRegistry<?>)reg);
         });
-        registryInfoGetter = getGetter(entries);
+        registryInfoGetter = getGetter();
     }
 
     public DimensionOptions grab_all(RandomDimension d) {
@@ -44,11 +46,14 @@ public class DimensionGrabber {
         buildGrabber(StructureSet.CODEC, RegistryKeys.STRUCTURE_SET).grab_all(rootdir.resolve("worldgen/structure_set"));
         buildGrabber(ChunkGeneratorSettings.CODEC, RegistryKeys.CHUNK_GENERATOR_SETTINGS).grab_all(rootdir.resolve("worldgen/noise_settings"));
         buildGrabber(DimensionType.CODEC, RegistryKeys.DIMENSION_TYPE).grab_all(rootdir.resolve("dimension_type"));
-        return grab_dimension(rootdir, d.getName());
+        DimensionOptions ret = buildGrabber(DimensionOptions.CODEC, RegistryKeys.DIMENSION)
+                .grab_with_return(rootdir + "/dimension", d.getName(), false);
+        close();
+        return ret;
     }
 
     <T> JsonGrabber<T> buildGrabber(Codec<T> codec, RegistryKey<Registry<T>> key) {
-        return (new JsonGrabber<>(registryInfoGetter, codec, (MutableRegistry<T>) (baseRegistryManager.get(key))));
+        return (new JsonGrabber<>(registryInfoGetter, codec, (MutableRegistry<T>)(mutableRegistries.get(key))));
     }
 
     <T> void grab_one_for_client(Codec<T> codec, RegistryKey<Registry<T>> key, Identifier id, NbtCompound optiondata) {
@@ -62,23 +67,15 @@ public class DimensionGrabber {
         close();
     }
 
-    DimensionOptions grab_dimension(Path rootdir, String i) {
-        DimensionOptions ret = buildGrabber(DimensionOptions.CODEC, RegistryKeys.DIMENSION).grab_with_return(rootdir.toString()+"/dimension", i, false);
-        close();
-        return ret;
-    }
-
     void close() {
-        baseRegistryManager.streamAllRegistries().forEach((entry) -> entry.value().freeze());
+        mutableRegistries.values().forEach(Registry::freeze);
     }
 
-    public RegistryOps.RegistryInfoGetter getGetter(List<MutableRegistry<?>> additionalRegistries) {
-        final Map<RegistryKey<? extends Registry<?>>, RegistryOps.RegistryInfo<?>> map = new HashMap<>();
-        baseRegistryManager.streamAllRegistries().forEach((entry) -> map.put(entry.key(), createInfo((MutableRegistry<?>)(entry.value()))));
-        additionalRegistries.forEach(first -> map.put(first.getKey(), createInfo(first)));
+    public RegistryOps.RegistryInfoGetter getGetter() {
+        //baseRegistryManager.streamAllRegistries().forEach((entry) -> map.put(entry.key(), createInfo((MutableRegistry<?>)(entry.value()))));
         return new RegistryOps.RegistryInfoGetter() {
             public <T> Optional<RegistryOps.RegistryInfo<T>> getRegistryInfo(RegistryKey<? extends Registry<? extends T>> registryRef) {
-                return Optional.ofNullable((RegistryOps.RegistryInfo)map.get(registryRef));
+                return Optional.ofNullable((RegistryOps.RegistryInfo<T>)createInfo(mutableRegistries.get(registryRef)));
             }
         };
     }
