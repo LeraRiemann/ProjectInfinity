@@ -25,7 +25,7 @@ public abstract class PortalDataHolder extends Item {
         return ColorHelper.Argb.fullAlpha((int) InfinityMethods.getNumericFromId(id) & 0xFFFFFF);
     }
 
-    public Identifier getDestination(ItemStack stack) {
+    public static Identifier getDestination(ItemStack stack) {
         return stack.getComponents().get(ModItemFunctions.DESTINATION.get());
     }
 

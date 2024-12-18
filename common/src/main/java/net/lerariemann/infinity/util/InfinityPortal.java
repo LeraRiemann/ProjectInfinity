@@ -74,7 +74,7 @@ public class InfinityPortal {
     }
 
     /** Finding a rectangle of portal blocks provided a position of one of them. */
-    public static BlockLocating.Rectangle getRect(ServerWorld world, BlockPos pos) {
+    public static BlockLocating.Rectangle getRect(World world, BlockPos pos) {
         BlockState blockStateFrom = world.getBlockState(pos);
         return BlockLocating.getLargestRectangle(
                 pos, getAxisOrDefault(blockStateFrom),

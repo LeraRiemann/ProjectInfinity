@@ -4,6 +4,8 @@ import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.InfinityPortal;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.component.ComponentMap;
@@ -13,16 +15,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.property.Properties;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockLocating;
 import net.minecraft.world.World;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class F4Item extends PortalDataHolder {
+    static final BlockState OBSIDIAN = Blocks.OBSIDIAN.getDefaultState();
+
     public F4Item(Settings settings) {
         super(settings);
     }
@@ -56,7 +64,7 @@ public class F4Item extends PortalDataHolder {
         tooltip.add(mutableText.formatted(Formatting.GRAY));
     }
 
-    public ItemStack placePortal(World world, PlayerEntity player, ItemStack stack, BlockPos lowerCenter,
+    public static ItemStack placePortal(World world, PlayerEntity player, ItemStack stack, BlockPos lowerCenter,
                                     int size_x, int size_y) {
         Direction.Axis dir2 = player.getHorizontalFacing().rotateClockwise(Direction.Axis.Y).getAxis();
 
@@ -69,15 +77,16 @@ public class F4Item extends PortalDataHolder {
         }
         BlockPos lowerLeft = lowerCenter.offset(dir2, -(size_x/2));
         Identifier id = getDestination(stack);
+        int obsNotReplaced = 0;
 
         //placing the portal
         for (int x = -1; x <= size_x; x++) {
-            world.setBlockState(lowerLeft.offset(dir2, x).up(size_y), Blocks.OBSIDIAN.getDefaultState());
-            world.setBlockState(lowerLeft.offset(dir2, x).down(), Blocks.OBSIDIAN.getDefaultState());
+            if (!world.setBlockState(lowerLeft.offset(dir2, x).up(size_y), OBSIDIAN)) obsNotReplaced++;
+            if (!world.setBlockState(lowerLeft.offset(dir2, x).down(), OBSIDIAN)) obsNotReplaced++;
         }
         for (int y = 0; y < size_y; y++) {
-            world.setBlockState(lowerLeft.offset(dir2, -1).offset(Direction.UP, y), Blocks.OBSIDIAN.getDefaultState());
-            world.setBlockState(lowerLeft.offset(dir2, size_x).offset(Direction.UP, y), Blocks.OBSIDIAN.getDefaultState());
+            if (!world.setBlockState(lowerLeft.offset(dir2, -1).offset(Direction.UP, y), OBSIDIAN)) obsNotReplaced++;
+            if (!world.setBlockState(lowerLeft.offset(dir2, size_x).offset(Direction.UP, y), OBSIDIAN)) obsNotReplaced++;
             for (int x = 0; x < size_x; x++) {
                 BlockPos pos = lowerLeft.offset(dir2, x).offset(Direction.UP, y);
                 world.setBlockState(pos,
@@ -88,6 +97,7 @@ public class F4Item extends PortalDataHolder {
                 }
             }
         }
+        useCharges -= obsNotReplaced;
 
         player.playSound(SoundEvents.BLOCK_BELL_USE, 1, 0.75f);
         stack.applyComponentsFrom(ComponentMap.builder()
@@ -119,8 +129,9 @@ public class F4Item extends PortalDataHolder {
         boolean positionFound = true;
         for (i = 0; i <= 8 && !world.isOutOfHeightLimit(lowerY + i + size_y); i++) {
             positionFound = true;
-            for (int j = 0; j < size_y; j++) for (int k = 0; k < size_x; k++) {
-                if (!world.getBlockState(lowerCenter.up(i+j).offset(dir2, k - (size_x /2))).isAir()) {
+            for (int j = 0; j <= size_y+1; j++) for (int k = -1; k <= size_x; k++) {
+                BlockState bs = world.getBlockState(lowerCenter.up(i+j-1).offset(dir2, k - (size_x /2)));
+                if (!bs.isAir() && !bs.isOf(Blocks.OBSIDIAN)) {
                     i += j;
                     positionFound = false;
                     break;
@@ -133,22 +144,37 @@ public class F4Item extends PortalDataHolder {
         return TypedActionResult.consume(placePortal(world, player, stack, lowerCenter.up(i), size_x, size_y));
     }
 
+    public static boolean isPortal(BlockState state) {
+        return state.isOf(Blocks.NETHER_PORTAL) || state.isOf(ModBlocks.PORTAL.get());
+    }
+
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         PlayerEntity player = context.getPlayer();
         if (player == null) return ActionResult.FAIL;
-        Direction.Axis dir2 =
-                player.getHorizontalFacing().getAxis().equals(Direction.Axis.X) ? Direction.Axis.Z : Direction.Axis.X;
         ItemStack stack = context.getStack();
         World world = context.getWorld();
-        BlockPos pos = context.getBlockPos().up();
+        BlockPos pos = context.getBlockPos();
+        BlockState bs = world.getBlockState(pos);
+        Hand hand = context.getHand();
+
+        if (isPortal(bs)) {
+            ItemStack newStack = useOnPortalBlock(world, pos, stack);
+            player.setStackInHand(hand, newStack);
+            return ActionResult.CONSUME;
+        }
+        pos = pos.up(bs.isOf(Blocks.OBSIDIAN) ? 1 : 2);
+
+        Direction.Axis dir2 =
+                player.getHorizontalFacing().getAxis().equals(Direction.Axis.X) ? Direction.Axis.Z : Direction.Axis.X;
 
         int size_x = stack.getOrDefault(ModItemFunctions.SIZE_X.get(), 3);
         int size_y = stack.getOrDefault(ModItemFunctions.SIZE_Y.get(), 3);
 
         //validating the place position
-        for (int j = 0; j < size_y; j++) for (int k = 0; k < size_x; k++) {
-            if (!world.getBlockState(pos.up(j).offset(dir2, k - (size_x /2))).isAir()) {
+        for (int j = -1; j <= size_y; j++) for (int k = -1; k <= size_x; k++) {
+            bs = world.getBlockState(pos.up(j).offset(dir2, k - (size_x /2)));
+            if (!bs.isAir() && !bs.isOf(Blocks.OBSIDIAN)) {
                 return ActionResult.FAIL;
             }
         }
@@ -158,7 +184,43 @@ public class F4Item extends PortalDataHolder {
         if (stackNew == null) {
             return ActionResult.FAIL;
         }
-        player.setStackInHand(context.getHand(), stack);
+        player.setStackInHand(hand, stack);
         return ActionResult.CONSUME;
+    }
+
+    public static boolean checkNeighbors(World world, BlockPos bp) {
+        int i = 0;
+        for (Direction dir : Direction.values()) {
+            BlockState bs = world.getBlockState(bp.offset(dir));
+            Direction.Axis axis = dir.getAxis();
+            if (isPortal(bs) && (bs.get(Properties.HORIZONTAL_AXIS).equals(axis) || axis.isVertical()))
+                if (++i > 1) return true;
+        }
+        return false;
+    }
+
+    public static void checkObsidianRemoval(World world, BlockPos bp,
+                                            Set<BlockPos> toRemove) {
+        if (world.getBlockState(bp).isOf(Blocks.OBSIDIAN)) {
+            if (checkNeighbors(world, bp)) return;
+            toRemove.add(bp);
+        }
+    }
+
+    public static ItemStack useOnPortalBlock(World world, BlockPos origin, ItemStack stack) {
+        Direction.Axis axis = world.getBlockState(origin).get(NetherPortalBlock.AXIS);
+        BlockLocating.Rectangle portal = InfinityPortal.getRect(world, origin);
+        Set<BlockPos> obsidian = new HashSet<>();
+        for (int i = -1; i <= portal.width; i++)
+            for (int j : Set.of(-1, portal.height))
+                checkObsidianRemoval(world, portal.lowerLeft.offset(axis, i).up(j), obsidian);
+        for (int j = 0; j < portal.height; j++)
+            for (int i : Set.of(-1, portal.width))
+                checkObsidianRemoval(world, portal.lowerLeft.offset(axis, i).up(j), obsidian);
+        for (BlockPos bp : obsidian)
+            world.removeBlock(bp, false);
+        stack.applyComponentsFrom(ComponentMap.builder()
+                .add(ModItemFunctions.CHARGE.get(), getCharge(stack) + obsidian.size()).build());
+        return stack;
     }
 }

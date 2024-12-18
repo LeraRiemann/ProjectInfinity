@@ -202,14 +202,14 @@ public interface PortalCreator {
         queue.add(pos);
         BlockPos blockPos;
         Direction.Axis axis = world.getBlockState(pos).get(NetherPortalBlock.AXIS);
+        Set<Direction> toCheck = (axis == Direction.Axis.Z) ?
+                Set.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH) :
+                Set.of(Direction.UP, Direction.DOWN, Direction.EAST, Direction.WEST);
         while ((blockPos = queue.poll()) != null) {
             set.add(blockPos);
             BlockState blockState = world.getBlockState(blockPos);
             if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof InfinityPortalBlock) {
                 modifier.accept(world, blockPos);
-                Set<Direction> toCheck = (axis == Direction.Axis.Z) ?
-                        Set.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH) :
-                        Set.of(Direction.UP, Direction.DOWN, Direction.EAST, Direction.WEST);
                 BlockPos blockPos2;
                 for (Direction dir : toCheck) {
                     blockPos2 = blockPos.offset(dir);

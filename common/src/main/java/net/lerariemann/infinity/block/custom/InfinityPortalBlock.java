@@ -77,13 +77,13 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             if (blockEntity instanceof InfinityPortalBlockEntity npbe) {
                 /* If the portal is open already, nothing should happen. */
                 if (npbe.isOpen() && world_exists(s, npbe.getDimension()))
-                    return ActionResult.SUCCESS;
+                    return ActionResult.PASS;
 
                 /* If the portal key is blank, open the portal on any right-click. */
                 RandomProvider prov = InfinityMod.provider;
                 Optional<Item> key = prov.getPortalKeyAsItem();
                 if (key.isEmpty()) {
-                    PortalCreator.openWithStatIncrease(player, s, world, pos);
+                    if (!npbe.isOpen()) PortalCreator.openWithStatIncrease(player, s, world, pos);
                 }
 
                 /* Otherwise check if we're using the correct key. If so, open. */
@@ -98,7 +98,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 }
             }
         }
-        return ActionResult.SUCCESS;
+        return ActionResult.PASS;
     }
 
     @Override
