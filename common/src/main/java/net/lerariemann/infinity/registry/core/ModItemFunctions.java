@@ -32,6 +32,7 @@ import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -54,15 +55,18 @@ public class ModItemFunctions {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_TYPE);
 
-
-    public static RegistrySupplier<ComponentType<Identifier>> KEY_DESTINATION = registerComponentType("key_destination",
+    public static RegistrySupplier<ComponentType<Identifier>> DESTINATION = registerComponentType("destination",
             (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
     public static RegistrySupplier<ComponentType<Identifier>> BIOME_CONTENTS = registerComponentType("biome_contents",
             (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
     public static RegistrySupplier<ComponentType<Integer>> COLOR = registerComponentType("color",
             (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
     public static RegistrySupplier<ComponentType<Integer>> CHARGE = registerComponentType("charge",
-            (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+            (builder) -> builder.codec(Codecs.NONNEGATIVE_INT).packetCodec(PacketCodecs.VAR_INT));
+    public static RegistrySupplier<ComponentType<Integer>> SIZE_X = registerComponentType("size_x",
+            (builder) -> builder.codec(Codecs.POSITIVE_INT).packetCodec(PacketCodecs.VAR_INT));
+    public static RegistrySupplier<ComponentType<Integer>> SIZE_Y = registerComponentType("size_y",
+            (builder) -> builder.codec(Codecs.POSITIVE_INT).packetCodec(PacketCodecs.VAR_INT));
 
     public static RegistrySupplier<LootFunctionType<SetLevelLootFunction>> SET_BIOME_BOTTLE_LEVEL =
             LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () -> new LootFunctionType<>(SetLevelLootFunction.CODEC));
@@ -72,6 +76,9 @@ public class ModItemFunctions {
     public static RegistrySupplier<RecipeSerializer<BiomeBottleCombiningRecipe>> BIOME_BOTTLE_COMBINING =
             RECIPE_SERIALIZERS.register("biome_bottle_combining", () ->
                     new SpecialRecipeSerializer<>(BiomeBottleCombiningRecipe::new));
+    public static RegistrySupplier<RecipeSerializer<F4RechargingRecipe>> F4_RECHARGING =
+            RECIPE_SERIALIZERS.register("f4_recharging", () ->
+                    new SpecialRecipeSerializer<>(F4RechargingRecipe::new));
     public static RegistrySupplier<RecipeSerializer<CollisionCraftingRecipe>> PORTAL_CRAFTING =
             RECIPE_SERIALIZERS.register("collision_portal", () ->
                     new CollisionCraftingRecipe.Serializer(CollisionCraftingRecipe.OfPortal::new));
@@ -141,7 +148,7 @@ public class ModItemFunctions {
     @Environment(EnvType.CLIENT)
     public static void registerModelPredicates() {
         ItemPropertiesRegistry.register(ModItems.TRANSFINITE_KEY.get(), InfinityMethods.getId("key"), (stack, world, entity, seed) -> {
-            Identifier id = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
+            Identifier id = stack.getComponents().get(ModItemFunctions.DESTINATION.get());
             if (id == null) return 0.02f;
             String s = id.toString();
             if (s.contains("infinity:generated_")) return 0.01f;
@@ -163,7 +170,7 @@ public class ModItemFunctions {
                 ModItemFunctions::iridPredicate);
         ItemPropertiesRegistry.register(ModItems.F4.get(), InfinityMethods.getId("f4"),
                 (stack, world, entity, seed) -> {
-                    Identifier id = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
+                    Identifier id = stack.getComponents().get(ModItemFunctions.DESTINATION.get());
                     if (id == null) return 0.0f;
                     return 0.01f;
                 });

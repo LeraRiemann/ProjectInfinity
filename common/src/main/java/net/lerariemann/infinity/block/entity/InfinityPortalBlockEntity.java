@@ -94,9 +94,18 @@ public class InfinityPortalBlockEntity extends BlockEntity {
     }
 
     public void setData(MinecraftServer server, Identifier i) {
+        if (server == null) {
+            setData(i);
+            return;
+        }
         setDimension(i);
         setColor(PortalColorApplier.of(i, server).apply(getPos()));
         setOpen(server.getWorldRegistryKeys().contains(RegistryKey.of(RegistryKeys.WORLD, i)));
+    }
+    public void setData(Identifier i) {
+        setDimension(i);
+        setColor((int)InfinityMethods.getNumericFromId(i));
+        setOpen(false);
     }
 
     public ServerWorld getDimensionAsWorld() {

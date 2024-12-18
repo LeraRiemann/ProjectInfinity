@@ -12,12 +12,12 @@ public class TransfiniteKeyItem extends PortalDataHolder {
     }
 
     @Override
-    public MutableText defaultTooltip() {
+    public MutableText defaultDimensionTooltip() {
         return Text.translatable("tooltip.infinity.key.randomise");
     }
 
     @Override
-    public MutableText getTooltip(Identifier dimension) {
+    public MutableText getDimensionTooltip(Identifier dimension) {
         String s = dimension.toString();
         // Keys to randomly generated dimensions.
         if (s.contains("infinity:generated_"))

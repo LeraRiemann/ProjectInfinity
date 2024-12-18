@@ -57,7 +57,7 @@ public interface PortalCreator {
         ItemStack itemStack = entity.getStack();
 
         /* Check if the item provided is a transfinite key. */
-        Identifier key_dest = itemStack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
+        Identifier key_dest = itemStack.getComponents().get(ModItemFunctions.DESTINATION.get());
         if ((entity.getStack().getItem().equals(ModItems.TRANSFINITE_KEY.get())) && key_dest == null) {
             key_dest = Identifier.of("minecraft:random");
         }

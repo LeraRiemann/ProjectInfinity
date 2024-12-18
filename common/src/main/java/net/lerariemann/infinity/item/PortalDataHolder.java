@@ -25,38 +25,45 @@ public abstract class PortalDataHolder extends Item {
         return ColorHelper.Argb.fullAlpha((int) InfinityMethods.getNumericFromId(id) & 0xFFFFFF);
     }
 
-    public static Optional<ComponentMap> addKeyComponents(Item item, Identifier dim) {
+    public Identifier getDestination(ItemStack stack) {
+        return stack.getComponents().get(ModItemFunctions.DESTINATION.get());
+    }
+
+    public ComponentMap.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+        Identifier dim = ipbe.getDimension();
+        Integer keycolor = getColorFromId(dim);
+        return ComponentMap.builder()
+                .add(ModItemFunctions.DESTINATION.get(), dim)
+                .add(ModItemFunctions.COLOR.get(), keycolor);
+    }
+
+    public static Optional<ComponentMap> addPortalComponents(Item item, ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
         if (item instanceof PortalDataHolder pdh)
-            return Optional.of(pdh.addKeyComponents(dim));
+            return Optional.of(pdh.addPortalComponents(oldStack, ipbe));
         return Optional.empty();
     }
 
-    public Identifier getDestination(ItemStack stack) {
-        return stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
-    }
-
-    public ComponentMap addKeyComponents(Identifier dim) {
-        Integer keycolor = getColorFromId(dim);
-        return (ComponentMap.builder()
-                .add(ModItemFunctions.KEY_DESTINATION.get(), dim)
-                .add(ModItemFunctions.COLOR.get(), keycolor)).build();
+    public ComponentMap addPortalComponents(ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
+        ComponentMap changes = getPortalComponents(ipbe).build();
+        oldStack.applyComponentsFrom(changes);
+        return oldStack.getComponents();
     }
 
     public ItemStack withPortalData(InfinityPortalBlockEntity ipbe) {
         ItemStack stack = getDefaultStack();
-        stack.applyComponentsFrom(addKeyComponents(ipbe.getDimension()));
+        stack.applyComponentsFrom(addPortalComponents(stack, ipbe));
         return stack;
     }
 
-    public abstract MutableText defaultTooltip();
+    public abstract MutableText defaultDimensionTooltip();
 
-    public abstract MutableText getTooltip(Identifier dimension);
+    public abstract MutableText getDimensionTooltip(Identifier dimension);
 
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        Identifier dimension = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
-        MutableText mutableText = (dimension != null) ? getTooltip(dimension) : defaultTooltip();
+        Identifier dimension = stack.getComponents().get(ModItemFunctions.DESTINATION.get());
+        MutableText mutableText = (dimension != null) ? getDimensionTooltip(dimension) : defaultDimensionTooltip();
         tooltip.add(mutableText.formatted(Formatting.GRAY));
     }
 }
