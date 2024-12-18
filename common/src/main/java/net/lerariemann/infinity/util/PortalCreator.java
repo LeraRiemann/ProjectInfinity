@@ -121,7 +121,7 @@ public interface PortalCreator {
         }
 
         /* Set color and destination. Open status = the world that is being accessed exists already. */
-        boolean dimensionExistsAlready = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, dimName)) != null;
+        boolean dimensionExistsAlready = server.getWorldRegistryKeys().contains(RegistryKey.of(RegistryKeys.WORLD, dimName));
         modifyPortalRecursive(world, pos, dimName, dimensionExistsAlready);
 
         if (dimensionExistsAlready) {

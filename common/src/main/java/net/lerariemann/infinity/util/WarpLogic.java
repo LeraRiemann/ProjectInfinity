@@ -1,8 +1,10 @@
 package net.lerariemann.infinity.util;
 
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
+import net.lerariemann.infinity.registry.var.ModCommands;
 import net.lerariemann.infinity.registry.var.ModStats;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,19 +33,27 @@ import java.util.Objects;
 
 public interface WarpLogic {
     /**
-     * Handles the /warp-id command, converting their numeric ID to an Identifier
-     * and passing the data along to /warp.
+     * Handles the /warp id command, converting the provided numeric ID to an Identifier.
      */
     static void requestWarpById(CommandContext<ServerCommandSource> context, long value) {
-        requestWarp(context, InfinityMethods.getDimId(value));
+        requestWarp(context.getSource().getPlayer(), InfinityMethods.getDimId(value), true);
     }
-
     /**
-     * Handles the /warp command, warping the player to their specified dimension.
-     * The player-provided text should have already been converted to an Identifier.
+     * Handles the /warp existing command, warping the player to a specified dimension. This is the same as writing the input into a book.
      */
-    static void requestWarp(CommandContext<ServerCommandSource> context, Identifier value) {
-        requestWarp(context.getSource().getPlayer(), value, true);
+    static void requestWarpToExisting(CommandContext<ServerCommandSource> context, Identifier value) throws CommandSyntaxException {
+        ServerWorld w = context.getSource().getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD, value));
+        if (w == null)
+            throw ModCommands.MALFORM_IDENTIFIER_EXCEPTION.create(value);
+        else if (InfinityMethods.isTimebombed(w))
+            throw ModCommands.TIMEBOMBED_EXCEPRION.create(value);
+        else requestWarp(context.getSource().getPlayer(), value, true);
+    }
+    /**
+     * Handles the /warp text command, warping the player to a specified dimension. This is the same as writing the input into a book.
+     */
+    static void requestWarpByText(CommandContext<ServerCommandSource> context, String value) {
+        requestWarp(context.getSource().getPlayer(), InfinityMethods.getId(value), true);
     }
 
     /**

@@ -48,7 +48,7 @@ public class PlatformMethodsImpl {
         RegistryUtils.unfreeze(registry);
     }
 
-    public static void addAfter(RegistrySupplier<Item> supplier, RegistryKey<ItemGroup> group, Item item) {
+    public static <T extends Item> void addAfter(RegistrySupplier<T> supplier, RegistryKey<ItemGroup> group, Item item) {
         if (InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
             ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, supplier.get()));
         }

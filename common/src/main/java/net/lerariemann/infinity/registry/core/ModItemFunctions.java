@@ -63,8 +63,6 @@ public class ModItemFunctions {
             (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
     public static RegistrySupplier<ComponentType<Integer>> CHARGE = registerComponentType("charge",
             (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
-    public static RegistrySupplier<ComponentType<Boolean>> DO_NOT_OPEN = registerComponentType("do_not_open",
-            (builder) -> builder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL));
 
     public static RegistrySupplier<LootFunctionType<SetLevelLootFunction>> SET_BIOME_BOTTLE_LEVEL =
             LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () -> new LootFunctionType<>(SetLevelLootFunction.CODEC));
@@ -163,5 +161,11 @@ public class ModItemFunctions {
                 ModItemFunctions::iridPredicate);
         ItemPropertiesRegistry.register(ModItems.IRIDESCENT_WOOL.get(), InfinityMethods.getId("iridescent"),
                 ModItemFunctions::iridPredicate);
+        ItemPropertiesRegistry.register(ModItems.F4.get(), InfinityMethods.getId("f4"),
+                (stack, world, entity, seed) -> {
+                    Identifier id = stack.getComponents().get(ModItemFunctions.KEY_DESTINATION.get());
+                    if (id == null) return 0.0f;
+                    return 0.01f;
+                });
     }
 }

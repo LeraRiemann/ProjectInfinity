@@ -18,7 +18,8 @@ public class InfinityModFabricClient implements ClientModInitializer {
         ColorProviderRegistry.BLOCK.register(InfinityMethods::getInfinityPortalColor, ModBlocks.PORTAL.get());
         ColorProviderRegistry.BLOCK.register(InfinityMethods::getBookBoxColor, ModBlocks.BOOK_BOX.get(), ModBlocks.IRIDESCENCE.get());
         ColorProviderRegistry.BLOCK.register(InfinityMethods::getBiomeBottleColor, ModBlocks.BIOME_BOTTLE.get());
-        ColorProviderRegistry.ITEM.register(InfinityMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get(), ModItems.BIOME_BOTTLE_ITEM.get());
+        ColorProviderRegistry.ITEM.register(InfinityMethods::getOverlayColorFromComponents,
+                ModItems.TRANSFINITE_KEY.get(), ModItems.BIOME_BOTTLE_ITEM.get(), ModItems.F4.get());
         ColorProviderRegistry.ITEM.register(InfinityMethods::getInfinityPortalColor, ModItems.PORTAL_ITEM.get());
         // On Fabric, render layer maps are also applied to blocks.
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutoutMipped(),

@@ -1,0 +1,9 @@
+{
+  "type": "infinity:collision_portal",
+  "input": {
+    "item": "infinity:f4"
+  },
+  "output": {
+    "id": "infinity:f4"
+  }
+}

@@ -96,11 +96,15 @@ public interface InfinityMethods {
         return InfinityMethods.getDimId(getDimensionSeed(text));
     }
 
+    static boolean isTimebombed(ServerWorld world) {
+        return ((Timebombable)world).infinity$isTimebombed();
+    }
+
     /**
      * Check if a dimension exists and has not been timebombed.
      */
     static boolean dimExists(ServerWorld world) {
-        return (world != null && !((Timebombable)world).infinity$isTimebombed());
+        return (world != null && !isTimebombed(world));
     }
 
     /**
@@ -143,7 +147,7 @@ public interface InfinityMethods {
     }
 
     static int getOverlayColorFromComponents(ItemStack stack, int layer) {
-        int color = stack.getComponents().getOrDefault(ModItemFunctions.COLOR.get(), 0);
+        int color = stack.getComponents().getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF);
         if (layer == 1) {
             return ColorHelper.Argb.fullAlpha(color);
         }
@@ -185,12 +189,6 @@ public interface InfinityMethods {
             }
         }
         return 0xFFFFFF;
-    }
-
-    static int getKeyColorFromId(Identifier id) {
-        if(id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("generated_"))
-            return ColorHelper.Argb.fullAlpha((int) getNumericFromId(id) & 0xFFFFFF);
-        return 0;
     }
 
     static long getRandomSeed(java.util.Random random) {

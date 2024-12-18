@@ -6,6 +6,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
+import net.lerariemann.infinity.item.PortalDataHolder;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.InfinityPortal;
@@ -16,7 +17,6 @@ import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.SpawnReason;
@@ -103,18 +103,15 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
 
     @Override
     public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
-        if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
-            ItemStack stack = ModItems.TRANSFINITE_KEY.get().getDefaultStack();
-            stack.applyComponentsFrom(getKeyComponents(ipbe.getDimension()));
-            return stack;
-        }
+        if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe)
+            return ModItems.TRANSFINITE_KEY.get().withPortalData(ipbe);
         return ItemStack.EMPTY;
     }
 
     static boolean world_exists(MinecraftServer s, Identifier l) {
         return (!l.getNamespace().equals(InfinityMod.MOD_ID)) ||
                 s.getSavePath(WorldSavePath.DATAPACKS).resolve(l.getPath()).toFile().exists() ||
-                s.getWorld(RegistryKey.of(RegistryKeys.WORLD, l)) != null;
+                s.getWorldRegistryKeys().contains(RegistryKey.of(RegistryKeys.WORLD, l));
     }
 
     /**
@@ -155,18 +152,6 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         }
     }
 
-    public static Optional<ComponentMap> getKeyComponents(Item item, Identifier dim) {
-        if (!item.equals(ModItems.TRANSFINITE_KEY.get())) return Optional.empty();
-        return Optional.of(getKeyComponents(dim));
-    }
-
-    public static ComponentMap getKeyComponents(Identifier dim) {
-        Integer keycolor = InfinityMethods.getKeyColorFromId(dim);
-        return (ComponentMap.builder()
-                .add(ModItemFunctions.KEY_DESTINATION.get(), dim)
-                .add(ModItemFunctions.COLOR.get(), keycolor)).build();
-    }
-
     /**
      * Adds logic for portal-based recipes.
      */
@@ -178,7 +163,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             MinecraftServer server = world.getServer();
             if (entity instanceof ItemEntity e) {
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
-                        item -> getKeyComponents(item, npbe.getDimension()));
+                        item -> PortalDataHolder.addKeyComponents(item, npbe.getDimension()));
                 InfinityMod.provider.getPortalKeyAsItem().ifPresent(item -> { //opening a portal by tossing a key in
                     if (e.getStack().isOf(item)) {
                         InfinityPortal.tryUpdateOpenStatus(npbe, world, pos, server);
@@ -209,7 +194,6 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         }
         if (!bl.get()) super.onEntityCollision(state, w, pos, entity);
     }
-
     /**
      * Spawns chaos pawns in the portal.
      */

@@ -46,7 +46,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method="findRespawnPosition", at = @At("HEAD"), cancellable = true)
     private static void injected(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> cir) {
-        if (((Timebombable)world).infinity$isTimebombed()) cir.setReturnValue(Optional.empty());
+        if (InfinityMethods.isTimebombed(world)) cir.setReturnValue(Optional.empty());
     }
 
     @Inject(method = "teleportTo",
