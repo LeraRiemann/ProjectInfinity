@@ -3,6 +3,7 @@ package net.lerariemann.infinity.item;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.InfinityPortal;
 import net.minecraft.block.BlockState;
@@ -40,6 +41,8 @@ public class F4Item extends PortalDataHolder {
         if (s.contains("infinity:generated_"))
             return Text.translatable("tooltip.infinity.key.generated")
                     .append(s.replace("infinity:generated_", ""));
+        if (s.equals(InfinityMethods.ofRandomDim))
+            return Text.translatable("tooltip.infinity.key.randomise");
         // All other dimensions.
         return Text.translatableWithFallback(
                 Util.createTranslationKey("dimension", dimension),
@@ -74,7 +77,8 @@ public class F4Item extends PortalDataHolder {
             return null;
         }
         BlockPos lowerLeft = lowerCenter.offset(dir2, -(size_x/2));
-        Identifier id = getDestination(stack);
+        Identifier id = ModItems.F4.get().getDestinationParsed(stack, world);
+        boolean doNotRenderPortal = (world.isClient && ModItems.F4.get().isDestinationRandom(id));
         int obsNotReplaced = 0;
 
         //placing the portal
@@ -85,7 +89,7 @@ public class F4Item extends PortalDataHolder {
         for (int y = 0; y < size_y; y++) {
             if (!world.setBlockState(lowerLeft.offset(dir2, -1).offset(Direction.UP, y), OBSIDIAN)) obsNotReplaced++;
             if (!world.setBlockState(lowerLeft.offset(dir2, size_x).offset(Direction.UP, y), OBSIDIAN)) obsNotReplaced++;
-            for (int x = 0; x < size_x; x++) {
+            if (!doNotRenderPortal) for (int x = 0; x < size_x; x++) {
                 BlockPos pos = lowerLeft.offset(dir2, x).offset(Direction.UP, y);
                 world.setBlockState(pos,
                         ((id == null) ? Blocks.NETHER_PORTAL : ModBlocks.PORTAL.get())

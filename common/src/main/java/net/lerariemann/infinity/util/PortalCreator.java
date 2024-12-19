@@ -9,7 +9,6 @@ import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
@@ -57,11 +56,8 @@ public interface PortalCreator {
         ItemStack itemStack = entity.getStack();
 
         /* Check if the item provided is a transfinite key. */
-        Identifier key_dest = itemStack.getComponents().get(ModItemFunctions.DESTINATION.get());
-        if ((entity.getStack().getItem().equals(ModItems.TRANSFINITE_KEY.get())) && key_dest == null) {
-            key_dest = Identifier.of("minecraft:random");
-        }
-        if (key_dest != null)  {
+        if (entity.getStack().getItem().equals(ModItems.TRANSFINITE_KEY.get())) {
+            Identifier key_dest = ModItems.TRANSFINITE_KEY.get().getDestinationParsed(itemStack, world);
             boolean bl = modifyOnInitialCollision(key_dest, world, pos);
             if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             return;
@@ -111,9 +107,6 @@ public interface PortalCreator {
      */
     static boolean modifyOnInitialCollision(Identifier dimName, ServerWorld world, BlockPos pos) {
         MinecraftServer server = world.getServer();
-        if (dimName.toString().equals("minecraft:random")) {
-            dimName = InfinityMethods.getRandomId(world.getRandom());
-        }
         PlayerEntity nearestPlayer = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
 
         if (((MinecraftServerAccess)server).infinity$needsInvocation()) {

@@ -12,6 +12,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +27,18 @@ public abstract class PortalDataHolder extends Item {
         return ColorHelper.Argb.fullAlpha((int) InfinityMethods.getNumericFromId(id) & 0xFFFFFF);
     }
 
-    public static Identifier getDestination(ItemStack stack) {
+    @Nullable
+    public Identifier getDestination(ItemStack stack) {
         return stack.getComponents().get(ModItemFunctions.DESTINATION.get());
+    }
+
+    public boolean isDestinationRandom(Identifier id) {
+        return (id != null && id.toString().equals(InfinityMethods.ofRandomDim));
+    }
+
+    public Identifier getDestinationParsed(ItemStack stack, World world) {
+        Identifier id = getDestination(stack);
+        return (isDestinationRandom(id)) ? InfinityMethods.getRandomId(world.random) : id;
     }
 
     public ComponentMap.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {

@@ -31,6 +31,8 @@ import static net.lerariemann.infinity.InfinityModClient.sampler;
 
 // Methods that are not dependent on ExpectPlatform, and work identically on both Fabric and NeoForge.
 public interface InfinityMethods {
+    String ofRandomDim = "infinity:random";
+
     /**
      * Converts a string to an identifier in the Infinite Dimensions namespace.
      */

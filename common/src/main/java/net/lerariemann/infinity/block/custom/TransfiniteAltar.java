@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.block.entity.TransfiniteAltarEntity;
 import net.minecraft.block.*;
@@ -76,7 +77,7 @@ public class TransfiniteAltar extends BlockWithEntity {
     }
 
     static double next() {
-        return TransfiniteAltarEntity.r.nextDouble()-0.5;
+        return InfinityMod.random.nextDouble()-0.5;
     }
 
     @Override

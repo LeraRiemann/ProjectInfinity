@@ -148,12 +148,11 @@ public class ModItemFunctions {
     @Environment(EnvType.CLIENT)
     public static void registerModelPredicates() {
         ItemPropertiesRegistry.register(ModItems.TRANSFINITE_KEY.get(), InfinityMethods.getId("key"), (stack, world, entity, seed) -> {
-            Identifier id = stack.getComponents().get(ModItemFunctions.DESTINATION.get());
-            if (id == null) return 0.02f;
+            Identifier id = ModItems.TRANSFINITE_KEY.get().getDestination(stack);
             String s = id.toString();
             if (s.contains("infinity:generated_")) return 0.01f;
             return switch(s) {
-                case "minecraft:random" -> 0.02f;
+                case InfinityMethods.ofRandomDim -> 0.02f;
                 case "minecraft:the_end" -> 0.03f;
                 case "infinity:pride" -> 0.04f;
                 default -> 0;
@@ -170,8 +169,9 @@ public class ModItemFunctions {
                 ModItemFunctions::iridPredicate);
         ItemPropertiesRegistry.register(ModItems.F4.get(), InfinityMethods.getId("f4"),
                 (stack, world, entity, seed) -> {
-                    Identifier id = stack.getComponents().get(ModItemFunctions.DESTINATION.get());
+                    Identifier id = ModItems.F4.get().getDestination(stack);
                     if (id == null) return 0.0f;
+                    if (id.toString().equals(InfinityMethods.ofRandomDim)) return 0.02f;
                     return 0.01f;
                 });
     }

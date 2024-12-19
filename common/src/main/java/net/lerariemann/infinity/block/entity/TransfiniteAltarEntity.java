@@ -16,11 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Objects;
-import java.util.Random;
 
 public class TransfiniteAltarEntity extends CosmicAltarEntity {
-    public static Random r = new Random();
-
     public TransfiniteAltarEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ALTAR.get(), pos, state);
     }
@@ -66,7 +63,7 @@ public class TransfiniteAltarEntity extends CosmicAltarEntity {
             for (int i : offsets) for (int k : offsets) {
                 if (i == 0 && k == 0) world.setBlockState(pos.add(i, -1, k), Blocks.STONE.getDefaultState());
                 else world.setBlockState(pos.add(i, -1, k), Registries.BLOCK.get(Identifier.of(
-                        InfinityMod.provider.randomName(r, "full_blocks"))).getDefaultState());
+                        InfinityMod.provider.randomName(InfinityMod.random, "full_blocks"))).getDefaultState());
             }
         }
         if (be.time >= 0) be.time+=1;
