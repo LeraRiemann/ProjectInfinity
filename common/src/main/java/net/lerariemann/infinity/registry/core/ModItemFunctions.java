@@ -9,6 +9,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.item.function.*;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
@@ -28,7 +29,6 @@ import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -39,6 +39,13 @@ import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.registry.core.ModItems.TRANSFINITE_KEY;
 
 public class ModItemFunctions {
+
+    public static String SIZE_X = "f4_size_x";
+    public static String SIZE_Y = "f4_size_y";
+    public static String F4_CHARGE = "f4_charge";
+    public static String DESTINATION = "key_destination";
+    public static String COLOR = "key_color";
+
     public static final DeferredRegister<LootFunctionType> LOOT_FUNCTION_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.LOOT_FUNCTION_TYPE);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS =
@@ -128,26 +135,6 @@ public class ModItemFunctions {
         itemEntity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
     }
 
-    public static @Nullable String getBiomeComponents(ItemStack stack) {
-        if (stack.getNbt() != null) {
-            return stack.getNbt().getCompound("BlockEntityTag").getString("Biome");
-        }
-        return null;
-    }
-
-    public static @Nullable String getDimensionComponents(ItemStack stack) {
-        if (stack.getNbt() != null) {
-            return stack.getNbt().getString("key_destination");
-        }
-        return null;
-    }
-
-    public static @Nullable Identifier getDimensionIdentifier(ItemStack stack) {
-        String dimension = getDimensionComponents(stack);
-        if (dimension != null) return Identifier.tryParse(dimension);
-        else return null;
-    }
-
     @Environment(EnvType.CLIENT)
     public static float iridPredicate(@Nullable ItemStack stack, ClientWorld world, @Nullable LivingEntity entity, int seed) {
         if (entity == null) return 0;
@@ -182,7 +169,7 @@ public class ModItemFunctions {
                 ModItemFunctions::iridPredicate);
         ItemPropertiesRegistry.register(ModItems.F4.get(), InfinityMethods.getId("f4"),
                 (stack, world, entity, seed) -> {
-                    Identifier id = stack.getComponents().get(ModItemFunctions.DESTINATION.get());
+                    Identifier id = BackportMethods.getDimensionIdentifier(stack);
                     if (id == null) return 0.0f;
                     return 0.01f;
                 });

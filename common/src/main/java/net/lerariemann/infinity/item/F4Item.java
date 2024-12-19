@@ -1,19 +1,21 @@
 package net.lerariemann.infinity.item;
 
+import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.InfinityPortal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
-import net.minecraft.component.ComponentMap;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.MutableText;
@@ -48,8 +50,13 @@ public class F4Item extends PortalDataHolder {
                 InfinityMethods.fallback(dimension.getPath()));
     }
 
+
     public static int getCharge(ItemStack f4) {
-        return f4.getOrDefault(ModItemFunctions.CHARGE.get(), 0);
+        if (f4.hasNbt()) {
+            assert f4.getNbt() != null;
+            return f4.getNbt().getInt("f4_charge");
+        }
+        return 0;
     }
 
     @Override
@@ -58,8 +65,8 @@ public class F4Item extends PortalDataHolder {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext type) {
+        super.appendTooltip(stack, world, tooltip, type);
         MutableText mutableText = Text.translatable("tooltip.infinity.f4.charges", getCharge(stack));
         tooltip.add(mutableText.formatted(Formatting.GRAY));
     }
@@ -100,8 +107,7 @@ public class F4Item extends PortalDataHolder {
         useCharges -= obsNotReplaced;
 
         player.playSound(SoundEvents.BLOCK_BELL_USE, 1, 0.75f);
-        stack.applyComponentsFrom(ComponentMap.builder()
-                .add(ModItemFunctions.CHARGE.get(), charges - useCharges).build());
+        BackportMethods.apply(stack, ModItemFunctions.F4_CHARGE, charges-useCharges);
         return stack;
     }
 
@@ -112,8 +118,9 @@ public class F4Item extends PortalDataHolder {
         BlockPos lowerCenter = player.getBlockPos().offset(dir, 4);
         ItemStack stack = player.getStackInHand(hand);
 
-        int size_x = stack.getOrDefault(ModItemFunctions.SIZE_X.get(), 3);
-        int size_y = stack.getOrDefault(ModItemFunctions.SIZE_Y.get(), 3);
+        int size_x = BackportMethods.getOrDefaultInt(stack, ModItemFunctions.SIZE_X, 3);
+        int size_y =  BackportMethods.getOrDefaultInt(stack, ModItemFunctions.SIZE_Y, 3);
+
         if (size_y % 2 == 0) {
             double d = dir2.equals(Direction.Axis.X) ? player.getPos().x : player.getPos().z;
             if (d % 1 > 0.5) { //player on the positive side of the block
@@ -168,8 +175,8 @@ public class F4Item extends PortalDataHolder {
         Direction.Axis dir2 =
                 player.getHorizontalFacing().getAxis().equals(Direction.Axis.X) ? Direction.Axis.Z : Direction.Axis.X;
 
-        int size_x = stack.getOrDefault(ModItemFunctions.SIZE_X.get(), 3);
-        int size_y = stack.getOrDefault(ModItemFunctions.SIZE_Y.get(), 3);
+        int size_x = BackportMethods.getOrDefaultInt(stack, ModItemFunctions.SIZE_X, 3);
+        int size_y = BackportMethods.getOrDefaultInt(stack, ModItemFunctions.SIZE_Y, 3);
 
         //validating the place position
         for (int j = -1; j <= size_y; j++) for (int k = -1; k <= size_x; k++) {
@@ -219,8 +226,9 @@ public class F4Item extends PortalDataHolder {
                 checkObsidianRemoval(world, portal.lowerLeft.offset(axis, i).up(j), obsidian);
         for (BlockPos bp : obsidian)
             world.removeBlock(bp, false);
-        stack.applyComponentsFrom(ComponentMap.builder()
-                .add(ModItemFunctions.CHARGE.get(), getCharge(stack) + obsidian.size()).build());
+        BackportMethods.apply(stack, ModItemFunctions.F4_CHARGE, getCharge(stack));
+        BackportMethods.apply(stack, ModItemFunctions.SIZE_X, portal.width);
+        BackportMethods.apply(stack, ModItemFunctions.SIZE_Y, portal.height);
         return stack;
     }
 }

@@ -11,7 +11,6 @@ import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.compat.CreateCompat;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
@@ -64,7 +63,7 @@ public interface PortalCreator {
         if (entity.isRemoved()) return;
         ItemStack itemStack = entity.getStack();
         if (itemStack.getItem() == ModItems.TRANSFINITE_KEY.get()) {
-            Identifier key_dest = ModItemFunctions.getDimensionIdentifier(itemStack);
+            Identifier key_dest = BackportMethods.getDimensionIdentifier(itemStack);
             MinecraftServer server = world.getServer();
             if (server != null) {
                 if (world instanceof ServerWorld serverWorld) {

@@ -126,7 +126,7 @@ public class PlatformMethods {
     }
 
     @ExpectPlatform
-    public static void addAfter(RegistrySupplier<Item> blockItem, RegistryKey<ItemGroup> group, Item item) {
+    public static <T extends Item> void addAfter(RegistrySupplier<T> blockItem, RegistryKey<ItemGroup> group, Item item) {
         throw new AssertionError();
     }
 

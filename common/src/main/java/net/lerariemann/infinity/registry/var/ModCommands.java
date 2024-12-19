@@ -7,7 +7,9 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.command.argument.DimensionArgumentType;
 import net.minecraft.server.command.CommandManager;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
 
 import static net.lerariemann.infinity.util.WarpLogic.*;
@@ -17,10 +19,10 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class ModCommands {
     public static final DynamicCommandExceptionType MALFORM_IDENTIFIER_EXCEPTION = new DynamicCommandExceptionType(
-            id -> Text.stringifiedTranslatable("error.infinity.warp.malformed_identifier", id)
+            id -> Text.translatable("error.infinity.warp.malformed_identifier", id)
     );
     public static final DynamicCommandExceptionType TIMEBOMBED_EXCEPRION = new DynamicCommandExceptionType(
-            id -> Text.stringifiedTranslatable("error.infinity.warp.timebombed", id)
+            id -> Text.translatable("error.infinity.warp.timebombed", id)
     );
 
     public static void registerCommands() {

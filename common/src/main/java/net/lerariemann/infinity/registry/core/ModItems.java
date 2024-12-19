@@ -14,14 +14,13 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Rarity;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.util.PlatformMethods.*;
 
+@SuppressWarnings("unused")
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, RegistryKeys.ITEM);
     //block items
@@ -40,7 +39,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM =
             registerBlockItemAfter(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK, BlockItem::new);
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM =
-            registerBlockItemAfter(ModBlocks.TIME_BOMB, ItemGroups.FUNCTIONAL, Items.VAULT, BlockItem::new);
+            registerBlockItemAfter(ModBlocks.TIME_BOMB, ItemGroups.FUNCTIONAL, Items.BEACON, BlockItem::new);
     public static final RegistrySupplier<Item> IRIDESCENT_WOOL  =
             registerBlockItemAfter(ModBlocks.IRIDESCENT_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL, BlockItem::new);
     public static final RegistrySupplier<Item> IRIDESCENT_CARPET  =
@@ -67,11 +66,11 @@ public class ModItems {
     public static final RegistrySupplier<Item> FOOTPRINT =
             registerItemAfter("footprint", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<TransfiniteKeyItem> TRANSFINITE_KEY =
-            registerItemAfter("key", ItemGroups.INGREDIENTS, Items.OMINOUS_TRIAL_KEY, TransfiniteKeyItem::new);
+            registerItemAfter("key", ItemGroups.INGREDIENTS, Items.AMETHYST_SHARD, TransfiniteKeyItem::new);
     public static final RegistrySupplier<HomeItem> HOME_ITEM =
             registerItemAfter("fine_item", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, HomeItem::new,
-                    new Item.Settings().component(DataComponentTypes.FOOD,
-                            new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of())));
+                    new Item.Settings().food(
+                            new FoodComponent.Builder().alwaysEdible().build()));
     public static final RegistrySupplier<Item> WHITE_MATTER =
             registerItemAfter("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> BLACK_MATTER =

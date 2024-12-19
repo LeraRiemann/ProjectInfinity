@@ -95,7 +95,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 RandomProvider prov = InfinityMod.provider;
                 Optional<Item> key = prov.getPortalKeyAsItem();
                 if (key.isEmpty()) {
-                    if (!npbe.isOpen()) PortalCreator.openWithStatIncrease(player, s, world, pos);
+                    if (!npbe.isOpen()) PortalCreator.openWithStatIncrease(player, s, serverWorld, pos);
                 }
                 /* Otherwise check if we're using the correct key. If so, open. */
                 else {
@@ -187,7 +187,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             MinecraftServer server = world.getServer();
             if (entity instanceof ItemEntity e) {
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
-                        putKeyComponents(e.getStack().getItem(), npbe.getDimension()));
+                        putKeyComponents(e.getStack().getItem(), ipbe.getDimension()));
                 InfinityMod.provider.getPortalKeyAsItem().ifPresent(item -> {
                     if (e.getStack().isOf(item)) {
                         InfinityPortal.tryUpdateOpenStatus(ipbe, world, pos, server);

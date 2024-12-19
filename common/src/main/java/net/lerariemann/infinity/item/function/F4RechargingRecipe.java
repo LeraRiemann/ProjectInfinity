@@ -3,26 +3,27 @@ package net.lerariemann.infinity.item.function;
 import net.lerariemann.infinity.item.F4Item;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
-import net.minecraft.component.ComponentMap;
+import net.lerariemann.infinity.util.BackportMethods;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 public class F4RechargingRecipe extends SpecialCraftingRecipe {
-    public F4RechargingRecipe(CraftingRecipeCategory craftingRecipeCategory) {
-        super(craftingRecipeCategory);
+    public F4RechargingRecipe(Identifier id, CraftingRecipeCategory craftingRecipeCategory) {
+        super(id, craftingRecipeCategory);
     }
 
-    public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
+    public boolean matches(RecipeInputInventory inventory, World world) {
         boolean foundF4 = false;
-        for (int k = 0; k < craftingRecipeInput.getSize(); k++) {
-            ItemStack itemStack = craftingRecipeInput.getStackInSlot(k);
+        for (int k = 0; k < inventory.getInputStacks().size(); k++) {
+            ItemStack itemStack = inventory.getStack(k);
             if (itemStack.isOf(ModItems.F4.get())) {
                 if (foundF4) return false;
                 foundF4 = true;
@@ -32,11 +33,11 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
         return foundF4;
     }
 
-    public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup wrapperLookup) {
+    public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
         ItemStack f4 = null;
         int i = 0;
-        for (int k = 0; k < craftingRecipeInput.getSize(); k++) {
-            ItemStack itemStack = craftingRecipeInput.getStackInSlot(k);
+        for (int k = 0; k < inventory.getInputStacks().size(); k++) {
+            ItemStack itemStack = inventory.getStack(k);
             if (itemStack.isOf(ModItems.F4.get())) f4 = itemStack;
             else if (!itemStack.isEmpty()) i++;
         }
@@ -46,19 +47,17 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
             return Items.OBSIDIAN.getDefaultStack().copyWithCount(Math.min(charge, 64));
         }
         ItemStack result = f4.copy();
-        result.applyComponentsFrom(ComponentMap.builder()
-                .add(ModItemFunctions.CHARGE.get(), charge + i)
-                .build());
+        BackportMethods.apply(result, ModItemFunctions.F4_CHARGE, charge+i);
         return result;
     }
 
     @Override
-    public DefaultedList<ItemStack> getRemainder(CraftingRecipeInput craftingRecipeInput) {
-        DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.getSize(), ItemStack.EMPTY);
+    public DefaultedList<ItemStack> getRemainder(RecipeInputInventory craftingRecipeInput) {
+        DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.getInputStacks().size(), ItemStack.EMPTY);
         ItemStack f4 = null;
         int f4pos = 0;
         for (int i = 0; i < defaultedList.size(); i++) {
-            ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
+            ItemStack itemStack = craftingRecipeInput.getStack(i);
             if (itemStack.isOf(ModItems.F4.get())) {
                 f4 = itemStack;
                 f4pos = i;
@@ -68,9 +67,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
         assert f4 != null;
         ItemStack result = f4.copy();
         int charge = Math.max(F4Item.getCharge(f4) - 64, 0);
-        result.applyComponentsFrom(ComponentMap.builder()
-                .add(ModItemFunctions.CHARGE.get(), charge)
-                .build());
+        BackportMethods.apply(result, ModItemFunctions.F4_CHARGE, charge);
         defaultedList.set(f4pos, result);
         return defaultedList;
     }
