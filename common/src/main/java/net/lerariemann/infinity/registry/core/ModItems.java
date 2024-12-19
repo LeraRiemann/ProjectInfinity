@@ -12,36 +12,42 @@ import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Rarity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.util.PlatformMethods.*;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, RegistryKeys.ITEM);
-
+    //block items
     public static final RegistrySupplier<Item> PORTAL_ITEM =
             ITEMS.register(ModBlocks.PORTAL.getId(), () -> new BlockItem(ModBlocks.PORTAL.get(), new Item.Settings()));
     public static final RegistrySupplier<Item> ALTAR_ITEM =
-            registerBlockItem(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN);
+            registerBlockItemAfter(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN, BlockItem::new);
     public static final RegistrySupplier<Item> ANT_ITEM  =
-            registerBlockItem(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE);
+            registerBlockItemAfter(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE, BlockItem::new);
     public static final RegistrySupplier<Item> BOOK_BOX_ITEM =
-            registerBlockItem(ModBlocks.BOOK_BOX, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF);
+            registerBlockItemAfter(ModBlocks.BOOK_BOX, ItemGroups.FUNCTIONAL, Items.CHISELED_BOOKSHELF, BlockItem::new);
     public static final RegistrySupplier<Item> CURSOR_ITEM  =
-            registerBlockItem(ModBlocks.CURSOR, ItemGroups.COLORED_BLOCKS, Items.PINK_TERRACOTTA);
-    public static final RegistrySupplier<Item> FOOTPRINT =
-            registerItem("footprint", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
-    public static final RegistrySupplier<Item> FINE_ITEM = registerHomeItem();
+            registerBlockItemAfter(ModBlocks.CURSOR, ItemGroups.COLORED_BLOCKS, Items.PINK_TERRACOTTA, BlockItem::new);
     public static final RegistrySupplier<Item> NETHERITE_SLAB_ITEM =
-            registerBlockItem(ModBlocks.NETHERITE_SLAB, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
+            registerBlockItemAfter(ModBlocks.NETHERITE_SLAB, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK, BlockItem::new);
     public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM =
-            registerBlockItem(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK);
+            registerBlockItemAfter(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK, BlockItem::new);
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM =
-            registerBlockItem(ModBlocks.TIME_BOMB, ItemGroups.FUNCTIONAL, Items.BEACON);
-    public static final RegistrySupplier<Item> TRANSFINITE_KEY = registerKeyItem();
+            registerBlockItemAfter(ModBlocks.TIME_BOMB, ItemGroups.FUNCTIONAL, Items.VAULT, BlockItem::new);
+    public static final RegistrySupplier<Item> IRIDESCENT_WOOL  =
+            registerBlockItemAfter(ModBlocks.IRIDESCENT_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL, BlockItem::new);
+    public static final RegistrySupplier<Item> IRIDESCENT_CARPET  =
+            registerBlockItemAfter(ModBlocks.IRIDESCENT_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, BlockItem::new);
+    public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM =
+            registerBlockItemAfter(ModBlocks.BIOME_BOTTLE, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE, BiomeBottleItem::new);
+    //spawn eggs
     public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () ->
             new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0, 0xFFFFFF,
                     createSpawnEggSettings()));
@@ -54,41 +60,64 @@ public class ModItems {
     public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = ITEMS.register("chaos_slime_spawn_egg",  () ->
             new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME, 0xAA77DD, 0xFF66FF,
                     createSpawnEggSettings()));
+    //bucket
     public static final RegistrySupplier<Item> IRIDESCENCE_BUCKET = ITEMS.register("iridescence_bucket", () ->
             new ArchitecturyBucketItem(PlatformMethods.getIridescenceStill(), new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1)));
+    //misc
+    public static final RegistrySupplier<Item> FOOTPRINT =
+            registerItemAfter("footprint", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
+    public static final RegistrySupplier<TransfiniteKeyItem> TRANSFINITE_KEY =
+            registerItemAfter("key", ItemGroups.INGREDIENTS, Items.OMINOUS_TRIAL_KEY, TransfiniteKeyItem::new);
+    public static final RegistrySupplier<HomeItem> HOME_ITEM =
+            registerItemAfter("fine_item", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, HomeItem::new,
+                    new Item.Settings().component(DataComponentTypes.FOOD,
+                            new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of())));
     public static final RegistrySupplier<Item> WHITE_MATTER =
-            registerItem("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
+            registerItemAfter("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> BLACK_MATTER =
-            registerItem("black_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
-    public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM = registerBottleItem();
-    public static final RegistrySupplier<Item> IRIDESCENT_WOOL  =
-            registerBlockItem(ModBlocks.IRIDESCENT_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL);
-    public static final RegistrySupplier<Item> IRIDESCENT_CARPET  =
-            registerBlockItem(ModBlocks.IRIDESCENT_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET);
+            registerItemAfter("black_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
+    public static final RegistrySupplier<F4Item> F4 =
+            registerItemAfter("f4", ItemGroups.OPERATOR, Items.DEBUG_STICK, F4Item::new,
+                    new Item.Settings().rarity(Rarity.UNCOMMON));
     public static TagKey<Item> IRIDESCENT_TAG = createItemTag("iridescent");
 
-
-
-    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings) {
-        return ITEMS.register(block.getId(), () -> new BlockItem(block.get(), settings));
+    public static <T extends Item> RegistrySupplier<T> register(String item, Item.Settings settings, Function<Item.Settings, T> constructor) {
+        return ITEMS.register(item, () -> constructor.apply(settings));
+    }
+    /**
+     * Registers an item via Architectury API.
+     */
+    public static <T extends Item> RegistrySupplier<T> registerItemAfter(String id, RegistryKey<ItemGroup> group, Item item,
+                                                           Function<Item.Settings, T> constructor, Item.Settings settings) {
+        RegistrySupplier<T> registeredItem = register(id, addFallbackTab(settings, group), constructor);
+        addAfter(registeredItem, group, item);
+        return registeredItem;
+    }
+    public static <T extends Item> RegistrySupplier<T> registerItemAfter(String id, RegistryKey<ItemGroup> group, Item item,
+                                                           Function<Item.Settings, T> constructor) {
+        return registerItemAfter(id, group, item, constructor, new Item.Settings());
     }
 
-    public static RegistrySupplier<Item> register(String item, Item.Settings settings) {
-        return ITEMS.register(item, () -> new Item(settings));
+    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings,
+                                                           BiFunction<Block, Item.Settings, Item> constructor) {
+        return ITEMS.register(block.getId(), () -> constructor.apply(block.get(), settings));
     }
-
+    /**
+     * Registers a Block Item via Architectury API.
+     */
+    public static RegistrySupplier<Item> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
+                                                                Item.Settings settings,
+                                                                BiFunction<Block, Item.Settings, Item> constructor) {
+        RegistrySupplier<Item> registeredItem = registerBlockItem(block, addFallbackTab(settings, group), constructor);
+        addAfter(registeredItem, group, item);
+        return registeredItem;
+    }
     /**
      * Registers a Block Item through Architectury API.
      */
-    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item.Settings settings) {
-       return registerBlockItem(block, settings.arch$tab(group));
-    }
-
-    /**
-     * Registers a Block Item through Architectury API.
-     */
-    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item) {
-        return registerBlockItem(block, group, item, new Item.Settings());
+    public static RegistrySupplier<Item> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
+                                                                BiFunction<Block, Item.Settings, Item> constructor) {
+        return registerBlockItemAfter(block, group, item, new Item.Settings(), constructor);
     }
 
     /**
@@ -98,55 +127,6 @@ public class ModItems {
         if (!InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
             return settings.arch$tab(group);
         return settings;
-    }
-
-    /**
-     * Registers a Block Item via Architectury API.
-     */
-    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item, Item.Settings settings) {
-        RegistrySupplier<Item> registeredItem = registerBlockItem(block, addFallbackTab(settings, group));
-        addAfter(registeredItem, group, item);
-        return registeredItem;
-    }
-
-    /**
-     * Registers an item via Architectury API.
-     */
-    public static RegistrySupplier<Item> registerItem(String id, RegistryKey<ItemGroup> group, Item item) {
-        RegistrySupplier<Item> registeredItem = register(id, addFallbackTab(new Item.Settings(), group));
-        addAfter(registeredItem, group, item);
-        return registeredItem;
-    }
-
-    /**
-     * Registers a Transfinite Key item.
-     */
-    public static RegistrySupplier<Item> registerKeyItem() {
-        final Item.Settings keySettings = addFallbackTab(new Item.Settings(), ItemGroups.INGREDIENTS);
-        RegistrySupplier<Item> registeredItem = ITEMS.register("key", () -> new TransfiniteKeyItem(keySettings));
-        addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.AMETHYST_SHARD);
-        return registeredItem;
-    }
-
-    /**
-     * Registers a Home Sweet Home item.
-     */
-    public static RegistrySupplier<Item> registerHomeItem() {
-        final Item.Settings homeSettings = new Item.Settings().food(new FoodComponent.Builder().build());
-        RegistrySupplier<Item> registeredItem = ITEMS.register("fine_item", () -> new HomeItem(homeSettings));
-        addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5);
-        return registeredItem;
-    }
-
-    /**
-     * Registers a Biome Bottle item.
-     */
-    public static RegistrySupplier<Item> registerBottleItem() {
-        final Item.Settings bottlesettings = addFallbackTab(new Item.Settings(), ItemGroups.FUNCTIONAL);
-        RegistrySupplier<Item> registeredItem = ITEMS.register("biome_bottle", () ->
-                new BiomeBottleItem(ModBlocks.BIOME_BOTTLE.get(), bottlesettings));
-        addAfter(registeredItem, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE);
-        return registeredItem;
     }
 
     /**

@@ -1,49 +1,36 @@
 package net.lerariemann.infinity.item;
 
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-public class TransfiniteKeyItem extends Item {
+public class TransfiniteKeyItem extends PortalDataHolder {
     public TransfiniteKeyItem(Settings settings) {
         super(settings);
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        super.appendTooltip(stack, world, tooltip, context);
-        String dimension = ModItemFunctions.getDimensionComponents(stack);
-        MutableText mutableText;
-        if (dimension != null) {
-            // Keys to randomly generated dimensions.
-            if (dimension.contains("infinity:generated_"))
-                mutableText = Text.translatable("dimension.infinity.generated")
-                        .append(dimension.replace("infinity:generated_", ""));
-            // Keys without a dimension attached.
-            else if (dimension.equals("minecraft:random"))
-                mutableText = Text.translatable("dimension.infinity.randomise");
-            // Easter Egg dimensions.
-            else {
-                Identifier id = new Identifier(dimension);
-                mutableText = Text.translatableWithFallback(
-                        Util.createTranslationKey("dimension", id),
-                        InfinityMethods.fallback(id.getPath()));
-            }
-        }
-        else {
-            mutableText = Text.translatable("dimension.infinity.randomise");
-        }
-        tooltip.add(mutableText.formatted(Formatting.GRAY));
+    public MutableText defaultDimensionTooltip() {
+        return Text.translatable("tooltip.infinity.key.randomise");
+    }
+
+    @Override
+    public MutableText getDimensionTooltip(Identifier dimension) {
+        String s = dimension.toString();
+        // Keys to randomly generated dimensions.
+        if (s.contains("infinity:generated_"))
+            return Text.translatable("tooltip.infinity.key.generated")
+                    .append(s.replace("infinity:generated_", ""));
+        // Keys without a dimension attached.
+        if (s.equals("minecraft:random"))
+            return Text.translatable("tooltip.infinity.key.randomise");
+        // Easter Egg dimensions.
+        return Text.translatableWithFallback(
+                Util.createTranslationKey("dimension", dimension),
+                InfinityMethods.fallback(dimension.getPath()));
     }
 }

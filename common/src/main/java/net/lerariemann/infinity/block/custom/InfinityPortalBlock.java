@@ -6,6 +6,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
+import net.lerariemann.infinity.item.PortalDataHolder;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.var.ModPoi;
 import net.lerariemann.infinity.util.*;
@@ -88,13 +89,13 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             if (blockEntity instanceof InfinityPortalBlockEntity npbe) {
                 /* If the portal is open already, nothing should happen. */
                 if (npbe.isOpen() && world_exists(s, npbe.getDimension()))
-                    return ActionResult.SUCCESS;
+                    return ActionResult.PASS;
 
                 /* If the portal key is blank, open the portal on any right-click. */
                 RandomProvider prov = InfinityMod.provider;
                 Optional<Item> key = prov.getPortalKeyAsItem();
                 if (key.isEmpty()) {
-                    PortalCreator.openWithStatIncrease(player, s, serverWorld, pos);
+                    if (!npbe.isOpen()) PortalCreator.openWithStatIncrease(player, s, world, pos);
                 }
                 /* Otherwise check if we're using the correct key. If so, open. */
                 else {
@@ -108,7 +109,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 }
             }
         }
-        return ActionResult.SUCCESS;
+        return ActionResult.PASS;
     }
 
     @Override
@@ -125,7 +126,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     static boolean world_exists(MinecraftServer s, Identifier l) {
         return (!l.getNamespace().equals(InfinityMod.MOD_ID)) ||
                 s.getSavePath(WorldSavePath.DATAPACKS).resolve(l.getPath()).toFile().exists() ||
-                s.getWorld(RegistryKey.of(RegistryKeys.WORLD, l)) != null;
+                s.getWorldRegistryKeys().contains(RegistryKey.of(RegistryKeys.WORLD, l));
     }
 
     /**
@@ -182,15 +183,15 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     public void onEntityCollision(BlockState state, World w, BlockPos pos, Entity entity) {
         AtomicBoolean bl = new AtomicBoolean(false);
         if (w instanceof ServerWorld world
-                && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity npbe) {
+                && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
             MinecraftServer server = world.getServer();
             if (entity instanceof ItemEntity e) {
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
                         putKeyComponents(e.getStack().getItem(), npbe.getDimension()));
                 InfinityMod.provider.getPortalKeyAsItem().ifPresent(item -> {
                     if (e.getStack().isOf(item)) {
-                        InfinityPortal.tryUpdateOpenStatus(npbe, world, pos, server);
-                        if (npbe.isOpen()) return;
+                        InfinityPortal.tryUpdateOpenStatus(ipbe, world, pos, server);
+                        if (ipbe.isOpen()) return;
                         PlayerEntity nearestPlayer =
                                 world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
                         PortalCreator.openWithStatIncrease(nearestPlayer, server, world, pos);
@@ -203,13 +204,13 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             }
             if (entity instanceof PlayerEntity player
                     && InfinityMod.provider.isPortalKeyBlank()) {
-                ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
-                if ((world1 == null) || !npbe.isOpen())
+                ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, ipbe.getDimension()));
+                if ((world1 == null) || !ipbe.isOpen())
                     PortalCreator.openWithStatIncrease(player, server, world, pos);
                 else {
                     Timebombable tw = (Timebombable)world1;
                     if (tw.infinity$isTimebombed() && tw.infinity$tryRestore()) {
-                        new RandomDimension(npbe.getDimension(), server);
+                        new RandomDimension(ipbe.getDimension(), server);
                         PortalCreator.openWithStatIncrease(player, server, world, pos);
                     }
                 }

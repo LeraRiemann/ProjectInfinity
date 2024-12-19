@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.util;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.var.ModPoi;
 import net.minecraft.block.BlockState;
@@ -45,7 +44,7 @@ public class InfinityPortal {
     @Nullable BlockPos posTo;
     @Nullable BlockLocating.Rectangle portalTo;
     boolean unableToCreatePortalFlag = false;
-    boolean syncFlag = true;
+    boolean noSyncFlag = false;
 
     public InfinityPortal(InfinityPortalBlockEntity ipbe, ServerWorld worldFrom, BlockPos startingPos) {
         this.ipbe = ipbe;
@@ -80,7 +79,7 @@ public class InfinityPortal {
     }
 
     /** Finding a rectangle of portal blocks provided a position of one of them. */
-    public static BlockLocating.Rectangle getRect(ServerWorld world, BlockPos pos) {
+    public static BlockLocating.Rectangle getRect(World world, BlockPos pos) {
         BlockState blockStateFrom = world.getBlockState(pos);
         return BlockLocating.getLargestRectangle(
                 pos, getAxisOrDefault(blockStateFrom),
@@ -124,7 +123,7 @@ public class InfinityPortal {
         if (worldTo != null) {
             if (worldTo.getRegistryKey().equals(worldFrom.getRegistryKey()))
                 player.sendMessage(Text.translatable("error.infinity.portal.matching_ends"));
-            else if (((Timebombable)worldTo).infinity$isTimebombed())
+            else if (InfinityMethods.isTimebombed(worldTo))
                 player.sendMessage(Text.translatable("error.infinity.portal.deleted"));
             else if (unableToCreatePortalFlag)
                 player.sendMessage(Text.translatable("error.infinity.portal.cannot_create"));
@@ -180,7 +179,7 @@ public class InfinityPortal {
         findOrCreateExitPortal();
         if (portalTo == null) return;
         posTo = lowerCenterPos(portalTo, worldTo);
-        if (syncFlag) trySyncPortals(worldFrom, posFrom, worldTo, posTo);
+        if (!noSyncFlag) trySyncPortals(worldFrom, posFrom, worldTo, posTo);
     }
 
     /** Searches for a rectangle of portal blocks to teleport to */
@@ -225,7 +224,8 @@ public class InfinityPortal {
                 .map(PointOfInterest::getPos)
                 .filter(wbTo::contains)
                 .min(Comparator.comparingDouble(posTo -> posTo.getSquaredDistance(originOfTesting)));
-        if (portal.isPresent()) syncFlag = false;
+        noSyncFlag = portal.isPresent(); //if a nether portal indeed was found we do not wish to overwrite it
+
         return portal;
     }
 

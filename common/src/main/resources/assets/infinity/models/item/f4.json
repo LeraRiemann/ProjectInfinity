@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "infinity:item/f4/frame",
+    "layer1": "infinity:item/f4/overlay_def"
+  },
+  "overrides": [
+    { "predicate": { "infinity:f4": 0.01 }, "model": "infinity:item/f4_colored" }
+  ]
+}

@@ -93,11 +93,15 @@ public interface InfinityMethods {
         return InfinityMethods.getDimId(getDimensionSeed(text));
     }
 
+    static boolean isTimebombed(ServerWorld world) {
+        return ((Timebombable)world).infinity$isTimebombed();
+    }
+
     /**
      * Check if a dimension exists and has not been timebombed.
      */
     static boolean dimExists(ServerWorld world) {
-        return (world != null && !((Timebombable)world).infinity$isTimebombed());
+        return (world != null && !isTimebombed(world));
     }
 
     /**

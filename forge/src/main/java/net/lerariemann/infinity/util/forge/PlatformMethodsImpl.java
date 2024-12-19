@@ -58,8 +58,10 @@ public class PlatformMethodsImpl {
     }
 
     //Optional, requires Item Group API.
-    public static void addAfter(RegistrySupplier<Item> blockItem, RegistryKey<ItemGroup> group, Item item) {
-        ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, blockItem.get()));
+    public static <T extends Item> void addAfter(RegistrySupplier<T> supplier, RegistryKey<ItemGroup> group, Item item) {
+        if (InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
+            ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, supplier.get()));
+        }
     }
 
     public static RegistrySupplier<ForgeFlowingFluid.Source> getIridescenceStill() {

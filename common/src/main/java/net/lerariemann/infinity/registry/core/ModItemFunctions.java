@@ -49,6 +49,9 @@ public class ModItemFunctions {
     public static RegistrySupplier<RecipeSerializer<BiomeBottleCombiningRecipe>> BIOME_BOTTLE_COMBINING =
             RECIPE_SERIALIZERS.register("biome_bottle_combining", () ->
                     new SpecialRecipeSerializer<>(BiomeBottleCombiningRecipe::new));
+    public static RegistrySupplier<RecipeSerializer<F4RechargingRecipe>> F4_RECHARGING =
+            RECIPE_SERIALIZERS.register("f4_recharging", () ->
+                    new SpecialRecipeSerializer<>(F4RechargingRecipe::new));
     public static RegistrySupplier<RecipeSerializer<CollisionCraftingRecipe>> PORTAL_CRAFTING =
             RECIPE_SERIALIZERS.register("collision_portal", () ->
                     new CollisionCraftingRecipe.Serializer(CollisionCraftingRecipe.OfPortal::new));
@@ -177,5 +180,11 @@ public class ModItemFunctions {
                 ModItemFunctions::iridPredicate);
         ItemPropertiesRegistry.register(ModItems.IRIDESCENT_WOOL.get(), InfinityMethods.getId("iridescent"),
                 ModItemFunctions::iridPredicate);
+        ItemPropertiesRegistry.register(ModItems.F4.get(), InfinityMethods.getId("f4"),
+                (stack, world, entity, seed) -> {
+                    Identifier id = stack.getComponents().get(ModItemFunctions.DESTINATION.get());
+                    if (id == null) return 0.0f;
+                    return 0.01f;
+                });
     }
 }

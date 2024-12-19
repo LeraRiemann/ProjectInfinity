@@ -13,6 +13,7 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -99,16 +100,31 @@ public class InfinityPortalBlockEntity extends BlockEntity {
         markDirty();
     }
 
+    public void setData(MinecraftServer server, Identifier i) {
+        if (server == null) {
+            setData(i);
+            return;
+        }
+        setDimension(i);
+        setColor(PortalColorApplier.of(i, server).apply(getPos()));
+        setOpen(server.getWorldRegistryKeys().contains(RegistryKey.of(RegistryKeys.WORLD, i)));
+    }
+    public void setData(Identifier i) {
+        setDimension(i);
+        setColor((int)InfinityMethods.getNumericFromId(i));
+        setOpen(false);
+    }
+
     public boolean isConnected() {
         if (!isOpen()) return false;
-        if (getWorld() instanceof ServerWorld worldFrom && InfinityMethods.dimExists(worldFrom)) {
+        if (getWorld() instanceof ServerWorld worldFrom && !InfinityMethods.isTimebombed(worldFrom)) {
             return InfinityPortal.isValidDestination(worldFrom, getDimensionAsWorld(), getOtherSidePos());
         }
         return false;
     }
     public boolean isConnectedBothSides() {
         if (!isOpen()) return false;
-        if (getWorld() instanceof ServerWorld worldFrom && InfinityMethods.dimExists(worldFrom)) {
+        if (getWorld() instanceof ServerWorld worldFrom && !InfinityMethods.isTimebombed(worldFrom)) {
             ServerWorld worldTo = getDimensionAsWorld();
             BlockPos posTo = getOtherSidePos();
             if (posTo == null || !InfinityMethods.dimExists(worldTo)) return false;
