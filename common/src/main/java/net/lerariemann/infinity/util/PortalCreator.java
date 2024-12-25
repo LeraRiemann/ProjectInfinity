@@ -72,7 +72,7 @@ public interface PortalCreator {
         }
         if (writableComponent != null || writtenComponent != null || printedComponent != null) {
             String content = parseComponents(writableComponent, writtenComponent, printedComponent);
-            Identifier id = InfinityMethods.getIdentifier(content);
+            Identifier id = InfinityMethods.dimTextToId(content);
             boolean bl = modifyOnInitialCollision(id, world, pos);
             if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
         }

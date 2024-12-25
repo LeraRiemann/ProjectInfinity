@@ -91,7 +91,7 @@ public interface InfinityMethods {
      * Convert a provided string into a dimension ID.
      * This also checks if it matches an Easter Egg dimension.
      */
-    static Identifier getIdentifier(String text) {
+    static Identifier dimTextToId(String text) {
         if (text.equals("abatised redivides")) return World.END.getValue();
         if (text.isEmpty()) return InfinityMethods.getId("missingno");
         if (InfinityMod.provider.easterizer.isEaster(text, InfinityMod.provider) && !text.equals("missingno")) return InfinityMethods.getId(text);
