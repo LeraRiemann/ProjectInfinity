@@ -29,7 +29,7 @@ public class AntBlock extends HorizontalFacingBlock {
         return CODEC;
     }
 
-    boolean inverseExists(Block down) {
+    public static boolean inverseExists(Block down) {
         var s = Registries.BLOCK.getEntry(down).getIdAsString();
         var state = down.getDefaultState();
         if (PlatformMethods.isInBlack(state)) {
@@ -41,7 +41,7 @@ public class AntBlock extends HorizontalFacingBlock {
         return false;
     }
 
-    Block recolor(Block down, boolean toWhite) {
+    public static Block recolor(Block down, boolean toWhite) {
         String s = Registries.BLOCK.getEntry(down).getIdAsString();
         var state = down.getDefaultState();
         if (PlatformMethods.isInBlack(state)) {
@@ -54,7 +54,7 @@ public class AntBlock extends HorizontalFacingBlock {
     }
 
     @Nullable
-    Clockwiseness getCW(Block down) {
+    public static Clockwiseness getCW(Block down) {
         String s = Registries.BLOCK.getEntry(down).getIdAsString();
         if (s.contains("black")) {
             return Clockwiseness.CCW;
@@ -120,7 +120,7 @@ public class AntBlock extends HorizontalFacingBlock {
         builder.add(FACING);
     }
 
-    enum Clockwiseness {
+    public enum Clockwiseness {
         CW,
         CCW
     }
