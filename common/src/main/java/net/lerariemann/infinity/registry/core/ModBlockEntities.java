@@ -21,10 +21,6 @@ public class ModBlockEntities {
             BLOCK_ENTITY_TYPES.register("neither_portal", () ->
                     BlockEntityType.Builder.create(InfinityPortalBlockEntity::new,
                             ModBlocks.PORTAL.get()).build(type("neither_portal")));
-    public static final RegistrySupplier<BlockEntityType<TransfiniteAltarEntity>> ALTAR =
-            BLOCK_ENTITY_TYPES.register("altar_block_entity", () ->
-                    BlockEntityType.Builder.create(TransfiniteAltarEntity::new,
-                            ModBlocks.ALTAR.get()).build(type("altar_block_entity")));
     public static final RegistrySupplier<BlockEntityType<CosmicAltarEntity>> ALTAR_COSMIC =
             BLOCK_ENTITY_TYPES.register("cosmic_block_entity", () ->
                     BlockEntityType.Builder.create(CosmicAltarEntity::new,

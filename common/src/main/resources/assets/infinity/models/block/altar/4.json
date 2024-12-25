@@ -1,9 +1,0 @@
-{
-  "parent": "infinity:block/altar",
-  "textures": {
-    "leg": "infinity:block/altar/leg/4",
-    "top": "infinity:block/altar/leg/4",
-    "side": "infinity:block/altar/side/4",
-    "particle": "infinity:block/altar/leg/4"
-  }
-}
