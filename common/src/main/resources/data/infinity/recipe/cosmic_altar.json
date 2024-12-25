@@ -1,0 +1,9 @@
+{
+  "type": "infinity:collision_iridescence",
+  "input": {
+    "item": "infinity:altar"
+  },
+  "output": {
+    "id": "infinity:cosmic_altar"
+  }
+}

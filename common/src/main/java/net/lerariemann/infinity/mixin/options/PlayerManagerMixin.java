@@ -60,8 +60,8 @@ public class PlayerManagerMixin {
             int y = serverWorld2.getTopY() - 10;
             BlockPos pos = new BlockPos(player.getBlockX(), y, player.getBlockZ());
             BlockState st = serverWorld2.getBlockState(pos);
-            serverWorld2.setBlockState(pos, ModBlocks.ALTAR_COSMIC.get().getDefaultState());
-            serverWorld2.getBlockEntity(pos, ModBlockEntities.ALTAR_COSMIC.get()).ifPresent(e -> {
+            serverWorld2.setBlockState(pos, ModBlocks.COSMIC_ALTAR.get().getDefaultState());
+            serverWorld2.getBlockEntity(pos, ModBlockEntities.COSMIC_ALTAR.get()).ifPresent(e -> {
                 InfinityMod.LOGGER.info("Invoking the name of the Cosmic Altar...");
                 e.startTime();
                 e.addNull(st);

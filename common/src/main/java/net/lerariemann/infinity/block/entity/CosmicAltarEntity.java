@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtHelper;
@@ -26,14 +25,9 @@ public class CosmicAltarEntity extends BlockEntity {
     protected Map<String, BlockState> map;
     public static int[] offsets = new int[]{-1, 0, 1};
     public static int[] offsets_y = new int[]{1, 2, 3};
-    public CosmicAltarEntity(BlockEntityType<? extends CosmicAltarEntity> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
-        time = -1; //not ticking when set improperly
-        map = new HashMap<>();
-    }
     public CosmicAltarEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.ALTAR_COSMIC.get(), pos, state);
-        time = -1;
+        super(ModBlockEntities.COSMIC_ALTAR.get(), pos, state);
+        time = -1; //not ticking when set improperly
         map = new HashMap<>();
     }
 
@@ -43,7 +37,7 @@ public class CosmicAltarEntity extends BlockEntity {
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, CosmicAltarEntity be) {
-        MinecraftServerAccess a = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer())));
+        MinecraftServerAccess access = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer())));
         if(be.time == 0) {
             for (int i : offsets) for (int j : offsets_y) for (int k : offsets) {
                 be.map.put(i + "," + j + "," + k, world.getBlockState(pos.add(i, j, k)));
@@ -53,7 +47,7 @@ public class CosmicAltarEntity extends BlockEntity {
             for (int i : offsets) for (int j : offsets_y) for (int k : offsets) {
                 world.setBlockState(pos.add(i, j, k), be.fromMap(i, j, k));
             }
-            a.infinity$onInvocation();
+            access.infinity$onInvocation();
             be.markRemoved();
             world.setBlockState(pos, be.fromMap(0, 0, 0));
         }
@@ -81,7 +75,8 @@ public class CosmicAltarEntity extends BlockEntity {
         }
         map = new HashMap<>();
         if (nbt.contains("map", NbtElement.COMPOUND_TYPE)) {
-            RegistryWrapper<Block> registryEntryLookup = this.world != null ? this.world.createCommandRegistryWrapper(RegistryKeys.BLOCK) : Registries.BLOCK.getReadOnlyWrapper();
+            RegistryWrapper<Block> registryEntryLookup =
+                    registryLookup.getOptionalWrapper(RegistryKeys.BLOCK).orElse(Registries.BLOCK.getReadOnlyWrapper());
             NbtCompound mapnbt = nbt.getCompound("map");
             for (String s : mapnbt.getKeys()) {
                 map.put(s, NbtHelper.toBlockState(registryEntryLookup, nbt.getCompound(s)));
@@ -93,10 +88,12 @@ public class CosmicAltarEntity extends BlockEntity {
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
         nbt.putInt("time", this.time);
-        NbtCompound mapnbt = new NbtCompound();
-        for (String s : map.keySet()) {
-            mapnbt.put(s, NbtHelper.fromBlockState(map.get(s)));
+        if (!map.isEmpty()) {
+            NbtCompound mapnbt = new NbtCompound();
+            for (String s : map.keySet()) {
+                mapnbt.put(s, NbtHelper.fromBlockState(map.get(s)));
+            }
+            nbt.put("map", mapnbt);
         }
-        nbt.put("map", mapnbt);
     }
 }

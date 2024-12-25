@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "infinity:block/altar/cosmic",
+    "particle": "infinity:block/iridescent/block"
+  }
+}

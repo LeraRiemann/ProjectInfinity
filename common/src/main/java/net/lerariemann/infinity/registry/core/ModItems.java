@@ -31,6 +31,8 @@ public class ModItems {
             ITEMS.register(ModBlocks.PORTAL.getId(), () -> new BlockItem(ModBlocks.PORTAL.get(), new Item.Settings()));
     public static final RegistrySupplier<Item> ALTAR_ITEM =
             registerBlockItemAfter(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN, BlockItem::new);
+    public static final RegistrySupplier<Item> COSMIC_ALTAR_ITEM =
+            registerBlockItemAfter(ModBlocks.COSMIC_ALTAR, ItemGroups.OPERATOR, Items.DEBUG_STICK, BlockItem::new);
     public static final RegistrySupplier<Item> ANT_ITEM  =
             registerBlockItemAfter(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE, BlockItem::new);
     public static final RegistrySupplier<Item> BOOK_BOX_ITEM =

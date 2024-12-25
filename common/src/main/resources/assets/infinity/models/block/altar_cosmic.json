@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "infinity:block/altar/cosmic_top",
-    "side": "infinity:block/altar/cosmic"
-  }
-}

@@ -35,6 +35,6 @@ public class CosmicAltar extends BlockWithEntity {
     }
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, ModBlockEntities.ALTAR_COSMIC.get(), world.isClient ? null : CosmicAltarEntity::serverTick);
+        return validateTicker(type, ModBlockEntities.COSMIC_ALTAR.get(), world.isClient ? null : CosmicAltarEntity::serverTick);
     }
 }
