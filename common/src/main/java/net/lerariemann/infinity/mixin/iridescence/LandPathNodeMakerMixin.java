@@ -2,7 +2,7 @@ package net.lerariemann.infinity.mixin.iridescence;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.lerariemann.infinity.entity.custom.ChaosPawn;
+import net.lerariemann.infinity.entity.custom.AbstractChessFigure;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.pathing.LandPathNodeMaker;
@@ -23,7 +23,7 @@ public abstract class LandPathNodeMakerMixin extends PathNodeMaker {
             at = @At("HEAD"), cancellable = true)
     private void inj(BlockView world, int x, int y, int z, MobEntity mob, CallbackInfoReturnable<PathNodeType> cir) {
         if (Iridescence.isIridescence(entity.getWorld(), new BlockPos(x, y, z))) {
-            if (entity instanceof ChaosPawn pawn && pawn.isChess())
+            if (entity instanceof AbstractChessFigure figure && figure.isBlackOrWhite())
                 cir.setReturnValue(PathNodeType.BLOCKED);
         }
     }

@@ -4,7 +4,7 @@ import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
-import net.lerariemann.infinity.util.BackportMethods;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.InfinityPortal;
 import net.minecraft.block.BlockState;
@@ -26,9 +26,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.World;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class F4Item extends PortalDataHolder {
     static final BlockState OBSIDIAN = Blocks.OBSIDIAN.getDefaultState();
@@ -44,6 +42,8 @@ public class F4Item extends PortalDataHolder {
         if (s.contains("infinity:generated_"))
             return Text.translatable("tooltip.infinity.key.generated")
                     .append(s.replace("infinity:generated_", ""));
+        if (s.equals(InfinityMethods.ofRandomDim))
+            return Text.translatable("tooltip.infinity.key.randomise");
         // All other dimensions.
         return Text.translatableWithFallback(
                 Util.createTranslationKey("dimension", dimension),
@@ -83,7 +83,8 @@ public class F4Item extends PortalDataHolder {
             return null;
         }
         BlockPos lowerLeft = lowerCenter.offset(dir2, -(size_x/2));
-        Identifier id = getDestination(stack);
+        Identifier id = ModItems.F4.get().getDestinationParsed(stack, world);
+        boolean doNotRenderPortal = (world.isClient && ModItems.F4.get().isDestinationRandom(id));
         int obsNotReplaced = 0;
 
         //placing the portal
@@ -94,7 +95,7 @@ public class F4Item extends PortalDataHolder {
         for (int y = 0; y < size_y; y++) {
             if (!world.setBlockState(lowerLeft.offset(dir2, -1).offset(Direction.UP, y), OBSIDIAN)) obsNotReplaced++;
             if (!world.setBlockState(lowerLeft.offset(dir2, size_x).offset(Direction.UP, y), OBSIDIAN)) obsNotReplaced++;
-            for (int x = 0; x < size_x; x++) {
+            if (!doNotRenderPortal) for (int x = 0; x < size_x; x++) {
                 BlockPos pos = lowerLeft.offset(dir2, x).offset(Direction.UP, y);
                 world.setBlockState(pos,
                         ((id == null) ? Blocks.NETHER_PORTAL : ModBlocks.PORTAL.get())
@@ -148,7 +149,9 @@ public class F4Item extends PortalDataHolder {
         }
         if (!positionFound) return TypedActionResult.pass(stack);
 
-        return TypedActionResult.consume(placePortal(world, player, stack, lowerCenter.up(i), size_x, size_y));
+        ItemStack newStack = placePortal(world, player, stack.copy(), lowerCenter.up(i), size_x, size_y);
+        if (newStack == null) return TypedActionResult.pass(stack);
+        return TypedActionResult.consume(player.isCreative() ? stack : newStack);
     }
 
     public static boolean isPortal(BlockState state) {
@@ -166,8 +169,8 @@ public class F4Item extends PortalDataHolder {
         Hand hand = context.getHand();
 
         if (isPortal(bs)) {
-            ItemStack newStack = useOnPortalBlock(world, pos, stack);
-            player.setStackInHand(hand, newStack);
+            ItemStack newStack = useOnPortalBlock(world, pos, stack.copy());
+            if (!player.isCreative()) player.setStackInHand(hand, newStack);
             return ActionResult.CONSUME;
         }
         pos = pos.up(bs.isOf(Blocks.OBSIDIAN) ? 1 : 2);
@@ -186,45 +189,80 @@ public class F4Item extends PortalDataHolder {
             }
         }
 
-        ItemStack stackNew = placePortal(world, player, context.getStack(), pos,
+        ItemStack newStack = placePortal(world, player, context.getStack().copy(), pos,
                 size_x, size_y);
-        if (stackNew == null) {
+        if (newStack == null) {
             return ActionResult.FAIL;
         }
-        player.setStackInHand(hand, stack);
+        if (!player.isCreative()) player.setStackInHand(hand, newStack);
         return ActionResult.CONSUME;
     }
 
-    public static boolean checkNeighbors(World world, BlockPos bp) {
+    public static boolean checkIfValidAxis(Direction.Axis axisFound, Direction.Axis axisBeingChecked, Direction.Axis forceAxis) {
+        if (forceAxis == null) {
+            return axisBeingChecked.isVertical() || axisFound.equals(axisBeingChecked);
+        }
+        return axisFound.equals(forceAxis);
+    }
+
+    public static boolean checkNeighbors(World world, BlockPos bp,
+                                         Collection<Direction> primaryOffsets, //possible directions in which blocks of other portals may be
+                                         Collection<Direction> secondaryOffsets, //possible secondary directions from a neighboring obsidian in case we found a corner
+                                         int max,
+                                         Direction.Axis forcePrimaryAxis) {
         int i = 0;
-        for (Direction dir : Direction.values()) {
+        boolean checkCorners = !secondaryOffsets.isEmpty();
+        for (Direction dir : primaryOffsets) {
             BlockState bs = world.getBlockState(bp.offset(dir));
             Direction.Axis axis = dir.getAxis();
-            if (isPortal(bs) && (bs.get(Properties.HORIZONTAL_AXIS).equals(axis) || axis.isVertical()))
-                if (++i > 1) return true;
+            if (isPortal(bs)) {
+                Direction.Axis axisFound = bs.get(Properties.HORIZONTAL_AXIS);
+                if (checkIfValidAxis(axisFound, axis, forcePrimaryAxis))
+                    if (++i > max) return true;
+            }
+            if (checkCorners && bs.isOf(Blocks.OBSIDIAN)) {
+                Direction.Axis forceAxis = axis.isHorizontal() ? axis : null;
+                return checkNeighbors(world, bp.offset(dir), secondaryOffsets, Set.of(), 0, forceAxis);
+            }
         }
         return false;
     }
 
-    public static void checkObsidianRemoval(World world, BlockPos bp,
-                                            Set<BlockPos> toRemove) {
+    public static void checkObsidianRemovalSides(World world, BlockPos bp,
+                                                 Set<BlockPos> toRemove,
+                                                 Set<BlockPos> toLeave,
+                                                 Direction direction) {
         if (world.getBlockState(bp).isOf(Blocks.OBSIDIAN)) {
-            if (checkNeighbors(world, bp)) return;
+            boolean bl = direction.getAxis().isVertical();
+            Set<Direction> primaryOffsets =  bl ? Set.of(direction) : Set.of(direction,
+                    direction.rotateClockwise(Direction.Axis.Y),
+                    direction.rotateCounterclockwise(Direction.Axis.Y));
+            Set<Direction> secondaryOffsets = bl ? Set.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST) :
+                    Set.of(Direction.UP, Direction.DOWN);
+            if (checkNeighbors(world, bp, primaryOffsets, secondaryOffsets, 0, null)) {
+                toLeave.add(bp);
+                return;
+            }
             toRemove.add(bp);
         }
     }
 
     public static ItemStack useOnPortalBlock(World world, BlockPos origin, ItemStack stack) {
         Direction.Axis axis = world.getBlockState(origin).get(NetherPortalBlock.AXIS);
+        Direction positive = axis.equals(Direction.Axis.X) ? Direction.EAST : Direction.SOUTH;
         BlockLocating.Rectangle portal = InfinityPortal.getRect(world, origin);
-        Set<BlockPos> obsidian = new HashSet<>();
-        for (int i = -1; i <= portal.width; i++)
-            for (int j : Set.of(-1, portal.height))
-                checkObsidianRemoval(world, portal.lowerLeft.offset(axis, i).up(j), obsidian);
-        for (int j = 0; j < portal.height; j++)
-            for (int i : Set.of(-1, portal.width))
-                checkObsidianRemoval(world, portal.lowerLeft.offset(axis, i).up(j), obsidian);
-        for (BlockPos bp : obsidian)
+        Set<BlockPos> toRemove = new HashSet<>();
+        Set<BlockPos> toLeave = new HashSet<>();
+        for (int i = -1; i <= portal.width; i++) {
+            checkObsidianRemovalSides(world, portal.lowerLeft.offset(axis, i).up(-1), toRemove, toLeave, Direction.DOWN);
+            checkObsidianRemovalSides(world, portal.lowerLeft.offset(axis, i).up(portal.height), toRemove, toLeave, Direction.UP);
+        }
+        for (int j = -1; j <= portal.height; j++) {
+            checkObsidianRemovalSides(world, portal.lowerLeft.offset(axis, -1).up(j), toRemove, toLeave, positive.getOpposite());
+            checkObsidianRemovalSides(world, portal.lowerLeft.offset(axis, portal.width).up(j), toRemove, toLeave, positive);
+        }
+        int obsidian = 0;
+        for (BlockPos bp : toRemove) if (!toLeave.contains(bp)) { //double check since we're checking the corners twice
             world.removeBlock(bp, false);
         BackportMethods.apply(stack, ModItemFunctions.F4_CHARGE, getCharge(stack));
         BackportMethods.apply(stack, ModItemFunctions.SIZE_X, portal.width);

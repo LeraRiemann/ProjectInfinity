@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.util.Random;
 
 public class InfinityMod {
 	public static final String MOD_ID = "infinity";
@@ -26,6 +27,7 @@ public class InfinityMod {
 	public static Path rootConfigPath;
 	public static Path utilPath = Path.of("config/infinity/.util");
 	public static RandomProvider provider;
+	public static Random random = new Random(); //do not use this in dimgen, only in emergent block behaviour
 
 	public static void updateProvider(MinecraftServer server) {
 		RandomProvider p = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",

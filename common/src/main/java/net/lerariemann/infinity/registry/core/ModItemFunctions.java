@@ -171,6 +171,7 @@ public class ModItemFunctions {
                 (stack, world, entity, seed) -> {
                     Identifier id = BackportMethods.getDimensionIdentifier(stack);
                     if (id == null) return 0.0f;
+                    if (id.toString().equals(InfinityMethods.ofRandomDim)) return 0.02f;
                     return 0.01f;
                 });
     }

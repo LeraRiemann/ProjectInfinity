@@ -118,7 +118,8 @@ public class BiomeBottle extends BlockWithEntity {
 
     public static void updateCharge(ItemStack stack) {
         int charge = getCharge(stack);
-        if (charge > 0) updateCharge(stack, charge);
+        if (charge == 0) stack.remove(ModItemFunctions.BIOME_CONTENTS.get());
+        updateCharge(stack, charge);
     }
 
     public static int getLevel(int charge) {

@@ -29,6 +29,8 @@ import static net.lerariemann.infinity.InfinityModClient.sampler;
 
 // Methods that are not dependent on ExpectPlatform, and work identically on both Fabric and NeoForge.
 public interface InfinityMethods {
+    String ofRandomDim = "infinity:random";
+
     /**
      * Converts a string to an identifier in the Infinite Dimensions namespace.
      */
@@ -86,7 +88,7 @@ public interface InfinityMethods {
      * Convert a provided string into a dimension ID.
      * This also checks if it matches an Easter Egg dimension.
      */
-    static Identifier getIdentifier(String text) {
+    static Identifier dimTextToId(String text) {
         if (text.equals("abatised redivides")) return World.END.getValue();
         if (text.isEmpty()) return InfinityMethods.getId("missingno");
         if (InfinityMod.provider.easterizer.isEaster(text, InfinityMod.provider) && !text.equals("missingno")) return InfinityMethods.getId(text);

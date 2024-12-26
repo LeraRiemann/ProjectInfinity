@@ -14,6 +14,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public abstract class PortalDataHolder extends Item {
         return Math.toIntExact(InfinityMethods.getNumericFromId(id));
     }
 
-    public static Identifier getDestination(ItemStack stack) {
+    public Identifier getDestination(ItemStack stack) {
         return BackportMethods.getDimensionIdentifier(stack);
     }
 /*
@@ -46,8 +47,22 @@ public abstract class PortalDataHolder extends Item {
             return Optional.empty();
         }
 
-        public NbtCompound addPortalComponents(ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
-            NbtCompound changes = getPortalComponents(ipbe);
+    public boolean isDestinationRandom(Identifier id) {
+        return (id != null && id.toString().equals(InfinityMethods.ofRandomDim));
+    }
+
+    public Identifier getDestinationParsed(ItemStack stack, World world) {
+        Identifier id = getDestination(stack);
+        return (isDestinationRandom(id)) ? InfinityMethods.getRandomId(world.random) : id;
+    }
+
+    public ComponentMap.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+        Identifier dim = ipbe.getDimension();
+        Integer keycolor = getColorFromId(dim);
+        return ComponentMap.builder()
+                .add(ModItemFunctions.DESTINATION.get(), dim)
+                .add(ModItemFunctions.COLOR.get(), keycolor);
+    }
 
             oldStack.applyComponentsFrom(changes);
             return oldStack.getComponents();

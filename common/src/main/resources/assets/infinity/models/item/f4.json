@@ -5,6 +5,7 @@
     "layer1": "infinity:item/f4/overlay_def"
   },
   "overrides": [
-    { "predicate": { "infinity:f4": 0.01 }, "model": "infinity:item/f4_colored" }
+    { "predicate": { "infinity:f4": 0.01 }, "model": "infinity:item/f4/colored" },
+    { "predicate": { "infinity:f4": 0.02 }, "model": "infinity:item/f4/iridescent" }
   ]
 }

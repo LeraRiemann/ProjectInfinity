@@ -4,14 +4,11 @@
   "key": {
     "P": {
       "item": "minecraft:light_gray_stained_glass_pane"
-    },
-    "M": {
-      "item": "infinity:black_matter"
     }
   },
   "pattern": [
     "PPP",
-    "PMP",
+    "P P",
     "PPP"
   ],
   "result": {

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "infinity:star_of_lang",
+          "weight": 1,
+          "functions": []
+        }
+      ]
+    }
+  ]
+}

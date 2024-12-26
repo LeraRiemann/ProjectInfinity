@@ -51,7 +51,7 @@ public class AntBlock extends HorizontalFacingBlock {
     }
 
     @Nullable
-    Clockwiseness getCW(Block down) {
+    public static Clockwiseness getCW(Block down) {
         var s = down.toString();
         if (s.contains("black")) {
             return Clockwiseness.CCW;
@@ -117,7 +117,7 @@ public class AntBlock extends HorizontalFacingBlock {
         builder.add(FACING);
     }
 
-    enum Clockwiseness {
+    public enum Clockwiseness {
         CW,
         CCW
     }

@@ -8,13 +8,13 @@
     "B": {
       "item": "minecraft:black_concrete"
     },
-    "M": {
-      "item": "infinity:black_matter"
+    "S": {
+      "item": "infinity:star_of_lang"
     }
   },
   "pattern": [
     "BLB",
-    "LML",
+    "LSL",
     "BLB"
   ],
   "result": {

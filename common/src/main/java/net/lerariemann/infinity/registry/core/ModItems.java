@@ -28,6 +28,8 @@ public class ModItems {
             ITEMS.register(ModBlocks.PORTAL.getId(), () -> new BlockItem(ModBlocks.PORTAL.get(), new Item.Settings()));
     public static final RegistrySupplier<Item> ALTAR_ITEM =
             registerBlockItemAfter(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN, BlockItem::new);
+    public static final RegistrySupplier<Item> COSMIC_ALTAR_ITEM =
+            registerBlockItemAfter(ModBlocks.COSMIC_ALTAR, ItemGroups.OPERATOR, Items.DEBUG_STICK, BlockItem::new);
     public static final RegistrySupplier<Item> ANT_ITEM  =
             registerBlockItemAfter(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE, BlockItem::new);
     public static final RegistrySupplier<Item> BOOK_BOX_ITEM =
@@ -47,9 +49,6 @@ public class ModItems {
     public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM =
             registerBlockItemAfter(ModBlocks.BIOME_BOTTLE, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE, BiomeBottleItem::new);
     //spawn eggs
-    public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () ->
-            new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0, 0xFFFFFF,
-                    createSpawnEggSettings()));
     public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = ITEMS.register("chaos_creeper_spawn_egg", () ->
             new ArchitecturySpawnEggItem(ModEntities.CHAOS_CREEPER, 0x91BD59, 0x78A7FF,
                     createSpawnEggSettings()));
@@ -57,7 +56,16 @@ public class ModItems {
             new ArchitecturySpawnEggItem(ModEntities.CHAOS_SKELETON, 0xF3CFB9, 0x87A363,
                     createSpawnEggSettings()));
     public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = ITEMS.register("chaos_slime_spawn_egg",  () ->
-            new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME, 0xAA77DD, 0xFF66FF,
+            new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME, 0xFF66FF, 0xAA77DD,
+                    createSpawnEggSettings()));
+    public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () ->
+            new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0x222222, 0xFFFFFF,
+                    createSpawnEggSettings()));
+    public static final RegistrySupplier<Item> ANT_SPAWN_EGG = ITEMS.register("ant_spawn_egg",  () ->
+            new ArchitecturySpawnEggItem(ModEntities.ANT, 0x444444, 0xFFFFFF,
+                    createSpawnEggSettings()));
+    public static final RegistrySupplier<Item> BISHOP_SPAWN_EGG = ITEMS.register("bishop_spawn_egg",  () ->
+            new ArchitecturySpawnEggItem(ModEntities.BISHOP, 0, 0xFFFFFF,
                     createSpawnEggSettings()));
     //bucket
     public static final RegistrySupplier<Item> IRIDESCENCE_BUCKET = ITEMS.register("iridescence_bucket", () ->
@@ -68,13 +76,19 @@ public class ModItems {
     public static final RegistrySupplier<TransfiniteKeyItem> TRANSFINITE_KEY =
             registerItemAfter("key", ItemGroups.INGREDIENTS, Items.AMETHYST_SHARD, TransfiniteKeyItem::new);
     public static final RegistrySupplier<HomeItem> HOME_ITEM =
-            registerItemAfter("fine_item", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, HomeItem::new,
+            registerItemAfter("fine_item", ItemGroups.INGREDIENTS, Items.MILK_BUCKET, HomeItem::new,
                     new Item.Settings().food(
                             new FoodComponent.Builder().alwaysEdible().build()));
     public static final RegistrySupplier<Item> WHITE_MATTER =
             registerItemAfter("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> BLACK_MATTER =
             registerItemAfter("black_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
+    public static final RegistrySupplier<Item> IRIDESCENT_STAR =
+            registerItemAfter("iridescent_star", ItemGroups.INGREDIENTS, Items.NETHER_STAR, Item::new,
+                    new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
+    public static final RegistrySupplier<Item> STAR_OF_LANG =
+            registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, StarOfLangItem::new,
+                    new Item.Settings().component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final RegistrySupplier<F4Item> F4 =
             registerItemAfter("f4", ItemGroups.OPERATOR, Items.DEBUG_STICK, F4Item::new,
                     new Item.Settings().rarity(Rarity.UNCOMMON));
