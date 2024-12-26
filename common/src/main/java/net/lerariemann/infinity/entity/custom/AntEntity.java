@@ -23,7 +23,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -142,9 +141,10 @@ public class AntEntity extends AnimalEntity implements Angerable {
     public boolean shouldPursueRegularGoals() {
         World w = getWorld();
         Optional<BlockPos> bp = supportingBlockPos;
-        return (w == null || bp.isEmpty()
+        return (w == null
+                || bp.isEmpty()
                 || isInBattle()
-                || AntBlock.inverseExists(w.getBlockState(bp.get()).getBlock()));
+                || !AntBlock.inverseExists(w.getBlockState(bp.get()).getBlock()));
     }
 
     public static class AntBattleGoal<T extends LivingEntity> extends ActiveTargetGoal<T> {
@@ -173,13 +173,11 @@ public class AntEntity extends AnimalEntity implements Angerable {
             if (mob.shouldPursueRegularGoals()) return false;
             Optional<BlockPos> bp = mob.supportingBlockPos;
             if (bp.isEmpty() || bp.get().equals(mob.lastChangedPos)) return false;
-            LogManager.getLogger().info("boop 1");
             mob.lastChangedPos = bp.get();
 
             BlockState down = mob.getWorld().getBlockState(bp.get());
             AntBlock.Clockwiseness cw = AntBlock.getCW(down.getBlock());
             if (cw == null) return false;
-            LogManager.getLogger().info("boop 2");
 
             Direction direction = mob.direction;
             Direction direction2 = cw.equals(AntBlock.Clockwiseness.CW)
@@ -190,7 +188,6 @@ public class AntEntity extends AnimalEntity implements Angerable {
             if (newBlock == null) return false;
 
             targetPos = mob.getBlockPos().offset(direction2);
-            LogManager.getLogger().info("boop 4");
             mob.getWorld().setBlockState(bp.get(), newBlock.getStateWithProperties(down), 19);
             mob.direction = direction2;
             return true;
