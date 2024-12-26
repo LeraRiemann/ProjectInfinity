@@ -1,20 +1,15 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
-import net.lerariemann.infinity.entity.custom.AntEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
-import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModCriteria;
+import net.lerariemann.infinity.util.AntBattle;
 import net.minecraft.block.*;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -30,8 +25,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-
-import java.util.Objects;
 
 public class TransfiniteAltar extends Block {
     public static final int numColors = 13;
@@ -79,18 +72,8 @@ public class TransfiniteAltar extends Block {
                     bbbe.startTicking();
                 }
                 if (world.getBlockState(pos.up()).isOf(ModBlocks.ANT.get())) {
-                    Scoreboard sb = serverWorld.getScoreboard();
-                    Team t = sb.getTeam("ant_battle");
-                    if (t == null) t = sb.addTeam("ant_battle");
                     world.removeBlock(pos.up(), false);
-                    AntEntity ant = ModEntities.ANT.get().spawn(serverWorld, pos.up(), SpawnReason.MOB_SUMMONED);
-                    if (ant != null) {
-                        sb.addScoreHolderToTeam(ant.getNameForScoreboard(), t);
-                        Objects.requireNonNull(ant.getAttributeInstance(EntityAttributes.GENERIC_SCALE)).setBaseValue(2.0);
-                        Objects.requireNonNull(ant.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(20);
-                        Objects.requireNonNull(ant.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.25f);
-                        ant.setHealth(20);
-                    }
+                    (new AntBattle(serverWorld)).start(pos.up());
                 }
             }
 
