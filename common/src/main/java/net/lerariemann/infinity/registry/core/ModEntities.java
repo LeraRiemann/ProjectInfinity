@@ -55,7 +55,7 @@ public class ModEntities {
                     .dimensions(0.6f, 1.8f).maxTrackingRange(10).build("chaos_pawn"));
     public static final RegistrySupplier<EntityType<AntEntity>> ANT = INFINITY_ENTITIES
             .register("ant", () -> EntityType.Builder.create(AntEntity::new, SpawnGroup.MONSTER)
-                    .dimensions(0.52f, 0.52f).maxTrackingRange(10).build("ant"));
+                    .dimensions(0.52f, 0.27f).maxTrackingRange(10).build("ant"));
 
     public static void registerEntities() {
         INFINITY_ENTITIES.register();

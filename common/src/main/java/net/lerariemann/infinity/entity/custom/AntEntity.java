@@ -45,7 +45,7 @@ public class AntEntity extends AnimalEntity implements Angerable {
     protected void initGoals() {
         super.initGoals();
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new MeleeAttackGoal(this, 5, true));
+        this.goalSelector.add(1, new MeleeAttackGoal(this, 1.25, true));
         this.targetSelector.add(1, new RevengeGoal(this));
         this.targetSelector.add(2, new AntBattleGoal<>(this, PlayerEntity.class, true));
         this.goalSelector.add(3, new AntBlockRecolorGoal(this));
