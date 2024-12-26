@@ -2,7 +2,7 @@ package net.lerariemann.infinity.mixin.iridescence;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.lerariemann.infinity.entity.custom.ChaosPawn;
+import net.lerariemann.infinity.entity.custom.AbstractChessFigure;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.pathing.LandPathNodeMaker;
@@ -19,12 +19,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LandPathNodeMaker.class)
 public abstract class LandPathNodeMakerMixin extends PathNodeMaker {
-    /* Chess-type pawns avoid iridescence */
+    /* Chess-type mobs avoid iridescence */
     @Inject(method = "getNodeType(Lnet/minecraft/entity/ai/pathing/PathContext;IIILnet/minecraft/entity/mob/MobEntity;)Lnet/minecraft/entity/ai/pathing/PathNodeType;",
             at = @At("HEAD"), cancellable = true)
     private void inj(PathContext context, int x, int y, int z, MobEntity mob, CallbackInfoReturnable<PathNodeType> cir) {
         if (Iridescence.isIridescence(entity.getWorld(), new BlockPos(x, y, z))) {
-            if (entity instanceof ChaosPawn pawn && pawn.isChess())
+            if (entity instanceof AbstractChessFigure figure && figure.isBlackOrWhite())
                 cir.setReturnValue(PathNodeType.BLOCKED);
         }
     }

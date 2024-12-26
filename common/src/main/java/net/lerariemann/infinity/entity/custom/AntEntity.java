@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.block.custom.AntBlock;
+import net.lerariemann.infinity.util.AntBattle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -24,15 +25,25 @@ public class AntEntity extends AbstractChessFigure {
     @Nullable
     protected BlockPos lastChangedPos;
     private Direction direction;
+    private boolean dropsLoot;
 
     public AntEntity(EntityType<? extends AbstractChessFigure> entityType, World world) {
         super(entityType, world);
         direction = Direction.EAST;
+        dropsLoot = true;
     }
 
     @Override
-    public boolean isChess() {
+    public boolean isBlackOrWhite() {
         return true;
+    }
+    @Override
+    public boolean shouldDropLoot() {
+        return dropsLoot;
+    }
+    public void addToBattle(AntBattle battle) {
+        battle.addEntity(this);
+        dropsLoot = false;
     }
 
     @Override
@@ -58,6 +69,7 @@ public class AntEntity extends AbstractChessFigure {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
+        this.dropsLoot = !nbt.contains("dropsLoot") || nbt.getBoolean("dropsLoot");
         this.direction = switch(nbt.getString("direction")) {
             case "N" -> Direction.NORTH;
             case "W" -> Direction.WEST;
@@ -73,6 +85,7 @@ public class AntEntity extends AbstractChessFigure {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
+        nbt.putBoolean("dropsLoot", dropsLoot);
         nbt.putString("direction", switch(this.direction) {
                     case Direction.NORTH -> "N";
                     case Direction.WEST -> "W";

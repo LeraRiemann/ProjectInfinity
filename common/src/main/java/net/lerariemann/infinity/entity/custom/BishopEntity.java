@@ -61,7 +61,7 @@ public class BishopEntity extends AbstractChessFigure {
         return battle != null;
     }
     @Override
-    public boolean isChess() {
+    public boolean isBlackOrWhite() {
         return true;
     }
 }

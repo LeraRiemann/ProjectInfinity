@@ -113,7 +113,7 @@ public class ChaosPawn extends AbstractChessFigure {
     }
 
     @Override
-    public boolean isChess() {
+    public boolean isBlackOrWhite() {
         return dataTracker.get(special_case) != -1 && !Iridescence.isUnderEffect(this);
     }
 
@@ -156,7 +156,7 @@ public class ChaosPawn extends AbstractChessFigure {
     @Override
     protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
         super.dropEquipment(world, source, causedByPlayer);
-        if (!this.isChess()) {
+        if (!this.isBlackOrWhite()) {
             String s = InfinityMod.provider.registry.get("items").getRandomElement(world.random);
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
             ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i));

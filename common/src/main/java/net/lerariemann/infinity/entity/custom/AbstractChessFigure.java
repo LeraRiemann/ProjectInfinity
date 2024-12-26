@@ -37,7 +37,7 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
         super(entityType, world);
     }
 
-    public abstract boolean isChess();
+    public abstract boolean isBlackOrWhite();
 
     @Override
     protected void initGoals() {
@@ -107,7 +107,7 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
 
     @Override
     public float getPathfindingFavor(BlockPos pos, WorldView world) {
-        if (!isChess()) return 0.0f;
+        if (!isBlackOrWhite()) return 0.0f;
         if (Iridescence.isIridescence(world, pos)) return -1.0F;
         return 0.0f;
     }
@@ -131,12 +131,12 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
         return (!Iridescence.isUnderEffect(this));
     }
     public boolean shouldPursueChessGoals() {
-        return shouldPursueRegularGoals() && isChess();
+        return shouldPursueRegularGoals() && isBlackOrWhite();
     }
 
     public static boolean isAngerCompatible(AbstractChessFigure fig1, AbstractChessFigure fig2) {
         if (fig1 instanceof ChaosPawn p1 && fig2 instanceof ChaosPawn p2) return p1.getCase() == p2.getCase();
-        return fig1.isChess() ^ !fig2.isChess();
+        return fig1.isBlackOrWhite() ^ !fig2.isBlackOrWhite();
     }
 
     public static class ChaosCleanseGoal<T extends LivingEntity> extends ActiveTargetGoal<T> {

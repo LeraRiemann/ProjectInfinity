@@ -1,9 +1,25 @@
 {
-  "type": "infinity:collision_iridescence",
-  "input": {
-    "item": "infinity:altar"
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "item": "minecraft:lodestone"
+    },
+    "A": {
+      "item": "infinity:altar"
+    },
+    "S": {
+      "item": "infinity:iridescent_star"
+    }
   },
-  "output": {
+  "pattern": [
+    "LAL",
+    "ASA",
+    "LAL"
+  ],
+  "result": {
+    "count": 1,
     "id": "infinity:cosmic_altar"
-  }
+  },
+  "show_notification": true
 }

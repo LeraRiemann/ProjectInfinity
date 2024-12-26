@@ -2,20 +2,21 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "item": "minecraft:grass_block"
+    "O": {
+      "item": "minecraft:obsidian"
     },
     "S": {
-      "item": "infinity:star_of_lang"
+      "item": "infinity:iridescent_star"
     }
   },
   "pattern": [
-    "GGG",
-    "GSG",
-    "GGG"
+    "OOO",
+    "OSO",
+    "OOO"
   ],
   "result": {
-    "id": "infinity:fine_item"
+    "count": 1,
+    "id": "infinity:f4"
   },
   "show_notification": true
 }

@@ -185,7 +185,7 @@ public interface Iridescence {
     );
 
     static boolean isConvertible(MobEntity entity) {
-        return (convertibles.containsKey(entity.getType()) || (entity instanceof ChaosPawn pawn && pawn.isChess()));
+        return (convertibles.containsKey(entity.getType()) || (entity instanceof ChaosPawn pawn && pawn.isBlackOrWhite()));
     }
 
     static void tryApplyEffect(MobEntity ent) {

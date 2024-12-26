@@ -49,7 +49,7 @@ public class AntBattle {
             Objects.requireNonNull(ant.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.25f);
             ant.setHealth(20);
             bishop.startRiding(ant);
-            addEntity(ant);
+            ant.addToBattle(this);
             bishop.addToBattle(this);
         }
     }
