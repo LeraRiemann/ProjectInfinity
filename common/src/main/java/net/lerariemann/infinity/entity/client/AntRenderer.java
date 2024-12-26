@@ -8,11 +8,11 @@ import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-public class AntRenderer extends MobEntityRenderer<AntEntity, AntModel> {
+public class AntRenderer extends MobEntityRenderer<AntEntity, AntModel<AntEntity>> {
     private static final Identifier TEXTURE = InfinityMethods.getId("textures/entity/ant.png");
 
     public AntRenderer(EntityRendererFactory.Context context) {
-        super(context, new AntModel(context.getPart(AntModel.MODEL_LAYER)), 0.6f);
+        super(context, new AntModel<>(context.getPart(AntModel.MODEL_LAYER)), 0.6f);
     }
 
     @Override

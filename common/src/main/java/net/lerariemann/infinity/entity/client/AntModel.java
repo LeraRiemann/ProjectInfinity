@@ -10,7 +10,7 @@ import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
-public class AntModel extends SinglePartEntityModel<AntEntity> {
+public class AntModel<T extends AntEntity> extends SinglePartEntityModel<T> {
 	public static final EntityModelLayer MODEL_LAYER =
 		new EntityModelLayer(InfinityMethods.getId("ant"), "main");
 
@@ -27,21 +27,37 @@ public class AntModel extends SinglePartEntityModel<AntEntity> {
 		ModelPartData body = root.addChild("body", ModelPartBuilder.create().uv(0, 11).cuboid(-2.0F, -5.75F, 3.0F, 4.0F, 4.0F, 4.0F, new Dilation(0.0F))
 				.uv(0, 0).cuboid(-1.0F, -4.0F, -5.0F, 2.0F, 2.0F, 9.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
 
-		ModelPartData head = body.addChild("head", ModelPartBuilder.create().uv(16, 11).cuboid(-1.5F, -1.75F, -3.0F, 3.0F, 3.0F, 3.0F, new Dilation(0.0F))
-				.uv(0, 0).cuboid(2.0F, -3.75F, -1.0F, -1.0F, 3.0F, 1.0F, new Dilation(0.0F))
-				.uv(0, 0).cuboid(-1.0F, -3.75F, -1.0F, -1.0F, 3.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -3.0F, -4.0F));
+		body.addChild("head", ModelPartBuilder.create().uv(16, 11).cuboid(-1.5F, -1.75F, -3.0F, 3.0F, 3.0F, 3.0F, new Dilation(0.0F))
+				.uv(0, 0)
+				.cuboid(2.0F, -3.75F, -1.0F, -1.0F, 3.0F, 1.0F, new Dilation(0.0F))
+				.uv(0, 0)
+				.cuboid(-1.0F, -3.75F, -1.0F, -1.0F, 3.0F, 1.0F, new Dilation(0.0F)),
+				ModelTransform.pivot(0.0F, -3.0F, -4.0F));
 
-		ModelPartData front_left_leg = body.addChild("front_left_leg", ModelPartBuilder.create().uv(16, 17).cuboid(-0.5F, -0.5F, -1.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.5F, -2.5F, -1.5F, 0.0F, 0.2182F, 0.3054F));
-
-		ModelPartData center_left_leg = body.addChild("center_left_leg", ModelPartBuilder.create().uv(0, 19).cuboid(-0.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.5F, -2.5F, -0.5F, 0.0F, 0.0F, 0.3054F));
-
-		ModelPartData back_left_leg = body.addChild("back_left_leg", ModelPartBuilder.create().uv(16, 19).cuboid(-0.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.5F, -2.5F, 1.5F, 0.0F, -0.2182F, 0.3054F));
-
-		ModelPartData front_right_leg = body.addChild("front_right_leg", ModelPartBuilder.create().uv(0, 21).cuboid(-6.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(-0.5F, -2.5F, -2.5F, 0.0F, -0.2182F, -0.3054F));
-
-		ModelPartData center_right_leg = body.addChild("center_right_leg", ModelPartBuilder.create().uv(16, 21).cuboid(-6.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(-0.5F, -2.5F, -0.5F, 0.0F, 0.0F, -0.3054F));
-
-		ModelPartData back_right_leg = body.addChild("back_right_leg", ModelPartBuilder.create().uv(22, 0).cuboid(-6.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(-0.5F, -2.5F, 1.5F, 0.0F, 0.2182F, -0.3054F));
+		body.addChild("front_left_leg", ModelPartBuilder.create()
+				.uv(16, 17)
+				.cuboid(-0.5F, -0.5F, -1.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)),
+				ModelTransform.of(0.5F, -2.5F, -1.5F, 0.0F, 0.2182F, 0.3054F));
+		body.addChild("center_left_leg", ModelPartBuilder.create()
+				.uv(0, 19)
+				.cuboid(-0.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)),
+				ModelTransform.of(0.5F, -2.5F, -0.5F, 0.0F, 0.0F, 0.3054F));
+		body.addChild("back_left_leg", ModelPartBuilder.create()
+				.uv(16, 19)
+				.cuboid(-0.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)),
+				ModelTransform.of(0.5F, -2.5F, 1.5F, 0.0F, -0.2182F, 0.3054F));
+		body.addChild("front_right_leg", ModelPartBuilder.create()
+				.uv(0, 21)
+				.cuboid(-6.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)),
+				ModelTransform.of(-0.5F, -2.5F, -2.5F, 0.0F, -0.2182F, -0.3054F));
+		body.addChild("center_right_leg", ModelPartBuilder.create()
+				.uv(16, 21)
+				.cuboid(-6.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)),
+				ModelTransform.of(-0.5F, -2.5F, -0.5F, 0.0F, 0.0F, -0.3054F));
+		body.addChild("back_right_leg", ModelPartBuilder.create()
+				.uv(22, 0)
+				.cuboid(-6.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, new Dilation(0.0F)),
+				ModelTransform.of(-0.5F, -2.5F, 1.5F, 0.0F, 0.2182F, -0.3054F));
 
 		return TexturedModelData.of(modelData, 64, 64);
 	}
@@ -57,7 +73,7 @@ public class AntModel extends SinglePartEntityModel<AntEntity> {
 	}
 
 	@Override
-	public void setAngles(AntEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+	public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
 		this.getPart().traverse().forEach(ModelPart::resetTransform);
 		this.setHeadAngles(headYaw, headPitch);
 		this.animateMovement(AntAnimation.walk, limbAngle, limbDistance, 2f, 2.5f);

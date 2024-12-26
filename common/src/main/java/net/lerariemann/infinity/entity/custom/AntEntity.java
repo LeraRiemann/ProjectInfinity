@@ -11,7 +11,7 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,16 +46,15 @@ public class AntEntity extends AnimalEntity implements Angerable {
     protected void initGoals() {
         super.initGoals();
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new MeleeAttackGoal(this, 2, true));
+        this.goalSelector.add(1, new MeleeAttackGoal(this, 5, true));
         this.targetSelector.add(1, new RevengeGoal(this));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, 10,
-                true, false, this::shouldAttackFirst));
-        this.goalSelector.add(3, new AntGoal(this));
+        this.targetSelector.add(2, new AntBattleGoal<>(this, PlayerEntity.class, true));
+        this.goalSelector.add(3, new AntBlockRecolorGoal(this));
         this.goalSelector.add(4, new FollowParentConditionalGoal(this, 1.25));
-        this.targetSelector.add(5, new UniversalAngerGoal<>(this, false));
+        this.targetSelector.add(5, new UniversalAngerGoal<>(this, true));
         this.goalSelector.add(5, new WanderConditionalGoal(this, 1.0));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.add(7, new LookAroundGoal(this));
+        this.goalSelector.add(6, new LookAtEntityConditionalGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.add(7, new LookAroundConditionalGoal(this));
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
@@ -66,7 +65,7 @@ public class AntEntity extends AnimalEntity implements Angerable {
 
     public boolean isInBattle() {
         Team t = getScoreboardTeam();
-        return (t != null && t.getName().equals("battle"));
+        return (t != null && t.getName().equals("ant_battle"));
     }
 
     @Override
@@ -102,10 +101,6 @@ public class AntEntity extends AnimalEntity implements Angerable {
             pos.putInt("z", lastChangedPos.getZ());
             nbt.put("last_changed_pos", pos);
         }
-    }
-
-    public boolean shouldAttackFirst(LivingEntity entity) {
-        return isInBattle() && shouldAngerAt(entity);
     }
 
     @Override
@@ -144,24 +139,38 @@ public class AntEntity extends AnimalEntity implements Angerable {
         return this.angryAt;
     }
 
-    public static boolean isOnRecolorable(LivingEntity mob) {
-        World w = mob.getWorld();
-        Optional<BlockPos> bp = mob.supportingBlockPos;
-        return (w != null && bp.isPresent() && AntBlock.inverseExists(w.getBlockState(bp.get()).getBlock()));
+    public boolean shouldPursueRegularGoals() {
+        World w = getWorld();
+        Optional<BlockPos> bp = supportingBlockPos;
+        return (w == null || bp.isEmpty()
+                || isInBattle()
+                || AntBlock.inverseExists(w.getBlockState(bp.get()).getBlock()));
     }
 
-    public static class AntGoal extends Goal {
+    public static class AntBattleGoal<T extends LivingEntity> extends ActiveTargetGoal<T> {
+        public AntBattleGoal(MobEntity mob, Class<T> targetClass, boolean checkVisibility) {
+            super(mob, targetClass, checkVisibility);
+        }
+
+        @Override
+        public boolean canStart() {
+            if (mob instanceof AntEntity e && !e.isInBattle()) return false;
+            return super.canStart();
+        }
+    }
+
+    public static class AntBlockRecolorGoal extends Goal {
         private final AntEntity mob;
         @Nullable
         private BlockPos targetPos;
 
-        public AntGoal(AntEntity mob) {
+        public AntBlockRecolorGoal(AntEntity mob) {
             this.mob = mob;
         }
 
         @Override
         public boolean canStart() {
-            if (mob.isInBattle()) return false;
+            if (mob.shouldPursueRegularGoals()) return false;
             Optional<BlockPos> bp = mob.supportingBlockPos;
             if (bp.isEmpty() || bp.get().equals(mob.lastChangedPos)) return false;
             LogManager.getLogger().info("boop 1");
@@ -202,27 +211,56 @@ public class AntEntity extends AnimalEntity implements Angerable {
     }
 
     public static class FollowParentConditionalGoal extends FollowParentGoal {
-        private final AnimalEntity mob;
+        private final AntEntity mob;
 
-        public FollowParentConditionalGoal(AnimalEntity animal, double speed) {
+        public FollowParentConditionalGoal(AntEntity animal, double speed) {
             super(animal, speed);
             this.mob = animal;
         }
 
         @Override
         public boolean canStart() {
-            return super.canStart() && !isOnRecolorable(mob);
+            return super.canStart() && mob.shouldPursueRegularGoals();
         }
     }
 
     public static class WanderConditionalGoal extends WanderAroundFarGoal {
-        public WanderConditionalGoal(PathAwareEntity pathAwareEntity, double d) {
+        private final AntEntity mob1;
+        public WanderConditionalGoal(AntEntity pathAwareEntity, double d) {
             super(pathAwareEntity, d);
+            mob1 = pathAwareEntity;
         }
 
         @Override
         public boolean canStart() {
-            return super.canStart() && !isOnRecolorable(mob);
+            return super.canStart() && mob1.shouldPursueRegularGoals();
+        }
+    }
+
+    public static class LookAroundConditionalGoal extends LookAroundGoal {
+        private final AntEntity mob1;
+        public LookAroundConditionalGoal(AntEntity mob) {
+            super(mob);
+            mob1 = mob;
+        }
+
+        @Override
+        public boolean canStart() {
+            return super.canStart() && mob1.shouldPursueRegularGoals();
+        }
+    }
+
+    public static class LookAtEntityConditionalGoal extends LookAtEntityGoal {
+        private final AntEntity mob1;
+
+        public LookAtEntityConditionalGoal(AntEntity mob, Class<? extends LivingEntity> targetType, float range) {
+            super(mob, targetType, range);
+            mob1 = mob;
+        }
+
+        @Override
+        public boolean canStart() {
+            return super.canStart() && mob1.shouldPursueRegularGoals();
         }
     }
 }

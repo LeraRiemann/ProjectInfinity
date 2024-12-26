@@ -1,13 +1,19 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
+import net.lerariemann.infinity.entity.custom.AntEntity;
+import net.lerariemann.infinity.registry.core.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.minecraft.block.*;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -63,11 +69,22 @@ public class TransfiniteAltar extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
-        if (world instanceof ServerWorld) {
-            if (itemStack.isEmpty() &&
-                    world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
-                if (player instanceof ServerPlayerEntity spe) ModCriteria.BIOME_BOTTLE.get().trigger(spe, bbbe);
-                bbbe.startTicking();
+        if (world instanceof ServerWorld serverWorld) {
+            if (itemStack.isEmpty()) {
+                if (world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
+                    if (player instanceof ServerPlayerEntity spe) ModCriteria.BIOME_BOTTLE.get().trigger(spe, bbbe);
+                    bbbe.startTicking();
+                }
+                if (world.getBlockState(pos.up()).isOf(ModBlocks.ANT.get())) {
+                    Scoreboard sb = serverWorld.getScoreboard();
+                    Team t = sb.getTeam("ant_battle");
+                    if (t == null) t = sb.addTeam("ant_battle");
+                    world.removeBlock(pos.up(), false);
+                    for (int i = 0; i < 5; i++) {
+                        AntEntity ant = ModEntities.ANT.get().spawn(serverWorld, pos.up(), SpawnReason.MOB_SUMMONED);
+                        if (ant != null) sb.addScoreHolderToTeam(ant.getNameForScoreboard(), t);
+                    }
+                }
             }
 
             //coloration
