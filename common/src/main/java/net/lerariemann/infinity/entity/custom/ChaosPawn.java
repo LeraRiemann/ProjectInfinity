@@ -25,6 +25,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.*;
@@ -71,6 +72,12 @@ public class ChaosPawn extends AbstractChessFigure {
         this.setAllColors(this.getWorld().getBiome(this.getBlockPos()).value().getGrassColorAt(this.getX(), this.getZ()));
     }
 
+    @Override
+    public Text getDefaultName() {
+        if (isBlackOrWhite()) return Text.translatable("entity.infinity.pawn");
+        return super.getDefaultName();
+    }
+
     public int getCase() {
         return dataTracker.get(special_case);
     }
@@ -90,7 +97,7 @@ public class ChaosPawn extends AbstractChessFigure {
 
     @Override
     public RegistryKey<LootTable> getLootTableId() {
-        Identifier i = switch (dataTracker.get(special_case)) {
+        Identifier i = switch (getCase()) {
             case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
             case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
             default -> Identifier.of("");

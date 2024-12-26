@@ -25,9 +25,9 @@ import java.awt.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChromaticBlockEntity extends TintableBlockEntity {
-    public int hue;
-    public int saturation;
-    public int brightness;
+    public short hue;
+    public short saturation;
+    public short brightness;
     public ChromaticBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CHROMATIC.get(), pos, state);
         hue = 0;
@@ -36,11 +36,16 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     }
 
     public void setColor(int colorHex) {
+        setColor(colorHex, null);
+    }
+
+    public void setColor(int colorHex, @Nullable AtomicBoolean cancel) {
+        if (cancel != null && colorHex == getTint()) cancel.set(true);
         Color c = (new Color(colorHex));
         float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
-        hue = (int)(hsb[0] * 360);
-        saturation = (int)(hsb[1] * 255);
-        brightness = (int)(hsb[2] * 255);
+        hue = (short)(hsb[0] * 360);
+        saturation = (short)(hsb[1] * 255);
+        brightness = (short)(hsb[2] * 255);
         sync();
     }
 
@@ -55,38 +60,55 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         setColor(components.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF));
     }
 
-    public int offsetSaturation(int amount, @Nullable AtomicBoolean saveResult) {
-        if (saveResult != null) saveResult.set(amount < 0 ? saturation == 0 : saturation == 255);
+    public ComponentMap asMap(int i) {
+        return ComponentMap.builder()
+                .add(ModItemFunctions.COLOR.get(), i)
+                .build();
+    }
+    public ComponentMap asMap() {
+        return asMap(getTint());
+    }
+
+    public int offsetSaturation(short amount, @Nullable AtomicBoolean cancel) {
+        if (cancel != null) cancel.set(amount < 0 ? saturation == 0 : saturation == 255);
         saturation += amount;
-        saturation = Math.clamp(saturation, 0, 255);
+        if (saturation < 0) saturation = 0;
+        else if (saturation > 255) saturation = 255;
         return saturation;
     }
-    public int offsetBrightness(int amount, @Nullable AtomicBoolean saveResult) {
-        if (saveResult != null) saveResult.set(amount < 0 ? brightness == 0 : brightness == 255);
+    public int offsetBrightness(short amount, @Nullable AtomicBoolean cancel) {
+        if (cancel != null) cancel.set(amount < 0 ? brightness == 0 : brightness == 255);
         brightness += amount;
-        brightness = Math.clamp(brightness, 0, 255);
+        if (brightness < 0) brightness = 0;
+        else if (brightness > 255) brightness = 255;
         return brightness;
     }
     public boolean onUse(World world, BlockPos pos, ItemStack stack) {
         SoundEvent event = SoundEvents.BLOCK_NOTE_BLOCK_GUITAR.value();
         float pitch = -1f;
+        float volume = 1f;
         AtomicBoolean cancel = new AtomicBoolean(false);
         if (stack.isOf(ModItems.IRIDESCENT_STAR.get())) {
-            pitch = offsetSaturation(16, cancel) / 255f;
+            pitch = offsetSaturation((short) 16, cancel) / 255f;
         }
         else if (stack.isOf(ModItems.STAR_OF_LANG.get())) {
-            pitch = offsetSaturation(-16, cancel) / 255f;
+            pitch = offsetSaturation((short) -16, cancel) / 255f;
         }
         else if (stack.isOf(ModItems.WHITE_MATTER.get())) {
-            pitch = offsetBrightness(16, cancel) / 255f;
+            pitch = offsetBrightness((short) 16, cancel) / 255f;
         }
         else if (stack.isOf(ModItems.BLACK_MATTER.get())) {
-            pitch = offsetBrightness(-16, cancel) / 255f;
+            pitch = offsetBrightness((short) -16, cancel) / 255f;
         }
         else if (stack.isOf(Items.AMETHYST_SHARD)) {
             hue += 15;
             hue %= 360;
             event = SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE;
+        }
+        else if (stack.isOf(ModItems.CHROMATIC_MATTER.get())) {
+            setColor(stack.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF), cancel);
+            event = SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP;
+            volume = 0.5f;
         }
         else if (stack.getItem() instanceof DyeItem dye) {
             setColor(dye.getColor().getEntityColor());
@@ -95,7 +117,7 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         else return false;
         if (cancel.get()) return false; //block was already at extremal saturation / brightness, no need for side effects
         pitch = pitch < 0 ? 1f : 0.5f + 1.5f * pitch; //scaling for Minecraft's sound system
-        if (!world.isClient()) world.playSound(null, pos, event, SoundCategory.BLOCKS, 1f, pitch);
+        if (!world.isClient()) world.playSound(null, pos, event, SoundCategory.BLOCKS, volume, pitch);
         sync();
         return true;
     }
@@ -111,20 +133,13 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     @Override
     public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(nbt, registryLookup);
-        NbtCompound color = nbt.getCompound("color");
-        hue = color.getInt("hue");
-        saturation = color.getInt("saturation");
-        brightness = color.getInt("value");
+        setColor(nbt.getInt("color"));
     }
 
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
-        NbtCompound color = new NbtCompound();
-        color.putInt("hue", hue);
-        color.putInt("saturation", saturation);
-        color.putInt("value", brightness);
-        nbt.put("color", color);
+        nbt.putInt("color", getTint());
     }
 
     public int getTint() {

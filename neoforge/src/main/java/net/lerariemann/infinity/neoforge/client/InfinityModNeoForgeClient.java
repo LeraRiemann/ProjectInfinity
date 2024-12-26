@@ -61,7 +61,8 @@ public class InfinityModNeoForgeClient {
                 ModItems.F4.get());
         event.register(InfinityMethods::getItemColorFromComponents,
                 ModItems.CHROMATIC_WOOL.get(),
-                ModItems.CHROMATIC_CARPET.get());
+                ModItems.CHROMATIC_CARPET.get(),
+                ModItems.CHROMATIC_MATTER.get());
     }
     @SubscribeEvent
     public static void registerModelPredicates(FMLClientSetupEvent event) {

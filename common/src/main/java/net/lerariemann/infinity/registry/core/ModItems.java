@@ -86,6 +86,8 @@ public class ModItems {
             registerItemAfter("fine_item", ItemGroups.FOOD_AND_DRINK, Items.MILK_BUCKET, HomeItem::new,
                     new Item.Settings().component(DataComponentTypes.FOOD,
                             new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of())));
+    public static final RegistrySupplier<ChromaticItem> CHROMATIC_MATTER =
+            registerItemAfter("chromatic_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, ChromaticItem::new);
     public static final RegistrySupplier<Item> WHITE_MATTER =
             registerItemAfter("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> BLACK_MATTER =
@@ -100,6 +102,7 @@ public class ModItems {
             registerItemAfter("f4", ItemGroups.OPERATOR, Items.DEBUG_STICK, F4Item::new,
                     new Item.Settings().rarity(Rarity.UNCOMMON));
     public static TagKey<Item> IRIDESCENT_TAG = createItemTag("iridescent");
+    public static TagKey<Item> MATTER_TAG = createItemTag("matter");
 
     public static <T extends Item> RegistrySupplier<T> register(String item, Item.Settings settings, Function<Item.Settings, T> constructor) {
         return ITEMS.register(item, () -> constructor.apply(settings));

@@ -2,10 +2,8 @@ package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
@@ -35,17 +33,17 @@ public class ChromaticBlock extends BlockWithEntity {
     public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
         ItemStack res = super.getPickStack(world, pos, state);
         if (!res.isEmpty() && world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe)
-            res.applyComponentsFrom(ComponentMap.builder()
-                    .add(ModItemFunctions.COLOR.get(), cbe.getTint())
-                    .build());
+            res.applyComponentsFrom(cbe.asMap());
         return res;
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe)
-            if (cbe.onUse(world, pos, player.getStackInHand(Hand.MAIN_HAND)))
+        if (world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) {
+            ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
+            if (cbe.onUse(world, pos, stack))
                 return ActionResult.SUCCESS;
+        }
         return super.onUse(state, world, pos, player, hit);
     }
 

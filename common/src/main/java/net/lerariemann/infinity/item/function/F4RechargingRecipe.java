@@ -45,7 +45,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
         if (i == 0) {
             if (charge > 0) return Items.OBSIDIAN.getDefaultStack().copyWithCount(Math.min(charge, 64)); //"removing obsidian" recipe
         }
-        ItemStack result = f4.copy();
+        ItemStack result = f4.copyWithCount(1);
         result.applyComponentsFrom(ComponentMap.builder() //"adding obsidian" recipe
                 .add(ModItemFunctions.CHARGE.get(), charge + i)
                 .build());
@@ -73,7 +73,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
         int charge = F4Item.getCharge(f4);
         if (charge == 0) return defaultedList; //"clearing data" recipe
         charge = Math.max(charge - 64, 0);
-        ItemStack result = f4.copy();
+        ItemStack result = f4.copyWithCount(1);
         result.applyComponentsFrom(ComponentMap.builder()
                 .add(ModItemFunctions.CHARGE.get(), charge)
                 .build());

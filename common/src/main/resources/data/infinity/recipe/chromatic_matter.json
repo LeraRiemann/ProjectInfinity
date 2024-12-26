@@ -1,9 +1,9 @@
 {
   "type": "infinity:collision_portal",
   "input": {
-    "tag": "minecraft:wool_carpets"
+    "tag": "infinity:matter"
   },
   "output": {
-    "id": "infinity:chromatic_carpet"
+    "id": "infinity:chromatic_matter"
   }
 }
