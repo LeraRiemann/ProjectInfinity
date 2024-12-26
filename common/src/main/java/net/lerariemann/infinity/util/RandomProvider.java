@@ -23,6 +23,7 @@ public class RandomProvider {
     public Map<String, Double> rootChances;
     public Map<String, Boolean> gameRules;
     public Map<String, Integer> gameRulesInt;
+    public ArrayList<String> disabledDimensions;
     public String configPath;
     public String savingPath;
     public String portalKey;
@@ -49,6 +50,7 @@ public class RandomProvider {
         rootChances = new HashMap<>();
         gameRules = new HashMap<>();
         gameRulesInt = new HashMap<>();
+        disabledDimensions = new ArrayList<>();
     }
 
     void register_all() {
@@ -83,6 +85,12 @@ public class RandomProvider {
                 rootChances.put(s, rootchances.getCompound(c).getDouble(s));
             }
         }
+
+        NbtList disableddimensions = rootConfig.getList("disabledDimensions", 8);
+        for (NbtElement jsonElement : disableddimensions) {
+            disabledDimensions.add(jsonElement.asString());
+        }
+
     }
 
     public Optional<Item> getPortalKeyAsItem() {
