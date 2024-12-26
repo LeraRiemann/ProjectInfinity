@@ -34,7 +34,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -46,9 +45,7 @@ import org.joml.Vector3f;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
-    public static final BooleanProperty BOOP = BooleanProperty.of("boop");
-
+public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider, Boopable {
     public InfinityPortalBlock(Settings settings) {
         super(settings);
         this.setDefaultState(getDefaultState().with(BOOP, false));
@@ -57,7 +54,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
-        builder.add(BOOP);
+        appendBoop(builder);
     }
 
     @Nullable

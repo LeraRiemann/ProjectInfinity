@@ -10,22 +10,24 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtHelper;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class CosmicAltarEntity extends BlockEntity {
+public class CosmicAltarBlockEntity extends BlockEntity {
     protected int time;
     protected Map<String, BlockState> map;
     public static int[] offsets = new int[]{-1, 0, 1};
     public static int[] offsets_y = new int[]{1, 2, 3};
-    public CosmicAltarEntity(BlockPos pos, BlockState state) {
+    public CosmicAltarBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.COSMIC_ALTAR.get(), pos, state);
         time = -1; //not ticking when set improperly
         map = new HashMap<>();
@@ -36,7 +38,7 @@ public class CosmicAltarEntity extends BlockEntity {
         return true;
     }
 
-    public static void serverTick(World world, BlockPos pos, BlockState state, CosmicAltarEntity be) {
+    public static void serverTick(World world, BlockPos pos, BlockState state, CosmicAltarBlockEntity be) {
         MinecraftServerAccess access = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer())));
         if(be.time == 0) {
             for (int i : offsets) for (int j : offsets_y) for (int k : offsets) {
@@ -95,5 +97,16 @@ public class CosmicAltarEntity extends BlockEntity {
             }
             nbt.put("map", mapnbt);
         }
+    }
+
+    @Nullable
+    @Override
+    public BlockEntityUpdateS2CPacket toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
+        return createNbt(registryLookup);
     }
 }

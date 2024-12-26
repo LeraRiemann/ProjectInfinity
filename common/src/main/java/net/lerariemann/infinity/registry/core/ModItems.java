@@ -49,6 +49,10 @@ public class ModItems {
             registerBlockItemAfter(ModBlocks.IRIDESCENT_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL, BlockItem::new);
     public static final RegistrySupplier<Item> IRIDESCENT_CARPET  =
             registerBlockItemAfter(ModBlocks.IRIDESCENT_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, BlockItem::new);
+    public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_WOOL  =
+            registerBlockItemAfter(ModBlocks.CHROMATIC_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL, ChromaticBlockItem::new);
+    public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_CARPET  =
+            registerBlockItemAfter(ModBlocks.CHROMATIC_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, ChromaticBlockItem::new);
     public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM =
             registerBlockItemAfter(ModBlocks.BIOME_BOTTLE, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE, BiomeBottleItem::new);
     //spawn eggs
@@ -114,25 +118,25 @@ public class ModItems {
         return registerItemAfter(id, group, item, constructor, new Item.Settings());
     }
 
-    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings,
-                                                           BiFunction<Block, Item.Settings, Item> constructor) {
+    public static <T extends Item> RegistrySupplier<T> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings,
+                                                           BiFunction<Block, Item.Settings, T> constructor) {
         return ITEMS.register(block.getId(), () -> constructor.apply(block.get(), settings));
     }
     /**
      * Registers a Block Item via Architectury API.
      */
-    public static RegistrySupplier<Item> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
+    public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 Item.Settings settings,
-                                                                BiFunction<Block, Item.Settings, Item> constructor) {
-        RegistrySupplier<Item> registeredItem = registerBlockItem(block, addFallbackTab(settings, group), constructor);
+                                                                BiFunction<Block, Item.Settings, T> constructor) {
+        RegistrySupplier<T> registeredItem = registerBlockItem(block, addFallbackTab(settings, group), constructor);
         addAfter(registeredItem, group, item);
         return registeredItem;
     }
     /**
      * Registers a Block Item through Architectury API.
      */
-    public static RegistrySupplier<Item> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
-                                                                BiFunction<Block, Item.Settings, Item> constructor) {
+    public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
+                                                                BiFunction<Block, Item.Settings, T> constructor) {
         return registerBlockItemAfter(block, group, item, new Item.Settings(), constructor);
     }
 

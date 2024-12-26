@@ -1,0 +1,6 @@
+{
+  "parent": "infinity:block/chromatic/carpet_base",
+  "textures": {
+    "wool": "minecraft:block/white_wool"
+  }
+}

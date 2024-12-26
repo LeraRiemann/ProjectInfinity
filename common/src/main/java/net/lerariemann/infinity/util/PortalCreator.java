@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.block.custom.Boopable;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
@@ -223,7 +224,7 @@ public interface PortalCreator {
 
     static PortalModifierUnion forInitialSetupping(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
         BlockState bs = world.getBlockState(pos);
-        boolean boop = bs.contains(InfinityPortalBlock.BOOP) ? bs.get(InfinityPortalBlock.BOOP) : false;
+        boolean boop = !Boopable.getBoop(bs);
         PortalColorApplier applier = PortalColorApplier.of(id, world.getServer());
         return new PortalModifierUnion()
                 .addSetupper(infPortalSetupper(world, pos, boop))

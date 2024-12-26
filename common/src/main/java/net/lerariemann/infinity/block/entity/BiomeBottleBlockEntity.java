@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
-public class BiomeBottleBlockEntity extends BlockEntity {
+public class BiomeBottleBlockEntity extends TintableBlockEntity {
     private final PropertyDelegate propertyDelegate;
     private Identifier biome;
     private int color;
@@ -101,7 +101,7 @@ public class BiomeBottleBlockEntity extends BlockEntity {
         return createNbt(registryLookup);
     }
 
-    public Object getRenderData() {
+    public int getTint() {
         return propertyDelegate.get(0);
     }
 

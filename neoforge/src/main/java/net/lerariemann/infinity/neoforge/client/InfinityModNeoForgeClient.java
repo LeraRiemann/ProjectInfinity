@@ -47,15 +47,21 @@ public class InfinityModNeoForgeClient {
     // Apply colour handlers to tint Neither Portals and Book Boxes.
     @SubscribeEvent
     public static void registerBlockColorHandlers(RegisterColorHandlersEvent.Block event) {
-        event.register(InfinityMethods::getInfinityPortalColor, ModBlocks.PORTAL.get());
+        event.register(InfinityMethods::getBlockEntityColor, ModBlocks.PORTAL.get(),
+                ModBlocks.BIOME_BOTTLE.get(),
+                ModBlocks.CHROMATIC_WOOL.get(),
+                ModBlocks.CHROMATIC_CARPET.get());
         event.register(InfinityMethods::getBookBoxColor, ModBlocks.BOOK_BOX.get());
-        event.register(InfinityMethods::getBookBoxColor, ModBlocks.IRIDESCENCE.get());
-        event.register(InfinityMethods::getBiomeBottleColor, ModBlocks.BIOME_BOTTLE.get());
     }
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(InfinityMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get());
-        event.register(InfinityMethods::getOverlayColorFromComponents, ModItems.BIOME_BOTTLE_ITEM.get());
+        event.register(InfinityMethods::getOverlayColorFromComponents,
+                ModItems.TRANSFINITE_KEY.get(),
+                ModItems.BIOME_BOTTLE_ITEM.get(),
+                ModItems.F4.get());
+        event.register(InfinityMethods::getItemColorFromComponents,
+                ModItems.CHROMATIC_WOOL.get(),
+                ModItems.CHROMATIC_CARPET.get());
     }
     @SubscribeEvent
     public static void registerModelPredicates(FMLClientSetupEvent event) {

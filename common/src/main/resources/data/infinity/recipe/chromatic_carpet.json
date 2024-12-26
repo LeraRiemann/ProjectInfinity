@@ -1,9 +1,9 @@
 {
   "type": "infinity:collision_iridescence",
   "input": {
-    "item": "infinity:chromatic_carpet"
+    "tag": "minecraft:wool_carpets"
   },
   "output": {
-    "id": "infinity:iridescent_carpet"
+    "id": "infinity:chromatic_carpet"
   }
 }

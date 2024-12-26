@@ -43,7 +43,8 @@ public class SetAltarStateLootFunction extends ConditionalLootFunction {
                 new BlockStateComponent(Map.of())
                         .with(TransfiniteAltar.COLOR, color)
                         .with(TransfiniteAltar.FLOWER, flower))
-                .add(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(color + (flower ? 7 : 0)))
+                .add(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(color +
+                        (flower ? TransfiniteAltar.numColors : 0)))
                 .build());
         return stack;
     }

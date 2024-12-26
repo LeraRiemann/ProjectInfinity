@@ -27,14 +27,13 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-public class F4Item extends PortalDataHolder {
+public class F4Item extends Item implements PortalDataHolder {
     static final BlockState OBSIDIAN = Blocks.OBSIDIAN.getDefaultState();
 
     public F4Item(Settings settings) {
         super(settings);
     }
 
-    @Override
     public MutableText getDimensionTooltip(Identifier dimension) {
         String s = dimension.toString();
         // Randomly generated dimensions.
@@ -54,6 +53,10 @@ public class F4Item extends PortalDataHolder {
     }
 
     @Override
+    public ItemStack getStack() {
+        return getDefaultStack();
+    }
+
     public MutableText defaultDimensionTooltip() {
         return Text.translatable("tooltip.infinity.f4.default");
     }
@@ -61,8 +64,11 @@ public class F4Item extends PortalDataHolder {
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        MutableText mutableText = Text.translatable("tooltip.infinity.f4.charges", getCharge(stack));
+        Identifier dimension = stack.getComponents().get(ModItemFunctions.DESTINATION.get());
+        MutableText mutableText = (dimension != null) ? getDimensionTooltip(dimension) : defaultDimensionTooltip();
         tooltip.add(mutableText.formatted(Formatting.GRAY));
+        MutableText mutableText2 = Text.translatable("tooltip.infinity.f4.charges", getCharge(stack));
+        tooltip.add(mutableText2.formatted(Formatting.GRAY));
     }
 
     public static ItemStack placePortal(World world, PlayerEntity player, ItemStack stack, BlockPos lowerCenter,

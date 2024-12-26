@@ -6,8 +6,7 @@ import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
-import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
-import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.block.entity.TintableBlockEntity;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -155,39 +154,26 @@ public interface InfinityMethods {
         }
         return ColorHelper.Argb.fullAlpha(0xFFFFFF);
     }
+    static int getItemColorFromComponents(ItemStack stack, int layer) {
+        int color = stack.getComponents().getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF);
+        return ColorHelper.Argb.fullAlpha(color);
+    }
 
     /**
      * Gets an Infinity Portal's item colour - hard set as a light blue.
      */
-    static int getInfinityPortalColor(ItemStack stack, int layer) {
+    static int getBlockEntityColor(ItemStack stack, int layer) {
         return ColorHelper.Argb.fullAlpha(-16717057);
     }
 
     /**
-     * Gets an Infinity Portal's color from its block entity - for use in color providers.
+     * For use in color providers with blocks which the block entity sets color for.
      */
-    static int getInfinityPortalColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
+    static int getBlockEntityColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
         if (world != null && pos != null) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof InfinityPortalBlockEntity be) {
-                Object j = be.getRenderData();
-                if (j == null) return 0;
-                return (int)j & 0xFFFFFF;
-            }
-        }
-        return 0xFFFFFF;
-    }
-
-    /**
-     * Gets a Biome Bottle's color from its block entity - for use in color providers.
-     */
-    static int getBiomeBottleColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
-        if (world != null && pos != null) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof BiomeBottleBlockEntity be) {
-                Object j = be.getRenderData();
-                if (j == null) return 0;
-                return (int)j & 0xFFFFFF;
+            if (blockEntity instanceof TintableBlockEntity be) {
+                return be.getTint() & 0xFFFFFF;
             }
         }
         return 0xFFFFFF;

@@ -2,7 +2,6 @@ package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
-import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.lerariemann.infinity.util.BishopBattle;
 import net.minecraft.block.*;
@@ -91,7 +90,7 @@ public class TransfiniteAltar extends Block {
             }
             return ActionResult.SUCCESS;
         }
-        if (itemStack.isOf(ModItems.IRIDESCENT_STAR.get())) {
+        if (itemStack.isOf(Items.AMETHYST_SHARD)) {
             setColor(world, pos, state, (state.get(COLOR) + 1) % numColors);
             world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.BLOCKS, 1f, 1f);
             return ActionResult.SUCCESS;

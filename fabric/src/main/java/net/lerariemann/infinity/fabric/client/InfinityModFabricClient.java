@@ -14,13 +14,22 @@ import net.minecraft.client.render.RenderLayer;
 public class InfinityModFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        // Apply colour handlers to tint Neither Portals and Book Boxes.
-        ColorProviderRegistry.BLOCK.register(InfinityMethods::getInfinityPortalColor, ModBlocks.PORTAL.get());
-        ColorProviderRegistry.BLOCK.register(InfinityMethods::getBookBoxColor, ModBlocks.BOOK_BOX.get(), ModBlocks.IRIDESCENCE.get());
-        ColorProviderRegistry.BLOCK.register(InfinityMethods::getBiomeBottleColor, ModBlocks.BIOME_BOTTLE.get());
+        // Apply colour handlers to tint blocks.
+        ColorProviderRegistry.BLOCK.register(InfinityMethods::getBookBoxColor,
+                ModBlocks.BOOK_BOX.get());
+        ColorProviderRegistry.BLOCK.register(InfinityMethods::getBlockEntityColor,
+                ModBlocks.PORTAL.get(),
+                ModBlocks.BIOME_BOTTLE.get(),
+                ModBlocks.CHROMATIC_WOOL.get(),
+                ModBlocks.CHROMATIC_CARPET.get());
         ColorProviderRegistry.ITEM.register(InfinityMethods::getOverlayColorFromComponents,
-                ModItems.TRANSFINITE_KEY.get(), ModItems.BIOME_BOTTLE_ITEM.get(), ModItems.F4.get());
-        ColorProviderRegistry.ITEM.register(InfinityMethods::getInfinityPortalColor, ModItems.PORTAL_ITEM.get());
+                ModItems.TRANSFINITE_KEY.get(),
+                ModItems.BIOME_BOTTLE_ITEM.get(),
+                ModItems.F4.get());
+        ColorProviderRegistry.ITEM.register(InfinityMethods::getItemColorFromComponents,
+                ModItems.CHROMATIC_WOOL.get(),
+                ModItems.CHROMATIC_CARPET.get());
+        ColorProviderRegistry.ITEM.register(InfinityMethods::getBlockEntityColor, ModItems.PORTAL_ITEM.get());
         // On Fabric, render layer maps are also applied to blocks.
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutoutMipped(),
                 ModBlocks.BOOK_BOX.get(),

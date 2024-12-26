@@ -11,7 +11,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Util;
 
 public class ModBlockEntities {
-
     public static Type<?> type(String id) {
         return Util.getChoiceType(TypeReferences.BLOCK_ENTITY, id);
     }
@@ -21,14 +20,19 @@ public class ModBlockEntities {
             BLOCK_ENTITY_TYPES.register("neither_portal", () ->
                     BlockEntityType.Builder.create(InfinityPortalBlockEntity::new,
                             ModBlocks.PORTAL.get()).build(type("neither_portal")));
-    public static final RegistrySupplier<BlockEntityType<CosmicAltarEntity>> COSMIC_ALTAR =
+    public static final RegistrySupplier<BlockEntityType<CosmicAltarBlockEntity>> COSMIC_ALTAR =
             BLOCK_ENTITY_TYPES.register("cosmic_altar", () ->
-                    BlockEntityType.Builder.create(CosmicAltarEntity::new,
+                    BlockEntityType.Builder.create(CosmicAltarBlockEntity::new,
                             ModBlocks.COSMIC_ALTAR.get()).build(type("cosmic_altar")));
     public static final RegistrySupplier<BlockEntityType<BiomeBottleBlockEntity>> BIOME_BOTTLE =
             BLOCK_ENTITY_TYPES.register("biome_bottle", () ->
                     BlockEntityType.Builder.create(BiomeBottleBlockEntity::new,
                             ModBlocks.BIOME_BOTTLE.get()).build(type("biome_bottle")));
+    public static final RegistrySupplier<BlockEntityType<ChromaticBlockEntity>> CHROMATIC =
+            BLOCK_ENTITY_TYPES.register("chromatic", () ->
+                    BlockEntityType.Builder.create(ChromaticBlockEntity::new,
+                            ModBlocks.CHROMATIC_WOOL.get(),
+                            ModBlocks.CHROMATIC_CARPET.get()).build(type("chromatic")));
 
 
     public static void registerBlockEntities() {

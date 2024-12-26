@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.lerariemann.infinity.block.entity.CosmicAltarEntity;
+import net.lerariemann.infinity.block.entity.CosmicAltarBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -31,10 +31,10 @@ public class CosmicAltar extends BlockWithEntity {
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new CosmicAltarEntity(pos, state);
+        return new CosmicAltarBlockEntity(pos, state);
     }
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, ModBlockEntities.COSMIC_ALTAR.get(), world.isClient ? null : CosmicAltarEntity::serverTick);
+        return validateTicker(type, ModBlockEntities.COSMIC_ALTAR.get(), world.isClient ? null : CosmicAltarBlockEntity::serverTick);
     }
 }

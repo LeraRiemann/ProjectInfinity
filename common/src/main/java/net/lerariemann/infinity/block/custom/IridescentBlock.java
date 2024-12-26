@@ -2,8 +2,10 @@ package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.*;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
@@ -21,6 +23,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
+import org.jetbrains.annotations.Nullable;
 
 public class IridescentBlock extends Block {
     public static int num_models = 24;
@@ -45,7 +48,9 @@ public class IridescentBlock extends Block {
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return getPosBased(ctx.getWorld(), ctx.getBlockPos());
+        if (!ctx.getStack().getComponents().contains(DataComponentTypes.BLOCK_STATE))
+            return getPosBased(ctx.getWorld(), ctx.getBlockPos());
+        return super.getPlacementState(ctx);
     }
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
@@ -61,12 +66,26 @@ public class IridescentBlock extends Block {
         return getDefaultState().with(COLOR_OFFSET, InfinityOptions.access(world).iridMap.getColor(pos));
     }
 
+    @Nullable
+    public static BlockState toStatic(BlockState state) {
+        Block block = state.isOf(ModBlocks.IRIDESCENT_CARPET.get()) ? ModBlocks.CHROMATIC_CARPET.get() : ModBlocks.CHROMATIC_WOOL.get();
+        return block.getDefaultState();
+    }
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.IRIDESCENT_STAR.get())) {
             world.setBlockState(pos, state.with(COLOR_OFFSET, (state.get(COLOR_OFFSET) + 1) % num_models));
             world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.BLOCKS, 1f, 1f);
             return ActionResult.SUCCESS;
+        }
+        if (player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.STAR_OF_LANG.get())) {
+            BlockState state1 = toStatic(state);
+            if (state1 != null) {
+                world.setBlockState(pos, state1);
+                world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.BLOCKS, 1f, 1f);
+                return ActionResult.SUCCESS;
+            }
         }
         return super.onUse(state, world, pos, player, hit);
     }
