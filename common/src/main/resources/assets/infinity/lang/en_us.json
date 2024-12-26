@@ -119,6 +119,7 @@
   "subtitles.music.ivory.challenger": "ivory - challenger",
   "tag.item.infinity.iridescent": "Iridescent items",
   "config.infinity.title": "Infinite Dimensions",
+  "config.infinity.title.easter": "Easter Egg Dimensions",
   "config.infinity.title.general": "General",
   "config.infinity.title.gameRules": "Gamerules",
   "config.infinity.title.features_rules": "Feature Rules",
@@ -134,8 +135,6 @@
   "config.infinity.altarKey.description": "This item was used to activate the Transfinite Altar, which was originally required to access modded content. Now, using this item on the altar can be used to play a fun animation.",
   "config.infinity.portalKey": "Portal Key",
   "config.infinity.portalKey.description": "When set, this item is required to unlock Infinity Portals.",
-  "config.infinity.gameRules.disabledUntilReview": "Disable unfinished Easter Egg Dimensions",
-  "config.infinity.gameRules.disabledUntilReview.description": "When disabled, Infinite Dimensions will prevent you from accessing Easter Egg dimensions that have not yet been finished.",
   "config.infinity.gameRules.longArithmeticEnabled": "Enable Long Arithmetic",
   "config.infinity.gameRules.longArithmeticEnabled.description": "If enabled, this will expand the range in which dimension, biome and feature IDs generate from the integer limit (~2 billion) to the long limit (~9 quintillion). You know, if for some reason 2 billion dimensions is not enough for you :D",
   "config.infinity.gameRules.maxBiomeCount": "Maximum Biome Count",
@@ -199,5 +198,6 @@
   "config.infinity.rootChances.noise_settings.randomize_biome_blocks.description": "This setting controls the percentage chance that, for where dirt/grass would be in the world, a random block is chosen instead.",
   "config.infinity.rootChances.noise_settings.solid_lakes.description": "This setting controls the percentage chance for lakes to be composed of a random solid block instead of a fluid.",
   "config.infinity.rootChances.noise_settings.rift_world_chance.description": "This setting controls the percentage chance for dimensions to generate as a rift world, with 4 block gaps to the void on chunk borders.",
-  "config.infinity.rootChances.noise_settings.solid_oceans.description": "This setting controls the percentage chance for oceans to be composed of a random solid block instead of a fluid."
+  "config.infinity.rootChances.noise_settings.solid_oceans.description": "This setting controls the percentage chance for oceans to be composed of a random solid block instead of a fluid.",
+  "config.infinity.easter.disabled.description": "This dimension has been disabled and may be reworked in a future update. By enabling it now, you may need to delete config files later to experience the finished dimension."
 }
