@@ -75,8 +75,8 @@ public class AntModel<T extends AntEntity> extends SinglePartEntityModel<T> {
 	}
 
 	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		body.render(matrices, vertices, light, overlay, color);
+	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
+		body.render(matrices, vertices, light, overlay, red, green, blue, alpha);
 	}
 
 	@Override

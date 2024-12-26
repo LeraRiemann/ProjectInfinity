@@ -62,28 +62,52 @@ public interface PortalCreator {
     static void tryCreatePortalFromItem(World world, BlockPos pos, ItemEntity entity) {
         if (entity.isRemoved()) return;
         ItemStack itemStack = entity.getStack();
-
-        /* Check if the item provided is a transfinite key. */
-        if (entity.getStack().getItem().equals(ModItems.TRANSFINITE_KEY.get())) {
-            Identifier key_dest = ModItems.TRANSFINITE_KEY.get().getDestinationParsed(itemStack, world);
-            boolean bl = modifyOnInitialCollision(key_dest, world, pos);
-            if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-            return;
+        if (itemStack.getItem() == ModItems.TRANSFINITE_KEY.get()) {
+            Identifier key_dest = BackportMethods.getDimensionIdentifier(itemStack);
+            MinecraftServer server = world.getServer();
+            if (server != null) {
+                if (world instanceof ServerWorld serverWorld) {
+                    boolean bl = modifyOnInitialCollision(Objects.requireNonNullElse(key_dest, Identifier.of("minecraft", "random")),
+                            serverWorld, pos);
+                    if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                }
+            }
+        }
+        else if (itemStack.getItem() == Items.WRITTEN_BOOK || itemStack.getItem() == Items.WRITABLE_BOOK) {
+            NbtCompound compound = itemStack.getNbt();
+            String content;
+            if (compound != null) {
+                content = parseComponents(compound, itemStack.getItem());
+            }
+            else content = "";
+            MinecraftServer server = world.getServer();
+            if (server != null) {
+                Identifier id = InfinityMethods.dimTextToId(content);
+                if (world instanceof ServerWorld serverWorld) {
+                    boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
+                    if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                }
+            }
+        }
+        else if (Platform.isModLoaded("computercraft")) {
+            if (isPrintedPage(itemStack.getItem())) {
+                NbtCompound compound = itemStack.getNbt();
+                String content;
+                if (compound != null) {
+                    content = checkPrintedPage(compound);
+                }
+                else content = "";
+                MinecraftServer server = world.getServer();
+                if (server != null) {
+                    Identifier id = InfinityMethods.dimTextToId(content);
+                    if (world instanceof ServerWorld serverWorld) {
+                        boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
+                        if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                    }
+                }
+            }
         }
 
-        /* Check if the item provided is a book of some kind. */
-        WritableBookContentComponent writableComponent = itemStack.getComponents().get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
-        WrittenBookContentComponent writtenComponent = itemStack.getComponents().get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
-        String printedComponent = null;
-        if (Platform.isModLoaded("computercraft")) {
-            printedComponent = checkPrintedPage(itemStack);
-        }
-        if (writableComponent != null || writtenComponent != null || printedComponent != null) {
-            String content = parseComponents(writableComponent, writtenComponent, printedComponent);
-            Identifier id = InfinityMethods.dimTextToId(content);
-            boolean bl = modifyOnInitialCollision(id, world, pos);
-            if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-        }
     }
 
     /**

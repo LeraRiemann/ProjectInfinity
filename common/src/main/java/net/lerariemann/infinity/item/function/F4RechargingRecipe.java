@@ -69,7 +69,6 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
         if (charge == 0) return defaultedList; //"clearing data" recipe
         charge = Math.max(charge - 64, 0);
         ItemStack result = f4.copy();
-        int charge = Math.max(F4Item.getCharge(f4) - 64, 0);
         BackportMethods.apply(result, ModItemFunctions.F4_CHARGE, charge);
         defaultedList.set(f4pos, result);
         return defaultedList;

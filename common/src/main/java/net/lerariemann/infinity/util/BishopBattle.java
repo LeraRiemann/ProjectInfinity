@@ -39,14 +39,13 @@ public class BishopBattle {
     }
 
     public void addEntity(LivingEntity entity) {
-        scoreboard.addScoreHolderToTeam(entity.getNameForScoreboard(), team);
+        scoreboard.addPlayerToTeam(entity.getEntityName(), team);
     }
 
     public void start(BlockPos pos) {
         AntEntity ant = ModEntities.ANT.get().spawn(serverWorld, pos, SpawnReason.MOB_SUMMONED);
         BishopEntity bishop = ModEntities.BISHOP.get().spawn(serverWorld, pos, SpawnReason.MOB_SUMMONED);
         if (ant != null && bishop != null) {
-            Objects.requireNonNull(ant.getAttributeInstance(EntityAttributes.GENERIC_SCALE)).setBaseValue(3.0);
             Objects.requireNonNull(ant.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(20);
             Objects.requireNonNull(ant.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.25f);
             ant.setHealth(20);

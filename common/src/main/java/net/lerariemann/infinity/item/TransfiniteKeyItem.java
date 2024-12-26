@@ -24,7 +24,7 @@ public class TransfiniteKeyItem extends PortalDataHolder {
     @Override
     public Identifier getDestination(ItemStack stack) {
         return Objects.requireNonNullElse(super.getDestination(stack),
-                Identifier.of(InfinityMethods.ofRandomDim)); // no destination component -> randomize
+                new Identifier(InfinityMethods.ofRandomDim)); // no destination component -> randomize
     }
 
     @Override

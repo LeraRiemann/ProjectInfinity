@@ -47,8 +47,7 @@ public class BishopEntity extends AbstractChessFigure {
         battle.addEntity(this);
     }
     @Override
-    protected void onRemoval(Entity.RemovalReason reason) {
-        super.onRemoval(reason);
+    public void onRemoved() {
         if (battle != null) battle.stop();
     }
 

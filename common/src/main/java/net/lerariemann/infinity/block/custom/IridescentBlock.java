@@ -56,13 +56,13 @@ public class IridescentBlock extends Block {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.IRIDESCENT_STAR.get())) {
             world.setBlockState(pos, state.with(COLOR_OFFSET, (state.get(COLOR_OFFSET) + 1) % num_models));
             world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.BLOCKS, 1f, 1f);
             return ActionResult.SUCCESS;
         }
-        return super.onUse(state, world, pos, player, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     public static class Carpet extends IridescentBlock {

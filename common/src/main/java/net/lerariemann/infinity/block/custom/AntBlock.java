@@ -24,7 +24,7 @@ public class AntBlock extends HorizontalFacingBlock {
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
     }
 
-    boolean inverseExists(Block down) {
+    public static boolean inverseExists(Block down) {
         Identifier id = Registries.BLOCK.getId(down);
         String n = id.getNamespace();
         String s = id.getPath();
@@ -37,7 +37,7 @@ public class AntBlock extends HorizontalFacingBlock {
         return false;
     }
 
-    Block recolor(Block down, boolean toWhite) {
+    public static Block recolor(Block down, boolean toWhite) {
         Identifier id = Registries.BLOCK.getId(down);
         String n = id.getNamespace();
         String s = id.getPath();

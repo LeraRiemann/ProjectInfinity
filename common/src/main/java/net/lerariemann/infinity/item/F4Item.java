@@ -5,6 +5,7 @@ import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.InfinityPortal;
 import net.minecraft.block.BlockState;
@@ -264,6 +265,7 @@ public class F4Item extends PortalDataHolder {
         int obsidian = 0;
         for (BlockPos bp : toRemove) if (!toLeave.contains(bp)) { //double check since we're checking the corners twice
             world.removeBlock(bp, false);
+        }
         BackportMethods.apply(stack, ModItemFunctions.F4_CHARGE, getCharge(stack));
         BackportMethods.apply(stack, ModItemFunctions.SIZE_X, portal.width);
         BackportMethods.apply(stack, ModItemFunctions.SIZE_Y, portal.height);

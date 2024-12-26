@@ -65,7 +65,7 @@ public class TransfiniteAltar extends Block {
     public void testRituals(ServerWorld world, BlockPos pos, ServerPlayerEntity player) {
         //biome spreading
         if (world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
-            ModCriteria.BIOME_BOTTLE.get().trigger(player, bbbe);
+            ModCriteria.BIOME_BOTTLE.trigger(player, bbbe);
             bbbe.startTicking();
         }
         //bishop miniboss battle
@@ -76,7 +76,7 @@ public class TransfiniteAltar extends Block {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
         //rituals
         if (world instanceof ServerWorld serverWorld) {
@@ -101,7 +101,7 @@ public class TransfiniteAltar extends Block {
             world.playSound(null, pos, SoundEvents.BLOCK_AZALEA_LEAVES_PLACE, SoundCategory.BLOCKS, 1f, 1f);
             return ActionResult.SUCCESS;
         }
-        return super.onUse(state, world, pos, player, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     public static int getColor(ItemStack itemStack, BlockState oldState) {

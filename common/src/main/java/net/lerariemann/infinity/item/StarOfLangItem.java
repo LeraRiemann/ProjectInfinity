@@ -12,4 +12,8 @@ public class StarOfLangItem extends Item {
     public ItemStack getRecipeRemainder(ItemStack stack) {
         return ModItems.STAR_OF_LANG.get().getDefaultStack();
     }
+
+    public boolean hasGlint(ItemStack stack) {
+        return true;
+    }
 }

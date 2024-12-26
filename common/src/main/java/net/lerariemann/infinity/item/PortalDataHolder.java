@@ -31,6 +31,15 @@ public abstract class PortalDataHolder extends Item {
     public Identifier getDestination(ItemStack stack) {
         return BackportMethods.getDimensionIdentifier(stack);
     }
+
+    public boolean isDestinationRandom(Identifier id) {
+        return (id != null && id.toString().equals(InfinityMethods.ofRandomDim));
+    }
+
+    public Identifier getDestinationParsed(ItemStack stack, World world) {
+        Identifier id = getDestination(stack);
+        return (isDestinationRandom(id)) ? InfinityMethods.getRandomId(world.random) : id;
+    }
 /*
         public NbtCompound getPortalComponents(InfinityPortalBlockEntity ipbe) {
             Identifier dim = ipbe.getDimension();
@@ -47,14 +56,9 @@ public abstract class PortalDataHolder extends Item {
             return Optional.empty();
         }
 
-    public boolean isDestinationRandom(Identifier id) {
-        return (id != null && id.toString().equals(InfinityMethods.ofRandomDim));
-    }
 
-    public Identifier getDestinationParsed(ItemStack stack, World world) {
-        Identifier id = getDestination(stack);
-        return (isDestinationRandom(id)) ? InfinityMethods.getRandomId(world.random) : id;
-    }
+
+
 
     public ComponentMap.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
         Identifier dim = ipbe.getDimension();

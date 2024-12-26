@@ -1,15 +1,13 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.access.MobEntityAccess;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -24,7 +22,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.*;
@@ -50,7 +47,6 @@ public class ChaosPawn extends AbstractChessFigure {
     public static DefaultAttributeContainer.Builder createAttributes() {
         return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0)
-                .add(EntityAttributes.GENERIC_SCALE, 0.9)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.6F);
     }
     @Override
@@ -133,7 +129,7 @@ public class ChaosPawn extends AbstractChessFigure {
 
     public void unchess() {
         dataTracker.set(special_case, -1);
-        randomizeColors(new Random());
+        randomizeColors(random);
         playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
     }
 
@@ -144,8 +140,8 @@ public class ChaosPawn extends AbstractChessFigure {
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        Random r = new Random();
-        setAllColors(r, world.getBlockState(this.getBlockPos().down()));
+        var r = new java.util.Random();
+        setAllColors(random, world.getBlockState(this.getBlockPos().down()));
         double i = r.nextDouble() * 40;
         Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
         this.setHealth((float)i);
@@ -160,10 +156,10 @@ public class ChaosPawn extends AbstractChessFigure {
     }
 
     @Override
-    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
-        super.dropEquipment(world, source, causedByPlayer);
+    protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
+        super.dropEquipment(source, lootingMultiplier, allowDrops);
         if (!this.isBlackOrWhite()) {
-            String s = InfinityMod.provider.registry.get("items").getRandomElement(world.random);
+            String s = InfinityMod.provider.registry.get("items").getRandomElement(getWorld().random);
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
             ItemStack stack = Registries.ITEM.get(new Identifier(s)).getDefaultStack().copyWithCount((int)(i*i));
 //            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());

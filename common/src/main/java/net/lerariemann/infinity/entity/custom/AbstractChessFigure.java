@@ -13,6 +13,7 @@ import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -84,7 +85,7 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
         return isInBattle("battle");
     }
     public boolean isInBattle(String battleName) {
-        Team t = getScoreboardTeam();
+        AbstractTeam t = getScoreboardTeam();
         return (t != null && t.getName().contains(battleName));
     }
 
@@ -178,8 +179,8 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
             this.getOthersInRange().stream().filter(entity -> {
                 if (entity == mob) return false;
                 if (Iridescence.isUnderEffect(entity)) return false;
-                if (entity instanceof AbstractChessFigure pawn) {
-                    return isAngerCompatible(mob, pawn);
+                if (entity instanceof AbstractChessFigure) {
+                    return isAngerCompatible(mob, entity);
                 }
                 return true;
             }).map(entity -> (Angerable)entity).forEach(Angerable::universallyAnger);

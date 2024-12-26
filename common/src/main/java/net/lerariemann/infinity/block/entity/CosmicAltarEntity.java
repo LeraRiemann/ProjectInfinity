@@ -70,9 +70,7 @@ public class CosmicAltarEntity extends BlockEntity {
         }
         map = new HashMap<>();
         if (nbt.contains("map", NbtElement.COMPOUND_TYPE)) {
-            RegistryWrapper<Block> registryEntryLookup =
-                    registryLookup.getOptionalWrapper(RegistryKeys.BLOCK).orElse(Registries.BLOCK.getReadOnlyWrapper());
-            NbtCompound mapnbt = nbt.getCompound("map");
+            RegistryWrapper<Block> registryEntryLookup = this.world != null ? this.world.createCommandRegistryWrapper(RegistryKeys.BLOCK) : Registries.BLOCK.getReadOnlyWrapper();            NbtCompound mapnbt = nbt.getCompound("map");
             for (String s : mapnbt.getKeys()) {
                 map.put(s, NbtHelper.toBlockState(registryEntryLookup, nbt.getCompound(s)));
             }

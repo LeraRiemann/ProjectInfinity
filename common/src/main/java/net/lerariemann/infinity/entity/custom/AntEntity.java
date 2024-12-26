@@ -103,9 +103,9 @@ public class AntEntity extends AbstractChessFigure {
         super.writeCustomDataToNbt(nbt);
         nbt.putBoolean("dropsLoot", dropsLoot);
         nbt.putString("direction", switch(this.direction) {
-                    case Direction.NORTH -> "N";
-                    case Direction.WEST -> "W";
-                    case Direction.SOUTH -> "S";
+                    case NORTH -> "N";
+                    case WEST -> "W";
+                    case SOUTH -> "S";
                     default -> "E";
                 });
         if (lastChangedPos != null) {
@@ -181,7 +181,7 @@ public class AntEntity extends AbstractChessFigure {
         @Override
         public void start() {
             if (targetPos == null) return;
-            Vec3d v = targetPos.toBottomCenterPos();
+            Vec3d v = targetPos.toCenterPos();
             mob.teleport(v.x, v.y, v.z, false);
             mob.setYaw(mob.direction.asRotation());
         }
