@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.block.custom.AntBlock;
-import net.lerariemann.infinity.util.AntBattle;
+import net.lerariemann.infinity.util.BishopBattle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -9,10 +9,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -41,9 +44,22 @@ public class AntEntity extends AbstractChessFigure {
     public boolean shouldDropLoot() {
         return dropsLoot;
     }
-    public void addToBattle(AntBattle battle) {
+    public void addToBattle(BishopBattle battle) {
         battle.addEntity(this);
         dropsLoot = false;
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return null;
+    }
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundEvents.ENTITY_SILVERFISH_HURT;
+    }
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.ENTITY_SILVERFISH_DEATH;
     }
 
     @Override
@@ -106,7 +122,7 @@ public class AntEntity extends AbstractChessFigure {
         World w = getWorld();
         Optional<BlockPos> bp = supportingBlockPos;
         return (bp.isEmpty()
-                || isInBattle("ant_battle")
+                || isInBattle()
                 || !AntBlock.inverseExists(w.getBlockState(bp.get()).getBlock()))
                 && super.shouldPursueRegularGoals();
     }
@@ -118,7 +134,7 @@ public class AntEntity extends AbstractChessFigure {
 
         @Override
         public boolean canStart() {
-            if (mob instanceof AbstractChessFigure e && !e.isInBattle("ant_battle")) return false;
+            if (mob instanceof AbstractChessFigure e && !e.isInBattle()) return false;
             return super.canStart();
         }
     }

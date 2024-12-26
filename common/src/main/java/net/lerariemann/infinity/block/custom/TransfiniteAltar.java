@@ -4,7 +4,7 @@ import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModCriteria;
-import net.lerariemann.infinity.util.AntBattle;
+import net.lerariemann.infinity.util.BishopBattle;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
@@ -62,43 +62,50 @@ public class TransfiniteAltar extends Block {
         world.setBlockState(pos, state.with(COLOR, i));
     }
 
+    public void testRituals(ServerWorld world, BlockPos pos, ServerPlayerEntity player) {
+        //biome spreading
+        if (world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
+            ModCriteria.BIOME_BOTTLE.get().trigger(player, bbbe);
+            bbbe.startTicking();
+        }
+        //bishop miniboss battle
+        if (world.getBlockState(pos.up()).isOf(ModBlocks.ANT.get())) {
+            world.removeBlock(pos.up(), false);
+            (new BishopBattle(world)).start(pos.up());
+        }
+    }
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
+        //rituals
         if (world instanceof ServerWorld serverWorld) {
-            if (itemStack.isEmpty()) {
-                if (world.getBlockEntity(pos.up()) instanceof BiomeBottleBlockEntity bbbe) {
-                    if (player instanceof ServerPlayerEntity spe) ModCriteria.BIOME_BOTTLE.get().trigger(spe, bbbe);
-                    bbbe.startTicking();
-                }
-                if (world.getBlockState(pos.up()).isOf(ModBlocks.ANT.get())) {
-                    world.removeBlock(pos.up(), false);
-                    (new AntBattle(serverWorld)).start(pos.up());
-                }
-            }
-
-            //coloration
-            if (itemStack.getItem() instanceof DyeItem) {
-                int i = getColor(itemStack, state);
-                if (i>=0 && state.get(COLOR) != i) {
-                    setColor(world, pos, state, i);
-                    world.playSound(null, pos, SoundEvents.ITEM_DYE_USE, SoundCategory.BLOCKS, 1f, 1f);
-                }
-                return ActionResult.SUCCESS;
-            }
-            if (itemStack.isOf(Items.SUNFLOWER)) {
-                world.setBlockState(pos, state.with(FLOWER, !state.get(FLOWER)));
-                world.playSound(null, pos, SoundEvents.BLOCK_AZALEA_LEAVES_PLACE, SoundCategory.BLOCKS, 1f, 1f);
-                return ActionResult.SUCCESS;
-            }
+            if (itemStack.isEmpty()) testRituals(serverWorld, pos, (ServerPlayerEntity)player);
         }
-        if (itemStack.isOf(Items.SUNFLOWER)) return ActionResult.SUCCESS;
+        //coloration
+        if (itemStack.getItem() instanceof DyeItem) {
+            int i = getColor(itemStack, state);
+            if (i>=0 && state.get(COLOR) != i) {
+                setColor(world, pos, state, i);
+                world.playSound(null, pos, SoundEvents.ITEM_DYE_USE, SoundCategory.BLOCKS, 1f, 1f);
+            }
+            return ActionResult.SUCCESS;
+        }
+        if (itemStack.isOf(ModItems.IRIDESCENT_STAR.get())) {
+            setColor(world, pos, state, (state.get(COLOR) + 1) % numColors);
+            world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.BLOCKS, 1f, 1f);
+            return ActionResult.SUCCESS;
+        }
+        if (itemStack.isOf(Items.SUNFLOWER)) {
+            world.setBlockState(pos, state.with(FLOWER, !state.get(FLOWER)));
+            world.playSound(null, pos, SoundEvents.BLOCK_AZALEA_LEAVES_PLACE, SoundCategory.BLOCKS, 1f, 1f);
+            return ActionResult.SUCCESS;
+        }
         return super.onUse(state, world, pos, player, hit);
     }
 
     public static int getColor(ItemStack itemStack, BlockState oldState) {
         int i = -1;
-        if (itemStack.isOf(ModItems.IRIDESCENT_WOOL.get())) i = (oldState.get(COLOR) + 1) % numColors;
         if (itemStack.isOf(Items.RED_DYE)) i = 1;
         if (itemStack.isOf(Items.ORANGE_DYE)) i = 2;
         if (itemStack.isOf(Items.YELLOW_DYE)) i = 3;

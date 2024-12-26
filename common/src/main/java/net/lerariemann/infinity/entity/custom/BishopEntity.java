@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.util.AntBattle;
+import net.lerariemann.infinity.util.BishopBattle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BishopEntity extends AbstractChessFigure {
     @Nullable
-    public AntBattle battle;
+    public BishopBattle battle;
 
     public BishopEntity(EntityType<? extends BishopEntity> entityType, World world) {
         super(entityType, world);
@@ -40,9 +40,9 @@ public class BishopEntity extends AbstractChessFigure {
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         if (nbt.contains("battle") && getWorld() instanceof ServerWorld w)
-            battle = new AntBattle(w, nbt.getString("battle"));
+            battle = new BishopBattle(w, nbt.getString("battle"));
     }
-    public void addToBattle(AntBattle battle) {
+    public void addToBattle(BishopBattle battle) {
         this.battle = battle;
         battle.addEntity(this);
     }
