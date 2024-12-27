@@ -9,9 +9,11 @@ import net.minecraft.text.Text;
 
 public class F4Screen extends Screen implements ScreenHandlerProvider<F4ScreenHandler> {
     protected final F4ScreenHandler handler;
+    int offsetX = 8;
+    boolean v = true;
 
     public static F4Screen of(PlayerEntity player) {
-        F4ScreenHandlerFactory factory = new F4ScreenHandlerFactory(player);
+        F4ScreenHandler.Factory factory = new F4ScreenHandler.Factory(player);
         F4ScreenHandler handler = (F4ScreenHandler)factory.createMenu(0, player.getInventory(), player);
         return new F4Screen(handler, player.getInventory(), factory.getDisplayName());
     }
@@ -24,9 +26,13 @@ public class F4Screen extends Screen implements ScreenHandlerProvider<F4ScreenHa
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        context.drawText(this.textRenderer, Text.literal("A concept of a config screen"), 8, 8, 0xFFFFFF, false);
-        context.drawText(this.textRenderer, Text.literal("Portal width is " + handler.width), 8, 16, 0xFFFFFF, false);
-        context.drawText(this.textRenderer, Text.literal("Portal height is " + handler.height), 8, 24, 0xFFFFFF, false);
+        if (v) offsetX++;
+        else offsetX--;
+        if (offsetX > width - 149) v = false;
+        if (offsetX < 0) v = true;
+        context.drawText(this.textRenderer, Text.literal("A concept of a config screen"), offsetX, 8, 0xFFFFFF, false);
+        context.drawText(this.textRenderer, Text.literal("Portal width is " + handler.width), offsetX, 16, 0xFFFFFF, false);
+        context.drawText(this.textRenderer, Text.literal("Portal height is " + handler.height), offsetX,  24, 0xFFFFFF, false);
     }
 
     @Override
