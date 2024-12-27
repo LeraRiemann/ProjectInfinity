@@ -2,7 +2,7 @@ package net.lerariemann.infinity.block.entity;
 
 import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.block.BlockState;
@@ -85,9 +85,9 @@ public class BiomeBottleBlockEntity extends TintableBlockEntity {
     @Override
     protected void readComponents(BlockEntity.ComponentsAccess components) {
         super.readComponents(components);
-        this.biome = components.getOrDefault(ModItemFunctions.BIOME_CONTENTS.get(), BiomeBottle.defaultBiome());
-        this.color = components.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF);
-        this.charge = components.getOrDefault(ModItemFunctions.CHARGE.get(), 0);
+        this.biome = components.getOrDefault(ModComponentTypes.BIOME_CONTENTS.get(), BiomeBottle.defaultBiome());
+        this.color = components.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
+        this.charge = components.getOrDefault(ModComponentTypes.CHARGE.get(), 0);
     }
 
     @Nullable

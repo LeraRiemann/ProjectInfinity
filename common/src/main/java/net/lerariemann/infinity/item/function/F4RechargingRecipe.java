@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.item.function;
 
 import net.lerariemann.infinity.item.F4Item;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.component.ComponentMap;
@@ -47,11 +48,11 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
         }
         ItemStack result = f4.copyWithCount(1);
         result.applyComponentsFrom(ComponentMap.builder() //"adding obsidian" recipe
-                .add(ModItemFunctions.CHARGE.get(), charge + i)
+                .add(ModComponentTypes.CHARGE.get(), charge + i)
                 .build());
         if (charge + i == 0) { //"clearing data" recipe
-            result.remove(ModItemFunctions.DESTINATION.get());
-            result.remove(ModItemFunctions.COLOR.get());
+            result.remove(ModComponentTypes.DESTINATION.get());
+            result.remove(ModComponentTypes.COLOR.get());
         }
         return result;
     }
@@ -75,7 +76,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
         charge = Math.max(charge - 64, 0);
         ItemStack result = f4.copyWithCount(1);
         result.applyComponentsFrom(ComponentMap.builder()
-                .add(ModItemFunctions.CHARGE.get(), charge)
+                .add(ModComponentTypes.CHARGE.get(), charge)
                 .build());
         defaultedList.set(f4pos, result);//"adding obsidian" recipe
         return defaultedList;

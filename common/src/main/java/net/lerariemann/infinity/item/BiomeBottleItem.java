@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.custom.BiomeBottle;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -23,7 +23,7 @@ public class BiomeBottleItem extends BlockItem {
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        Identifier biome = stack.getComponents().get(ModItemFunctions.BIOME_CONTENTS.get());
+        Identifier biome = stack.getComponents().get(ModComponentTypes.BIOME_CONTENTS.get());
         if (biome != null) {
             tooltip.add(Text.translatable(Util.createTranslationKey("biome", biome)).formatted(Formatting.GRAY));
         }

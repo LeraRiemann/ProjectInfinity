@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.item;
 
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,7 +27,7 @@ public class TransfiniteKeyItem extends Item implements PortalDataHolder {
     @NotNull
     @Override
     public Identifier getDestination(ItemStack stack) {
-        return Objects.requireNonNullElse(stack.getComponents().get(ModItemFunctions.DESTINATION.get()),
+        return Objects.requireNonNullElse(stack.getComponents().get(ModComponentTypes.DESTINATION.get()),
                 Identifier.of(InfinityMethods.ofRandomDim)); // no destination component -> randomize
     }
 
@@ -54,7 +54,7 @@ public class TransfiniteKeyItem extends Item implements PortalDataHolder {
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        Identifier dimension = stack.getComponents().get(ModItemFunctions.DESTINATION.get());
+        Identifier dimension = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
         MutableText mutableText = (dimension != null) ? getDimensionTooltip(dimension) : defaultDimensionTooltip();
         tooltip.add(mutableText.formatted(Formatting.GRAY));
     }

@@ -1,12 +1,11 @@
 package net.lerariemann.infinity.registry.core;
 
-import com.mojang.serialization.Codec;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
+import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.item.function.*;
 import net.lerariemann.infinity.options.InfinityOptions;
@@ -15,7 +14,6 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -23,16 +21,15 @@ import net.minecraft.item.FluidModificationItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -41,34 +38,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.UnaryOperator;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModItemFunctions {
-    public static final DeferredRegister<ComponentType<?>> COMPONENT_TYPES =
-            DeferredRegister.create(MOD_ID, RegistryKeys.DATA_COMPONENT_TYPE);
     public static final DeferredRegister<LootFunctionType<?>> LOOT_FUNCTION_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.LOOT_FUNCTION_TYPE);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS =
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_SERIALIZER);
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_TYPE);
+    private static final DeferredRegister<ScreenHandlerType<?>> SCREEN_HANDLERS =
+            DeferredRegister.create(MOD_ID, RegistryKeys.SCREEN_HANDLER);
 
-    public static RegistrySupplier<ComponentType<Identifier>> DESTINATION = registerComponentType("destination",
-            (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
-    public static RegistrySupplier<ComponentType<Identifier>> BIOME_CONTENTS = registerComponentType("biome_contents",
-            (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
-    public static RegistrySupplier<ComponentType<Integer>> COLOR = registerComponentType("color",
-            (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
-    public static RegistrySupplier<ComponentType<String>> DYE_COLOR = registerComponentType("dye_color",
-            (builder) -> builder.codec(Codec.STRING).packetCodec(PacketCodecs.STRING));
-    public static RegistrySupplier<ComponentType<Integer>> CHARGE = registerComponentType("charge",
-            (builder) -> builder.codec(Codecs.NONNEGATIVE_INT).packetCodec(PacketCodecs.VAR_INT));
-    public static RegistrySupplier<ComponentType<Integer>> SIZE_X = registerComponentType("size_x",
-            (builder) -> builder.codec(Codecs.POSITIVE_INT).packetCodec(PacketCodecs.VAR_INT));
-    public static RegistrySupplier<ComponentType<Integer>> SIZE_Y = registerComponentType("size_y",
-            (builder) -> builder.codec(Codecs.POSITIVE_INT).packetCodec(PacketCodecs.VAR_INT));
 
     public static RegistrySupplier<LootFunctionType<SetLevelLootFunction>> SET_BIOME_BOTTLE_LEVEL =
             LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () -> new LootFunctionType<>(SetLevelLootFunction.CODEC));
@@ -97,12 +79,14 @@ public class ModItemFunctions {
     public static RegistrySupplier<RecipeType<CollisionCraftingRecipe>> IRIDESCENCE_CRAFTING_TYPE =
             RECIPE_TYPES.register("collision_iridescence", () -> CollisionCraftingRecipe.Type.IRIDESCENCE);
 
+    public static final RegistrySupplier<ScreenHandlerType<F4ScreenHandler>> F4_SCREEN_HANDLER =
+            SCREEN_HANDLERS.register("f4", () -> MenuRegistry.ofExtended(F4ScreenHandler::new));
+
     public static void registerItemFunctions() {
-        InfinityMod.LOGGER.debug("Registering component types for " + MOD_ID);
-        COMPONENT_TYPES.register();
         LOOT_FUNCTION_TYPES.register();
         RECIPE_SERIALIZERS.register();
         RECIPE_TYPES.register();
+        SCREEN_HANDLERS.register();
     }
 
     public static void registerDispenserBehaviour() {
@@ -119,10 +103,6 @@ public class ModItemFunctions {
                 }
             }
         });
-    }
-
-    private static <T> RegistrySupplier<ComponentType<T>> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
-        return COMPONENT_TYPES.register(id, () -> (builderOperator.apply(ComponentType.builder())).build());
     }
 
     public static void checkCollisionRecipes(ServerWorld w, ItemEntity itemEntity,

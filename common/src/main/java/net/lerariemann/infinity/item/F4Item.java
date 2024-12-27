@@ -2,7 +2,7 @@ package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.InfinityPortal;
@@ -34,7 +34,7 @@ public class F4Item extends Item implements PortalDataHolder {
         super(settings);
     }
 
-    public MutableText getDimensionTooltip(Identifier dimension) {
+    public static MutableText getDimensionTooltip(Identifier dimension) {
         String s = dimension.toString();
         // Randomly generated dimensions.
         if (s.contains("infinity:generated_"))
@@ -49,7 +49,7 @@ public class F4Item extends Item implements PortalDataHolder {
     }
 
     public static int getCharge(ItemStack f4) {
-        return f4.getOrDefault(ModItemFunctions.CHARGE.get(), 0);
+        return f4.getOrDefault(ModComponentTypes.CHARGE.get(), 0);
     }
 
     @Override
@@ -57,14 +57,14 @@ public class F4Item extends Item implements PortalDataHolder {
         return getDefaultStack();
     }
 
-    public MutableText defaultDimensionTooltip() {
+    public static MutableText defaultDimensionTooltip() {
         return Text.translatable("tooltip.infinity.f4.default");
     }
 
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        Identifier dimension = stack.getComponents().get(ModItemFunctions.DESTINATION.get());
+        Identifier dimension = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
         MutableText mutableText = (dimension != null) ? getDimensionTooltip(dimension) : defaultDimensionTooltip();
         tooltip.add(mutableText.formatted(Formatting.GRAY));
         MutableText mutableText2 = Text.translatable("tooltip.infinity.f4.charges", getCharge(stack));
@@ -109,7 +109,7 @@ public class F4Item extends Item implements PortalDataHolder {
 
         player.playSound(SoundEvents.BLOCK_BELL_USE, 1, 0.75f);
         stack.applyComponentsFrom(ComponentMap.builder()
-                .add(ModItemFunctions.CHARGE.get(), charges - useCharges).build());
+                .add(ModComponentTypes.CHARGE.get(), charges - useCharges).build());
         return stack;
     }
 
@@ -120,8 +120,8 @@ public class F4Item extends Item implements PortalDataHolder {
         BlockPos lowerCenter = player.getBlockPos().offset(dir, 4);
         ItemStack stack = player.getStackInHand(hand);
 
-        int size_x = stack.getOrDefault(ModItemFunctions.SIZE_X.get(), 3);
-        int size_y = stack.getOrDefault(ModItemFunctions.SIZE_Y.get(), 3);
+        int size_x = stack.getOrDefault(ModComponentTypes.SIZE_X.get(), 3);
+        int size_y = stack.getOrDefault(ModComponentTypes.SIZE_Y.get(), 3);
         if (size_y % 2 == 0) {
             double d = dir2.equals(Direction.Axis.X) ? player.getPos().x : player.getPos().z;
             if (d % 1 > 0.5) { //player on the positive side of the block
@@ -178,8 +178,8 @@ public class F4Item extends Item implements PortalDataHolder {
         Direction.Axis dir2 =
                 player.getHorizontalFacing().getAxis().equals(Direction.Axis.X) ? Direction.Axis.Z : Direction.Axis.X;
 
-        int size_x = stack.getOrDefault(ModItemFunctions.SIZE_X.get(), 3);
-        int size_y = stack.getOrDefault(ModItemFunctions.SIZE_Y.get(), 3);
+        int size_x = stack.getOrDefault(ModComponentTypes.SIZE_X.get(), 3);
+        int size_y = stack.getOrDefault(ModComponentTypes.SIZE_Y.get(), 3);
 
         //validating the place position
         for (int j = -1; j <= size_y; j++) for (int k = -1; k <= size_x; k++) {
@@ -267,7 +267,7 @@ public class F4Item extends Item implements PortalDataHolder {
             obsidian++;
         }
         stack.applyComponentsFrom(ComponentMap.builder()
-                .add(ModItemFunctions.CHARGE.get(), getCharge(stack) + obsidian).build());
+                .add(ModComponentTypes.CHARGE.get(), getCharge(stack) + obsidian).build());
         return stack;
     }
 }

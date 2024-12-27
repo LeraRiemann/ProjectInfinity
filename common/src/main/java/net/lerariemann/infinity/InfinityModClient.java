@@ -2,6 +2,7 @@ package net.lerariemann.infinity;
 
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.lerariemann.infinity.item.function.F4Screen;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModPayloads;
@@ -28,6 +29,7 @@ public class InfinityModClient {
             while (f4ConfigKey.wasPressed()) if (client.player != null
                     && client.player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.F4.get())) {
                 client.player.sendMessage(Text.literal("This will open a config screen in the future"), false);
+                client.setScreen(F4Screen.of(client.player));
             }
         });
     }

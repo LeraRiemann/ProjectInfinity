@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.entity;
 
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -52,17 +52,17 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     @Override
     protected void addComponents(ComponentMap.Builder componentMapBuilder) {
         super.addComponents(componentMapBuilder);
-        componentMapBuilder.add(ModItemFunctions.COLOR.get(), getTint());
+        componentMapBuilder.add(ModComponentTypes.COLOR.get(), getTint());
     }
     @Override
     protected void readComponents(BlockEntity.ComponentsAccess components) {
         super.readComponents(components);
-        setColor(components.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF));
+        setColor(components.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF));
     }
 
     public static ComponentMap asMap(int i) {
         return ComponentMap.builder()
-                .add(ModItemFunctions.COLOR.get(), i)
+                .add(ModComponentTypes.COLOR.get(), i)
                 .build();
     }
     public ComponentMap asMap() {

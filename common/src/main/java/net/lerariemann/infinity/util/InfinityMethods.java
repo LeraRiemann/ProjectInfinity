@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.TintableBlockEntity;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
@@ -148,14 +148,14 @@ public interface InfinityMethods {
     }
 
     static int getOverlayColorFromComponents(ItemStack stack, int layer) {
-        int color = stack.getComponents().getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF);
+        int color = stack.getComponents().getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
         if (layer == 1) {
             return ColorHelper.Argb.fullAlpha(color);
         }
         return ColorHelper.Argb.fullAlpha(0xFFFFFF);
     }
     static int getItemColorFromComponents(ItemStack stack, int layer) {
-        int color = stack.getComponents().getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF);
+        int color = stack.getComponents().getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
         return ColorHelper.Argb.fullAlpha(color);
     }
 

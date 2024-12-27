@@ -2,7 +2,7 @@ package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,7 +26,7 @@ public class ChromaticItem extends Item implements PortalDataHolder {
     @Override
     public ComponentMap.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
         return ComponentMap.builder()
-                .add(ModItemFunctions.COLOR.get(), ipbe.getPortalColor());
+                .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
     }
     @Override
     public ItemStack getStack() {
@@ -45,14 +45,14 @@ public class ChromaticItem extends Item implements PortalDataHolder {
             BlockPos pos = context.getBlockPos();
             BlockState bs = world.getBlockState(pos);
             ItemStack currStack = context.getStack();
-            int itemColor = currStack.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF);
+            int itemColor = currStack.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
             if (player.isSneaking()) {
                 ItemStack newStack = currStack.copy();
                 if (world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) { //copy color from chroma blocks
                     int i = cbe.getTint();
                     if (i != itemColor) {
                         newStack.applyComponentsFrom(ChromaticBlockEntity.asMap(i));
-                        newStack.remove(ModItemFunctions.DYE_COLOR.get());
+                        newStack.remove(ModComponentTypes.DYE_COLOR.get());
                         player.setStackInHand(context.getHand(), newStack);
                         playDing(player, 0.5f);
                         return ActionResult.SUCCESS;
@@ -61,10 +61,10 @@ public class ChromaticItem extends Item implements PortalDataHolder {
                 else { //copy color from vanilla blocks
                     DyeColor color = ColorLogic.getColorByState(bs);
                     if (color == null) return super.useOnBlock(context);
-                    if (!color.getName().equals(newStack.getOrDefault(ModItemFunctions.DYE_COLOR.get(), "null"))) {
+                    if (!color.getName().equals(newStack.getOrDefault(ModComponentTypes.DYE_COLOR.get(), "null"))) {
                         newStack.applyComponentsFrom(ComponentMap.builder()
-                                        .add(ModItemFunctions.DYE_COLOR.get(), color.getName())
-                                        .add(ModItemFunctions.COLOR.get(), color.getEntityColor())
+                                        .add(ModComponentTypes.DYE_COLOR.get(), color.getName())
+                                        .add(ModComponentTypes.COLOR.get(), color.getEntityColor())
                                 .build());
                         player.setStackInHand(context.getHand(), newStack);
                         playDing(player, 0.5f);
@@ -73,8 +73,8 @@ public class ChromaticItem extends Item implements PortalDataHolder {
                 }
             }
             if (!player.isSneaking()) { //paste color to blocks
-                boolean bl = currStack.contains(ModItemFunctions.DYE_COLOR.get());
-                Block block = ColorLogic.recolor(bl ? currStack.get(ModItemFunctions.DYE_COLOR.get()) : "infinity:chromatic", bs);
+                boolean bl = currStack.contains(ModComponentTypes.DYE_COLOR.get());
+                Block block = ColorLogic.recolor(bl ? currStack.get(ModComponentTypes.DYE_COLOR.get()) : "infinity:chromatic", bs);
                 if (block == null) return super.useOnBlock(context);
                 world.setBlockState(pos, block.getDefaultState());
                 AtomicBoolean cancel = new AtomicBoolean(false);

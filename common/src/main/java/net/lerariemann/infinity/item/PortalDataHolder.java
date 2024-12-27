@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.item.Item;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface PortalDataHolder {
     @Nullable
     default Identifier getDestination(ItemStack stack) {
-        return stack.getComponents().get(ModItemFunctions.DESTINATION.get());
+        return stack.getComponents().get(ModComponentTypes.DESTINATION.get());
     }
 
     default boolean isDestinationRandom(Identifier id) {
@@ -41,8 +41,8 @@ public interface PortalDataHolder {
 
     default ComponentMap.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
         return ComponentMap.builder()
-                .add(ModItemFunctions.DESTINATION.get(), ipbe.getDimension())
-                .add(ModItemFunctions.COLOR.get(), ipbe.getPortalColor());
+                .add(ModComponentTypes.DESTINATION.get(), ipbe.getDimension())
+                .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
     }
 
     default ItemStack withPortalData(InfinityPortalBlockEntity ipbe) {

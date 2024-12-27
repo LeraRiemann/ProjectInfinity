@@ -3,7 +3,7 @@ package net.lerariemann.infinity.block.custom;
 import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -99,7 +99,7 @@ public class BiomeBottle extends BlockWithEntity {
         return charge < 1000 ? Rarity.COMMON : charge < 9000 ? Rarity.UNCOMMON : Rarity.RARE;
     }
     public static ComponentMap.Builder updateCharge(ComponentMap.Builder builder, int charge) {
-        return builder.add(ModItemFunctions.CHARGE.get(), charge)
+        return builder.add(ModComponentTypes.CHARGE.get(), charge)
                 .add(DataComponentTypes.RARITY, getRarity(charge))
                 .add(DataComponentTypes.BLOCK_STATE, (new BlockStateComponent(Map.of()))
                         .with(LEVEL, getLevel(charge)));
@@ -109,7 +109,7 @@ public class BiomeBottle extends BlockWithEntity {
     }
     public static void updateCharge(ItemStack stack) {
         int charge = getCharge(stack);
-        if (charge == 0) stack.remove(ModItemFunctions.BIOME_CONTENTS.get());
+        if (charge == 0) stack.remove(ModComponentTypes.BIOME_CONTENTS.get());
         updateCharge(stack, charge);
     }
 
@@ -122,11 +122,11 @@ public class BiomeBottle extends BlockWithEntity {
     }
 
     public static Identifier getBiome(ItemStack stack) {
-        return stack.getComponents().getOrDefault(ModItemFunctions.BIOME_CONTENTS.get(), defaultBiome());
+        return stack.getComponents().getOrDefault(ModComponentTypes.BIOME_CONTENTS.get(), defaultBiome());
     }
 
     public static int getCharge(ItemStack stack) {
-        return stack.getComponents().getOrDefault(ModItemFunctions.CHARGE.get(), 0);
+        return stack.getComponents().getOrDefault(ModComponentTypes.CHARGE.get(), 0);
     }
 
     public static void playSploosh(ServerWorld world, BlockPos pos) {
@@ -137,8 +137,8 @@ public class BiomeBottle extends BlockWithEntity {
 
     public static ComponentMap.Builder addComponents(ComponentMap.Builder componentMapBuilder,
                                      Identifier biome, int color, int charge) {
-        componentMapBuilder.add(ModItemFunctions.BIOME_CONTENTS.get(), biome);
-        componentMapBuilder.add(ModItemFunctions.COLOR.get(), color);
+        componentMapBuilder.add(ModComponentTypes.BIOME_CONTENTS.get(), biome);
+        componentMapBuilder.add(ModComponentTypes.COLOR.get(), color);
         updateCharge(componentMapBuilder, charge);
         return componentMapBuilder;
     }

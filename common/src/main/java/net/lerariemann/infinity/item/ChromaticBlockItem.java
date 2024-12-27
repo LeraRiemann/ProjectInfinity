@@ -2,7 +2,7 @@ package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,7 +23,7 @@ public class ChromaticBlockItem extends BlockItem implements PortalDataHolder {
     @Override
     public ComponentMap.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
         return ComponentMap.builder()
-                .add(ModItemFunctions.COLOR.get(), ipbe.getPortalColor());
+                .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
     }
 
     //todo: implement this properly
@@ -33,7 +33,7 @@ public class ChromaticBlockItem extends BlockItem implements PortalDataHolder {
         if (player != null && player.getStackInHand(Hand.OFF_HAND)
                 .isOf(ModItems.CHROMATIC_MATTER.get())
                 && world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) {
-            cbe.setColor(stack.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF));
+            cbe.setColor(stack.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF));
         }
         return bl;
     }
