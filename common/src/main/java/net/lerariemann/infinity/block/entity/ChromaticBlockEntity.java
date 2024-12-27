@@ -105,11 +105,6 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
             hue %= 360;
             event = SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE;
         }
-        else if (stack.isOf(ModItems.CHROMATIC_MATTER.get())) {
-            setColor(stack.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF), cancel);
-            event = SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP;
-            volume = 0.5f;
-        }
         else if (stack.getItem() instanceof DyeItem dye) {
             setColor(dye.getColor().getEntityColor());
             event = SoundEvents.ITEM_DYE_USE;
