@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2003008,
+  "infinity_version": 2003009,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "longArithmeticEnabled": false,
@@ -7,6 +7,7 @@
     "chaosMobsEnabled": true,
     "consumePortalKey": true,
     "randomizeAllNetherPortals": false,
+    "pawnsCanDropIllegalItems": false,
     "maxBiomeCount": 6,
     "maxDimensionScale": 0,
     "iridescenceInitialDuration": 1,

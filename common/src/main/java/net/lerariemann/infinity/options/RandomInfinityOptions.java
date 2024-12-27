@@ -119,7 +119,7 @@ public class RandomInfinityOptions {
 
     public static NbtCompound effect(Random r, RandomProvider provider) {
         NbtCompound res = new NbtCompound();
-        String effect = ((NbtCompound)provider.compoundRegistry.get("effects").getRandomElement(r)).getString("Name");
+        String effect = provider.randomName(r, "effects");
         int amplifier = Math.min(5, (int)(0.5*r.nextExponential()));
         res.putString("id", effect);
         res.putInt("amplifier", amplifier);

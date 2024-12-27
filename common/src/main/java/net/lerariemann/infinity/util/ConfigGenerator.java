@@ -11,6 +11,8 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.particle.ParticleType;
@@ -384,6 +386,19 @@ public interface ConfigGenerator {
         return "";
     }
 
+    static NbtCompound extractLootTable(Registry<LootTable> registry, RegistryKey<LootTable> key) {
+        Identifier id = key.getValue();
+        Optional<LootTable> o = registry.getOrEmpty(key);
+        if (o.isEmpty()) return null;
+        LootTable table = o.get();
+        Identifier type = LootContextTypes.MAP.inverse().get(table.getType());
+        if (type == null) return null;
+        NbtCompound res = new NbtCompound();
+        res.putString("Name", id.toString());
+        res.putString("Type", type.getPath()); //this data is unused for now but might be important later
+        return res;
+    }
+
     static void generateAll(World w, BlockPos inAir, BlockPos onStone) {
         MinecraftServer s = Objects.requireNonNull(w.getServer());
         DynamicRegistryManager manager = s.getRegistryManager();
@@ -395,6 +410,8 @@ public interface ConfigGenerator {
                 key.getValue().getNamespace().equals(InfinityMod.MOD_ID) ? null : key.getValue().toString());
         generate(manager.get(RegistryKeys.STRUCTURE), "extra", "structures", ConfigGenerator::extractStructure);
         generate(manager.get(RegistryKeys.CONFIGURED_FEATURE), "extra", "trees", ConfigGenerator::extractFeature);
+        generate(s.getReloadableRegistries().getRegistryManager().get(RegistryKeys.LOOT_TABLE),
+                "extra", "loot_tables", ConfigGenerator::extractLootTable);
     }
 
     static void generateAllNoWorld() {

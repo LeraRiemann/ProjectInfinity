@@ -104,7 +104,11 @@ public class ChaosPawn extends AbstractChessFigure {
         Identifier i = switch (getCase()) {
             case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
             case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
-            default -> Identifier.of("");
+            default -> {
+                boolean bl = InfinityMod.provider.rule("pawnsCanDropIllegalItems");
+                if (bl) yield Identifier.of(""); //loot is defined in dropEquipment instead
+                else yield Identifier.of(InfinityMod.provider.randomName(random, "loot_tables"));
+            }
         };
         return RegistryKey.of(RegistryKeys.LOOT_TABLE, i);
     }
@@ -167,10 +171,10 @@ public class ChaosPawn extends AbstractChessFigure {
     @Override
     protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
         super.dropEquipment(world, source, causedByPlayer);
-        if (!this.isBlackOrWhite()) {
-            String s = InfinityMod.provider.registry.get("items").getRandomElement(world.random);
+        if (!this.isBlackOrWhite() && InfinityMod.provider.rule("pawnsCanDropIllegalItems")) {
+            String s = InfinityMod.provider.randomName(random, "items");
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
-            ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int)(i*i));
+            ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int) (i * i));
             stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
             this.dropStack(stack);
         }

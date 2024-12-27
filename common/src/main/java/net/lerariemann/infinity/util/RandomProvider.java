@@ -278,13 +278,24 @@ public class RandomProvider {
             Map.entry("biomes", "minecraft:plains"),
             Map.entry("mobs", "minecraft:pig"),
             Map.entry("tags", "#minecraft:air"),
-            Map.entry("trees", "minecraft:oak"));
+            Map.entry("trees", "minecraft:oak"),
+            Map.entry("loot_tables", "minecraft:blocks/stone"));
 
     public String randomName(Random random, String key) {
         return randomName(random, key, defaultMap.get(key));
     }
+    public String randomName(net.minecraft.util.math.random.Random random, String key) {
+        return randomName(random, key, defaultMap.get(key));
+    }
 
     public String randomName(Random random, String key, String def) {
+        if (compoundRegistry.containsKey(key))
+            return elementToName(compoundRegistry.get(key).getRandomElement(random));
+        if (registry.containsKey(key))
+            return registry.get(key).getRandomElement(random);
+        return def;
+    }
+    public String randomName(net.minecraft.util.math.random.Random random, String key, String def) {
         if (compoundRegistry.containsKey(key))
             return elementToName(compoundRegistry.get(key).getRandomElement(random));
         if (registry.containsKey(key))
