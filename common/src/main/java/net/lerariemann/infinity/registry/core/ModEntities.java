@@ -9,7 +9,6 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.entity.client.*;
 import net.lerariemann.infinity.entity.custom.*;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.minecraft.SharedConstants;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.HostileEntity;
@@ -81,7 +80,6 @@ public class ModEntities {
                     .build(type("bishop")));
 
     public static void registerEntities() {
-        SharedConstants.useChoiceTypeRegistrations = false;
         INFINITY_ENTITIES.register();
         registerAttributes();
     }
