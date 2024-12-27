@@ -198,7 +198,7 @@ public interface CommonIO {
         };
     }
 
-    int maxBound = 20000000;
+    int maxBound = 30000000;
     static float boundsCheck(float base) {
         return Math.clamp(base, -maxBound, maxBound);
     }

@@ -8,10 +8,12 @@ import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.lerariemann.infinity.registry.var.ModStats;
+import net.lerariemann.infinity.util.CommonIO;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.WarpLogic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -23,7 +25,10 @@ import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -39,6 +44,8 @@ import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -171,6 +178,31 @@ public interface Iridescence {
                 player.increaseStat(ModStats.IRIDESCENCE, 1);
                 ModCriteria.IRIDESCENT.get().trigger(player);
             }
+        }
+    }
+
+    static void saveCookie(ServerPlayerEntity player) {
+        NbtCompound compound = new NbtCompound();
+        compound.putDouble("x", player.getPos().x);
+        compound.putDouble("y", player.getPos().y);
+        compound.putDouble("z", player.getPos().z);
+        compound.putString("dim", player.getServerWorld().getRegistryKey().getValue().toString());
+        CommonIO.write(compound, InfinityMod.provider.savingPath, player.getUuidAsString() + ".json");
+    }
+
+    static void endJourney(ServerPlayerEntity player) {
+        player.setInvulnerable(false);
+        String s = InfinityMod.provider.savingPath + "/" + player.getUuidAsString() + ".json";
+        try {
+            NbtCompound comp = CommonIO.read(s);
+            player.teleport(player.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, Identifier.of(comp.getString("dim")))),
+                    comp.getDouble("x"), comp.getDouble("y"), comp.getDouble("z"), player.getYaw(), player.getPitch());
+        } catch (Exception e) {
+            WarpLogic.respawnAlive(player);
+        }
+        try {
+            Files.deleteIfExists(Path.of(s));
+        } catch (Exception ignored) {
         }
     }
 
