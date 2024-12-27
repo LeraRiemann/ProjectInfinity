@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.registry.core;
 
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.level.entity.EntityModelLayerRegistry;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
@@ -46,29 +47,29 @@ public class ModEntities {
             .register("chaos_slime", () -> EntityType.Builder.create(ChaosSlime::new, SpawnGroup.MONSTER)
                     .dimensions(0.52f, 0.52f)
                     .maxTrackingRange(10)
-                    .build("chaos_slime"));
+                    .build(type("chaos_slime")));
     public static final RegistrySupplier<EntityType<ChaosSkeleton>> CHAOS_SKELETON = INFINITY_ENTITIES
             .register("chaos_skeleton", () -> EntityType.Builder.create(ChaosSkeleton::new, SpawnGroup.MONSTER)
                     .dimensions(0.6f, 1.99f)
                     .maxTrackingRange(8)
                     .vehicleAttachment(-0.7F)
-                    .build("chaos_skeleton"));
+                    .build(type("chaos_skeleton")));
     public static final RegistrySupplier<EntityType<ChaosCreeper>> CHAOS_CREEPER = INFINITY_ENTITIES
             .register("chaos_creeper", () -> EntityType.Builder.create(ChaosCreeper::new, SpawnGroup.MONSTER)
                     .dimensions(0.6f, 1.7f)
                     .maxTrackingRange(8)
-                    .build("chaos_creeper"));
+                    .build(type("chaos_creeper")));
     public static final RegistrySupplier<EntityType<ChaosPawn>> CHAOS_PAWN = INFINITY_ENTITIES
             .register("chaos_pawn", () -> EntityType.Builder.create(ChaosPawn::new, SpawnGroup.MONSTER)
                     .dimensions(0.6f, 2.0f)
                     .maxTrackingRange(10)
                     .vehicleAttachment(-0.7F)
-                    .build("chaos_pawn"));
+                    .build(type("chaos_pawn")));
     public static final RegistrySupplier<EntityType<AntEntity>> ANT = INFINITY_ENTITIES
             .register("ant", () -> EntityType.Builder.create(AntEntity::new, SpawnGroup.CREATURE)
                     .dimensions(0.6f, 0.3f)
                     .maxTrackingRange(10)
-                    .build("ant"));
+                    .build(type("ant")));
     public static final RegistrySupplier<EntityType<BishopEntity>> BISHOP = INFINITY_ENTITIES
             .register("bishop", () -> EntityType.Builder.create(BishopEntity::new, SpawnGroup.MONSTER)
                     .dimensions(0.6f, 2.7f)
@@ -76,11 +77,18 @@ public class ModEntities {
                     .nameTagAttachment(2.05F)
                     .vehicleAttachment(-0.7F)
                     .maxTrackingRange(10)
-                    .build("bishop"));
+                    .build(type("bishop")));
 
     public static void registerEntities() {
         INFINITY_ENTITIES.register();
         registerAttributes();
+    }
+
+    public static String type(String id) {
+        if (!Platform.isFabric()) {
+            return "infinity:"+id;
+        }
+        else return null;
     }
 
     public static void registerAttributes() {

@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.registry.core;
 
 import com.mojang.datafixers.types.Type;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
@@ -12,7 +13,9 @@ import net.minecraft.util.Util;
 
 public class ModBlockEntities {
     public static Type<?> type(String id) {
-        return Util.getChoiceType(TypeReferences.BLOCK_ENTITY, id);
+        if (!Platform.isFabric())
+            return Util.getChoiceType(TypeReferences.BLOCK_ENTITY, "infinity:"+ id);
+        else return null;
     }
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(InfinityMod.MOD_ID, RegistryKeys.BLOCK_ENTITY_TYPE);
 
