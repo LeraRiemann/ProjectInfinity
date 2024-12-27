@@ -1,36 +1,40 @@
 package net.lerariemann.infinity.item.function;
 
-import dev.architectury.registry.registries.RegistrySupplier;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.recipe.CraftingRecipe;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
-import java.util.Map;
+import java.util.function.BiFunction;
 
-public class ChromaticColoringRecipe extends SpecialCraftingRecipe {
-    public ChromaticColoringRecipe(CraftingRecipeCategory category) {
-        super(category);
+public class ChromaticColoringRecipe implements CraftingRecipe {
+    private final Ingredient input;
+    private final ItemStack output;
+
+    public ChromaticColoringRecipe(Ingredient input, ItemStack output) {
+        this.input = input;
+        this.output = output;
     }
-
-    public static final Map<TagKey<Item>, RegistrySupplier<? extends Item>> map = Map.ofEntries(
-            Map.entry(ItemTags.WOOL, ModItems.CHROMATIC_WOOL),
-            Map.entry(ItemTags.WOOL_CARPETS, ModItems.CHROMATIC_CARPET));
+    @Override
+    public CraftingRecipeCategory getCategory() {
+        return CraftingRecipeCategory.MISC;
+    }
 
     @Override
     public boolean matches(CraftingRecipeInput input, World world) {
         boolean foundChroma = false;
-        TagKey<Item> itemTag = null;
+        boolean foundOther = false;
         for (int k = 0; k < input.getSize(); k++) {
             ItemStack itemStack = input.getStackInSlot(k);
             if (itemStack.isOf(ModItems.CHROMATIC_MATTER.get())) {
@@ -38,34 +42,28 @@ public class ChromaticColoringRecipe extends SpecialCraftingRecipe {
                 foundChroma = true;
             }
             else if (!itemStack.isEmpty()) {
-                RegistryEntry<Item> entry = itemStack.getItem().getRegistryEntry();
-                if (itemTag == null) {
-                    for (TagKey<Item> tag: map.keySet()) if (entry.isIn(tag)) itemTag = tag;
-                }
-                else if (!entry.isIn(itemTag)) return false;
+                if (!this.input.test(itemStack)) return false;
+                foundOther = true;
             }
         }
-        return (itemTag != null && foundChroma);
+        return (foundOther && foundChroma);
     }
 
     @Override
     public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        ItemStack chroma = null;
-        ItemStack result = null;
+        ItemStack chroma = ItemStack.EMPTY;
         int i = 0;
         for (int k = 0; k < input.getSize(); k++) {
             ItemStack itemStack = input.getStackInSlot(k);
             if (itemStack.isOf(ModItems.CHROMATIC_MATTER.get())) chroma = itemStack;
             else if (!itemStack.isEmpty()) {
-                RegistryEntry<Item> entry = itemStack.getItem().getRegistryEntry();
-                if (result == null) for (TagKey<Item> tag: map.keySet()) if (entry.isIn(tag))
-                            result = map.get(tag).get().getDefaultStack();
                 i++;
             }
         }
-        assert result != null && chroma != null && i > 0;
+        assert !chroma.isEmpty() && i > 0;
+        ItemStack result = output.copyWithCount(i);
         result.applyComponentsFrom(chroma.getComponents());
-        return result.copyWithCount(i);
+        return result;
     }
 
     @Override
@@ -86,7 +84,40 @@ public class ChromaticColoringRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
+    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
+        return output;
+    }
+
+    @Override
     public RecipeSerializer<?> getSerializer() {
         return ModItemFunctions.CHROMATIC_COLORING.get();
+    }
+
+    public record Serializer(BiFunction<Ingredient, ItemStack, ChromaticColoringRecipe> func)
+            implements RecipeSerializer<ChromaticColoringRecipe> {
+
+        @Override
+        public MapCodec<ChromaticColoringRecipe> codec() {
+            return RecordCodecBuilder.mapCodec(instance -> instance.group(
+                            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input").forGetter(recipe -> recipe.input),
+                            ItemStack.VALIDATED_CODEC.fieldOf("output").forGetter(recipe -> recipe.output))
+                    .apply(instance, func));
+        }
+
+        @Override
+        public PacketCodec<RegistryByteBuf, ChromaticColoringRecipe> packetCodec() {
+            return PacketCodec.ofStatic(this::write, this::read);
+        }
+
+        private ChromaticColoringRecipe read(RegistryByteBuf buf) {
+            Ingredient input = Ingredient.PACKET_CODEC.decode(buf);
+            ItemStack output = ItemStack.PACKET_CODEC.decode(buf);
+            return func.apply(input, output);
+        }
+
+        private void write(RegistryByteBuf buf, ChromaticColoringRecipe recipe) {
+            Ingredient.PACKET_CODEC.encode(buf, recipe.input);
+            ItemStack.PACKET_CODEC.encode(buf, recipe.output);
+        }
     }
 }

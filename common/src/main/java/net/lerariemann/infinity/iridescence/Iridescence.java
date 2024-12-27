@@ -28,6 +28,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -81,24 +82,24 @@ public interface Iridescence {
         return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F);
     }
 
-    java.util.List<String> colors = List.of(
-            "minecraft:red_",
-            "minecraft:orange_",
-            "minecraft:yellow_",
-            "minecraft:lime_",
-            "minecraft:green_",
-            "minecraft:cyan_",
-            "minecraft:light_blue_",
-            "minecraft:blue_",
-            "minecraft:purple_",
-            "minecraft:magenta_",
-            "minecraft:pink_");
+    java.util.List<DyeColor> colors = List.of(
+            DyeColor.RED,
+            DyeColor.ORANGE,
+            DyeColor.YELLOW,
+            DyeColor.LIME,
+            DyeColor.GREEN,
+            DyeColor.CYAN,
+            DyeColor.LIGHT_BLUE,
+            DyeColor.BLUE,
+            DyeColor.PURPLE,
+            DyeColor.MAGENTA,
+            DyeColor.PINK);
 
     static Block getRandomColorBlock(WorldAccess world, String str) {
-        return Registries.BLOCK.get(Identifier.of(colors.get(world.getRandom().nextInt(colors.size())) + str));
+        return Registries.BLOCK.get(Identifier.of(colors.get(world.getRandom().nextInt(colors.size())).getName() + "_" + str));
     }
     static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*colors.size())) + str));
+        return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*colors.size())).getName() + "_" + str));
     }
 
     static int getAmplifierOnApply(LivingEntity entity, int original) {

@@ -81,10 +81,10 @@ public class ModItemFunctions {
     public static RegistrySupplier<RecipeSerializer<F4RechargingRecipe>> F4_RECHARGING =
             RECIPE_SERIALIZERS.register("f4_recharging", () ->
                     new SpecialRecipeSerializer<>(F4RechargingRecipe::new));
+
     public static RegistrySupplier<RecipeSerializer<ChromaticColoringRecipe>> CHROMATIC_COLORING =
             RECIPE_SERIALIZERS.register("chromatic_coloring", () ->
-                    new SpecialRecipeSerializer<>(ChromaticColoringRecipe::new));
-
+                    new ChromaticColoringRecipe.Serializer(ChromaticColoringRecipe::new));
     public static RegistrySupplier<RecipeSerializer<CollisionCraftingRecipe>> PORTAL_CRAFTING =
             RECIPE_SERIALIZERS.register("collision_portal", () ->
                     new CollisionCraftingRecipe.Serializer(CollisionCraftingRecipe.OfPortal::new));
