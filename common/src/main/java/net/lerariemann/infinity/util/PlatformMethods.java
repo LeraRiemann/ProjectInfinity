@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util;
 import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.item.StarOfLangItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
@@ -19,6 +20,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.poi.PointOfInterestType;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 
 /**
  * Methods that are dependent on ExpectPlatform, and require a different implementation to work on both Fabric and NeoForge.
@@ -140,6 +142,11 @@ public class PlatformMethods {
     }
     @ExpectPlatform
     public static double acidHeightTest(Entity entity) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
         throw new AssertionError();
     }
 }

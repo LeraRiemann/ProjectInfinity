@@ -95,8 +95,8 @@ public class ModItems {
     public static final RegistrySupplier<Item> IRIDESCENT_STAR =
             registerItemAfter("iridescent_star", ItemGroups.INGREDIENTS, Items.NETHER_STAR, Item::new,
                     new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
-    public static final RegistrySupplier<Item> STAR_OF_LANG =
-            registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, StarOfLangItem::new,
+    public static final RegistrySupplier<? extends StarOfLangItem> STAR_OF_LANG =
+            registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, PlatformMethods.getStarOfLangConstructor(),
                     new Item.Settings().component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final RegistrySupplier<F4Item> F4 =
             registerItemAfter("f4", ItemGroups.OPERATOR, Items.DEBUG_STICK, F4Item::new,

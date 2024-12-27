@@ -29,7 +29,6 @@ public final class InfinityModNeoForge {
         eventBus.addListener(InfinityModNeoForge::registerSpawns);
         eventBus.addListener(InfinityModNeoForge::commonSetup);
         eventBus.addListener(FluidTypes::registerFluidInteractions);
-
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsNeoforge.registerModFluids();
         ModEffectsNeoforge.register(eventBus);
