@@ -61,6 +61,8 @@ public class ModItemFunctions {
             (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
     public static RegistrySupplier<ComponentType<Integer>> COLOR = registerComponentType("color",
             (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+    public static RegistrySupplier<ComponentType<String>> DYE_COLOR = registerComponentType("dye_color",
+            (builder) -> builder.codec(Codec.STRING).packetCodec(PacketCodecs.STRING));
     public static RegistrySupplier<ComponentType<Integer>> CHARGE = registerComponentType("charge",
             (builder) -> builder.codec(Codecs.NONNEGATIVE_INT).packetCodec(PacketCodecs.VAR_INT));
     public static RegistrySupplier<ComponentType<Integer>> SIZE_X = registerComponentType("size_x",

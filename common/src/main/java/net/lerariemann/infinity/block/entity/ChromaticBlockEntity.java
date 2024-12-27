@@ -60,7 +60,7 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         setColor(components.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF));
     }
 
-    public ComponentMap asMap(int i) {
+    public static ComponentMap asMap(int i) {
         return ComponentMap.builder()
                 .add(ModItemFunctions.COLOR.get(), i)
                 .build();
