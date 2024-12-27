@@ -34,7 +34,6 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
     @Override
     public boolean matches(CraftingRecipeInput input, World world) {
         boolean foundChroma = false;
-        boolean foundOther = false;
         for (int k = 0; k < input.getSize(); k++) {
             ItemStack itemStack = input.getStackInSlot(k);
             if (itemStack.isOf(ModItems.CHROMATIC_MATTER.get())) {
@@ -43,10 +42,9 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
             }
             else if (!itemStack.isEmpty()) {
                 if (!this.input.test(itemStack)) return false;
-                foundOther = true;
             }
         }
-        return (foundOther && foundChroma);
+        return foundChroma;
     }
 
     @Override
@@ -60,22 +58,26 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
                 i++;
             }
         }
-        assert !chroma.isEmpty() && i > 0;
-        ItemStack result = output.copyWithCount(i);
-        result.applyComponentsFrom(chroma.getComponents());
-        return result;
+        assert !chroma.isEmpty();
+        if (i > 0) {
+            ItemStack result = output.copyWithCount(i);
+            result.applyComponentsFrom(chroma.getComponents());
+            return result;
+        }
+        else return chroma.getItem().getDefaultStack();
     }
 
     @Override
     public DefaultedList<ItemStack> getRemainder(CraftingRecipeInput craftingRecipeInput) {
         DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.getSize(), ItemStack.EMPTY);
+        int j = 0;
         for (int i = 0; i < defaultedList.size(); i++) {
             ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
-            if (itemStack.isOf(ModItems.CHROMATIC_MATTER.get())) {
+            if (itemStack.isOf(ModItems.CHROMATIC_MATTER.get()))
                 defaultedList.set(i, itemStack.copyWithCount(1));
-            }
+            else if (!itemStack.isEmpty()) j++;
         }
-        return defaultedList;
+        return j > 0 ? defaultedList : DefaultedList.ofSize(craftingRecipeInput.getSize(), ItemStack.EMPTY);
     }
 
     @Override

@@ -74,8 +74,12 @@ public class ChaosPawn extends AbstractChessFigure {
 
     @Override
     public Text getDefaultName() {
-        if (isBlackOrWhite()) return Text.translatable("entity.infinity.pawn");
-        return super.getDefaultName();
+        int i = getCase();
+        return switch (i) {
+            case 0 -> Text.translatable("entity.infinity.pawn_black");
+            case 1 -> Text.translatable("entity.infinity.pawn_white");
+            default -> super.getDefaultName();
+        };
     }
 
     public int getCase() {
