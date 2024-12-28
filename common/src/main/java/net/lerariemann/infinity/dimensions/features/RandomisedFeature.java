@@ -5,6 +5,7 @@ import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.RegistryKeys;
@@ -59,7 +60,7 @@ public abstract class RandomisedFeature {
             block2 = PROVIDER.randomElement(random, "blocks_features");
         }
         else {
-            block2 = RandomProvider.nameToElement(
+            block2 = NbtUtils.nameToElement(
                     PROVIDER.randomName(random, "fluids"));
         }
         return block2;
@@ -76,7 +77,7 @@ public abstract class RandomisedFeature {
     }
 
     void addRandomIntProvider(NbtCompound config, String key, int lbound, int bound) {
-        config.put(key, RandomProvider.intProvider(random, lbound, bound, true));
+        config.put(key, NbtUtils.randomIntProvider(random, lbound, bound, true));
     }
 
     abstract NbtCompound feature();

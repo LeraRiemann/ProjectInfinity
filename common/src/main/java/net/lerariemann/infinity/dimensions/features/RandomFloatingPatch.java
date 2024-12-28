@@ -23,7 +23,7 @@ public class RandomFloatingPatch extends RandomisedFeature {
         int y_spread = 1 + random.nextInt(7);
         int tries_max = (xz_spread+1)*(xz_spread+1);
         NbtCompound config = CommonIO.readAndFormat(InfinityMod.utilPath + "/preplacements/floatingpatch.json",
-                CommonIO.CompoundToString(PROVIDER.randomElement(random, "blocks_features"), 0),
+                CommonIO.compoundToString(PROVIDER.randomElement(random, "blocks_features")),
                 Math.min(256, random.nextInt(tries_max)), xz_spread, y_spread);
         return feature(config);
     }

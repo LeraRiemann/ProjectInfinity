@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.block.custom.AntBlock;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -85,7 +86,7 @@ public class AntEntity extends AbstractChessFigure {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.dropsLoot = !nbt.contains("dropsLoot") || nbt.getBoolean("dropsLoot");
+        this.dropsLoot = NbtUtils.test(nbt, "dropsLoot", true);
         this.direction = switch(nbt.getString("direction")) {
             case "N" -> Direction.NORTH;
             case "W" -> Direction.WEST;

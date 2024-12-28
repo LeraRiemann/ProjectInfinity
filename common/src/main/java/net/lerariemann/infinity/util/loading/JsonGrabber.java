@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 import static java.nio.file.Files.walk;
 
@@ -37,8 +38,9 @@ public class JsonGrabber<E> {
     }
 
     void grab_all(Path rootdir, boolean bl) {
-        try {
-            if(rootdir.toFile().exists()) walk(rootdir).forEach(a -> grab(a, bl));
+        if(!rootdir.toFile().exists()) return;
+        try (Stream<Path> files = walk(rootdir)) {
+            files.forEach(a -> grab(a, bl));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -56,7 +58,7 @@ public class JsonGrabber<E> {
     }
 
     void grab(Identifier id, NbtCompound compound, boolean bl) {
-        grab(RegistryKey.of(registry.getKey(), id), JsonParser.parseString(CommonIO.CompoundToString(compound, 0)), bl);
+        grab(RegistryKey.of(registry.getKey(), id), JsonParser.parseString(CommonIO.compoundToString(compound)), bl);
     }
 
     void grab(RegistryKey<E> key, JsonElement jsonElement, boolean bl) {

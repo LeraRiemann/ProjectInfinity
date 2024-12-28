@@ -27,7 +27,7 @@ public class InfinityMod {
 	public static Random random = new Random(); //do not use this in dimgen, only in emergent block behaviour
 
 	public static void updateProvider(MinecraftServer server) {
-		RandomProvider p = new RandomProvider(server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
+		RandomProvider p = new RandomProvider(server.getSavePath(WorldSavePath.DATAPACKS).resolve(MOD_ID));
 		p.kickGhostsOut(server.getRegistryManager());
 		provider = p;
 		if (!((MinecraftServerAccess)server).infinity$needsInvocation()) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
@@ -57,6 +57,5 @@ public class InfinityMod {
 		ModCriteria.registerCriteria();
 		ModPayloads.registerPayloadsServer();
 		RandomText.walkPaths();
-		provider = new RandomProvider();
 	}
 }

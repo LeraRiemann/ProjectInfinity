@@ -60,7 +60,7 @@ public class RandomDimensionType {
     }
 
     double coordinateScale() {
-        int scaleMax = parent.PROVIDER.gameRulesInt.get("maxDimensionScale");
+        int scaleMax = parent.PROVIDER.ruleInt("maxDimensionScale");
         if (scaleMax <= 0 || scaleMax > scaleCap) scaleMax = scaleCap;
         int distribParam = Math.min(scaleMax, 8);
         double scaleMin = 1.0 / scaleMax;

@@ -4,6 +4,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -44,7 +45,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         NbtCompound biome = InfinityMod.provider.randomElement(world.getRandom(), "biomes");
-        this.setColor(biome.contains("Color") ? biome.getInt("Color") : 7842607);
+        this.setColor(NbtUtils.test(biome, "Color", 7842607));
         this.setRandomCharge();
         this.setBiome(biome.getString("Name"));
         return super.initialize(world, difficulty, spawnReason, entityData);

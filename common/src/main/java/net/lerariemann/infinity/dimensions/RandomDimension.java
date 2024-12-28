@@ -4,6 +4,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
@@ -113,12 +114,12 @@ public class RandomDimension {
         height = max_y - min_y;
         default_block = randomiseblocks ?
                 PROVIDER.randomElement(random, "full_blocks_worldgen") :
-                RandomProvider.nameToElement(getDefaultBlock("minecraft:stone"));
+                NbtUtils.nameToElement(getDefaultBlock("minecraft:stone"));
         default_fluid = randomiseblocks ?
                 PROVIDER.randomElement(random, "fluids") :
-                RandomProvider.nameToFluid(getDefaultFluid());
+                NbtUtils.nameToFluid(getDefaultFluid());
         deepslate = Arrays.stream((new String[]{"minecraft:overworld", "minecraft:amplified", "infinity:whack"})).toList().contains(type_alike) ?
-                RandomProvider.nameToElement("minecraft:deepslate") : default_block;
+                NbtUtils.nameToElement("minecraft:deepslate") : default_block;
     }
 
     void wrap_up(boolean isEasterDim) {
@@ -228,8 +229,8 @@ public class RandomDimension {
         res.put("layers", layers);
         res.putBoolean("lakes", random.nextBoolean());
         res.putBoolean("features", random.nextBoolean());
-        top_blocks.put(biome, RandomProvider.nameToElement(block));
-        underwater.put(biome, RandomProvider.nameToElement(block));
+        top_blocks.put(biome, NbtUtils.nameToElement(block));
+        underwater.put(biome, NbtUtils.nameToElement(block));
         return res;
     }
 
@@ -272,7 +273,7 @@ public class RandomDimension {
 
     NbtList randomBiomesCheckerboard() {
         NbtList res = new NbtList();
-        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.gameRulesInt.get("maxBiomeCount")));
+        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.ruleInt("maxBiomeCount")));
         for (int i = 0; i < biome_count; i++) {
             res.add(NbtString.of(randomBiome()));
         }
@@ -281,7 +282,7 @@ public class RandomDimension {
 
     NbtList randomBiomes() {
         NbtList res = new NbtList();
-        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.gameRulesInt.get("maxBiomeCount")));
+        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.ruleInt("maxBiomeCount")));
         for (int i = 0; i < biome_count; i++) {
             NbtCompound element = new NbtCompound();
             element.putString("biome", randomBiome());

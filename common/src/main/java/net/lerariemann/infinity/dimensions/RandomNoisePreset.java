@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 
@@ -46,7 +47,7 @@ public class RandomNoisePreset {
         data.putBoolean("disable_mob_generation", false);
         data.putBoolean("legacy_random_source", false);
         data.put("default_block", parent.default_block);
-        data.put("default_fluid", RandomProvider.nameToElement(parent.default_fluid.getString("Name")));
+        data.put("default_fluid", NbtUtils.nameToElement(parent.default_fluid.getString("Name")));
         data.putInt("sea_level", parent.sea_level);
         data.put("noise", noise(dim));
         data.put("noise_router", getRouter(noise_router));
@@ -122,7 +123,7 @@ public class RandomNoisePreset {
 
     NbtCompound buildSurfaceRule() {
         parent.deepslate = parent.randomiseblocks ? PROVIDER.randomElement(parent.random, "full_blocks_worldgen") :
-                RandomProvider.nameToElement("minecraft:deepslate");
+                NbtUtils.nameToElement("minecraft:deepslate");
         int i = 0;
         switch (surface_rule) {
             case "caves", "nether", "tangled" -> i=1;
@@ -139,7 +140,7 @@ public class RandomNoisePreset {
     }
 
     void addDeepslate(NbtList base) {
-        base.add(CommonIO.readAndAddBlock(InfinityMod.utilPath + "/surface_rule/deepslate.json", parent.deepslate));
+        base.add(CommonIO.readAndAddCompound(InfinityMod.utilPath + "/surface_rule/deepslate.json", parent.deepslate));
         parent.additional_blocks.add(parent.deepslate);
     }
 
@@ -191,21 +192,21 @@ public class RandomNoisePreset {
             String root = InfinityMod.utilPath + "/surface_rule/custom/";
             boolean useRandomBlock = parent.randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
             NbtCompound top_block = useRandomBlock ? randomBlock(PROVIDER.rule("forceSolidSurface") ? "full_blocks_worldgen" : "top_blocks") :
-                    RandomProvider.nameToElement(parent.getDefaultBlock("minecraft:grass_block"));
+                    NbtUtils.nameToElement(parent.getDefaultBlock("minecraft:grass_block"));
             parent.top_blocks.put(biome, top_block);
             NbtCompound block_underwater = useRandomBlock ? randomBlock("full_blocks_worldgen") :
-                    RandomProvider.nameToElement(parent.getDefaultBlock("minecraft:dirt"));
+                    NbtUtils.nameToElement(parent.getDefaultBlock("minecraft:dirt"));
             parent.underwater.put(biome, block_underwater);
             NbtCompound beach = useRandomBlock ? randomBlock("full_blocks_worldgen") : top_block;
             NbtCompound rule1 = CommonIO.readAndFormat(root + "ceiling.json",
-                    CommonIO.CompoundToString(parent.deepslate, 5), CommonIO.CompoundToString(parent.default_block, 4));
+                    CommonIO.compoundToString(parent.deepslate, 5), CommonIO.compoundToString(parent.default_block, 4));
             NbtCompound rule2 = CommonIO.readAndFormat(root + "grass.json",
-                    parent.sea_level - 1, parent.sea_level, CommonIO.CompoundToString(beach, 10),
-                    CommonIO.CompoundToString(top_block, 8), CommonIO.CompoundToString(block_underwater, 5));
+                    parent.sea_level - 1, parent.sea_level, CommonIO.compoundToString(beach, 10),
+                    CommonIO.compoundToString(top_block, 8), CommonIO.compoundToString(block_underwater, 5));
             NbtCompound rule3 = CommonIO.readAndFormat(root + "dirt.json",
-                    CommonIO.CompoundToString(block_underwater, 7));
+                    CommonIO.compoundToString(block_underwater, 7));
             NbtCompound rule4 = CommonIO.readAndFormat(root + "final.json",
-                    CommonIO.CompoundToString(parent.deepslate, 5), CommonIO.CompoundToString(parent.default_block, 4));
+                    CommonIO.compoundToString(parent.deepslate, 5), CommonIO.compoundToString(parent.default_block, 4));
             NbtCompound rule = startingRule("sequence");
             NbtList sq = new NbtList();
             sq.add(rule1);

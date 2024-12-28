@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.options;
 
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.entity.effect.InstantStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -20,9 +21,9 @@ public record EffectGiver(RegistryEntry<StatusEffect> id, int duration, int ampl
 
     public static EffectGiver of(NbtCompound data) {
         if (data.contains("id")) return new EffectGiver(effectOf(data.getString("id")),
-                InfinityOptions.test(data, "duration", 300),
-                InfinityOptions.test(data, "amplifier", 0),
-                Math.min(InfinityOptions.test(data, "cooldown", 100), 100));
+                NbtUtils.test(data, "duration", 300),
+                NbtUtils.test(data, "amplifier", 0),
+                Math.min(NbtUtils.test(data, "cooldown", 100), 100));
         return new EffectGiver(null, 0,0,200);
     }
 

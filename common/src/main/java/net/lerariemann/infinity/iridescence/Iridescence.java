@@ -125,10 +125,10 @@ public interface Iridescence {
         return ticksInHour * (3 + 2*amplifier);
     }
     static int getCooldownDuration() {
-        return ticksInHour * InfinityMod.provider.gameRulesInt.get("iridescenceCooldownDuration");
+        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceCooldownDuration");
     }
     static int getInitialPhaseLength() {
-        return ticksInHour * InfinityMod.provider.gameRulesInt.get("iridescenceInitialDuration");
+        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceInitialDuration");
     }
 
     static Phase getPhase(LivingEntity entity) {
@@ -195,16 +195,16 @@ public interface Iridescence {
 
     static void endJourney(ServerPlayerEntity player) {
         player.setInvulnerable(false);
-        String s = InfinityMod.provider.savingPath + "/" + player.getUuidAsString() + ".json";
+        Path cookie = InfinityMod.provider.savingPath.resolve(player.getUuidAsString() + ".json");
         try {
-            NbtCompound comp = CommonIO.read(s);
+            NbtCompound comp = CommonIO.read(cookie);
             player.teleport(player.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, Identifier.of(comp.getString("dim")))),
                     comp.getDouble("x"), comp.getDouble("y"), comp.getDouble("z"), player.getYaw(), player.getPitch());
         } catch (Exception e) {
             WarpLogic.respawnAlive(player);
         }
         try {
-            Files.deleteIfExists(Path.of(s));
+            Files.deleteIfExists(cookie);
         } catch (Exception ignored) {
         }
     }

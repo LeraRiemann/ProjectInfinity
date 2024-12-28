@@ -16,11 +16,11 @@ import java.util.function.BiFunction;
 
 public interface CommonIO {
     static void write(NbtCompound base, String path, String filename) {
-        write(CompoundToString(base, 0), Paths.get(path), filename);
+        write(compoundToString(base), Paths.get(path), filename);
     }
 
     static void write(NbtCompound base, Path dir, String filename) {
-        write(CompoundToString(base, 0), dir, filename);
+        write(compoundToString(base), dir, filename);
     }
 
     static void write(String source, Path dir, String filename) {
@@ -36,7 +36,7 @@ public interface CommonIO {
     }
 
     static void writeSurfaceRule(NbtCompound base, String path, String filename) {
-        String source = CompoundToString(base, 0);
+        String source = compoundToString(base);
         for (int j: (new Integer[]{31, 62})) for (int i = -5; i < 6; i++) {
             String z = Integer.toString(j+i);
             source = source.replace("\"absolute\": "+z, "\"absolute\": "+(i==0 ? "%SL%" : "%SL" + (i>0 ? "+" : "") + i + "%"));
@@ -89,8 +89,8 @@ public interface CommonIO {
             throw new RuntimeException(e);
         }
     }
-    static NbtCompound readAndAddBlock(String path, NbtCompound block) {
-        return readAndFormat(path, CompoundToString(block, 0));
+    static NbtCompound readAndAddCompound(String path, NbtCompound block) {
+        return readAndFormat(path, compoundToString(block));
     }
 
     static NbtCompound readSurfaceRule(File file, int seaLevel) {
@@ -169,11 +169,11 @@ public interface CommonIO {
         return parent + "\t".repeat(Math.max(0, t));
     }
 
-    static String ElementToString(NbtElement base, int t) {
+    static String elementToString(NbtElement base, int t) {
         return switch (base) {
             case null -> "!!NULL!!";
-            case NbtCompound nbtCompound -> CompoundToString(nbtCompound, t + 1);
-            case NbtList nbtElements -> ListToString(nbtElements, t + 1);
+            case NbtCompound nbtCompound -> compoundToString(nbtCompound, t + 1);
+            case NbtList nbtElements -> listToString(nbtElements, t + 1);
             case NbtByte nbtByte -> (nbtByte.byteValue() != 0) ? "true" : "false";
             case NbtDouble nbtDouble -> String.valueOf(boundsCheck(nbtDouble.floatValue()));
             case NbtFloat nbtFloat -> String.valueOf(boundsCheck(nbtFloat.floatValue()));
@@ -196,12 +196,15 @@ public interface CommonIO {
         return Math.clamp(base, -maxBound, maxBound);
     }
 
-    static String CompoundToString(NbtCompound base, int t) {
+    static String compoundToString(NbtCompound base) {
+        return compoundToString(base, 0);
+    }
+    static String compoundToString(NbtCompound base, int t) {
         String res = "{\n";
         int i = base.getSize() - 1;
         for (String key: base.getKeys()) {
             NbtElement elem = base.get(key);
-            res = appendTabs(res, t+1) + "\"" + key + "\": " + ElementToString(elem, t);
+            res = appendTabs(res, t+1) + "\"" + key + "\": " + elementToString(elem, t);
             if (i!=0) res += ",";
             res += "\n";
             i--;
@@ -209,11 +212,11 @@ public interface CommonIO {
         res = appendTabs(res, t) + "}";
         return res;
     }
-    static String ListToString(NbtList base, int t) {
+    static String listToString(NbtList base, int t) {
         String res = "[\n";
         for (int i=0; i<base.size(); i++) {
             NbtElement elem = base.get(i);
-            res = appendTabs(res, t+1) + ElementToString(elem, t);
+            res = appendTabs(res, t+1) + elementToString(elem, t);
             if (i!=(base.size()-1)) res += ",";
             res += "\n";
         }

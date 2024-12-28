@@ -2,6 +2,7 @@ package net.lerariemann.infinity.options;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -61,9 +62,9 @@ public interface PortalColorApplier {
 
     record RandomHue(float saturation, float brightness, float detail) implements PortalColorApplier {
         public RandomHue(NbtCompound applierData) {
-            this(InfinityOptions.test(applierData, "saturation", 1.0f),
-                    InfinityOptions.test(applierData, "brightness", 1.0f),
-                    InfinityOptions.test(applierData, "detail", 12.0f));
+            this(NbtUtils.test(applierData, "saturation", 1.0f),
+                    NbtUtils.test(applierData, "brightness", 1.0f),
+                    NbtUtils.test(applierData, "detail", 12.0f));
         }
 
         @Override

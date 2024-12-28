@@ -4,7 +4,7 @@ import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
-import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.ComponentMap;
@@ -73,7 +73,7 @@ public class BiomeBottleBlockEntity extends TintableBlockEntity {
         this.charge = tag.getInt("Charge");
         this.biome = Identifier.of(tag.getString("Biome"));
         this.color = tag.getInt("Color");
-        this.from_charge = InfinityOptions.test(tag, "from_charge", 0);
+        this.from_charge = NbtUtils.test(tag, "from_charge", 0);
     }
 
     @Override
