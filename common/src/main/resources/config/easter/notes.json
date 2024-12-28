@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:flat",
+  "settings": {
+    "biome": "minecraft:the_void",
+    "lakes": false,
+    "features": false,
+    "layers": [
+      {
+        "height": 64,
+        "block": "infinity:note_block"
+      }
+    ]
+  }
+}
