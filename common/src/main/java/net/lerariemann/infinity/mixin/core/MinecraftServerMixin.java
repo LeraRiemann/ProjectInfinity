@@ -92,7 +92,7 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
             Path p = InfinityMod.invocationLock;
             if (!Files.exists(p)) {
                 Files.createDirectories(p.getParent());
-                Files.copy(InfinityMod.rootConfigPath.resolve(".util/invocation.lock"), p, REPLACE_EXISTING);
+                Files.copy(InfinityMod.rootConfigPathInJar.resolve(".util/invocation.lock"), p, REPLACE_EXISTING);
             }
             infinity$setDimensionProvider();
             InfinityMod.LOGGER.info("Invocation complete");

@@ -18,22 +18,23 @@ import java.util.Random;
 public class InfinityMod {
 	public static final String MOD_ID = "infinity";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Infinite Dimensions");
-	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
-	public static Path rootConfigPath;
-	public static Path utilPath = Path.of("config/infinity/.util");
+	public static Path configPath = Path.of("config", InfinityMod.MOD_ID);
+	public static Path utilPath = configPath.resolve(".util");
+	public static Path invocationLock = configPath.resolve("modular/invocation.lock");
+
+	public static Path rootConfigPathInJar;
 	public static RandomProvider provider;
 	public static Random random = new Random(); //do not use this in dimgen, only in emergent block behaviour
 
 	public static void updateProvider(MinecraftServer server) {
-		RandomProvider p = new RandomProvider("config/" + InfinityMod.MOD_ID + "/",
-				server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
+		RandomProvider p = new RandomProvider(server.getSavePath(WorldSavePath.DATAPACKS).toString() + "/" + InfinityMod.MOD_ID);
 		p.kickGhostsOut(server.getRegistryManager());
 		provider = p;
 		if (!((MinecraftServerAccess)server).infinity$needsInvocation()) ModMaterialRules.RandomBlockMaterialRule.setProvider(p);
 	}
 
 	public static void init() {
-		rootConfigPath = PlatformMethods.getRootConfigPath();
+		rootConfigPathInJar = PlatformMethods.getRootConfigPath();
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
 		ModComponentTypes.registerComponentTypes();
@@ -56,6 +57,6 @@ public class InfinityMod {
 		ModCriteria.registerCriteria();
 		ModPayloads.registerPayloadsServer();
 		RandomText.walkPaths();
-		provider = new RandomProvider("config/" + InfinityMod.MOD_ID + "/");
+		provider = new RandomProvider();
 	}
 }

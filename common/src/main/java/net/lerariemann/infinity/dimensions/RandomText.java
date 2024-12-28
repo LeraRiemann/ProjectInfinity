@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -19,10 +20,8 @@ public class RandomText extends RandomStructure {
     public static List<Path> mod_resources;
     public static void walkPaths() {
         mod_resources = new ArrayList<>();
-        try {
-            Files.walk(InfinityMod.rootConfigPath).forEach(p -> {
-                if (p.toString().endsWith(".json")) mod_resources.add(p);
-            });
+        try (Stream<Path> files = Files.walk(InfinityMod.rootConfigPathInJar)) {
+            files.filter(p -> p.toString().endsWith(".json")).forEach(p -> mod_resources.add(p));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -59,7 +58,7 @@ public class RandomText extends RandomStructure {
     }
 
     static String genTextFromModResources(Random random) throws IOException {
-        Path tempfile = ConfigManager.tempfile();
+        Path tempfile = ConfigManager.tempFile;
         Path p = mod_resources.get(random.nextInt(mod_resources.size()));
         Files.copy(p, tempfile, REPLACE_EXISTING);
         return genTextFromFile(random, tempfile.toFile());

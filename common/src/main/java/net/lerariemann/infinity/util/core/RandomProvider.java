@@ -12,11 +12,14 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static java.nio.file.Files.walk;
+import static net.lerariemann.infinity.InfinityMod.configPath;
 
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry;
@@ -25,24 +28,21 @@ public class RandomProvider {
     public Map<String, Boolean> gameRules;
     public Map<String, Integer> gameRulesInt;
     public ArrayList<String> disabledDimensions;
-    public String configPath;
     public String savingPath;
     public String portalKey;
     public String altarKey;
     public String salt;
     public Easterizer easterizer;
 
-    public RandomProvider(String configpath, String savingpath) {
-        this(configpath);
-        savingPath = savingpath;
-        genCorePack();
-    }
-
-    public RandomProvider(String configpath) {
-        configPath = configpath;
+    public RandomProvider() {
         initStorage();
         registerAll();
-        easterizer = new Easterizer(configPath);
+        easterizer = new Easterizer();
+    }
+    public RandomProvider(String savingPath) {
+        this();
+        this.savingPath = savingPath;
+        genCorePack();
     }
 
     void initStorage() {
@@ -56,18 +56,18 @@ public class RandomProvider {
 
     void registerAll() {
         readRootConfig();
-        registerCategory(registry, "misc", CommonIO::stringListReader);
-        registerCategory(registry, "features", CommonIO::stringListReader);
-        registerCategory(registry, "vegetation", CommonIO::stringListReader);
-        registerCategory(compoundRegistry, "blocks", CommonIO::compoundListReader);
+        registerCategory(registry, "misc", CommonIO::readStringList);
+        registerCategory(registry, "features", CommonIO::readStringList);
+        registerCategory(registry, "vegetation", CommonIO::readStringList);
+        registerCategory(compoundRegistry, "blocks", CommonIO::readCompoundList);
         extractBlocks();
-        registerCategory(compoundRegistry, "extra", CommonIO::compoundListReader);
+        registerCategory(compoundRegistry, "extra", CommonIO::readCompoundList);
         extractMobs();
         registerHardcoded();
     }
 
     void readRootConfig() {
-        NbtCompound rootConfig = CommonIO.read(configPath + "infinity.json");
+        NbtCompound rootConfig = CommonIO.read(configPath.resolve("infinity.json"));
         portalKey = rootConfig.getString("portalKey");
         altarKey = rootConfig.getString("altarKey");
         salt = rootConfig.getString("salt");
@@ -102,7 +102,7 @@ public class RandomProvider {
     }
 
     public NbtCompound notRandomTree(String tree, String block) {
-        return CommonIO.readCarefully(InfinityMod.utilPath + "/placements/tree_vanilla.json", tree, block);
+        return CommonIO.readAndFormat(InfinityMod.utilPath.resolve("placements/tree_vanilla.json").toString(), tree, block);
     }
 
     void saveTrees() {
@@ -201,31 +201,26 @@ public class RandomProvider {
     }
 
     <B> void registerCategory(Map<String, B> reg, String subpath, ListReader<B> reader) {
-        String path = configPath + "modular";
-        try {
-            walk(Paths.get(path + "/minecraft/" + subpath)).forEach(p -> {
+        Path path = configPath.resolve("modular");
+        try (Stream<Path> files = walk(path.resolve("minecraft").resolve(subpath))) {
+            files.filter(p -> p.toFile().isFile()).forEach(p -> {
                 String fullname = p.toString();
-                if (p.toFile().isFile()) {
-                    String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
-                    name = name.substring(name.lastIndexOf('\\') + 1);
-                    int i = fullname.replace("minecraft_", "%%%").lastIndexOf("minecraft");
-                    String sub = fullname.substring(i+10);
-                    reg.put(name, reader.op(path, sub));
-                }});
+                String name = p.getFileName().toString().replace(".json", "");
+                int i = fullname.replace("minecraft_", "%%%").lastIndexOf("minecraft");
+                String sub = fullname.substring(i+10);
+                reg.put(name, reader.op(path, sub));
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     void registerHardcoded() {
-        try {
-            walk(Paths.get(configPath + "hardcoded")).forEach(p -> {
-                String fullname = p.toString();
-                if (fullname.endsWith(".json")) {
-                    String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
-                    name = name.substring(name.lastIndexOf('\\') + 1);
-                    if (!name.equals("none")) registry.put(name, CommonIO.stringListReader(fullname));
-                }
+        try (Stream<Path> files = walk(configPath.resolve("hardcoded"))) {
+            files.map(Path::toString).filter(s -> s.endsWith(".json")).forEach(fullname -> {
+                String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
+                name = name.substring(name.lastIndexOf('\\') + 1);
+                if (!name.equals("none")) registry.put(name, CommonIO.readStringList(fullname));
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -265,7 +260,7 @@ public class RandomProvider {
             Map.entry("particles", "minecraft:heart"),
             Map.entry("biomes", "minecraft:plains"),
             Map.entry("mobs", "minecraft:pig"),
-            Map.entry("tags", "#minecraft:air"),
+            Map.entry("tags", "minecraft:air"),
             Map.entry("trees", "minecraft:oak"),
             Map.entry("loot_tables", "minecraft:blocks/stone"));
 
@@ -506,6 +501,6 @@ public class RandomProvider {
     }
 
     interface ListReader<B>  {
-        B op(String path, String subpath);
+        B op(Path path, String subpath);
     }
 }

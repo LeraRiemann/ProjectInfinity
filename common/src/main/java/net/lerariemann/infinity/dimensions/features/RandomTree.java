@@ -56,8 +56,8 @@ public class RandomTree extends RandomisedFeature {
         mangrove.putInt("max_root_width", 1 + random.nextInt(ishuge ? 12 : 4));
         mangrove.putInt("max_root_length", 1 + random.nextInt(ishuge ? 64 : 8));
         mangrove.putFloat("random_skew_chance", random.nextFloat());
-        mangrove.putString("can_grow_through", PROVIDER.randomName(random, "tags"));
-        mangrove.putString("muddy_roots_in", PROVIDER.randomName(random, "tags"));
+        mangrove.putString("can_grow_through", "#" + PROVIDER.randomName(random, "tags"));
+        mangrove.putString("muddy_roots_in", "#" + PROVIDER.randomName(random, "tags"));
         addRandomBlockProvider(mangrove, "muddy_roots_provider", "full_blocks");
         res.put("mangrove_root_placement", mangrove);
         return res;
@@ -79,7 +79,7 @@ public class RandomTree extends RandomisedFeature {
                 res.putInt("extra_branch_steps", 1 + (int) Math.floor(random.nextExponential()));
                 res.putInt("extra_branch_length", (int) Math.floor(random.nextExponential()*3));
                 res.putFloat("place_branch_per_log_probability", random.nextFloat());
-                res.putString("can_grow_through", PROVIDER.randomName(random, "tags"));
+                res.putString("can_grow_through", "#" + PROVIDER.randomName(random, "tags"));
             }
             case "cherry_trunk_placer" -> {
                 addRandomIntProvider(res, "branch_count", 1, 3);

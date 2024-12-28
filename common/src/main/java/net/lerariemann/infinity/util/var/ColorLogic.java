@@ -11,6 +11,8 @@ import net.minecraft.util.Identifier;
 import java.util.Map;
 
 public interface ColorLogic {
+    String[] vanillaColors = {"white", "light_gray", "gray", "black", "brown", "red", "orange", "yellow", "lime", "green",
+            "light_blue", "blue", "cyan", "purple", "magenta", "pink"};
     Map<TagKey<Block>, String> supportedBlockTypes = Map.ofEntries(
             Map.entry(BlockTags.WOOL, "$_wool"),
             Map.entry(BlockTags.WOOL_CARPETS, "$_carpet"));

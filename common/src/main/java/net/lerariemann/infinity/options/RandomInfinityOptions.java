@@ -28,7 +28,7 @@ public class RandomInfinityOptions {
         NbtCompound shader = new NbtCompound();
         if (prov.roll(r, "use_shaders")) {
             Object[] lst = genMatrix(r);
-            shader = CommonIO.readCarefully(InfinityMod.utilPath + "/shader.json", lst);
+            shader = CommonIO.readAndFormat(InfinityMod.utilPath + "/shader.json", lst);
         }
         data.put("shader", shader);
         //sun

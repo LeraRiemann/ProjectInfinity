@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.BiFunction;
 
 public interface CommonIO {
     static void write(NbtCompound base, String path, String filename) {
@@ -43,10 +44,6 @@ public interface CommonIO {
         write(source, Paths.get(path), filename);
     }
 
-    static NbtCompound read(String path) {
-        return read(new File(path));
-    }
-
     static int getVersion(File file) {
         String content;
         try {
@@ -63,6 +60,12 @@ public interface CommonIO {
         }
     }
 
+    static NbtCompound read(String path) {
+        return read(new File(path));
+    }
+    static NbtCompound read(Path path) {
+        return read(path.toFile());
+    }
     static NbtCompound read(File file) {
         String content;
         try {
@@ -75,7 +78,7 @@ public interface CommonIO {
         }
     }
 
-    static NbtCompound readCarefully(String path,  Object... args) {
+    static NbtCompound readAndFormat(String path, Object... args) {
         File file = new File(path);
         try {
             String content = String.valueOf((new Formatter(Locale.US)).format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), args));
@@ -86,31 +89,21 @@ public interface CommonIO {
             throw new RuntimeException(e);
         }
     }
-
     static NbtCompound readAndAddBlock(String path, NbtCompound block) {
-        File file = new File(path);
-        try {
-            String content = String.valueOf((new Formatter(Locale.US)).format(FileUtils.readFileToString(file, StandardCharsets.UTF_8), CompoundToString(block, 0)));
-            NbtCompound c = StringNbtReader.parse(content);
-            c.remove("infinity_version");
-            return c;
-        } catch (IOException | CommandSyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        return readAndFormat(path, CompoundToString(block, 0));
     }
 
-    static NbtCompound readSurfaceRule(File file, int sealevel) {
+    static NbtCompound readSurfaceRule(File file, int seaLevel) {
         try {
             String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            NbtCompound c = format(content, sealevel);
+            NbtCompound c = formatSurfaceRule(content, seaLevel);
             c.remove("infinity_version");
             return c;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-    static NbtCompound format(String content, int sealevel) {
+    static NbtCompound formatSurfaceRule(String content, int seaLevel) {
         int i = content.lastIndexOf("%");
         if (i == -1) {
             try {
@@ -119,15 +112,15 @@ public interface CommonIO {
                 throw new RuntimeException(e);
             }
         }
-        else if (content.contains("%SL%")) return format(content.replace("%SL%", String.valueOf(sealevel)), sealevel);
+        else if (content.contains("%SL%")) return formatSurfaceRule(content.replace("%SL%", String.valueOf(seaLevel)), seaLevel);
         else {
             int j = content.lastIndexOf("%SL");
             String num = content.substring(j+3, i);
-            return format(content.replace("%SL" + num + "%", String.valueOf(sealevel + Integer.parseInt(num))), sealevel);
+            return formatSurfaceRule(content.replace("%SL" + num + "%", String.valueOf(seaLevel + Integer.parseInt(num))), seaLevel);
         }
     }
 
-    static WeighedStructure<String> stringListReader(String path) {
+    static WeighedStructure<String> readStringList(String path) {
         NbtCompound base = read(path);
         WeighedStructure<String> res = new WeighedStructure<>();
         NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
@@ -154,28 +147,22 @@ public interface CommonIO {
         return new NbtList();
     }
 
-    static WeighedStructure<String> stringListReader(String path, String subpath) {
-        WeighedStructure<String> res = new WeighedStructure<>();
-        for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
-            NbtList list = _extractElements(path1, subpath);
+    static <T> WeighedStructure<T> readWeighedList(Path path, String subPath, BiFunction<NbtCompound, String, T> infoGetter) {
+        WeighedStructure<T> res = new WeighedStructure<>();
+        for (File path1: Objects.requireNonNull(path.toFile().listFiles(File::isDirectory))) {
+            NbtList list = _extractElements(path1, subPath);
             for(int i = 0; i < list.size(); i++) {
                 NbtCompound a = list.getCompound(i);
-                res.add(a.getString("key"), a.getDouble("weight"));
+                res.add(infoGetter.apply(a, "key"), a.getDouble("weight"));
             }
         }
         return res;
     }
-
-    static WeighedStructure<NbtElement> compoundListReader(String path, String subpath) {
-        WeighedStructure<NbtElement> res = new WeighedStructure<>();
-        for (File path1: Objects.requireNonNull((new File(path)).listFiles(File::isDirectory))) {
-            NbtList list = _extractElements(path1, subpath);
-            for(int i = 0; i < list.size(); i++) {
-                NbtCompound a = list.getCompound(i);
-                res.add(a.get("key"), a.getDouble("weight"));
-            }
-        }
-        return res;
+    static WeighedStructure<String> readStringList(Path path, String subPath) {
+        return readWeighedList(path, subPath, NbtCompound::getString);
+    }
+    static WeighedStructure<NbtElement> readCompoundList(Path path, String subPath) {
+        return readWeighedList(path, subPath, NbtCompound::get);
     }
 
     static String appendTabs(String parent, int t) {

@@ -23,7 +23,8 @@ import java.nio.file.Path;
 import java.util.function.Function;
 
 /**
- * Methods that are dependent on ExpectPlatform, and require a different implementation to work on both Fabric and NeoForge.
+ * Methods that require different implementations to work on Fabric vs. NeoForge and thus depend on {@link dev.architectury.injectables.annotations.ExpectPlatform}.
+ * @see InfinityMethods
  */
 public class PlatformMethods {
 

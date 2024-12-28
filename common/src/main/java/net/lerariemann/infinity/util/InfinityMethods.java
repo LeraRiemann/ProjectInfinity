@@ -28,7 +28,8 @@ import java.nio.charset.StandardCharsets;
 
 import static net.lerariemann.infinity.InfinityModClient.sampler;
 
-// Methods that are not dependent on ExpectPlatform, and work identically on both Fabric and NeoForge.
+/** Common mod methods that work identically on Fabric and NeoForge.
+ * @see PlatformMethods */
 public interface InfinityMethods {
     String ofRandomDim = "infinity:random";
 

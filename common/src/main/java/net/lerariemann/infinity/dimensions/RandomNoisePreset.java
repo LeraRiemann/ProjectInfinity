@@ -6,8 +6,9 @@ import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.nio.file.Files.walk;
 
@@ -78,21 +79,21 @@ public class RandomNoisePreset {
         Random r = parent.random;
         switch(router) {
             case "caves" -> {
-                return CommonIO.readCarefully(path, min - 8, min + 24, max - 24, max);
+                return CommonIO.readAndFormat(path, min - 8, min + 24, max - 24, max);
             }
             case "floating_islands" -> {
-                return CommonIO.readCarefully(path, min + 4, min + 32, max - 72, max + 184);
+                return CommonIO.readAndFormat(path, min + 4, min + 32, max - 72, max + 184);
             }
             case "end" -> {
-                return CommonIO.readCarefully(path, min + 4, min + 32, max - 72, max + 184, min + 4, min + 32, max - 72, max + 184);
+                return CommonIO.readAndFormat(path, min + 4, min + 32, max - 72, max + 184, min + 4, min + 32, max - 72, max + 184);
             }
             case "overworld", "large_biomes" -> {
-                return CommonIO.readCarefully(path, min, min + 24, softmax - 16, softmax, min, max,
+                return CommonIO.readAndFormat(path, min, min + 24, softmax - 16, softmax, min, max,
                         (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4),
                         min, min + 24, softmax - 16, softmax);
             }
             case "amplified" -> {
-                return CommonIO.readCarefully(path, min, min + 24, max - 16, max, min, max,
+                return CommonIO.readAndFormat(path, min, min + 24, max - 16, max, min, max,
                         (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4), (float)(max+1), (float)(min+4),
                         min, min + 24, max - 16, max);
             }
@@ -100,7 +101,7 @@ public class RandomNoisePreset {
                 double f = r.nextExponential();
                 double a = r.nextDouble(1.0, 8.0);
                 double b = r.nextDouble(1.0, 8.0);
-                return CommonIO.readCarefully(path,
+                return CommonIO.readAndFormat(path,
                         2*f, min, min+8, max-8, -2*f, max,
                         min, parent.sea_level, parent.sea_level, max,
                         f, a, b,
@@ -113,7 +114,7 @@ public class RandomNoisePreset {
                 double f = r.nextDouble(0.005, 0.1);
                 double a = r.nextExponential();
                 double b = r.nextExponential();
-                return CommonIO.readCarefully(path, min+32, min, min, max, a, b, a, b, f, min+16, min, max-16, max);
+                return CommonIO.readAndFormat(path, min+32, min, min, max, a, b, a, b, f, min+16, min, max-16, max);
             }
         }
         return CommonIO.read(path);
@@ -167,8 +168,8 @@ public class RandomNoisePreset {
 
     NbtList biomeSequence() {
         NbtList sequence = new NbtList();
-        try {
-            walk(Paths.get(PROVIDER.configPath + "modular/")).forEach(p -> {
+        try (Stream<Path> files = walk(InfinityMod.configPath.resolve("modular"))) {
+            files.forEach(p -> {
                 if (p.toString().contains("surface_rule") && p.toFile().isFile()) {
                     NbtCompound compound = CommonIO.readSurfaceRule(p.toFile(), parent.sea_level);
                     NbtList biomes = compound.getList("biomes", NbtElement.STRING_TYPE);
@@ -196,14 +197,14 @@ public class RandomNoisePreset {
                     RandomProvider.nameToElement(parent.getDefaultBlock("minecraft:dirt"));
             parent.underwater.put(biome, block_underwater);
             NbtCompound beach = useRandomBlock ? randomBlock("full_blocks_worldgen") : top_block;
-            NbtCompound rule1 = CommonIO.readCarefully(root + "ceiling.json",
+            NbtCompound rule1 = CommonIO.readAndFormat(root + "ceiling.json",
                     CommonIO.CompoundToString(parent.deepslate, 5), CommonIO.CompoundToString(parent.default_block, 4));
-            NbtCompound rule2 = CommonIO.readCarefully(root + "grass.json",
+            NbtCompound rule2 = CommonIO.readAndFormat(root + "grass.json",
                     parent.sea_level - 1, parent.sea_level, CommonIO.CompoundToString(beach, 10),
                     CommonIO.CompoundToString(top_block, 8), CommonIO.CompoundToString(block_underwater, 5));
-            NbtCompound rule3 = CommonIO.readCarefully(root + "dirt.json",
+            NbtCompound rule3 = CommonIO.readAndFormat(root + "dirt.json",
                     CommonIO.CompoundToString(block_underwater, 7));
-            NbtCompound rule4 = CommonIO.readCarefully(root + "final.json",
+            NbtCompound rule4 = CommonIO.readAndFormat(root + "final.json",
                     CommonIO.CompoundToString(parent.deepslate, 5), CommonIO.CompoundToString(parent.default_block, 4));
             NbtCompound rule = startingRule("sequence");
             NbtList sq = new NbtList();
@@ -216,7 +217,7 @@ public class RandomNoisePreset {
             biomestoadd.add(NbtString.of(biome));
             sequence.add(ruleWrap(biomestoadd, rule));
         }
-        sequence.add(CommonIO.readCarefully(
+        sequence.add(CommonIO.readAndFormat(
                 InfinityMod.utilPath + "/surface_rule/default.json",
                 defaultBlock("minecraft:grass_block"),
                 defaultBlock("minecraft:dirt"),

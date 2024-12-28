@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.entity;
 
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.util.config.ConfigGenerator;
+import net.lerariemann.infinity.util.config.ConfigGenerators;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -45,7 +45,7 @@ public class CosmicAltarBlockEntity extends BlockEntity {
                 be.map.put(i + "," + j + "," + k, world.getBlockState(pos.add(i, j, k)));
                 world.setBlockState(pos.add(i, j, k), Blocks.AIR.getDefaultState());
             }
-            ConfigGenerator.generateAll(world, pos.up(2), pos.up());
+            ConfigGenerators.generateAll(world, pos.up(2), pos.up());
             for (int i : offsets) for (int j : offsets_y) for (int k : offsets) {
                 world.setBlockState(pos.add(i, j, k), be.fromMap(i, j, k));
             }
