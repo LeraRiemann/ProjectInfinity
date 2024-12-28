@@ -1,7 +1,5 @@
 package net.lerariemann.infinity.block.custom;
 
-import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NoteBlock;
 import net.minecraft.block.enums.NoteBlockInstrument;
@@ -16,8 +14,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.event.GameEvent;
 
-public class ChaosNoteBlock extends NoteBlock {
-    public ChaosNoteBlock(Settings settings) {
+public class NotesBlock extends NoteBlock {
+    public NotesBlock(Settings settings) {
         super(settings);
     }
 
@@ -48,10 +46,5 @@ public class ChaosNoteBlock extends NoteBlock {
 
         world.playSound(null, (double)pos.getX() + (double)0.5F, (double)pos.getY() + (double)0.5F, (double)pos.getZ() + (double)0.5F, noteBlockInstrument.getSound(), SoundCategory.RECORDS, 3.0F, f, world.random.nextLong());
         return true;
-    }
-
-    @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
-        return Items.NOTE_BLOCK.getDefaultStack();
     }
 }

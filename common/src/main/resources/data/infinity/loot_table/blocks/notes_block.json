@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:note_block"
+          "name": "infinity:notes_block"
         }
       ],
       "rolls": 1.0

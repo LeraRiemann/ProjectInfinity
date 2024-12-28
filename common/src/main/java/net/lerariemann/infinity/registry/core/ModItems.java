@@ -43,6 +43,8 @@ public class ModItems {
             registerBlockItemAfter(ModBlocks.NETHERITE_SLAB, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK, BlockItem::new);
     public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM =
             registerBlockItemAfter(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK, BlockItem::new);
+    public static final RegistrySupplier<Item> NOTES_BLOCK_ITEM =
+            registerBlockItemAfter(ModBlocks.NOTES_BLOCK, ItemGroups.FUNCTIONAL, Items.NOTE_BLOCK, BlockItem::new);
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM =
             registerBlockItemAfter(ModBlocks.TIME_BOMB, ItemGroups.FUNCTIONAL, Items.VAULT, BlockItem::new);
     public static final RegistrySupplier<Item> IRIDESCENT_WOOL  =

@@ -6,8 +6,8 @@
     "features": false,
     "layers": [
       {
-        "height": 64,
-        "block": "infinity:note_block"
+        "height": 1,
+        "block": "infinity:notes_block"
       }
     ]
   }
