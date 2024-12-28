@@ -28,7 +28,7 @@ public interface ConfigManager {
 
     /** If the game was last started in a version of the mod that uses a different modular config format,
      * this deletes the old configs ensuring they will be regenerated in the correct format
-     * by {@link net.lerariemann.infinity.util.config.ConfigGenerator} on next world load. */
+     * by {@link ConfigFactory} on next world load. */
     static void updateInvocationLock() {
         File invlock = InfinityMod.invocationLock.toFile();
         if (!invlock.exists()) return;

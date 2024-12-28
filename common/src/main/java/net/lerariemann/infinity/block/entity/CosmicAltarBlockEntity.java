@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.entity;
 
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.util.config.ConfigGeneration;
+import net.lerariemann.infinity.util.config.ConfigGenerator;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -55,9 +55,9 @@ public class CosmicAltarBlockEntity extends BlockEntity {
         }
     }
     static void invoke(ServerWorld serverWorld, BlockPos altarPos) {
-        ConfigGeneration.generateAll(serverWorld.getServer());
-        Set<String> fluidBlockNames = ConfigGeneration.generateFluids();
-        ConfigGeneration.generateBlocks(serverWorld, altarPos.up(2), altarPos.up(), fluidBlockNames);
+        ConfigGenerator.generateAll(serverWorld.getServer());
+        Set<String> fluidBlockNames = ConfigGenerator.generateFluids();
+        ConfigGenerator.generateBlocks(serverWorld, altarPos.up(2), altarPos.up(), fluidBlockNames);
     }
 
     public void addNull(BlockState s) {
