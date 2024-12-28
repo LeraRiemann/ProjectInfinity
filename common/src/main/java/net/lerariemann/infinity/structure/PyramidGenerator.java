@@ -20,12 +20,16 @@ public class PyramidGenerator extends ShiftableStructurePiece {
     int y, y0;
     BlockStateProvider b;
 
-    PyramidGenerator(Structure.Context context, int top_y, int bottom_y, BlockStateProvider blockState) {
-        super(ModStructureTypes.PYRAMID_PIECE.get(), context.chunkPos().getStartX(), bottom_y, context.chunkPos().getStartZ(),
-                2*(top_y-bottom_y)+1, top_y-bottom_y, 2*(top_y-bottom_y)+1, Direction.EAST);
-        y = top_y;
-        y0 = bottom_y;
-        b = blockState;
+    public PyramidGenerator(int x, int y, int z, int width, int height, int depth, BlockStateProvider provider) {
+        super(ModStructureTypes.PYRAMID_PIECE.get(), x, y, z, width, height, depth, Direction.EAST);
+        b = provider;
+    }
+
+    public static PyramidGenerator of(Structure.Context context, int top_y, int bottom_y, BlockStateProvider provider) {
+        int deltaY = top_y-bottom_y;
+        int x = context.chunkPos().getStartX();
+        int z = context.chunkPos().getStartZ();
+        return new PyramidGenerator(x - deltaY, bottom_y, z - deltaY, 2*deltaY + 1, deltaY, 2*deltaY + 1, provider);
     }
 
     public PyramidGenerator(NbtCompound nbt) {

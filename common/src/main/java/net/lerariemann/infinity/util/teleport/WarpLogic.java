@@ -54,7 +54,7 @@ public interface WarpLogic {
      * Handles the /warp text command, warping the player to a specified dimension. This is the same as writing the input into a book.
      */
     static void requestWarpByText(CommandContext<ServerCommandSource> context, String value) {
-        requestWarp(context.getSource().getPlayer(), InfinityMethods.getId(value), true);
+        requestWarp(context.getSource().getPlayer(), InfinityMethods.dimTextToId(value), true);
     }
 
     /**

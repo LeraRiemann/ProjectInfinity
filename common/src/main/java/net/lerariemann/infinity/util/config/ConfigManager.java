@@ -48,7 +48,7 @@ public interface ConfigManager {
     static void unpackDefaultConfigs() {
         try(Stream<Path> files = Files.walk(InfinityMod.rootConfigPathInJar)) {
             if (!configPath.toFile().exists()) Files.createDirectories(configPath);
-            files.filter(p -> p.endsWith(".json")).forEach(p -> registerConfig(p, configPath));
+            files.filter(p -> p.toString().endsWith(".json")).forEach(p -> registerConfig(p, configPath));
             Files.deleteIfExists(tempFile); //being a good method cleaning up after itself :3
         } catch (IOException e) {
             throw new RuntimeException(e);
