@@ -15,14 +15,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
-public class GameRendererMixin implements GameRendererAccess {
+public abstract class GameRendererMixin implements GameRendererAccess {
     @Shadow
     @Final
     private ResourceManager resourceManager;
-
     @Shadow
-    private void loadPostProcessor(Identifier id) {
-    }
+    protected abstract void loadPostProcessor(Identifier id);
 
     @Override
     public void infinity$loadPP(Identifier id) {

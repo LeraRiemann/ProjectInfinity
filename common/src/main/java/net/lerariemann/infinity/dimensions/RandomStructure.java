@@ -28,7 +28,8 @@ public class RandomStructure {
     }
 
     void addData() {
-        data = (NbtCompound)(parent.PROVIDER.compoundRegistry.get("structures").getRandomElement(random));
+        data = parent.PROVIDER.randomElement(random, "structures");
+        assert data.contains("id");
         type = data.getString("id");
         name = Identifier.of(type).getPath().replace("/", "_").replace("\\", "_") + "_" + id;
 

@@ -14,9 +14,9 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(MOD_ID, RegistryKeys.BLOCK);
 
     public static final RegistrySupplier<Block> COSMIC_ALTAR = BLOCKS.register("cosmic_altar", () ->
-            new CosmicAltar(AbstractBlock.Settings.copy(Blocks.NETHERITE_BLOCK).luminance(state -> 15).nonOpaque()));
+            new CosmicAltarBlock(AbstractBlock.Settings.copy(Blocks.NETHERITE_BLOCK).luminance(state -> 15).nonOpaque()));
     public static final RegistrySupplier<Block> ALTAR = BLOCKS.register("altar", () ->
-            new TransfiniteAltar(AbstractBlock.Settings.copy(Blocks.STONE).nonOpaque().luminance(state -> state.get(TransfiniteAltar.FLOWER) ? 15 : 0)));
+            new AltarBlock(AbstractBlock.Settings.copy(Blocks.STONE).nonOpaque().luminance(state -> state.get(AltarBlock.FLOWER) ? 15 : 0)));
     public static final RegistrySupplier<Block> ANT = BLOCKS.register("ant", () ->
             new AntBlock(AbstractBlock.Settings.copy(Blocks.WHITE_CONCRETE)));
     public static final RegistrySupplier<Block> BOOK_BOX = BLOCKS.register("book_box", () ->
@@ -26,14 +26,14 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> PORTAL = BLOCKS.register("neither_portal", () ->
             new InfinityPortalBlock(AbstractBlock.Settings.copy(Blocks.NETHER_PORTAL)));
     public static final RegistrySupplier<Block> NETHERITE_STAIRS = BLOCKS.register("netherite_stairs", () ->
-            new ModStairs(Blocks.NETHERITE_BLOCK.getDefaultState(), AbstractBlock.Settings.copy(Blocks.NETHERITE_BLOCK)));
+            new ModStairsBlock(Blocks.NETHERITE_BLOCK.getDefaultState(), AbstractBlock.Settings.copy(Blocks.NETHERITE_BLOCK)));
     public static final RegistrySupplier<Block> NETHERITE_SLAB = BLOCKS.register("netherite_slab", () ->
             new SlabBlock(AbstractBlock.Settings.copy(Blocks.NETHERITE_BLOCK)));
     public static final RegistrySupplier<Block> TIME_BOMB = BLOCKS.register("timebomb", () ->
             new TimeBombBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(state -> 15)));
     public static final RegistrySupplier<FluidBlock> IRIDESCENCE = PlatformMethods.getIridBlockForReg();
     public static final RegistrySupplier<Block> BIOME_BOTTLE = BLOCKS.register("biome_bottle", () ->
-            new BiomeBottle(AbstractBlock.Settings.copy(Blocks.BEACON).luminance(state -> state.get(BiomeBottle.LEVEL))
+            new BiomeBottleBlock(AbstractBlock.Settings.copy(Blocks.BEACON).luminance(state -> state.get(BiomeBottleBlock.LEVEL))
                     .sounds(BlockSoundGroup.GLASS)));
     public static final RegistrySupplier<Block> IRIDESCENT_WOOL = BLOCKS.register("iridescent_wool", () ->
             new IridescentBlock(AbstractBlock.Settings.copy(Blocks.MAGENTA_WOOL)));
@@ -43,10 +43,10 @@ public class ModBlocks {
             new ChromaticBlock(AbstractBlock.Settings.copy(Blocks.MAGENTA_WOOL)));
     public static final RegistrySupplier<Block> CHROMATIC_CARPET = BLOCKS.register("chromatic_carpet", () ->
             new ChromaticBlock.Carpet(AbstractBlock.Settings.copy(Blocks.MAGENTA_CARPET)));
-    public static final RegistrySupplier<IridescentKelp> IRIDESCENT_KELP = BLOCKS.register("iridescent_kelp", () ->
-            new IridescentKelp(AbstractBlock.Settings.copy(Blocks.KELP).mapColor(MapColor.MAGENTA)));
-    public static final RegistrySupplier<IridescentKelp.Plant> IRIDESCENT_KELP_PLANT = BLOCKS.register("iridescent_kelp_plant", () ->
-            new IridescentKelp.Plant(AbstractBlock.Settings.copy(Blocks.KELP).mapColor(MapColor.MAGENTA)));
+    public static final RegistrySupplier<IridescentKelpBlock> IRIDESCENT_KELP = BLOCKS.register("iridescent_kelp", () ->
+            new IridescentKelpBlock(AbstractBlock.Settings.copy(Blocks.KELP).mapColor(MapColor.MAGENTA)));
+    public static final RegistrySupplier<IridescentKelpBlock.Plant> IRIDESCENT_KELP_PLANT = BLOCKS.register("iridescent_kelp_plant", () ->
+            new IridescentKelpBlock.Plant(AbstractBlock.Settings.copy(Blocks.KELP).mapColor(MapColor.MAGENTA)));
 
 
     public static void registerModBlocks() {

@@ -63,7 +63,10 @@ public class RandomInfinityOptions {
         data.putDouble("time_scale", timeScale(r));
         data.putDouble("mavity", prov.roll(r, "use_mavity") ? mavity(r) : 1.0);
         if (prov.roll(r, "pitch_shift")) data.put("pitch_shift", pitchShift(r));
-        if (prov.roll(r, "give_effect")) data.put("effect", effect(r, prov));
+        if (prov.roll(r, "give_effect")) {
+            NbtCompound effect = effect(r, prov);
+            if (!effect.isEmpty()) data.put("effect", effect);
+        }
         data.put("iridescent_map", iridMap(r));
     }
 
@@ -119,9 +122,10 @@ public class RandomInfinityOptions {
 
     public static NbtCompound effect(Random r, RandomProvider provider) {
         NbtCompound res = new NbtCompound();
-        String effect = provider.randomName(r, "effects");
+        NbtCompound effect = provider.randomElement(r, "effects");
+        if (effect.getBoolean("Instant")) return new NbtCompound();
         int amplifier = Math.min(5, (int)(0.5*r.nextExponential()));
-        res.putString("id", effect);
+        res.putString("id", effect.getString("Name"));
         res.putInt("amplifier", amplifier);
         return res;
     }

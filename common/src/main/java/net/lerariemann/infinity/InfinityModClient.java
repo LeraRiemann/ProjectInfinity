@@ -6,6 +6,7 @@ import net.lerariemann.infinity.item.function.F4Screen;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModPayloads;
+import net.lerariemann.infinity.registry.var.ModScreenHandlers;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Hand;
@@ -23,6 +24,7 @@ public class InfinityModClient {
     public static void initializeClient() {
         ModPayloads.registerPayloadsClient();
         ModEntities.registerEntityRenderers();
+        ModScreenHandlers.register();
         KeyMappingRegistry.register(f4ConfigKey);
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (f4ConfigKey.wasPressed()) if (client.player != null

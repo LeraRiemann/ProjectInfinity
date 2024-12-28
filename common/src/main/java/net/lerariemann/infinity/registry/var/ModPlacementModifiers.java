@@ -40,14 +40,16 @@ public class ModPlacementModifiers {
     }
 
     public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIER_TYPES = DeferredRegister.create(MOD_ID, RegistryKeys.PLACEMENT_MODIFIER_TYPE);
+    public static final RegistrySupplier<PlacementModifierType<?>> PROXIMITY = register("center_proximity",
+            ModPlacementModifiers.CenterProximityPlacementModifier.MODIFIER_CODEC);
 
-
-    static RegistrySupplier<PlacementModifierType<?>> register(String id, MapCodec<? extends PlacementModifier> codec) {
-            return PLACEMENT_MODIFIER_TYPES.register(id, () -> () -> (MapCodec<PlacementModifier>) codec);
+    static <P extends PlacementModifier> PlacementModifierType<P> getType(MapCodec<P> codec) {
+        return () -> codec;
     }
-
+    static RegistrySupplier<PlacementModifierType<?>> register(String id, MapCodec<? extends PlacementModifier> codec) {
+            return PLACEMENT_MODIFIER_TYPES.register(id, () -> getType(codec));
+    }
     public static void registerModifiers() {
-        register("center_proximity", ModPlacementModifiers.CenterProximityPlacementModifier.MODIFIER_CODEC);
         PLACEMENT_MODIFIER_TYPES.register();
     }
 }

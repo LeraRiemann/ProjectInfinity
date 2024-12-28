@@ -24,6 +24,7 @@ public interface ShaderLoader {
     }
 
     static void reloadShaders(MinecraftClient client, boolean bl, boolean iridescence) {
+        if (client.world == null) return;
         try {
             load(client);
         } catch (IOException e) {

@@ -8,7 +8,7 @@ public class RandomBlobs extends RandomisedFeature {
 
     public RandomBlobs(RandomFeaturesList parent) {
         super(parent, "blob");
-        block = parent.PROVIDER.randomBlock(random, "full_blocks_worldgen");
+        block = parent.PROVIDER.randomElement(random, "full_blocks_worldgen");
         daddy.additional_blocks.add(block);
         id = "netherrack_replace_blobs";
         save_with_placement();

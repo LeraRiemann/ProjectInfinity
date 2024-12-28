@@ -8,7 +8,6 @@ import net.minecraft.block.enums.BlockFace;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.loot.LootTable;
@@ -28,6 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.StructureSpawns;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
@@ -307,13 +307,17 @@ public interface ConfigGenerator {
 
     static NbtCompound extractEffect(RegistryKey<StatusEffect> key) {
         NbtCompound res = new NbtCompound();
-        StatusEffectCategory cat = Objects.requireNonNull(Registries.STATUS_EFFECT.get(key)).getCategory();
+        Optional<StatusEffect> o = Registries.STATUS_EFFECT.getOrEmpty(key);
+        if (o.isEmpty()) return null;
+        StatusEffect effect = o.get();
         res.putString("Name", key.getValue().toString());
-        res.putString("Category", switch (cat) { //this data is unused for now but might be important later
+        res.putString("Category", switch (effect.getCategory()) { //this data is unused for now but might be important later
             case HARMFUL -> "harmful";
             case BENEFICIAL -> "beneficial";
             case NEUTRAL -> "neutral";
         });
+        res.putInt("Color", effect.getColor());
+        res.putBoolean("Instant", effect.isInstant());
         return res;
     }
 
@@ -399,6 +403,18 @@ public interface ConfigGenerator {
         return res;
     }
 
+    static NbtCompound extractBiome(Registry<Biome> registry, RegistryKey<Biome> key) {
+        Identifier id = key.getValue();
+        if (id.getNamespace().equals(InfinityMod.MOD_ID)) return null; //cull our generated biomes
+        Optional<Biome> o = registry.getOrEmpty(key);
+        if (o.isEmpty()) return null;
+        Biome biome = o.get();
+        NbtCompound res = new NbtCompound();
+        res.putString("Name", id.toString());
+        res.putInt("Color", biome.getFoliageColor());
+        return res;
+    }
+
     static void generateAll(World w, BlockPos inAir, BlockPos onStone) {
         MinecraftServer s = Objects.requireNonNull(w.getServer());
         DynamicRegistryManager manager = s.getRegistryManager();
@@ -406,8 +422,7 @@ public interface ConfigGenerator {
         generateBlocksAndFluids(w, inAir, onStone);
         Set<String> registeredRules = SurfaceRuleScanner.scan(s);
         loggerOutput(registeredRules.size(), "surface rules");
-        generate(manager.get(RegistryKeys.BIOME), "misc", "biomes", key ->
-                key.getValue().getNamespace().equals(InfinityMod.MOD_ID) ? null : key.getValue().toString());
+        generate(manager.get(RegistryKeys.BIOME), "extra", "biomes", ConfigGenerator::extractBiome);
         generate(manager.get(RegistryKeys.STRUCTURE), "extra", "structures", ConfigGenerator::extractStructure);
         generate(manager.get(RegistryKeys.CONFIGURED_FEATURE), "extra", "trees", ConfigGenerator::extractFeature);
         generate(s.getReloadableRegistries().getRegistryManager().get(RegistryKeys.LOOT_TABLE),

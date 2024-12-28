@@ -1,10 +1,9 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.block.custom.BiomeBottle;
+import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
-import net.lerariemann.infinity.util.WeighedStructure;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -17,8 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -28,14 +25,12 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
 public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public static TrackedData<Integer> color = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.INTEGER);
     public static TrackedData<Float> range = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.FLOAT);
     public static TrackedData<String> biome = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.STRING);
-    public Registry<Biome> reg;
 
     public ChaosCreeper(EntityType<? extends CreeperEntity> entityType, World world) {
         super(entityType, world);
@@ -48,14 +43,10 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
-        MinecraftServer s = world.toServerWorld().getServer();
-        reg = s.getRegistryManager().get(RegistryKeys.BIOME);
-        WeighedStructure<String> biomes = InfinityMod.provider.registry.get("biomes");
-        String biomename = biomes != null ? biomes.getElement(world.getRandom().nextDouble()) : "minecraft:plains";
-        Biome b = reg.get(Identifier.of(biomename));
-        this.setColor(b != null ? b.getFoliageColor() : 7842607);
+        NbtCompound biome = InfinityMod.provider.randomElement(world.getRandom(), "biomes");
+        this.setColor(biome.contains("Color") ? biome.getInt("Color") : 7842607);
         this.setRandomCharge();
-        this.setBiome(biomename);
+        this.setBiome(biome.getString("Name"));
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
@@ -70,12 +61,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public void setBiome(String s) {
         this.dataTracker.set(biome, s);
     }
-
-    public Biome getBiome() {
-        return reg.get(Identifier.of(getBiomeId()));
-    }
-
-    public String getBiomeId() {
+    public String getBiome() {
         return this.dataTracker.get(biome);
     }
 
@@ -106,7 +92,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
         super.writeCustomDataToNbt(nbt);
         nbt.putFloat("range", this.getRange());
         nbt.putInt("color", this.getColorRaw());
-        nbt.putString("biome", this.getBiomeId());
+        nbt.putString("biome", this.getBiome());
     }
 
     @Override
@@ -124,7 +110,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
         if (s != null) {
             ServerWorld serverWorld = s.getWorld(this.getWorld().getRegistryKey());
             if (serverWorld != null) {
-                BiomeBottle.spread(serverWorld, getBlockPos(), Identifier.of(getBiomeId()), getCharge());
+                BiomeBottleBlock.spreadCircle(serverWorld, getBlockPos(), Identifier.of(getBiome()), getCharge());
             }
         }
         this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), f, World.ExplosionSourceType.NONE);
@@ -138,13 +124,13 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
-        if (itemStack.isOf(ModItems.BIOME_BOTTLE_ITEM.get()) && BiomeBottle.isEmpty(itemStack)) {
+        if (itemStack.isOf(ModItems.BIOME_BOTTLE_ITEM.get()) && BiomeBottleBlock.isEmpty(itemStack)) {
             ItemStack itemStack2 = new ItemStack(itemStack.getItem());
             this.playSound(SoundEvents.ITEM_BOTTLE_FILL, 1.0f, 1.0f);
             CreeperEntity newCreeper;
             if (!this.getWorld().isClient() && (newCreeper = EntityType.CREEPER.create(this.getWorld())) != null) {
-                itemStack2.applyComponentsFrom(BiomeBottle.addComponents(ComponentMap.builder(),
-                                Identifier.of(getBiomeId()), getColorRaw(), getCharge()).build());
+                itemStack2.applyComponentsFrom(BiomeBottleBlock.addComponents(ComponentMap.builder(),
+                                Identifier.of(getBiome()), getColorRaw(), getCharge()).build());
                 ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
                 player.setStackInHand(hand, itemStack3);
                 this.discard();

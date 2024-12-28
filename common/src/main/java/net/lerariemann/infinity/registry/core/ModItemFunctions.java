@@ -1,12 +1,11 @@
 package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.registry.item.ItemPropertiesRegistry;
-import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lerariemann.infinity.block.custom.BiomeBottle;
+import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
 import net.lerariemann.infinity.item.function.*;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -27,7 +26,6 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPointer;
@@ -48,8 +46,6 @@ public class ModItemFunctions {
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_SERIALIZER);
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_TYPE);
-    private static final DeferredRegister<ScreenHandlerType<?>> SCREEN_HANDLERS =
-            DeferredRegister.create(MOD_ID, RegistryKeys.SCREEN_HANDLER);
 
 
     public static RegistrySupplier<LootFunctionType<SetLevelLootFunction>> SET_BIOME_BOTTLE_LEVEL =
@@ -79,14 +75,10 @@ public class ModItemFunctions {
     public static RegistrySupplier<RecipeType<CollisionCraftingRecipe>> IRIDESCENCE_CRAFTING_TYPE =
             RECIPE_TYPES.register("collision_iridescence", () -> CollisionCraftingRecipe.Type.IRIDESCENCE);
 
-    public static final RegistrySupplier<ScreenHandlerType<F4ScreenHandler>> F4_SCREEN_HANDLER =
-            SCREEN_HANDLERS.register("f4", () -> MenuRegistry.ofExtended(F4ScreenHandler::new));
-
     public static void registerItemFunctions() {
         LOOT_FUNCTION_TYPES.register();
         RECIPE_SERIALIZERS.register();
         RECIPE_TYPES.register();
-        SCREEN_HANDLERS.register();
     }
 
     public static void registerDispenserBehaviour() {
@@ -146,7 +138,7 @@ public class ModItemFunctions {
         });
         ItemPropertiesRegistry.register(ModItems.BIOME_BOTTLE_ITEM.get(), InfinityMethods.getId("bottle"),
                 (stack, world, entity, seed) -> {
-                    int charge = BiomeBottle.getCharge(stack);
+                    int charge = BiomeBottleBlock.getCharge(stack);
                     return Math.clamp(charge / 1000.0f, 0f, 1f);
                 });
         ItemPropertiesRegistry.register(ModItems.IRIDESCENT_CARPET.get(), InfinityMethods.getId("iridescent"),

@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class WeighedStructure<T> {
     public List<T> keys;
@@ -26,13 +27,11 @@ public class WeighedStructure<T> {
     }
 
     public T getRandomElement(Random random) {
-        return getElement(random.nextDouble());
+        return getRandomElement(random::nextDouble);
     }
-
-    public T getRandomElement(net.minecraft.util.math.random.Random random) {
-        return getElement(random.nextDouble());
+    public T getRandomElement(Supplier<Double> random) {
+        return getElement(random.get());
     }
-
     public T getElement(double d) {
         int i;
         double r = d * statsum;

@@ -25,7 +25,7 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class TransfiniteAltar extends Block {
+public class AltarBlock extends Block {
     public static final int numColors = 13;
     public static final BooleanProperty FLOWER = BooleanProperty.of("flower");
     public static final IntProperty COLOR = IntProperty.of("color", 0, numColors - 1);
@@ -37,7 +37,7 @@ public class TransfiniteAltar extends Block {
     public static final VoxelShape LEG4 = Block.createCuboidShape(13, 0, 13, 16, 3, 16);
     public static final VoxelShape SHAPE = VoxelShapes.union(BASE_SHAPE, TOP_SHAPE, LEG1, LEG2, LEG3, LEG4);
 
-    public TransfiniteAltar(Settings settings) {
+    public AltarBlock(Settings settings) {
         super(settings);
         this.setDefaultState(getDefaultState().with(COLOR, 0).with(FLOWER, false));
     }

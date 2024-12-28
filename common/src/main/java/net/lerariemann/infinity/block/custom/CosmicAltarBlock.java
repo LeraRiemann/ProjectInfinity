@@ -13,9 +13,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class CosmicAltar extends BlockWithEntity {
-    public static final MapCodec<CosmicAltar> CODEC = createCodec(CosmicAltar::new);
-    public CosmicAltar(Settings settings) {
+public class CosmicAltarBlock extends BlockWithEntity {
+    public static final MapCodec<CosmicAltarBlock> CODEC = createCodec(CosmicAltarBlock::new);
+    public CosmicAltarBlock(Settings settings) {
         super(settings);
     }
 

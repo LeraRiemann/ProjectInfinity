@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.block.entity;
 
-import net.lerariemann.infinity.block.custom.BiomeBottle;
+import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
@@ -79,13 +79,13 @@ public class BiomeBottleBlockEntity extends TintableBlockEntity {
     @Override
     protected void addComponents(ComponentMap.Builder componentMapBuilder) {
         super.addComponents(componentMapBuilder);
-        BiomeBottle.addComponents(componentMapBuilder, biome, color, charge);
+        BiomeBottleBlock.addComponents(componentMapBuilder, biome, color, charge);
     }
 
     @Override
     protected void readComponents(BlockEntity.ComponentsAccess components) {
         super.readComponents(components);
-        this.biome = components.getOrDefault(ModComponentTypes.BIOME_CONTENTS.get(), BiomeBottle.defaultBiome());
+        this.biome = components.getOrDefault(ModComponentTypes.BIOME_CONTENTS.get(), BiomeBottleBlock.defaultBiome());
         this.color = components.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
         this.charge = components.getOrDefault(ModComponentTypes.CHARGE.get(), 0);
     }
@@ -121,7 +121,7 @@ public class BiomeBottleBlockEntity extends TintableBlockEntity {
 
     public void empty() {
         color = 0xFFFFFF;
-        biome = BiomeBottle.defaultBiome();
+        biome = BiomeBottleBlock.defaultBiome();
         charge = 0;
         from_charge = 0;
     }
@@ -138,10 +138,10 @@ public class BiomeBottleBlockEntity extends TintableBlockEntity {
                     int diff = be.charge%diff2;
                     if (diff == 0) diff = diff2;
                     int charge_new = be.charge - diff;
-                    BiomeBottle.spreadRing(w, pos, be.biome, be.from_charge - be.charge, be.from_charge - charge_new);
+                    BiomeBottleBlock.spreadRing(w, pos, be.biome, be.from_charge - be.charge, be.from_charge - charge_new);
                     be.charge = charge_new;
-                    world.setBlockState(pos, state.with(BiomeBottle.LEVEL, Math.clamp(level - 1, 0, 10)));
-                    BiomeBottle.playSploosh(w, pos);
+                    world.setBlockState(pos, state.with(BiomeBottleBlock.LEVEL, Math.clamp(level - 1, 0, 10)));
+                    BiomeBottleBlock.playSploosh(w, pos);
                     be.markDirty();
                 }
             }

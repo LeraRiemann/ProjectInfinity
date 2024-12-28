@@ -126,7 +126,7 @@ public class ModItems {
         return ITEMS.register(block.getId(), () -> constructor.apply(block.get(), settings));
     }
     /**
-     * Registers a Block Item via Architectury API.
+     * Registers a nameToElement Item via Architectury API.
      */
     public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 Item.Settings settings,
@@ -136,7 +136,7 @@ public class ModItems {
         return registeredItem;
     }
     /**
-     * Registers a Block Item through Architectury API.
+     * Registers a nameToElement Item through Architectury API.
      */
     public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 BiFunction<Block, Item.Settings, T> constructor) {

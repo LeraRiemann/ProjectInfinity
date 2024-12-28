@@ -23,7 +23,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -41,7 +40,6 @@ import java.util.*;
 import java.util.List;
 
 public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
-    static Registry<StatusEffect> reg = Registries.STATUS_EFFECT;
     private static final TrackedData<String> effect = DataTracker.registerData(ChaosSkeleton.class, TrackedDataHandlerRegistry.STRING);
     private static final TrackedData<Integer> color = DataTracker.registerData(ChaosSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Integer> duration = DataTracker.registerData(ChaosSkeleton.class, TrackedDataHandlerRegistry.INTEGER);
@@ -83,9 +81,9 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         Random r = new Random();
-        Identifier e = Identifier.of(InfinityMod.provider.randomName(r, "effects"));
-        this.setEffect(e);
-        this.setColorRaw(Objects.requireNonNull(reg.get(e)).getColor());
+        NbtCompound effect = InfinityMod.provider.randomElement(r, "effects");
+        this.setEffectRaw(effect.getString("Name"));
+        this.setColorRaw(effect.getInt("Color"));
         this.setDuration(r.nextInt(600));
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
@@ -95,7 +93,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
         super.initDataTracker(builder);
         builder.add(effect, "luck");
         builder.add(duration, 200);
-        builder.add(color, 255);
+        builder.add(color, 0x00FF00);
     }
     @Override
     public boolean isAffectedByDaylight() {
@@ -111,7 +109,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
             }
             if (player.getWorld().getRandom().nextFloat() < 0.5) {
                 String i = effect_lookup.get(this.getEffectRaw());
-                StatusEffect newEffect = reg.get(Identifier.of(i));
+                StatusEffect newEffect = Registries.STATUS_EFFECT.get(Identifier.of(i));
                 if (newEffect != null) {
                     ChaosSkeleton newSkeleton;
                     if (!this.getWorld().isClient() && (newSkeleton = ModEntities.CHAOS_SKELETON.get().create(this.getWorld())) != null) {

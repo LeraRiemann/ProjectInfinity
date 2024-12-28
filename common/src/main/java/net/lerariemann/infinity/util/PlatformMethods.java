@@ -124,7 +124,7 @@ public class PlatformMethods {
     }
 
     /**
-     * Register a Flammable Block (how does Architectury API not have a helper for this)
+     * Register a Flammable nameToElement (how does Architectury API not have a helper for this)
      */
     @ExpectPlatform
     public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {

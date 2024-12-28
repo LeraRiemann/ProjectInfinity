@@ -3,7 +3,7 @@ package net.lerariemann.infinity.item.function;
 import dev.architectury.registry.menu.ExtendedMenuProvider;
 import net.lerariemann.infinity.item.F4Item;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.var.ModScreenHandlers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -25,7 +25,7 @@ public class F4ScreenHandler extends ScreenHandler {
         this(syncId, playerInventory, packet.readString(), packet.readVarInt());
     }
     public F4ScreenHandler(int syncId, PlayerInventory playerInventory, String destination, int slot) {
-        super(ModItemFunctions.F4_SCREEN_HANDLER.get(), syncId);
+        super(ModScreenHandlers.F4.get(), syncId);
         this.playerInventory = playerInventory;
         this.slot = slot;
         stack = playerInventory.getStack(slot);

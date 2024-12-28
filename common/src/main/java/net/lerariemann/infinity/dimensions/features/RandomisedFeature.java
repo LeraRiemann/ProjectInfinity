@@ -54,24 +54,24 @@ public abstract class RandomisedFeature {
     }
 
     NbtCompound genBlockOrFluid() {
-        NbtCompound block, block2;
+        NbtCompound block2;
         if (parent.roll("solid_lakes")) {
-            block2 = PROVIDER.randomBlock(random, "blocks_features");
+            block2 = PROVIDER.randomElement(random, "blocks_features");
         }
         else {
-            block = PROVIDER.randomBlock(random, "fluids");
-            block2 = RandomProvider.Block(block.getString("Name"));
+            block2 = RandomProvider.nameToElement(
+                    PROVIDER.randomName(random, "fluids"));
         }
         return block2;
     }
 
     void addRandomBlockProvider(NbtCompound config, String key, String group) {
-        NbtCompound block = PROVIDER.randomBlock(random, group);
+        NbtCompound block = PROVIDER.randomElement(random, group);
         config.put(key, PROVIDER.blockToProvider(block, random));
     }
 
     void addRandomBlock(NbtCompound config, String key, String group) {
-        NbtCompound block = PROVIDER.randomBlock(random, group);
+        NbtCompound block = PROVIDER.randomElement(random, group);
         config.put(key, block);
     }
 

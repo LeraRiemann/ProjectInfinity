@@ -5,8 +5,6 @@ import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
-import java.util.Objects;
-
 public class RandomShape extends RandomisedFeature {
     String shape;
     boolean usePreset;
@@ -30,7 +28,7 @@ public class RandomShape extends RandomisedFeature {
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         NbtList replaceable = new NbtList();
-        replaceable.add(RandomProvider.Block(parent.parent.parent.default_fluid.getString("Name")));
+        replaceable.add(RandomProvider.nameToElement(parent.parent.parent.default_fluid.getString("Name")));
         config.put("replaceable", replaceable);
         if (!usePreset) addRandomBlockProvider(config, "block_provider", "full_blocks_worldgen");
         else config.put("block_provider", PROVIDER.randomPreset(random, useBands ? "weighted_state_provider" : "noise_provider"));

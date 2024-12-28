@@ -37,8 +37,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BiomeBottle extends BlockWithEntity {
-    public static final MapCodec<BiomeBottle> CODEC = createCodec(BiomeBottle::new);
+public class BiomeBottleBlock extends BlockWithEntity {
+    public static final MapCodec<BiomeBottleBlock> CODEC = createCodec(BiomeBottleBlock::new);
     public static final IntProperty LEVEL = IntProperty.of("level", 0, 10);
     public static final VoxelShape MAIN = Block.createCuboidShape(2, 0, 2, 14, 12, 14);
     public static final VoxelShape TIP = Block.createCuboidShape(6, 12, 6, 10, 16, 10);
@@ -53,7 +53,7 @@ public class BiomeBottle extends BlockWithEntity {
         return SHAPE;
     }
 
-    public BiomeBottle(Settings settings) {
+    public BiomeBottleBlock(Settings settings) {
         super(settings);
         this.setDefaultState(getDefaultState().with(LEVEL, 0));
     }
@@ -148,23 +148,9 @@ public class BiomeBottle extends BlockWithEntity {
         return entry.orElse(null);
     }
 
-    public static void spread(ServerWorld world, BlockPos origin, Identifier biomeId, int charge) {
-        Set<BlockPos> posSet = new HashSet<>();
-        Set<Chunk> set = new HashSet<>();
-        origin = origin.down(origin.getY());
-        double ra = charge / Math.PI;
-        for (int i = 0; i*i < ra; i++) {
-            for (int j = 0; i*i + j*j < ra; j++) {
-                List<BlockPos> signs = offsets(origin, i, j);
-                posSet.addAll(signs);
-                set.addAll(signs.stream().map(ChunkPos::new)
-                        .map(chunkPos -> world.getChunk(chunkPos.getStartPos()))
-                        .filter(Objects::nonNull).collect(Collectors.toSet()));
-            }
-        }
-        spread(world, set, posSet, biomeFromId(world, biomeId));
+    public static void spreadCircle(ServerWorld world, BlockPos origin, Identifier biomeId, int charge) {
+        spreadRing(world, origin, biomeId, 0, charge);
     }
-
     public static void spreadRing(ServerWorld world, BlockPos origin, Identifier biomeId, int chargemin, int chargemax) {
         Set<BlockPos> posSet = new HashSet<>();
         Set<Chunk> set = new HashSet<>();

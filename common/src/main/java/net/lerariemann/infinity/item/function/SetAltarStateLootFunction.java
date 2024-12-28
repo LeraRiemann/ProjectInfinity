@@ -2,7 +2,7 @@ package net.lerariemann.infinity.item.function;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.lerariemann.infinity.block.custom.TransfiniteAltar;
+import net.lerariemann.infinity.block.custom.AltarBlock;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
@@ -37,14 +37,14 @@ public class SetAltarStateLootFunction extends ConditionalLootFunction {
     protected ItemStack process(ItemStack stack, LootContext context) {
         BlockState st = context.get(LootContextParameters.BLOCK_STATE);
         if (st == null) return stack;
-        int color = st.get(TransfiniteAltar.COLOR);
-        boolean flower = st.get(TransfiniteAltar.FLOWER);
+        int color = st.get(AltarBlock.COLOR);
+        boolean flower = st.get(AltarBlock.FLOWER);
         if (color > 0 || flower) stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.BLOCK_STATE,
                 new BlockStateComponent(Map.of())
-                        .with(TransfiniteAltar.COLOR, color)
-                        .with(TransfiniteAltar.FLOWER, flower))
+                        .with(AltarBlock.COLOR, color)
+                        .with(AltarBlock.FLOWER, flower))
                 .add(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(color +
-                        (flower ? TransfiniteAltar.numColors : 0)))
+                        (flower ? AltarBlock.numColors : 0)))
                 .build());
         return stack;
     }

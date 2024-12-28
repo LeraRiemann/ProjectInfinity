@@ -16,7 +16,7 @@ public class RandomCrop extends RandomisedFeature {
     public RandomCrop(RandomFeaturesList parent) {
         super(parent, "crop");
         id = "block_column";
-        NbtElement crop = PROVIDER.compoundRegistry.get("crops").getRandomElement(random);
+        NbtElement crop = PROVIDER.compoundRegistry.get("crops").getRandomElement(random::nextDouble);
         cropp = (NbtCompound)crop;
         start = daddy.sea_level - (cropp.getKeys().contains("offset") ? cropp.getInt("offset") : 1);
         water = cropp.getBoolean("needsWater");
@@ -69,7 +69,7 @@ public class RandomCrop extends RandomisedFeature {
         boolean bl = cropp.getKeys().contains("blocks");
         for (int i = 0; bl ? (i < cropp.getInt("blocks")) : (cropp.getKeys().contains("block_" + i)); i++)
             layers.add(blockToLayer(cropp.getCompound("block_" + i)));
-        layers.add(blockToLayer(RandomProvider.Block("minecraft:air")));
+        layers.add(blockToLayer(RandomProvider.nameToElement("minecraft:air")));
         config.put("layers", layers);
         NbtCompound allowedPlacement = new NbtCompound();
         allowedPlacement.putString("type", "true");

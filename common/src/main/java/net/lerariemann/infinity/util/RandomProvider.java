@@ -14,6 +14,7 @@ import net.minecraft.world.biome.Biome;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Function;
 
 import static java.nio.file.Files.walk;
 
@@ -235,19 +236,6 @@ public class RandomProvider {
         return registry.get("mob_categories").keys;
     }
 
-    public static NbtCompound Block(String block) {
-        NbtCompound res = new NbtCompound();
-        res.putString("Name", block);
-        return res;
-    }
-
-    public static NbtCompound Fluid(String block) {
-        NbtCompound res = new NbtCompound();
-        res.putString("Name", block);
-        res.putString("fluidName", block);
-        return res;
-    }
-
     public NbtCompound blockToProvider(NbtCompound block, Random random) {
         NbtCompound res = new NbtCompound();
         boolean isRotatable = Registries.BLOCK.get(Identifier.of(block.getString("Name"))).getDefaultState().getProperties().contains(Properties.AXIS);
@@ -282,52 +270,57 @@ public class RandomProvider {
             Map.entry("loot_tables", "minecraft:blocks/stone"));
 
     public String randomName(Random random, String key) {
-        return randomName(random, key, defaultMap.get(key));
+        return randomName(random.nextDouble(), key);
     }
     public String randomName(net.minecraft.util.math.random.Random random, String key) {
-        return randomName(random, key, defaultMap.get(key));
+        return randomName(random.nextDouble(), key);
+    }
+    public String randomName(double d, String key) {
+        if (compoundRegistry.containsKey(key))
+            return elementToName(compoundRegistry.get(key).getElement(d));
+        if (registry.containsKey(key))
+            return registry.get(key).getElement(d);
+        return defaultMap.get(key);
     }
 
-    public String randomName(Random random, String key, String def) {
-        if (compoundRegistry.containsKey(key))
-            return elementToName(compoundRegistry.get(key).getRandomElement(random));
-        if (registry.containsKey(key))
-            return registry.get(key).getRandomElement(random);
-        return def;
+    public NbtCompound randomElement(net.minecraft.util.math.random.Random random, String key) {
+        return randomElement(random.nextDouble(), key);
     }
-    public String randomName(net.minecraft.util.math.random.Random random, String key, String def) {
-        if (compoundRegistry.containsKey(key))
-            return elementToName(compoundRegistry.get(key).getRandomElement(random));
-        if (registry.containsKey(key))
-            return registry.get(key).getRandomElement(random);
-        return def;
+    public NbtCompound randomElement(Random random, String key) {
+        return randomElement(random.nextDouble(), key);
+    }
+    public NbtCompound randomElement(double d, String key) {
+        return randomElementInternal(d, key, key.equals("fluids") ? RandomProvider::nameToFluid : RandomProvider::nameToElement);
+    }
+    private NbtCompound randomElementInternal(double d, String key, Function<String, NbtCompound> converter) {
+        if (compoundRegistry.containsKey(key)) {
+            NbtElement compound = compoundRegistry.get(key).getElement(d);
+            if (compound instanceof NbtCompound) return ((NbtCompound)compound);
+            else if (compound instanceof NbtString) return converter.apply(compound.asString());
+        }
+        else if (registry.containsKey(key))
+            return converter.apply(registry.get(key).getElement(d));
+        return converter.apply(defaultMap.get(key));
     }
 
     public static String elementToName(NbtElement e) {
         if (e instanceof NbtCompound) return ((NbtCompound)e).getString("Name");
         else return e.asString();
     }
-
-    public NbtCompound randomBlock(Random random, String key) {
-        if (compoundRegistry.containsKey(key)) {
-            NbtElement compound = compoundRegistry.get(key).getRandomElement(random);
-            if (compound instanceof NbtCompound) return ((NbtCompound)compound);
-            else return Block(compound.asString());
-        }
-        else {
-            return Block(randomName(random, key));
-        }
+    public static NbtCompound nameToElement(String block) {
+        NbtCompound res = new NbtCompound();
+        res.putString("Name", block);
+        return res;
     }
-
-    public NbtCompound randomFluid(Random random) {
-        if (!compoundRegistry.containsKey("fluids")) return Fluid("minecraft:water");
-        NbtElement compound = compoundRegistry.get("fluids").getRandomElement(random);
-        if (compound instanceof NbtCompound) return ((NbtCompound)compound);
-        else return Fluid(compound.asString());
+    public static NbtCompound nameToFluid(String block) {
+        NbtCompound res = new NbtCompound();
+        res.putString("Name", block);
+        res.putString("fluidName", block);
+        return res;
     }
 
     public NbtCompound randomBlockProvider(Random random, String key) {
-        return blockToProvider(randomBlock(random, key), random);
+        return blockToProvider(randomElement(random, key), random);
     }
 
     public NbtCompound randomPreset(Random random, String key) {

@@ -5,8 +5,8 @@ import net.lerariemann.infinity.util.PlatformMethods;
 import net.minecraft.block.*;
 import net.minecraft.fluid.FluidState;
 
-public class IridescentKelp extends KelpBlock {
-    public IridescentKelp(Settings settings) {
+public class IridescentKelpBlock extends KelpBlock {
+    public IridescentKelpBlock(Settings settings) {
         super(settings);
     }
 
