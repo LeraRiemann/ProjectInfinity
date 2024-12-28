@@ -11,7 +11,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /** Handles scanning of game content listed in a registry of choice.
- * <p>Filtering and formatting of content is delegated to the provided extractor function; these are defined in {@link ConfigGenerators}.
+ * <p>Filtering and formatting of content is delegated to the provided extractor function; these are defined in {@link ConfigGeneration}.
  * <p>Sorting and saving of content is delegated to {@link DataCollection}.
  * @param <S> type of content being scanned for: i.e. {@link Item}, {@link Biome}, etc.
  * @param <T> data output format; either {@link String}, {@link NbtCompound} or {@link NbtList} */

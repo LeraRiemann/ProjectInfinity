@@ -52,6 +52,9 @@ import java.util.Map;
 import java.util.Random;
 
 public interface Iridescence {
+    Identifier TEXTURE = Identifier.of("minecraft:block/water_still");
+    Identifier FLOWING_TEXTURE = Identifier.of("minecraft:block/water_flow");
+    Identifier OVERLAY_TEXTURE = Identifier.of("minecraft:block/water_overlay");
     DoublePerlinNoiseSampler sampler =
             DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, genOctaves(2));
 

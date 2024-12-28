@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.util.config;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.block.entity.CosmicAltarBlockEntity;
 import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,13 +21,13 @@ import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.Pool;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.StructureSpawns;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.SpawnSettings;
@@ -38,10 +39,28 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Methods for generating modular config files (scanning all registries for usable content) and writing them to the disk.
+ * <p>Methods for generating modular config files (scanning all registries for usable content) and writing them to the disk.</p>
+ * <p>Generating most content types is done via {@link ConfigGenerator}.</p>
+ * <p>Used by the {@link CosmicAltarBlockEntity} performing an invocation.</p>
  * @author LeraRiemann
  */
-public interface ConfigGenerators {
+public interface ConfigGeneration {
+    static void generateAll(MinecraftServer server) {
+        ConfigGenerator.of(Registries.ITEM).generate("misc", "items");
+        ConfigGenerator.of(Registries.PARTICLE_TYPE, ConfigGeneration::extractParticle).generate("misc", "particles");
+        ConfigGenerator.of(Registries.ENTITY_TYPE, ConfigGeneration::extractMob).generate("extra", "mobs");
+        ConfigGenerator.of(Registries.STATUS_EFFECT, ConfigGeneration::extractEffect).generate("extra", "effects");
+        generateSounds();
+        generateBlockTags();
+        SurfaceRuleScanner.scan(server);
+        DynamicRegistryManager manager = server.getRegistryManager();
+        ConfigGenerator.of(manager.get(RegistryKeys.BIOME), ConfigGeneration::extractBiome).generate("extra", "biomes");
+        ConfigGenerator.of(manager.get(RegistryKeys.STRUCTURE), ConfigGeneration::extractStructure).generate("extra", "structures");
+        ConfigGenerator.of(manager.get(RegistryKeys.CONFIGURED_FEATURE), ConfigGeneration::extractFeature).generate("extra", "trees");
+        ConfigGenerator.of(server.getReloadableRegistries().getRegistryManager().get(RegistryKeys.LOOT_TABLE), ConfigGeneration::extractLootTable)
+                .generate("extra", "loot_tables");
+    }
+
     static void generateSounds() {
         Registry<SoundEvent> r = Registries.SOUND_EVENT;
         DataCollection.Logged<String> music = new DataCollection.Logged<>("misc", "music", "music tracks");
@@ -64,10 +83,10 @@ public interface ConfigGenerators {
     static Set<String> generateFluids() {
         DataCollection.Logged<NbtCompound> fluidMap = new DataCollection.Logged<>("blocks", "fluids");
         Registry<Fluid> r = Registries.FLUID;
-        Set<String> blocknames = new HashSet<>();
+        Set<String> fluidBlockNames = new HashSet<>();
         r.getKeys().forEach(a -> {
             NbtCompound data = extractFluid(a);
-            blocknames.add(data.getString("Name"));
+            fluidBlockNames.add(data.getString("Name"));
             Fluid f = r.get(a.getValue());
             if (f instanceof FlowableFluid fl && fl.equals(fl.getStill())) {
                 String modId = a.getValue().getNamespace();
@@ -75,30 +94,28 @@ public interface ConfigGenerators {
             }
         });
         fluidMap.save();
-        return blocknames;
+        return fluidBlockNames;
     }
 
-    static void generateBlocksAndFluids(WorldView w, BlockPos inAir, BlockPos onStone) {
+    static void generateBlocks(ServerWorld serverWorld, BlockPos inAir, BlockPos onAltar, Set<String> excludedBlockNames) {
         DataCollection.Logged<NbtCompound> blockMap = new DataCollection.Logged<>("blocks", "blocks");
         DataCollection<NbtList> colorPresetMap = new DataCollection<>("extra", "color_presets");
         DataCollection<String> airMap = new DataCollection<>("blocks", "airs");
         DataCollection<String> flowerMap = new DataCollection<>("blocks", "flowers");
         Registry<Block> r = Registries.BLOCK;
-        Set<String> fluidBlockNames = generateFluids();
         r.getKeys().forEach(key -> {
             String blockName = key.getValue().toString();
-            if(!fluidBlockNames.contains(blockName)) {
-                Block block = r.get(key);
-                assert block != null;
-                String modId = key.getValue().getNamespace();
-                blockMap.add(modId, extractBlock(key, w, inAir, onStone));
-                if (blockName.contains("magenta") && !isLaggy(block) && isFloat(block.getDefaultState(), w, inAir)) {
-                    NbtList lst = checkColorSet(blockName);
-                    if (lst != null) colorPresetMap.add(modId, lst);
-                }
-                if (block.getDefaultState().isIn(BlockTags.AIR)) DataCollection.addIdentifier(airMap, key.getValue());
-                if (block.getDefaultState().isIn(BlockTags.SMALL_FLOWERS)) DataCollection.addIdentifier(flowerMap, key.getValue());
+            if(excludedBlockNames.contains(blockName)) return;
+            Block block = r.get(key);
+            assert block != null;
+            String modId = key.getValue().getNamespace();
+            blockMap.add(modId, extractBlock(key, serverWorld, inAir, onAltar));
+            if (blockName.contains("magenta") && !isLaggy(block) && isFloat(block.getDefaultState(), serverWorld, inAir)) {
+                NbtList lst = checkColorSet(blockName);
+                if (lst != null) colorPresetMap.add(modId, lst);
             }
+            if (block.getDefaultState().isIn(BlockTags.AIR)) DataCollection.addIdentifier(airMap, key.getValue());
+            if (block.getDefaultState().isIn(BlockTags.SMALL_FLOWERS)) DataCollection.addIdentifier(flowerMap, key.getValue());
         });
         blockMap.save();
         colorPresetMap.save();
@@ -301,28 +318,5 @@ public interface ConfigGenerators {
         res.putString("Name", id.toString());
         res.putInt("Color", biome.getFoliageColor());
         return res;
-    }
-
-    static void generateAll(World w, BlockPos inAir, BlockPos onStone) {
-        MinecraftServer s = Objects.requireNonNull(w.getServer());
-        DynamicRegistryManager manager = s.getRegistryManager();
-        generateAllNoWorld();
-        generateBlocksAndFluids(w, inAir, onStone);
-        Set<String> registeredRules = SurfaceRuleScanner.scan(s);
-        DataCollection.loggerOutput(registeredRules.size(), "surface rules");
-        ConfigGenerator.of(manager.get(RegistryKeys.BIOME), ConfigGenerators::extractBiome).generate("extra", "biomes");
-        ConfigGenerator.of(manager.get(RegistryKeys.STRUCTURE), ConfigGenerators::extractStructure).generate("extra", "structures");
-        ConfigGenerator.of(manager.get(RegistryKeys.CONFIGURED_FEATURE), ConfigGenerators::extractFeature).generate("extra", "trees");
-        ConfigGenerator.of(s.getReloadableRegistries().getRegistryManager().get(RegistryKeys.LOOT_TABLE), ConfigGenerators::extractLootTable)
-                .generate("extra", "loot_tables");
-    }
-
-    static void generateAllNoWorld() {
-        generateSounds();
-        ConfigGenerator.of(Registries.ITEM).generate("misc", "items");
-        ConfigGenerator.of(Registries.PARTICLE_TYPE, ConfigGenerators::extractParticle).generate("misc", "particles");
-        ConfigGenerator.of(Registries.ENTITY_TYPE, ConfigGenerators::extractMob).generate("extra", "mobs");
-        generateBlockTags();
-        ConfigGenerator.of(Registries.STATUS_EFFECT, ConfigGenerators::extractEffect).generate("extra", "effects");
     }
 }

@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.entity;
 
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.util.config.ConfigGenerators;
+import net.lerariemann.infinity.util.config.ConfigGeneration;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,13 +14,14 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Set;
 
 public class CosmicAltarBlockEntity extends BlockEntity {
     protected int time;
@@ -39,20 +40,24 @@ public class CosmicAltarBlockEntity extends BlockEntity {
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, CosmicAltarBlockEntity be) {
-        MinecraftServerAccess access = ((MinecraftServerAccess)(Objects.requireNonNull(world.getServer())));
-        if(be.time == 0) {
+        if (world instanceof ServerWorld serverWorld && be.time == 0) {
             for (int i : offsets) for (int j : offsets_y) for (int k : offsets) {
                 be.map.put(i + "," + j + "," + k, world.getBlockState(pos.add(i, j, k)));
                 world.setBlockState(pos.add(i, j, k), Blocks.AIR.getDefaultState());
             }
-            ConfigGenerators.generateAll(world, pos.up(2), pos.up());
+            invoke(serverWorld, pos);
             for (int i : offsets) for (int j : offsets_y) for (int k : offsets) {
                 world.setBlockState(pos.add(i, j, k), be.fromMap(i, j, k));
             }
-            access.infinity$onInvocation();
+            ((MinecraftServerAccess)world.getServer()).infinity$onInvocation();
             be.markRemoved();
             world.setBlockState(pos, be.fromMap(0, 0, 0));
         }
+    }
+    static void invoke(ServerWorld serverWorld, BlockPos altarPos) {
+        ConfigGeneration.generateAll(serverWorld.getServer());
+        Set<String> fluidBlockNames = ConfigGeneration.generateFluids();
+        ConfigGeneration.generateBlocks(serverWorld, altarPos.up(2), altarPos.up(), fluidBlockNames);
     }
 
     public void addNull(BlockState s) {

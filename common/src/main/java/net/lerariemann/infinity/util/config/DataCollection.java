@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-/** A collection of {@link WeighedStructure} objects, used in {@link ConfigGenerator} to auto-sort different types of game content by mod ID.
+/** A collection of {@link WeighedStructure} objects, used in {@link ConfigGeneration} to auto-sort different types of game content by mod ID.
  * @author LeraRiemann */
 public class DataCollection<T> {
     private final Map<String, WeighedStructure<T>> map = new HashMap<>();

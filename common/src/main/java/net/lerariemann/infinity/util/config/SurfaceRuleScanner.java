@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public interface SurfaceRuleScanner {
-    static Set<String> scan(MinecraftServer server) {
+    static void scan(MinecraftServer server) {
         Map<String, NbtCompound> map = new HashMap<>();
         Registry<ChunkGeneratorSettings> registry = server.getRegistryManager().get(RegistryKeys.CHUNK_GENERATOR_SETTINGS);
         registry.getKeys().forEach(key -> {
@@ -35,7 +35,7 @@ public interface SurfaceRuleScanner {
             String path = "config/infinity/modular/" + modname + "/surface_rule";
             CommonIO.writeSurfaceRule(value, path, biomename);
         });
-        return map.keySet();
+        DataCollection.loggerOutput(map.size(), "surface rules");
     }
 
     class Tree{
@@ -101,7 +101,9 @@ public interface SurfaceRuleScanner {
         }
 
         static boolean checkUnneededParts(NbtCompound rule) {
-            return rule.getString("type").contains("block") && rule.toString().contains("minecraft:bedrock");
+            return rule.getString("type").contains("block")
+                    && (rule.toString().contains("minecraft:bedrock")
+                    || rule.toString().contains("minecraft:deepslate"));
         }
 
         public NbtCompound wrappedRule(String biome) {
@@ -115,11 +117,11 @@ public interface SurfaceRuleScanner {
 
         public NbtCompound extractRule(String biome) {
             if (!biomeLocations.containsKey(biome)) return null;
-            if (biomeLocations.get(biome).size() == 1) return extractRule(biomeLocations.get(biome).getFirst());
             else {
                 NbtCompound comp = RandomNoisePreset.startingRule("sequence");
                 NbtList l = new NbtList();
                 biomeLocations.get(biome).forEach(i -> l.add(extractRule(i)));
+                biomeLocations.get("minecraft:default").forEach(i -> l.add(extractRule(i)));
                 comp.put("sequence", l);
                 return comp;
             }
