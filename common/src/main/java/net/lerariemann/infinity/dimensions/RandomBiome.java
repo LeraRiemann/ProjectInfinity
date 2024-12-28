@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.util.WeighedStructure;
+import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.RandomProvider;
+import net.lerariemann.infinity.util.core.WeighedStructure;
 import net.minecraft.nbt.*;
 
 import java.util.*;

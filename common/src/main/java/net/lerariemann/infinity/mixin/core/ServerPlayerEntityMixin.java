@@ -5,7 +5,7 @@ import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.access.ServerPlayerEntityAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;

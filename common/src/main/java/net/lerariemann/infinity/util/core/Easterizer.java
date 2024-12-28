@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.core;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomDimension;
@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import static java.nio.file.Files.walk;
 
@@ -19,12 +18,12 @@ public class Easterizer {
     public Map<String, NbtCompound> optionmap;
     public Map<String, Integer> colormap;
 
-    public Easterizer(RandomProvider prov) {
+    public Easterizer(String configPath) {
         map = new HashMap<>();
         optionmap = new HashMap<>();
         colormap = new HashMap<>();
         try {
-            walk(Paths.get(prov.configPath).resolve("easter")).forEach(p -> {
+            walk(Paths.get(configPath).resolve("easter")).forEach(p -> {
                 String fullname = p.toString();
                 if (p.toFile().isFile() && !fullname.endsWith("_type.json")) {
                     String name = p.getFileName().toString();

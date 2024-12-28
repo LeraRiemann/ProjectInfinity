@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.access;
 
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;

@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.var;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;

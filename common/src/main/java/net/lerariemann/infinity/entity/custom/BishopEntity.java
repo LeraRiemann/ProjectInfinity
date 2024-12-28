@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.util.BishopBattle;
+import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.pathing.EntityNavigation;

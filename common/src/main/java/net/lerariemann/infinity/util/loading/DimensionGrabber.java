@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.loading;
+package net.lerariemann.infinity.util.loading;
 
 import com.mojang.serialization.Codec;
 import net.lerariemann.infinity.dimensions.RandomDimension;

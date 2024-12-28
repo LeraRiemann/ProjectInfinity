@@ -1,6 +1,7 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.config;
 
 import net.lerariemann.infinity.dimensions.RandomNoisePreset;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;

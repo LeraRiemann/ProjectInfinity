@@ -1,8 +1,8 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.util.ConfigManager;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.config.ConfigManager;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import org.apache.commons.io.FileUtils;
 

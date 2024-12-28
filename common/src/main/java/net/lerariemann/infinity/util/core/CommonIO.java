@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.core;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.architectury.platform.Platform;

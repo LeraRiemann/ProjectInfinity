@@ -1,8 +1,9 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.teleport;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.var.ModPoi;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.entity.Entity;

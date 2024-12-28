@@ -4,7 +4,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.PortalCreator;
+import net.lerariemann.infinity.util.teleport.PortalCreator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

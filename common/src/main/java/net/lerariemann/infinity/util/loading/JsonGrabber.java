@@ -1,11 +1,11 @@
-package net.lerariemann.infinity.loading;
+package net.lerariemann.infinity.util.loading;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.*;

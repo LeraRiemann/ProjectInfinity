@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.teleport;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
@@ -11,7 +11,8 @@ import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.registry.core.ModItems;
-import net.lerariemann.infinity.loading.DimensionGrabber;
+import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.lerariemann.infinity.registry.var.ModPayloads;

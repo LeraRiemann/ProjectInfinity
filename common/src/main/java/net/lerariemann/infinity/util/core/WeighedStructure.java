@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class WeighedStructure<T> {
         weights.add(weight);
     }
 
-    int size() {
+    public int size() {
         return keys.size();
     }
 

@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.block.custom.AntBlock;
-import net.lerariemann.infinity.util.BishopBattle;
+import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;

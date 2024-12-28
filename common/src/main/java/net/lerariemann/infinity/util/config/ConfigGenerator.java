@@ -1,6 +1,8 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.config;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.WeighedStructure;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
@@ -39,7 +41,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
-import static net.lerariemann.infinity.util.ConfigManager.getConfigDir;
+import static net.lerariemann.infinity.util.config.ConfigManager.getConfigDir;
 
 public interface ConfigGenerator {
     static <T> NbtCompound wsToCompound(WeighedStructure<T> w) {

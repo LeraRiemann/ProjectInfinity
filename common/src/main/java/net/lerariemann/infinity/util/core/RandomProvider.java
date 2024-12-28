@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.core;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.item.Item;
@@ -41,8 +41,8 @@ public class RandomProvider {
     public RandomProvider(String configpath) {
         configPath = configpath;
         initStorage();
-        register_all();
-        easterizer = new Easterizer(this);
+        registerAll();
+        easterizer = new Easterizer(configPath);
     }
 
     void initStorage() {
@@ -54,20 +54,19 @@ public class RandomProvider {
         disabledDimensions = new ArrayList<>();
     }
 
-    void register_all() {
-        read_root_config();
-        String path = configPath + "modular";
-        register_category(registry, path, "misc", CommonIO::stringListReader);
-        register_category(registry, path, "features", CommonIO::stringListReader);
-        register_category(registry, path, "vegetation", CommonIO::stringListReader);
-        register_category(compoundRegistry, path, "blocks", CommonIO::compoundListReader);
-        extract_blocks();
-        register_category(compoundRegistry, path, "extra", CommonIO::compoundListReader);
-        extract_mobs();
-        register_category_hardcoded(configPath + "hardcoded");
+    void registerAll() {
+        readRootConfig();
+        registerCategory(registry, "misc", CommonIO::stringListReader);
+        registerCategory(registry, "features", CommonIO::stringListReader);
+        registerCategory(registry, "vegetation", CommonIO::stringListReader);
+        registerCategory(compoundRegistry, "blocks", CommonIO::compoundListReader);
+        extractBlocks();
+        registerCategory(compoundRegistry, "extra", CommonIO::compoundListReader);
+        extractMobs();
+        registerHardcoded();
     }
 
-    void read_root_config() {
+    void readRootConfig() {
         NbtCompound rootConfig = CommonIO.read(configPath + "infinity.json");
         portalKey = rootConfig.getString("portalKey");
         altarKey = rootConfig.getString("altarKey");
@@ -148,7 +147,7 @@ public class RandomProvider {
         return gameRules.getOrDefault(key, false);
     }
 
-    void extract_blocks() {
+    void extractBlocks() {
         if (compoundRegistry.containsKey("blocks")) {
             WeighedStructure<NbtElement> blocksSettings = compoundRegistry.get("blocks");
             WeighedStructure<NbtElement> allBlocks = new WeighedStructure<>();
@@ -180,7 +179,7 @@ public class RandomProvider {
         }
     }
 
-    void extract_mobs() {
+    void extractMobs() {
         if (compoundRegistry.containsKey("mobs")) {
             WeighedStructure<NbtElement> allmobs = compoundRegistry.get("mobs");
             WeighedStructure<String> allMobNames = new WeighedStructure<>();
@@ -201,7 +200,8 @@ public class RandomProvider {
         return res;
     }
 
-    static <B> void register_category(Map<String, B> reg, String path, String subpath, ListReader<B> reader) {
+    <B> void registerCategory(Map<String, B> reg, String subpath, ListReader<B> reader) {
+        String path = configPath + "modular";
         try {
             walk(Paths.get(path + "/minecraft/" + subpath)).forEach(p -> {
                 String fullname = p.toString();
@@ -217,9 +217,9 @@ public class RandomProvider {
         }
     }
 
-    void register_category_hardcoded(String path) {
+    void registerHardcoded() {
         try {
-            walk(Paths.get(path)).forEach(p -> {
+            walk(Paths.get(configPath + "hardcoded")).forEach(p -> {
                 String fullname = p.toString();
                 if (fullname.endsWith(".json")) {
                     String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);

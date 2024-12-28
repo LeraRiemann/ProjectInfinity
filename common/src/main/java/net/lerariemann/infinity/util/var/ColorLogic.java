@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.var;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

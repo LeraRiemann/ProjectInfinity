@@ -3,7 +3,7 @@ package net.lerariemann.infinity.item;
 import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
-import net.lerariemann.infinity.util.ColorLogic;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;

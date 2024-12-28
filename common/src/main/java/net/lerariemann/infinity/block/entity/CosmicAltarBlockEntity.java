@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.block.entity;
 
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.util.ConfigGenerator;
+import net.lerariemann.infinity.util.config.ConfigGenerator;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

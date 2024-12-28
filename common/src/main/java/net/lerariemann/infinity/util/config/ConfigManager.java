@@ -1,7 +1,8 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.config;
 
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;

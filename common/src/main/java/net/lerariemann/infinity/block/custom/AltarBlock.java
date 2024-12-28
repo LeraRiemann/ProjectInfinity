@@ -3,7 +3,7 @@ package net.lerariemann.infinity.block.custom;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.var.ModCriteria;
-import net.lerariemann.infinity.util.BishopBattle;
+import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;

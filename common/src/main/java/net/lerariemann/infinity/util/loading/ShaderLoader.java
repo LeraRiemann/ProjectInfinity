@@ -1,9 +1,11 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.loading;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.access.GameRendererAccess;
 import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.resource.ResourcePackManager;

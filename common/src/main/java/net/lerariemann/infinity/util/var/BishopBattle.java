@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.util;
+package net.lerariemann.infinity.util.var;
 
 import net.lerariemann.infinity.entity.custom.AntEntity;
 import net.lerariemann.infinity.entity.custom.BishopEntity;

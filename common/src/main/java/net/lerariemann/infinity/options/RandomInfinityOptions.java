@@ -2,8 +2,8 @@ package net.lerariemann.infinity.options;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.RandomProvider;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 

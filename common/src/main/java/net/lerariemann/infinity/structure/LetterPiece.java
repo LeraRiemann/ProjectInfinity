@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.structure;
 
-import net.lerariemann.infinity.util.TextData;
+import net.lerariemann.infinity.util.var.TextData;
 import net.lerariemann.infinity.registry.core.ModStructureTypes;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NbtCompound;

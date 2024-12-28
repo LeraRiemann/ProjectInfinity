@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.iridescence;
 
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.InstantStatusEffect;
