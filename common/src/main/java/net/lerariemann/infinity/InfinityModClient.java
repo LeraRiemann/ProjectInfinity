@@ -2,7 +2,7 @@ package net.lerariemann.infinity;
 
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.lerariemann.infinity.item.function.F4Screen;
+import net.lerariemann.infinity.util.screen.F4Screen;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModPayloads;

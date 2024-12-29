@@ -118,7 +118,7 @@
   "lore.infinity.transfinite_key": "This item was created by throwing Amethyst into an Infinity Portal, attuning it to that portal's signature. Throwing this key into a Nether Portal will allow you to recreate the portal it came from.",
   "tooltip.infinity.key.randomise": "Dimension randomised",
   "tooltip.infinity.key.generated": "Dimension #",
-  "tooltip.infinity.f4.default": "Places a Nether Portal",
+  "tooltip.infinity.f4": "Portal to %s",
   "tooltip.infinity.f4.charges": "Charges left: %s",
   "potion.infinity.skeleton": "Skeleton's Potion",
   "stat.infinity.portals_opened_stat": "Infinity portals opened",

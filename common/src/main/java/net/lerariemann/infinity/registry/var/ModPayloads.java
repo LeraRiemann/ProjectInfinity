@@ -3,20 +3,26 @@ package net.lerariemann.infinity.registry.var;
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -82,9 +88,7 @@ public class ModPayloads {
         ((InfinityOptionsAccess)client).infinity$setOptions(options);
         NbtCompound shader = options.getShader();
         boolean bl = shader.isEmpty();
-        if (bl) client.execute(() -> {
-            ShaderLoader.reloadShaders(client, false);
-        });
+        if (bl) client.execute(() -> ShaderLoader.reloadShaders(client, false));
         else {
             client.execute(() -> {
                 CommonIO.write(shader, ShaderLoader.shaderDir(client), ShaderLoader.FILENAME);
@@ -124,17 +128,47 @@ public class ModPayloads {
         return new ShaderRePayload(InfinityOptions.access(destination).data(), bl);
     }
 
+    public record F4Payload(int slot, int width, int height) implements CustomPayload {
+        public static final CustomPayload.Id<F4Payload> ID = new CustomPayload.Id<>(InfinityMethods.getId("f4"));
+        public static final PacketCodec<RegistryByteBuf, F4Payload> CODEC = PacketCodec.tuple(
+                PacketCodecs.VAR_INT, F4Payload::slot,
+                PacketCodecs.VAR_INT, F4Payload::width,
+                PacketCodecs.VAR_INT, F4Payload::height,
+                F4Payload::new);
+        @Override
+        public CustomPayload.Id<? extends CustomPayload> getId() {
+            return ID;
+        }
+    }
+    public static void receiveF4(F4Payload payload, ServerPlayNetworking.Context context) {
+        try (MinecraftServer server = context.server()) {
+            server.execute(() -> {
+                ItemStack st = context.player().getInventory().getStack(payload.slot);
+                if (st.isOf(ModItems.F4.get())) {
+                    ItemStack newStack = st.copy();
+                    newStack.applyComponentsFrom(ComponentMap.builder()
+                            .add(ModComponentTypes.SIZE_X.get(), Math.clamp(payload.width, 1, 21))
+                            .add(ModComponentTypes.SIZE_Y.get(), Math.clamp(payload.height, 1, 21))
+                            .build());
+                    context.player().getInventory().setStack(payload.slot, newStack);
+                }
+            });
+        }
+    }
+
     public static void registerPayloadsServer() {
         PayloadTypeRegistry.playS2C().register(WorldAddPayload.ID, WorldAddPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(BiomeAddPayload.ID, BiomeAddPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ShaderRePayload.ID, ShaderRePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
+        PayloadTypeRegistry.playC2S().register(F4Payload.ID, F4Payload.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(F4Payload.ID, ModPayloads::receiveF4);
     }
 
     public static void registerPayloadsClient() {
-        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.WorldAddPayload.ID, ModPayloads::addWorld);
-        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.BiomeAddPayload.ID, ModPayloads::addBiome);
-        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.ShaderRePayload.ID, ModPayloads::receiveShader);
-        ClientPlayNetworking.registerGlobalReceiver(ModPayloads.StarsRePayLoad.ID, ModPayloads::receiveStars);
+        ClientPlayNetworking.registerGlobalReceiver(WorldAddPayload.ID, ModPayloads::addWorld);
+        ClientPlayNetworking.registerGlobalReceiver(BiomeAddPayload.ID, ModPayloads::addBiome);
+        ClientPlayNetworking.registerGlobalReceiver(ShaderRePayload.ID, ModPayloads::receiveShader);
+        ClientPlayNetworking.registerGlobalReceiver(StarsRePayLoad.ID, ModPayloads::receiveStars);
     }
 }

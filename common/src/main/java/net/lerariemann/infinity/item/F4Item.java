@@ -35,17 +35,12 @@ public class F4Item extends Item implements PortalDataHolder {
     }
 
     public static MutableText getDimensionTooltip(Identifier dimension) {
-        String s = dimension.toString();
-        // Randomly generated dimensions.
-        if (s.contains("infinity:generated_"))
-            return Text.translatable("tooltip.infinity.key.generated")
-                    .append(s.replace("infinity:generated_", ""));
-        if (s.equals(InfinityMethods.ofRandomDim))
-            return Text.translatable("tooltip.infinity.key.randomise");
-        // All other dimensions.
-        return Text.translatableWithFallback(
-                Util.createTranslationKey("dimension", dimension),
-                InfinityMethods.fallback(dimension.getPath()));
+        if (dimension == null) return Text.translatable(Blocks.NETHER_PORTAL.getTranslationKey());
+        String name = dimension.toString();
+        MutableText text = InfinityMethods.getDimensionNameAsText(dimension);
+        if (name.contains("infinity:generated_") || name.equals(InfinityMethods.ofRandomDim))
+            return text;
+        return Text.translatable("tooltip.infinity.f4", text);
     }
 
     public static int getCharge(ItemStack f4) {
@@ -57,15 +52,11 @@ public class F4Item extends Item implements PortalDataHolder {
         return getDefaultStack();
     }
 
-    public static MutableText defaultDimensionTooltip() {
-        return Text.translatable("tooltip.infinity.f4.default");
-    }
-
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
         Identifier dimension = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
-        MutableText mutableText = (dimension != null) ? getDimensionTooltip(dimension) : defaultDimensionTooltip();
+        MutableText mutableText = getDimensionTooltip(dimension);
         tooltip.add(mutableText.formatted(Formatting.GRAY));
         MutableText mutableText2 = Text.translatable("tooltip.infinity.f4.charges", getCharge(stack));
         tooltip.add(mutableText2.formatted(Formatting.GRAY));

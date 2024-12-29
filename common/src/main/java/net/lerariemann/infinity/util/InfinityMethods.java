@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import dev.architectury.platform.Platform;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
@@ -15,8 +16,10 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.random.Random;
@@ -194,6 +197,20 @@ public interface InfinityMethods {
     
     static Identifier getRandomId(Random random) {
         return getDimId(getRandomSeed(random));
+    }
+
+    static MutableText getDimensionNameAsText(Identifier dimension) {
+        String name = dimension.toString();
+        // Randomly generated dimensions.
+        if (name.contains("infinity:generated_"))
+            return Text.translatable("tooltip.infinity.key.generated")
+                    .append(name.replace("infinity:generated_", ""));
+        if (name.equals(InfinityMethods.ofRandomDim))
+            return Text.translatable("tooltip.infinity.key.randomise");
+        // All other dimensions.
+        return Text.translatableWithFallback(
+                Util.createTranslationKey("dimension", dimension),
+                InfinityMethods.fallback(dimension.getPath()));
     }
 
     /**
