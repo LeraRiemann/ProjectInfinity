@@ -5,16 +5,20 @@ import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.screen.F4Screen;
 import net.lerariemann.infinity.util.teleport.InfinityPortal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.MutableText;
@@ -98,7 +102,7 @@ public class F4Item extends Item implements PortalDataHolder {
         }
         useCharges -= obsNotReplaced;
 
-        player.playSound(SoundEvents.BLOCK_BELL_USE, 1, 0.75f);
+        world.playSound(player, player.getBlockPos(), SoundEvents.BLOCK_BELL_USE, SoundCategory.BLOCKS, 1, 0.75f);
         stack.applyComponentsFrom(ComponentMap.builder()
                 .add(ModComponentTypes.CHARGE.get(), charges - useCharges).build());
         return stack;
@@ -106,6 +110,13 @@ public class F4Item extends Item implements PortalDataHolder {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        if (player instanceof ClientPlayerEntity clientPlayer) {
+            MinecraftClient.getInstance().setScreen(F4Screen.of(clientPlayer));
+        }
+        return TypedActionResult.success(player.getStackInHand(hand));
+    }
+
+    public static TypedActionResult<ItemStack> deploy(World world, PlayerEntity player, Hand hand) {
         Direction dir = player.getHorizontalFacing();
         Direction.Axis dir2 = dir.rotateClockwise(Direction.Axis.Y).getAxis();
         BlockPos lowerCenter = player.getBlockPos().offset(dir, 4);
@@ -128,13 +139,16 @@ public class F4Item extends Item implements PortalDataHolder {
         boolean positionFound = true;
         for (i = 0; i <= 8 && !world.isOutOfHeightLimit(lowerY + i + size_y); i++) {
             positionFound = true;
-            for (int j = 0; j <= size_y+1; j++) for (int k = -1; k <= size_x; k++) {
+            for (int j = 0; j <= size_y+1 && positionFound; j++) for (int k = -1; k <= size_x; k++) {
                 BlockState bs = world.getBlockState(lowerCenter.up(i+j-1).offset(dir2, k - (size_x /2)));
-                if (!bs.isAir() && !bs.isOf(Blocks.OBSIDIAN)) {
-                    i += j;
-                    positionFound = false;
-                    break;
+                if (bs.isReplaceable()) continue;
+                if (bs.isOf(Blocks.OBSIDIAN)) {
+                    if (j == 0 || j == size_y+1 || k == -1 || k == size_x) continue;
+                    i += j-1;
                 }
+                else i += j;
+                positionFound = false;
+                break;
             }
             if (positionFound) break;
         }
@@ -175,9 +189,8 @@ public class F4Item extends Item implements PortalDataHolder {
         //validating the place position
         for (int j = -1; j <= size_y; j++) for (int k = -1; k <= size_x; k++) {
             bs = world.getBlockState(pos.up(j).offset(dir2, k - (size_x /2)));
-            if (!bs.isAir() && !bs.isOf(Blocks.OBSIDIAN)) {
-                return ActionResult.FAIL;
-            }
+            if (bs.isOf(Blocks.OBSIDIAN) && (j == -1 || j == size_y || k == -1 || k == size_x)) continue;
+            if (!bs.isReplaceable()) return ActionResult.FAIL;
         }
 
         ItemStack newStack = placePortal(world, player, context.getStack().copy(), pos,
@@ -254,11 +267,14 @@ public class F4Item extends Item implements PortalDataHolder {
         }
         int obsidian = 0;
         for (BlockPos bp : toRemove) if (!toLeave.contains(bp)) { //double check since we're checking the corners twice
-            world.removeBlock(bp, false);
+            world.setBlockState(bp,  Blocks.AIR.getDefaultState(), 3, 0);
             obsidian++;
         }
+        for (int i = 0; i <= portal.width; i++) for (int j = -1; j <= portal.height; j++)
+            world.setBlockState(portal.lowerLeft.offset(axis, i).up(j), Blocks.AIR.getDefaultState(), 3, 0);
         stack.applyComponentsFrom(ComponentMap.builder()
                 .add(ModComponentTypes.CHARGE.get(), getCharge(stack) + obsidian).build());
+        world.playSound(null, origin, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1, 0.75f);
         return stack;
     }
 }

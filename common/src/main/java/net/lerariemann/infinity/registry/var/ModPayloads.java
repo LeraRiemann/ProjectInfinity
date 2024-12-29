@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.item.F4Item;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
@@ -22,10 +23,11 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
 
 import java.nio.file.Path;
 import java.util.Objects;
@@ -129,7 +131,7 @@ public class ModPayloads {
     }
 
     public record F4Payload(int slot, int width, int height) implements CustomPayload {
-        public static final CustomPayload.Id<F4Payload> ID = new CustomPayload.Id<>(InfinityMethods.getId("f4"));
+        public static final CustomPayload.Id<F4Payload> ID = new CustomPayload.Id<>(InfinityMethods.getId("receive_f4"));
         public static final PacketCodec<RegistryByteBuf, F4Payload> CODEC = PacketCodec.tuple(
                 PacketCodecs.VAR_INT, F4Payload::slot,
                 PacketCodecs.VAR_INT, F4Payload::width,
@@ -141,18 +143,31 @@ public class ModPayloads {
         }
     }
     public static void receiveF4(F4Payload payload, ServerPlayNetworking.Context context) {
-        try (MinecraftServer server = context.server()) {
-            server.execute(() -> {
-                ItemStack st = context.player().getInventory().getStack(payload.slot);
-                if (st.isOf(ModItems.F4.get())) {
-                    ItemStack newStack = st.copy();
-                    newStack.applyComponentsFrom(ComponentMap.builder()
-                            .add(ModComponentTypes.SIZE_X.get(), Math.clamp(payload.width, 1, 21))
-                            .add(ModComponentTypes.SIZE_Y.get(), Math.clamp(payload.height, 1, 21))
-                            .build());
-                    context.player().getInventory().setStack(payload.slot, newStack);
-                }
-            });
+        ItemStack st = context.player().getInventory().getStack(payload.slot);
+        if (st.isOf(ModItems.F4.get())) {
+            ItemStack newStack = st.copy();
+            newStack.applyComponentsFrom(ComponentMap.builder()
+                    .add(ModComponentTypes.SIZE_X.get(), Math.clamp(payload.width, 1, 21))
+                    .add(ModComponentTypes.SIZE_Y.get(), Math.clamp(payload.height, 1, 21))
+                    .build());
+            context.player().getInventory().setStack(payload.slot, newStack);
+        }
+    }
+    public record DeployF4() implements CustomPayload {
+        public static final DeployF4 INSTANCE = new DeployF4();
+        public static final CustomPayload.Id<DeployF4> ID = new CustomPayload.Id<>(InfinityMethods.getId("deploy_f4"));
+        public static final PacketCodec<RegistryByteBuf, DeployF4> CODEC = PacketCodec.unit(INSTANCE);
+        @Override
+        public CustomPayload.Id<? extends CustomPayload> getId() {
+            return ID;
+        }
+    }
+    public static void deployF4(DeployF4 payload, ServerPlayNetworking.Context context) {
+        ServerPlayerEntity player = context.player();
+        ItemStack st = player.getStackInHand(Hand.MAIN_HAND);
+        if (st.isOf(ModItems.F4.get())) {
+            TypedActionResult<ItemStack> result = F4Item.deploy(player.getServerWorld(), player, Hand.MAIN_HAND);
+            player.setStackInHand(Hand.MAIN_HAND, result.getValue());
         }
     }
 
@@ -162,7 +177,9 @@ public class ModPayloads {
         PayloadTypeRegistry.playS2C().register(ShaderRePayload.ID, ShaderRePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
         PayloadTypeRegistry.playC2S().register(F4Payload.ID, F4Payload.CODEC);
+        PayloadTypeRegistry.playC2S().register(DeployF4.ID, DeployF4.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(F4Payload.ID, ModPayloads::receiveF4);
+        ServerPlayNetworking.registerGlobalReceiver(DeployF4.ID, ModPayloads::deployF4);
     }
 
     public static void registerPayloadsClient() {

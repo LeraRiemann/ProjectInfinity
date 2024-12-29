@@ -109,7 +109,7 @@
   "item.infinity.star_of_lang": "Star of Lang",
   "item.infinity.iridescent_star": "Iridescent Star",
   "item.infinity.f4": "F4",
-  "key.infinity.f4_config": "Open F4 config menu",
+  "key.infinity.f4": "Place a Nether Portal",
   "lore.infinity.altar": "This block can be crafted by throwing a Lectern into an Infinity Portal. Using a diamond on it will play a fun animation!",
   "lore.infinity.ant": "This strange block rapidly moves, changing White Concrete to Black Concrete and back again, referencing \"Langton's ant\".",
   "lore.infinity.book_box": "This block can be found in the Infinite Library. Using it will give you a randomly generated book based on the block's position.",
