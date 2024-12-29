@@ -14,7 +14,7 @@
     "iridescenceCooldownDuration": 168
   },
   "disabledDimensions": ["ant", "bash", "checkerboard", "custom",
-    "isolation", "missing", "perfection", "terminal"],
+    "isolation", "missing", "notes", "perfection", "terminal"],
   "portalKey": "",
   "altarKey": "minecraft:diamond",
   "salt": "",
