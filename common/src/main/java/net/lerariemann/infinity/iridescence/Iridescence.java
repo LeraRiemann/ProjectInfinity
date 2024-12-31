@@ -7,7 +7,6 @@ import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.lerariemann.infinity.registry.var.ModCriteria;
-import net.lerariemann.infinity.registry.var.ModStats;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
