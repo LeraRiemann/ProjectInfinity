@@ -148,7 +148,14 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
         this.dataTracker.set(effect, c);
     }
     public String getEffectRaw() {
-        return this.dataTracker.get(effect);
+        var dataEffect = this.dataTracker.get(effect);
+        if (dataEffect.isBlank()) {
+            Random r = new Random();
+            NbtCompound newEffect = InfinityMod.provider.randomElement(r, "effects");
+            this.setEffectRaw(newEffect.getString("Name"));
+            return newEffect.getString("Name");
+        }
+        return dataEffect;
     }
     public void setColorRaw(int c) {
         this.dataTracker.set(color, c);
