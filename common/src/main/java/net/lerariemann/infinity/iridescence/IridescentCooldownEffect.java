@@ -16,7 +16,7 @@ public class IridescentCooldownEffect extends StatusEffect {
         int cooldownDuration = Iridescence.getCooldownDuration();
         if (cooldownDuration > 0)
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
-                    cooldownDuration, 0, false, false, false));
+                    cooldownDuration, 0, true, false));
         return true;
     }
 

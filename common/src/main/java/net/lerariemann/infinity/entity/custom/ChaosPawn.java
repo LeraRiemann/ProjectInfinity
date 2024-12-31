@@ -52,7 +52,7 @@ public class ChaosPawn extends AbstractChessFigure {
         return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0)
                 .add(EntityAttributes.GENERIC_SCALE, 0.9)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.6F);
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25F);
     }
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {

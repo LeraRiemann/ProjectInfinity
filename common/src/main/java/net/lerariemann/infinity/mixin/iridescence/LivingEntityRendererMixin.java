@@ -15,7 +15,7 @@ public class LivingEntityRendererMixin {
     @Inject(method = "isShaking", at = @At("RETURN"), cancellable = true)
     void inj(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof MobEntity ent && Iridescence.isConvertible(ent)) {
-            cir.setReturnValue(cir.getReturnValue() || ent.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT));
+            cir.setReturnValue(cir.getReturnValue() || Iridescence.isUnderEffect(ent));
         }
     }
 }

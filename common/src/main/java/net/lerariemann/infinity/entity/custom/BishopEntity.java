@@ -25,7 +25,7 @@ public class BishopEntity extends AbstractChessFigure {
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 150);
     }
     @Override

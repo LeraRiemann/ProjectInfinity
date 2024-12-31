@@ -52,9 +52,9 @@ import java.util.Map;
 import java.util.Random;
 
 public interface Iridescence {
-    Identifier TEXTURE = Identifier.of("minecraft:block/water_still");
-    Identifier FLOWING_TEXTURE = Identifier.of("minecraft:block/water_flow");
-    Identifier OVERLAY_TEXTURE = Identifier.of("minecraft:block/water_overlay");
+    Identifier TEXTURE = InfinityMethods.getId("block/iridescence");
+    Identifier FLOWING_TEXTURE = InfinityMethods.getId("block/iridescence");
+    Identifier OVERLAY_TEXTURE = InfinityMethods.getId("block/iridescence_overlay");
     DoublePerlinNoiseSampler sampler =
             DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, genOctaves(2));
 
@@ -171,14 +171,13 @@ public interface Iridescence {
         int amplifier1 = Iridescence.getAmplifierOnApply(entity, amplifier);
         if (amplifier1 >= 0) {
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
-                    Iridescence.getEffectLength(amplifier1), amplifier1));
+                    Iridescence.getEffectLength(amplifier1), amplifier1, true, true));
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
             int cooldownDuration = Iridescence.getCooldownDuration();
             if (cooldownDuration > 0)
                 entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
-                        cooldownDuration, amplifier1 > 0 ? 1 : 0, false, false, false));
+                        cooldownDuration, amplifier1 > 0 ? 1 : 0, true, false));
             if (entity instanceof ServerPlayerEntity player) {
-                player.increaseStat(ModStats.IRIDESCENCE, 1);
                 ModCriteria.IRIDESCENT.get().trigger(player);
             }
         }
@@ -230,7 +229,8 @@ public interface Iridescence {
                 ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0,
                         true, false));
             else if (isConvertible(ent))
-                ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0));
+                ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0,
+                        true, true));
         }
     }
 
