@@ -1,7 +1,5 @@
 package net.lerariemann.infinity.util.teleport;
 
-import com.google.common.collect.Queues;
-import com.google.common.collect.Sets;
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
@@ -40,6 +38,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockLocating;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -192,47 +191,33 @@ public interface PortalCreator {
         modifyPortalRecursive(world, pos, new PortalModifier(consumer));
     }
     static void modifyPortalRecursive(ServerWorld world, BlockPos pos, BiConsumer<World, BlockPos> modifier) {
-        Set<BlockPos> set = Sets.newHashSet();
-        Queue<BlockPos> queue = Queues.newArrayDeque();
-        queue.add(pos);
-        BlockPos blockPos;
         Direction.Axis axis = world.getBlockState(pos).get(NetherPortalBlock.AXIS);
-        Set<Direction> toCheck = (axis == Direction.Axis.Z) ?
-                Set.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH) :
-                Set.of(Direction.UP, Direction.DOWN, Direction.EAST, Direction.WEST);
-        while ((blockPos = queue.poll()) != null) {
-            set.add(blockPos);
-            BlockState blockState = world.getBlockState(blockPos);
-            if (blockState.getBlock() instanceof NetherPortalBlock || blockState.getBlock() instanceof InfinityPortalBlock) {
-                modifier.accept(world, blockPos);
-                BlockPos blockPos2;
-                for (Direction dir : toCheck) {
-                    blockPos2 = blockPos.offset(dir);
-                    if (!set.contains(blockPos2))
-                        queue.add(blockPos2);
-                }
-            }
+        BlockLocating.Rectangle rect = BlockLocating.getLargestRectangle(pos, axis, 21,
+                Direction.Axis.Y, 21, posx -> world.getBlockState(posx).getBlock() instanceof NetherPortalBlock);
+        for (int i = 0; i < rect.width; i++) for (int j = 0; j < rect.height; j++) {
+            BlockPos blockPos = rect.lowerLeft.up(j).offset(axis, i);
+            modifier.accept(world, blockPos);
         }
     }
 
-    static Consumer<BlockPos> infPortalSetupper(ServerWorld world, BlockPos pos, boolean boop) {
+    static Consumer<BlockPos> infPortalSetupper(ServerWorld world, BlockPos pos) {
         BlockState originalState = world.getBlockState(pos);
         BlockState state = ModBlocks.PORTAL.get().getDefaultState()
                 .with(NetherPortalBlock.AXIS, originalState.get(NetherPortalBlock.AXIS))
-                .with(InfinityPortalBlock.BOOP, boop);
-        return p -> world.setBlockState(p, state);
+                .with(InfinityPortalBlock.BOOP, !Boopable.getBoop(world.getBlockState(pos)));
+        return p -> world.setBlockState(p, state, 3, 1);
     }
 
     static PortalModifierUnion forInitialSetupping(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
-        BlockState bs = world.getBlockState(pos);
-        boolean boop = !Boopable.getBoop(bs);
         PortalColorApplier applier = PortalColorApplier.of(id, world.getServer());
         return new PortalModifierUnion()
-                .addSetupper(infPortalSetupper(world, pos, boop))
-                .addModifier(nbpe -> nbpe.setDimension(id))
-                .addModifier(npbe -> npbe.setColor(applier.apply(npbe.getPos())))
-                .addModifier(npbe -> npbe.setOpen(open))
-                .addModifier(BlockEntity::markDirty);
+                .addSetupper(infPortalSetupper(world, pos))
+                .addModifier(npbe -> {
+                    npbe.setDimension(id);
+                    npbe.setColor(applier.apply(npbe.getPos()));
+                    npbe.setOpen(open);
+                    npbe.markDirty();
+                });
     }
 
     /**

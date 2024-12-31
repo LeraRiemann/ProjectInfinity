@@ -12,7 +12,7 @@ architectury {
 
 allprojects {
     group = maven_group
-    version = "$mod_version+$minecraft_version"
+    version = "$mod_version+$minecraft_version-tb3"
 }
 
 forgix {

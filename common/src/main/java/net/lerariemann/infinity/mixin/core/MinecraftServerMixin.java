@@ -81,7 +81,7 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
         infinity$worldsToAdd = new HashMap<>();
         infinity$needsInvocation = !Files.exists(InfinityMod.invocationLock);
         InfinityMod.LOGGER.info("Invocation {}", infinity$needsInvocation ? "needed..." : "not needed");
-        infinity$setDimensionProvider();
+        if (!infinity$needsInvocation) infinity$setDimensionProvider();
     }
     @Override
     public boolean infinity$needsInvocation() {return infinity$needsInvocation;}
