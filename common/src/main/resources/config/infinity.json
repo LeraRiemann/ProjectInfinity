@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2003009,
+  "infinity_version": 2003010,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "longArithmeticEnabled": false,
@@ -10,13 +10,13 @@
     "pawnsCanDropIllegalItems": false,
     "maxBiomeCount": 6,
     "maxDimensionScale": 0,
-    "iridescenceInitialDuration": 1,
-    "iridescenceCooldownDuration": 168
+    "iridescenceInitialDuration": 30,
+    "iridescenceCooldownDuration": 168,
+    "afterglowDuration": 24
   },
   "disabledDimensions": ["ant", "bash", "checkerboard", "custom",
     "isolation", "missing", "notes", "perfection", "terminal"],
   "portalKey": "",
-  "altarKey": "minecraft:diamond",
   "salt": "",
   "rootChances": {
     "dimension_type": {

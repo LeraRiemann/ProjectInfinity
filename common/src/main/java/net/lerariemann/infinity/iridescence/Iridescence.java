@@ -7,6 +7,7 @@ import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.lerariemann.infinity.registry.var.ModCriteria;
+import net.lerariemann.infinity.registry.var.ModStats;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
@@ -120,14 +121,26 @@ public interface Iridescence {
 
     int ticksInHour = 1200;
 
-    static int getEffectLength(int amplifier) {
-        return ticksInHour * (3 + 2*amplifier);
+    static int getOnsetLength() {
+        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceInitialDuration") / 60; //default is 30 seconds
+    }
+    static int getEffectLength(int amplifier) { //amplifier is 0 to 4
+        return getComeupLength() + getPeakLength(amplifier) + getOffsetLength(); //8 to 12 minutes
+    }
+    static int getComeupLength() {
+        return ticksInHour;
+    }
+    static int getPeakLength(int amplifier) {
+        return ticksInHour * (4 + amplifier);
+    }
+    static int getOffsetLength() {
+        return ticksInHour * 3;
+    }
+    static int getAfterglowDuration() {
+        return ticksInHour * InfinityMod.provider.ruleInt("afterglowDuration"); //default is 24 minutes
     }
     static int getCooldownDuration() {
-        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceCooldownDuration");
-    }
-    static int getInitialPhaseLength() {
-        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceInitialDuration");
+        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceCooldownDuration"); //default is 7*24 minutes
     }
 
     static Phase getPhase(LivingEntity entity) {
@@ -136,9 +149,9 @@ public interface Iridescence {
         return getPhase(effect.getDuration(), effect.getAmplifier());
     }
     static Phase getPhase(int duration, int amplifier) {
-        int time_passed = getEffectLength(amplifier) - getInitialPhaseLength() - duration;
+        int time_passed = getEffectLength(amplifier) - duration;
         if (time_passed < 0) return Phase.INITIAL;
-        return (time_passed < ticksInHour) ? Phase.UPWARDS : (duration <= ticksInHour || amplifier == 0) ? Phase.DOWNWARDS : Phase.PLATEAU;
+        return (time_passed < getComeupLength()) ? Phase.UPWARDS : (duration <= getOffsetLength() || amplifier == 0) ? Phase.DOWNWARDS : Phase.PLATEAU;
     }
 
     static boolean shouldWarp(int duration, int amplifier) {
@@ -148,7 +161,7 @@ public interface Iridescence {
         return (amplifier > 0) && (duration == ticksInHour);
     }
     static boolean shouldRequestShaderLoad(int duration, int amplifier) {
-        int time_passed = getEffectLength(amplifier) - getInitialPhaseLength() - duration;
+        int time_passed = getEffectLength(amplifier) - duration;
         return (time_passed == 0);
     }
 
@@ -167,15 +180,16 @@ public interface Iridescence {
     }
 
     static void tryBeginJourney(LivingEntity entity, int amplifier) {
-        int amplifier1 = Iridescence.getAmplifierOnApply(entity, amplifier);
-        if (amplifier1 >= 0) {
+        amplifier = Iridescence.getAmplifierOnApply(entity, amplifier);
+        if (amplifier >= 0) {
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
-                    Iridescence.getEffectLength(amplifier1), amplifier1, true, true));
+                    Iridescence.getEffectLength(amplifier) + Iridescence.getOnsetLength(),
+                    amplifier, true, true));
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
             int cooldownDuration = Iridescence.getCooldownDuration();
             if (cooldownDuration > 0)
                 entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
-                        cooldownDuration, amplifier1 > 0 ? 1 : 0, true, false));
+                        cooldownDuration, amplifier > 0 ? 1 : 0, true, false));
             if (entity instanceof ServerPlayerEntity player) {
                 ModCriteria.IRIDESCENT.get().trigger(player);
             }
@@ -191,8 +205,14 @@ public interface Iridescence {
         CommonIO.write(compound, InfinityMod.provider.savingPath, player.getUuidAsString() + ".json");
     }
 
-    static void endJourney(ServerPlayerEntity player) {
+    static void endJourney(ServerPlayerEntity player, boolean isEarlyCancel, int amplifier) {
         player.setInvulnerable(false);
+        if (!isEarlyCancel) {
+            player.increaseStat(ModStats.IRIDESCENCE, 1);
+            if (amplifier != 0)
+                player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW,
+                        getAfterglowDuration(), 0, true, true));
+        }
         Path cookie = InfinityMod.provider.savingPath.resolve(player.getUuidAsString() + ".json");
         try {
             NbtCompound comp = CommonIO.read(cookie);

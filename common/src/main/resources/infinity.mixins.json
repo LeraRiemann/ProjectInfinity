@@ -29,6 +29,7 @@
     "iridescence.LandPathNodeMakerMixin",
     "iridescence.MobNavigationMixin",
     "iridescence.StatusEffectInstanceMixin",
+    "iridescence.StatusEffectUtilMixin",
     "mobs.CreeperEntityMixin",
     "mobs.LivingEntityMixin",
     "mobs.SheepEntityMixin",

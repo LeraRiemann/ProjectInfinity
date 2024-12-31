@@ -23,13 +23,13 @@ import static net.lerariemann.infinity.InfinityMod.configPath;
 public class RandomProvider {
     public Map<String, WeighedStructure<String>> registry = new HashMap<>();
     public Map<String, WeighedStructure<NbtElement>> compoundRegistry = new HashMap<>();
-    public Map<String, Double> rootChances = new HashMap<>();
-    public Map<String, Boolean> gameRules = new HashMap<>();
-    public Map<String, Integer> gameRulesInt = new HashMap<>();
+    private final Map<String, Double> rootChances = new HashMap<>();
+    private final Map<String, Boolean> gameRules = new HashMap<>();
+    private final Map<String, Integer> gameRulesInt = new HashMap<>();
+    private final Map<String, Double> gameRulesDouble = new HashMap<>();
     public ArrayList<String> disabledDimensions = new ArrayList<>();
     public Path savingPath;
-    public String portalKey;
-    public String altarKey;
+    private String portalKey;
     public String salt;
     public Easterizer easterizer;
 
@@ -54,7 +54,8 @@ public class RandomProvider {
         return gameRules.getOrDefault(key, false);
     }
     public int ruleInt(String key) {
-        return gameRulesInt.get(key);
+        if (gameRulesInt.containsKey(key)) return gameRulesInt.get(key);
+        return (gameRulesDouble.get(key)).intValue();
     }
 
     public String randomName(Random random, String key) {
@@ -123,13 +124,13 @@ public class RandomProvider {
     void readRootConfig() {
         NbtCompound rootConfig = CommonIO.read(configPath.resolve("infinity.json"));
         portalKey = rootConfig.getString("portalKey");
-        altarKey = rootConfig.getString("altarKey");
         salt = rootConfig.getString("salt");
         NbtCompound gamerules = rootConfig.getCompound("gameRules");
         for (String s: gamerules.getKeys()) {
             NbtElement elem = gamerules.get(s);
             if (elem!=null) {
-                if (elem.getType() == 3) gameRulesInt.put(s, gamerules.getInt(s));
+                if (elem.getType() == NbtElement.INT_TYPE) gameRulesInt.put(s, gamerules.getInt(s));
+                if (elem.getType() == NbtElement.DOUBLE_TYPE) gameRulesDouble.put(s, gamerules.getDouble(s));
                 else gameRules.put(s, gamerules.getBoolean(s));
             }
         }
@@ -144,7 +145,6 @@ public class RandomProvider {
         for (NbtElement jsonElement : disableddimensions) {
             disabledDimensions.add(jsonElement.asString());
         }
-
     }
 
     void extractBlocks() {

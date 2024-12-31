@@ -271,18 +271,21 @@ public class RandomDimension {
         });
     }
 
+    int getBiomeCount() {
+        return random.nextInt(2, Math.clamp(PROVIDER.ruleInt("maxBiomeCount"), 2, 10));
+    }
+
     NbtList randomBiomesCheckerboard() {
         NbtList res = new NbtList();
-        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.ruleInt("maxBiomeCount")));
+        int biome_count = getBiomeCount();
         for (int i = 0; i < biome_count; i++) {
             res.add(NbtString.of(randomBiome()));
         }
         return res;
     }
-
     NbtList randomBiomes() {
         NbtList res = new NbtList();
-        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.ruleInt("maxBiomeCount")));
+        int biome_count = getBiomeCount();
         for (int i = 0; i < biome_count; i++) {
             NbtCompound element = new NbtCompound();
             element.putString("biome", randomBiome());

@@ -15,11 +15,13 @@ public class ModEffectsNeoforge {
 
     public static void register(IEventBus eventBus) {
         ModStatusEffects.IRIDESCENT_EFFECT = EFFECTS.register("iridescence",
-                () -> new IridescentEffect(StatusEffectCategory.NEUTRAL, 0xFF00FF)).getDelegate();
+                () -> new IridescentEffect(StatusEffectCategory.NEUTRAL, 0xFF66FF)).getDelegate();
         ModStatusEffects.IRIDESCENT_SETUP = EFFECTS.register("iridescent_setup",
                 () -> new IridescentEffect.Setup(StatusEffectCategory.NEUTRAL, 0xFF00FF)).getDelegate();
         ModStatusEffects.IRIDESCENT_COOLDOWN = EFFECTS.register("iridescent_cooldown",
                 () -> new IridescentCooldownEffect(StatusEffectCategory.NEUTRAL, 0x884488)).getDelegate();
+        ModStatusEffects.AFTERGLOW = EFFECTS.register("afterglow",
+                ModStatusEffects::getAfterglowInstanceForReg).getDelegate();
         EFFECTS.register(eventBus);
     }
 }

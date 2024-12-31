@@ -27,14 +27,14 @@ public interface ShaderLoader {
 
     static void reloadShaders(MinecraftClient client, boolean bl, boolean iridescence) {
         if (client.world == null) return;
+        if (iridescence) {
+            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMethods.getId("shaders/post/iridescence.json"));
+            return;
+        }
         try {
             load(client);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-        if (iridescence) {
-            ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMethods.getId("shaders/post/iridescence.json"));
-            return;
         }
         if(bl && shaderDir(client).resolve(FILENAME).toFile().exists()) {
             ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMethods.getId("shaders/" + FILENAME));

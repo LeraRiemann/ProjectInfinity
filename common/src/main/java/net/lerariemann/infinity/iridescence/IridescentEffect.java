@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.iridescence;
 
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.registry.var.ModStats;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.minecraft.entity.LivingEntity;
@@ -43,7 +42,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         switch (entity) {
             case ServerPlayerEntity player -> {
                 unloadShader(player);
-                if (player.isInvulnerable()) endJourney(player);
+                if (player.isInvulnerable()) endJourney(player, true, 0);
             }
             case ChaosPawn pawn -> {
                 if (pawn.getRandom().nextBoolean()) {
@@ -69,8 +68,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
                 WarpLogic.requestWarp(player, id, false);
             }
             if (shouldReturn(duration, amplifier)) {
-                player.increaseStat(ModStats.IRIDESCENCE, 1);
-                endJourney(player);
+                endJourney(player, false, amplifier);
             }
             if (shouldRequestShaderLoad(duration, amplifier))
                 loadShader(player);
