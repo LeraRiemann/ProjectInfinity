@@ -72,6 +72,10 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             }
             if (shouldRequestShaderLoad(duration, amplifier))
                 loadShader(player);
+            if (amplifier == 0 && duration == 2) {
+                player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW,
+                        getAfterglowDuration() / 2, 0, true, true));
+            }
         }
     }
 

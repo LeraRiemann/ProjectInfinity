@@ -104,7 +104,8 @@ public class ModItems {
             registerItemAfter("f4", ItemGroups.OPERATOR, Items.DEBUG_STICK, F4Item::new,
                     new Item.Settings().rarity(Rarity.UNCOMMON));
     public static final RegistrySupplier<Item> DISC =
-            registerItemAfter("disc", ItemGroups.TOOLS, Items.MUSIC_DISC_PIGSTEP, Item::new);
+            registerItemAfter("disc", ItemGroups.TOOLS, Items.MUSIC_DISC_PIGSTEP, Item::new,
+                    new Item.Settings().rarity(Rarity.RARE));
     public static TagKey<Item> IRIDESCENT_TAG = createItemTag("iridescent");
     public static TagKey<Item> MATTER_TAG = createItemTag("matter");
 
