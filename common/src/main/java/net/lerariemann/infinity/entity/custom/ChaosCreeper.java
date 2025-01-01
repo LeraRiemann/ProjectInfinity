@@ -26,6 +26,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryPair;
+import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -154,7 +155,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
 
     @Override
     protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
-        if (source.getAttacker() instanceof AbstractSkeletonEntity) {
+        if (source.getAttacker() != null && source.getAttacker().getType().isIn(EntityTypeTags.SKELETONS)) {
             ItemStack stack = ModItems.DISC.get().getDefaultStack();
             Identifier song = Identifier.of(InfinityMod.provider.randomName(world.random, "jukeboxes"));
             stack.applyComponentsFrom(ComponentMap.builder()
