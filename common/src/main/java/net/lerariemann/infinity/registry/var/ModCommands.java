@@ -4,11 +4,15 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
+import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.config.SoundScanner;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.command.argument.DimensionArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+
+import java.util.Set;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -52,10 +56,16 @@ public class ModCommands {
                                 })
                 )
         ));
-
         CommandRegistrationEvent.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("respawn")
                 .requires(source -> source.hasPermissionLevel(2)).executes(context -> {
                     WarpLogic.respawnAlive(context.getSource().getPlayer());
+                    return 1;
+                })));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("debug_list_sounds")
+                .requires(source -> source.hasPermissionLevel(2)).executes(context -> {
+                    Set<Identifier> allSoundIDs = SoundScanner.getLoadedIds();
+                    context.getSource().sendMessage(Text.literal("Found " + allSoundIDs.size() + " sound IDs"));
+                    allSoundIDs.forEach(id -> InfinityMod.LOGGER.info(id.toString()));
                     return 1;
                 })));
     }

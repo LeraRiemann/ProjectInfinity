@@ -45,6 +45,7 @@
     "qol.LavaFluidMixin"
   ],
   "client": [
+    "SoundListMixin",
     "iridescence.LivingEntityRendererMixin",
     "iridescence.PostEffectProcessorMixin",
     "options.BackgroundRendererMixin",
