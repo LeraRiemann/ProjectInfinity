@@ -2,13 +2,13 @@
   "music.ivory.hope_instilled": {
     "subtitle": "subtitles.music.ivory.hope_instilled",
     "sounds": [
-      "infinity:ivory_hope_instilled"
+      "ivory:music/hope_instilled"
     ]
   },
   "music.ivory.challenger": {
     "subtitle": "subtitles.music.ivory.challenger",
     "sounds": [
-      "infinity:ivory_challenger"
+      "ivory:music/challenger"
     ]
   },
   "music.c418.classic": {

@@ -19,6 +19,6 @@ public class SoundListMixin {
     @Inject(method = "findSounds(Lnet/minecraft/resource/ResourceManager;)V",
     at = @At("RETURN"))
     void inj(ResourceManager resourceManager, CallbackInfo ci) {
-        SoundScanner.instance = new SoundScanner(foundSounds.keySet());
+        SoundScanner.instance = new SoundScanner(foundSounds);
     }
 }

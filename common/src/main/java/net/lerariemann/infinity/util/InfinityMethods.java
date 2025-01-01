@@ -3,7 +3,6 @@ package net.lerariemann.infinity.util;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import dev.architectury.platform.Platform;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
@@ -210,15 +209,15 @@ public interface InfinityMethods {
         // All other dimensions.
         return Text.translatableWithFallback(
                 Util.createTranslationKey("dimension", dimension),
-                InfinityMethods.fallback(dimension.getPath()));
+                InfinityMethods.formatAsTitleCase(dimension.getPath()));
     }
 
     /**
     * Creates a fallback for texts without translation by replacing underscores
      * with spaces and formatting the text as Title Case.
      */
-    static String fallback(String text) {
-        text = text.replace("_", " ");
+    static String formatAsTitleCase(String text) {
+        text = text.replaceAll("[_./]", " ");
         //i am sure java has a smarter way to do title case, but this works too
         StringBuilder newText = new StringBuilder();
         int i = 0;

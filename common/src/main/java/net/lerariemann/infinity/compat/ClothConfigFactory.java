@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.InfinityMod.rootConfigPathInJar;
-import static net.lerariemann.infinity.util.InfinityMethods.fallback;
+import static net.lerariemann.infinity.util.InfinityMethods.formatAsTitleCase;
 import static net.minecraft.client.resource.language.I18n.hasTranslation;
 
 public class ClothConfigFactory {
@@ -176,7 +176,7 @@ public class ClothConfigFactory {
         for (String name : sorted.toList()) {
             var defaultsDisabled = isEasterEggDisabled(defaultConfig, name);
             easterCategory.addEntry(builder.entryBuilder().startBooleanToggle(
-                    Text.of(InfinityMethods.fallback(name)), isEasterEggDisabled(currentConfig, name))
+                    Text.of(InfinityMethods.formatAsTitleCase(name)), isEasterEggDisabled(currentConfig, name))
                     .setSaveConsumer(newValue -> easterSetter(name, newValue))
                     .setTooltip(easterTooltip(defaultsDisabled))
                     .setDefaultValue(defaultsDisabled).build());
@@ -226,7 +226,7 @@ public class ClothConfigFactory {
             category = "";
         }
         else category = category + ".";
-        return Text.translatableWithFallback("config."+MOD_ID + "." + category + field.getKey(), fallback(field.getKey()));
+        return Text.translatableWithFallback("config."+MOD_ID + "." + category + field.getKey(), formatAsTitleCase(field.getKey()));
     }
 
     static Optional<Text[]> easterTooltip(boolean enabled) {
