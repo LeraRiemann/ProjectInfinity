@@ -35,22 +35,20 @@ public class DimensionGrabber {
         registryInfoGetter = getGetter(entries);
     }
 
-
-
     public DimensionOptions grab_all(RandomDimension d) {
         Path rootdir = Paths.get(d.getStoragePath());
-        buildGrabber(ConfiguredFeature.CODEC, RegistryKeys.CONFIGURED_FEATURE).grab_all(rootdir.resolve("worldgen/configured_feature"));
-        buildGrabber(PlacedFeature.CODEC, RegistryKeys.PLACED_FEATURE).grab_all(rootdir.resolve("worldgen/placed_feature"), true);
-        buildGrabber(ConfiguredCarver.CODEC, RegistryKeys.CONFIGURED_CARVER).grab_all(rootdir.resolve("worldgen/configured_carver"));
-        buildGrabber(Biome.CODEC, RegistryKeys.BIOME).grab_all(rootdir.resolve("worldgen/biome"));
-        buildGrabber(Structure.STRUCTURE_CODEC, RegistryKeys.STRUCTURE).grab_all(rootdir.resolve("worldgen/structure"));
-        buildGrabber(StructureSet.CODEC, RegistryKeys.STRUCTURE_SET).grab_all(rootdir.resolve("worldgen/structure_set"));
-        buildGrabber(ChunkGeneratorSettings.CODEC, RegistryKeys.CHUNK_GENERATOR_SETTINGS).grab_all(rootdir.resolve("worldgen/noise_settings"));
-        buildGrabber(DimensionType.CODEC, RegistryKeys.DIMENSION_TYPE).grab_all(rootdir.resolve("dimension_type"));
+        buildGrabber(ConfiguredFeature.CODEC, RegistryKeys.CONFIGURED_FEATURE).grabAll(rootdir.resolve("worldgen/configured_feature"));
+        buildGrabber(PlacedFeature.CODEC, RegistryKeys.PLACED_FEATURE).grabAll(rootdir.resolve("worldgen/placed_feature"), true);
+        buildGrabber(ConfiguredCarver.CODEC, RegistryKeys.CONFIGURED_CARVER).grabAll(rootdir.resolve("worldgen/configured_carver"));
+        buildGrabber(Biome.CODEC, RegistryKeys.BIOME).grabAll(rootdir.resolve("worldgen/biome"));
+        buildGrabber(Structure.STRUCTURE_CODEC, RegistryKeys.STRUCTURE).grabAll(rootdir.resolve("worldgen/structure"));
+        buildGrabber(StructureSet.CODEC, RegistryKeys.STRUCTURE_SET).grabAll(rootdir.resolve("worldgen/structure_set"));
+        buildGrabber(ChunkGeneratorSettings.CODEC, RegistryKeys.CHUNK_GENERATOR_SETTINGS).grabAll(rootdir.resolve("worldgen/noise_settings"));
+        buildGrabber(DimensionType.CODEC, RegistryKeys.DIMENSION_TYPE).grabAll(rootdir.resolve("dimension_type"));
         return grab_dimension(rootdir, d.getName());
     }
 
-    <T> JsonGrabber<T> buildGrabber(Codec<T> codec, RegistryKey<Registry<T>> key) {
+    public <T> JsonGrabber<T> buildGrabber(Codec<T> codec, RegistryKey<Registry<T>> key) {
         return (new JsonGrabber<>(registryInfoGetter, codec, (MutableRegistry<T>) (baseRegistryManager.get(key))));
     }
 
@@ -72,7 +70,7 @@ public class DimensionGrabber {
         return ret;
     }
 
-    void close() {
+    public void close() {
         baseRegistryManager.streamAllRegistries().forEach((entry) -> entry.value().freeze());
     }
 

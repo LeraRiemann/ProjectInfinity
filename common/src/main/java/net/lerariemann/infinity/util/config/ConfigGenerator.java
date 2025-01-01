@@ -54,6 +54,7 @@ public interface ConfigGenerator {
         generateBlockTags();
         SurfaceRuleScanner.scan(server);
         DynamicRegistryManager manager = server.getRegistryManager();
+        ConfigFactory.of(manager.get(RegistryKeys.JUKEBOX_SONG)).generate("misc", "jukeboxes");
         ConfigFactory.of(manager.get(RegistryKeys.BIOME), ConfigGenerator::extractBiome).generate("extra", "biomes");
         ConfigFactory.of(manager.get(RegistryKeys.STRUCTURE), ConfigGenerator::extractStructure).generate("extra", "structures");
         ConfigFactory.of(manager.get(RegistryKeys.CONFIGURED_FEATURE), ConfigGenerator::extractFeature).generate("extra", "trees");

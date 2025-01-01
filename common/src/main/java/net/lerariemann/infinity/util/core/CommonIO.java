@@ -69,10 +69,13 @@ public interface CommonIO {
     static NbtCompound read(File file) {
         String content;
         try {
-            content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            NbtCompound c = StringNbtReader.parse(content);
-            c.remove("infinity_version");
-            return c;
+            if (file.exists()) {
+                content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+                NbtCompound c = StringNbtReader.parse(content);
+                c.remove("infinity_version");
+                return c;
+            }
+            return new NbtCompound();
         } catch (IOException | CommandSyntaxException e) {
             throw new RuntimeException(e);
         }

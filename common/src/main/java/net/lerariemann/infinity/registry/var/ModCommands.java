@@ -4,13 +4,11 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
-import net.lerariemann.infinity.util.config.SoundScanner;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.command.argument.DimensionArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.WorldSavePath;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -58,17 +56,6 @@ public class ModCommands {
                 .requires(source -> source.hasPermissionLevel(2)).executes(context -> {
                     WarpLogic.respawnAlive(context.getSource().getPlayer());
                     return 1;
-                })));
-        CommandRegistrationEvent.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("debug_list_sounds")
-                .requires(source -> source.hasPermissionLevel(2)).executes(context -> {
-                    boolean bl = SoundScanner.save(context.getSource().getServer().getSavePath(WorldSavePath.DATAPACKS).getParent());
-                    if (bl) {
-                        context.getSource().sendMessage(Text.literal("Saved " + SoundScanner.getMatchingLoadedIds().count()
-                                + " music IDs out of " + SoundScanner.getLoadedIds().size() + " sound IDs"));
-                        return 1;
-                    }
-                    context.getSource().sendError(Text.literal("Sound IDs are not preloaded yet"));
-                    return 0;
                 })));
     }
 }

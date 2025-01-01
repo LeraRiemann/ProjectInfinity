@@ -10,6 +10,7 @@ import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.item.F4Item;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.util.config.SoundScanner;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -23,6 +24,7 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
@@ -37,6 +39,10 @@ public class ModPayloads {
     public static MinecraftClient client(Object context) {
         ClientPlayNetworking.Context clientContext = (ClientPlayNetworking.Context) context;
         return clientContext.client();
+    }
+    public static MinecraftServer server(Object context) {
+        ServerPlayNetworking.Context serverContext = (ServerPlayNetworking.Context) context;
+        return serverContext.server();
     }
 
     public record WorldAddPayload(Identifier world_id, NbtCompound world_data) implements CustomPayload {
@@ -171,15 +177,39 @@ public class ModPayloads {
         }
     }
 
+    public record DownloadSoundPack(NbtCompound songIds) implements CustomPayload {
+        public static final CustomPayload.Id<DownloadSoundPack> ID = new CustomPayload.Id<>(InfinityMethods.getId("download_sound_pack"));
+        public static final PacketCodec<RegistryByteBuf, DownloadSoundPack> CODEC = PacketCodec.tuple(
+                PacketCodecs.NBT_COMPOUND, DownloadSoundPack::songIds, DownloadSoundPack::new);
+
+        @Override
+        public CustomPayload.Id<? extends CustomPayload> getId() {
+            return ID;
+        }
+    }
+    public record UploadJukeboxes(NbtCompound data) implements CustomPayload {
+        public static final CustomPayload.Id<UploadJukeboxes> ID = new CustomPayload.Id<>(InfinityMethods.getId("upload_jukeboxes"));
+        public static final PacketCodec<RegistryByteBuf, UploadJukeboxes> CODEC = PacketCodec.tuple(
+                PacketCodecs.NBT_COMPOUND, UploadJukeboxes::data, UploadJukeboxes::new);
+        @Override
+        public CustomPayload.Id<? extends CustomPayload> getId() {
+            return ID;
+        }
+    }
+
     public static void registerPayloadsServer() {
         PayloadTypeRegistry.playS2C().register(WorldAddPayload.ID, WorldAddPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(BiomeAddPayload.ID, BiomeAddPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ShaderRePayload.ID, ShaderRePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
+        PayloadTypeRegistry.playS2C().register(DownloadSoundPack.ID, DownloadSoundPack.CODEC);
+
         PayloadTypeRegistry.playC2S().register(F4Payload.ID, F4Payload.CODEC);
         PayloadTypeRegistry.playC2S().register(DeployF4.ID, DeployF4.CODEC);
+        PayloadTypeRegistry.playC2S().register(UploadJukeboxes.ID, UploadJukeboxes.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(F4Payload.ID, ModPayloads::receiveF4);
         ServerPlayNetworking.registerGlobalReceiver(DeployF4.ID, ModPayloads::deployF4);
+        ServerPlayNetworking.registerGlobalReceiver(UploadJukeboxes.ID, SoundScanner::unpackUploadedJukeboxes);
     }
 
     public static void registerPayloadsClient() {
@@ -187,5 +217,6 @@ public class ModPayloads {
         ClientPlayNetworking.registerGlobalReceiver(BiomeAddPayload.ID, ModPayloads::addBiome);
         ClientPlayNetworking.registerGlobalReceiver(ShaderRePayload.ID, ModPayloads::receiveShader);
         ClientPlayNetworking.registerGlobalReceiver(StarsRePayLoad.ID, ModPayloads::receiveStars);
+        ClientPlayNetworking.registerGlobalReceiver(DownloadSoundPack.ID, SoundScanner::unpackDownloadedPack);
     }
 }

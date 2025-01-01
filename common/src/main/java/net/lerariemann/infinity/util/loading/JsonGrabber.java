@@ -33,11 +33,11 @@ public class JsonGrabber<E> {
         registryInfoGetter = get;
     }
 
-    void grab_all(Path rootdir) {
-        grab_all(rootdir, false);
+    public void grabAll(Path rootdir) {
+        grabAll(rootdir, false);
     }
 
-    void grab_all(Path rootdir, boolean bl) {
+    void grabAll(Path rootdir, boolean bl) {
         if(!rootdir.toFile().exists()) return;
         try (Stream<Path> files = walk(rootdir)) {
             files.forEach(a -> grab(a, bl));
