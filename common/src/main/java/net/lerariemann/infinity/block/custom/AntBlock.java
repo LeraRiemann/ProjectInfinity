@@ -29,7 +29,7 @@ public class AntBlock extends HorizontalFacingBlock {
         return CODEC;
     }
 
-    public static boolean inverseExists(Block down) {
+    private static boolean inverseExists(Block down) {
         var s = Registries.BLOCK.getEntry(down).getIdAsString();
         var state = down.getDefaultState();
         if (PlatformMethods.isInBlack(state)) {
@@ -39,6 +39,9 @@ public class AntBlock extends HorizontalFacingBlock {
             return Registries.BLOCK.containsId(Identifier.of(s.replace("white", "black")));
         }
         return false;
+    }
+    public static boolean isSafeToRecolor(World world, BlockPos pos) {
+        return inverseExists(world.getBlockState(pos).getBlock()) && (world.getBlockEntity(pos) == null);
     }
 
     public static Block recolor(Block down, boolean toWhite) {
@@ -68,8 +71,7 @@ public class AntBlock extends HorizontalFacingBlock {
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random) {
         super.scheduledTick(state, world, pos, random);
-        Block down = world.getBlockState(pos.down()).getBlock();
-        if (inverseExists(down)) {
+        if (isSafeToRecolor(world, pos.down())) {
             this.safeMove(state, world, pos);
         }
     }
@@ -80,7 +82,7 @@ public class AntBlock extends HorizontalFacingBlock {
     }
 
     private ActionResult move(BlockState blockState, World world, BlockPos pos) {
-        if (inverseExists(world.getBlockState(pos.down()).getBlock())) return safeMove(blockState, world, pos);
+        if (isSafeToRecolor(world, pos.down())) return safeMove(blockState, world, pos);
         return ActionResult.FAIL;
     }
 

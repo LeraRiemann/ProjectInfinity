@@ -124,7 +124,7 @@ public class AntEntity extends AbstractChessFigure {
         Optional<BlockPos> bp = supportingBlockPos;
         return (bp.isEmpty()
                 || isInBattle()
-                || !AntBlock.inverseExists(w.getBlockState(bp.get()).getBlock()))
+                || !AntBlock.isSafeToRecolor(w, bp.get()))
                 && super.shouldPursueRegularGoals();
     }
 
