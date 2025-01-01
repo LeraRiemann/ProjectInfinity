@@ -70,7 +70,7 @@ public class PlayerManagerMixin {
             });
         }
         InfinityMod.LOGGER.info("Sending sound pack to client");
-        InfinityMethods.sendS2CPayload(player, new ModPayloads.DownloadSoundPack(
+        if (InfinityMod.provider.rule("useSoundSyncPackets")) InfinityMethods.sendS2CPayload(player, new ModPayloads.DownloadSoundPack(
                 CommonIO.read(player.server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))));
     }
 

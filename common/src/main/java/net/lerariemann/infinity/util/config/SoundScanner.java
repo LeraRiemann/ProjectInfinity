@@ -51,16 +51,13 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
      * <p>If the server already contains data upon which the client should create its resource pack, it holds this data.
      * <p>Otherwise, this payload is empty, and the server relies on the client to create it and send it back to the server for future use. */
     public static void unpackDownloadedPack(ModPayloads.DownloadSoundPack payload, Object clientContext) {
-        InfinityMod.LOGGER.info("Received sound pack from server");
         MinecraftClient cl = ModPayloads.client(clientContext);
         //the client unpacks a non-empty payload only when needed, meaning only if it doesn't have necessary files yet
         if (!payload.songIds().isEmpty() && !Files.exists(cl.getResourcePackDir().resolve("infinity/assets/infinity/sounds.json"))) {
-            InfinityMod.LOGGER.info("Saving sound pack");
             cl.execute(() -> saveResourcePack(cl, payload.songIds().getList("entries", NbtElement.STRING_TYPE).stream()
                     .map(NbtElement::asString).map(Identifier::of), false));
         }
         else if (isPreloaded()) {
-            InfinityMod.LOGGER.info("Generating new sound pack");
             cl.execute(() -> {
                 NbtCompound jukeboxes = saveResourcePack(cl, getMatchingLoadedIds(), true);
                 NbtCompound res = new NbtCompound();
@@ -68,7 +65,6 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
                 getMatchingLoadedIds().forEach(id -> songIds.add(NbtString.of(id.toString())));
                 res.put("entries", songIds);
                 res.put("jukeboxes", jukeboxes);
-                InfinityMod.LOGGER.info("Uploading sound pack to server");
                 ClientPlayNetworking.send(new ModPayloads.UploadJukeboxes(res));
             });
         }
@@ -115,8 +111,8 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
     /** Receiver for a C2S {@link ModPayloads.UploadJukeboxes} payload, which holds data to send to clients in the future for them to
      * generate custom sound resource packs, as well as jukebox song definitions corresponding to this data. */
     public static void unpackUploadedJukeboxes(ModPayloads.UploadJukeboxes payload, ServerPlayNetworking.Context context) {
+        if (!InfinityMod.provider.rule("useSoundSyncPackets")) return;
         NbtCompound data = payload.data();
-        InfinityMod.LOGGER.info("Downloading sound pack from client");
         if (!data.contains("jukeboxes") || !data.contains("entries")) return;
         MinecraftServer server = context.player().server;
         if (Files.exists(server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))) return;
@@ -125,7 +121,6 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
         data.remove("jukeboxes");
         NbtCompound packData = new NbtCompound();
         packData.put("entries", data.get("entries"));
-        InfinityMod.LOGGER.info("Saving sound pack from client");
         CommonIO.write(packData, server.getSavePath(WorldSavePath.DATAPACKS), "client_sound_pack_data.json");
     }
     public static void unpackUploadedJukeboxes(MinecraftServer server, NbtCompound allJukeboxes) {

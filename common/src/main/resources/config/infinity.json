@@ -8,6 +8,7 @@
     "consumePortalKey": true,
     "randomizeAllNetherPortals": false,
     "pawnsCanDropIllegalItems": false,
+    "useSoundSyncPackets": true,
     "maxBiomeCount": 6,
     "maxDimensionScale": 0,
     "iridescenceInitialDuration": 30,

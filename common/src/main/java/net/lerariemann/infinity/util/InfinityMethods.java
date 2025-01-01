@@ -161,6 +161,10 @@ public interface InfinityMethods {
         int color = stack.getComponents().getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
         return ColorHelper.Argb.fullAlpha(color);
     }
+    static int getDiscColorFromComponents(ItemStack stack, int layer) {
+        int color = getItemColorFromComponents(stack, layer);
+        return layer == 0 ? color : 0xFFFFFF ^ color;
+    }
 
     /**
      * Gets an Infinity Portal's item colour - hard set as a light blue.
