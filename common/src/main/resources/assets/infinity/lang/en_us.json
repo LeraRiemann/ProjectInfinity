@@ -156,6 +156,8 @@
   "config.infinity.gameRules.iridescenceInitialDuration.description": "How long it takes for the visual aspects of the iridescent effect to start, in seconds. Set to 0 to start them immediately.",
   "config.infinity.gameRules.afterglowDuration": "Iridescence - afterglow duration",
   "config.infinity.gameRules.afterglowDuration.description": "Duration of the positive afterglow effect you get on completion of the iridescent journey, in minutes.",
+  "config.infinity.gameRules.resetChargeCooldown": "Reset Charge - cooldown period",
+  "config.infinity.gameRules.resetChargeCooldown.description": "If you destroy a dimension with a reset charge, after this amount of ticks (or a server restart) you are allowed to restore it again. Set to 0 to only allow for restoring such dimensions after a server restart.",
   "config.infinity.gameRules.iridescenceCooldownDuration": "Iridescence - cooldown duration",
   "config.infinity.gameRules.iridescenceCooldownDuration.description": "Duration of the iridescent cooldown effect, in minutes. The full cooldown is twice this, the second half limiting the player to level I of the effect. Set to 0 to disable the cooldown.",
   "config.infinity.gameRules.randomizeAllNetherPortals": "Randomize All Nether Portals",

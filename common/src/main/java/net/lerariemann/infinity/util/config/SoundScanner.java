@@ -53,7 +53,9 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
                     subtitlesForRP.putString(subtitleID, subtitleData);
                     soundsForRP.put(songID, soundForRP); //resourcepack side
 
-                    CommonIO.write(getJukeboxDef(songID, subtitleID), savingPath.resolve("datapacks/infinity/data/infinity/jukebox_song"),  arr.getLast() + ".json");
+                    CommonIO.write(getJukeboxDef(songID, subtitleID),
+                            savingPath.resolve("datapacks/infinity/data/infinity/jukebox_song"),
+                            arr.getLast() + ".json");
                 });
         CommonIO.write(soundsForRP, savingPath.resolve("resourcepacks/infinity/assets/infinity"), "sounds.json");
         CommonIO.write(subtitlesForRP, savingPath.resolve("resourcepacks/infinity/assets/infinity/lang"), "en_us.json");

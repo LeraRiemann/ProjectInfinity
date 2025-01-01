@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2003010,
+  "infinity_version": 2003011,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "longArithmeticEnabled": false,
@@ -12,7 +12,8 @@
     "maxDimensionScale": 0,
     "iridescenceInitialDuration": 30,
     "iridescenceCooldownDuration": 168,
-    "afterglowDuration": 24
+    "afterglowDuration": 24,
+    "resetChargeCooldown": 6000
   },
   "disabledDimensions": ["ant", "bash", "checkerboard", "custom",
     "isolation", "missing", "notes", "perfection", "terminal"],
