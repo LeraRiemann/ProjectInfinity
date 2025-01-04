@@ -2,7 +2,7 @@ package net.lerariemann.infinity.features;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.lerariemann.infinity.util.TextData;
+import net.lerariemann.infinity.util.var.TextData;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;

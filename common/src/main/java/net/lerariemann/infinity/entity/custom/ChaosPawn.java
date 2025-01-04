@@ -22,6 +22,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.*;
@@ -47,7 +48,8 @@ public class ChaosPawn extends AbstractChessFigure {
     public static DefaultAttributeContainer.Builder createAttributes() {
         return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.6F);
+                .add(EntityAttributes.GENERIC_SCALE, 0.9)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25F);
     }
     @Override
     protected void initDataTracker() {
@@ -65,6 +67,16 @@ public class ChaosPawn extends AbstractChessFigure {
     public void onEatingGrass() {
         super.onEatingGrass();
         this.setAllColors(this.getWorld().getBiome(this.getBlockPos()).value().getGrassColorAt(this.getX(), this.getZ()));
+    }
+
+    @Override
+    public Text getDefaultName() {
+        int i = getCase();
+        return switch (i) {
+            case 0 -> Text.translatable("entity.infinity.pawn_black");
+            case 1 -> Text.translatable("entity.infinity.pawn_white");
+            default -> super.getDefaultName();
+        };
     }
 
     public int getCase() {
@@ -85,11 +97,15 @@ public class ChaosPawn extends AbstractChessFigure {
     }
 
     @Override
-    public Identifier getLootTableId() {
-        return switch (dataTracker.get(special_case)) {
-            case 0 -> Identifier.tryParse("infinity:entities/chaos_pawn_black");
-            case 1 -> Identifier.tryParse("infinity:entities/chaos_pawn_white");
-            default -> Identifier.tryParse("");
+    public RegistryKey<LootTable> getLootTableId() {
+        Identifier i = switch (getCase()) {
+            case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
+            case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
+            default -> {
+                boolean bl = InfinityMod.provider.rule("pawnsCanDropIllegalItems");
+                if (bl) yield Identifier.of(""); //loot is defined in dropEquipment instead
+                else yield Identifier.of(InfinityMod.provider.randomName(random, "loot_tables"));
+            }
         };
     }
 
@@ -156,13 +172,13 @@ public class ChaosPawn extends AbstractChessFigure {
     }
 
     @Override
-    protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
-        super.dropEquipment(source, lootingMultiplier, allowDrops);
-        if (!this.isBlackOrWhite()) {
-            String s = InfinityMod.provider.registry.get("items").getRandomElement(getWorld().random);
+    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
+        super.dropEquipment(world, source, causedByPlayer);
+        if (!this.isBlackOrWhite() && InfinityMod.provider.rule("pawnsCanDropIllegalItems")) {
+            String s = InfinityMod.provider.randomName(random, "items");
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
-            ItemStack stack = Registries.ITEM.get(new Identifier(s)).getDefaultStack().copyWithCount((int)(i*i));
-//            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
+            ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int) (i * i));
+            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
             this.dropStack(stack);
         }
     }

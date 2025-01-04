@@ -40,12 +40,18 @@ public class ModItems {
             registerBlockItemAfter(ModBlocks.NETHERITE_SLAB, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK, BlockItem::new);
     public static final RegistrySupplier<Item> NETHERITE_STAIRS_ITEM =
             registerBlockItemAfter(ModBlocks.NETHERITE_STAIRS, ItemGroups.BUILDING_BLOCKS, Items.NETHERITE_BLOCK, BlockItem::new);
+    public static final RegistrySupplier<Item> NOTES_BLOCK_ITEM =
+            registerBlockItemAfter(ModBlocks.NOTES_BLOCK, ItemGroups.FUNCTIONAL, Items.NOTE_BLOCK, BlockItem::new);
     public static final RegistrySupplier<Item> TIME_BOMB_ITEM =
             registerBlockItemAfter(ModBlocks.TIME_BOMB, ItemGroups.FUNCTIONAL, Items.BEACON, BlockItem::new);
     public static final RegistrySupplier<Item> IRIDESCENT_WOOL  =
             registerBlockItemAfter(ModBlocks.IRIDESCENT_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL, BlockItem::new);
     public static final RegistrySupplier<Item> IRIDESCENT_CARPET  =
             registerBlockItemAfter(ModBlocks.IRIDESCENT_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, BlockItem::new);
+    public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_WOOL  =
+            registerBlockItemAfter(ModBlocks.CHROMATIC_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL, ChromaticBlockItem::new);
+    public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_CARPET  =
+            registerBlockItemAfter(ModBlocks.CHROMATIC_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, ChromaticBlockItem::new);
     public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM =
             registerBlockItemAfter(ModBlocks.BIOME_BOTTLE, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE, BiomeBottleItem::new);
     //spawn eggs
@@ -76,23 +82,29 @@ public class ModItems {
     public static final RegistrySupplier<TransfiniteKeyItem> TRANSFINITE_KEY =
             registerItemAfter("key", ItemGroups.INGREDIENTS, Items.AMETHYST_SHARD, TransfiniteKeyItem::new);
     public static final RegistrySupplier<HomeItem> HOME_ITEM =
-            registerItemAfter("fine_item", ItemGroups.INGREDIENTS, Items.MILK_BUCKET, HomeItem::new,
-                    new Item.Settings().food(
-                            new FoodComponent.Builder().alwaysEdible().build()));
+            registerItemAfter("fine_item", ItemGroups.FOOD_AND_DRINK, Items.MILK_BUCKET, HomeItem::new,
+                    new Item.Settings().component(DataComponentTypes.FOOD,
+                            new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of())));
+    public static final RegistrySupplier<ChromaticItem> CHROMATIC_MATTER =
+            registerItemAfter("chromatic_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, ChromaticItem::new);
     public static final RegistrySupplier<Item> WHITE_MATTER =
             registerItemAfter("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> BLACK_MATTER =
             registerItemAfter("black_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> IRIDESCENT_STAR =
-            registerItemAfter("iridescent_star", ItemGroups.INGREDIENTS, Items.NETHER_STAR, GlintItem::new,
-                    new Item.Settings().rarity(Rarity.UNCOMMON));
-    public static final RegistrySupplier<Item> STAR_OF_LANG =
-            registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, StarOfLangItem::new,
-                    new Item.Settings());
+            registerItemAfter("iridescent_star", ItemGroups.INGREDIENTS, Items.NETHER_STAR, Item::new,
+                    new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
+    public static final RegistrySupplier<? extends StarOfLangItem> STAR_OF_LANG =
+            registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, PlatformMethods.getStarOfLangConstructor(),
+                    new Item.Settings().component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final RegistrySupplier<F4Item> F4 =
             registerItemAfter("f4", ItemGroups.OPERATOR, Items.DEBUG_STICK, F4Item::new,
                     new Item.Settings().rarity(Rarity.UNCOMMON));
+    public static final RegistrySupplier<Item> DISC =
+            registerItemAfter("disc", ItemGroups.TOOLS, Items.MUSIC_DISC_PIGSTEP, Item::new,
+                    new Item.Settings().rarity(Rarity.RARE));
     public static TagKey<Item> IRIDESCENT_TAG = createItemTag("iridescent");
+    public static TagKey<Item> MATTER_TAG = createItemTag("matter");
 
     public static <T extends Item> RegistrySupplier<T> register(String item, Item.Settings settings, Function<Item.Settings, T> constructor) {
         return ITEMS.register(item, () -> constructor.apply(settings));
@@ -111,25 +123,25 @@ public class ModItems {
         return registerItemAfter(id, group, item, constructor, new Item.Settings());
     }
 
-    public static RegistrySupplier<Item> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings,
-                                                           BiFunction<Block, Item.Settings, Item> constructor) {
+    public static <T extends Item> RegistrySupplier<T> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings,
+                                                           BiFunction<Block, Item.Settings, T> constructor) {
         return ITEMS.register(block.getId(), () -> constructor.apply(block.get(), settings));
     }
     /**
-     * Registers a Block Item via Architectury API.
+     * Registers a nameToElement Item via Architectury API.
      */
-    public static RegistrySupplier<Item> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
+    public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 Item.Settings settings,
-                                                                BiFunction<Block, Item.Settings, Item> constructor) {
-        RegistrySupplier<Item> registeredItem = registerBlockItem(block, addFallbackTab(settings, group), constructor);
+                                                                BiFunction<Block, Item.Settings, T> constructor) {
+        RegistrySupplier<T> registeredItem = registerBlockItem(block, addFallbackTab(settings, group), constructor);
         addAfter(registeredItem, group, item);
         return registeredItem;
     }
     /**
-     * Registers a Block Item through Architectury API.
+     * Registers a nameToElement Item through Architectury API.
      */
-    public static RegistrySupplier<Item> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
-                                                                BiFunction<Block, Item.Settings, Item> constructor) {
+    public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
+                                                                BiFunction<Block, Item.Settings, T> constructor) {
         return registerBlockItemAfter(block, group, item, new Item.Settings(), constructor);
     }
 

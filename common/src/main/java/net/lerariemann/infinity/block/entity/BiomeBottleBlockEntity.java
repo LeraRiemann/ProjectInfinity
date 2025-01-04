@@ -1,10 +1,10 @@
 package net.lerariemann.infinity.block.entity;
 
-import net.lerariemann.infinity.block.custom.BiomeBottle;
+import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
-import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
-public class BiomeBottleBlockEntity extends BlockEntity {
+public class BiomeBottleBlockEntity extends TintableBlockEntity {
     private final PropertyDelegate propertyDelegate;
     private Identifier biome;
     public int color;
@@ -72,22 +72,22 @@ public class BiomeBottleBlockEntity extends BlockEntity {
         this.charge = tag.getInt("Charge");
         this.biome = new Identifier(tag.getString("Biome"));
         this.color = tag.getInt("Color");
-        this.from_charge = InfinityOptions.test(tag, "from_charge", 0);
+        this.from_charge = NbtUtils.test(tag, "from_charge", 0);
     }
 
-//    @Override
-//    protected void addComponents(ComponentMap.Builder componentMapBuilder) {
-//        super.addComponents(componentMapBuilder);
-//        BiomeBottle.addComponents(componentMapBuilder, biome, color, charge);
-//    }
-//
-//    @Override
-//    protected void readComponents(BlockEntity.ComponentsAccess components) {
-//        super.readComponents(components);
-//        this.biome = components.getOrDefault(ModItemFunctions.BIOME_CONTENTS.get(), BiomeBottle.defaultBiome());
-//        this.color = components.getOrDefault(ModItemFunctions.COLOR.get(), 0xFFFFFF);
-//        this.charge = components.getOrDefault(ModItemFunctions.CHARGE.get(), 0);
-//    }
+    // @Override
+    // protected void addComponents(ComponentMap.Builder componentMapBuilder) {
+    //     super.addComponents(componentMapBuilder);
+    //     BiomeBottleBlock.addComponents(componentMapBuilder, biome, color, charge);
+    // }
+
+    // @Override
+    // protected void readComponents(BlockEntity.ComponentsAccess components) {
+    //     super.readComponents(components);
+    //     this.biome = components.getOrDefault(ModComponentTypes.BIOME_CONTENTS.get(), BiomeBottleBlock.defaultBiome());
+    //     this.color = components.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
+    //     this.charge = components.getOrDefault(ModComponentTypes.CHARGE.get(), 0);
+    // }
 
     @Nullable
     @Override
@@ -100,7 +100,7 @@ public class BiomeBottleBlockEntity extends BlockEntity {
         return createNbt();
     }
 
-    public Object getRenderData() {
+    public int getTint() {
         return propertyDelegate.get(0);
     }
 
@@ -120,7 +120,7 @@ public class BiomeBottleBlockEntity extends BlockEntity {
 
     public void empty() {
         color = 0xFFFFFF;
-        biome = BiomeBottle.defaultBiome();
+        biome = BiomeBottleBlock.defaultBiome();
         charge = 0;
         from_charge = 0;
     }
@@ -137,10 +137,10 @@ public class BiomeBottleBlockEntity extends BlockEntity {
                     int diff = be.charge%diff2;
                     if (diff == 0) diff = diff2;
                     int charge_new = be.charge - diff;
-                    BiomeBottle.spreadRing(w, pos, be.biome, be.from_charge - be.charge, be.from_charge - charge_new);
+                    BiomeBottleBlock.spreadRing(w, pos, be.biome, be.from_charge - be.charge, be.from_charge - charge_new);
                     be.charge = charge_new;
-                    world.setBlockState(pos, state.with(BiomeBottle.LEVEL, MathHelper.clamp(level - 1, 0, 10)));
-                    BiomeBottle.playSploosh(w, pos);
+                    world.setBlockState(pos, state.with(BiomeBottleBlock.LEVEL, Math.clamp(level - 1, 0, 10)));
+                    BiomeBottleBlock.playSploosh(w, pos);
                     be.markDirty();
                 }
             }

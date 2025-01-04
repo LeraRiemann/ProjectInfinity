@@ -70,7 +70,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     }
     @Override
     public boolean infinity$tryRestore() {
-        if(InfinityMethods.isInfinity(getRegistryKey()) && (infinity$timebombProgress > Timebombable.cooldownTicks)) {
+        if(InfinityMethods.isInfinity(getRegistryKey()) && (infinity$timebombProgress > Timebombable.getCooldownTicks())) {
             infinity$timebombProgress = 0;
             return true;
         }

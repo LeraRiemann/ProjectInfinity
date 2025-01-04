@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "infinity:block/iridescence"
+      "model": "minecraft:block/water"
     }
   }
 }

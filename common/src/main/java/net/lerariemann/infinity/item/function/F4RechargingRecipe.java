@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.item.function;
 
 import net.lerariemann.infinity.item.F4Item;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.BackportMethods;

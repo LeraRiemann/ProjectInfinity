@@ -1,8 +1,7 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
@@ -29,7 +28,8 @@ public class RandomStructure {
     }
 
     void addData() {
-        data = (NbtCompound)(parent.PROVIDER.compoundRegistry.get("structures").getRandomElement(random));
+        data = parent.PROVIDER.randomElement(random, "structures");
+        assert data.contains("id");
         type = data.getString("id");
         name = new Identifier(type).getPath().replace("/", "_").replace("\\", "_") + "_" + id;
 

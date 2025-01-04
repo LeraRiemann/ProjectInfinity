@@ -2,9 +2,10 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.core.NbtUtils;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -111,10 +112,14 @@ public class RandomDimension {
         sea_level = randomiseblocks ? (int)Math.floor(random.nextGaussian(sea_level_default, 8)) : sea_level_default;
         max_y = Math.max(max_y, 16 * (int) (1 + Math.floor(sea_level / 16.0)));
         height = max_y - min_y;
-        default_block = randomiseblocks ? PROVIDER.randomBlock(random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:stone"));
-        default_fluid = randomiseblocks ? PROVIDER.randomFluid(random) : RandomProvider.Fluid(defaultfluid());
+        default_block = randomiseblocks ?
+                PROVIDER.randomElement(random, "full_blocks_worldgen") :
+                NbtUtils.nameToElement(getDefaultBlock("minecraft:stone"));
+        default_fluid = randomiseblocks ?
+                PROVIDER.randomElement(random, "fluids") :
+                NbtUtils.nameToFluid(getDefaultFluid());
         deepslate = Arrays.stream((new String[]{"minecraft:overworld", "minecraft:amplified", "infinity:whack"})).toList().contains(type_alike) ?
-                RandomProvider.Block("minecraft:deepslate") : default_block;
+                NbtUtils.nameToElement("minecraft:deepslate") : default_block;
     }
 
     void wrap_up(boolean isEasterDim) {
@@ -124,7 +129,7 @@ public class RandomDimension {
         if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
     }
 
-    String defaultblock(String s) {
+    String getDefaultBlock(String fallback) {
         switch(type_alike) {
             case "minecraft:end" -> {
                 return "minecraft:end_stone";
@@ -133,12 +138,11 @@ public class RandomDimension {
                 return "minecraft:netherrack";
             }
             default -> {
-                return s;
+                return fallback;
             }
         }
     }
-
-    String defaultfluid() {
+    String getDefaultFluid() {
         switch(type_alike) {
             case "minecraft:end" -> {
                 return "minecraft:air";
@@ -225,8 +229,8 @@ public class RandomDimension {
         res.put("layers", layers);
         res.putBoolean("lakes", random.nextBoolean());
         res.putBoolean("features", random.nextBoolean());
-        top_blocks.put(biome, RandomProvider.Block(block));
-        underwater.put(biome, RandomProvider.Block(block));
+        top_blocks.put(biome, NbtUtils.nameToElement(block));
+        underwater.put(biome, NbtUtils.nameToElement(block));
         return res;
     }
 
@@ -267,18 +271,21 @@ public class RandomDimension {
         });
     }
 
+    int getBiomeCount() {
+        return random.nextInt(2, Math.clamp(PROVIDER.ruleInt("maxBiomeCount"), 2, 10));
+    }
+
     NbtList randomBiomesCheckerboard() {
         NbtList res = new NbtList();
-        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.gameRulesInt.get("maxBiomeCount")));
+        int biome_count = getBiomeCount();
         for (int i = 0; i < biome_count; i++) {
             res.add(NbtString.of(randomBiome()));
         }
         return res;
     }
-
     NbtList randomBiomes() {
         NbtList res = new NbtList();
-        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.gameRulesInt.get("maxBiomeCount")));
+        int biome_count = getBiomeCount();
         for (int i = 0; i < biome_count; i++) {
             NbtCompound element = new NbtCompound();
             element.putString("biome", randomBiome());

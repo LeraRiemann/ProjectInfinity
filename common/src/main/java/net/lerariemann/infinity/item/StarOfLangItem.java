@@ -13,7 +13,13 @@ public class StarOfLangItem extends Item {
         return ModItems.STAR_OF_LANG.get().getDefaultStack();
     }
 
-    public boolean hasGlint(ItemStack stack) {
+    @Override
+    public boolean hasGlint(ItemStack stack) { 
+        return true;
+    }
+
+    @Override
+    public boolean hasRecipeRemainder() {
         return true;
     }
 }

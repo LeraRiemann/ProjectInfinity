@@ -6,13 +6,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.registry.core.ModBlocks;
-import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.util.WeighedStructure;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LadderBlock;
 import net.minecraft.block.enums.BlockHalf;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.state.property.Properties;
@@ -30,14 +28,14 @@ public class ModMaterialRules {
         return (x < 0) ? size - 1 - a : a;
     }
 
-    public record RandomBlockStateRule(WeighedStructure<NbtElement> w) implements MaterialRules.BlockStateRule
+    public record RandomBlockStateRule(RandomProvider prov) implements MaterialRules.BlockStateRule
     {
         @Override
         public BlockState tryApply(int i, int j, int k) {
             long seed = MathHelper.hashCode(i, j, k);
             double d = (seed & 0xFFFL) / (double)0xFFFL;
             d = d - Math.floor(d);
-            BlockState st = Registries.BLOCK.get(new Identifier(RandomProvider.elementToName(w.getElement(d)))).getDefaultState();
+            BlockState st = Registries.BLOCK.get(new Identifier(prov.randomName(d, "full_blocks_worldgen"))).getDefaultState();
             if(st.contains(Properties.PERSISTENT)) st = st.with(Properties.PERSISTENT, Boolean.TRUE);
             return st;
         }
@@ -59,7 +57,7 @@ public class ModMaterialRules {
 
         @Override
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext materialRuleContext) {
-            return new RandomBlockStateRule(PROVIDER.compoundRegistry.get("full_blocks_worldgen"));
+            return new RandomBlockStateRule(PROVIDER);
         }
     }
 
@@ -400,8 +398,8 @@ public class ModMaterialRules {
     public static final DeferredRegister<Codec<? extends MaterialRules.MaterialRule>> MATERIAL_RULES =
             DeferredRegister.create(MOD_ID, RegistryKeys.MATERIAL_RULE);
 
-    public static <T extends CodecHolder<? extends MaterialRules.MaterialRule>> void register(String name, T holder) {
-        MATERIAL_RULES.register(name, () -> holder.codec());
+    public static <R extends MaterialRules.MaterialRule, T extends CodecHolder<R>> void register(String name, T holder) {
+        MATERIAL_RULES.register(name, holder::codec);
     }
 
     public static void registerRules() {

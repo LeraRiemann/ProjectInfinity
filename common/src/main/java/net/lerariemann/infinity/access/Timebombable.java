@@ -1,7 +1,8 @@
 package net.lerariemann.infinity.access;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
@@ -11,13 +12,17 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public interface Timebombable {
-    int cooldownTicks = 6000;
-
     void infinity$timebomb();
     boolean infinity$tryRestore();
 
     boolean infinity$isTimebombed();
     int infinity$getTimebombProgress();
+
+    static int getCooldownTicks() {
+        int i = InfinityMod.provider.ruleInt("resetChargeCooldown");
+        if (i <= 0) i = Integer.MAX_VALUE;
+        return i;
+    }
 
     default void tickTimebombProgress(ServerPlayerEntity player) {
         int i = infinity$getTimebombProgress();

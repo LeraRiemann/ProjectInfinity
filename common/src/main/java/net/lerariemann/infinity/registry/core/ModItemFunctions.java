@@ -5,8 +5,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.block.custom.BiomeBottle;
+import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
 import net.lerariemann.infinity.item.function.*;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.BackportMethods;
@@ -22,18 +21,21 @@ import net.minecraft.inventory.SingleStackInventory;
 import net.minecraft.item.FluidModificationItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPointer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.registry.core.ModItems.TRANSFINITE_KEY;
@@ -59,6 +61,10 @@ public class ModItemFunctions {
     public static RegistrySupplier<RecipeSerializer<F4RechargingRecipe>> F4_RECHARGING =
             RECIPE_SERIALIZERS.register("f4_recharging", () ->
                     new SpecialRecipeSerializer<>(F4RechargingRecipe::new));
+
+    public static RegistrySupplier<RecipeSerializer<ChromaticColoringRecipe>> CHROMATIC_COLORING =
+            RECIPE_SERIALIZERS.register("chromatic_coloring", () ->
+                    new ChromaticColoringRecipe.Serializer(ChromaticColoringRecipe::new));
     public static RegistrySupplier<RecipeSerializer<CollisionCraftingRecipe>> PORTAL_CRAFTING =
             RECIPE_SERIALIZERS.register("collision_portal", () ->
                     new CollisionCraftingRecipe.Serializer(CollisionCraftingRecipe.OfPortal::new));
@@ -72,7 +78,6 @@ public class ModItemFunctions {
             RECIPE_TYPES.register("collision_iridescence", () -> CollisionCraftingRecipe.Type.IRIDESCENCE);
 
     public static void registerItemFunctions() {
-        InfinityMod.LOGGER.debug("Registering component types for " + InfinityMod.MOD_ID);
         LOOT_FUNCTION_TYPES.register();
         RECIPE_SERIALIZERS.register();
         RECIPE_TYPES.register();
@@ -160,8 +165,8 @@ public class ModItemFunctions {
         });
         ItemPropertiesRegistry.register(ModItems.BIOME_BOTTLE_ITEM.get(), InfinityMethods.getId("bottle"),
                 (stack, world, entity, seed) -> {
-                    int charge = BiomeBottle.getCharge(stack);
-                    return MathHelper.clamp(charge / 1000.0f, 0f, 1f);
+                    int charge = BiomeBottleBlock.getCharge(stack);
+                    return Math.clamp(charge / 1000.0f, 0f, 1f);
                 });
         ItemPropertiesRegistry.register(ModItems.IRIDESCENT_CARPET.get(), InfinityMethods.getId("iridescent"),
                 ModItemFunctions::iridPredicate);

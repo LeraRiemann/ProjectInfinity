@@ -1,8 +1,7 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.nbt.*;
 
 import java.util.Random;
@@ -44,7 +43,7 @@ public class RandomDimensionType {
         lightLevel.putString("type", "uniform");
         lightLevel.put("value", RandomProvider.genBounds(0, random.nextInt(16)));
         data.put("monster_spawn_light_level", lightLevel);
-        data.putString("infiniburn", dim.PROVIDER.randomName(random, "tags"));
+        data.putString("infiniburn", "#" + dim.PROVIDER.randomName(random, "tags"));
         String s = dim.PROVIDER.randomName(random, "dimension_effects");
         foggy = s.equals("minecraft:the_nether");
         data.putString("effects", s);
@@ -60,7 +59,7 @@ public class RandomDimensionType {
     }
 
     double coordinateScale() {
-        int scaleMax = parent.PROVIDER.gameRulesInt.get("maxDimensionScale");
+        int scaleMax = parent.PROVIDER.ruleInt("maxDimensionScale");
         if (scaleMax <= 0 || scaleMax > scaleCap) scaleMax = scaleCap;
         int distribParam = Math.min(scaleMax, 8);
         double scaleMin = 1.0 / scaleMax;

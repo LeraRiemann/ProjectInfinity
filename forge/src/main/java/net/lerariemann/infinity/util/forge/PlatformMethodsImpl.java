@@ -4,7 +4,9 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.lerariemann.infinity.item.forge.StarOfLangItemForge;
 import net.lerariemann.infinity.fluids.forge.FluidTypes;
+import net.lerariemann.infinity.item.StarOfLangItem;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.forge.IridescenceLiquidBlockForge;
@@ -30,6 +32,7 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.ModLoadingContext;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 
 /**
  * See {@link PlatformMethods} for usages.
@@ -101,5 +104,9 @@ public class PlatformMethodsImpl {
     public static double acidHeightTest(Entity entity) {
         if (entity instanceof PlayerEntity) return -1;
         return entity.getFluidTypeHeight(FluidTypes.IRIDESCENCE_TYPE.get());
+    }
+
+    public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
+        return StarOfLangItemforge::new;
     }
 }

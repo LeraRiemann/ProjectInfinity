@@ -4,8 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
-import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.item.StarOfLangItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
@@ -26,10 +25,12 @@ import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.poi.PointOfInterestType;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 
-import static net.lerariemann.infinity.InfinityModClient.sampler;
-
-//Abstraction layer for classes from Fabric API and Forgified Fabric API, as well as Fabric Loader vs. NeoForge Loader.
+/**
+ * Methods that require different implementations to work on Fabric vs. NeoForge and thus depend on {@link dev.architectury.injectables.annotations.ExpectPlatform}.
+ * @see InfinityMethods
+ */
 public class PlatformMethods {
 
     public static boolean isFabricApiLoaded(String modID) {
@@ -171,7 +172,7 @@ public class PlatformMethods {
     }
 
     /**
-     * Register a Flammable Block (how does Architectury API not have a helper for this)
+     * Register a Flammable nameToElement (how does Architectury API not have a helper for this)
      */
     @ExpectPlatform
     public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
@@ -189,6 +190,11 @@ public class PlatformMethods {
     }
     @ExpectPlatform
     public static double acidHeightTest(Entity entity) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
         throw new AssertionError();
     }
 }

@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.iridescence;
 
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
@@ -12,6 +12,8 @@ import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+
+import static net.lerariemann.infinity.iridescence.Iridescence.*;
 
 public class IridescentEffect extends StatusEffect implements ModStatusEffects.SpecialEffect {
     public IridescentEffect(StatusEffectCategory category, int color) {
@@ -26,18 +28,24 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         }
         if (entity instanceof Angerable ang) ang.stopAnger();
         if (entity instanceof ServerPlayerEntity player
-                && Iridescence.shouldApplyShader(player))
-            Iridescence.loadShader(player);
+                && shouldApplyShader(player))
+            loadShader(player);
     }
 
     public void onRemoved(LivingEntity entity) {
-        entity.setInvulnerable(false);
-        if (entity instanceof ServerPlayerEntity player) {
-            Iridescence.unloadShader(player);
-        } else if (entity instanceof ChaosPawn pawn) {
-            if (pawn.getRandom().nextBoolean()) {
-                pawn.unchess();
-                Iridescence.convTriggers(pawn);
+        switch (entity) {
+            case ServerPlayerEntity player -> {
+                unloadShader(player);
+                if (player.isInvulnerable()) endJourney(player, true, 0);
+            }
+            case ChaosPawn pawn -> {
+                if (pawn.getRandom().nextBoolean()) {
+                    pawn.unchess();
+                    convTriggers(pawn);
+                }
+            }
+            case MobEntity currEntity -> endConversion(currEntity);
+            default -> {
             }
         } else if (entity instanceof MobEntity currEntity) {
             Iridescence.endConversion(currEntity);
@@ -47,17 +55,23 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
     @Override
     public void tryApplySpecial(LivingEntity entity, int duration, int amplifier) {
         if (entity instanceof ServerPlayerEntity player) {
-            if (Iridescence.shouldWarp(duration, amplifier)) {
-                player.setInvulnerable(true);
-                Identifier id = Iridescence.getIdForWarp(player);
+            if (shouldWarp(duration, amplifier)) {
+                if (!player.isInvulnerable()) {
+                    player.setInvulnerable(true);
+                    saveCookie(player);
+                }
+                Identifier id = getIdForWarp(player);
                 WarpLogic.requestWarp(player, id, false);
             }
-            if (Iridescence.shouldReturn(duration, amplifier)) {
-                player.setInvulnerable(false);
-                WarpLogic.respawnAlive(player);
+            if (shouldReturn(duration, amplifier)) {
+                endJourney(player, false, amplifier);
             }
-            if (Iridescence.shouldRequestShaderLoad(duration, amplifier))
-                Iridescence.loadShader(player);
+            if (shouldRequestShaderLoad(duration, amplifier))
+                loadShader(player);
+            if (amplifier == 0 && duration == 2) {
+                player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW,
+                        getAfterglowDuration() / 2, 0, true, true));
+            }
         }
     }
 
@@ -75,9 +89,9 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         }
 
         @Override
-        public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
-            super.onApplied(entity, attributes, amplifier);
-            Iridescence.tryBeginJourney(entity, amplifier);
+        public void onApplied(LivingEntity entity, int amplifier) {
+            super.onApplied(entity, amplifier);
+            tryBeginJourney(entity, amplifier);
         }
     }
 }

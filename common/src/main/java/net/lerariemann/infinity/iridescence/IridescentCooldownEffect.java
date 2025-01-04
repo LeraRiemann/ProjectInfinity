@@ -15,8 +15,9 @@ public class IridescentCooldownEffect extends StatusEffect {
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         int cooldownDuration = Iridescence.getCooldownDuration();
         if (cooldownDuration > 0)
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN.value(),
-                    cooldownDuration, 0, false, false, false));
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
+                    cooldownDuration, 0, true, false));
+        return true;
     }
 
     @Override

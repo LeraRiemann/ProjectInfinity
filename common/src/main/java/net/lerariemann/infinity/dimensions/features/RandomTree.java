@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
@@ -45,7 +45,7 @@ public class RandomTree extends RandomisedFeature {
         NbtCompound res = new NbtCompound();
         res.putString("type", "mangrove_root_placer");
         addRandomBlockProvider(res, "root_provider", "full_blocks");
-        res.put("trunk_offset_y", RandomProvider.intProvider(random, 10, true));
+        res.put("trunk_offset_y", NbtUtils.randomIntProvider(random, 10, true));
         if (random.nextBoolean()) {
             NbtCompound above = new NbtCompound();
             addRandomBlockProvider(above, "above_root_provider", "blocks_features");
@@ -56,8 +56,8 @@ public class RandomTree extends RandomisedFeature {
         mangrove.putInt("max_root_width", 1 + random.nextInt(ishuge ? 12 : 4));
         mangrove.putInt("max_root_length", 1 + random.nextInt(ishuge ? 64 : 8));
         mangrove.putFloat("random_skew_chance", random.nextFloat());
-        mangrove.putString("can_grow_through", PROVIDER.randomName(random, "tags"));
-        mangrove.putString("muddy_roots_in", PROVIDER.randomName(random, "tags"));
+        mangrove.putString("can_grow_through", "#" + PROVIDER.randomName(random, "tags"));
+        mangrove.putString("muddy_roots_in", "#" + PROVIDER.randomName(random, "tags"));
         addRandomBlockProvider(mangrove, "muddy_roots_provider", "full_blocks");
         res.put("mangrove_root_placement", mangrove);
         return res;
@@ -79,7 +79,7 @@ public class RandomTree extends RandomisedFeature {
                 res.putInt("extra_branch_steps", 1 + (int) Math.floor(random.nextExponential()));
                 res.putInt("extra_branch_length", (int) Math.floor(random.nextExponential()*3));
                 res.putFloat("place_branch_per_log_probability", random.nextFloat());
-                res.putString("can_grow_through", PROVIDER.randomName(random, "tags"));
+                res.putString("can_grow_through", "#" + PROVIDER.randomName(random, "tags"));
             }
             case "cherry_trunk_placer" -> {
                 addRandomIntProvider(res, "branch_count", 1, 3);
@@ -108,15 +108,15 @@ public class RandomTree extends RandomisedFeature {
         res.putString("type", type);
         switch (type) {
             case "blob_foliage_placer", "bush_foliage_placer", "fancy_foliage_placer", "jungle_foliage_placer" -> res.putInt("height", random.nextInt(16));
-            case "pine_foliage_placer" -> res.put("height", RandomProvider.intProvider(random, ishuge ? 24 : 6, true));
-            case "spruce_foliage_placer" -> res.put("trunk_height", RandomProvider.intProvider(random, ishuge ? 24 : 6, true));
-            case "mega_pine_foliage_placer" -> res.put("crown_height", RandomProvider.intProvider(random, ishuge ? 24 : 6, true));
+            case "pine_foliage_placer" -> res.put("height", NbtUtils.randomIntProvider(random, ishuge ? 24 : 6, true));
+            case "spruce_foliage_placer" -> res.put("trunk_height", NbtUtils.randomIntProvider(random, ishuge ? 24 : 6, true));
+            case "mega_pine_foliage_placer" -> res.put("crown_height", NbtUtils.randomIntProvider(random, ishuge ? 24 : 6, true));
             case "random_spread_foliage_placer" -> {
                 addRandomIntProvider(res, "foliage_height", 1, ishuge ? 512 : 16);
                 res.putInt("leaf_placement_attempts", random.nextInt(256));
             }
             case "cherry_foliage_placer" -> {
-                res.put("height", RandomProvider.intProvider(random, 4, 16, true));
+                res.put("height", NbtUtils.randomIntProvider(random, 4, 16, true));
                 res.putFloat("wide_bottom_layer_hole_chance", random.nextFloat());
                 res.putFloat("corner_hole_chance", random.nextFloat());
                 res.putFloat("hanging_leaves_chance", random.nextFloat());

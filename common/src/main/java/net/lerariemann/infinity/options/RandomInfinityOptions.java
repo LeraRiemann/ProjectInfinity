@@ -2,8 +2,8 @@ package net.lerariemann.infinity.options;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.RandomProvider;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -28,7 +28,7 @@ public class RandomInfinityOptions {
         NbtCompound shader = new NbtCompound();
         if (prov.roll(r, "use_shaders")) {
             Object[] lst = genMatrix(r);
-            shader = CommonIO.readCarefully(InfinityMod.utilPath + "/shader.json", lst);
+            shader = CommonIO.readAndFormat(InfinityMod.utilPath + "/shader.json", lst);
         }
         data.put("shader", shader);
         //sun
@@ -63,7 +63,10 @@ public class RandomInfinityOptions {
         data.putDouble("time_scale", timeScale(r));
         data.putDouble("mavity", prov.roll(r, "use_mavity") ? mavity(r) : 1.0);
         if (prov.roll(r, "pitch_shift")) data.put("pitch_shift", pitchShift(r));
-        if (prov.roll(r, "give_effect")) data.put("effect", effect(r, prov));
+        if (prov.roll(r, "give_effect")) {
+            NbtCompound effect = effect(r, prov);
+            if (!effect.isEmpty()) data.put("effect", effect);
+        }
         data.put("iridescent_map", iridMap(r));
     }
 
@@ -119,9 +122,10 @@ public class RandomInfinityOptions {
 
     public static NbtCompound effect(Random r, RandomProvider provider) {
         NbtCompound res = new NbtCompound();
-        String effect = ((NbtCompound)provider.compoundRegistry.get("effects").getRandomElement(r)).getString("Name");
+        NbtCompound effect = provider.randomElement(r, "effects");
+        if (effect.getBoolean("Instant")) return new NbtCompound();
         int amplifier = Math.min(5, (int)(0.5*r.nextExponential()));
-        res.putString("id", effect);
+        res.putString("id", effect.getString("Name"));
         res.putInt("amplifier", amplifier);
         return res;
     }

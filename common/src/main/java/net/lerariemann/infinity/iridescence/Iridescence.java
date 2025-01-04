@@ -9,10 +9,12 @@ import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.lerariemann.infinity.registry.var.ModStats;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -24,11 +26,15 @@ import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -39,12 +45,17 @@ import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 public interface Iridescence {
+    Identifier TEXTURE = InfinityMethods.getId("block/iridescence");
+    Identifier FLOWING_TEXTURE = InfinityMethods.getId("block/iridescence");
+    Identifier OVERLAY_TEXTURE = InfinityMethods.getId("block/iridescence_overlay");
     DoublePerlinNoiseSampler sampler =
             DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, genOctaves(2));
 
@@ -82,24 +93,24 @@ public interface Iridescence {
         return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F);
     }
 
-    java.util.List<String> colors = List.of(
-            "minecraft:red_",
-            "minecraft:orange_",
-            "minecraft:yellow_",
-            "minecraft:lime_",
-            "minecraft:green_",
-            "minecraft:cyan_",
-            "minecraft:light_blue_",
-            "minecraft:blue_",
-            "minecraft:purple_",
-            "minecraft:magenta_",
-            "minecraft:pink_");
+    java.util.List<DyeColor> colors = List.of(
+            DyeColor.RED,
+            DyeColor.ORANGE,
+            DyeColor.YELLOW,
+            DyeColor.LIME,
+            DyeColor.GREEN,
+            DyeColor.CYAN,
+            DyeColor.LIGHT_BLUE,
+            DyeColor.BLUE,
+            DyeColor.PURPLE,
+            DyeColor.MAGENTA,
+            DyeColor.PINK);
 
-    public static Block getRandomColorBlock(WorldAccess world, String str) {
-        return Registries.BLOCK.get(new Identifier(colors.get(world.getRandom().nextInt(colors.size())) + str));
+    static Block getRandomColorBlock(WorldAccess world, String str) {
+        return Registries.BLOCK.get(Identifier.of(colors.get(world.getRandom().nextInt(colors.size())).getName() + "_" + str));
     }
-    public static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(new Identifier(colors.get((int)(d*colors.size())) + str));
+    static Block getRandomColorBlock(double d, String str) {
+        return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*colors.size())).getName() + "_" + str));
     }
 
     public static final int ticksInHour = 1200;
@@ -111,14 +122,28 @@ public interface Iridescence {
         return -1;
     }
 
-    static int getEffectLength(int amplifier) {
-        return ticksInHour * (3 + 2*amplifier);
+    int ticksInHour = 1200;
+
+    static int getOnsetLength() {
+        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceInitialDuration") / 60; //default is 30 seconds
+    }
+    static int getEffectLength(int amplifier) { //amplifier is 0 to 4
+        return getComeupLength() + getPeakLength(amplifier) + getOffsetLength(); //8 to 12 minutes
+    }
+    static int getComeupLength() {
+        return ticksInHour;
+    }
+    static int getPeakLength(int amplifier) {
+        return ticksInHour * (4 + amplifier);
+    }
+    static int getOffsetLength() {
+        return ticksInHour * 3;
+    }
+    static int getAfterglowDuration() {
+        return ticksInHour * InfinityMod.provider.ruleInt("afterglowDuration"); //default is 24 minutes
     }
     static int getCooldownDuration() {
-        return ticksInHour * InfinityMod.provider.gameRulesInt.get("iridescenceCooldownDuration");
-    }
-    static int getInitialPhaseLength() {
-        return ticksInHour * InfinityMod.provider.gameRulesInt.get("iridescenceInitialDuration");
+        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceCooldownDuration"); //default is 7*24 minutes
     }
 
     public static Phase getPhase(LivingEntity entity) {
@@ -127,9 +152,9 @@ public interface Iridescence {
         return getPhase(effect.getDuration(), effect.getAmplifier());
     }
     static Phase getPhase(int duration, int amplifier) {
-        int time_passed = getEffectLength(amplifier) - getInitialPhaseLength() - duration;
+        int time_passed = getEffectLength(amplifier) - duration;
         if (time_passed < 0) return Phase.INITIAL;
-        return (time_passed < ticksInHour) ? Phase.UPWARDS : (duration <= ticksInHour || amplifier == 0) ? Phase.DOWNWARDS : Phase.PLATEAU;
+        return (time_passed < getComeupLength()) ? Phase.UPWARDS : (duration <= getOffsetLength() || amplifier == 0) ? Phase.DOWNWARDS : Phase.PLATEAU;
     }
 
     static boolean shouldWarp(int duration, int amplifier) {
@@ -139,7 +164,7 @@ public interface Iridescence {
         return (amplifier > 0) && (duration == ticksInHour);
     }
     static boolean shouldRequestShaderLoad(int duration, int amplifier) {
-        int time_passed = getEffectLength(amplifier) - getInitialPhaseLength() - duration;
+        int time_passed = getEffectLength(amplifier) - duration;
         return (time_passed == 0);
     }
 
@@ -158,19 +183,50 @@ public interface Iridescence {
     }
 
     static void tryBeginJourney(LivingEntity entity, int amplifier) {
-        int amplifier1 = Iridescence.getAmplifierOnApply(entity, amplifier);
-        if (amplifier1 >= 0) {
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(),
-                    Iridescence.getEffectLength(amplifier1), amplifier1));
-            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
+        amplifier = Iridescence.getAmplifierOnApply(entity, amplifier);
+        if (amplifier >= 0) {
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
+                    Iridescence.getEffectLength(amplifier) + Iridescence.getOnsetLength(),
+                    amplifier, true, true));
+            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
             int cooldownDuration = Iridescence.getCooldownDuration();
             if (cooldownDuration > 0)
-                entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN.value(),
-                        cooldownDuration, amplifier1 > 0 ? 1 : 0, false, false, false));
+                entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
+                        cooldownDuration, amplifier > 0 ? 1 : 0, true, false));
             if (entity instanceof ServerPlayerEntity player) {
-                player.increaseStat(ModStats.IRIDESCENCE, 1);
-                ModCriteria.IRIDESCENT.trigger(player);
+                ModCriteria.IRIDESCENT.get().trigger(player);
             }
+        }
+    }
+
+    static void saveCookie(ServerPlayerEntity player) {
+        NbtCompound compound = new NbtCompound();
+        compound.putDouble("x", player.getPos().x);
+        compound.putDouble("y", player.getPos().y);
+        compound.putDouble("z", player.getPos().z);
+        compound.putString("dim", player.getServerWorld().getRegistryKey().getValue().toString());
+        CommonIO.write(compound, InfinityMod.provider.savingPath, player.getUuidAsString() + ".json");
+    }
+
+    static void endJourney(ServerPlayerEntity player, boolean isEarlyCancel, int amplifier) {
+        player.setInvulnerable(false);
+        if (!isEarlyCancel) {
+            player.increaseStat(ModStats.IRIDESCENCE, 1);
+            if (amplifier != 0)
+                player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW,
+                        getAfterglowDuration(), 0, true, true));
+        }
+        Path cookie = InfinityMod.provider.savingPath.resolve(player.getUuidAsString() + ".json");
+        try {
+            NbtCompound comp = CommonIO.read(cookie);
+            player.teleport(player.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, Identifier.of(comp.getString("dim")))),
+                    comp.getDouble("x"), comp.getDouble("y"), comp.getDouble("z"), player.getYaw(), player.getPitch());
+        } catch (Exception e) {
+            WarpLogic.respawnAlive(player);
+        }
+        try {
+            Files.deleteIfExists(cookie);
+        } catch (Exception ignored) {
         }
     }
 
@@ -195,7 +251,8 @@ public interface Iridescence {
                 ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0,
                         true, false));
             else if (isConvertible(ent))
-                ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0));
+                ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0,
+                        true, true));
         }
     }
 

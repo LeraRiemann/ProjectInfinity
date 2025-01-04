@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.registry.core;
 
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.level.entity.EntityModelLayerRegistry;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
@@ -59,7 +60,7 @@ public class ModEntities {
             .register("chaos_creeper", () -> EntityType.Builder.create(ChaosCreeper::new, SpawnGroup.MONSTER)
                     .setDimensions(0.6f, 1.7f)
                     .maxTrackingRange(8)
-                    .build("chaos_creeper"));
+                    .build(type("chaos_creeper")));
     public static final RegistrySupplier<EntityType<ChaosPawn>> CHAOS_PAWN = INFINITY_ENTITIES
             .register("chaos_pawn", () -> EntityType.Builder.create(ChaosPawn::new, SpawnGroup.MONSTER)
                     .setDimensions(0.6f, 2.0f)
@@ -69,16 +70,23 @@ public class ModEntities {
             .register("ant", () -> EntityType.Builder.create(AntEntity::new, SpawnGroup.CREATURE)
                     .setDimensions(0.6f, 0.3f)
                     .maxTrackingRange(10)
-                    .build("ant"));
+                    .build(type("ant")));
     public static final RegistrySupplier<EntityType<BishopEntity>> BISHOP = INFINITY_ENTITIES
             .register("bishop", () -> EntityType.Builder.create(BishopEntity::new, SpawnGroup.MONSTER)
                     .setDimensions(0.6f, 2.7f)
                     .maxTrackingRange(10)
-                    .build("bishop"));
+                    .build(type("bishop")));
 
     public static void registerEntities() {
         INFINITY_ENTITIES.register();
         registerAttributes();
+    }
+
+    public static String type(String id) {
+        if (!Platform.isFabric()) {
+            return "infinity:"+id;
+        }
+        else return null;
     }
 
     public static void registerAttributes() {

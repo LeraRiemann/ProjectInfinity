@@ -35,7 +35,7 @@ public class PyramidStructure extends Structure {
     }
 
     private void addPieces(StructurePiecesCollector collector, Structure.Context context) {
-        collector.addPiece(new PyramidGenerator(context, top_y, bottom_y, block));
+        collector.addPiece(PyramidGenerator.of(context, top_y, bottom_y, block));
     }
 
     @Override

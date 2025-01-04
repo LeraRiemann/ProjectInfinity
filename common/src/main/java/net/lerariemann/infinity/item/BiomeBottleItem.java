@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.item;
 
-import net.lerariemann.infinity.block.custom.BiomeBottle;
-import net.lerariemann.infinity.util.BackportMethods;
+import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BlockItem;
@@ -33,7 +32,7 @@ public class BiomeBottleItem extends BlockItem {
             tooltip.add(mutableText.formatted(Formatting.GRAY));
         }
         if (type.isAdvanced()) {
-            tooltip.add(Text.translatable("caption.infinity.biomebottle.charge", BiomeBottle.getCharge(stack)).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("caption.infinity.biomebottle.charge", BiomeBottleBlock.getCharge(stack)).formatted(Formatting.GRAY));
         }
     }
 }

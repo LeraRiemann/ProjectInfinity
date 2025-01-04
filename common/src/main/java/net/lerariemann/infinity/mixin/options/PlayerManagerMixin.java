@@ -8,7 +8,8 @@ import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.minecraft.block.BlockState;
 import net.minecraft.network.ClientConnection;
@@ -17,6 +18,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldSaveHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -67,6 +69,9 @@ public class PlayerManagerMixin {
                 e.addNull(st);
             });
         }
+        InfinityMod.LOGGER.info("Sending sound pack to client");
+        if (InfinityMod.provider.rule("useSoundSyncPackets")) InfinityMethods.sendS2CPayload(player, new ModPayloads.DownloadSoundPack(
+                CommonIO.read(player.server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))));
     }
 
     @Inject(method="sendWorldInfo", at = @At("TAIL"))

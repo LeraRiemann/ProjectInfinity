@@ -1,31 +1,29 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 
 import java.util.Arrays;
 
 public class RandomCrop extends RandomisedFeature {
-    NbtCompound cropp;
+    NbtCompound crop;
     boolean water;
     int start;
 
     public RandomCrop(RandomFeaturesList parent) {
         super(parent, "crop");
         id = "block_column";
-        NbtElement crop = PROVIDER.compoundRegistry.get("crops").getRandomElement(random);
-        cropp = (NbtCompound)crop;
-        start = daddy.sea_level - (cropp.getKeys().contains("offset") ? cropp.getInt("offset") : 1);
-        water = cropp.getBoolean("needsWater");
+        crop = PROVIDER.randomElement(random, "crops");
+        start = daddy.sea_level - (crop.getKeys().contains("offset") ? crop.getInt("offset") : 1);
+        water = crop.getBoolean("needsWater");
         save_with_placement();
     }
 
     static NbtCompound blockToLayer(NbtCompound block) {
         NbtCompound layer = new NbtCompound();
-        NbtCompound provider = RandomProvider.blockToProvider(block);
+        NbtCompound provider = NbtUtils.blockToSimpleStateProvider(block);
         layer.put("provider", provider);
         layer.putInt("height", 1);
         return layer;
@@ -66,10 +64,10 @@ public class RandomCrop extends RandomisedFeature {
         config.putString("direction", "up");
         config.putBoolean("prioritize_tip", false);
         NbtList layers = new NbtList();
-        boolean bl = cropp.getKeys().contains("blocks");
-        for (int i = 0; bl ? (i < cropp.getInt("blocks")) : (cropp.getKeys().contains("block_" + i)); i++)
-            layers.add(blockToLayer(cropp.getCompound("block_" + i)));
-        layers.add(blockToLayer(RandomProvider.Block("minecraft:air")));
+        boolean bl = crop.getKeys().contains("blocks");
+        for (int i = 0; bl ? (i < crop.getInt("blocks")) : (crop.getKeys().contains("block_" + i)); i++)
+            layers.add(blockToLayer(crop.getCompound("block_" + i)));
+        layers.add(blockToLayer(NbtUtils.nameToElement("minecraft:air")));
         config.put("layers", layers);
         NbtCompound allowedPlacement = new NbtCompound();
         allowedPlacement.putString("type", "true");

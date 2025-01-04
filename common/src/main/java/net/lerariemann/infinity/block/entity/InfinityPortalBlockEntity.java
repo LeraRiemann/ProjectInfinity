@@ -4,9 +4,8 @@ import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
-import net.lerariemann.infinity.util.InfinityPortal;
+import net.lerariemann.infinity.util.teleport.InfinityPortal;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
@@ -22,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class InfinityPortalBlockEntity extends BlockEntity {
+public class InfinityPortalBlockEntity extends TintableBlockEntity {
     private final PropertyDelegate propertyDelegate;
     private Identifier dimension;
     private int portalColor;
@@ -91,6 +90,10 @@ public class InfinityPortalBlockEntity extends BlockEntity {
     }
     public void setColor(int c) {
         this.portalColor = c;
+        if (world != null) {
+            BlockState bs = world.getBlockState(pos);
+            world.updateListeners(pos, bs, bs, 0);
+        }
     }
     public void setOpen(boolean i) {
         this.isOpen = i;
@@ -199,8 +202,8 @@ public class InfinityPortalBlockEntity extends BlockEntity {
         return createNbt();
     }
 
-    @Override
-    public Object getRenderData() {
+//    @Override
+    public int getTint() {
         return propertyDelegate.get(0);
     }
 }

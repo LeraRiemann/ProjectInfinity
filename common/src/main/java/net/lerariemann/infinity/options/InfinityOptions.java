@@ -4,7 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -17,6 +17,7 @@ import org.joml.Vector3f;
 
 import java.io.File;
 import java.util.function.Function;
+import static net.lerariemann.infinity.util.core.NbtUtils.*;
 
 public class InfinityOptions {
     public NbtCompound data;
@@ -68,25 +69,6 @@ public class InfinityOptions {
     }
     public static InfinityOptions nullSafe(InfinityOptions options) {
         return (options != null) ? options : InfinityOptions.empty();
-    }
-
-    public static String test(NbtCompound data, String key, String def) {
-        return data.contains(key, NbtElement.STRING_TYPE) ? data.getString(key) : def;
-    }
-    public static NbtCompound test(NbtCompound data, String key, NbtCompound def) {
-        return data.contains(key, NbtElement.COMPOUND_TYPE) ? data.getCompound(key) : def;
-    }
-    public static float test(NbtCompound data, String key, float def) {
-        return data.contains(key, NbtElement.DOUBLE_TYPE) ? data.getFloat(key) : def;
-    }
-    public static int test(NbtCompound data, String key, int def) {
-        return data.contains(key, NbtElement.INT_TYPE) ? data.getInt(key) : def;
-    }
-    public static double test(NbtCompound data, String key, double def) {
-        return data.contains(key, NbtElement.DOUBLE_TYPE) ? data.getDouble(key) : def;
-    }
-    public static boolean test(NbtCompound data, String key, boolean def) {
-        return data.contains(key) ? data.getBoolean(key) : def;
     }
 
     public boolean isEmpty() {

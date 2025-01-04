@@ -8,8 +8,10 @@ import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.item.PortalDataHolder;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
-import net.lerariemann.infinity.registry.var.ModPoi;
-import net.lerariemann.infinity.util.*;
+import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.teleport.InfinityPortal;
+import net.lerariemann.infinity.util.teleport.PortalCreator;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.registry.core.ModItems;
@@ -35,10 +37,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -59,9 +57,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
-    public static final BooleanProperty BOOP = BooleanProperty.of("boop");
-
+public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider, Boopable {
     public InfinityPortalBlock(Settings settings) {
         super(settings);
         this.setDefaultState(getDefaultState().with(BOOP, false));
@@ -70,7 +66,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
-        builder.add(BOOP);
+        appendBoop(builder);
     }
 
     @Nullable

@@ -3,20 +3,24 @@ package net.lerariemann.infinity.item;
 import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.InfinityPortal;
+import net.lerariemann.infinity.util.screen.F4Screen;
+import net.lerariemann.infinity.util.teleport.InfinityPortal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.MutableText;
@@ -29,26 +33,20 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-public class F4Item extends PortalDataHolder {
+public class F4Item extends Item implements PortalDataHolder {
     static final BlockState OBSIDIAN = Blocks.OBSIDIAN.getDefaultState();
 
     public F4Item(Settings settings) {
         super(settings);
     }
 
-    @Override
-    public MutableText getDimensionTooltip(Identifier dimension) {
-        String s = dimension.toString();
-        // Randomly generated dimensions.
-        if (s.contains("infinity:generated_"))
-            return Text.translatable("tooltip.infinity.key.generated")
-                    .append(s.replace("infinity:generated_", ""));
-        if (s.equals(InfinityMethods.ofRandomDim))
-            return Text.translatable("tooltip.infinity.key.randomise");
-        // All other dimensions.
-        return Text.translatableWithFallback(
-                Util.createTranslationKey("dimension", dimension),
-                InfinityMethods.fallback(dimension.getPath()));
+    public static MutableText getDimensionTooltip(Identifier dimension) {
+        if (dimension == null) return Text.translatable(Blocks.NETHER_PORTAL.getTranslationKey());
+        String name = dimension.toString();
+        MutableText text = InfinityMethods.getDimensionNameAsText(dimension);
+        if (name.contains("infinity:generated_") || name.equals(InfinityMethods.ofRandomDim))
+            return text;
+        return Text.translatable("tooltip.infinity.f4", text);
     }
 
 
@@ -61,15 +59,18 @@ public class F4Item extends PortalDataHolder {
     }
 
     @Override
-    public MutableText defaultDimensionTooltip() {
-        return Text.translatable("tooltip.infinity.f4.default");
+    public ItemStack getStack() {
+        return getDefaultStack();
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext type) {
-        super.appendTooltip(stack, world, tooltip, type);
-        MutableText mutableText = Text.translatable("tooltip.infinity.f4.charges", getCharge(stack));
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        super.appendTooltip(stack, context, tooltip, type);
+        Identifier dimension = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
+        MutableText mutableText = getDimensionTooltip(dimension);
         tooltip.add(mutableText.formatted(Formatting.GRAY));
+        MutableText mutableText2 = Text.translatable("tooltip.infinity.f4.charges", getCharge(stack));
+        tooltip.add(mutableText2.formatted(Formatting.GRAY));
     }
 
     public static ItemStack placePortal(World world, PlayerEntity player, ItemStack stack, BlockPos lowerCenter,
@@ -84,8 +85,10 @@ public class F4Item extends PortalDataHolder {
             return null;
         }
         BlockPos lowerLeft = lowerCenter.offset(dir2, -(size_x/2));
-        Identifier id = ModItems.F4.get().getDestinationParsed(stack, world);
-        boolean doNotRenderPortal = (world.isClient && ModItems.F4.get().isDestinationRandom(id));
+        Identifier id = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
+        boolean doNotRenderPortal = (world.isClient && (id == null || !id.getPath().contains("generated_")));
+        if (ModItems.F4.get().isDestinationRandom(id))
+            id = InfinityMethods.getRandomId(world.random);
         int obsNotReplaced = 0;
 
         //placing the portal
@@ -108,13 +111,21 @@ public class F4Item extends PortalDataHolder {
         }
         useCharges -= obsNotReplaced;
 
-        player.playSound(SoundEvents.BLOCK_BELL_USE, 1, 0.75f);
-        BackportMethods.apply(stack, ModItemFunctions.F4_CHARGE, charges-useCharges);
+        world.playSound(player, player.getBlockPos(), SoundEvents.BLOCK_BELL_USE, SoundCategory.BLOCKS, 1, 0.75f);
+        stack.applyComponentsFrom(ComponentMap.builder()
+                .add(ModComponentTypes.CHARGE.get(), charges - useCharges).build());
         return stack;
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        if (player instanceof ClientPlayerEntity clientPlayer) {
+            MinecraftClient.getInstance().setScreen(F4Screen.of(clientPlayer));
+        }
+        return TypedActionResult.success(player.getStackInHand(hand));
+    }
+
+    public static TypedActionResult<ItemStack> deploy(World world, PlayerEntity player, Hand hand) {
         Direction dir = player.getHorizontalFacing();
         Direction.Axis dir2 = dir.rotateClockwise(Direction.Axis.Y).getAxis();
         BlockPos lowerCenter = player.getBlockPos().offset(dir, 4);
@@ -138,13 +149,16 @@ public class F4Item extends PortalDataHolder {
         boolean positionFound = true;
         for (i = 0; i <= 8 && !world.isOutOfHeightLimit(lowerY + i + size_y); i++) {
             positionFound = true;
-            for (int j = 0; j <= size_y+1; j++) for (int k = -1; k <= size_x; k++) {
+            for (int j = 0; j <= size_y+1 && positionFound; j++) for (int k = -1; k <= size_x; k++) {
                 BlockState bs = world.getBlockState(lowerCenter.up(i+j-1).offset(dir2, k - (size_x /2)));
-                if (!bs.isAir() && !bs.isOf(Blocks.OBSIDIAN)) {
-                    i += j;
-                    positionFound = false;
-                    break;
+                if (bs.isReplaceable()) continue;
+                if (bs.isOf(Blocks.OBSIDIAN)) {
+                    if (j == 0 || j == size_y+1 || k == -1 || k == size_x) continue;
+                    i += j-1;
                 }
+                else i += j;
+                positionFound = false;
+                break;
             }
             if (positionFound) break;
         }
@@ -185,9 +199,8 @@ public class F4Item extends PortalDataHolder {
         //validating the place position
         for (int j = -1; j <= size_y; j++) for (int k = -1; k <= size_x; k++) {
             bs = world.getBlockState(pos.up(j).offset(dir2, k - (size_x /2)));
-            if (!bs.isAir() && !bs.isOf(Blocks.OBSIDIAN)) {
-                return ActionResult.FAIL;
-            }
+            if (bs.isOf(Blocks.OBSIDIAN) && (j == -1 || j == size_y || k == -1 || k == size_x)) continue;
+            if (!bs.isReplaceable()) return ActionResult.FAIL;
         }
 
         ItemStack newStack = placePortal(world, player, context.getStack().copy(), pos,
@@ -264,11 +277,14 @@ public class F4Item extends PortalDataHolder {
         }
         int obsidian = 0;
         for (BlockPos bp : toRemove) if (!toLeave.contains(bp)) { //double check since we're checking the corners twice
-            world.removeBlock(bp, false);
+            world.setBlockState(bp,  Blocks.AIR.getDefaultState(), 3, 0);
+            obsidian++;
         }
-        BackportMethods.apply(stack, ModItemFunctions.F4_CHARGE, getCharge(stack));
-        BackportMethods.apply(stack, ModItemFunctions.SIZE_X, portal.width);
-        BackportMethods.apply(stack, ModItemFunctions.SIZE_Y, portal.height);
+        for (int i = 0; i <= portal.width; i++) for (int j = -1; j <= portal.height; j++)
+            world.setBlockState(portal.lowerLeft.offset(axis, i).up(j), Blocks.AIR.getDefaultState(), 3, 0);
+        stack.applyComponentsFrom(ComponentMap.builder()
+                .add(ModComponentTypes.CHARGE.get(), getCharge(stack) + obsidian).build());
+        world.playSound(null, origin, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1, 0.75f);
         return stack;
     }
 }

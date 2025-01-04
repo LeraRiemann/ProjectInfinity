@@ -19,7 +19,7 @@ public abstract class KelpBlockMixin extends AbstractPlantStemBlock {
         super(settings, growthDirection, outlineShape, tickWater, growthChance);
     }
 
-    /* A hook to correctly place kelp in iridescence (see IridescentKelp) */
+    /* A hook to correctly place kelp in iridescence (see IridescentKelpBlock) */
     @Inject(method="getPlacementState", at= @At(value = "HEAD"), cancellable = true)
     void inj(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
         if (Iridescence.isIridescence(ctx.getWorld(), ctx.getBlockPos())) {

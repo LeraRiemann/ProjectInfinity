@@ -2,10 +2,11 @@ package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.core.NbtUtils;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.RegistryKeys;
 
@@ -54,29 +55,29 @@ public abstract class RandomisedFeature {
     }
 
     NbtCompound genBlockOrFluid() {
-        NbtCompound block, block2;
+        NbtCompound block2;
         if (parent.roll("solid_lakes")) {
-            block2 = PROVIDER.randomBlock(random, "blocks_features");
+            block2 = PROVIDER.randomElement(random, "blocks_features");
         }
         else {
-            block = PROVIDER.randomBlock(random, "fluids");
-            block2 = RandomProvider.Block(block.getString("Name"));
+            block2 = NbtUtils.nameToElement(
+                    PROVIDER.randomName(random, "fluids"));
         }
         return block2;
     }
 
     void addRandomBlockProvider(NbtCompound config, String key, String group) {
-        NbtCompound block = PROVIDER.randomBlock(random, group);
+        NbtCompound block = PROVIDER.randomElement(random, group);
         config.put(key, PROVIDER.blockToProvider(block, random));
     }
 
     void addRandomBlock(NbtCompound config, String key, String group) {
-        NbtCompound block = PROVIDER.randomBlock(random, group);
+        NbtCompound block = PROVIDER.randomElement(random, group);
         config.put(key, block);
     }
 
     void addRandomIntProvider(NbtCompound config, String key, int lbound, int bound) {
-        config.put(key, RandomProvider.intProvider(random, lbound, bound, true));
+        config.put(key, NbtUtils.randomIntProvider(random, lbound, bound, true));
     }
 
     abstract NbtCompound feature();

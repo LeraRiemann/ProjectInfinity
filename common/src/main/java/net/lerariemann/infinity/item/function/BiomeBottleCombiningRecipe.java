@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.item.function;
 
-import net.lerariemann.infinity.block.custom.BiomeBottle;
+import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.Block;
@@ -26,19 +26,19 @@ public class BiomeBottleCombiningRecipe extends SpecialCraftingRecipe {
             if (!bl) return false;
             ItemStack itemStack = inventory.getStack(k);
             if (!itemStack.isEmpty()) {
-                if (Block.getBlockFromItem(itemStack.getItem()) instanceof BiomeBottle) {
-                    charge += BiomeBottle.getCharge(itemStack);
+                if (Block.getBlockFromItem(itemStack.getItem()) instanceof BiomeBottleBlock) {
+                    charge += BiomeBottleBlock.getCharge(itemStack);
                     if (stack1 == null) {
                         stack1 = itemStack;
-                        bl = !BiomeBottle.isEmpty(stack1);
+                        bl = !BiomeBottleBlock.isEmpty(stack1);
                     }
-                    else bl = !BiomeBottle.isEmpty(itemStack)
-                            && BiomeBottle.getBiome(stack1).equals(BiomeBottle.getBiome(itemStack));
+                    else bl = !BiomeBottleBlock.isEmpty(itemStack)
+                            && BiomeBottleBlock.getBiome(stack1).equals(BiomeBottleBlock.getBiome(itemStack));
                 }
                 else return false;
             }
         }
-        return bl && (stack1 != null) && (charge < BiomeBottle.maxAllowedCharge);
+        return bl && (stack1 != null) && (charge < BiomeBottleBlock.maxAllowedCharge);
     }
 
     public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {

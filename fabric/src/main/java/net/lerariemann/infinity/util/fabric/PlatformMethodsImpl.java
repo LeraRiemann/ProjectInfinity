@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.item.StarOfLangItem;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
@@ -28,6 +28,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 
 /**
  * See {@link PlatformMethods} for usages.
@@ -86,5 +87,9 @@ public class PlatformMethodsImpl {
     }
     public static double acidHeightTest(Entity entity) {
         return -1;
+    }
+
+    public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
+        return StarOfLangItem::new;
     }
 }

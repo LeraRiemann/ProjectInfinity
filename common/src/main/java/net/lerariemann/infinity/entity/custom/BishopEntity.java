@@ -1,8 +1,11 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.util.BishopBattle;
+import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.entity.ai.pathing.MobNavigation;
+import net.minecraft.entity.ai.pathing.PathNodeNavigator;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
@@ -22,13 +25,25 @@ public class BishopEntity extends AbstractChessFigure {
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 150);
     }
     @Override
     protected void initGoals() {
         targetSelector.add(2, new AntEntity.AntBattleGoal<>(this, PlayerEntity.class, true));
         super.initGoals();
+    }
+
+    @Override
+    protected EntityNavigation createNavigation(World world) {
+        return new MobNavigation(this, world) {
+            @Override
+            protected PathNodeNavigator createPathNodeNavigator(int range) {
+                this.nodeMaker = new BishopNodeMaker();
+                this.nodeMaker.setCanEnterOpenDoors(true);
+                return new PathNodeNavigator(this.nodeMaker, range);
+            }
+        };
     }
 
     @Override

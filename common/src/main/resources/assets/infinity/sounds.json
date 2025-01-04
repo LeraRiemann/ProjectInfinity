@@ -2,13 +2,30 @@
   "music.ivory.hope_instilled": {
     "subtitle": "subtitles.music.ivory.hope_instilled",
     "sounds": [
-      "infinity:ivory_hope_instilled"
+      "ivory:music/hope_instilled"
     ]
   },
   "music.ivory.challenger": {
     "subtitle": "subtitles.music.ivory.challenger",
     "sounds": [
-      "infinity:ivory_challenger"
+      "ivory:music/challenger"
+    ]
+  },
+  "music.c418.classic": {
+    "subtitle": "subtitles.music.c418.classic",
+    "sounds": [
+      "music/game/minecraft",
+      "music/game/clark",
+      "music/game/sweden",
+      "music/game/subwoofer_lullaby",
+      "music/game/living_mice",
+      "music/game/haggstrom",
+      "music/game/danny",
+      "music/game/key",
+      "music/game/oxygene",
+      "music/game/dry_hands",
+      "music/game/wet_hands",
+      "music/game/mice_on_venus"
     ]
   },
   "backport.vault.open_shutter": {

@@ -2,7 +2,8 @@ package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.CorePack;
 import net.minecraft.nbt.*;
 
 public class RandomVegetation extends RandomisedFeature {
@@ -28,7 +29,7 @@ public class RandomVegetation extends RandomisedFeature {
         String tree = "minecraft:oak";
         if (parent.roll("use_vanilla_trees")) {
             tree = PROVIDER.randomName(random, "trees");
-            NbtCompound c = PROVIDER.notRandomTree(tree, parent.surface_block.getString("Name"));
+            NbtCompound c = CorePack.treePlacement(tree, parent.surface_block.getString("Name"));
             String s = tree.substring(tree.lastIndexOf(':') + 1).replace("/", "_") + "_" + parent.parent.id;
             s = s.replace("/", "_");
             CommonIO.write(c, parent.storagePath + "/worldgen/placed_feature", s + ".json");

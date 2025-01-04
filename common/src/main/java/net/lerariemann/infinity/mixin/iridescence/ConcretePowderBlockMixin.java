@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
-import net.lerariemann.infinity.registry.core.ModBlocks;
+import net.lerariemann.infinity.iridescence.Iridescence;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ConcretePowderBlock;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,6 +14,6 @@ public class ConcretePowderBlockMixin {
     @Inject(method= "hardensIn(Lnet/minecraft/block/BlockState;)Z",
     at = @At("RETURN"), cancellable = true)
     private static void inj(BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        if (state.isOf(ModBlocks.IRIDESCENCE.get())) cir.setReturnValue(false);
+        if (Iridescence.isIridescence(state.getFluidState())) cir.setReturnValue(false);
     }
 }

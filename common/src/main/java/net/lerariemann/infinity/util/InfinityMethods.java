@@ -5,17 +5,18 @@ import com.google.common.hash.Hashing;
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
-import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
-import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.block.entity.TintableBlockEntity;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
@@ -27,7 +28,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.lerariemann.infinity.InfinityModClient.sampler;
 
-// Methods that are not dependent on ExpectPlatform, and work identically on both Fabric and NeoForge.
+/** Common mod methods that work identically on Fabric and NeoForge.
+ * @see PlatformMethods */
 public interface InfinityMethods {
     String ofRandomDim = "infinity:random";
 
@@ -159,6 +161,14 @@ public interface InfinityMethods {
         }
         return 0xFFFFFF;
     }
+    static int getItemColorFromComponents(ItemStack stack, int layer) {
+        int color = stack.getComponents().getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
+        return ColorHelper.Argb.fullAlpha(color);
+    }
+    static int getDiscColorFromComponents(ItemStack stack, int layer) {
+        int color = getItemColorFromComponents(stack, layer);
+        return layer == 0 ? color : 0xFFFFFF ^ color;
+    }
 
     /**
      * Gets an Infinity Portal's item colour - hard set as a light blue.
@@ -168,9 +178,9 @@ public interface InfinityMethods {
     }
 
     /**
-     * Gets an Infinity Portal's color from its block entity - for use in color providers.
+     * For use in color providers with blocks which the block entity sets color for.
      */
-    static int getInfinityPortalColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
+    static int getBlockEntityColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
         if (world != null && pos != null) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof InfinityPortalBlockEntity be) {
@@ -217,12 +227,26 @@ public interface InfinityMethods {
         return getDimId(getRandomSeed(random));
     }
 
+    static MutableText getDimensionNameAsText(Identifier dimension) {
+        String name = dimension.toString();
+        // Randomly generated dimensions.
+        if (name.contains("infinity:generated_"))
+            return Text.translatable("tooltip.infinity.key.generated")
+                    .append(name.replace("infinity:generated_", ""));
+        if (name.equals(InfinityMethods.ofRandomDim))
+            return Text.translatable("tooltip.infinity.key.randomise");
+        // All other dimensions.
+        return Text.translatableWithFallback(
+                Util.createTranslationKey("dimension", dimension),
+                InfinityMethods.formatAsTitleCase(dimension.getPath()));
+    }
+
     /**
     * Creates a fallback for texts without translation by replacing underscores
      * with spaces and formatting the text as Title Case.
      */
-    static String fallback(String text) {
-        text = text.replace("_", " ");
+    static String formatAsTitleCase(String text) {
+        text = text.replaceAll("[_./]", " ");
         //i am sure java has a smarter way to do title case, but this works too
         StringBuilder newText = new StringBuilder();
         int i = 0;

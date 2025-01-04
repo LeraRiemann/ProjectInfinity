@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2003008,
+  "infinity_version": 2003011,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "longArithmeticEnabled": false,
@@ -7,15 +7,18 @@
     "chaosMobsEnabled": true,
     "consumePortalKey": true,
     "randomizeAllNetherPortals": false,
+    "pawnsCanDropIllegalItems": false,
+    "useSoundSyncPackets": true,
     "maxBiomeCount": 6,
     "maxDimensionScale": 0,
-    "iridescenceInitialDuration": 1,
-    "iridescenceCooldownDuration": 168
+    "iridescenceInitialDuration": 30,
+    "iridescenceCooldownDuration": 168,
+    "afterglowDuration": 24,
+    "resetChargeCooldown": 6000
   },
   "disabledDimensions": ["ant", "bash", "checkerboard", "custom",
-    "isolation", "missing", "perfection", "terminal"],
+    "isolation", "missing", "notes", "perfection", "terminal"],
   "portalKey": "",
-  "altarKey": "minecraft:diamond",
   "salt": "",
   "rootChances": {
     "dimension_type": {

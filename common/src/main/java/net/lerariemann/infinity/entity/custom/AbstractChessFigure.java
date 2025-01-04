@@ -115,17 +115,17 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_PLAYER_BREATH;
+        return isBlackOrWhite() ? SoundEvents.ENTITY_PLAYER_BREATH : SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_PLAYER_HURT;
+        return isBlackOrWhite() ? SoundEvents.ENTITY_PLAYER_HURT : SoundEvents.BLOCK_AMETHYST_BLOCK_HIT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_PLAYER_DEATH;
+        return isBlackOrWhite() ? SoundEvents.ENTITY_PLAYER_DEATH : SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK;
     }
 
     public boolean shouldPursueRegularGoals() {
