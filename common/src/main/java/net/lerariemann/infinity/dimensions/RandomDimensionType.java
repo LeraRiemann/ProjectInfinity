@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 
 import java.util.Random;
@@ -41,7 +42,7 @@ public class RandomDimensionType {
         data.putInt("monster_spawn_block_light_limit", random.nextInt(16));
         NbtCompound lightLevel = new NbtCompound();
         lightLevel.putString("type", "uniform");
-        lightLevel.put("value", RandomProvider.genBounds(0, random.nextInt(16)));
+            lightLevel.put("value", RandomProvider.genBounds(0, random.nextInt(16)));
         data.put("monster_spawn_light_level", lightLevel);
         data.putString("infiniburn", "#" + dim.PROVIDER.randomName(random, "tags"));
         String s = dim.PROVIDER.randomName(random, "dimension_effects");

@@ -173,13 +173,13 @@ public interface CommonIO {
         return parent + "\t".repeat(Math.max(0, t));
     }
 
-    static String ElementToString(NbtElement base, int t) {
+    static String elementToString(NbtElement base, int t) {
         if (base == null) {
             return "!!NULL!!";
         } else if (base instanceof NbtCompound nbtCompound) {
-            return CompoundToString(nbtCompound, t + 1);
+            return compoundToString(nbtCompound, t + 1);
         } else if (base instanceof NbtList nbtElements) {
-            return ListToString(nbtElements, t + 1);
+            return listToString(nbtElements, t + 1);
         } else if (base instanceof NbtByte nbtByte) {
             return (nbtByte.byteValue() != 0) ? "true" : "false";
         } else if (base instanceof NbtDouble nbtDouble) {
@@ -237,4 +237,3 @@ public interface CommonIO {
         return res;
     }
 }
-

@@ -16,6 +16,7 @@ public class ModSounds {
     public static SoundEvent IVORY_MUSIC_HOPE_EVENT = SoundEvent.of(IVORY_MUSIC_HOPE);
     public static SoundEvent IVORY_MUSIC_CHALLENGER_EVENT = SoundEvent.of(IVORY_MUSIC_CHALLENGER);
     public static SoundEvent CLASSIC_MUSIC_SOUND_EVENT = SoundEvent.of(CLASSIC_MUSIC);
+    public static SoundEvent BACKPORT_VAULT_EVENT = SoundEvent.of(BACKPORT_VAULT);
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(MOD_ID, RegistryKeys.SOUND_EVENT);
 
     public static void registerSounds() {

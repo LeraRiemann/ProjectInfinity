@@ -5,8 +5,11 @@ import com.google.common.hash.Hashing;
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
+import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.block.entity.TintableBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
@@ -18,6 +21,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
@@ -161,12 +165,9 @@ public interface InfinityMethods {
         }
         return 0xFFFFFF;
     }
-    static int getItemColorFromComponents(ItemStack stack, int layer) {
-        int color = stack.getComponents().getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
-        return ColorHelper.Argb.fullAlpha(color);
-    }
+
     static int getDiscColorFromComponents(ItemStack stack, int layer) {
-        int color = getItemColorFromComponents(stack, layer);
+        int color = getOverlayColorFromComponents(stack, layer);
         return layer == 0 ? color : 0xFFFFFF ^ color;
     }
 

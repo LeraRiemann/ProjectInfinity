@@ -8,6 +8,7 @@ import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.item.PortalDataHolder;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.var.ModPoi;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.teleport.InfinityPortal;
 import net.lerariemann.infinity.util.teleport.PortalCreator;
@@ -15,6 +16,7 @@ import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -37,6 +39,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.Properties;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -260,7 +265,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     public static TeleportTarget getTeleportTarget(Entity entity, InfinityPortalBlockEntity portal,
                                                    ServerWorld worldFrom, BlockPos posFrom) {
         BlockState blockStateFrom = worldFrom.getBlockState(posFrom);
-        Direction.Axis axisFrom = blockStateFrom.get(Properties.HORIZONTAL_AXIS);
+        Direction.Axis axisFrom = blockStateFrom.get(net.minecraft.state.property.Properties.HORIZONTAL_AXIS);
         BlockLocating.Rectangle portalFrom = BlockLocating.getLargestRectangle(
                 posFrom, axisFrom,
                 21, Direction.Axis.Y, 21,
@@ -338,7 +343,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                                                    Entity teleportingEntity,
                                                    Direction.Axis axisFrom, Vec3d offset) {
         BlockState blockStateTo = worldTo.getBlockState(posTo);
-        Direction.Axis axisTo = blockStateTo.get(Properties.HORIZONTAL_AXIS);
+        Direction.Axis axisTo = blockStateTo.get(net.minecraft.state.property.Properties.HORIZONTAL_AXIS);
         BlockLocating.Rectangle portalTo = BlockLocating.getLargestRectangle(
                 posTo, axisTo,
                 21, Direction.Axis.Y, 21,

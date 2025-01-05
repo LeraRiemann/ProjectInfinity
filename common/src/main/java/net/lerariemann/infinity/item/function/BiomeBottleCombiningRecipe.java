@@ -50,7 +50,7 @@ public class BiomeBottleCombiningRecipe extends SpecialCraftingRecipe {
             if (!itemStack.isEmpty()) {
                 if (itemStack.getItem().equals(ModItems.BIOME_BOTTLE_ITEM.get())) {
                     if (stack1 == ItemStack.EMPTY) stack1 = itemStack;
-                    charge += BiomeBottle.getCharge(itemStack);
+                    charge += BiomeBottleBlock.getCharge(itemStack);
                     bottles += 1;
                 }
             }
@@ -60,7 +60,7 @@ public class BiomeBottleCombiningRecipe extends SpecialCraftingRecipe {
         }
 
         ItemStack result = stack1.copy();
-        BiomeBottle.updateCharge(result, charge);
+        BiomeBottleBlock.updateCharge(result, charge);
         result.setCount(1);
         return result;
     }

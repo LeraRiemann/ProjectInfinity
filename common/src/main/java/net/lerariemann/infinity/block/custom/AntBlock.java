@@ -25,10 +25,11 @@ public class AntBlock extends HorizontalFacingBlock {
     }
 
     private static boolean inverseExists(Block down) {
-        var s = Registries.BLOCK.getEntry(down).getIdAsString();
-        var state = down.getDefaultState();
-        if (PlatformMethods.isInBlack(state)) {
-            return Registries.BLOCK.containsId(Identifier.of(s.replace("black", "white")));
+        Identifier id = Registries.BLOCK.getId(down);
+        String n = id.getNamespace();
+        String s = id.getPath();
+        if (s.contains("black_")) {
+            return Registries.BLOCK.containsId(Identifier.of(n, s.replace("black", "white")));
         }
         if (s.contains("white_")) {
             return Registries.BLOCK.containsId(Identifier.of(n, s.replace("white", "black")));

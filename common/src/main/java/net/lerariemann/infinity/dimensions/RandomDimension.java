@@ -15,6 +15,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 
 import java.io.IOException;
@@ -272,7 +273,7 @@ public class RandomDimension {
     }
 
     int getBiomeCount() {
-        return random.nextInt(2, Math.clamp(PROVIDER.ruleInt("maxBiomeCount"), 2, 10));
+        return random.nextInt(2, MathHelper.clamp(PROVIDER.ruleInt("maxBiomeCount"), 2, 10));
     }
 
     NbtList randomBiomesCheckerboard() {

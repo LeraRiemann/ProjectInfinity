@@ -26,7 +26,7 @@ public class InfinityModFabricClient implements ClientModInitializer {
                 ModItems.TRANSFINITE_KEY.get(),
                 ModItems.BIOME_BOTTLE_ITEM.get(),
                 ModItems.F4.get());
-        ColorProviderRegistry.ITEM.register(InfinityMethods::getItemColorFromComponents,
+        ColorProviderRegistry.ITEM.register(InfinityMethods::getOverlayColorFromComponents,
                 ModItems.CHROMATIC_WOOL.get(),
                 ModItems.CHROMATIC_CARPET.get(),
                 ModItems.CHROMATIC_MATTER.get());

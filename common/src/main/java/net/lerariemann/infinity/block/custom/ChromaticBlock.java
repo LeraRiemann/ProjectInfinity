@@ -20,7 +20,7 @@ import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 public class ChromaticBlock extends BlockWithEntity {
-    public static final MapCodec<ChromaticBlock> CODEC = createCodec(ChromaticBlock::new);
+
     public ChromaticBlock(Settings settings) {
         super(settings);
     }
@@ -30,21 +30,21 @@ public class ChromaticBlock extends BlockWithEntity {
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         ItemStack res = super.getPickStack(world, pos, state);
-        if (!res.isEmpty() && world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe)
-            res.applyComponentsFrom(cbe.asMap());
+//        if (!res.isEmpty() && world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe)
+//            res.applyComponentsFrom(cbe.asMap());
         return res;
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) {
             ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
             if (cbe.onUse(world, pos, stack))
                 return ActionResult.SUCCESS;
         }
-        return super.onUse(state, world, pos, player, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     public static class Carpet extends ChromaticBlock {
@@ -55,19 +55,19 @@ public class ChromaticBlock extends BlockWithEntity {
         }
 
         @Override
-        protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
             return SHAPE;
         }
 
         @Override
-        protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
             return !state.canPlaceAt(world, pos)
                     ? Blocks.AIR.getDefaultState()
                     : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         }
 
         @Override
-        protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
             return !world.isAir(pos.down());
         }
     }
@@ -75,10 +75,7 @@ public class ChromaticBlock extends BlockWithEntity {
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CODEC;
-    }
+
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new ChromaticBlockEntity(pos, state);

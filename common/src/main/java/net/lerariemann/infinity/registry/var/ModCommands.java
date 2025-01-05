@@ -7,12 +7,9 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.command.argument.DimensionArgumentType;
 import net.minecraft.server.command.CommandManager;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
 
-import static net.lerariemann.infinity.util.WarpLogic.*;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 

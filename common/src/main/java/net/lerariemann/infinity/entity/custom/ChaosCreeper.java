@@ -2,14 +2,9 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
-import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
-import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.NbtUtils;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.JukeboxPlayableComponent;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -22,9 +17,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryPair;
 import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
@@ -37,8 +29,6 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
-import java.awt.Color;
 
 public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public static TrackedData<Integer> color = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.INTEGER);
@@ -55,12 +45,12 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
 
     @Override
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         NbtCompound biome = InfinityMod.provider.randomElement(world.getRandom(), "biomes");
         this.setColor(NbtUtils.test(biome, "Color", 7842607));
         this.setRandomCharge();
         this.setBiome(biome.getString("Name"));
-        return super.initialize(world, difficulty, spawnReason, entityData);
+        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override
@@ -132,7 +122,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
         if (s != null) {
             ServerWorld serverWorld = s.getWorld(this.getWorld().getRegistryKey());
             if (serverWorld != null) {
-                BiomeBottleBlock.spreadCircle(serverWorld, getBlockPos(), Identifier.of(getBiome()), getCharge());
+                BiomeBottleBlock.spreadCircle(serverWorld, getBlockPos(), new Identifier(getBiome()), getCharge());
             }
         }
         this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), f, World.ExplosionSourceType.NONE);
@@ -153,7 +143,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
             if (!this.getWorld().isClient() && (newCreeper = EntityType.CREEPER.create(this.getWorld())) != null) {
                 NbtCompound compound = new NbtCompound();
                 NbtCompound blockEntityTag = new NbtCompound();
-                blockEntityTag.putString("Biome", getBiomeId());
+                blockEntityTag.putString("Biome", getBiome());
                 blockEntityTag.putInt("Color", getColorRaw());
                 blockEntityTag.putInt("Charge", getCharge());
                 compound.put("BlockEntityTag", blockEntityTag);
@@ -170,14 +160,14 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     }
 
     @Override
-    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
+    protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
         if (source.getAttacker() != null && source.getAttacker().getType().isIn(EntityTypeTags.SKELETONS)) {
             ItemStack stack = ModItems.DISC.get().getDefaultStack();
-            Identifier song = Identifier.of(InfinityMod.provider.randomName(world.random, "jukeboxes"));
-            stack.applyComponentsFrom(ComponentMap.builder()
-                    .add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new RegistryPair<>(
-                            RegistryKey.of(RegistryKeys.JUKEBOX_SONG, song)), true))
-                    .add(ModComponentTypes.COLOR.get(), (int)InfinityMethods.getNumericFromId(song)).build());
+            Identifier song = new Identifier(InfinityMod.provider.randomName(getEntityWorld().random, "jukeboxes"));
+//            stack.applyComponentsFrom(ComponentMap.builder()
+//                    .add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new RegistryPair<>(
+//                            RegistryKey.of(RegistryKeys.JUKEBOX_SONG, song)), true))
+//                    .add(ModComponentTypes.COLOR.get(), (int)InfinityMethods.getNumericFromId(song)).build());
             this.dropStack(stack);
         }
     }

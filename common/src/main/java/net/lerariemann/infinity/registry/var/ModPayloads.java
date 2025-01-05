@@ -2,34 +2,23 @@ package net.lerariemann.infinity.registry.var;
 
 import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
-import net.lerariemann.infinity.iridescence.Iridescence;
-import net.lerariemann.infinity.item.F4Item;
-import net.lerariemann.infinity.registry.core.ModComponentTypes;
-import net.lerariemann.infinity.registry.core.ModItems;
-import net.lerariemann.infinity.util.config.SoundScanner;
-import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.InfinityOptions;
-import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.loading.DimensionGrabber;
+import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.TypedActionResult;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -41,6 +30,9 @@ public class ModPayloads {
     public static final Identifier WORLD_ADD = getId("reload_worlds");
     public static final Identifier SHADER_RELOAD = getId("reload_shader");
     public static final Identifier STARS_RELOAD = getId("reload_stars");
+    public static final Identifier DEPLOY_F4 = getId("deploy_f4");
+    public static final Identifier UPLOAD_JUKEBOXES = getId("upload_jukeboxes");
+
 
     public static PacketByteBuf buildPacket(ServerWorld destination, ServerPlayerEntity player) {
         return buildPacket(destination, Iridescence.shouldApplyShader(player));
@@ -56,10 +48,6 @@ public class ModPayloads {
         ServerPlayNetworking.send(player, ModPayloads.SHADER_RELOAD,
                 ModPayloads.buildPacket(world, player));
     }
-    public static MinecraftServer server(Object context) {
-        ServerPlayNetworking.Context serverContext = (ServerPlayNetworking.Context) context;
-        return serverContext.server();
-    }
 
     public static void receiveShader(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         if (buf.readBoolean()) {
@@ -70,7 +58,7 @@ public class ModPayloads {
         ((InfinityOptionsAccess)client).infinity$setOptions(options);
         NbtCompound shader = options.getShader();
         boolean bl = shader.isEmpty();
-        if (bl) client.execute(() -> ShaderLoader.reloadShaders(client, false));
+        if (bl) client.execute(() -> ShaderLoader.reloadShaders(client, false, false));
         else {
             client.execute(() -> {
                 CommonIO.write(shader, ShaderLoader.shaderDir(client), ShaderLoader.FILENAME);

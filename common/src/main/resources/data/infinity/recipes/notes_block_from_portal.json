@@ -4,6 +4,6 @@
     "item": "minecraft:note_block"
   },
   "output": {
-    "id": "infinity:notes_block"
+    "item": "infinity:notes_block"
   }
 }

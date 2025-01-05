@@ -1,12 +1,12 @@
-package net.lerariemann.infinity.item.neoforge;
+package net.lerariemann.infinity.item.forge;
 
 import net.lerariemann.infinity.item.StarOfLangItem;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class StarOfLangItemNeoforge extends StarOfLangItem {
-    public StarOfLangItemNeoforge(Settings settings) {
+public class StarOfLangItemForge extends StarOfLangItem {
+    public StarOfLangItemForge(Settings settings) {
         super(settings);
     }
     @Override

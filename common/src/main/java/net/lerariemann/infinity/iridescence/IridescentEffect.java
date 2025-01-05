@@ -8,10 +8,13 @@ import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.InstantStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+
+import java.util.Objects;
 
 import static net.lerariemann.infinity.iridescence.Iridescence.*;
 
@@ -33,20 +36,16 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
     }
 
     public void onRemoved(LivingEntity entity) {
-        switch (entity) {
-            case ServerPlayerEntity player -> {
-                unloadShader(player);
-                if (player.isInvulnerable()) endJourney(player, true, 0);
+        if (Objects.requireNonNull(entity) instanceof ServerPlayerEntity player) {
+            unloadShader(player);
+            if (player.isInvulnerable()) endJourney(player, true, 0);
+        } else if (entity instanceof ChaosPawn pawn) {
+            if (pawn.getRandom().nextBoolean()) {
+                pawn.unchess();
+                convTriggers(pawn);
             }
-            case ChaosPawn pawn -> {
-                if (pawn.getRandom().nextBoolean()) {
-                    pawn.unchess();
-                    convTriggers(pawn);
-                }
-            }
-            case MobEntity currEntity -> endConversion(currEntity);
-            default -> {
-            }
+        } else if (entity instanceof MobEntity currEntity) {
+            endConversion(currEntity);
         } else if (entity instanceof MobEntity currEntity) {
             Iridescence.endConversion(currEntity);
         }
@@ -69,7 +68,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             if (shouldRequestShaderLoad(duration, amplifier))
                 loadShader(player);
             if (amplifier == 0 && duration == 2) {
-                player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW,
+                player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW.value(),
                         getAfterglowDuration() / 2, 0, true, true));
             }
         }
@@ -89,8 +88,8 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         }
 
         @Override
-        public void onApplied(LivingEntity entity, int amplifier) {
-            super.onApplied(entity, amplifier);
+        public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
+            super.onApplied(entity, attributes, amplifier);
             tryBeginJourney(entity, amplifier);
         }
     }

@@ -2,7 +2,6 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.RandomProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -29,7 +28,6 @@ import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.awt.Color;
 import java.util.Random;
 
 public class ChaosSlime extends SlimeEntity implements TintableEntity {

@@ -5,7 +5,6 @@ import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.*;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
@@ -42,8 +41,6 @@ public class IridescentBlock extends Block {
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        if (!ctx.getStack().getComponents().contains(DataComponentTypes.BLOCK_STATE))
-            return getPosBased(ctx.getWorld(), ctx.getBlockPos());
         return super.getPlacementState(ctx);
     }
     @Override
@@ -81,7 +78,7 @@ public class IridescentBlock extends Block {
                 return ActionResult.SUCCESS;
             }
         }
-        return super.onUse(state, world, pos, player, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     public static class Carpet extends IridescentBlock {

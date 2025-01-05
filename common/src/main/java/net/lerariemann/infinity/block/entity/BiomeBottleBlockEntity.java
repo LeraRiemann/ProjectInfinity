@@ -139,7 +139,7 @@ public class BiomeBottleBlockEntity extends TintableBlockEntity {
                     int charge_new = be.charge - diff;
                     BiomeBottleBlock.spreadRing(w, pos, be.biome, be.from_charge - be.charge, be.from_charge - charge_new);
                     be.charge = charge_new;
-                    world.setBlockState(pos, state.with(BiomeBottleBlock.LEVEL, Math.clamp(level - 1, 0, 10)));
+                    world.setBlockState(pos, state.with(BiomeBottleBlock.LEVEL, MathHelper.clamp(level - 1, 0, 10)));
                     BiomeBottleBlock.playSploosh(w, pos);
                     be.markDirty();
                 }

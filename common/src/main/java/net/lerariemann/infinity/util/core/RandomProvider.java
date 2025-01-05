@@ -42,7 +42,7 @@ public class RandomProvider {
 
     public Optional<Item> getPortalKeyAsItem() {
         if (portalKey.isBlank()) return Optional.empty();
-        return Registries.ITEM.getOrEmpty(Identifier.of(portalKey));
+        return Registries.ITEM.getOrEmpty(new Identifier(portalKey));
     }
     public boolean isPortalKeyBlank() {
         return getPortalKeyAsItem().isEmpty();
@@ -232,7 +232,7 @@ public class RandomProvider {
 
     public NbtCompound blockToProvider(NbtCompound block, Random random) {
         NbtCompound res = new NbtCompound();
-        boolean isRotatable = Registries.BLOCK.get(Identifier.of(block.getString("Name"))).getDefaultState().getProperties().contains(Properties.AXIS);
+        boolean isRotatable = Registries.BLOCK.get(new Identifier(block.getString("Name"))).getDefaultState().getProperties().contains(Properties.AXIS);
         res.putString("type", isRotatable && roll(random, "rotate_blocks") ?
                 "minecraft:rotated_block_provider" : "minecraft:simple_state_provider");
         res.put("state", block);
@@ -267,13 +267,20 @@ public class RandomProvider {
         return res;
     }
 
+    public static NbtCompound genBounds(int lbound, int bound) {
+        NbtCompound value = new NbtCompound();
+        value.putInt("min_inclusive", lbound);
+        value.putInt("max_inclusive", bound);
+        return value;
+    }
+
     public void kickGhostsOut(DynamicRegistryManager s) {
         Registry<Biome> reg = s.get(RegistryKeys.BIOME);
         WeighedStructure<String> biomes = registry.get("biomes");
         if (biomes != null) {
             int i = 0;
             while(i < biomes.keys.size()) {
-                if (!reg.containsId(Identifier.of(biomes.keys.get(i)))) {
+                if (!reg.containsId(new Identifier(biomes.keys.get(i)))) {
                     biomes.kick(i);
                 }
                 else i++;

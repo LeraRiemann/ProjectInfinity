@@ -2,7 +2,6 @@ package net.lerariemann.infinity.util;
 
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,12 +14,27 @@ public class BackportMethods {
         return i;
     }
 
+    public static String getOrDefaultString(ItemStack stack, String key, String i) {
+        if (stack.hasNbt()) {
+            assert stack.getNbt() != null;
+            return stack.getNbt().getString(key);
+        }
+        return i;
+    }
+
     public static ItemStack apply(ItemStack stack, String key, int i) {
         if (stack.hasNbt()) {
             assert stack.getNbt() != null;
-            var c = new NbtCompound();
-            c.putInt(key, i);
             stack.getNbt().putInt(key, i);
+            return stack;
+        }
+        return stack;
+    }
+
+    public static ItemStack apply(ItemStack stack, String key, String i) {
+        if (stack.hasNbt()) {
+            assert stack.getNbt() != null;
+            stack.getNbt().putString(key, i);
             return stack;
         }
         return stack;

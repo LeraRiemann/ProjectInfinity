@@ -1,14 +1,15 @@
 package net.lerariemann.infinity.item;
 
-import net.lerariemann.infinity.registry.core.ModComponentTypes;
+import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -22,19 +23,14 @@ public class TransfiniteKeyItem extends Item implements PortalDataHolder {
     @NotNull
     @Override
     public Identifier getDestination(ItemStack stack) {
-        return Objects.requireNonNullElse(super.getDestination(stack),
+        return Objects.requireNonNullElse(BackportMethods.getDimensionIdentifier(stack),
                 new Identifier(InfinityMethods.ofRandomDim)); // no destination component -> randomize
     }
 
     @Override
-    public ItemStack getStack() {
-        return getDefaultStack();
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        Identifier dimension = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext type) {
+        super.appendTooltip(stack, world, tooltip, type);
+        Identifier dimension = BackportMethods.getDimensionIdentifier(stack);
         MutableText mutableText = (dimension != null)
                 ? InfinityMethods.getDimensionNameAsText(dimension)
                 : Text.translatable("tooltip.infinity.key.randomise");

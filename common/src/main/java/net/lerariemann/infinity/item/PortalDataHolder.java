@@ -2,6 +2,7 @@ package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
+import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
@@ -15,7 +16,7 @@ import java.util.Optional;
 public interface PortalDataHolder {
     @Nullable
     default Identifier getDestination(ItemStack stack) {
-        return stack.getComponents().get(ModComponentTypes.DESTINATION.get());
+        return BackportMethods.getDimensionIdentifier(stack);
     }
 
     default boolean isDestinationRandom(Identifier id) {

@@ -23,7 +23,7 @@ public interface InfinitySpawnHelper {
             bl = world.getFluidState(pos).isIn(FluidTags.WATER);
         else bl = (world.getBlockState(pos.down()).allowsSpawning(world, pos.down(), type));
 
-        bl = bl || SpawnReason.isAnySpawner(spawnReason);
+        bl = bl || spawnReason.equals(SpawnReason.SPAWNER);
 
         if (sg.equals(SpawnGroup.MONSTER))
             bl = bl && (HostileEntity.isSpawnDark(world, pos, random) && world.getDifficulty() != Difficulty.PEACEFUL);

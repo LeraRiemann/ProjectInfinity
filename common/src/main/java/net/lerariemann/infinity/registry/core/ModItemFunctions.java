@@ -21,7 +21,7 @@ import net.minecraft.inventory.SingleStackInventory;
 import net.minecraft.item.FluidModificationItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SpecialRecipeSerializer;
@@ -30,6 +30,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -166,7 +167,7 @@ public class ModItemFunctions {
         ItemPropertiesRegistry.register(ModItems.BIOME_BOTTLE_ITEM.get(), InfinityMethods.getId("bottle"),
                 (stack, world, entity, seed) -> {
                     int charge = BiomeBottleBlock.getCharge(stack);
-                    return Math.clamp(charge / 1000.0f, 0f, 1f);
+                    return MathHelper.clamp(charge / 1000.0f, 0f, 1f);
                 });
         ItemPropertiesRegistry.register(ModItems.IRIDESCENT_CARPET.get(), InfinityMethods.getId("iridescent"),
                 ModItemFunctions::iridPredicate);

@@ -48,7 +48,6 @@ public class ChaosPawn extends AbstractChessFigure {
     public static DefaultAttributeContainer.Builder createAttributes() {
         return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0)
-                .add(EntityAttributes.GENERIC_SCALE, 0.9)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25F);
     }
     @Override
@@ -97,14 +96,15 @@ public class ChaosPawn extends AbstractChessFigure {
     }
 
     @Override
-    public RegistryKey<LootTable> getLootTableId() {
-        Identifier i = switch (getCase()) {
-            case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
-            case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
+    public Identifier getLootTableId() {
+        //loot is defined in dropEquipment instead
+        return switch (getCase()) {
+            case 0 -> new Identifier("infinity:entities/chaos_pawn_black");
+            case 1 -> new Identifier("infinity:entities/chaos_pawn_white");
             default -> {
                 boolean bl = InfinityMod.provider.rule("pawnsCanDropIllegalItems");
-                if (bl) yield Identifier.of(""); //loot is defined in dropEquipment instead
-                else yield Identifier.of(InfinityMod.provider.randomName(random, "loot_tables"));
+                if (bl) yield new Identifier(""); //loot is defined in dropEquipment instead
+                else yield new Identifier(InfinityMod.provider.randomName(random, "loot_tables"));
             }
         };
     }
@@ -172,13 +172,13 @@ public class ChaosPawn extends AbstractChessFigure {
     }
 
     @Override
-    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
-        super.dropEquipment(world, source, causedByPlayer);
+    protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
+        super.dropEquipment(source, lootingMultiplier, allowDrops);
         if (!this.isBlackOrWhite() && InfinityMod.provider.rule("pawnsCanDropIllegalItems")) {
             String s = InfinityMod.provider.randomName(random, "items");
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
-            ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int) (i * i));
-            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
+            ItemStack stack = Registries.ITEM.get(new Identifier(s)).getDefaultStack().copyWithCount((int) (i * i));
+//            stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
             this.dropStack(stack);
         }
     }

@@ -5,7 +5,6 @@ import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -49,26 +48,6 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         sync();
     }
 
-    @Override
-    protected void addComponents(ComponentMap.Builder componentMapBuilder) {
-        super.addComponents(componentMapBuilder);
-        componentMapBuilder.add(ModComponentTypes.COLOR.get(), getTint());
-    }
-    @Override
-    protected void readComponents(BlockEntity.ComponentsAccess components) {
-        super.readComponents(components);
-        setColor(components.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF));
-    }
-
-    public static ComponentMap asMap(int i) {
-        return ComponentMap.builder()
-                .add(ModComponentTypes.COLOR.get(), i)
-                .build();
-    }
-    public ComponentMap asMap() {
-        return asMap(getTint());
-    }
-
     public int offsetSaturation(short amount, @Nullable AtomicBoolean cancel) {
         if (cancel != null) cancel.set(amount < 0 ? saturation == 0 : saturation == 255);
         saturation += amount;
@@ -106,7 +85,7 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
             event = SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE;
         }
         else if (stack.getItem() instanceof DyeItem dye) {
-            setColor(dye.getColor().getEntityColor());
+            setColor(dye.getColor().getFireworkColor());
             event = SoundEvents.ITEM_DYE_USE;
         }
         else return false;
@@ -126,14 +105,14 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     }
 
     @Override
-    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(nbt, registryLookup);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
         setColor(nbt.getInt("color"));
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(nbt, registryLookup);
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
         nbt.putInt("color", getTint());
     }
 
@@ -147,7 +126,7 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         return BlockEntityUpdateS2CPacket.create(this);
     }
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        return createNbt(registryLookup);
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
     }
 }

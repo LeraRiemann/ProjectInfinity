@@ -2,16 +2,13 @@ package net.lerariemann.infinity.block.custom;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NoteBlock;
-import net.minecraft.block.enums.NoteBlockInstrument;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.block.enums.Instrument;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
 import net.minecraft.world.event.GameEvent;
 
 public class NotesBlock extends NoteBlock {
@@ -20,7 +17,7 @@ public class NotesBlock extends NoteBlock {
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (random.nextInt(115) == 0) {
             this.playNote(world, pos);
         }
@@ -32,11 +29,11 @@ public class NotesBlock extends NoteBlock {
     }
 
     @Override
-    protected boolean onSyncedBlockEvent(BlockState state, World world, BlockPos pos, int type, int data) {
-        NoteBlockInstrument[] instruments = NoteBlockInstrument.values();
-        NoteBlockInstrument noteBlockInstrument = instruments[world.random.nextInt(instruments.length-7)];
+    public boolean onSyncedBlockEvent(BlockState state, World world, BlockPos pos, int type, int data) {
+        Instrument[] instruments = (Instrument[]) INSTRUMENT.stream().toArray();
+        Instrument noteBlockInstrument = instruments[world.random.nextInt(instruments.length-7)];
         float f;
-        if (noteBlockInstrument.canBePitched()) {
+        if (noteBlockInstrument.shouldSpawnNoteParticles()) {
             int i = world.random.nextInt(12);
             f = getNotePitch(i);
             world.addParticle(ParticleTypes.NOTE, (double)pos.getX() + (double)0.5F, (double)pos.getY() + 1.2, (double)pos.getZ() + (double)0.5F, (double)i / (double)24.0F, (double)0.0F, (double)0.0F);

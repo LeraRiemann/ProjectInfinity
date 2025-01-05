@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.item.StarOfLangItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,6 +28,8 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 import java.nio.file.Path;
 import java.util.function.Function;
+
+import static net.lerariemann.infinity.InfinityModClient.sampler;
 
 /**
  * Methods that require different implementations to work on Fabric vs. NeoForge and thus depend on {@link dev.architectury.injectables.annotations.ExpectPlatform}.

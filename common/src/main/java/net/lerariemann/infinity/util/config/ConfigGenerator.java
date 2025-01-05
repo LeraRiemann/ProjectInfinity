@@ -58,7 +58,7 @@ public interface ConfigGenerator {
         ConfigFactory.of(manager.get(RegistryKeys.BIOME), ConfigGenerator::extractBiome).generate("extra", "biomes");
         ConfigFactory.of(manager.get(RegistryKeys.STRUCTURE), ConfigGenerator::extractStructure).generate("extra", "structures");
         ConfigFactory.of(manager.get(RegistryKeys.CONFIGURED_FEATURE), ConfigGenerator::extractFeature).generate("extra", "trees");
-        ConfigFactory.of(server.getReloadableRegistries().getRegistryManager().get(RegistryKeys.LOOT_TABLE), ConfigGenerator::extractLootTable)
+        ConfigFactory.of(server.getRegistryManager().get(RegistryKeys.LOOT_TABLE), ConfigGenerator::extractLootTable)
                 .generate("extra", "loot_tables");
     }
 
@@ -115,7 +115,7 @@ public interface ConfigGenerator {
                 NbtList lst = checkColorSet(blockName);
                 if (lst != null) colorPresetMap.add(modId, lst);
             }
-            if (block.getDefaultState().isIn(BlockTags.AIR)) DataCollection.addIdentifier(airMap, key.getValue());
+            if (block.getDefaultState().isAir()) DataCollection.addIdentifier(airMap, key.getValue());
             if (block.getDefaultState().isIn(BlockTags.SMALL_FLOWERS)) DataCollection.addIdentifier(flowerMap, key.getValue());
         });
         blockMap.save();

@@ -35,7 +35,7 @@ public record CorePack(RandomProvider provider, Path savingPath) {
         double size = trees.size();
         NbtCompound c = new NbtCompound();
         NbtList l = new NbtList();
-        c.put("default", treePlacement(trees.getFirst(), "minecraft:grass_block"));
+        c.put("default", treePlacement(trees.get(0), "minecraft:grass_block"));
         for (int i = 1; i < size; i++) {
             NbtCompound c1 = new NbtCompound();
             c1.put("feature", treePlacement(trees.get(i), "minecraft:grass_block"));

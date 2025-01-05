@@ -52,11 +52,12 @@ public class DataCollection<T> {
         range.sort(new Comparator<Integer>() {
             public String extract(int i) {
                 T obj = w.keys.get(i);
-                return switch (obj) {
-                    case NbtCompound compound -> compound.getString("Name");
-                    case NbtList list -> list.getFirst().toString();
-                    default -> obj.toString();
-                };
+                if (Objects.requireNonNull(obj) instanceof NbtCompound compound) {
+                    return compound.getString("Name");
+                } else if (obj instanceof NbtList list) {
+                    return list.get(0).toString();
+                }
+                return obj.toString();
             }
             @Override
             public int compare(Integer i, Integer j) {
@@ -66,10 +67,12 @@ public class DataCollection<T> {
         for (int i = 0; i < w.keys.size(); i++) {
             NbtCompound element = new NbtCompound();
             T obj = w.keys.get(range.get(i));
-            switch (obj) {
-                case String string -> element.putString("key", string);
-                case NbtElement e -> element.put("key", e);
-                default -> throw new RuntimeException("Unexpected weighed structure format");
+            if (Objects.requireNonNull(obj) instanceof String string) {
+                element.putString("key", string);
+            } else if (obj instanceof NbtElement e) {
+                element.put("key", e);
+            } else {
+                throw new RuntimeException("Unexpected weighed structure format");
             }
             element.putDouble("weight", w.weights.get(range.get(i)));
             elements.add(element);

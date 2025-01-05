@@ -82,9 +82,9 @@ public class ModItems {
     public static final RegistrySupplier<TransfiniteKeyItem> TRANSFINITE_KEY =
             registerItemAfter("key", ItemGroups.INGREDIENTS, Items.AMETHYST_SHARD, TransfiniteKeyItem::new);
     public static final RegistrySupplier<HomeItem> HOME_ITEM =
-            registerItemAfter("fine_item", ItemGroups.FOOD_AND_DRINK, Items.MILK_BUCKET, HomeItem::new,
-                    new Item.Settings().component(DataComponentTypes.FOOD,
-                            new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of())));
+            registerItemAfter("fine_item", ItemGroups.INGREDIENTS, Items.MILK_BUCKET, HomeItem::new,
+                    new Item.Settings().food(
+                            new FoodComponent.Builder().alwaysEdible().build()));
     public static final RegistrySupplier<ChromaticItem> CHROMATIC_MATTER =
             registerItemAfter("chromatic_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, ChromaticItem::new);
     public static final RegistrySupplier<Item> WHITE_MATTER =
@@ -92,11 +92,11 @@ public class ModItems {
     public static final RegistrySupplier<Item> BLACK_MATTER =
             registerItemAfter("black_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> IRIDESCENT_STAR =
-            registerItemAfter("iridescent_star", ItemGroups.INGREDIENTS, Items.NETHER_STAR, Item::new,
-                    new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
+            registerItemAfter("iridescent_star", ItemGroups.INGREDIENTS, Items.NETHER_STAR, GlintItem::new,
+                    new Item.Settings().rarity(Rarity.UNCOMMON));
     public static final RegistrySupplier<? extends StarOfLangItem> STAR_OF_LANG =
             registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, PlatformMethods.getStarOfLangConstructor(),
-                    new Item.Settings().component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
+                    new Item.Settings());
     public static final RegistrySupplier<F4Item> F4 =
             registerItemAfter("f4", ItemGroups.OPERATOR, Items.DEBUG_STICK, F4Item::new,
                     new Item.Settings().rarity(Rarity.UNCOMMON));

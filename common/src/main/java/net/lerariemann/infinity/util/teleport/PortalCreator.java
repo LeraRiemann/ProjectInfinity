@@ -11,7 +11,9 @@ import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.compat.CreateCompat;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.registry.var.ModCriteria;
@@ -45,6 +47,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
+import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -237,7 +240,7 @@ public interface PortalCreator {
     static PortalModifierUnion forInitialSetupping(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
         PortalColorApplier applier = PortalColorApplier.of(id, world.getServer());
         PortalModifierUnion union = new PortalModifierUnion()
-                .addSetupper(infPortalSetupper(world, pos, !boop))
+                .addSetupper(infPortalSetupper(world, pos))
                 .addModifier(nbpe -> nbpe.setDimension(id))
                 .addModifier(npbe -> npbe.setColor(applier.apply(npbe.getPos())))
                 .addModifier(npbe -> npbe.setOpen(open))

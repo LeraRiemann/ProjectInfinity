@@ -150,9 +150,10 @@ public class BiomeBottleBlock extends BlockWithEntity {
                 pos.getY() + 0.5, pos.getZ() + 0.5, 30, 0.5, 0.5, 0.5, 0.2);
     }
 
-    public static RegistryEntry<Biome> biomeFromId(ServerWorld world, Identifier biome) {
-        Optional<RegistryEntry.Reference<Biome>> entry = world.getServer().getRegistryManager().get(RegistryKeys.BIOME).getEntry(biome);
-        return entry.orElse(null);
+    public static RegistryEntry<Biome> biomeFromId(ServerWorld world, Identifier id) {
+        Registry<Biome> registry = world.getServer().getRegistryManager().get(RegistryKeys.BIOME);
+        Biome biome = registry.get(id);
+        return registry.getEntry(biome);
     }
 
     public static void spreadCircle(ServerWorld world, BlockPos origin, Identifier biomeId, int charge) {

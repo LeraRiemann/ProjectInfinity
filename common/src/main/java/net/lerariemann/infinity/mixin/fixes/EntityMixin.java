@@ -2,8 +2,8 @@ package net.lerariemann.infinity.mixin.fixes;
 
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.InfinityPortal;
-import net.lerariemann.infinity.util.PortalCreator;
+import net.lerariemann.infinity.util.teleport.InfinityPortal;
+import net.lerariemann.infinity.util.teleport.PortalCreator;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.RegistryKey;

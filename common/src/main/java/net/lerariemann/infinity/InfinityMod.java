@@ -2,17 +2,14 @@ package net.lerariemann.infinity;
 
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.dimensions.RandomText;
-import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.registry.core.*;
 import net.lerariemann.infinity.registry.var.*;
-import net.lerariemann.infinity.util.CommonIO;
+
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.config.ConfigManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
-import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +38,6 @@ public class InfinityMod {
 		rootConfigPathInJar = PlatformMethods.getRootConfigPath();
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
-		ModComponentTypes.registerComponentTypes();
 		ModItemFunctions.registerItemFunctions();
 		ModEntities.registerEntities();
 		ModBlocks.registerModBlocks();

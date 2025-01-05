@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
@@ -94,11 +95,11 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(effect, "luck");
-        builder.add(duration, 200);
-        builder.add(color, 0x00FF00);
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(effect, "luck");
+        this.dataTracker.startTracking(duration, 200);
+        this.dataTracker.startTracking(color, 0x00FF00);
     }
     @Override
     public boolean isAffectedByDaylight() {
@@ -114,7 +115,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
             }
             if (player.getWorld().getRandom().nextFloat() < 0.5) {
                 String i = effect_lookup.get(this.getEffectRaw());
-                StatusEffect newEffect = Registries.STATUS_EFFECT.get(Identifier.of(i));
+                StatusEffect newEffect = Registries.STATUS_EFFECT.get(new Identifier(i));
                 if (newEffect != null) {
                     ChaosSkeleton newSkeleton;
                     if (!this.getWorld().isClient() && (newSkeleton = ModEntities.CHAOS_SKELETON.get().create(this.getWorld())) != null) {
@@ -162,9 +163,6 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     }
     public void setColorRaw(int c) {
         this.dataTracker.set(color, c);
-    }
-    public String getEffectRaw() {
-        return this.dataTracker.get(effect);
     }
     public int getEffectRawId() {
         return reg.getRawId(getEffect());

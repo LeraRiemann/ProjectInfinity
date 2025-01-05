@@ -107,22 +107,20 @@ public interface Iridescence {
             DyeColor.PINK);
 
     static Block getRandomColorBlock(WorldAccess world, String str) {
-        return Registries.BLOCK.get(Identifier.of(colors.get(world.getRandom().nextInt(colors.size())).getName() + "_" + str));
+        return Registries.BLOCK.get(new Identifier(colors.get(world.getRandom().nextInt(colors.size())).getName() + "_" + str));
     }
     static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*colors.size())).getName() + "_" + str));
+        return Registries.BLOCK.get(new Identifier(colors.get((int)(d*colors.size())).getName() + "_" + str));
     }
 
-    public static final int ticksInHour = 1200;
+    int ticksInHour = 1200;
 
-    public static int getAmplifierOnApply(LivingEntity entity, int original) {
+    static int getAmplifierOnApply(LivingEntity entity, int original) {
         StatusEffectInstance cooldown = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
         if (cooldown == null) return original;
         else if (cooldown.getAmplifier() < 1) return 0;
         return -1;
     }
-
-    int ticksInHour = 1200;
 
     static int getOnsetLength() {
         return ticksInHour * InfinityMod.provider.ruleInt("iridescenceInitialDuration") / 60; //default is 30 seconds
@@ -185,16 +183,16 @@ public interface Iridescence {
     static void tryBeginJourney(LivingEntity entity, int amplifier) {
         amplifier = Iridescence.getAmplifierOnApply(entity, amplifier);
         if (amplifier >= 0) {
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(),
                     Iridescence.getEffectLength(amplifier) + Iridescence.getOnsetLength(),
                     amplifier, true, true));
-            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
+            entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
             int cooldownDuration = Iridescence.getCooldownDuration();
             if (cooldownDuration > 0)
-                entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
+                entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN.value(),
                         cooldownDuration, amplifier > 0 ? 1 : 0, true, false));
             if (entity instanceof ServerPlayerEntity player) {
-                ModCriteria.IRIDESCENT.get().trigger(player);
+                ModCriteria.IRIDESCENT.trigger(player);
             }
         }
     }
@@ -213,13 +211,13 @@ public interface Iridescence {
         if (!isEarlyCancel) {
             player.increaseStat(ModStats.IRIDESCENCE, 1);
             if (amplifier != 0)
-                player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW,
+                player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW.value(),
                         getAfterglowDuration(), 0, true, true));
         }
         Path cookie = InfinityMod.provider.savingPath.resolve(player.getUuidAsString() + ".json");
         try {
             NbtCompound comp = CommonIO.read(cookie);
-            player.teleport(player.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, Identifier.of(comp.getString("dim")))),
+            player.teleport(player.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, new Identifier(comp.getString("dim")))),
                     comp.getDouble("x"), comp.getDouble("y"), comp.getDouble("z"), player.getYaw(), player.getPitch());
         } catch (Exception e) {
             WarpLogic.respawnAlive(player);
@@ -251,7 +249,7 @@ public interface Iridescence {
                 ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0,
                         true, false));
             else if (isConvertible(ent))
-                ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT, ticksInHour, 0,
+                ent.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(), ticksInHour, 0,
                         true, true));
         }
     }

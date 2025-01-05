@@ -12,7 +12,6 @@ import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.forge.IridescenceLiquidBlockForge;
 import net.lerariemann.infinity.fluids.forge.ModFluidsForge;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.PlatformMethods;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -107,6 +106,6 @@ public class PlatformMethodsImpl {
     }
 
     public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
-        return StarOfLangItemforge::new;
+        return StarOfLangItemForge::new;
     }
 }

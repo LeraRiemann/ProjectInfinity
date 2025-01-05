@@ -14,14 +14,14 @@ import java.util.Objects;
 public class StatusEffectUtilMixin {
     @Inject(method = "hasHaste", at = @At("RETURN"), cancellable = true)
     private static void injected(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (entity.hasStatusEffect(ModStatusEffects.AFTERGLOW))
+        if (entity.hasStatusEffect(ModStatusEffects.AFTERGLOW.value()))
             cir.setReturnValue(true);
     }
 
     @Inject(method = "getHasteAmplifier", at = @At("RETURN"), cancellable = true)
     private static void inj2(LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
-        if (entity.hasStatusEffect(ModStatusEffects.AFTERGLOW))
+        if (entity.hasStatusEffect(ModStatusEffects.AFTERGLOW.value()))
             cir.setReturnValue(cir.getReturnValue() +
-                    Objects.requireNonNull(entity.getStatusEffect(ModStatusEffects.AFTERGLOW)).getAmplifier());
+                    Objects.requireNonNull(entity.getStatusEffect(ModStatusEffects.AFTERGLOW.value())).getAmplifier());
     }
 }

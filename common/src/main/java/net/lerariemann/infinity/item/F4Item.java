@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.item;
 
-import net.lerariemann.infinity.block.custom.BiomeBottle;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -13,13 +13,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
@@ -59,14 +59,9 @@ public class F4Item extends Item implements PortalDataHolder {
     }
 
     @Override
-    public ItemStack getStack() {
-        return getDefaultStack();
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        Identifier dimension = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext type) {
+        super.appendTooltip(stack, world, tooltip, type);
+        Identifier dimension = BackportMethods.getDimensionIdentifier(stack);
         MutableText mutableText = getDimensionTooltip(dimension);
         tooltip.add(mutableText.formatted(Formatting.GRAY));
         MutableText mutableText2 = Text.translatable("tooltip.infinity.f4.charges", getCharge(stack));
@@ -85,7 +80,7 @@ public class F4Item extends Item implements PortalDataHolder {
             return null;
         }
         BlockPos lowerLeft = lowerCenter.offset(dir2, -(size_x/2));
-        Identifier id = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
+        Identifier id = BackportMethods.getDimensionIdentifier(stack);
         boolean doNotRenderPortal = (world.isClient && (id == null || !id.getPath().contains("generated_")));
         if (ModItems.F4.get().isDestinationRandom(id))
             id = InfinityMethods.getRandomId(world.random);
@@ -112,8 +107,7 @@ public class F4Item extends Item implements PortalDataHolder {
         useCharges -= obsNotReplaced;
 
         world.playSound(player, player.getBlockPos(), SoundEvents.BLOCK_BELL_USE, SoundCategory.BLOCKS, 1, 0.75f);
-        stack.applyComponentsFrom(ComponentMap.builder()
-                .add(ModComponentTypes.CHARGE.get(), charges - useCharges).build());
+        BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, charges-useCharges);
         return stack;
     }
 
@@ -282,8 +276,7 @@ public class F4Item extends Item implements PortalDataHolder {
         }
         for (int i = 0; i <= portal.width; i++) for (int j = -1; j <= portal.height; j++)
             world.setBlockState(portal.lowerLeft.offset(axis, i).up(j), Blocks.AIR.getDefaultState(), 3, 0);
-        stack.applyComponentsFrom(ComponentMap.builder()
-                .add(ModComponentTypes.CHARGE.get(), getCharge(stack) + obsidian).build());
+        BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, getCharge(stack) + obsidian);
         world.playSound(null, origin, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1, 0.75f);
         return stack;
     }

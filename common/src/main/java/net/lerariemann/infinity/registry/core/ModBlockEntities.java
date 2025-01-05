@@ -32,6 +32,11 @@ public class ModBlockEntities {
             BLOCK_ENTITY_TYPES.register("biome_bottle", () ->
                     BlockEntityType.Builder.create(BiomeBottleBlockEntity::new,
                             ModBlocks.BIOME_BOTTLE.get()).build(type("biome_bottle_block_entity")));
+    public static final RegistrySupplier<BlockEntityType<ChromaticBlockEntity>> CHROMATIC =
+            BLOCK_ENTITY_TYPES.register("chromatic", () ->
+                    BlockEntityType.Builder.create(ChromaticBlockEntity::new,
+                            ModBlocks.CHROMATIC_WOOL.get(),
+                            ModBlocks.CHROMATIC_CARPET.get()).build(type("chromatic")));
     public static final RegistrySupplier<BlockEntityType<RailHelper.RHBEntity>> RAIL_HELPER =
             BLOCK_ENTITY_TYPES.register("rail_helper_block_entity", () ->
                     BlockEntityType.Builder.create(RailHelper.RHBEntity::new,
