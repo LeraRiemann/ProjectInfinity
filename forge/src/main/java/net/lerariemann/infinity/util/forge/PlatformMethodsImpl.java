@@ -29,6 +29,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.loading.FMLConfig;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
 import java.util.function.Function;
@@ -82,6 +85,10 @@ public class PlatformMethodsImpl {
 
     public static Path getRootConfigPath() {
         return ModLoadingContext.get().getActiveContainer().getModInfo().getOwningFile().getFile().findResource("config");
+    }
+
+    public static Path getConfigPath() {
+        return Path.of(FMLPaths.CONFIGDIR.get() + "/infinity");
     }
 
     public static TagKey<Item> createItemTag(String id) {

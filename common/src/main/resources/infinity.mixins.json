@@ -48,7 +48,6 @@
     "options.DimensionTypeMixin",
     "options.PlayerManagerMixin",
     "options.ServerWorldMixin",
-    "qol.EnderDragonEntityMixin",
     "qol.FireBlockMixin",
     "qol.LavaFluidMixin"
   ],

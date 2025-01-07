@@ -167,6 +167,11 @@ public class PlatformMethods {
         throw new AssertionError();
     }
 
+    @ExpectPlatform
+    public static Path getConfigPath() {
+        throw new AssertionError();
+    }
+
     /**
      * Create an Item Tag.
      */

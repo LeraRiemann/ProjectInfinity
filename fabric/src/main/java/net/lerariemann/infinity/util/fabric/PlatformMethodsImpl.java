@@ -75,6 +75,10 @@ public class PlatformMethodsImpl {
         return mc.getRootPaths().get(0).resolve("config");
     }
 
+    public static Path getConfigPath() {
+        return Path.of(FabricLoader.getInstance().getConfigDir() + "/infinity");
+    }
+
     public static TagKey<Item> createItemTag(String id) {
         return TagKey.of(RegistryKeys.ITEM, InfinityMethods.getId(id));
     }
