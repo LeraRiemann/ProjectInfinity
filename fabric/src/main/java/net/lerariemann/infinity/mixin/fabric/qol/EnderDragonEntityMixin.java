@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin.qol;
+package net.lerariemann.infinity.mixin.fabric.qol;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.lerariemann.infinity.util.InfinityMethods;

@@ -25,7 +25,7 @@ public class InfinityMod {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Infinite Dimensions");
 	public static Path invocationLock = Path.of("config/infinity/modular/invocation.lock");
 	public static Path rootConfigPath;
-	public static Path utilPath = Path.of("config/infinity/.util");
+	public static Path utilPath = Path.of(PlatformMethods.getConfigPath() + "/.util");
 	public static RandomProvider provider;
 	public static Random random = new Random(); //do not use this in dimgen, only in emergent block behaviour
 
