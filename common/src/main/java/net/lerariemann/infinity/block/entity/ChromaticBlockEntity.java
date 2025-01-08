@@ -3,6 +3,7 @@ package net.lerariemann.infinity.block.entity;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.ComponentMap;
@@ -101,12 +102,12 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
             pitch = offsetBrightness((short) -16, cancel) / 255f;
         }
         else if (stack.isOf(Items.AMETHYST_SHARD)) {
-            hue += 15;
+            hue += 5;
             hue %= 360;
             event = SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE;
         }
         else if (stack.getItem() instanceof DyeItem dye) {
-            setColor(dye.getColor().getEntityColor());
+            setColor(ColorLogic.getChromaticColor(dye.getColor()));
             event = SoundEvents.ITEM_DYE_USE;
         }
         else return false;
@@ -121,6 +122,7 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         markDirty();
         if (world != null) {
             BlockState bs = world.getBlockState(pos);
+            bs.updateNeighbors(world, pos, 3);
             world.updateListeners(pos, bs, bs, 0);
         }
     }

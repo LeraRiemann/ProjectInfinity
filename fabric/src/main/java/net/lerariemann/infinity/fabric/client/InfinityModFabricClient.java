@@ -44,7 +44,9 @@ public class InfinityModFabricClient implements ClientModInitializer {
                 ModBlocks.IRIDESCENT_KELP_PLANT.get());
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(),
                 ModBlocks.TIME_BOMB.get(),
-                ModBlocks.BIOME_BOTTLE.get());
+                ModBlocks.BIOME_BOTTLE.get(),
+                ModBlocks.CHROMATIC_WOOL.get(),
+                ModBlocks.CHROMATIC_CARPET.get());
         // Render layer maps are also applied to fluids.
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(),
                 PlatformMethods.getIridescenceStill().get(),

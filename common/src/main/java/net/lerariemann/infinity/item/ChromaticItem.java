@@ -65,7 +65,7 @@ public class ChromaticItem extends Item implements PortalDataHolder {
                     if (!color.getName().equals(newStack.getOrDefault(ModComponentTypes.DYE_COLOR.get(), "null"))) {
                         newStack.applyComponentsFrom(ComponentMap.builder()
                                         .add(ModComponentTypes.DYE_COLOR.get(), color.getName())
-                                        .add(ModComponentTypes.COLOR.get(), color.getEntityColor())
+                                        .add(ModComponentTypes.COLOR.get(), ColorLogic.getChromaticColor(color))
                                 .build());
                         player.setStackInHand(context.getHand(), newStack);
                         playDing(player, 0.5f);
@@ -83,7 +83,6 @@ public class ChromaticItem extends Item implements PortalDataHolder {
                     cbe.setColor(itemColor, cancel);
                 }
                 if (!cancel.get()) {
-                    state.updateNeighbors(world, pos, 3);
                     playDing(player, 1f);
                     return ActionResult.SUCCESS;
                 }

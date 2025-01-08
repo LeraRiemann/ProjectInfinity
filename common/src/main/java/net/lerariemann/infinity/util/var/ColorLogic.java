@@ -14,9 +14,29 @@ import java.util.Map;
 public interface ColorLogic {
     String[] vanillaColors = {"white", "light_gray", "gray", "black", "brown", "red", "orange", "yellow", "lime", "green",
             "light_blue", "blue", "cyan", "purple", "magenta", "pink"};
+    Map<String, Integer> chromaticColors = Map.ofEntries(Map.entry("white", 0xFFFFFF),
+            Map.entry("light_gray", 0x8F8F86),
+            Map.entry("gray", 0x262F2F),
+            Map.entry("black", 0x000000),
+            Map.entry("brown", 0x6B340F),
+            Map.entry("red", 0xA30300),
+            Map.entry("orange", 0xFF6200),
+            Map.entry("yellow", 0xFFCC00),
+            Map.entry("lime", 0x7FBF00),
+            Map.entry("green", 0x425C00),
+            Map.entry("cyan", 0x00727C),
+            Map.entry("light_blue", 0x21BEEA),
+            Map.entry("blue", 0x1B2592),
+            Map.entry("purple", 0x6214A2),
+            Map.entry("magenta", 0xB22AAD),
+            Map.entry("pink", 0xFF86AE));
     Map<TagKey<Block>, String> supportedBlockTypes = Map.ofEntries(
             Map.entry(BlockTags.WOOL, "$_wool"),
             Map.entry(BlockTags.WOOL_CARPETS, "$_carpet"));
+
+    static int getChromaticColor(DyeColor dye) {
+        return chromaticColors.getOrDefault(dye.getName(), 0xFFFFFF);
+    }
 
     static Block getBlockByColor(String color, TagKey<Block> type) {
         return Registries.BLOCK.get(Identifier.of(supportedBlockTypes.get(type)
