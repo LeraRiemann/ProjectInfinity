@@ -3,7 +3,7 @@ package net.lerariemann.infinity.item;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.minecraft.component.ComponentMap;
+import net.minecraft.component.ComponentChanges;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -27,27 +27,27 @@ public interface PortalDataHolder {
         return (isDestinationRandom(id)) ? InfinityMethods.getRandomId(world.random) : id;
     }
 
-    static Optional<ComponentMap> addPortalComponents(Item item, ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
+    static Optional<ComponentChanges> addPortalComponents(Item item, ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
         if (item instanceof PortalDataHolder pdh)
             return Optional.of(pdh.addPortalComponents(oldStack, ipbe));
         return Optional.empty();
     }
 
-    default ComponentMap addPortalComponents(ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
-        ComponentMap changes = getPortalComponents(ipbe).build();
-        oldStack.applyComponentsFrom(changes);
-        return oldStack.getComponents();
+    default ComponentChanges addPortalComponents(ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
+        ComponentChanges changes = getPortalComponents(ipbe).build();
+        oldStack.applyChanges(changes);
+        return changes;
     }
 
-    default ComponentMap.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
-        return ComponentMap.builder()
+    default ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+        return ComponentChanges.builder()
                 .add(ModComponentTypes.DESTINATION.get(), ipbe.getDimension())
                 .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
     }
 
     default ItemStack withPortalData(InfinityPortalBlockEntity ipbe) {
         ItemStack stack = getStack();
-        stack.applyComponentsFrom(addPortalComponents(stack, ipbe));
+        stack.applyChanges(addPortalComponents(stack, ipbe));
         return stack;
     }
 

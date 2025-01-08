@@ -12,7 +12,7 @@ import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.component.ComponentMap;
+import net.minecraft.component.ComponentChanges;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -99,7 +99,7 @@ public class ModItemFunctions {
 
     public static void checkCollisionRecipes(ServerWorld w, ItemEntity itemEntity,
                                              RecipeType<CollisionCraftingRecipe> recipeType,
-                                             Function<Item, Optional<ComponentMap>> componentFunction) {
+                                             Function<Item, Optional<ComponentChanges>> componentFunction) {
         if (itemEntity.isRemoved()) return;
         ItemStack itemStack = itemEntity.getStack();
         Optional<RecipeEntry<CollisionCraftingRecipe>> match = w.getRecipeManager()
@@ -107,7 +107,7 @@ public class ModItemFunctions {
         if (match.isEmpty()) return;
 
         ItemStack resStack = match.get().value().getResult(w.getRegistryManager());
-        componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyComponentsFrom);
+        componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyChanges);
 
         Vec3d v = itemEntity.getVelocity();
         ItemEntity result = new ItemEntity(w, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(),

@@ -9,7 +9,6 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.Items;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -52,16 +51,6 @@ public class IridescentBlock extends Block {
         if (!ctx.getStack().getComponents().contains(DataComponentTypes.BLOCK_STATE))
             return getPosBased(ctx.getWorld(), ctx.getBlockPos());
         return super.getPlacementState(ctx);
-    }
-    @Override
-    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-        if (!oldState.isOf(state.getBlock())) world.scheduleBlockTick(pos, this, 1);
-    }
-    @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        super.scheduledTick(state, world, pos, random);
-        BlockState s = getPosBased(world, pos);
-        if(!state.equals(s)) world.setBlockState(pos, s);
     }
     public BlockState getPosBased(World world, BlockPos pos) {
         return getDefaultState().with(COLOR_OFFSET, InfinityOptions.access(world).iridMap.getColor(pos));

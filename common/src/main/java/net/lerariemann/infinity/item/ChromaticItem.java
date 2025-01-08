@@ -6,6 +6,7 @@ import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -24,9 +25,10 @@ public class ChromaticItem extends Item implements PortalDataHolder {
         super(settings);
     }
     @Override
-    public ComponentMap.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
-        return ComponentMap.builder()
-                .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
+    public ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+        return ComponentChanges.builder()
+                .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor())
+                .remove(ModComponentTypes.DYE_COLOR.get());
     }
     @Override
     public ItemStack getStack() {

@@ -14,6 +14,7 @@ import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 
@@ -47,6 +48,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             case ChaosPawn pawn -> {
                 if (pawn.getRandom().nextBoolean()) {
                     pawn.unchess();
+                    pawn.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
                     convTriggers(pawn);
                 }
             }
