@@ -41,8 +41,10 @@ public class ChromaticBlock extends BlockWithEntity {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) {
             ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
-            if (cbe.onUse(world, pos, stack))
+            if (cbe.onUse(world, pos, stack)) {
+                state.updateNeighbors(world, pos, 3);
                 return ActionResult.SUCCESS;
+            }
         }
         return super.onUse(state, world, pos, player, hit);
     }

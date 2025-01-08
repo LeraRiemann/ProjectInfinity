@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 
@@ -40,9 +41,17 @@ public interface ColorLogic {
         return false;
     }
 
-    static Block recolor(String color, BlockState state) {
-        for (TagKey<Block> key : supportedBlockTypes.keySet()) if (state.isIn(key))
-            return getBlockByColor(color, key);
+    static <T extends Comparable<T>> BlockState applyPropertyFrom(BlockState newState, BlockState oldState, Property<T> property) {
+        return newState.withIfExists(property, oldState.get(property));
+    }
+
+    static BlockState recolor(String color, BlockState state) {
+        for (TagKey<Block> key : supportedBlockTypes.keySet()) if (state.isIn(key)) {
+            BlockState newState = getBlockByColor(color, key).getDefaultState();
+            for (Property<?> property: state.getProperties())
+                newState = applyPropertyFrom(newState, state, property);
+            return newState;
+        }
         return null;
     }
 }

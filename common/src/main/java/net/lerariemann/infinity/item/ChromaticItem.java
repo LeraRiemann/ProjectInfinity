@@ -4,7 +4,6 @@ import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.var.ColorLogic;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.ComponentMap;
@@ -45,7 +44,7 @@ public class ChromaticItem extends Item implements PortalDataHolder {
         if (player != null) {
             World world = context.getWorld();
             BlockPos pos = context.getBlockPos();
-            BlockState bs = world.getBlockState(pos);
+            BlockState oldState = world.getBlockState(pos);
             ItemStack currStack = context.getStack();
             int itemColor = currStack.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
             if (player.isSneaking()) {
@@ -61,7 +60,7 @@ public class ChromaticItem extends Item implements PortalDataHolder {
                     }
                 }
                 else { //copy color from vanilla blocks
-                    DyeColor color = ColorLogic.getColorByState(bs);
+                    DyeColor color = ColorLogic.getColorByState(oldState);
                     if (color == null) return super.useOnBlock(context);
                     if (!color.getName().equals(newStack.getOrDefault(ModComponentTypes.DYE_COLOR.get(), "null"))) {
                         newStack.applyComponentsFrom(ComponentMap.builder()
@@ -76,14 +75,15 @@ public class ChromaticItem extends Item implements PortalDataHolder {
             }
             if (!player.isSneaking()) { //paste color to blocks
                 boolean bl = currStack.contains(ModComponentTypes.DYE_COLOR.get());
-                Block block = ColorLogic.recolor(bl ? currStack.get(ModComponentTypes.DYE_COLOR.get()) : "infinity:chromatic", bs);
-                if (block == null) return super.useOnBlock(context);
-                world.setBlockState(pos, block.getDefaultState());
+                BlockState state = ColorLogic.recolor(bl ? currStack.get(ModComponentTypes.DYE_COLOR.get()) : "infinity:chromatic", oldState);
+                if (state == null) return super.useOnBlock(context);
+                world.setBlockState(pos, state);
                 AtomicBoolean cancel = new AtomicBoolean(false);
                 if (!bl && world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) {
                     cbe.setColor(itemColor, cancel);
                 }
                 if (!cancel.get()) {
+                    state.updateNeighbors(world, pos, 3);
                     playDing(player, 1f);
                     return ActionResult.SUCCESS;
                 }
