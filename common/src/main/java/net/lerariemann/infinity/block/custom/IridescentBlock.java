@@ -8,6 +8,7 @@ import net.minecraft.block.*;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -74,7 +75,7 @@ public class IridescentBlock extends Block {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.IRIDESCENT_STAR.get())) {
+        if (player.getStackInHand(Hand.MAIN_HAND).isOf(Items.AMETHYST_SHARD)) {
             world.setBlockState(pos, state.with(COLOR_OFFSET, (state.get(COLOR_OFFSET) + 1) % num_models));
             world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.BLOCKS, 1f, 1f);
             return ActionResult.SUCCESS;

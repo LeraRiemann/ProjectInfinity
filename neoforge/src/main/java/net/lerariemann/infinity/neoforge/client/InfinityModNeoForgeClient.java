@@ -3,6 +3,7 @@ package net.lerariemann.infinity.neoforge.client;
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.InfinityModClient;
+import net.lerariemann.infinity.registry.var.ModScreenHandlers;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.compat.neoforge.ModConfigFactory;
@@ -11,6 +12,7 @@ import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.screen.F4Screen;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +23,7 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -37,6 +40,7 @@ public class InfinityModNeoForgeClient {
         eventBus.addListener(InfinityModNeoForgeClient::registerItemColorHandlers);
         eventBus.addListener(InfinityModNeoForgeClient::registerFluidRenderLayers);
         eventBus.addListener(InfinityModNeoForgeClient::registerModelPredicates);
+        eventBus.addListener(InfinityModNeoForgeClient::registerMenuScreens);
     }
 
     //Integrate Cloth Config screen (if mod present) with NeoForge mod menu.
@@ -65,6 +69,10 @@ public class InfinityModNeoForgeClient {
                 ModItems.CHROMATIC_MATTER.get());
         event.register(InfinityMethods::getDiscColorFromComponents,
                 ModItems.DISC.get());
+    }
+    @SubscribeEvent
+    public static void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(ModScreenHandlers.F4.get(), F4Screen::new);
     }
     @SubscribeEvent
     public static void registerModelPredicates(FMLClientSetupEvent event) {
@@ -96,8 +104,12 @@ public class InfinityModNeoForgeClient {
                 }
 
                 @Override
+                public int getTintColor() {
+                    return Iridescence.getTimeBasedColor();
+                }
+                @Override
                 public int getTintColor(@NotNull FluidState state, @NotNull BlockRenderView getter, @NotNull BlockPos pos) {
-                    return Iridescence.color(pos);
+                    return Iridescence.getPosBasedColor(pos);
                 }
 
             }, FluidTypes.IRIDESCENCE_TYPE.value());

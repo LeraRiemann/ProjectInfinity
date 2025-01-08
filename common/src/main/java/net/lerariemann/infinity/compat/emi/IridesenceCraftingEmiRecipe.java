@@ -11,7 +11,6 @@ import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.registry.DynamicRegistryManager;
 
 public class IridesenceCraftingEmiRecipe extends BasicEmiRecipe {
-
     public IridesenceCraftingEmiRecipe(RecipeEntry<CollisionCraftingRecipe> recipeEntry, DynamicRegistryManager registryManager) {
         super(EmiCompat.IRIDESENCE_CRAFTING, recipeEntry.id(), 118, 18);
         CollisionCraftingRecipe recipe = recipeEntry.value();

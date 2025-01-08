@@ -2,8 +2,12 @@ package net.lerariemann.infinity.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.lerariemann.infinity.InfinityModClient;
+import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
@@ -49,5 +53,12 @@ public class InfinityModFabricClient implements ClientModInitializer {
         InfinityModClient.initializeClient();
         // Register model predicates for Transfinite Keys
         ModItemFunctions.registerModelPredicates();
+
+        FluidVariantAttributes.register(PlatformMethods.getIridescenceStill().get(), new ModFluidsFabric.IridescenceVariantAttributeHandler());
+        FluidVariantAttributes.register(PlatformMethods.getIridescenceFlowing().get(), new ModFluidsFabric.IridescenceVariantAttributeHandler());
+        FluidVariantRendering.register(PlatformMethods.getIridescenceStill().get(), new ModFluidsFabric.IridescenceVariantRenderHandler());
+        FluidVariantRendering.register(PlatformMethods.getIridescenceFlowing().get(), new ModFluidsFabric.IridescenceVariantRenderHandler());
+        FluidRenderHandlerRegistry.INSTANCE.register(PlatformMethods.getIridescenceStill().get(), new ModFluidsFabric.IridescenceRenderHandler());
+        FluidRenderHandlerRegistry.INSTANCE.register(PlatformMethods.getIridescenceFlowing().get(), new ModFluidsFabric.IridescenceRenderHandler());
     }
 }

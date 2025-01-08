@@ -1,0 +1,34 @@
+package net.lerariemann.infinity.mixin.iridescence;
+
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.registry.core.ModItems;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
+
+@Mixin(ItemStack.class)
+public abstract class ItemStackMixin {
+    @Shadow public abstract boolean isIn(TagKey<Item> tag);
+
+    @Inject(method="getTooltip", at = @At(value = "INVOKE",
+            target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0))
+    void inj(Item.TooltipContext context, PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir,
+             @Local LocalRef<MutableText> mutableText) {
+        if (isIn(ModItems.IRIDESCENT_TAG)) {
+            mutableText.set(mutableText.get().withColor(Iridescence.getTimeBasedColor()));
+        }
+    }
+}

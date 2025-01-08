@@ -46,6 +46,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.Color;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -88,11 +89,16 @@ public interface Iridescence {
         return entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
     }
 
-    static int color(BlockPos pos) {
+    static int getPosBasedColor(BlockPos pos) {
         return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F);
     }
+    static int getTimeBasedColor() {
+        long timeMS = LocalTime.now().toNanoOfDay() / 1000000;
+        int hue = (int)(timeMS % 24000);
+        return Color.HSBtoRGB((float)(hue / 24000.0), 1.0f, 1.0f);
+    }
 
-    java.util.List<DyeColor> colors = List.of(
+    java.util.List<DyeColor> dyeColors = List.of(
             DyeColor.RED,
             DyeColor.ORANGE,
             DyeColor.YELLOW,
@@ -106,10 +112,10 @@ public interface Iridescence {
             DyeColor.PINK);
 
     static Block getRandomColorBlock(WorldAccess world, String str) {
-        return Registries.BLOCK.get(Identifier.of(colors.get(world.getRandom().nextInt(colors.size())).getName() + "_" + str));
+        return Registries.BLOCK.get(Identifier.of(dyeColors.get(world.getRandom().nextInt(dyeColors.size())).getName() + "_" + str));
     }
     static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(Identifier.of(colors.get((int)(d*colors.size())).getName() + "_" + str));
+        return Registries.BLOCK.get(Identifier.of(dyeColors.get((int)(d* dyeColors.size())).getName() + "_" + str));
     }
 
     static int getAmplifierOnApply(LivingEntity entity, int original) {

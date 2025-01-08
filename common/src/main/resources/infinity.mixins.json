@@ -4,6 +4,7 @@
   "package": "net.lerariemann.infinity.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "iridescence.ItemStackMixin",
     "core.AbstractBlockMixin",
     "core.AbstractFireBlockMixin",
     "core.MaterialRuleContextAccess",
@@ -24,7 +25,6 @@
     "iridescence.FishEntityMixin",
     "iridescence.FishEntityMixin$FishMoveControlMixin",
     "iridescence.FluidBlockMixin",
-    "iridescence.IridescenceMixin",
     "iridescence.KelpBlockMixin",
     "iridescence.LandPathNodeMakerMixin",
     "iridescence.MobNavigationMixin",
