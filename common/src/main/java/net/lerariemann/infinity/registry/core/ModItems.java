@@ -13,7 +13,6 @@ import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Rarity;
 
 import java.util.List;
@@ -94,8 +93,8 @@ public class ModItems {
             registerItemAfter("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> BLACK_MATTER =
             registerItemAfter("black_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
-    public static final RegistrySupplier<Item> IRIDESCENT_STAR =
-            registerItemAfter("iridescent_star", ItemGroups.INGREDIENTS, Items.NETHER_STAR, Item::new,
+    public static final RegistrySupplier<IridescentStarItem> IRIDESCENT_STAR =
+            registerItemAfter("iridescent_star", ItemGroups.INGREDIENTS, Items.NETHER_STAR, IridescentStarItem::new,
                     new Item.Settings().rarity(Rarity.UNCOMMON).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final RegistrySupplier<? extends StarOfLangItem> STAR_OF_LANG =
             registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, PlatformMethods.getStarOfLangConstructor(),
@@ -106,8 +105,6 @@ public class ModItems {
     public static final RegistrySupplier<Item> DISC =
             registerItemAfter("disc", ItemGroups.TOOLS, Items.MUSIC_DISC_PIGSTEP, Item::new,
                     new Item.Settings().rarity(Rarity.RARE));
-    public static TagKey<Item> IRIDESCENT_TAG = createItemTag("iridescent");
-    public static TagKey<Item> MATTER_TAG = createItemTag("matter");
 
     public static <T extends Item> RegistrySupplier<T> register(String item, Item.Settings settings, Function<Item.Settings, T> constructor) {
         return ITEMS.register(item, () -> constructor.apply(settings));

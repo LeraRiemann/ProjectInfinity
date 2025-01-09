@@ -9,6 +9,7 @@ import net.minecraft.state.property.Property;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 
+import java.awt.*;
 import java.util.Map;
 
 public interface ColorLogic {
@@ -63,6 +64,12 @@ public interface ColorLogic {
 
     static <T extends Comparable<T>> BlockState applyPropertyFrom(BlockState newState, BlockState oldState, Property<T> property) {
         return newState.withIfExists(property, oldState.get(property));
+    }
+
+    static boolean matchesPureHue(int rgb, int pureHue) {
+        Color c = new Color(rgb);
+        float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
+        return (Math.abs(hsb[0] * 360 - pureHue) <= 1) && (hsb[1] >= 1) && (hsb[2] >= 1);
     }
 
     static BlockState recolor(String color, BlockState state) {

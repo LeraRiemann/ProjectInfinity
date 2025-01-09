@@ -24,6 +24,8 @@ public class ModComponentTypes {
             (builder) -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC));
     public static RegistrySupplier<ComponentType<Integer>> COLOR = registerComponentType("color",
             (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+    public static RegistrySupplier<ComponentType<Integer>> HUE = registerComponentType("hue",
+            (builder) -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
     public static RegistrySupplier<ComponentType<String>> DYE_COLOR = registerComponentType("dye_color",
             (builder) -> builder.codec(Codec.STRING).packetCodec(PacketCodecs.STRING));
     public static RegistrySupplier<ComponentType<Integer>> CHARGE = registerComponentType("charge",

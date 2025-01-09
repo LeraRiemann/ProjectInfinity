@@ -3,11 +3,11 @@ package net.lerariemann.infinity.iridescence;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.registry.core.ModEntities;
-import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.lerariemann.infinity.registry.var.ModStats;
+import net.lerariemann.infinity.registry.var.ModTags;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
@@ -82,7 +82,7 @@ public interface Iridescence {
         return Iridescence.isIridescence(world.getFluidState(pos));
     }
     static boolean isIridescentItem(ItemStack stack) {
-        return stack.isIn(ModItems.IRIDESCENT_TAG);
+        return stack.isIn(ModTags.IRIDESCENT_ITEMS);
     }
 
     static boolean isUnderEffect(LivingEntity entity) {

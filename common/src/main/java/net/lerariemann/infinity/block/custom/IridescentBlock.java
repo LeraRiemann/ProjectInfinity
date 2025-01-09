@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
+import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItems;
@@ -8,7 +9,6 @@ import net.minecraft.block.*;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -57,23 +57,20 @@ public class IridescentBlock extends Block {
     }
 
     @Nullable
-    public static BlockState toStatic(BlockState state) {
-        Block block = state.isOf(ModBlocks.IRIDESCENT_CARPET.get()) ? ModBlocks.CHROMATIC_CARPET.get() : ModBlocks.CHROMATIC_WOOL.get();
-        return block.getDefaultState();
+    public BlockState toStatic(BlockState state) {
+        return ModBlocks.CHROMATIC_WOOL.get().getDefaultState();
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (player.getStackInHand(Hand.MAIN_HAND).isOf(Items.AMETHYST_SHARD)) {
-            world.setBlockState(pos, state.with(COLOR_OFFSET, (state.get(COLOR_OFFSET) + 1) % num_models));
-            world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.BLOCKS, 1f, 1f);
-            return ActionResult.SUCCESS;
-        }
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.STAR_OF_LANG.get())) {
             BlockState state1 = toStatic(state);
             if (state1 != null) {
                 world.setBlockState(pos, state1);
-                world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.BLOCKS, 1f, 1f);
+                if (world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) {
+                    cbe.setColor(state.get(COLOR_OFFSET)*(360 / num_models), 255, 255, null);
+                }
+                world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK, SoundCategory.BLOCKS, 1f, 1f);
                 return ActionResult.SUCCESS;
             }
         }
@@ -102,6 +99,11 @@ public class IridescentBlock extends Block {
         @Override
         protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
             return !world.isAir(pos.down());
+        }
+
+        @Override
+        public BlockState toStatic(BlockState state) {
+            return ModBlocks.CHROMATIC_CARPET.get().getDefaultState();
         }
     }
 }

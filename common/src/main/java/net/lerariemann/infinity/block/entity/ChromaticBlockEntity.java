@@ -42,6 +42,18 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         setColor(colorHex, null);
     }
 
+    public void setColor(int hue, int saturation, int brightness, @Nullable AtomicBoolean cancel) {
+        if (cancel != null && this.hue == hue && this.saturation == saturation && this.brightness == brightness) {
+            cancel.set(true);
+            return;
+        }
+        this.hue = (short)hue;
+        this.saturation = (short)saturation;
+        this.brightness = (short)brightness;
+        updateColor();
+        sync();
+    }
+
     public void setColor(int colorHex, @Nullable AtomicBoolean cancel) {
         if (cancel != null && colorHex == color) {
             cancel.set(true);
@@ -94,11 +106,11 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         float volume = 1f;
         AtomicBoolean cancel = new AtomicBoolean(false);
 
-        if (stack.isOf(ModItems.IRIDESCENT_STAR.get())) {
+        if (stack.isOf(Items.AMETHYST_SHARD)) {
             saturation = offset(saturation, (short) 16, cancel);
             pitch = saturation / 255f;
         }
-        else if (stack.isOf(ModItems.STAR_OF_LANG.get())) {
+        else if (stack.isOf(ModItems.FOOTPRINT.get())) {
             saturation = offset(saturation, (short) -16, cancel);
             pitch = saturation / 255f;
         }
@@ -109,11 +121,6 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         else if (stack.isOf(ModItems.BLACK_MATTER.get())) {
             brightness = offset(brightness, (short) -16, cancel);
             pitch = brightness / 255f;
-        }
-        else if (stack.isOf(Items.AMETHYST_SHARD)) {
-            hue += 10;
-            hue %= 360;
-            event = SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE;
         }
         else if (stack.getItem() instanceof DyeItem dye) {
             setColor(ColorLogic.getChromaticColor(dye.getColor()), cancel);
@@ -126,6 +133,19 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         if (!world.isClient()) world.playSound(null, pos, event, SoundCategory.BLOCKS, volume, pitch);
         sync();
         return true;
+    }
+
+    public void onIridStarUse(boolean reverse) {
+        if (reverse) {
+            hue -= 10;
+            if (hue < 0) hue += 360;
+        }
+        else {
+            hue += 10;
+            if (hue > 360) hue -= 360;
+        }
+        updateColor();
+        sync();
     }
 
     void sync() {

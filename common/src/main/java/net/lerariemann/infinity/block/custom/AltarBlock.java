@@ -64,7 +64,7 @@ public class AltarBlock extends Block {
         builder.add(FLOWER);
     }
 
-    public void setColor(World world, BlockPos pos, BlockState state, int i) {
+    public static void setColor(World world, BlockPos pos, BlockState state, int i) {
         world.setBlockState(pos, state.with(COLOR, i));
     }
 
@@ -115,11 +115,6 @@ public class AltarBlock extends Block {
                 setColor(world, pos, state, i);
                 world.playSound(null, pos, SoundEvents.ITEM_DYE_USE, SoundCategory.BLOCKS, 1f, 1f);
             }
-            return ActionResult.SUCCESS;
-        }
-        if (itemStack.isOf(Items.AMETHYST_SHARD)) {
-            setColor(world, pos, state, (state.get(COLOR) + 1) % numColors);
-            world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.BLOCKS, 1f, 1f);
             return ActionResult.SUCCESS;
         }
         if (itemStack.isOf(Items.SUNFLOWER)) {

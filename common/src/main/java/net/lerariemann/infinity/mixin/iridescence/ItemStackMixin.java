@@ -3,7 +3,7 @@ package net.lerariemann.infinity.mixin.iridescence;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.lerariemann.infinity.iridescence.Iridescence;
-import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.registry.var.ModTags;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,7 +27,7 @@ public abstract class ItemStackMixin {
             target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0))
     void inj(Item.TooltipContext context, PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir,
              @Local LocalRef<MutableText> mutableText) {
-        if (isIn(ModItems.IRIDESCENT_TAG)) {
+        if (isIn(ModTags.IRIDESCENT_ITEMS)) {
             mutableText.set(mutableText.get().withColor(Iridescence.getTimeBasedColor()));
         }
     }
