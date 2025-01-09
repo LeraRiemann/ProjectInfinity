@@ -13,8 +13,6 @@ import java.awt.*;
 import java.util.Map;
 
 public interface ColorLogic {
-    String[] vanillaColors = {"white", "light_gray", "gray", "black", "brown", "red", "orange", "yellow", "lime", "green",
-            "light_blue", "blue", "cyan", "purple", "magenta", "pink"};
     Map<String, Integer> chromaticColors = Map.ofEntries(Map.entry("white", 0xFFFFFF),
             Map.entry("light_gray", 0x8F8F86),
             Map.entry("gray", 0x262F2F),
@@ -31,19 +29,28 @@ public interface ColorLogic {
             Map.entry("purple", 0x6214A2),
             Map.entry("magenta", 0xB22AAD),
             Map.entry("pink", 0xFF86AE));
-    Map<TagKey<Block>, String> supportedBlockTypes = Map.ofEntries(
-            Map.entry(BlockTags.WOOL, "$_wool"),
-            Map.entry(BlockTags.WOOL_CARPETS, "$_carpet"));
+    int defaultChromatic = 0x9154DB;
 
     static int getChromaticColor(DyeColor dye) {
         return chromaticColors.getOrDefault(dye.getName(), 0xFFFFFF);
     }
 
+    static boolean matchesPureHue(int rgb, int pureHue) {
+        Color c = new Color(rgb);
+        float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
+        return (Math.abs(hsb[0] * 360 - pureHue) <= 1) && (hsb[1] >= 1) && (hsb[2] >= 1);
+    }
+
+    String[] vanillaColors = {"white", "light_gray", "gray", "black", "brown", "red", "orange", "yellow", "lime", "green",
+            "light_blue", "blue", "cyan", "purple", "magenta", "pink"};
+    Map<TagKey<Block>, String> supportedBlockTypes = Map.ofEntries(
+            Map.entry(BlockTags.WOOL, "$_wool"),
+            Map.entry(BlockTags.WOOL_CARPETS, "$_carpet"));
+
     static Block getBlockByColor(String color, TagKey<Block> type) {
         return Registries.BLOCK.get(Identifier.of(supportedBlockTypes.get(type)
                 .replace("$", color)));
     }
-
     static Block getBlockByColor(DyeColor color, TagKey<Block> type) {
         return getBlockByColor(color.getName(), type);
     }
@@ -64,12 +71,6 @@ public interface ColorLogic {
 
     static <T extends Comparable<T>> BlockState applyPropertyFrom(BlockState newState, BlockState oldState, Property<T> property) {
         return newState.withIfExists(property, oldState.get(property));
-    }
-
-    static boolean matchesPureHue(int rgb, int pureHue) {
-        Color c = new Color(rgb);
-        float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
-        return (Math.abs(hsb[0] * 360 - pureHue) <= 1) && (hsb[1] >= 1) && (hsb[2] >= 1);
     }
 
     static BlockState recolor(String color, BlockState state) {

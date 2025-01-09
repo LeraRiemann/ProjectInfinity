@@ -5,7 +5,6 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.item.function.CollisionCraftingRecipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -28,7 +27,7 @@ public class PortalCraftingEmiRecipe extends BasicEmiRecipe {
         widgets.addTexture(EmiTexture.PLUS, 26, 2);
 
         // Add the portal block texture.
-        widgets.addSlot(EmiStack.of(ModBlocks.PORTAL.get()), 48, 0);
+        widgets.addSlot(EmiCompat.PORTAL_WORKSTATION, 48, 0);
 
         // Add an arrow texture to indicate processing
         widgets.addTexture(EmiTexture.EMPTY_ARROW, 70, 1);

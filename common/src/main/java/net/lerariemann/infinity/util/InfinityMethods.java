@@ -165,11 +165,8 @@ public interface InfinityMethods {
         int color = getItemColorFromComponents(stack, layer);
         return layer == 0 ? color : 0xFFFFFF ^ color;
     }
-
-    /**
-     * Gets an Infinity Portal's item colour - hard set as a light blue.
-     */
-    static int getBlockEntityColor(ItemStack stack, int layer) {
+    /**Gets an Infinity Portal's item colour - hard set as light blue.*/
+    static int getPortalItemColor(ItemStack stack, int layer) {
         return ColorHelper.Argb.fullAlpha(-16717057);
     }
 

@@ -36,7 +36,7 @@ public class InfinityModFabricClient implements ClientModInitializer {
                 ModItems.CHROMATIC_MATTER.get());
         ColorProviderRegistry.ITEM.register(InfinityMethods::getDiscColorFromComponents,
                 ModItems.DISC.get());
-        ColorProviderRegistry.ITEM.register(InfinityMethods::getBlockEntityColor, ModItems.PORTAL_ITEM.get());
+        ColorProviderRegistry.ITEM.register(InfinityMethods::getPortalItemColor, ModItems.PORTAL_ITEM.get());
         // On Fabric, render layer maps are also applied to blocks.
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutoutMipped(),
                 ModBlocks.BOOK_BOX.get(),

@@ -7,6 +7,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.item.*;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
@@ -51,9 +52,13 @@ public class ModItems {
     public static final RegistrySupplier<Item> IRIDESCENT_CARPET  =
             registerBlockItemAfter(ModBlocks.IRIDESCENT_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, BlockItem::new);
     public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_WOOL  =
-            registerBlockItemAfter(ModBlocks.CHROMATIC_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL, ChromaticBlockItem::new);
+            registerBlockItemAfter(ModBlocks.CHROMATIC_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL,
+                    new Item.Settings().component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic),
+                    ChromaticBlockItem::new);
     public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_CARPET  =
-            registerBlockItemAfter(ModBlocks.CHROMATIC_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, ChromaticBlockItem::new);
+            registerBlockItemAfter(ModBlocks.CHROMATIC_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET,
+                    new Item.Settings().component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic),
+                    ChromaticBlockItem::new);
     public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM =
             registerBlockItemAfter(ModBlocks.BIOME_BOTTLE, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE, BiomeBottleItem::new);
     //spawn eggs
@@ -88,7 +93,8 @@ public class ModItems {
                     new Item.Settings().component(DataComponentTypes.FOOD,
                             new FoodComponent(0, 0, true, 3f, Optional.empty(), List.of())));
     public static final RegistrySupplier<ChromaticItem> CHROMATIC_MATTER =
-            registerItemAfter("chromatic_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, ChromaticItem::new);
+            registerItemAfter("chromatic_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, ChromaticItem::new,
+                    new Item.Settings().component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic));
     public static final RegistrySupplier<Item> WHITE_MATTER =
             registerItemAfter("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> BLACK_MATTER =
@@ -128,7 +134,7 @@ public class ModItems {
         return ITEMS.register(block.getId(), () -> constructor.apply(block.get(), settings));
     }
     /**
-     * Registers a nameToElement Item via Architectury API.
+     * Registers a BlockItem via Architectury API.
      */
     public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 Item.Settings settings,
@@ -138,7 +144,7 @@ public class ModItems {
         return registeredItem;
     }
     /**
-     * Registers a nameToElement Item through Architectury API.
+     * Registers a BlockItem through Architectury API.
      */
     public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 BiFunction<Block, Item.Settings, T> constructor) {
