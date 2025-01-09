@@ -85,8 +85,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
     public ParticleEffect createParticle(StatusEffectInstance effect) {
         float hue = effect.getDuration() / 13.0f;
         return EntityEffectParticleEffect.create(
-                ParticleTypes.ENTITY_EFFECT, ColorHelper.Argb.withAlpha(255,
-                        Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
+                ParticleTypes.ENTITY_EFFECT, ColorHelper.Argb.fullAlpha(Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
     }
 
     public static class Setup extends InstantStatusEffect {

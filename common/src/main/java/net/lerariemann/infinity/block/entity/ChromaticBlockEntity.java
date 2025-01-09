@@ -11,6 +11,7 @@ import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
@@ -29,6 +30,7 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     public short hue;
     public short saturation;
     public short brightness;
+    public int color;
     public ChromaticBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CHROMATIC.get(), pos, state);
         hue = 0;
@@ -41,19 +43,26 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     }
 
     public void setColor(int colorHex, @Nullable AtomicBoolean cancel) {
-        if (cancel != null && colorHex == getTint()) cancel.set(true);
+        if (cancel != null && colorHex == color) {
+            cancel.set(true);
+            return;
+        }
         Color c = (new Color(colorHex));
         float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
         hue = (short)(hsb[0] * 360);
         saturation = (short)(hsb[1] * 255);
         brightness = (short)(hsb[2] * 255);
+        color = colorHex;
         sync();
+    }
+    public void updateColor() {
+        color = Color.HSBtoRGB(hue / 360f, saturation / 255f, brightness / 255f) & 0xFFFFFF;
     }
 
     @Override
     protected void addComponents(ComponentMap.Builder componentMapBuilder) {
         super.addComponents(componentMapBuilder);
-        componentMapBuilder.add(ModComponentTypes.COLOR.get(), getTint());
+        componentMapBuilder.add(ModComponentTypes.COLOR.get(), color);
     }
     @Override
     protected void readComponents(BlockEntity.ComponentsAccess components) {
@@ -69,49 +78,50 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     public ComponentMap asMap() {
         return asMap(getTint());
     }
-
-    public int offsetSaturation(short amount, @Nullable AtomicBoolean cancel) {
-        if (cancel != null) cancel.set(amount < 0 ? saturation == 0 : saturation == 255);
-        saturation += amount;
-        if (saturation < 0) saturation = 0;
-        else if (saturation > 255) saturation = 255;
-        return saturation;
-    }
-    public int offsetBrightness(short amount, @Nullable AtomicBoolean cancel) {
-        if (cancel != null) cancel.set(amount < 0 ? brightness == 0 : brightness == 255);
-        brightness += amount;
-        if (brightness < 0) brightness = 0;
-        else if (brightness > 255) brightness = 255;
-        return brightness;
+    public short offset(short orig, short amount, AtomicBoolean cancel) {
+        if (amount < 0 ? orig == 0 : orig == 255) {
+            cancel.set(true);
+            return orig;
+        }
+        orig += amount;
+        if (orig < 0) orig = 0;
+        else if (orig > 255) orig = 255;
+        return orig;
     }
     public boolean onUse(World world, BlockPos pos, ItemStack stack) {
         SoundEvent event = SoundEvents.BLOCK_NOTE_BLOCK_GUITAR.value();
         float pitch = -1f;
         float volume = 1f;
         AtomicBoolean cancel = new AtomicBoolean(false);
+
         if (stack.isOf(ModItems.IRIDESCENT_STAR.get())) {
-            pitch = offsetSaturation((short) 16, cancel) / 255f;
+            saturation = offset(saturation, (short) 16, cancel);
+            pitch = saturation / 255f;
         }
         else if (stack.isOf(ModItems.STAR_OF_LANG.get())) {
-            pitch = offsetSaturation((short) -16, cancel) / 255f;
+            saturation = offset(saturation, (short) -16, cancel);
+            pitch = saturation / 255f;
         }
         else if (stack.isOf(ModItems.WHITE_MATTER.get())) {
-            pitch = offsetBrightness((short) 16, cancel) / 255f;
+            brightness = offset(brightness, (short) 16, cancel);
+            pitch = brightness / 255f;
         }
         else if (stack.isOf(ModItems.BLACK_MATTER.get())) {
-            pitch = offsetBrightness((short) -16, cancel) / 255f;
+            brightness = offset(brightness, (short) -16, cancel);
+            pitch = brightness / 255f;
         }
         else if (stack.isOf(Items.AMETHYST_SHARD)) {
-            hue += 5;
+            hue += 10;
             hue %= 360;
             event = SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE;
         }
         else if (stack.getItem() instanceof DyeItem dye) {
-            setColor(ColorLogic.getChromaticColor(dye.getColor()));
+            setColor(ColorLogic.getChromaticColor(dye.getColor()), cancel);
             event = SoundEvents.ITEM_DYE_USE;
         }
         else return false;
         if (cancel.get()) return false; //block was already at extremal saturation / brightness, no need for side effects
+        updateColor();
         pitch = pitch < 0 ? 1f : 0.5f + 1.5f * pitch; //scaling for Minecraft's sound system
         if (!world.isClient()) world.playSound(null, pos, event, SoundCategory.BLOCKS, volume, pitch);
         sync();
@@ -130,17 +140,28 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     @Override
     public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(nbt, registryLookup);
-        setColor(nbt.getInt("color"));
+        if (nbt.contains("color", NbtElement.INT_TYPE))
+            setColor(nbt.getInt("color"));
+        else if (nbt.contains("color", NbtElement.COMPOUND_TYPE)) {
+            NbtCompound color = nbt.getCompound("color");
+            hue = color.getShort("h");
+            saturation = color.getShort("s");
+            brightness = color.getShort("b");
+            updateColor();
+        }
     }
-
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
-        nbt.putInt("color", getTint());
+        NbtCompound color = new NbtCompound();
+        color.putShort("h", hue);
+        color.putShort("s", saturation);
+        color.putShort("b", brightness);
+        nbt.put("color", color);
     }
 
     public int getTint() {
-        return Color.HSBtoRGB(hue / 360f, saturation / 255f, brightness / 255f);
+        return color;
     }
 
     @Nullable

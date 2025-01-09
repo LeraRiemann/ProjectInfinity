@@ -1,7 +1,9 @@
 package net.lerariemann.infinity.item;
 
+import net.lerariemann.infinity.block.custom.AltarBlock;
 import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.BlockState;
@@ -17,6 +19,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.awt.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChromaticItem extends Item implements PortalDataHolder {
@@ -47,17 +50,22 @@ public class ChromaticItem extends Item implements PortalDataHolder {
             BlockState oldState = world.getBlockState(pos);
             ItemStack currStack = context.getStack();
             int itemColor = currStack.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
-            if (player.isSneaking()) {
+            if (player.isSneaking()) { //copy color
                 ItemStack newStack = currStack.copy();
+                int i = -1;
                 if (world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) { //copy color from chroma blocks
-                    int i = cbe.getTint();
-                    if (i != itemColor) {
-                        newStack.applyComponentsFrom(ChromaticBlockEntity.asMap(i));
-                        newStack.remove(ModComponentTypes.DYE_COLOR.get());
-                        player.setStackInHand(context.getHand(), newStack);
-                        playDing(player, 0.5f);
-                        return ActionResult.SUCCESS;
-                    }
+                    i = cbe.getTint();
+                }
+                else if (oldState.isOf(ModBlocks.ALTAR.get())) {
+                    int hue = (oldState.get(AltarBlock.COLOR) - 1) * (360 / (AltarBlock.numColors - 1));
+                    i = hue < 0 ? 0xCCCCCC : Color.HSBtoRGB(hue/360f, 1.0f, 1.0f) & 0xFFFFFF;
+                }
+                if (i > 0 && i != itemColor) {
+                    newStack.applyComponentsFrom(ChromaticBlockEntity.asMap(i));
+                    newStack.remove(ModComponentTypes.DYE_COLOR.get());
+                    player.setStackInHand(context.getHand(), newStack);
+                    playDing(player, 0.5f);
+                    return ActionResult.SUCCESS;
                 }
                 else { //copy color from vanilla blocks
                     DyeColor color = ColorLogic.getColorByState(oldState);

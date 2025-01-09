@@ -90,12 +90,12 @@ public interface Iridescence {
     }
 
     static int getPosBasedColor(BlockPos pos) {
-        return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F);
+        return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F) & 0xFFFFFF;
     }
     static int getTimeBasedColor() {
         long timeMS = LocalTime.now().toNanoOfDay() / 1000000;
         int hue = (int)(timeMS % 24000);
-        return Color.HSBtoRGB((float)(hue / 24000.0), 1.0f, 1.0f);
+        return Color.HSBtoRGB((float)(hue / 24000.0), 1.0f, 1.0f) & 0xFFFFFF;
     }
 
     java.util.List<DyeColor> dyeColors = List.of(

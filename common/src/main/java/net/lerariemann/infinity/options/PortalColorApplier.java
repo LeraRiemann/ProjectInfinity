@@ -70,7 +70,7 @@ public interface PortalColorApplier {
         @Override
         public int apply(BlockPos pos) {
             float hue = (pos.getX() + pos.getY() + pos.getZ()) / detail;
-            return Color.HSBtoRGB(hue - (int)hue, saturation, brightness);
+            return Color.HSBtoRGB(hue - (int)hue, saturation, brightness) & 0xFFFFFF;
         }
     }
 }
