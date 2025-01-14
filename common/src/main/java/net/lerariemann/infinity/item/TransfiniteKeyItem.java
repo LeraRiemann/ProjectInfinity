@@ -1,14 +1,19 @@
 package net.lerariemann.infinity.item;
 
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.minecraft.component.ComponentChanges;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -17,6 +22,17 @@ import java.util.Objects;
 public class TransfiniteKeyItem extends Item implements PortalDataHolder {
     public TransfiniteKeyItem(Settings settings) {
         super(settings);
+    }
+
+    @Override
+    public ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+        Identifier id = ipbe.getDimension();
+        int color = (ipbe.getWorld() instanceof ServerWorld w) ?
+                PortalColorApplier.of(id, w.getServer()).apply(BlockPos.ORIGIN) :
+                (int)InfinityMethods.getNumericFromId(id);
+        return ComponentChanges.builder()
+                .add(ModComponentTypes.DESTINATION.get(), id)
+                .add(ModComponentTypes.COLOR.get(), color & 0xFFFFFF);
     }
 
     @NotNull
