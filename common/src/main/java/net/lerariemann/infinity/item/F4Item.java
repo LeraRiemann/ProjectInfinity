@@ -3,7 +3,6 @@ package net.lerariemann.infinity.item;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
-import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.screen.F4Screen;
 import net.lerariemann.infinity.util.teleport.InfinityPortal;
@@ -80,7 +79,7 @@ public class F4Item extends Item implements PortalDataHolder {
         BlockPos lowerLeft = lowerCenter.offset(dir2, -(size_x/2));
         Identifier id = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
         boolean doNotRenderPortal = (world.isClient && (id == null || !id.getPath().contains("generated_")));
-        if (ModItems.F4.get().isDestinationRandom(id))
+        if (PortalDataHolder.isDestinationRandom(id))
             id = InfinityMethods.getRandomId(world.random);
         int obsNotReplaced = 0;
 

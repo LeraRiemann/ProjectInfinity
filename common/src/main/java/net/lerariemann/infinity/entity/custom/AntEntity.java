@@ -5,8 +5,7 @@ import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -17,6 +16,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -126,6 +127,59 @@ public class AntEntity extends AbstractChessFigure {
                 || isInBattle()
                 || !AntBlock.isSafeToRecolor(w, bp.get()))
                 && super.shouldPursueRegularGoals();
+    }
+
+    @Override
+    public boolean canBeLeashed() {
+        return !isInBattle();
+    }
+
+    @Override
+    public ActionResult interactMob(PlayerEntity player, Hand hand) {
+        if (!this.hasPassengers()
+                && this.getAttributeValue(EntityAttributes.GENERIC_SCALE) > 2
+                && player.getStackInHand(hand).isEmpty()) {
+            this.putPlayerOnBack(player);
+            return ActionResult.success(this.getWorld().isClient);
+        }
+        return super.interactMob(player, hand);
+    }
+    protected void putPlayerOnBack(PlayerEntity player) {
+        if (!this.getWorld().isClient) {
+            player.setYaw(this.getYaw());
+            player.setPitch(this.getPitch());
+            player.startRiding(this);
+        }
+    }
+    @Override
+    protected Vec3d getControlledMovementInput(PlayerEntity controllingPlayer, Vec3d movementInput) {
+        float f = controllingPlayer.forwardSpeed;
+        return new Vec3d(controllingPlayer.sidewaysSpeed * 0.5f, 0, f < 0 ? f*0.25f : f);
+    }
+    @Override
+    protected float getSaddledSpeed(PlayerEntity controllingPlayer) {
+        return (float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * 0.8f;
+    }
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        if (this.getFirstPassenger() instanceof PlayerEntity player) {
+            return player;
+        }
+        return super.getControllingPassenger();
+    }
+    @Override
+    protected void updatePassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater) {
+        super.updatePassengerPosition(passenger, positionUpdater);
+        if (passenger instanceof LivingEntity) {
+            ((LivingEntity)passenger).bodyYaw = this.bodyYaw;
+        }
+    }
+    @Override
+    protected void tickControlled(PlayerEntity controllingPlayer, Vec3d movementInput) {
+        super.tickControlled(controllingPlayer, movementInput);
+        this.setRotation(controllingPlayer.getYaw(),controllingPlayer.getPitch() * 0.5F);
+        this.prevYaw = this.bodyYaw = this.headYaw = this.getYaw();
     }
 
     public static class AntBattleGoal<T extends LivingEntity> extends ActiveTargetGoal<T> {

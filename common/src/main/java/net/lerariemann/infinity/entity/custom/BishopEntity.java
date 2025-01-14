@@ -57,7 +57,7 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
                 return true;
             }
         };
-        meleeAttackGoal = new MeleeAttackGoal(this, 1.2, false) {
+        meleeAttackGoal = new MeleeAttackGoal(this, 1.5, false) {
             @Override
             public void stop() {
                 super.stop();
@@ -167,7 +167,8 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
 
     public ItemStack getProjectileType() {
         NbtCompound effect = InfinityMod.provider.randomElement(random, "effects");
-        if (!effect.getString("Category").equals("harmful")) return Items.ARROW.getDefaultStack();
+        if (!effect.getString("Category").equals("harmful")
+                || effect.getBoolean("Instant")) return Items.ARROW.getDefaultStack();
         return ChaosSkeleton.setPotion(Items.TIPPED_ARROW.getDefaultStack(),
                 effect.getInt("Color"),
                 effect.getString("Name"),

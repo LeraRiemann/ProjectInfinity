@@ -18,7 +18,7 @@ public interface PortalDataHolder {
         return stack.getComponents().get(ModComponentTypes.DESTINATION.get());
     }
 
-    default boolean isDestinationRandom(Identifier id) {
+    static boolean isDestinationRandom(Identifier id) {
         return (id != null && id.toString().equals(InfinityMethods.ofRandomDim));
     }
 
