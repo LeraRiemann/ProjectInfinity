@@ -6,10 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.mob.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
@@ -33,7 +30,7 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
     @Nullable
     protected UUID angryAt;
 
-    protected AbstractChessFigure(EntityType<? extends HostileEntity> entityType, World world) {
+    protected AbstractChessFigure(EntityType<? extends AbstractChessFigure> entityType, World world) {
         super(entityType, world);
     }
 
@@ -43,10 +40,13 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
     protected void initGoals() {
         initRegularGoals();
         initChessGoals();
+        initAttackType();
+    }
+    protected  void initAttackType() {
+        this.goalSelector.add(2, new MeleeAttackGoal(this, 1.0, false));
     }
     protected void initChessGoals() {
         this.targetSelector.add(1, new ChessRevengeGoal(this).setGroupRevenge());
-        this.goalSelector.add(2, new MeleeAttackGoal(this, 1.0, false));
         this.targetSelector.add(3, new ChaosCleanseGoal<>(this, ChaosSlime.class, true));
         this.targetSelector.add(3, new ChaosCleanseGoal<>(this, ChaosSkeleton.class, true));
         this.targetSelector.add(3, new ChessUniversalAngerGoal(this));

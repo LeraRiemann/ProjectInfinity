@@ -71,10 +71,10 @@ public class AntEntity extends AbstractChessFigure {
     }
     @Override
     protected void initRegularGoals() {
-        this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(5, new WanderConditionalGoal(this, 1.0));
-        this.goalSelector.add(6, new LookAtEntityConditionalGoal(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.add(7, new LookAroundConditionalGoal(this));
+        goalSelector.add(0, new SwimGoal(this));
+        goalSelector.add(5, new WanderConditionalGoal(this, 1.0));
+        goalSelector.add(6, new LookAtEntityConditionalGoal(this, PlayerEntity.class, 6.0F));
+        goalSelector.add(7, new LookAroundConditionalGoal(this));
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
