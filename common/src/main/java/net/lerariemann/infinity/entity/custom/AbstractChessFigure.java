@@ -10,6 +10,7 @@ import net.minecraft.entity.mob.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -22,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,7 +54,7 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
         this.targetSelector.add(3, new ChessUniversalAngerGoal(this));
     }
     protected void initRegularGoals() {
-        this.goalSelector.add(0, new SwimGoal(this));
+        this.goalSelector.add(0, new SwimWithVehicleGoal(this));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
         this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
         this.goalSelector.add(8, new LookAroundGoal(this));
@@ -137,6 +139,50 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
     public static boolean isAngerCompatible(AbstractChessFigure fig1, AbstractChessFigure fig2) {
         if (fig1 instanceof ChaosPawn p1 && fig2 instanceof ChaosPawn p2) return p1.getCase() == p2.getCase();
         return fig1.isBlackOrWhite() ^ !fig2.isBlackOrWhite();
+    }
+
+    public static class SwimWithVehicleGoal extends Goal {
+        private final MobEntity mob;
+
+        public SwimWithVehicleGoal(MobEntity mob) {
+            this.mob = mob;
+            this.setControls(EnumSet.of(Goal.Control.JUMP));
+            mob.getNavigation().setCanSwim(true);
+        }
+
+        @Override
+        public void start() {
+            if (mob.getControllingVehicle() instanceof MobEntity vehicle) {
+                vehicle.getNavigation().setCanSwim(true);
+            }
+        }
+
+        @Override
+        public boolean canStart() {
+            if (mob.getControllingVehicle() instanceof MobEntity vehicle) {
+                return shouldMobSwim(vehicle);
+            }
+            return shouldMobSwim(mob);
+        }
+
+        public static boolean shouldMobSwim(MobEntity mob) {
+            return mob.isTouchingWater() && mob.getFluidHeight(FluidTags.WATER) > mob.getSwimHeight() || mob.isInLava();
+        }
+
+        @Override
+        public boolean shouldRunEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            if (mob.getRandom().nextFloat() < 0.8F) {
+                if (mob.getControllingVehicle() instanceof MobEntity vehicle) {
+                    vehicle.getJumpControl().setActive();
+                }
+                mob.getJumpControl().setActive();
+            }
+        }
     }
 
     public static class ChaosCleanseGoal<T extends LivingEntity> extends ActiveTargetGoal<T> {

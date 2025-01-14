@@ -5,6 +5,8 @@ import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FluidBlock;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -13,7 +15,9 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -21,6 +25,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -132,6 +137,29 @@ public class AntEntity extends AbstractChessFigure {
     @Override
     public boolean canBeLeashed() {
         return !isInBattle();
+    }
+    @Override
+    public boolean canWalkOnFluid(FluidState state) {
+        return state.isIn(FluidTags.WATER);
+    }
+
+    public static VoxelShape getWaterCollisionShape(int level) {
+        return Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, level, 16.0);
+    }
+
+    @Override
+    public void tickMovement() {
+        super.tickMovement();
+        if (!this.firstUpdate && this.fluidHeight.getDouble(FluidTags.WATER) > 0.0) {
+            ShapeContext shapeContext = ShapeContext.of(this);
+            if (shapeContext.isAbove(getWaterCollisionShape(15),
+                    this.getBlockPos(), true)
+                    && !this.getWorld().getFluidState(this.getBlockPos().up()).isIn(FluidTags.WATER)) {
+                this.setOnGround(true);
+            } else {
+                this.setVelocity(this.getVelocity().multiply(0.5).add(0.0, 0.05, 0.0));
+            }
+        }
     }
 
     @Override

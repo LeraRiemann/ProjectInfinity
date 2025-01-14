@@ -2,10 +2,7 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.var.BishopBattle;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RangedAttackMob;
 import net.minecraft.entity.ai.goal.BowAttackGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
@@ -24,6 +21,8 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,6 +43,15 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 150)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0);
     }
+
+    @Nullable
+    @Override
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+        entityData = super.initialize(world, difficulty, spawnReason, entityData);
+        updateAttackType();
+        return entityData;
+    }
+
     @Override
     protected void initGoals() {
         targetSelector.add(2, new AntEntity.AntBattleGoal<>(this, PlayerEntity.class, true));
@@ -51,12 +59,7 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
     }
     @Override
     protected void initAttackType() {
-        bowAttackGoal = new BowAttackGoal<>(this, 1.0, 20, 15.0F) {
-            @Override
-            public boolean isHoldingBow() {
-                return true;
-            }
-        };
+        bowAttackGoal = new BowAttackGoal<>(this, 1.0, 20, 15.0F);
         meleeAttackGoal = new MeleeAttackGoal(this, 1.5, false) {
             @Override
             public void stop() {
@@ -70,28 +73,38 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
                 mob.setAttacking(true);
             }
         };
-        updateAttackType();
-    }
-    public void updateAttackType() {
-        if (this.getWorld() != null && !this.getWorld().isClient) {
-            goalSelector.remove(meleeAttackGoal);
-            goalSelector.remove(bowAttackGoal);
-            if (random.nextBoolean()) {
-                goalSelector.add(2, meleeAttackGoal);
-                equipStack(EquipmentSlot.MAINHAND, (random.nextBoolean() ? Items.IRON_SWORD : Items.IRON_AXE).getDefaultStack());
-            }
-            else {
-                goalSelector.add(2, bowAttackGoal);
-                if (!isHolding(Items.BOW)) equipStack(EquipmentSlot.MAINHAND, Items.BOW.getDefaultStack());
-            }
-        }
     }
 
     @Override
     public void tickMovement() {
-        if (age % 200 == 0) updateAttackType();
+        if (age % 200 == 0 && getTarget() != null)
+            updateWeapon(random.nextBoolean());
         super.tickMovement();
     }
+    public void updateWeapon(boolean newAttackBow) {
+        if (this.getWorld() != null && !this.getWorld().isClient) {
+            boolean oldAttackBow = isHolding(Items.BOW);
+            if (!newAttackBow && oldAttackBow) {
+                equipStack(EquipmentSlot.MAINHAND, (random.nextBoolean() ? Items.IRON_SWORD : Items.IRON_AXE).getDefaultStack());
+            }
+            if (newAttackBow && !oldAttackBow) {
+                equipStack(EquipmentSlot.MAINHAND, Items.BOW.getDefaultStack());
+            }
+        }
+    }
+    @Override
+    public void equipStack(EquipmentSlot slot, ItemStack stack) {
+        super.equipStack(slot, stack);
+        if (!this.getWorld().isClient) {
+            this.updateAttackType();
+        }
+    }
+    public void updateAttackType() {
+        boolean bow = isHolding(Items.BOW);
+        goalSelector.remove(bow ? meleeAttackGoal : bowAttackGoal);
+        goalSelector.add(2, bow ? bowAttackGoal : meleeAttackGoal);
+    }
+
     @Override
     public void tickRiding() {
         super.tickRiding();
@@ -122,6 +135,7 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
         super.readCustomDataFromNbt(nbt);
         if (nbt.contains("battle") && getWorld() instanceof ServerWorld w)
             battle = new BishopBattle(w, nbt.getString("battle"));
+        updateAttackType();
     }
     public void addToBattle(BishopBattle battle) {
         this.battle = battle;

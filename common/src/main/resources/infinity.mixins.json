@@ -4,7 +4,6 @@
   "package": "net.lerariemann.infinity.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "iridescence.ItemStackMixin",
     "core.AbstractBlockMixin",
     "core.AbstractFireBlockMixin",
     "core.MaterialRuleContextAccess",
@@ -16,6 +15,7 @@
     "fixes.BeeGoalMixin",
     "fixes.BeeGoalMixin$BeeGoalMixin2",
     "fixes.ChunkRegionMixin",
+    "fixes.ColllisionShapeMixin",
     "fixes.EntityMixin",
     "fixes.MobEntityMixin",
     "fixes.PointOfInterestStorageMixin",
@@ -25,6 +25,7 @@
     "iridescence.FishEntityMixin",
     "iridescence.FishEntityMixin$FishMoveControlMixin",
     "iridescence.FluidBlockMixin",
+    "iridescence.ItemStackMixin",
     "iridescence.KelpBlockMixin",
     "iridescence.LandPathNodeMakerMixin",
     "iridescence.MobNavigationMixin",
