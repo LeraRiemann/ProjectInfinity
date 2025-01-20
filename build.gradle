@@ -13,7 +13,7 @@ architectury {
 allprojects {
     group = maven_group
     version = "$mod_version+$minecraft_version"
-    if (tbversion > 0) version = version + "-tb$tbversion"
+    if (tbversion != "0") version = version + "-tb$tbversion"
 }
 
 forgix {
