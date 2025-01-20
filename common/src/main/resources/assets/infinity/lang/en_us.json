@@ -26,6 +26,8 @@
   "advancements.infinity.over_9000.description": "Fill a biome bottle to the max and release it",
   "advancements.infinity.acid_test.title": "Acid Test",
   "advancements.infinity.acid_test.description": "Awaken chaos in mobs with iridescence",
+  "advancements.infinity.bishop_taken.title": "Player Takes Bishop",
+  "advancements.infinity.bishop_taken.description": "Summon and defeat an ant bishop by placing an Ant Block on your altar",
   "biome.infinity.ant": "Plateau of Lang",
   "biome.infinity.chaos": "Abode of Chaos",
   "biome.infinity.chess": "Chess Battle Advanced",

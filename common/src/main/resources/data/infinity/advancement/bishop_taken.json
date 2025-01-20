@@ -1,0 +1,35 @@
+{
+  "parent": "infinity:multiverse_root",
+  "criteria": {
+    "infinity:bishop": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "infinity:bishop"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.infinity.bishop_taken.title"
+    },
+    "description": {
+      "translate": "advancements.infinity.bishop_taken.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "infinity:star_of_lang"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

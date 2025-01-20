@@ -93,6 +93,7 @@ public interface Iridescence {
     static int getPosBasedColor(BlockPos pos) {
         return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F) & 0xFFFFFF;
     }
+    //todo: figure out how minecraft offsets animations to sync this with irid items' textures' animation loops
     static int getTimeBasedColor() {
         long timeMS = LocalTime.now().toNanoOfDay() / 1000000;
         int hue = (int)(timeMS % 24000);
@@ -122,20 +123,22 @@ public interface Iridescence {
     static int getAmplifierOnApply(LivingEntity entity, int original) {
         StatusEffectInstance cooldown = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
         if (cooldown == null) return original;
-        else if (cooldown.getAmplifier() < 1) return 0;
+        else if (cooldown.getAmplifier() < 1) {
+            if (original > 0) return 0;
+        }
         return -1;
     }
 
     int ticksInHour = 1200;
 
-    static int getOnsetLength() {
-        return ticksInHour * RandomProvider.ruleInt("iridescenceInitialDuration") / 60; //default is 30 seconds
-    }
     static int getFullEffectLength(int amplifier) {
         return getOnsetLength() + getEffectLength(amplifier);
     }
     static int getEffectLength(int amplifier) { //amplifier is 0 to 4
         return getComeupLength() + getPeakLength(amplifier) + getOffsetLength(); //8 to 12 minutes
+    }
+    static int getOnsetLength() {
+        return ticksInHour * RandomProvider.ruleInt("iridescenceInitialDuration") / 60; //default is 30 seconds
     }
     static int getComeupLength() {
         return ticksInHour;
@@ -153,6 +156,13 @@ public interface Iridescence {
         return ticksInHour * RandomProvider.ruleInt("iridescenceCooldownDuration"); //default is 7*24 minutes
     }
 
+    enum Phase {
+        INITIAL,
+        UPWARDS,
+        PLATEAU,
+        DOWNWARDS
+    }
+
     static Phase getPhase(LivingEntity entity) {
         StatusEffectInstance effect = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
         if (effect == null) return Phase.INITIAL;
@@ -168,7 +178,7 @@ public interface Iridescence {
         return (Iridescence.getPhase(duration, amplifier) == Iridescence.Phase.PLATEAU) && (duration % ticksInHour == 0);
     }
     static boolean shouldReturn(int duration, int amplifier) {
-        return (amplifier > 0) && (duration == ticksInHour);
+        return (amplifier > 0) && (duration == getOffsetLength());
     }
     static boolean shouldRequestShaderLoad(int duration, int amplifier) {
         int time_passed = getEffectLength(amplifier) - duration;
@@ -301,12 +311,5 @@ public interface Iridescence {
         if (player instanceof ServerPlayerEntity np) {
             ModCriteria.CONVERT_MOB.get().trigger(np, entity);
         }
-    }
-
-    enum Phase {
-        INITIAL,
-        UPWARDS,
-        PLATEAU,
-        DOWNWARDS
     }
 }
