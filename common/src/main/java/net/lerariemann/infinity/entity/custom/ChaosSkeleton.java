@@ -88,8 +88,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random r = new Random();
         NbtCompound effect = InfinityMod.provider.randomElement(r, "effects");
-        this.setEffectRaw(effect.getString("Name"));
-        this.setColorRaw(effect.getInt("Color"));
+        this.setEffect(effect);
         this.setDuration(r.nextInt(600));
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
@@ -109,12 +108,12 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
-        if (itemStack.isOf(Items.FERMENTED_SPIDER_EYE) && effect_lookup.containsKey(this.getEffectRaw())) {
+        if (itemStack.isOf(Items.FERMENTED_SPIDER_EYE) && effect_lookup.containsKey(this.getEffect())) {
             if (!player.getAbilities().creativeMode) {
                 itemStack.decrement(1);
             }
             if (player.getWorld().getRandom().nextFloat() < 0.5) {
-                String i = effect_lookup.get(this.getEffectRaw());
+                String i = effect_lookup.get(this.getEffect());
                 StatusEffect newEffect = Registries.STATUS_EFFECT.get(new Identifier(i));
                 if (newEffect != null) {
                     ChaosSkeleton newSkeleton;
@@ -123,8 +122,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
                         this.discard();
                         ModEntities.copy(this, newSkeleton);
                         newSkeleton.setDuration(this.getDuration());
-                        newSkeleton.setEffectRaw(i);
-                        newSkeleton.setColorRaw(newEffect.getColor());
+                        newSkeleton.setEffect(i, newEffect.getColor());
                         this.getWorld().spawnEntity(newSkeleton);
                         return ActionResult.SUCCESS;
                     }
@@ -132,7 +130,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
             }
         }
         if (itemStack.isOf(Items.GLASS_BOTTLE)) {
-            ItemStack itemStack2 = setPotion(Items.POTION.getDefaultStack(), this.getEffectRawId(), this.getDuration() * 20);
+            ItemStack itemStack2 = setPotion(Items.POTION.getDefaultStack(), this.getColorForRender(), this.getEffect(), this.getDuration() * 20);
             ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
             player.setStackInHand(hand, itemStack3);
             this.playSound(SoundEvents.ITEM_BOTTLE_FILL, 1.0f, 1.0f);
@@ -147,32 +145,26 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
         return super.interactMob(player, hand);
     }
 
-
-    public void setEffectRaw(String c) {
-        this.dataTracker.set(effect, c);
+    public void setEffect(NbtCompound eff) {
+        setEffect(eff.getString("Name"), eff.getInt("Color"));
     }
-    public String getEffectRaw() {
-        var dataEffect = this.dataTracker.get(effect);
-        if (dataEffect.isBlank()) {
-            Random r = new Random();
-            NbtCompound newEffect = InfinityMod.provider.randomElement(r, "effects");
-            this.setEffectRaw(newEffect.getString("Name"));
-            return newEffect.getString("Name");
+    public void setEffect(String eff, int c) {
+        if (eff.isBlank()) {
+            NbtCompound newEffect = InfinityMod.provider.randomElement(random, "effects");
+            eff = newEffect.getString("Name");
+            c = newEffect.getInt("Color");
         }
-        return dataEffect;
-    }
-    public void setColorRaw(int c) {
+        this.dataTracker.set(effect, eff);
         this.dataTracker.set(color, c);
     }
-    public int getEffectRawId() {
-        return reg.getRawId(getEffect());
+    public String getEffect() {
+        return this.dataTracker.get(effect);
     }
-    public void setEffect(Identifier i) {
-        setEffectRaw(i.toString());
+    @Override
+    public int getColor() {
+        return this.dataTracker.get(color);
     }
-    public StatusEffect getEffect() {
-        return reg.get(new Identifier(getEffectRaw()));
-    }
+
     public void setDuration(int i) {
         this.dataTracker.set(duration, i);
     }
@@ -182,16 +174,15 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putString("effect", this.getEffectRaw());
+        nbt.putString("effect", this.getEffect());
         nbt.putInt("duration", this.getDuration());
-        nbt.putInt("color", this.getColorRaw());
+        nbt.putInt("color", this.getColor());
     }
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.setEffectRaw(nbt.getString("effect"));
+        this.setEffect(nbt.getString("effect"), nbt.getInt("color"));
         this.setDuration(nbt.getInt("duration"));
-        this.setColorRaw(nbt.getInt("color"));
     }
 
     public static ItemStack setPotion(ItemStack stack, int effect, int duration) {
@@ -212,12 +203,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     }
 
     public ItemStack getProjectileType() {
-        return setPotion(Items.TIPPED_ARROW.getDefaultStack(), this.getEffectRawId(), this.getDuration());
-    }
-
-    @Override
-    public int getColorRaw() {
-        return this.dataTracker.get(color);
+        return setPotion(Items.TIPPED_ARROW.getDefaultStack(), this.getColor(), this.getEffect(), this.getDuration());
     }
 
     @Override

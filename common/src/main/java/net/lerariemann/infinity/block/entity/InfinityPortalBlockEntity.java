@@ -41,7 +41,7 @@ public class InfinityPortalBlockEntity extends TintableBlockEntity {
 
             public void set(int index, int value) {
                 if (index == 0) {
-                    InfinityPortalBlockEntity.this.portalColor = value;
+                    InfinityPortalBlockEntity.this.portalColor = value & 0xFFFFFF;
                 }
 
             }
@@ -58,7 +58,7 @@ public class InfinityPortalBlockEntity extends TintableBlockEntity {
     public InfinityPortalBlockEntity(BlockPos pos, BlockState state, int i, Identifier id) {
         this(pos, state);
         this.dimension = id;
-        this.portalColor = i;
+        this.portalColor = i & 0xFFFFFF;
         this.isOpen = false;
         this.otherSidePos = null;
     }
@@ -89,7 +89,7 @@ public class InfinityPortalBlockEntity extends TintableBlockEntity {
         this.dimension = i;
     }
     public void setColor(int c) {
-        this.portalColor = c;
+        this.portalColor = c & 0xFFFFFF;
         if (world != null) {
             BlockState bs = world.getBlockState(pos);
             world.updateListeners(pos, bs, bs, 0);
@@ -168,7 +168,7 @@ public class InfinityPortalBlockEntity extends TintableBlockEntity {
     public void readNbt(NbtCompound tag) {
         super.readNbt(tag);
         if (tag.contains("Dimension", NbtElement.NUMBER_TYPE)) { //conversion from legacy formats
-            this.portalColor = tag.getInt("Dimension");
+            this.portalColor = tag.getInt("Dimension") & 0xFFFFFF;
             if (tag.contains("DimensionName")) {
                 this.dimension = new Identifier(tag.getString("DimensionName"));
             }
@@ -179,7 +179,7 @@ public class InfinityPortalBlockEntity extends TintableBlockEntity {
             this.portalColor = tag.contains("Color", NbtElement.INT_TYPE) ?
                     tag.getInt("Color") :
                     (world != null ? PortalColorApplier.of(dimension, world.getServer()) :
-                            PortalColorApplier.of(dimension, new NbtCompound())).apply(pos);
+                            PortalColorApplier.of(dimension, new NbtCompound())).apply(pos) & 0xFFFFFF;
         }
         else {
             setDimension(InfinityMethods.getRandomSeed(new Random())); //random by default

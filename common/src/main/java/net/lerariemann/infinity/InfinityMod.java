@@ -38,11 +38,12 @@ public class InfinityMod {
 		rootConfigPathInJar = PlatformMethods.getRootConfigPath();
 		ConfigManager.updateInvocationLock();
 		ConfigManager.unpackDefaultConfigs();
+		ModComponentTypes.registerComponentTypes();
+		ModStatusEffects.registerModEffects();
 		ModItemFunctions.registerItemFunctions();
 		ModEntities.registerEntities();
 		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
-		ModStatusEffects.registerModEffects();
 		ModBlockEntities.registerBlockEntities();
 		ModPoi.registerPoi();
 		ModCommands.registerCommands();

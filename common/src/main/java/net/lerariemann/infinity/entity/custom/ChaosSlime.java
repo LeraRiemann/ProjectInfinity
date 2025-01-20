@@ -82,29 +82,24 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     public void setColor(Vector3f c) {
         this.dataTracker.set(color, c);
     }
+    @Override
+    public int getColor() {
+        return this.dataTracker.get(color);
+    }
+
     public void setCore(BlockState c) {
         this.dataTracker.set(core, c);
     }
-    @Override
-    public Vector3f getColor() {
-        Vector3f v = getColorNamed();
-        if (v!=null) return v;
-        return this.dataTracker.get(color);
-    }
-    @Override
-    public float getAlpha() {return 1.0f;}
-
     public BlockState getCore() {
         return this.dataTracker.get(core);
     }
-
     public BlockState getCoreForChild() {
         return Blocks.AIR.getDefaultState();
     }
 
     @Override
     protected ParticleEffect getParticles() {
-        return new DustParticleEffect(this.getColor(), 1.0f);
+        return new DustParticleEffect(particleColorFromInt(this.getColorForRender()), 1.0f);
     }
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
@@ -130,9 +125,7 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putFloat("red", this.dataTracker.get(color).x);
-        nbt.putFloat("green", this.dataTracker.get(color).y);
-        nbt.putFloat("blue", this.dataTracker.get(color).z);
+        nbt.putInt("color", getColor());
         nbt.putString("core", Registries.BLOCK.getId(this.getCore().getBlock()).toString());
     }
 

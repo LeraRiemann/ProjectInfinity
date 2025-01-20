@@ -82,7 +82,7 @@ public class F4Item extends Item implements PortalDataHolder {
         BlockPos lowerLeft = lowerCenter.offset(dir2, -(size_x/2));
         Identifier id = BackportMethods.getDimensionIdentifier(stack);
         boolean doNotRenderPortal = (world.isClient && (id == null || !id.getPath().contains("generated_")));
-        if (ModItems.F4.get().isDestinationRandom(id))
+        if (PortalDataHolder.isDestinationRandom(id))
             id = InfinityMethods.getRandomId(world.random);
         int obsNotReplaced = 0;
 

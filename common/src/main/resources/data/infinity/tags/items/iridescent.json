@@ -1,6 +1,11 @@
 {
   "values": [
     "infinity:iridescent_wool",
-    "infinity:iridescent_carpet"
+    "infinity:iridescent_carpet",
+    "infinity:iridescent_star",
+    "infinity:iridescence_bucket",
+    "infinity:cosmic_altar",
+    "infinity:chromatic_potion",
+    "infinity:iridescent_potion"
   ]
 }

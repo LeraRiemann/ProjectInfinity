@@ -19,7 +19,7 @@ public interface PortalDataHolder {
         return BackportMethods.getDimensionIdentifier(stack);
     }
 
-    default boolean isDestinationRandom(Identifier id) {
+    static boolean isDestinationRandom(Identifier id) {
         return (id != null && id.toString().equals(InfinityMethods.ofRandomDim));
     }
 
@@ -47,27 +47,27 @@ public interface PortalDataHolder {
 
 
 
-    static Optional<ComponentMap> addPortalComponents(Item item, ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
+    static Optional<ComponentChanges> addPortalComponents(Item item, ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
         if (item instanceof PortalDataHolder pdh)
             return Optional.of(pdh.addPortalComponents(oldStack, ipbe));
         return Optional.empty();
     }
 
-    default ComponentMap addPortalComponents(ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
-        ComponentMap changes = getPortalComponents(ipbe).build();
-        oldStack.applyComponentsFrom(changes);
-        return oldStack.getComponents();
+    default ComponentChanges addPortalComponents(ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
+        ComponentChanges changes = getPortalComponents(ipbe).build();
+        oldStack.applyChanges(changes);
+        return changes;
     }
 
-    default ComponentMap.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
-        return ComponentMap.builder()
+    default ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+        return ComponentChanges.builder()
                 .add(ModComponentTypes.DESTINATION.get(), ipbe.getDimension())
                 .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
     }
 
     default ItemStack withPortalData(InfinityPortalBlockEntity ipbe) {
         ItemStack stack = getStack();
-        stack.applyComponentsFrom(addPortalComponents(stack, ipbe));
+        stack.applyChanges(addPortalComponents(stack, ipbe));
         return stack;
     }
 

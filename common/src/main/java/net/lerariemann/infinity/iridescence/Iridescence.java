@@ -4,16 +4,17 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.registry.core.ModEntities;
-import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.lerariemann.infinity.registry.var.ModStats;
+import net.lerariemann.infinity.registry.var.ModTags;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
@@ -47,6 +48,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.Color;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -82,18 +84,24 @@ public interface Iridescence {
         return Iridescence.isIridescence(world.getFluidState(pos));
     }
     static boolean isIridescentItem(ItemStack stack) {
-        return stack.isIn(ModItems.IRIDESCENT_TAG);
+        return stack.isIn(ModTags.IRIDESCENT_ITEMS);
     }
 
     public static boolean isUnderEffect(LivingEntity entity) {
         return entity.hasStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT.value());
     }
 
-    static int color(BlockPos pos) {
-        return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F);
+    static int getPosBasedColor(BlockPos pos) {
+        return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F) & 0xFFFFFF;
+    }
+    //todo: figure out how minecraft offsets animations to sync this with irid items' textures' animation loops
+    static int getTimeBasedColor() {
+        long timeMS = LocalTime.now().toNanoOfDay() / 1000000;
+        int hue = (int)(timeMS % 24000);
+        return Color.HSBtoRGB((float)(hue / 24000.0), 1.0f, 1.0f) & 0xFFFFFF;
     }
 
-    java.util.List<DyeColor> colors = List.of(
+    java.util.List<DyeColor> dyeColors = List.of(
             DyeColor.RED,
             DyeColor.ORANGE,
             DyeColor.YELLOW,
@@ -107,10 +115,10 @@ public interface Iridescence {
             DyeColor.PINK);
 
     static Block getRandomColorBlock(WorldAccess world, String str) {
-        return Registries.BLOCK.get(new Identifier(colors.get(world.getRandom().nextInt(colors.size())).getName() + "_" + str));
+        return Registries.BLOCK.get(Identifier.of(dyeColors.get(world.getRandom().nextInt(dyeColors.size())).getName() + "_" + str));
     }
     static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(new Identifier(colors.get((int)(d*colors.size())).getName() + "_" + str));
+        return Registries.BLOCK.get(Identifier.of(dyeColors.get((int)(d* dyeColors.size())).getName() + "_" + str));
     }
 
     int ticksInHour = 1200;
@@ -118,15 +126,22 @@ public interface Iridescence {
     static int getAmplifierOnApply(LivingEntity entity, int original) {
         StatusEffectInstance cooldown = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
         if (cooldown == null) return original;
-        else if (cooldown.getAmplifier() < 1) return 0;
+        else if (cooldown.getAmplifier() < 1) {
+            if (original > 0) return 0;
+        }
         return -1;
     }
 
-    static int getOnsetLength() {
-        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceInitialDuration") / 60; //default is 30 seconds
+    int ticksInHour = 1200;
+
+    static int getFullEffectLength(int amplifier) {
+        return getOnsetLength() + getEffectLength(amplifier);
     }
     static int getEffectLength(int amplifier) { //amplifier is 0 to 4
         return getComeupLength() + getPeakLength(amplifier) + getOffsetLength(); //8 to 12 minutes
+    }
+    static int getOnsetLength() {
+        return ticksInHour * RandomProvider.ruleInt("iridescenceInitialDuration") / 60; //default is 30 seconds
     }
     static int getComeupLength() {
         return ticksInHour;
@@ -138,10 +153,17 @@ public interface Iridescence {
         return ticksInHour * 3;
     }
     static int getAfterglowDuration() {
-        return ticksInHour * InfinityMod.provider.ruleInt("afterglowDuration"); //default is 24 minutes
+        return ticksInHour * RandomProvider.ruleInt("afterglowDuration"); //default is 24 minutes
     }
     static int getCooldownDuration() {
-        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceCooldownDuration"); //default is 7*24 minutes
+        return ticksInHour * RandomProvider.ruleInt("iridescenceCooldownDuration"); //default is 7*24 minutes
+    }
+
+    enum Phase {
+        INITIAL,
+        UPWARDS,
+        PLATEAU,
+        DOWNWARDS
     }
 
     public static Phase getPhase(LivingEntity entity) {
@@ -159,7 +181,7 @@ public interface Iridescence {
         return (Iridescence.getPhase(duration, amplifier) == Iridescence.Phase.PLATEAU) && (duration % ticksInHour == 0);
     }
     static boolean shouldReturn(int duration, int amplifier) {
-        return (amplifier > 0) && (duration == ticksInHour);
+        return (amplifier > 0) && (duration == getOffsetLength());
     }
     static boolean shouldRequestShaderLoad(int duration, int amplifier) {
         int time_passed = getEffectLength(amplifier) - duration;
@@ -180,11 +202,11 @@ public interface Iridescence {
                 && getPhase(effect.getDuration(), effect.getAmplifier()) != Phase.INITIAL);
     }
 
-    static void tryBeginJourney(LivingEntity entity, int amplifier) {
+    static void tryBeginJourney(LivingEntity entity, int amplifier, boolean willingly) {
         amplifier = Iridescence.getAmplifierOnApply(entity, amplifier);
         if (amplifier >= 0) {
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(),
-                    Iridescence.getEffectLength(amplifier) + Iridescence.getOnsetLength(),
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
+                    Iridescence.getFullEffectLength(amplifier),
                     amplifier, true, true));
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
             int cooldownDuration = Iridescence.getCooldownDuration();
@@ -192,7 +214,7 @@ public interface Iridescence {
                 entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN.value(),
                         cooldownDuration, amplifier > 0 ? 1 : 0, true, false));
             if (entity instanceof ServerPlayerEntity player) {
-                ModCriteria.IRIDESCENT.trigger(player);
+                ModCriteria.IRIDESCENT.get().trigger(player, willingly, amplifier);
             }
         }
     }
@@ -292,12 +314,5 @@ public interface Iridescence {
         if (player instanceof ServerPlayerEntity np) {
             ModCriteria.CONVERT_MOB.trigger(np, entity);
         }
-    }
-
-    enum Phase {
-        INITIAL,
-        UPWARDS,
-        PLATEAU,
-        DOWNWARDS
     }
 }

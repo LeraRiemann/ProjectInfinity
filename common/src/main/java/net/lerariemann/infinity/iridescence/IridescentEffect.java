@@ -12,6 +12,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 
 import java.util.Objects;
@@ -36,13 +37,20 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
     }
 
     public void onRemoved(LivingEntity entity) {
-        if (Objects.requireNonNull(entity) instanceof ServerPlayerEntity player) {
-            unloadShader(player);
-            if (player.isInvulnerable()) endJourney(player, true, 0);
-        } else if (entity instanceof ChaosPawn pawn) {
-            if (pawn.getRandom().nextBoolean()) {
-                pawn.unchess();
-                convTriggers(pawn);
+        switch (entity) {
+            case ServerPlayerEntity player -> {
+                unloadShader(player);
+                if (player.isInvulnerable()) endJourney(player, true, 0);
+            }
+            case ChaosPawn pawn -> {
+                if (pawn.getRandom().nextBoolean()) {
+                    pawn.unchess();
+                    pawn.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
+                    convTriggers(pawn);
+                }
+            }
+            case MobEntity currEntity -> endConversion(currEntity);
+            default -> {
             }
         } else if (entity instanceof MobEntity currEntity) {
             endConversion(currEntity);
@@ -74,13 +82,12 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         }
     }
 
-//    @Override
-//    public ParticleEffect createParticle(StatusEffectInstance effect) {
-//        float hue = effect.getDuration() / 13.0f;
-//        return EntityEffectParticleEffect.create(
-//                ParticleTypes.ENTITY_EFFECT, ColorHelper.Argb.withAlpha(255,
-//                        Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
-//    }
+    @Override
+    public ParticleEffect createParticle(StatusEffectInstance effect) {
+        float hue = effect.getDuration() / 13.0f;
+        return EntityEffectParticleEffect.create(
+                ParticleTypes.ENTITY_EFFECT, ColorHelper.Argb.fullAlpha(Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
+    }
 
     public static class Setup extends InstantStatusEffect {
         public Setup(StatusEffectCategory category, int color) {
@@ -88,9 +95,9 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         }
 
         @Override
-        public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
-            super.onApplied(entity, attributes, amplifier);
-            tryBeginJourney(entity, amplifier);
+        public void onApplied(LivingEntity entity, int amplifier) {
+            super.onApplied(entity, amplifier);
+            tryBeginJourney(entity, amplifier, true);
         }
     }
 }

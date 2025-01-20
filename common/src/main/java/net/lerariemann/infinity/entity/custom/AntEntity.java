@@ -5,8 +5,9 @@ import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.FluidBlock;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -14,12 +15,17 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,10 +77,10 @@ public class AntEntity extends AbstractChessFigure {
     }
     @Override
     protected void initRegularGoals() {
-        this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(5, new WanderConditionalGoal(this, 1.0));
-        this.goalSelector.add(6, new LookAtEntityConditionalGoal(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.add(7, new LookAroundConditionalGoal(this));
+        goalSelector.add(0, new SwimGoal(this));
+        goalSelector.add(5, new WanderConditionalGoal(this, 1.0));
+        goalSelector.add(6, new LookAtEntityConditionalGoal(this, PlayerEntity.class, 6.0F));
+        goalSelector.add(7, new LookAroundConditionalGoal(this));
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
@@ -126,6 +132,82 @@ public class AntEntity extends AbstractChessFigure {
                 || isInBattle()
                 || !AntBlock.isSafeToRecolor(w, bp.get()))
                 && super.shouldPursueRegularGoals();
+    }
+
+    @Override
+    public boolean canBeLeashed() {
+        return !isInBattle();
+    }
+    @Override
+    public boolean canWalkOnFluid(FluidState state) {
+        return state.isIn(FluidTags.WATER);
+    }
+
+    public static VoxelShape getWaterCollisionShape(int level) {
+        return Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, level, 16.0);
+    }
+
+    @Override
+    public void tickMovement() {
+        super.tickMovement();
+        if (!this.firstUpdate && this.fluidHeight.getDouble(FluidTags.WATER) > 0.0) {
+            ShapeContext shapeContext = ShapeContext.of(this);
+            if (shapeContext.isAbove(getWaterCollisionShape(15),
+                    this.getBlockPos(), true)
+                    && !this.getWorld().getFluidState(this.getBlockPos().up()).isIn(FluidTags.WATER)) {
+                this.setOnGround(true);
+            } else {
+                this.setVelocity(this.getVelocity().multiply(0.5).add(0.0, 0.05, 0.0));
+            }
+        }
+    }
+
+    @Override
+    public ActionResult interactMob(PlayerEntity player, Hand hand) {
+        if (!this.hasPassengers()
+                && this.getAttributeValue(EntityAttributes.GENERIC_SCALE) > 2
+                && player.getStackInHand(hand).isEmpty()) {
+            this.putPlayerOnBack(player);
+            return ActionResult.success(this.getWorld().isClient);
+        }
+        return super.interactMob(player, hand);
+    }
+    protected void putPlayerOnBack(PlayerEntity player) {
+        if (!this.getWorld().isClient) {
+            player.setYaw(this.getYaw());
+            player.setPitch(this.getPitch());
+            player.startRiding(this);
+        }
+    }
+    @Override
+    protected Vec3d getControlledMovementInput(PlayerEntity controllingPlayer, Vec3d movementInput) {
+        float f = controllingPlayer.forwardSpeed;
+        return new Vec3d(controllingPlayer.sidewaysSpeed * 0.5f, 0, f < 0 ? f*0.25f : f);
+    }
+    @Override
+    protected float getSaddledSpeed(PlayerEntity controllingPlayer) {
+        return (float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * 0.8f;
+    }
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        if (this.getFirstPassenger() instanceof PlayerEntity player) {
+            return player;
+        }
+        return super.getControllingPassenger();
+    }
+    @Override
+    protected void updatePassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater) {
+        super.updatePassengerPosition(passenger, positionUpdater);
+        if (passenger instanceof LivingEntity) {
+            ((LivingEntity)passenger).bodyYaw = this.bodyYaw;
+        }
+    }
+    @Override
+    protected void tickControlled(PlayerEntity controllingPlayer, Vec3d movementInput) {
+        super.tickControlled(controllingPlayer, movementInput);
+        this.setRotation(controllingPlayer.getYaw(),controllingPlayer.getPitch() * 0.5F);
+        this.prevYaw = this.bodyYaw = this.headYaw = this.getYaw();
     }
 
     public static class AntBattleGoal<T extends LivingEntity> extends ActiveTargetGoal<T> {

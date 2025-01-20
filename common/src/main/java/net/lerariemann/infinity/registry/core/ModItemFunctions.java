@@ -13,6 +13,7 @@ import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.component.ComponentChanges;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -130,8 +131,8 @@ public class ModItemFunctions {
                 }, w);
         if (match.isEmpty()) return;
 
-        ItemStack resStack = match.get().getOutput(w.getRegistryManager());
-        resStack.setNbt(compound);
+        ItemStack resStack = match.get().value().getResult(w.getRegistryManager());
+        componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyChanges);
 
         Vec3d v = itemEntity.getVelocity();
         ItemEntity result = new ItemEntity(w, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(),

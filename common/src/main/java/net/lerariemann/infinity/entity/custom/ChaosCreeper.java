@@ -87,7 +87,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     }
 
     @Override
-    public int getColorRaw() {
+    public int getColor() {
         return this.dataTracker.get(color);
     }
 
@@ -103,7 +103,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putFloat("range", this.getRange());
-        nbt.putInt("color", this.getColorRaw());
+        nbt.putInt("color", this.getColor());
         nbt.putString("biome", this.getBiome());
     }
 

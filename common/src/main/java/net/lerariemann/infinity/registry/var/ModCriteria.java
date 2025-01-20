@@ -104,21 +104,14 @@ public class ModCriteria {
         }
     }
 
-    public static class IridescentCriterion extends AbstractCriterion<EmptyConditions> {
-        static final Identifier ID = InfinityMethods.getId("iridescence");
-
-        public void trigger(ServerPlayerEntity player) {
-            this.trigger(player, (conditions) -> true);
+    public static class IridescentCriterion extends AbstractCriterion<IridescenceConditions> {
+        public void trigger(ServerPlayerEntity player, boolean willing, int level) {
+            this.trigger(player, (conditions) -> conditions.test(willing, level));
         }
 
         @Override
-        protected EmptyConditions conditionsFromJson(JsonObject obj, LootContextPredicate lootContextPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
-            return new EmptyConditions(lootContextPredicate, ID);
-        }
-
-        @Override
-        public Identifier getId() {
-            return ID;
+        public Codec<IridescenceConditions> getConditionsCodec() {
+            return IridescenceConditions.CODEC;
         }
     }
 
@@ -179,8 +172,27 @@ public class ModCriteria {
         }
     }
 
-    public static class DataConditions extends AbstractCriterionConditions {
-        private final int score;
+    public record IridescenceConditions(Optional<LootContextPredicate> player, Optional<Boolean> willing, Optional<Integer> minLevel) implements AbstractCriterion.Conditions {
+        public static final Codec<IridescenceConditions> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                                EntityPredicate.LOOT_CONTEXT_PREDICATE_CODEC.optionalFieldOf("player").forGetter(IridescenceConditions::player),
+                                Codec.BOOL.optionalFieldOf("willing").forGetter(IridescenceConditions::willing),
+                                Codec.INT.optionalFieldOf("min_level").forGetter(IridescenceConditions::minLevel)
+                        )
+                        .apply(instance, IridescenceConditions::new)
+        );
+
+        public boolean test(boolean isWilling, int level) {
+            return (willing.isEmpty() || isWilling == willing.get()) && (minLevel.isEmpty() || level >= minLevel.get());
+        }
+    }
+
+    public static RegistrySupplier<DimensionOpenedCriterion> DIMS_OPENED;
+    public static RegistrySupplier<DimensionClosedCriterion> DIMS_CLOSED;
+    public static RegistrySupplier<WhoRemainsCriterion> WHO_REMAINS;
+    public static RegistrySupplier<IridescentCriterion> IRIDESCENT;
+    public static RegistrySupplier<BiomeBottleCriterion> BIOME_BOTTLE;
+    public static RegistrySupplier<ConvertMobCriterion> CONVERT_MOB;
 
         public DataConditions(LootContextPredicate player, int score, Identifier ID) {
             super(ID, player);

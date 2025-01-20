@@ -20,6 +20,17 @@ public class TransfiniteKeyItem extends Item implements PortalDataHolder {
         super(settings);
     }
 
+    @Override
+    public ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+        Identifier id = ipbe.getDimension();
+        int color = (ipbe.getWorld() instanceof ServerWorld w) ?
+                PortalColorApplier.of(id, w.getServer()).apply(BlockPos.ORIGIN) :
+                (int)InfinityMethods.getNumericFromId(id);
+        return ComponentChanges.builder()
+                .add(ModComponentTypes.DESTINATION.get(), id)
+                .add(ModComponentTypes.COLOR.get(), color & 0xFFFFFF);
+    }
+
     @NotNull
     @Override
     public Identifier getDestination(ItemStack stack) {

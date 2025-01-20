@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.registry.var;
 
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -20,6 +21,6 @@ public class ModScreenHandlers {
 
     public static void register() {
         SCREEN_HANDLERS.register();
-        HandledScreens.register(F4.get(), F4Screen::new);
+        if (Platform.isFabric()) HandledScreens.register(F4.get(), F4Screen::new);
     }
 }

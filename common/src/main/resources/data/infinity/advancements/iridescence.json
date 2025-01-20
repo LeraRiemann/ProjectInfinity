@@ -1,8 +1,8 @@
 {
-  "parent": "infinity:multiverse_root",
+  "parent": "infinity:iridescence_root",
   "display": {
     "icon": {
-      "item": "infinity:iridescence_bucket"
+      "item": "infinity:iridescent_potion"
     },
     "title": {
       "translate": "advancements.infinity.iridescence.title"
@@ -16,8 +16,11 @@
     "hidden": false
   },
   "criteria": {
-    "who_remains": {
-      "trigger": "infinity:iridescence"
+    "iridescence": {
+      "trigger": "infinity:iridescence",
+      "conditions": {
+        "willing": true
+      }
     }
   }
 }

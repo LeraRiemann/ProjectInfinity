@@ -21,10 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -128,14 +126,14 @@ public class ChaosPawn extends AbstractChessFigure {
         return dataTracker.get(special_case) != -1 && !Iridescence.isUnderEffect(this);
     }
 
-    public void setAllColors(Random r, BlockState state) {
+    public void initFromBlock(BlockState state) {
         if (state.isOf(Blocks.WHITE_WOOL) || state.isOf(Blocks.WHITE_CONCRETE)) {
             chess(true);
         }
         else if (state.isOf(Blocks.BLACK_WOOL) || state.isOf(Blocks.BLACK_CONCRETE)) {
             chess(false);
         }
-        else this.randomizeColors(r);
+        else unchess();
     }
 
     public void chess(boolean white) {
@@ -145,20 +143,14 @@ public class ChaosPawn extends AbstractChessFigure {
 
     public void unchess() {
         dataTracker.set(special_case, -1);
-        randomizeColors(random);
-        playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
-    }
-
-    public void randomizeColors(Random r) {
-        setColors(getColorSetup(() -> r.nextInt(16777216)));
+        setColors(getColorSetup(() -> random.nextInt(16777216)));
     }
 
     @Override
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        var r = new java.util.Random();
-        setAllColors(random, world.getBlockState(this.getBlockPos().down()));
-        double i = r.nextDouble() * 40;
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+        initFromBlock(world.getBlockState(this.getBlockPos().down()));
+        double i = random.nextDouble() * 40;
         Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
         this.setHealth((float)i);
         int a;

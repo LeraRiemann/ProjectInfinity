@@ -7,11 +7,11 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.item.*;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Rarity;
 
 import java.util.function.BiFunction;
@@ -26,10 +26,10 @@ public class ModItems {
     //block items
     public static final RegistrySupplier<Item> PORTAL_ITEM =
             ITEMS.register(ModBlocks.PORTAL.getId(), () -> new BlockItem(ModBlocks.PORTAL.get(), new Item.Settings()));
+    public static final RegistrySupplier<Item> COSMIC_ALTAR_ITEM =
+            registerBlockItemAfter(ModBlocks.COSMIC_ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN, BlockItem::new);
     public static final RegistrySupplier<Item> ALTAR_ITEM =
             registerBlockItemAfter(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN, BlockItem::new);
-    public static final RegistrySupplier<Item> COSMIC_ALTAR_ITEM =
-            registerBlockItemAfter(ModBlocks.COSMIC_ALTAR, ItemGroups.OPERATOR, Items.DEBUG_STICK, BlockItem::new);
     public static final RegistrySupplier<Item> ANT_ITEM  =
             registerBlockItemAfter(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE, BlockItem::new);
     public static final RegistrySupplier<Item> BOOK_BOX_ITEM =
@@ -49,9 +49,13 @@ public class ModItems {
     public static final RegistrySupplier<Item> IRIDESCENT_CARPET  =
             registerBlockItemAfter(ModBlocks.IRIDESCENT_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, BlockItem::new);
     public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_WOOL  =
-            registerBlockItemAfter(ModBlocks.CHROMATIC_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL, ChromaticBlockItem::new);
+            registerBlockItemAfter(ModBlocks.CHROMATIC_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL,
+                    new Item.Settings().component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic),
+                    ChromaticBlockItem::new);
     public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_CARPET  =
-            registerBlockItemAfter(ModBlocks.CHROMATIC_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, ChromaticBlockItem::new);
+            registerBlockItemAfter(ModBlocks.CHROMATIC_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET,
+                    new Item.Settings().component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic),
+                    ChromaticBlockItem::new);
     public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM =
             registerBlockItemAfter(ModBlocks.BIOME_BOTTLE, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE, BiomeBottleItem::new);
     //spawn eggs
@@ -86,7 +90,8 @@ public class ModItems {
                     new Item.Settings().food(
                             new FoodComponent.Builder().alwaysEdible().build()));
     public static final RegistrySupplier<ChromaticItem> CHROMATIC_MATTER =
-            registerItemAfter("chromatic_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, ChromaticItem::new);
+            registerItemAfter("chromatic_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, ChromaticItem::new,
+                    new Item.Settings().component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic));
     public static final RegistrySupplier<Item> WHITE_MATTER =
             registerItemAfter("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> BLACK_MATTER =
@@ -98,13 +103,19 @@ public class ModItems {
             registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, PlatformMethods.getStarOfLangConstructor(),
                     new Item.Settings());
     public static final RegistrySupplier<F4Item> F4 =
-            registerItemAfter("f4", ItemGroups.OPERATOR, Items.DEBUG_STICK, F4Item::new,
+            registerItemAfter("f4", ItemGroups.TOOLS, Items.WRITABLE_BOOK, F4Item::new,
                     new Item.Settings().rarity(Rarity.UNCOMMON));
     public static final RegistrySupplier<Item> DISC =
             registerItemAfter("disc", ItemGroups.TOOLS, Items.MUSIC_DISC_PIGSTEP, Item::new,
                     new Item.Settings().rarity(Rarity.RARE));
-    public static TagKey<Item> IRIDESCENT_TAG = createItemTag("iridescent");
-    public static TagKey<Item> MATTER_TAG = createItemTag("matter");
+    public static final RegistrySupplier<Item> IRIDESCENT_POTION =
+            registerItemAfter("iridescent_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
+                    new Item.Settings().component(ModComponentTypes.CHARGE.get(), 4)
+                            .rarity(Rarity.UNCOMMON)
+                            .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
+    public static final RegistrySupplier<Item> CHROMATIC_POTION =
+            registerItemAfter("chromatic_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
+                    new Item.Settings().component(ModComponentTypes.CHARGE.get(), 0));
 
     public static <T extends Item> RegistrySupplier<T> register(String item, Item.Settings settings, Function<Item.Settings, T> constructor) {
         return ITEMS.register(item, () -> constructor.apply(settings));
@@ -128,7 +139,7 @@ public class ModItems {
         return ITEMS.register(block.getId(), () -> constructor.apply(block.get(), settings));
     }
     /**
-     * Registers a nameToElement Item via Architectury API.
+     * Registers a BlockItem via Architectury API.
      */
     public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 Item.Settings settings,
@@ -138,7 +149,7 @@ public class ModItems {
         return registeredItem;
     }
     /**
-     * Registers a nameToElement Item through Architectury API.
+     * Registers a BlockItem through Architectury API.
      */
     public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 BiFunction<Block, Item.Settings, T> constructor) {

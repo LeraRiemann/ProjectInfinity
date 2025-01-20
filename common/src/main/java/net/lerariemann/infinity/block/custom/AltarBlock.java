@@ -5,6 +5,10 @@ import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.block.*;
+import net.minecraft.component.ComponentChanges;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BlockStateComponent;
+import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
@@ -24,6 +28,9 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
+
+import java.util.Map;
 
 public class AltarBlock extends Block {
     public static final int numColors = 13;
@@ -57,8 +64,28 @@ public class AltarBlock extends Block {
         builder.add(FLOWER);
     }
 
-    public void setColor(World world, BlockPos pos, BlockState state, int i) {
+    public static void setColor(World world, BlockPos pos, BlockState state, int i) {
         world.setBlockState(pos, state.with(COLOR, i));
+    }
+
+    public static ComponentChanges toComponentChanges(BlockState state) {
+        int color = state.get(AltarBlock.COLOR);
+        boolean flower = state.get(AltarBlock.FLOWER);
+        if (color > 0 || flower) return ComponentChanges.builder().add(DataComponentTypes.BLOCK_STATE,
+                        new BlockStateComponent(Map.of())
+                                .with(AltarBlock.COLOR, color)
+                                .with(AltarBlock.FLOWER, flower))
+                .add(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(color +
+                        (flower ? AltarBlock.numColors : 0)))
+                .build();
+        return ComponentChanges.EMPTY;
+    }
+
+    @Override
+    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+        ItemStack res = super.getPickStack(world, pos, state);
+        res.applyChanges(toComponentChanges(state));
+        return res;
     }
 
     public void testRituals(ServerWorld world, BlockPos pos, ServerPlayerEntity player) {
@@ -88,11 +115,6 @@ public class AltarBlock extends Block {
                 setColor(world, pos, state, i);
                 world.playSound(null, pos, SoundEvents.ITEM_DYE_USE, SoundCategory.BLOCKS, 1f, 1f);
             }
-            return ActionResult.SUCCESS;
-        }
-        if (itemStack.isOf(Items.AMETHYST_SHARD)) {
-            setColor(world, pos, state, (state.get(COLOR) + 1) % numColors);
-            world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.BLOCKS, 1f, 1f);
             return ActionResult.SUCCESS;
         }
         if (itemStack.isOf(Items.SUNFLOWER)) {

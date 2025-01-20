@@ -19,6 +19,12 @@ public class ChromaticBlockItem extends BlockItem implements PortalDataHolder {
         super(block, settings);
     }
 
+    @Override
+    public ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+        return ComponentChanges.builder()
+                .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
+    }
+
     //todo: implement this properly
     @Override
     protected boolean postPlacement(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state) {

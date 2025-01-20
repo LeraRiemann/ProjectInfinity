@@ -1,7 +1,7 @@
 package net.lerariemann.infinity.access;
 
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.var.ModCriteria;
 import net.minecraft.entity.damage.DamageSource;
@@ -19,7 +19,7 @@ public interface Timebombable {
     int infinity$getTimebombProgress();
 
     static int getCooldownTicks() {
-        int i = InfinityMod.provider.ruleInt("resetChargeCooldown");
+        int i = RandomProvider.ruleInt("resetChargeCooldown");
         if (i <= 0) i = Integer.MAX_VALUE;
         return i;
     }

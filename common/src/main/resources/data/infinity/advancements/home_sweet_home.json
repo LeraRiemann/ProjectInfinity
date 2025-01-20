@@ -1,5 +1,5 @@
 {
-  "parent": "infinity:multiverse_root",
+  "parent": "infinity:bishop_taken",
   "display": {
     "icon": {
       "item": "infinity:fine_item"

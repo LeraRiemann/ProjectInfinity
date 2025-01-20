@@ -273,7 +273,7 @@ public class RandomDimension {
     }
 
     int getBiomeCount() {
-        return random.nextInt(2, MathHelper.clamp(PROVIDER.ruleInt("maxBiomeCount"), 2, 10));
+        return random.nextInt(2, MathHelper.clamp(RandomProvider.ruleInt("maxBiomeCount"), 2, 10));
     }
 
     NbtList randomBiomesCheckerboard() {
