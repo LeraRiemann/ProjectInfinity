@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "infinity:item/chromatic_bottle"
+    "layer0": "infinity:item/chromatic_potion"
   }
 }

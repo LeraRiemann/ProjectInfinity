@@ -35,7 +35,7 @@ public class BrewingRecipeRegistryMixin {
         if (!input.isEmpty() && ingredient.isOf(ModItems.CHROMATIC_MATTER.get())) {
             Optional<RegistryEntry<Potion>> optional = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
             if (optional.isPresent() && optional.get().matchesId(Identifier.ofVanilla("awkward")))
-                cir.setReturnValue(ModItems.CHROMATIC_BOTTLE.get().getDefaultStack());
+                cir.setReturnValue(ModItems.CHROMATIC_POTION.get().getDefaultStack());
         }
     }
 }

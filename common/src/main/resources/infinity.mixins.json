@@ -26,6 +26,7 @@
     "iridescence.FishEntityMixin",
     "iridescence.FishEntityMixin$FishMoveControlMixin",
     "iridescence.FluidBlockMixin",
+    "iridescence.GlassBottleItemMixin",
     "iridescence.ItemStackMixin",
     "iridescence.KelpBlockMixin",
     "iridescence.LandPathNodeMakerMixin",

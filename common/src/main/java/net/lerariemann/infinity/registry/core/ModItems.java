@@ -29,10 +29,10 @@ public class ModItems {
     //block items
     public static final RegistrySupplier<Item> PORTAL_ITEM =
             ITEMS.register(ModBlocks.PORTAL.getId(), () -> new BlockItem(ModBlocks.PORTAL.get(), new Item.Settings()));
+    public static final RegistrySupplier<Item> COSMIC_ALTAR_ITEM =
+            registerBlockItemAfter(ModBlocks.COSMIC_ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN, BlockItem::new);
     public static final RegistrySupplier<Item> ALTAR_ITEM =
             registerBlockItemAfter(ModBlocks.ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN, BlockItem::new);
-    public static final RegistrySupplier<Item> COSMIC_ALTAR_ITEM =
-            registerBlockItemAfter(ModBlocks.COSMIC_ALTAR, ItemGroups.OPERATOR, Items.DEBUG_STICK, BlockItem::new);
     public static final RegistrySupplier<Item> ANT_ITEM  =
             registerBlockItemAfter(ModBlocks.ANT, ItemGroups.FUNCTIONAL, Items.LODESTONE, BlockItem::new);
     public static final RegistrySupplier<Item> BOOK_BOX_ITEM =
@@ -106,18 +106,18 @@ public class ModItems {
             registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, PlatformMethods.getStarOfLangConstructor(),
                     new Item.Settings().component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final RegistrySupplier<F4Item> F4 =
-            registerItemAfter("f4", ItemGroups.OPERATOR, Items.DEBUG_STICK, F4Item::new,
+            registerItemAfter("f4", ItemGroups.TOOLS, Items.WRITABLE_BOOK, F4Item::new,
                     new Item.Settings().rarity(Rarity.UNCOMMON));
     public static final RegistrySupplier<Item> DISC =
             registerItemAfter("disc", ItemGroups.TOOLS, Items.MUSIC_DISC_PIGSTEP, Item::new,
                     new Item.Settings().rarity(Rarity.RARE));
-    public static final RegistrySupplier<Item> IRIDESCENCE_BOTTLE =
-            registerItemAfter("iridescence_bottle", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
+    public static final RegistrySupplier<Item> IRIDESCENT_POTION =
+            registerItemAfter("iridescent_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
                     new Item.Settings().component(ModComponentTypes.CHARGE.get(), 4)
                             .rarity(Rarity.UNCOMMON)
                             .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
-    public static final RegistrySupplier<Item> CHROMATIC_BOTTLE =
-            registerItemAfter("chromatic_bottle", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
+    public static final RegistrySupplier<Item> CHROMATIC_POTION =
+            registerItemAfter("chromatic_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
                     new Item.Settings().component(ModComponentTypes.CHARGE.get(), 0));
 
     public static <T extends Item> RegistrySupplier<T> register(String item, Item.Settings settings, Function<Item.Settings, T> constructor) {

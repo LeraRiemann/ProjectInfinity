@@ -2,7 +2,7 @@
   "parent": "infinity:iridescence_root",
   "display": {
     "icon": {
-      "id": "infinity:iridescence_bottle"
+      "id": "infinity:iridescent_potion"
     },
     "title": {
       "translate": "advancements.infinity.iridescence.title"

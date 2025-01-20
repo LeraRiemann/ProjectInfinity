@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "infinity:item/iridescence_bottle"
+    "layer0": "infinity:item/iridescent_potion"
   }
 }
