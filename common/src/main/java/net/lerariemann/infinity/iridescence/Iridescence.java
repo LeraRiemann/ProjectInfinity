@@ -13,6 +13,7 @@ import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
@@ -128,7 +129,10 @@ public interface Iridescence {
     int ticksInHour = 1200;
 
     static int getOnsetLength() {
-        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceInitialDuration") / 60; //default is 30 seconds
+        return ticksInHour * RandomProvider.ruleInt("iridescenceInitialDuration") / 60; //default is 30 seconds
+    }
+    static int getFullEffectLength(int amplifier) {
+        return getOnsetLength() + getEffectLength(amplifier);
     }
     static int getEffectLength(int amplifier) { //amplifier is 0 to 4
         return getComeupLength() + getPeakLength(amplifier) + getOffsetLength(); //8 to 12 minutes
@@ -143,10 +147,10 @@ public interface Iridescence {
         return ticksInHour * 3;
     }
     static int getAfterglowDuration() {
-        return ticksInHour * InfinityMod.provider.ruleInt("afterglowDuration"); //default is 24 minutes
+        return ticksInHour * RandomProvider.ruleInt("afterglowDuration"); //default is 24 minutes
     }
     static int getCooldownDuration() {
-        return ticksInHour * InfinityMod.provider.ruleInt("iridescenceCooldownDuration"); //default is 7*24 minutes
+        return ticksInHour * RandomProvider.ruleInt("iridescenceCooldownDuration"); //default is 7*24 minutes
     }
 
     static Phase getPhase(LivingEntity entity) {
@@ -185,11 +189,11 @@ public interface Iridescence {
                 && getPhase(effect.getDuration(), effect.getAmplifier()) != Phase.INITIAL);
     }
 
-    static void tryBeginJourney(LivingEntity entity, int amplifier) {
+    static void tryBeginJourney(LivingEntity entity, int amplifier, boolean willingly) {
         amplifier = Iridescence.getAmplifierOnApply(entity, amplifier);
         if (amplifier >= 0) {
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
-                    Iridescence.getEffectLength(amplifier) + Iridescence.getOnsetLength(),
+                    Iridescence.getFullEffectLength(amplifier),
                     amplifier, true, true));
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
             int cooldownDuration = Iridescence.getCooldownDuration();
@@ -197,7 +201,7 @@ public interface Iridescence {
                 entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN,
                         cooldownDuration, amplifier > 0 ? 1 : 0, true, false));
             if (entity instanceof ServerPlayerEntity player) {
-                ModCriteria.IRIDESCENT.get().trigger(player);
+                ModCriteria.IRIDESCENT.get().trigger(player, willingly, amplifier);
             }
         }
     }

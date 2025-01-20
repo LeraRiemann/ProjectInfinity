@@ -2,13 +2,10 @@ package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
-import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.*;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -44,16 +41,6 @@ public class IridescentBlock extends Block {
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
         builder.add(COLOR_OFFSET);
-    }
-
-    @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        if (!ctx.getStack().getComponents().contains(DataComponentTypes.BLOCK_STATE))
-            return getPosBased(ctx.getWorld(), ctx.getBlockPos());
-        return super.getPlacementState(ctx);
-    }
-    public BlockState getPosBased(World world, BlockPos pos) {
-        return getDefaultState().with(COLOR_OFFSET, InfinityOptions.access(world).iridMap.getColor(pos));
     }
 
     @Nullable

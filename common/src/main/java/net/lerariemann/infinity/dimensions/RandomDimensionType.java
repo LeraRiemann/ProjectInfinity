@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 
 import java.util.Random;
@@ -60,7 +61,7 @@ public class RandomDimensionType {
     }
 
     double coordinateScale() {
-        int scaleMax = parent.PROVIDER.ruleInt("maxDimensionScale");
+        int scaleMax = RandomProvider.ruleInt("maxDimensionScale");
         if (scaleMax <= 0 || scaleMax > scaleCap) scaleMax = scaleCap;
         int distribParam = Math.min(scaleMax, 8);
         double scaleMin = 1.0 / scaleMax;

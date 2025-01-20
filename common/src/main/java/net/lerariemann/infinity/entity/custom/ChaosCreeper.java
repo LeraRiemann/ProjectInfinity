@@ -85,7 +85,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     }
 
     @Override
-    public int getColorRaw() {
+    public int getColor() {
         return this.dataTracker.get(color);
     }
 
@@ -101,7 +101,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putFloat("range", this.getRange());
-        nbt.putInt("color", this.getColorRaw());
+        nbt.putInt("color", this.getColor());
         nbt.putString("biome", this.getBiome());
     }
 
@@ -140,7 +140,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
             CreeperEntity newCreeper;
             if (!this.getWorld().isClient() && (newCreeper = EntityType.CREEPER.create(this.getWorld())) != null) {
                 itemStack2.applyComponentsFrom(BiomeBottleBlock.addComponents(ComponentMap.builder(),
-                                Identifier.of(getBiome()), getColorRaw(), getCharge()).build());
+                                Identifier.of(getBiome()), getColor(), getCharge()).build());
                 ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
                 player.setStackInHand(hand, itemStack3);
                 this.discard();

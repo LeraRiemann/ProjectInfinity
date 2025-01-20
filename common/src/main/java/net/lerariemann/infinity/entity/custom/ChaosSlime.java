@@ -25,7 +25,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,27 +71,24 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     public void setColor(int c) {
         this.dataTracker.set(color, c);
     }
+    @Override
+    public int getColor() {
+        return this.dataTracker.get(color);
+    }
+
     public void setCore(BlockState c) {
         this.dataTracker.set(core, c);
     }
-    @Override
-    public int getColorForRender() {
-        int v = getColorNamed();
-        if (v!=-1) return v;
-        return ColorHelper.Argb.fullAlpha(this.dataTracker.get(color));
-    }
-
     public BlockState getCore() {
         return this.dataTracker.get(core);
     }
-
     public BlockState getCoreForChild() {
         return Blocks.AIR.getDefaultState();
     }
 
     @Override
     protected ParticleEffect getParticles() {
-        return new DustParticleEffect(colorFromInt(this.getColorForRender()), 1.0f);
+        return new DustParticleEffect(particleColorFromInt(this.getColorForRender()), 1.0f);
     }
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
@@ -118,7 +114,7 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putInt("color", this.dataTracker.get(color));
+        nbt.putInt("color", getColor());
         nbt.putString("core", Registries.BLOCK.getId(this.getCore().getBlock()).toString());
     }
 

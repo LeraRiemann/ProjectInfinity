@@ -21,6 +21,7 @@
     "fixes.PointOfInterestStorageMixin",
     "fixes.SpawnHelperMixin",
     "fixes.WorldChunkMixin",
+    "iridescence.BrewingRecipeRegistryMixin",
     "iridescence.ConcretePowderBlockMixin",
     "iridescence.FishEntityMixin",
     "iridescence.FishEntityMixin$FishMoveControlMixin",

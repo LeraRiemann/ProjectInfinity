@@ -63,14 +63,14 @@ public class ModCriteria {
         }
     }
 
-    public static class IridescentCriterion extends AbstractCriterion<EmptyConditions> {
-        public void trigger(ServerPlayerEntity player) {
-            this.trigger(player, (conditions) -> true);
+    public static class IridescentCriterion extends AbstractCriterion<IridescenceConditions> {
+        public void trigger(ServerPlayerEntity player, boolean willing, int level) {
+            this.trigger(player, (conditions) -> conditions.test(willing, level));
         }
 
         @Override
-        public Codec<EmptyConditions> getConditionsCodec() {
-            return EmptyConditions.CODEC;
+        public Codec<IridescenceConditions> getConditionsCodec() {
+            return IridescenceConditions.CODEC;
         }
     }
 
@@ -119,6 +119,21 @@ public class ModCriteria {
 
         public boolean test(String data) {
             return data.equals(this.data);
+        }
+    }
+
+    public record IridescenceConditions(Optional<LootContextPredicate> player, Optional<Boolean> willing, Optional<Integer> minLevel) implements AbstractCriterion.Conditions {
+        public static final Codec<IridescenceConditions> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                                EntityPredicate.LOOT_CONTEXT_PREDICATE_CODEC.optionalFieldOf("player").forGetter(IridescenceConditions::player),
+                                Codec.BOOL.optionalFieldOf("willing").forGetter(IridescenceConditions::willing),
+                                Codec.INT.optionalFieldOf("min_level").forGetter(IridescenceConditions::minLevel)
+                        )
+                        .apply(instance, IridescenceConditions::new)
+        );
+
+        public boolean test(boolean isWilling, int level) {
+            return (willing.isEmpty() || isWilling == willing.get()) && (minLevel.isEmpty() || level >= minLevel.get());
         }
     }
 

@@ -53,7 +53,19 @@ public class RandomProvider {
     public boolean rule(String key) {
         return gameRules.getOrDefault(key, false);
     }
-    public int ruleInt(String key) {
+
+    public static int ruleInt(String key) {
+        if (InfinityMod.provider != null) {
+            return InfinityMod.provider._ruleInt(key);
+        }
+        Path root = configPath.resolve("infinity.json");
+        if (!root.toFile().exists()) return -1;
+        NbtCompound rules = CommonIO.read(configPath.resolve("infinity.json")).getCompound("gameRules");
+        if (!rules.contains(key)) return -1;
+        return ((AbstractNbtNumber) Objects.requireNonNull(rules.get(key))).intValue();
+    }
+
+    private int _ruleInt(String key) {
         if (gameRulesInt.containsKey(key)) return gameRulesInt.get(key);
         return (gameRulesDouble.get(key)).intValue();
     }

@@ -111,6 +111,14 @@ public class ModItems {
     public static final RegistrySupplier<Item> DISC =
             registerItemAfter("disc", ItemGroups.TOOLS, Items.MUSIC_DISC_PIGSTEP, Item::new,
                     new Item.Settings().rarity(Rarity.RARE));
+    public static final RegistrySupplier<Item> IRIDESCENCE_BOTTLE =
+            registerItemAfter("iridescence_bottle", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
+                    new Item.Settings().component(ModComponentTypes.CHARGE.get(), 4)
+                            .rarity(Rarity.UNCOMMON)
+                            .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
+    public static final RegistrySupplier<Item> CHROMATIC_BOTTLE =
+            registerItemAfter("chromatic_bottle", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
+                    new Item.Settings().component(ModComponentTypes.CHARGE.get(), 0));
 
     public static <T extends Item> RegistrySupplier<T> register(String item, Item.Settings settings, Function<Item.Settings, T> constructor) {
         return ITEMS.register(item, () -> constructor.apply(settings));

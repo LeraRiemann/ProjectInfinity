@@ -1,0 +1,9 @@
+{
+  "type": "infinity:collision_portal",
+  "input": {
+    "item": "infinity:chromatic_bottle"
+  },
+  "output": {
+    "id": "infinity:iridescent_bottle"
+  }
+}

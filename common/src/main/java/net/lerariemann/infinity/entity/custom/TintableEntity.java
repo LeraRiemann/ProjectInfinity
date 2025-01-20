@@ -8,9 +8,7 @@ import org.joml.Vector3f;
 import java.awt.*;
 
 public interface TintableEntity {
-    int getId();
-
-    default Vector3f colorFromInt(int i) {
+    default Vector3f particleColorFromInt(int i) {
         float f = (float)(i >> 16 & 0xFF) / 255.0f;
         float g = (float)(i >> 8 & 0xFF) / 255.0f;
         float h = (float)(i & 0xFF) / 255.0f;
@@ -45,10 +43,10 @@ public interface TintableEntity {
     default int getColorForRender() {
         int v = getColorNamed();
         if (v!=-1) return v;
-        return ColorHelper.Argb.fullAlpha(this.getColorRaw());
+        return ColorHelper.Argb.fullAlpha(this.getColor());
     }
 
-    default int getColorRaw() {
+    default int getColor() {
         return 0;
     }
 }

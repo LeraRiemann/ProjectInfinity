@@ -96,7 +96,7 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         @Override
         public void onApplied(LivingEntity entity, int amplifier) {
             super.onApplied(entity, amplifier);
-            tryBeginJourney(entity, amplifier);
+            tryBeginJourney(entity, amplifier, true);
         }
     }
 }

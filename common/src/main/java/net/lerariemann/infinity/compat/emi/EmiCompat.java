@@ -13,7 +13,11 @@ import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Potions;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -60,5 +64,16 @@ public class EmiCompat implements EmiPlugin {
         registry.addRecipe(ChromaticEmiRecipe.of("saturation_minus", ModItems.FOOTPRINT.get()));
         registry.addRecipe(ChromaticEmiRecipe.of("brightness_plus", ModItems.WHITE_MATTER.get()));
         registry.addRecipe(ChromaticEmiRecipe.of("brightness_minus", ModItems.BLACK_MATTER.get()));
+
+        ItemStack awkward = Items.POTION.getDefaultStack();
+        awkward.apply(DataComponentTypes.POTION_CONTENTS,
+                PotionContentsComponent.DEFAULT,
+                Potions.AWKWARD,
+                PotionContentsComponent::with);
+        /*EmiRecipe chromaBrew = new EmiBrewingRecipe(EmiStack.of(awkward),
+                EmiIngredient.of(Ingredient.ofItems(ModItems.CHROMATIC_MATTER.get())),
+                EmiStack.of(ModItems.CHROMATIC_BOTTLE.get().getDefaultStack()),
+                InfinityMethods.getId("/chromatic_bottle"));
+        registry.addRecipe(chromaBrew);*/
     }
 }

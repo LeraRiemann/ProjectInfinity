@@ -1,14 +1,14 @@
 {
-  "parent": "infinity:iridescence_root",
+  "parent": "infinity:multiverse_root",
   "display": {
     "icon": {
-      "id": "infinity:iridescence_bottle"
+      "id": "infinity:iridescence_bucket"
     },
     "title": {
-      "translate": "advancements.infinity.iridescence.title"
+      "translate": "advancements.infinity.iridescence_root.title"
     },
     "description": {
-      "translate": "advancements.infinity.iridescence.description"
+      "translate": "advancements.infinity.iridescence_root.description"
     },
     "frame": "task",
     "show_toast": true,
@@ -19,7 +19,7 @@
     "iridescence": {
       "trigger": "infinity:iridescence",
       "conditions": {
-        "willing": true
+        "willing": false
       }
     }
   }
