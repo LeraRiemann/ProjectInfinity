@@ -52,7 +52,7 @@ public class RandomProvider {
         return (random.nextDouble() < rootChances.getOrDefault(key, 0.0));
     }
 
-    public static <T> T getStaticRule(BiFunction<RandomProvider, String, T> applier,
+    private static <T> T getStaticRule(BiFunction<RandomProvider, String, T> applier,
                                       BiFunction<NbtCompound, String, T> applier2,
                                       String key, T def) {
         if (InfinityMod.provider != null) {
