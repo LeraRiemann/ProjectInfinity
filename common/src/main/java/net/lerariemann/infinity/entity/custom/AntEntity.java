@@ -135,9 +135,10 @@ public class AntEntity extends AbstractChessFigure {
     }
 
     @Override
-    public boolean canBeLeashed() {
+    public boolean canBeLeashedBy(PlayerEntity player) {
         return !isInBattle();
     }
+    
     @Override
     public boolean canWalkOnFluid(FluidState state) {
         return state.isIn(FluidTags.WATER);
@@ -165,7 +166,6 @@ public class AntEntity extends AbstractChessFigure {
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         if (!this.hasPassengers()
-                && this.getAttributeValue(EntityAttributes.GENERIC_SCALE) > 2
                 && player.getStackInHand(hand).isEmpty()) {
             this.putPlayerOnBack(player);
             return ActionResult.success(this.getWorld().isClient);

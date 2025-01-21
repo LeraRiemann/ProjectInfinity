@@ -44,7 +44,7 @@ public class ModPlacementModifiers {
             ModPlacementModifiers.CenterProximityPlacementModifier.MODIFIER_CODEC);
 
     static RegistrySupplier<PlacementModifierType<?>> register(String id, MapCodec<? extends PlacementModifier> codec) {
-            return PLACEMENT_MODIFIER_TYPES.register(id, () -> getType(codec));
+        return PLACEMENT_MODIFIER_TYPES.register(id, () -> () -> ((MapCodec<PlacementModifier>) codec).codec());
     }
     public static void registerModifiers() {
         PLACEMENT_MODIFIER_TYPES.register();

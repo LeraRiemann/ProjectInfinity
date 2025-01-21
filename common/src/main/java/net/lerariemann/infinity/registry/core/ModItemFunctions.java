@@ -13,7 +13,6 @@ import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.component.ComponentChanges;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -37,18 +36,11 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.registry.core.ModItems.TRANSFINITE_KEY;
 
 public class ModItemFunctions {
-
-    public static String SIZE_X = "f4_size_x";
-    public static String SIZE_Y = "f4_size_y";
-    public static String F4_CHARGE = "f4_charge";
-    public static String DESTINATION = "key_destination";
-    public static String COLOR = "key_color";
 
     public static final DeferredRegister<LootFunctionType> LOOT_FUNCTION_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.LOOT_FUNCTION_TYPE);
@@ -131,8 +123,8 @@ public class ModItemFunctions {
                 }, w);
         if (match.isEmpty()) return;
 
-        ItemStack resStack = match.get().value().getResult(w.getRegistryManager());
-        componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyChanges);
+        ItemStack resStack = match.get().getOutput(w.getRegistryManager());
+//        componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyChanges);
 
         Vec3d v = itemEntity.getVelocity();
         ItemEntity result = new ItemEntity(w, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(),

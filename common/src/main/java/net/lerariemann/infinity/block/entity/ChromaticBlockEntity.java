@@ -70,25 +70,6 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
         color = Color.HSBtoRGB(hue / 360f, saturation / 255f, brightness / 255f) & 0xFFFFFF;
     }
 
-    @Override
-    protected void addComponents(ComponentMap.Builder componentMapBuilder) {
-        super.addComponents(componentMapBuilder);
-        componentMapBuilder.add(ModComponentTypes.COLOR.get(), color);
-    }
-    @Override
-    protected void readComponents(BlockEntity.ComponentsAccess components) {
-        super.readComponents(components);
-        setColor(components.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF));
-    }
-
-    public static ComponentMap asMap(int i) {
-        return ComponentMap.builder()
-                .add(ModComponentTypes.COLOR.get(), i)
-                .build();
-    }
-    public ComponentMap asMap() {
-        return asMap(getTint());
-    }
     public short offset(short orig, short amount, AtomicBoolean cancel) {
         if (amount < 0 ? orig == 0 : orig == 255) {
             cancel.set(true);
@@ -158,7 +139,7 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
 
     @Override
     public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt, registryLookup);
+        super.readNbt(nbt);
         if (nbt.contains("color", NbtElement.INT_TYPE))
             setColor(nbt.getInt("color"));
         else if (nbt.contains("color", NbtElement.COMPOUND_TYPE)) {
@@ -171,7 +152,7 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     }
     @Override
     protected void writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt, registryLookup);
+        super.writeNbt(nbt);
         NbtCompound color = new NbtCompound();
         color.putShort("h", hue);
         color.putShort("s", saturation);

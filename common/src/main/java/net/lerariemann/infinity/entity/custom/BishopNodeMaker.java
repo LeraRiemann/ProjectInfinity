@@ -13,8 +13,8 @@ public class BishopNodeMaker extends LandPathNodeMaker {
     public int getSuccessors(PathNode[] successors, PathNode node) {
         int i = 0;
         int j = 0;
-        PathNodeType pathNodeType = this.getNodeType(node.x, node.y + 1, node.z);
-        PathNodeType pathNodeType2 = this.getNodeType(node.x, node.y, node.z);
+        PathNodeType pathNodeType = this.getNodeType(this.entity, node.x, node.y + 1, node.z);
+        PathNodeType pathNodeType2 = this.getNodeType(this.entity, node.x, node.y, node.z);
         if (this.entity.getPathfindingPenalty(pathNodeType) >= 0.0F && pathNodeType2 != PathNodeType.STICKY_HONEY) {
             j = MathHelper.floor(Math.max(1.0F, this.entity.getStepHeight()));
         }

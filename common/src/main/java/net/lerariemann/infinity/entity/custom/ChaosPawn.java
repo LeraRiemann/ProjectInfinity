@@ -148,8 +148,7 @@ public class ChaosPawn extends AbstractChessFigure {
 
     @Override
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
-        initFromBlock(world.getBlockState(this.getBlockPos().down()));
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {        initFromBlock(world.getBlockState(this.getBlockPos().down()));
         double i = random.nextDouble() * 40;
         Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
         this.setHealth((float)i);
@@ -157,7 +156,7 @@ public class ChaosPawn extends AbstractChessFigure {
         if ((a = (int)(0.1*i)) > 0) {
             this.equipLootStack(
                     EquipmentSlot.HEAD,
-                    Registries.ITEM.get(new Identifier(InfinityMod.provider.randomName(r, "items"))).getDefaultStack().copyWithCount(a));
+                    Registries.ITEM.get(new Identifier(InfinityMod.provider.randomName(i, "items"))).getDefaultStack().copyWithCount(a));
             ((MobEntityAccess)this).infinity$setPersistent(false);
         }
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);

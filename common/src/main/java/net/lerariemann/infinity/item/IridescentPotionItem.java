@@ -3,8 +3,10 @@ package net.lerariemann.infinity.item;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
+import net.lerariemann.infinity.util.BackportMethods;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,9 +14,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
-import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.potion.PotionUtil;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -30,18 +33,25 @@ public class IridescentPotionItem extends Item {
     }
 
     @Override
+    public boolean hasGlint(ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-        int level = stack.getOrDefault(ModComponentTypes.CHARGE.get(), 0);
+        int level = BackportMethods.getOrDefaultInt(stack, ModComponentTypes.F4_CHARGE, 0);
         if (!world.isClient) Iridescence.tryBeginJourney(user, level, true);
         if (user instanceof PlayerEntity player) {
             if (user instanceof ServerPlayerEntity spe) {
                 Criteria.CONSUME_ITEM.trigger(spe, stack);
             }
             player.incrementStat(Stats.USED.getOrCreateStat(this));
-            stack.decrementUnlessCreative(1, player);
 
-            if (!player.isInCreativeMode())
+            if (!player.isCreative()) {
+                stack.decrement(1);
                 player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE));
+            }
+
         }
         else if (stack.isEmpty()) {
             return new ItemStack(Items.GLASS_BOTTLE);
@@ -51,7 +61,7 @@ public class IridescentPotionItem extends Item {
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+    public int getMaxUseTime(ItemStack stack) {
         return 32;
     }
 
@@ -66,10 +76,15 @@ public class IridescentPotionItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        int level = stack.getOrDefault(ModComponentTypes.CHARGE.get(), 0);
-        List<StatusEffectInstance> effects = List.of(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext type) {
+        int level = BackportMethods.getOrDefaultInt(stack, ModComponentTypes.F4_CHARGE, 0);
+        List<StatusEffectInstance> effects = List.of(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(),
                 Iridescence.getFullEffectLength(level), level));
-        PotionContentsComponent.buildTooltip(effects, tooltip::add, 1.0F, context.getUpdateTickRate());
+        PotionUtil.buildTooltip(effects, tooltip::add, 1.0F, level);
+    }
+
+    @Override
+    public Text getName() {
+        return Text.translatable(this.getTranslationKey()).setStyle(Style.EMPTY.withColor(ColorLogic.defaultChromatic));
     }
 }

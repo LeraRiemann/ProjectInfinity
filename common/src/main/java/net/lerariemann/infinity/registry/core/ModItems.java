@@ -50,11 +50,11 @@ public class ModItems {
             registerBlockItemAfter(ModBlocks.IRIDESCENT_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, BlockItem::new);
     public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_WOOL  =
             registerBlockItemAfter(ModBlocks.CHROMATIC_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL,
-                    new Item.Settings().component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic),
+                    new Item.Settings(),
                     ChromaticBlockItem::new);
     public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_CARPET  =
             registerBlockItemAfter(ModBlocks.CHROMATIC_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET,
-                    new Item.Settings().component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic),
+                    new Item.Settings(),
                     ChromaticBlockItem::new);
     public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM =
             registerBlockItemAfter(ModBlocks.BIOME_BOTTLE, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE, BiomeBottleItem::new);
@@ -91,7 +91,7 @@ public class ModItems {
                             new FoodComponent.Builder().alwaysEdible().build()));
     public static final RegistrySupplier<ChromaticItem> CHROMATIC_MATTER =
             registerItemAfter("chromatic_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, ChromaticItem::new,
-                    new Item.Settings().component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic));
+                    new Item.Settings());
     public static final RegistrySupplier<Item> WHITE_MATTER =
             registerItemAfter("white_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, Item::new);
     public static final RegistrySupplier<Item> BLACK_MATTER =
@@ -110,12 +110,10 @@ public class ModItems {
                     new Item.Settings().rarity(Rarity.RARE));
     public static final RegistrySupplier<Item> IRIDESCENT_POTION =
             registerItemAfter("iridescent_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
-                    new Item.Settings().component(ModComponentTypes.CHARGE.get(), 4)
-                            .rarity(Rarity.UNCOMMON)
-                            .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
+                    new Item.Settings());
     public static final RegistrySupplier<Item> CHROMATIC_POTION =
             registerItemAfter("chromatic_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
-                    new Item.Settings().component(ModComponentTypes.CHARGE.get(), 0));
+                    new Item.Settings());
 
     public static <T extends Item> RegistrySupplier<T> register(String item, Item.Settings settings, Function<Item.Settings, T> constructor) {
         return ITEMS.register(item, () -> constructor.apply(settings));

@@ -43,7 +43,7 @@ public class IridescentBlock extends Block {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.STAR_OF_LANG.get())) {
             BlockState state1 = toStatic(state);
             if (state1 != null) {

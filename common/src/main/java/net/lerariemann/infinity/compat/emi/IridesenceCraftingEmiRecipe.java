@@ -9,11 +9,10 @@ import net.lerariemann.infinity.item.function.CollisionCraftingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 
 public class IridesenceCraftingEmiRecipe extends BasicEmiRecipe {
-    public IridesenceCraftingEmiRecipe(RecipeEntry<CollisionCraftingRecipe> recipeEntry, DynamicRegistryManager registryManager) {
-        super(EmiCompat.IRIDESCENCE_CRAFTING, recipeEntry.id(), 118, 18);
-        CollisionCraftingRecipe recipe = recipeEntry.value();
-        this.inputs.add(EmiIngredient.of(recipe.getInput()));
-        this.outputs.add(EmiStack.of(recipe.getOutput(registryManager)));
+    public IridesenceCraftingEmiRecipe(CollisionCraftingRecipe recipeEntry, DynamicRegistryManager registryManager) {
+        super(EmiCompat.IRIDESCENCE_CRAFTING, recipeEntry.getId(), 118, 18);
+        this.inputs.add(EmiIngredient.of(recipeEntry.getInput()));
+        this.outputs.add(EmiStack.of(recipeEntry.getOutput(registryManager)));
     }
 
     @Override

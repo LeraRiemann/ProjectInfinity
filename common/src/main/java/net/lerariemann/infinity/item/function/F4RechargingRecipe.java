@@ -48,7 +48,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
             if (charge > 0) return Items.OBSIDIAN.getDefaultStack().copyWithCount(Math.min(charge, 64)); //"removing obsidian" recipe
         }
         ItemStack result = f4.copy();
-        BackportMethods.apply(result, ModItemFunctions.F4_CHARGE, charge+i);
+        BackportMethods.apply(result, ModComponentTypes.F4_CHARGE, charge+i);
         return result;
     }
 
@@ -70,7 +70,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
         if (charge == 0) return defaultedList; //"clearing data" recipe
         charge = Math.max(charge - 64, 0);
         ItemStack result = f4.copy();
-        BackportMethods.apply(result, ModItemFunctions.F4_CHARGE, charge);
+        BackportMethods.apply(result, ModComponentTypes.F4_CHARGE, charge);
         defaultedList.set(f4pos, result);
         return defaultedList;
     }

@@ -3,12 +3,9 @@ package net.lerariemann.infinity.block.custom;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.var.ModCriteria;
+import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.block.*;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BlockStateComponent;
-import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
@@ -68,23 +65,9 @@ public class AltarBlock extends Block {
         world.setBlockState(pos, state.with(COLOR, i));
     }
 
-    public static ComponentChanges toComponentChanges(BlockState state) {
-        int color = state.get(AltarBlock.COLOR);
-        boolean flower = state.get(AltarBlock.FLOWER);
-        if (color > 0 || flower) return ComponentChanges.builder().add(DataComponentTypes.BLOCK_STATE,
-                        new BlockStateComponent(Map.of())
-                                .with(AltarBlock.COLOR, color)
-                                .with(AltarBlock.FLOWER, flower))
-                .add(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(color +
-                        (flower ? AltarBlock.numColors : 0)))
-                .build();
-        return ComponentChanges.EMPTY;
-    }
-
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         ItemStack res = super.getPickStack(world, pos, state);
-        res.applyChanges(toComponentChanges(state));
         return res;
     }
 

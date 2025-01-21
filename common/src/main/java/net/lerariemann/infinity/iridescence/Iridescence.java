@@ -115,10 +115,10 @@ public interface Iridescence {
             DyeColor.PINK);
 
     static Block getRandomColorBlock(WorldAccess world, String str) {
-        return Registries.BLOCK.get(Identifier.of(dyeColors.get(world.getRandom().nextInt(dyeColors.size())).getName() + "_" + str));
+        return Registries.BLOCK.get(new Identifier(dyeColors.get(world.getRandom().nextInt(dyeColors.size())).getName() + "_" + str));
     }
     static Block getRandomColorBlock(double d, String str) {
-        return Registries.BLOCK.get(Identifier.of(dyeColors.get((int)(d* dyeColors.size())).getName() + "_" + str));
+        return Registries.BLOCK.get(new Identifier(dyeColors.get((int)(d* dyeColors.size())).getName() + "_" + str));
     }
 
     int ticksInHour = 1200;
@@ -131,8 +131,6 @@ public interface Iridescence {
         }
         return -1;
     }
-
-    int ticksInHour = 1200;
 
     static int getFullEffectLength(int amplifier) {
         return getOnsetLength() + getEffectLength(amplifier);
@@ -205,7 +203,7 @@ public interface Iridescence {
     static void tryBeginJourney(LivingEntity entity, int amplifier, boolean willingly) {
         amplifier = Iridescence.getAmplifierOnApply(entity, amplifier);
         if (amplifier >= 0) {
-            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
+            entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(),
                     Iridescence.getFullEffectLength(amplifier),
                     amplifier, true, true));
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN.value());
@@ -214,7 +212,7 @@ public interface Iridescence {
                 entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_COOLDOWN.value(),
                         cooldownDuration, amplifier > 0 ? 1 : 0, true, false));
             if (entity instanceof ServerPlayerEntity player) {
-                ModCriteria.IRIDESCENT.get().trigger(player, willingly, amplifier);
+                ModCriteria.IRIDESCENT.trigger(player, willingly, amplifier);
             }
         }
     }

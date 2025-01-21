@@ -1,8 +1,6 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
 import net.lerariemann.infinity.registry.core.ModItems;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.recipe.BrewingRecipeRegistry;
@@ -18,23 +16,23 @@ import java.util.Optional;
 @Mixin(BrewingRecipeRegistry.class)
 public class BrewingRecipeRegistryMixin {
     @Inject(method = "isValidIngredient", at = @At("RETURN"), cancellable = true)
-    void inj(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+    private static void inj(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(cir.getReturnValue() || stack.isOf(ModItems.CHROMATIC_MATTER.get()));
     }
 
     @Inject(method="hasPotionRecipe", at = @At("RETURN"), cancellable = true)
-    void inj(ItemStack input, ItemStack ingredient, CallbackInfoReturnable<Boolean> cir) {
+    private static void inj(ItemStack input, ItemStack ingredient, CallbackInfoReturnable<Boolean> cir) {
         if (ingredient.isOf(ModItems.CHROMATIC_MATTER.get())) {
             Optional<RegistryEntry<Potion>> optional = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
-            if (optional.isPresent() && optional.get().matchesId(Identifier.ofVanilla("awkward"))) cir.setReturnValue(true);
+            if (optional.isPresent() && optional.get().matchesId(new Identifier("awkward"))) cir.setReturnValue(true);
         }
     }
 
     @Inject(method = "craft", at = @At("HEAD"), cancellable = true)
-    void inj2(ItemStack ingredient, ItemStack input, CallbackInfoReturnable<ItemStack> cir) {
+    private static void inj2(ItemStack ingredient, ItemStack input, CallbackInfoReturnable<ItemStack> cir) {
         if (!input.isEmpty() && ingredient.isOf(ModItems.CHROMATIC_MATTER.get())) {
             Optional<RegistryEntry<Potion>> optional = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
-            if (optional.isPresent() && optional.get().matchesId(Identifier.ofVanilla("awkward")))
+            if (optional.isPresent() && optional.get().matchesId(new Identifier("awkward")))
                 cir.setReturnValue(ModItems.CHROMATIC_POTION.get().getDefaultStack());
         }
     }

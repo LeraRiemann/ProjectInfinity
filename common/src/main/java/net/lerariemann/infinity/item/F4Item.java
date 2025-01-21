@@ -125,8 +125,8 @@ public class F4Item extends Item implements PortalDataHolder {
         BlockPos lowerCenter = player.getBlockPos().offset(dir, 4);
         ItemStack stack = player.getStackInHand(hand);
 
-        int size_x = BackportMethods.getOrDefaultInt(stack, ModItemFunctions.SIZE_X, 3);
-        int size_y =  BackportMethods.getOrDefaultInt(stack, ModItemFunctions.SIZE_Y, 3);
+        int size_x = BackportMethods.getOrDefaultInt(stack, ModComponentTypes.SIZE_X, 3);
+        int size_y =  BackportMethods.getOrDefaultInt(stack, ModComponentTypes.SIZE_Y, 3);
 
         if (size_y % 2 == 0) {
             double d = dir2.equals(Direction.Axis.X) ? player.getPos().x : player.getPos().z;
@@ -187,8 +187,8 @@ public class F4Item extends Item implements PortalDataHolder {
         Direction.Axis dir2 =
                 player.getHorizontalFacing().getAxis().equals(Direction.Axis.X) ? Direction.Axis.Z : Direction.Axis.X;
 
-        int size_x = BackportMethods.getOrDefaultInt(stack, ModItemFunctions.SIZE_X, 3);
-        int size_y = BackportMethods.getOrDefaultInt(stack, ModItemFunctions.SIZE_Y, 3);
+        int size_x = BackportMethods.getOrDefaultInt(stack, ModComponentTypes.SIZE_X, 3);
+        int size_y = BackportMethods.getOrDefaultInt(stack, ModComponentTypes.SIZE_Y, 3);
 
         //validating the place position
         for (int j = -1; j <= size_y; j++) for (int k = -1; k <= size_x; k++) {

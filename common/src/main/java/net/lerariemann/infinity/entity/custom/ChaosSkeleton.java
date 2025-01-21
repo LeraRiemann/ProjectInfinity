@@ -21,8 +21,6 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
@@ -34,6 +32,7 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -130,7 +129,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
             }
         }
         if (itemStack.isOf(Items.GLASS_BOTTLE)) {
-            ItemStack itemStack2 = setPotion(Items.POTION.getDefaultStack(), this.getColorForRender(), this.getEffect(), this.getDuration() * 20);
+            ItemStack itemStack2 = setPotion(Items.POTION.getDefaultStack(), this.getEffectRawId(), this.getDuration() * 20);
             ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
             player.setStackInHand(hand, itemStack3);
             this.playSound(SoundEvents.ITEM_BOTTLE_FILL, 1.0f, 1.0f);
@@ -160,8 +159,13 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     public String getEffect() {
         return this.dataTracker.get(effect);
     }
+
+    public int getEffectRawId() {
+        return reg.getRawId(getEffect());
+    }
+
     @Override
-    public int getColor() {
+    public int getColorRaw() {
         return this.dataTracker.get(color);
     }
 

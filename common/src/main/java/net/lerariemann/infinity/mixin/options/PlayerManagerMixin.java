@@ -70,8 +70,9 @@ public class PlayerManagerMixin {
             });
         }
         InfinityMod.LOGGER.info("Sending sound pack to client");
-        if (InfinityMod.provider.rule("useSoundSyncPackets")) InfinityMethods.sendS2CPayload(player, new ModPayloads.DownloadSoundPack(
-                CommonIO.read(player.server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))));
+        // TODO soundpacks
+//        if (InfinityMod.provider.rule("useSoundSyncPackets")) InfinityMethods.sendS2CPayload(player, new ModPayloads.DownloadSoundPack(
+//                CommonIO.read(player.server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))));
     }
 
     @Inject(method="sendWorldInfo", at = @At("TAIL"))

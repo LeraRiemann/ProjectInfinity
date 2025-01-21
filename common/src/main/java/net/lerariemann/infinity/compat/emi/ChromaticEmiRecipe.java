@@ -37,7 +37,7 @@ public class ChromaticEmiRecipe extends BasicEmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        widgets.addSlot(inputs.getFirst(), 0, 0);
+        widgets.addSlot(inputs.get(0), 0, 0);
         MutableText text = Text.translatable(Util.createTranslationKey("chromatic", this.id));
         Map<Integer, MutableText> chars = new HashMap<>();
         text.asOrderedText().accept((index, style, codepoint) -> {
@@ -49,7 +49,8 @@ public class ChromaticEmiRecipe extends BasicEmiRecipe {
         for (int i = 0; i < len; i++) {
             MutableText ch = chars.get(i);
             if (ch == null) continue;
-            finalText.append(ch.withColor(getCharColor(i, len)));
+            var chStyle = ch.setStyle(Style.EMPTY.withColor(getCharColor(i, len)));
+            finalText.append(chStyle);
         }
         if (infoId != null)
             widgets.add(new TextWidgetWithTooltip(Text.literal("ℹ").formatted(Formatting.GRAY)

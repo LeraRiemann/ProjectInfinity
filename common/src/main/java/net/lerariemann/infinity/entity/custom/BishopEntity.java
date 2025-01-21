@@ -46,8 +46,8 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
-        entityData = super.initialize(world, difficulty, spawnReason, entityData);
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+        entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
         updateAttackType();
         return entityData;
     }
@@ -160,7 +160,7 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
     }
 
     @Override
-    public void shootAt(LivingEntity target, float pullProgress) {
+    public void attack(LivingEntity target, float pullProgress) {
         ItemStack bow = Items.BOW.getDefaultStack();
         PersistentProjectileEntity persistentProjectileEntity =
                 ProjectileUtil.createArrowProjectile(this, getProjectileType(), pullProgress, bow);
@@ -184,7 +184,6 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
                 || effect.getBoolean("Instant")) return Items.ARROW.getDefaultStack();
         return ChaosSkeleton.setPotion(Items.TIPPED_ARROW.getDefaultStack(),
                 effect.getInt("Color"),
-                effect.getString("Name"),
                 200);
     }
 }

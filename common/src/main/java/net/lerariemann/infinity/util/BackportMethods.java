@@ -1,9 +1,12 @@
 package net.lerariemann.infinity.util;
 
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class BackportMethods {
     public static int getOrDefaultInt(ItemStack stack, String key, int i) {
@@ -20,6 +23,13 @@ public class BackportMethods {
             return stack.getNbt().getString(key);
         }
         return i;
+    }
+
+    public static boolean contains(ItemStack stack, String key) {
+        if (stack.hasNbt()) {
+            return !Objects.requireNonNull(stack.getSubNbt(key)).isEmpty();
+        }
+        return false;
     }
 
     public static ItemStack apply(ItemStack stack, String key, int i) {
@@ -49,7 +59,7 @@ public class BackportMethods {
 
     public static @Nullable String getDimensionComponents(ItemStack stack) {
         if (stack.getNbt() != null) {
-            return stack.getNbt().getString(ModItemFunctions.DESTINATION);
+            return stack.getNbt().getString(ModComponentTypes.DESTINATION);
         }
         return null;
     }
