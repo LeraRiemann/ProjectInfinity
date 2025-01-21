@@ -14,6 +14,7 @@ import net.minecraft.world.biome.Biome;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -50,21 +51,25 @@ public class RandomProvider {
     public boolean roll(Random random, String key) {
         return (random.nextDouble() < rootChances.getOrDefault(key, 0.0));
     }
-    public boolean rule(String key) {
-        return gameRules.getOrDefault(key, false);
-    }
 
-    public static int ruleInt(String key) {
+    public static <T> T getStaticRule(BiFunction<RandomProvider, String, T> applier,
+                                      BiFunction<NbtCompound, String, T> applier2,
+                                      String key, T def) {
         if (InfinityMod.provider != null) {
-            return InfinityMod.provider._ruleInt(key);
+            return applier.apply(InfinityMod.provider, key);
         }
         Path root = configPath.resolve("infinity.json");
-        if (!root.toFile().exists()) return -1;
+        if (!root.toFile().exists()) return def;
         NbtCompound rules = CommonIO.read(configPath.resolve("infinity.json")).getCompound("gameRules");
-        if (!rules.contains(key)) return -1;
-        return ((AbstractNbtNumber) Objects.requireNonNull(rules.get(key))).intValue();
+        if (!rules.contains(key)) return def;
+        return applier2.apply(rules, key);
     }
-
+    public static boolean rule(String key) {
+        return getStaticRule((p, k) -> p.gameRules.getOrDefault(k, false), NbtCompound::getBoolean, key, false);
+    }
+    public static int ruleInt(String key) {
+        return getStaticRule(RandomProvider::_ruleInt, (p, k) -> ((AbstractNbtNumber) Objects.requireNonNull(p.get(k))).intValue(), key, -1);
+    }
     private int _ruleInt(String key) {
         if (gameRulesInt.containsKey(key)) return gameRulesInt.get(key);
         return (gameRulesDouble.get(key)).intValue();
