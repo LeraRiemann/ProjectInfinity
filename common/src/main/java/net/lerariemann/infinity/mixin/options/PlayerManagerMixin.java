@@ -7,6 +7,7 @@ import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.minecraft.block.BlockState;
@@ -70,7 +71,7 @@ public class PlayerManagerMixin {
             });
         }
         InfinityMod.LOGGER.info("Sending sound pack to client");
-        if (InfinityMod.provider.rule("useSoundSyncPackets")) InfinityMethods.sendS2CPayload(player, new ModPayloads.DownloadSoundPack(
+        if (RandomProvider.rule("useSoundSyncPackets")) InfinityMethods.sendS2CPayload(player, new ModPayloads.DownloadSoundPack(
                 CommonIO.read(player.server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))));
     }
 

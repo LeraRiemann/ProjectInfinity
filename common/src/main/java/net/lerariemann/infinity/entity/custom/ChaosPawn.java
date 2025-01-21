@@ -2,6 +2,7 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.ComponentMap;
@@ -103,7 +104,7 @@ public class ChaosPawn extends AbstractChessFigure {
             case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
             case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
             default -> {
-                boolean bl = InfinityMod.provider.rule("pawnsCanDropIllegalItems");
+                boolean bl = RandomProvider.rule("pawnsCanDropIllegalItems");
                 if (bl) yield Identifier.of(""); //loot is defined in dropEquipment instead
                 else yield Identifier.of(InfinityMod.provider.randomName(random, "loot_tables"));
             }
@@ -163,7 +164,7 @@ public class ChaosPawn extends AbstractChessFigure {
     @Override
     protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
         super.dropEquipment(world, source, causedByPlayer);
-        if (!this.isBlackOrWhite() && InfinityMod.provider.rule("pawnsCanDropIllegalItems")) {
+        if (!this.isBlackOrWhite() && RandomProvider.rule("pawnsCanDropIllegalItems")) {
             String s = InfinityMod.provider.randomName(random, "items");
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
             ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int) (i * i));

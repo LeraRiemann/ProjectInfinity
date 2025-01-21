@@ -111,7 +111,7 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
     /** Receiver for a C2S {@link ModPayloads.UploadJukeboxes} payload, which holds data to send to clients in the future for them to
      * generate custom sound resource packs, as well as jukebox song definitions corresponding to this data. */
     public static void unpackUploadedJukeboxes(ModPayloads.UploadJukeboxes payload, ServerPlayNetworking.Context context) {
-        if (!InfinityMod.provider.rule("useSoundSyncPackets")) return;
+        if (!RandomProvider.rule("useSoundSyncPackets")) return;
         NbtCompound data = payload.data();
         if (!data.contains("jukeboxes") || !data.contains("entries")) return;
         MinecraftServer server = context.player().server;

@@ -8,6 +8,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.TintableBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
@@ -236,10 +237,10 @@ public interface InfinityMethods {
     }
 
     static boolean chaosMobsEnabled() {
-        return InfinityMod.provider.rule("chaosMobsEnabled");
+        return RandomProvider.rule("chaosMobsEnabled");
     }
 
     static boolean longArithmeticEnabled() {
-        return InfinityMod.provider.rule("longArithmeticEnabled");
+        return RandomProvider.rule("longArithmeticEnabled");
     }
 }

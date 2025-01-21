@@ -191,7 +191,7 @@ public class RandomNoisePreset {
             String biome = "infinity:biome_" + id;
             String root = InfinityMod.utilPath + "/surface_rule/custom/";
             boolean useRandomBlock = parent.randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
-            NbtCompound top_block = useRandomBlock ? randomBlock(PROVIDER.rule("forceSolidSurface") ? "full_blocks_worldgen" : "top_blocks") :
+            NbtCompound top_block = useRandomBlock ? randomBlock(RandomProvider.rule("forceSolidSurface") ? "full_blocks_worldgen" : "top_blocks") :
                     NbtUtils.nameToElement(parent.getDefaultBlock("minecraft:grass_block"));
             parent.top_blocks.put(biome, top_block);
             NbtCompound block_underwater = useRandomBlock ? randomBlock("full_blocks_worldgen") :
