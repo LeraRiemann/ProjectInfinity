@@ -51,6 +51,9 @@ public class RandomProvider {
         return (random.nextDouble() < rootChances.getOrDefault(key, 0.0));
     }
     public boolean rule(String key) {
+        if (InfinityMod.provider != null) {
+            return InfinityMod.provider._rule(key);
+        }
         return gameRules.getOrDefault(key, false);
     }
 
@@ -68,6 +71,9 @@ public class RandomProvider {
     private int _ruleInt(String key) {
         if (gameRulesInt.containsKey(key)) return gameRulesInt.get(key);
         return (gameRulesDouble.get(key)).intValue();
+    }
+    private boolean _rule(String key) {
+        return gameRules.get(key);
     }
 
     public String randomName(Random random, String key) {
