@@ -11,12 +11,15 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.item.StarOfLangItem;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
 import net.lerariemann.infinity.iridescence.IridescenceLiquidBlock;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.*;
+import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
@@ -31,6 +34,7 @@ import net.minecraft.server.world.ServerWorld;
 
 import java.nio.file.Path;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * See {@link PlatformMethods} for usages.
@@ -105,5 +109,9 @@ public class PlatformMethodsImpl {
 
     public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
         return StarOfLangItem::new;
+    }
+
+    public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i) {
+        return new Item.Settings().component(componentTypeSupplier.get(), i);
     }
 }

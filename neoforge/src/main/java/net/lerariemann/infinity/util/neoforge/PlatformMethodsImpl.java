@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.util.neoforge;
 
+import com.google.common.base.Suppliers;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -7,12 +8,15 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.lerariemann.infinity.item.neoforge.StarOfLangItemNeoforge;
 import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
 import net.lerariemann.infinity.item.StarOfLangItem;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.neoforge.IridescenceLiquidBlockNeoforge;
 import net.lerariemann.infinity.fluids.neoforge.ModFluidsNeoforge;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.*;
+import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
@@ -34,6 +38,7 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 
 import java.nio.file.Path;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * See {@link PlatformMethods} for usages.
@@ -116,5 +121,9 @@ public class PlatformMethodsImpl {
 
     public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
         return StarOfLangItemNeoforge::new;
+    }
+
+    public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i) {
+        return new Item.Settings().component(componentTypeSupplier, i);
     }
 }

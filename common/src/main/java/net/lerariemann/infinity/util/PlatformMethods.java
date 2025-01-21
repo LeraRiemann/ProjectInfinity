@@ -4,9 +4,12 @@ import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.item.StarOfLangItem;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
+import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
@@ -21,6 +24,7 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 import java.nio.file.Path;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Methods that require different implementations to work on Fabric vs. NeoForge and thus depend on {@link dev.architectury.injectables.annotations.ExpectPlatform}.
@@ -152,6 +156,11 @@ public class PlatformMethods {
 
     @ExpectPlatform
     public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i) {
         throw new AssertionError();
     }
 }
