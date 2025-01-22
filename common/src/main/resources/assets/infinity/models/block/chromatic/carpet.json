@@ -28,5 +28,6 @@
         "east":  { "uv": [ 0, 15, 16, 16 ], "texture": "#overlay", "cullface": "east" }
       }
     }
-  ]
+  ],
+  "render_type": "minecraft:translucent"
 }

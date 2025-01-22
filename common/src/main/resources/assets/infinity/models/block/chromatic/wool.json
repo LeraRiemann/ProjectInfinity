@@ -30,5 +30,6 @@
         "east":  { "texture": "#overlay", "cullface": "east"}
       }
     }
-  ]
+  ],
+  "render_type": "minecraft:translucent"
 }
