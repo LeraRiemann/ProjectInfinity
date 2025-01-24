@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.util.loading;
 
 import com.mojang.serialization.Codec;
-import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.*;
@@ -20,20 +19,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static net.lerariemann.infinity.util.PlatformMethods.unfreeze;
+
 public class DimensionGrabber {
     RegistryOps.RegistryInfoGetter registryInfoGetter;
     DynamicRegistryManager baseRegistryManager;
-    Map<RegistryKey<? extends Registry<?>>, MutableRegistry<?>> mutableRegistries;
 
     public DimensionGrabber(DynamicRegistryManager brm) {
         baseRegistryManager = brm;
-        mutableRegistries = new HashMap<>();
+        List<MutableRegistry<?>> entries = new ArrayList<>();
         baseRegistryManager.streamAllRegistries().forEach((entry) -> {
-            Registry<?> reg = entry.value();
-            PlatformMethods.unfreeze(reg);
-            mutableRegistries.put(entry.key(), (MutableRegistry<?>)reg);
+            unfreeze(entry.value());
+            entries.add((MutableRegistry<?>)entry.value());
         });
-        registryInfoGetter = getGetter();
+        registryInfoGetter = getGetter(entries);
     }
 
     public DimensionOptions grab_all(RandomDimension d) {
@@ -57,10 +56,24 @@ public class DimensionGrabber {
         if (!(baseRegistryManager.get(key).contains(RegistryKey.of(key, id)))) buildGrabber(codec, key).grab(id, optiondata, false);
     }
 
+    public void grab_dim_for_client(Identifier id, NbtCompound dimdata) {
+        if (!dimdata.isEmpty()) grab_one_for_client(DimensionType.CODEC, RegistryKeys.DIMENSION_TYPE, id, dimdata);
+    }
+
+    public void grab_biome_for_client(Identifier id, NbtCompound biomedata) {
+        grab_one_for_client(Biome.CODEC, RegistryKeys.BIOME, id, biomedata);
+    }
+
+    DimensionOptions grab_dimension(Path rootdir, String i) {
+        DimensionOptions ret = buildGrabber(DimensionOptions.CODEC, RegistryKeys.DIMENSION).grab_with_return(rootdir.toString()+"/dimension", i, false);
+        close();
+        return ret;
+    }
+
     public void grab_for_client(Identifier id, NbtCompound optiondata, List<Identifier> biomeids, List<NbtCompound> biomes) {
-        if (!optiondata.isEmpty()) grab_one_for_client(DimensionType.CODEC, RegistryKeys.DIMENSION_TYPE, id, optiondata);
+        if (!optiondata.isEmpty()) grab_dim_for_client(id, optiondata);
         int i = biomes.size();
-        for (int j = 0; j<i; j++) grab_one_for_client(Biome.CODEC, RegistryKeys.BIOME, biomeids.get(j), biomes.get(j));
+        for (int j = 0; j<i; j++) grab_biome_for_client(biomeids.get(j), biomes.get(j));
         close();
     }
 
@@ -68,11 +81,13 @@ public class DimensionGrabber {
         baseRegistryManager.streamAllRegistries().forEach((entry) -> entry.value().freeze());
     }
 
-    public RegistryOps.RegistryInfoGetter getGetter() {
-        //baseRegistryManager.streamAllRegistries().forEach((entry) -> map.put(entry.key(), createInfo((MutableRegistry<?>)(entry.value()))));
+    public RegistryOps.RegistryInfoGetter getGetter(List<MutableRegistry<?>> additionalRegistries) {
+        final Map<RegistryKey<? extends Registry<?>>, RegistryOps.RegistryInfo<?>> map = new HashMap<>();
+        baseRegistryManager.streamAllRegistries().forEach((entry) -> map.put(entry.key(), createInfo((MutableRegistry<?>)(entry.value()))));
+        additionalRegistries.forEach(first -> map.put(first.getKey(), createInfo(first)));
         return new RegistryOps.RegistryInfoGetter() {
             public <T> Optional<RegistryOps.RegistryInfo<T>> getRegistryInfo(RegistryKey<? extends Registry<? extends T>> registryRef) {
-                return Optional.ofNullable((RegistryOps.RegistryInfo<T>)createInfo(mutableRegistries.get(registryRef)));
+                return Optional.ofNullable((RegistryOps.RegistryInfo<T>)map.get(registryRef));
             }
         };
     }

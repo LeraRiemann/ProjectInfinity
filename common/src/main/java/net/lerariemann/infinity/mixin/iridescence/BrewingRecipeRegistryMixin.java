@@ -1,9 +1,11 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
 import net.lerariemann.infinity.registry.core.ModItems;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.recipe.BrewingRecipeRegistry;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,16 +25,16 @@ public class BrewingRecipeRegistryMixin {
     @Inject(method="hasPotionRecipe", at = @At("RETURN"), cancellable = true)
     private static void inj(ItemStack input, ItemStack ingredient, CallbackInfoReturnable<Boolean> cir) {
         if (ingredient.isOf(ModItems.CHROMATIC_MATTER.get())) {
-            Optional<RegistryEntry<Potion>> optional = input.getRegistryEntry(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
-            if (optional.isPresent() && optional.get().matchesId(new Identifier("awkward"))) cir.setReturnValue(true);
+            RegistryEntry<Item> optional = input.getRegistryEntry();
+           if (optional.matchesId(new Identifier("awkward"))) cir.setReturnValue(true);
         }
     }
 
     @Inject(method = "craft", at = @At("HEAD"), cancellable = true)
     private static void inj2(ItemStack ingredient, ItemStack input, CallbackInfoReturnable<ItemStack> cir) {
         if (!input.isEmpty() && ingredient.isOf(ModItems.CHROMATIC_MATTER.get())) {
-            Optional<RegistryEntry<Potion>> optional = input.getRegistryEntry(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
-            if (optional.isPresent() && optional.get().matchesId(new Identifier("awkward")))
+            RegistryEntry<Item> optional = input.getRegistryEntry();
+            if (optional.matchesId(new Identifier("awkward")))
                 cir.setReturnValue(ModItems.CHROMATIC_POTION.get().getDefaultStack());
         }
     }

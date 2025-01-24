@@ -58,8 +58,8 @@ public interface ConfigGenerator {
         ConfigFactory.of(manager.get(RegistryKeys.BIOME), ConfigGenerator::extractBiome).generate("extra", "biomes");
         ConfigFactory.of(manager.get(RegistryKeys.STRUCTURE), ConfigGenerator::extractStructure).generate("extra", "structures");
         ConfigFactory.of(manager.get(RegistryKeys.CONFIGURED_FEATURE), ConfigGenerator::extractFeature).generate("extra", "trees");
-        ConfigFactory.of(server.getRegistryManager().get(RegistryKeys.LOOT_TABLE), ConfigGenerator::extractLootTable)
-                .generate("extra", "loot_tables");
+//        ConfigFactory.of(server.getRegistryManager().get(Registries.LOOT_TABLE), ConfigGenerator::extractLootTable)
+//                .generate("extra", "loot_tables");
     }
 
     static void generateSounds() {

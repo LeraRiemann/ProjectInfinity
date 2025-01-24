@@ -32,7 +32,6 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -147,6 +146,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     public void setEffect(NbtCompound eff) {
         setEffect(eff.getString("Name"), eff.getInt("Color"));
     }
+
     public void setEffect(String eff, int c) {
         if (eff.isBlank()) {
             NbtCompound newEffect = InfinityMod.provider.randomElement(random, "effects");
@@ -156,12 +156,18 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
         this.dataTracker.set(effect, eff);
         this.dataTracker.set(color, c);
     }
+
+    public void setEffectRaw(String c) {
+        this.dataTracker.set(effect, c);
+    }
+    public void setColorRaw(int c) {
+        this.dataTracker.set(color, c);
+    }
     public String getEffect() {
         return this.dataTracker.get(effect);
     }
-
     public int getEffectRawId() {
-        return reg.getRawId(getEffect());
+        return Registries.STATUS_EFFECT.getRawId(getEffectID());
     }
 
     @Override
@@ -169,6 +175,9 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
         return this.dataTracker.get(color);
     }
 
+    public StatusEffect getEffectID() {
+        return Registries.STATUS_EFFECT.get(new Identifier(getEffect()));
+    }
     public void setDuration(int i) {
         this.dataTracker.set(duration, i);
     }
@@ -180,7 +189,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
         super.writeCustomDataToNbt(nbt);
         nbt.putString("effect", this.getEffect());
         nbt.putInt("duration", this.getDuration());
-        nbt.putInt("color", this.getColor());
+        nbt.putInt("color", this.getColorRaw());
     }
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
@@ -207,7 +216,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     }
 
     public ItemStack getProjectileType() {
-        return setPotion(Items.TIPPED_ARROW.getDefaultStack(), this.getColor(), this.getEffect(), this.getDuration());
+        return setPotion(Items.TIPPED_ARROW.getDefaultStack(), this.getEffectRawId(), this.getDuration());
     }
 
     @Override

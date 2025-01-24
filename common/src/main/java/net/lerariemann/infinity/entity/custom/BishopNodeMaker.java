@@ -21,14 +21,14 @@ public class BishopNodeMaker extends LandPathNodeMaker {
 
         double d = this.getFeetY(new BlockPos(node.x, node.y, node.z));
 
-        PathNode[] succ = new PathNode[Direction.Type.HORIZONTAL.getFacingCount()];
+        PathNode[] succ = new PathNode[Direction.Type.HORIZONTAL.ordinal()];
         for (Direction direction : Direction.Type.HORIZONTAL) {
             PathNode pathNode = this.getPathNode(node.x + direction.getOffsetX(), node.y, node.z + direction.getOffsetZ(), j, d, direction, pathNodeType2);
             succ[direction.getHorizontal()] = pathNode;
         }
         for (Direction directionx : Direction.Type.HORIZONTAL) {
             Direction direction2 = directionx.rotateYClockwise();
-            if (this.isValidDiagonalSuccessor(node,
+            if (this.isValidDiagonalSuccessor(node, node,
                     succ[directionx.getHorizontal()],
                     succ[direction2.getHorizontal()])) {
                 PathNode pathNode2 = this.getPathNode(
@@ -40,7 +40,7 @@ public class BishopNodeMaker extends LandPathNodeMaker {
                         directionx,
                         pathNodeType2
                 );
-                if (this.isValidDiagonalSuccessor(pathNode2)) {
+                if (this.isValidDiagonalSuccessor(pathNode2, null, null, null)) {
                     successors[i++] = pathNode2;
                 }
             }
@@ -50,7 +50,7 @@ public class BishopNodeMaker extends LandPathNodeMaker {
     }
 
     @Override
-    protected boolean isValidDiagonalSuccessor(PathNode xNode, @Nullable PathNode zNode, @Nullable PathNode xDiagNode) {
+    protected boolean isValidDiagonalSuccessor(PathNode xNode, @Nullable PathNode zNode, @Nullable PathNode xDiagNode, @Nullable PathNode zDiagNode) {
         if (xDiagNode == null || zNode == null || (xDiagNode.y > xNode.y && zNode.y > xNode.y)) {
             return false;
         } else if (zNode.type != PathNodeType.WALKABLE_DOOR && xDiagNode.type != PathNodeType.WALKABLE_DOOR) {
