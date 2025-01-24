@@ -31,7 +31,7 @@ public class InfinityModClient {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (f4ConfigKey.wasPressed()) if (client.player != null
                     && client.player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.F4.get())) {
-                ClientPlayNetworking.send(ModPayloads.DeployF4.INSTANCE);
+                ClientPlayNetworking.send(ModPayloads.DEPLOY_F4);
                 TypedActionResult<ItemStack> result = F4Item.deploy(client.world, client.player, Hand.MAIN_HAND);
                 client.player.setStackInHand(Hand.MAIN_HAND, result.getValue());
             }

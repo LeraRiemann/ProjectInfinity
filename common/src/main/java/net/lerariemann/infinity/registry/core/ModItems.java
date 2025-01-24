@@ -172,10 +172,6 @@ public class ModItems {
         return new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
     }
 
-    public static Item.Settings createChromaticSettings() {
-        return deferredIntComponent(ModComponentTypes.COLOR, ColorLogic.defaultChromatic);
-    }
-
     public static void registerModItems() {
         addAfter(IRIDESCENCE_BUCKET, ItemGroups.TOOLS, Items.MILK_BUCKET);
         InfinityMod.LOGGER.debug("Registering items for " + MOD_ID);

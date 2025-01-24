@@ -213,9 +213,4 @@ public class PlatformMethods {
     public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
         throw new AssertionError();
     }
-
-    @ExpectPlatform
-    public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i) {
-        throw new AssertionError();
-    }
 }

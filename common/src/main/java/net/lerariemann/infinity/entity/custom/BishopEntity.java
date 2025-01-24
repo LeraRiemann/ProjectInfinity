@@ -161,9 +161,8 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
 
     @Override
     public void attack(LivingEntity target, float pullProgress) {
-        ItemStack bow = Items.BOW.getDefaultStack();
         PersistentProjectileEntity persistentProjectileEntity =
-                ProjectileUtil.createArrowProjectile(this, getProjectileType(), pullProgress, bow);
+                ProjectileUtil.createArrowProjectile(this, getProjectileType(), pullProgress);
         double d = target.getX() - this.getX();
         double e = target.getBodyY(0.333) - persistentProjectileEntity.getY();
         double f = target.getZ() - this.getZ();

@@ -164,8 +164,8 @@ public class ChaosPawn extends AbstractChessFigure {
     }
 
     @Override
-    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
-        super.dropEquipment(world, source, causedByPlayer);
+    protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
+        super.dropEquipment(source, lootingMultiplier, allowDrops);
         if (!this.isBlackOrWhite() && RandomProvider.rule("pawnsCanDropIllegalItems")) {
             String s = InfinityMod.provider.randomName(random, "items");
             double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;

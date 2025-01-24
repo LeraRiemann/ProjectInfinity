@@ -10,6 +10,7 @@ import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
+//import net.minecraft.block.jukebox.JukeboxSong;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -32,8 +33,8 @@ import java.util.stream.Stream;
 
 /**
  * Pipeline for generating custom sound events and jukebox song definitions for every music track in the game.
+ * TODO soundpacks
  */
-// TODO soundpacks
 public record SoundScanner(Map<Identifier, Resource> soundIds) {
     /** Holds a map which allows to get the list of all sound IDs in existence and .ogg data for each.
      * Seeded by {@link SoundListMixin} on client launch. */
@@ -110,26 +111,26 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
 
     /** Receiver for a C2S {@link ModPayloads} payload, which holds data to send to clients in the future for them to
      * generate custom sound resource packs, as well as jukebox song definitions corresponding to this data. */
-    // public static void unpackUploadedJukeboxes(ModPayloads.UploadJukeboxes payload, ServerPlayNetworking.Context context) {
-    //     if (!RandomProvider.rule("useSoundSyncPackets")) return;
-    //     NbtCompound data = payload.data();
-    //     if (!data.contains("jukeboxes") || !data.contains("entries")) return;
-    //     MinecraftServer server = context.player().server;
-    //     if (Files.exists(server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))) return;
-
-    //     unpackUploadedJukeboxes(server, data.getCompound("jukeboxes"));
-    //     data.remove("jukeboxes");
-    //     NbtCompound packData = new NbtCompound();
-    //     packData.put("entries", data.get("entries"));
-    //     CommonIO.write(packData, server.getSavePath(WorldSavePath.DATAPACKS), "client_sound_pack_data.json");
-    // }
-    // public static void unpackUploadedJukeboxes(MinecraftServer server, NbtCompound allJukeboxes) {
-    //     Path pathJukeboxes = server.getSavePath(WorldSavePath.DATAPACKS).resolve("infinity/data/infinity/jukebox_song");
-    //     for (String key: allJukeboxes.getKeys()) {
-    //         if (allJukeboxes.get(key) instanceof NbtCompound jukebox) {
-    //             CommonIO.write(jukebox, pathJukeboxes, key + ".json");
-    //         }
-    //     }
+//    public static void unpackUploadedJukeboxes(ModPayloads.UploadJukeboxes payload, ServerPlayNetworking.Context context) {
+//        if (!RandomProvider.rule("useSoundSyncPackets")) return;
+//        NbtCompound data = payload.data();
+//        if (!data.contains("jukeboxes") || !data.contains("entries")) return;
+//        MinecraftServer server = context.player().server;
+//        if (Files.exists(server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))) return;
+//
+//        unpackUploadedJukeboxes(server, data.getCompound("jukeboxes"));
+//        data.remove("jukeboxes");
+//        NbtCompound packData = new NbtCompound();
+//        packData.put("entries", data.get("entries"));
+//        CommonIO.write(packData, server.getSavePath(WorldSavePath.DATAPACKS), "client_sound_pack_data.json");
+//    }
+    public static void unpackUploadedJukeboxes(MinecraftServer server, NbtCompound allJukeboxes) {
+        Path pathJukeboxes = server.getSavePath(WorldSavePath.DATAPACKS).resolve("infinity/data/infinity/jukebox_song");
+        for (String key: allJukeboxes.getKeys()) {
+            if (allJukeboxes.get(key) instanceof NbtCompound jukebox) {
+                CommonIO.write(jukebox, pathJukeboxes, key + ".json");
+            }
+        }
 //        grabJukeboxes(server);
     }
     /** Injects freshly received jukebox song definitions into the server's registries, config files and {@link RandomProvider}. */

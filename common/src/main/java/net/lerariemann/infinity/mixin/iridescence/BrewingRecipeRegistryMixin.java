@@ -23,7 +23,7 @@ public class BrewingRecipeRegistryMixin {
     @Inject(method="hasPotionRecipe", at = @At("RETURN"), cancellable = true)
     private static void inj(ItemStack input, ItemStack ingredient, CallbackInfoReturnable<Boolean> cir) {
         if (ingredient.isOf(ModItems.CHROMATIC_MATTER.get())) {
-            Optional<RegistryEntry<Potion>> optional = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
+            Optional<RegistryEntry<Potion>> optional = input.getRegistryEntry(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
             if (optional.isPresent() && optional.get().matchesId(new Identifier("awkward"))) cir.setReturnValue(true);
         }
     }
@@ -31,7 +31,7 @@ public class BrewingRecipeRegistryMixin {
     @Inject(method = "craft", at = @At("HEAD"), cancellable = true)
     private static void inj2(ItemStack ingredient, ItemStack input, CallbackInfoReturnable<ItemStack> cir) {
         if (!input.isEmpty() && ingredient.isOf(ModItems.CHROMATIC_MATTER.get())) {
-            Optional<RegistryEntry<Potion>> optional = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
+            Optional<RegistryEntry<Potion>> optional = input.getRegistryEntry(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
             if (optional.isPresent() && optional.get().matchesId(new Identifier("awkward")))
                 cir.setReturnValue(ModItems.CHROMATIC_POTION.get().getDefaultStack());
         }
