@@ -102,7 +102,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 else {
                     ItemStack usedKey = player.getStackInHand(Hand.MAIN_HAND);
                     if (usedKey.isOf(key.get())) {
-                        if (!player.getAbilities().creativeMode && prov.rule("consumePortalKey")) {
+                        if (!player.getAbilities().creativeMode && RandomProvider.rule("consumePortalKey")) {
                             usedKey.decrement(1); // Consume the key if needed
                         }
                         PortalCreator.openWithStatIncrease(player, s, serverWorld, pos);

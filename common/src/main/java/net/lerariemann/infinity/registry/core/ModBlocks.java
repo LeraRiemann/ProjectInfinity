@@ -2,6 +2,7 @@ package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.custom.*;
 import net.minecraft.block.*;
@@ -53,6 +54,7 @@ public class ModBlocks {
             new RailHelper(AbstractBlock.Settings.copy(Blocks.BARRIER)));
 
     public static void registerModBlocks() {
+        InfinityMod.LOGGER.debug("Registering blocks for " + MOD_ID);
         BLOCKS.register();
     }
 

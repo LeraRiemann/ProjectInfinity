@@ -265,10 +265,10 @@ public interface InfinityMethods {
     }
 
     static boolean chaosMobsEnabled() {
-        return InfinityMod.provider.rule("chaosMobsEnabled");
+        return RandomProvider.rule("chaosMobsEnabled");
     }
 
     static boolean longArithmeticEnabled() {
-        return InfinityMod.provider.rule("longArithmeticEnabled");
+        return RandomProvider.rule("longArithmeticEnabled");
     }
 }

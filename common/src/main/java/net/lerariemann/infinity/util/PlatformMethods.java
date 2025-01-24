@@ -7,6 +7,8 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.item.StarOfLangItem;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
@@ -28,6 +30,7 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 import java.nio.file.Path;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static net.lerariemann.infinity.InfinityModClient.sampler;
 
@@ -208,6 +211,11 @@ public class PlatformMethods {
 
     @ExpectPlatform
     public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i) {
         throw new AssertionError();
     }
 }

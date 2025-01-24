@@ -1,9 +1,9 @@
 package net.lerariemann.infinity.mixin.core;
 
-import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.teleport.PortalCreator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -48,14 +48,14 @@ public class NetherPortalBlockMixin extends AbstractBlockMixin {
 	@Override
 	protected void injected_onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify, CallbackInfo ci) {
 		if (state.isOf(Blocks.NETHER_PORTAL) &&
-				(InfinityMod.provider.rule("randomizeAllNetherPortals")
+				(RandomProvider.rule("randomizeAllNetherPortals")
 						|| InfinityMethods.isInfinity(world)))
 			world.scheduleBlockTick(pos, Blocks.NETHER_PORTAL, 2);
 	}
 	@Override
 	protected void injected_scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
 		if (state.isOf(Blocks.NETHER_PORTAL)) {
-			boolean bl = InfinityMod.provider.rule("randomizeAllNetherPortals");
+			boolean bl = RandomProvider.rule("randomizeAllNetherPortals");
 			if (!bl && !InfinityMethods.isInfinity(world)) return;
 			world.setBlockState(pos, ModBlocks.PORTAL.get().getDefaultState().
 					with(AXIS, state.get(AXIS)));

@@ -265,7 +265,7 @@ public interface PortalCreator {
         /* creates the dimension datapack */
         RandomDimension d = new RandomDimension(id, server);
 
-        if (!InfinityMod.provider.rule("runtimeGenerationEnabled")) return false;
+        if (!RandomProvider.rule("runtimeGenerationEnabled")) return false;
         ((MinecraftServerAccess)(server)).infinity$addWorld(
                 key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d)); // create the dimension
         server.getPlayerManager().getPlayerList().forEach(

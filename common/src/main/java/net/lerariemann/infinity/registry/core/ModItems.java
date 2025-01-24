@@ -2,8 +2,10 @@ package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.item.*;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -170,8 +172,13 @@ public class ModItems {
         return new Item.Settings().arch$tab(ItemGroups.SPAWN_EGGS);
     }
 
+    public static Item.Settings createChromaticSettings() {
+        return deferredIntComponent(ModComponentTypes.COLOR, ColorLogic.defaultChromatic);
+    }
+
     public static void registerModItems() {
         addAfter(IRIDESCENCE_BUCKET, ItemGroups.TOOLS, Items.MILK_BUCKET);
+        InfinityMod.LOGGER.debug("Registering items for " + MOD_ID);
         ITEMS.register();
     }
 }

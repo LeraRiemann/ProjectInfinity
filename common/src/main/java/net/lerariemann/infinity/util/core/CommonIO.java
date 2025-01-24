@@ -136,6 +136,7 @@ public interface CommonIO {
     }
 
     private static boolean _checkIfModLoaded(File path1) {
+        if (!RandomProvider.rule("enforceModLoadedChecks")) return true;
         String modname = path1.toPath().getName(path1.toPath().getNameCount() - 1).toString();
         return Platform.isModLoaded(modname);
     }
