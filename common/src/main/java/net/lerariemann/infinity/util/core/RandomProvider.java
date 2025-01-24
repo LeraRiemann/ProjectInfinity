@@ -34,9 +34,13 @@ public class RandomProvider {
     public String salt;
     public Easterizer easterizer;
 
-    public RandomProvider(Path savingPath) {
+    public RandomProvider() {
         registerAll();
         easterizer = new Easterizer();
+    }
+
+    public RandomProvider(Path savingPath) {
+        this();
         this.savingPath = savingPath;
         (new CorePack(this, savingPath)).generate();
     }

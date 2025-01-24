@@ -57,5 +57,6 @@ public class InfinityMod {
 		ModCriteria.registerCriteria();
 		ModPayloads.registerPayloadsServer();
 		RandomText.walkPaths();
+		provider = new RandomProvider();
 	}
 }
