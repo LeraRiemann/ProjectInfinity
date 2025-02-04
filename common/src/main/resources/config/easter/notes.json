@@ -1,14 +1,17 @@
 {
-  "type": "minecraft:flat",
-  "settings": {
-    "biome": "minecraft:the_void",
-    "lakes": false,
-    "features": false,
-    "layers": [
-      {
-        "height": 1,
-        "block": "infinity:notes_block"
-      }
-    ]
+  "infinity_version": 2004002,
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:the_void",
+      "lakes": false,
+      "features": false,
+      "layers": [
+        {
+          "height": 1,
+          "block": "infinity:notes_block"
+        }
+      ]
+    }
   }
 }

@@ -9,12 +9,8 @@ import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.TintableBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.core.RandomProvider;
-import net.lerariemann.infinity.util.screen.F4Screen;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.RegistryKey;
@@ -99,9 +95,13 @@ public interface InfinityMethods {
      * This also checks if it matches an Easter Egg dimension.
      */
     static Identifier dimTextToId(String text) {
-        if (text.equals("abatised redivides")) return World.END.getValue();
-        if (text.isEmpty()) return InfinityMethods.getId("missingno");
-        if (InfinityMod.provider.easterizer.isEaster(text, InfinityMod.provider) && !text.equals("missingno")) return InfinityMethods.getId(text);
+        if (text.equals("abatised redivides"))
+            return World.END.getValue();
+        if (text.isEmpty())
+            return InfinityMethods.getId("missingno");
+        String easterId = InfinityMod.provider.easterizer.getAsEaster(text);
+        if (easterId != null)
+            return InfinityMethods.getId(easterId);
         return InfinityMethods.getDimId(getDimensionSeed(text));
     }
 

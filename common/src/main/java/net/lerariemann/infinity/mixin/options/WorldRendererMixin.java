@@ -71,10 +71,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         SkyRenderer renderer = new SkyRenderer(infinity$options(), client, world,
                 matrices, tickDelta, projectionMatrix,
                 lightSkyBuffer, starsBuffer);
-        if (renderer.testAndRenderNonOverworldySkies()) return;
-        renderer.setupOverworldySky();
-        renderer.renderAllCelestialBodies(fogCallback);
-        renderer.finish();
+        renderer.render(fogCallback);
     }
     @Unique
     private InfinityOptions infinity$options() {

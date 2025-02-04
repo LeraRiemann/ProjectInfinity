@@ -1,4 +1,6 @@
 {
+  "infinity_version": 2004002,
+  "generator": {
     "type": "minecraft:noise",
     "settings": {
       "sea_level": 0,
@@ -59,3 +61,4 @@
       "biome": "infinity:terminal"
     }
   }
+}
