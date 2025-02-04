@@ -20,7 +20,10 @@
       [],
       [],
       [],
-      [],
+      [
+        "infinity:isolation_dead_bushes",
+        "infinity:trees_isolation"
+      ],
       []
     ],
     "spawners": {},
