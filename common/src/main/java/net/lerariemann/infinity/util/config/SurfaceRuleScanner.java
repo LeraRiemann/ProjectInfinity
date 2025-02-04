@@ -126,7 +126,7 @@ public interface SurfaceRuleScanner {
                     if (biomeLocations.containsKey("minecraft:default"))
                         biomeLocations.get("minecraft:default").forEach(i -> l.add(extractRule(i)));
                     else {
-                        InfinityMod.LOGGER.info("Default locations unexpectedly missing when processing surface rules for biome {}", biome);
+                        InfinityMod.LOGGER.warn("Default locations unexpectedly missing when processing surface rules for biome {}", biome);
                     }
                     comp.put("sequence", l);
                 } catch (Exception e) {
