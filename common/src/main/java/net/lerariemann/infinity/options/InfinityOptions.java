@@ -11,6 +11,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.joml.Vector3f;
 
@@ -84,6 +85,14 @@ public class InfinityOptions {
     }
     public Function<Float, Float> getSoundPitch() {
         return shifter.applier();
+    }
+    public boolean isHaunted() {
+        return test(data, "haunted", false);
+    }
+    public int getHauntingTicks(Random random) {
+        if (!isHaunted()) return -2;
+        if (data.contains("haunting_ticks")) return data.getInt("haunting_ticks");
+        return random.nextBetween(test(data, "min_haunting_ticks", 20), test(data, "max_haunting_ticks", 200));
     }
 
     //sky - common

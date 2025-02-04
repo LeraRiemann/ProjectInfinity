@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lerariemann.infinity.registry.core.ModFeatures;
 import net.minecraft.block.BlockState;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -87,12 +88,12 @@ public class WonkyTrunkPlacer extends TrunkPlacer {
     ) {
         if (this.canReplace(world, pos)) {
             BlockState bs = function.apply(config.trunkProvider.get(random, pos));
-            /*Direction.Axis axis = currentDir.getAxis();
+            Direction.Axis axis = currentDir.getAxis();
             if (bs.contains(Properties.AXIS)) bs = bs.with(Properties.AXIS, axis);
             if (bs.contains(Properties.HORIZONTAL_AXIS) && axis.isHorizontal()) bs = bs.with(Properties.HORIZONTAL_AXIS, axis);
             if (bs.contains(Properties.FACING)) bs = bs.with(Properties.FACING, currentDir);
             if (bs.contains(Properties.HORIZONTAL_FACING) && axis.isHorizontal()) bs = bs.with(Properties.HORIZONTAL_FACING, currentDir);
-            if (bs.contains(Properties.HOPPER_FACING) && currentDir != Direction.UP) bs = bs.with(Properties.HOPPER_FACING, currentDir);*/
+            if (bs.contains(Properties.HOPPER_FACING) && currentDir != Direction.UP) bs = bs.with(Properties.HOPPER_FACING, currentDir);
             replacer.accept(pos, bs);
             return true;
         } else {

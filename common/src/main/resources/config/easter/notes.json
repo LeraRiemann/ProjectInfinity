@@ -1,5 +1,8 @@
 {
   "infinity_version": 2004002,
+  "options": {
+    "haunted": true
+  },
   "generator": {
     "type": "minecraft:flat",
     "settings": {

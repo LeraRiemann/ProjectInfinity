@@ -18,7 +18,7 @@
     "resetChargeCooldown": 6000
   },
   "disabledDimensions": ["ant", "bash", "checkerboard", "custom",
-    "missing", "notes", "perfection", "terminal"],
+    "missing", "perfection", "terminal"],
   "portalKey": "",
   "salt": "",
   "rootChances": {
