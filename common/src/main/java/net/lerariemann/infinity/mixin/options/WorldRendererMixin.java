@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.options.SkyRenderer;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
@@ -43,7 +44,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     @Inject(method = "renderSky(Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
             at=@At("HEAD"), cancellable=true)
     private void injected4(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
-        if (!infinity$options().isEmpty()) {
+        if (InfinityMethods.isInfinity(world)) {
             infinity$renderEntireSky(matrix4f, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
             ci.cancel();
         }
