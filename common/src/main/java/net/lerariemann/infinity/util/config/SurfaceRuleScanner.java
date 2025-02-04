@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.util.config;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomNoisePreset;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.nbt.*;
@@ -120,8 +121,20 @@ public interface SurfaceRuleScanner {
             else {
                 NbtCompound comp = RandomNoisePreset.startingRule("sequence");
                 NbtList l = new NbtList();
+                try {
+                    biomeLocations.get(biome).forEach(i -> l.add(extractRule(i)));
+                    if (biomeLocations.containsKey("minecraft:default"))
+                        biomeLocations.get("minecraft:default").forEach(i -> l.add(extractRule(i)));
+                    else {
+                        InfinityMod.LOGGER.info("Default locations unexpectedly missing when processing surface rules for biome {}", biome);
+                    }
+                    comp.put("sequence", l);
+                } catch (Exception e) {
+                    throw new RuntimeException("Encountered an unexpected exception when processing surface rules for biome " + biome + "\n" + e.getMessage());
+                }
                 biomeLocations.get(biome).forEach(i -> l.add(extractRule(i)));
-                biomeLocations.get("minecraft:default").forEach(i -> l.add(extractRule(i)));
+                if (biomeLocations.containsKey("minecraft:default"))
+                    biomeLocations.get("minecraft:default").forEach(i -> l.add(extractRule(i)));
                 comp.put("sequence", l);
                 return comp;
             }

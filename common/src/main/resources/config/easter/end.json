@@ -1,10 +1,10 @@
 {
-  "infinity_version": 2001005,
+  "infinity_version": 2004001,
   "easter-options": {
-    "portal_color": 65535,
+    "portal_color": 12171705,
     "star_size_base": 0.25,
     "star_size_modifier": 0.25,
-    "star_brightness_night": 0.75
+    "star_brightness_night": 0.0
   },
   "type": "minecraft:noise",
   "settings": {
