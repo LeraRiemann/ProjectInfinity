@@ -30,8 +30,8 @@
       "upper_size": 1
     },
     "trunk_placer": {
-      "type": "infinity:wonky",
-      "base_height": 16,
+      "type": "minecraft:straight_trunk_placer",
+      "base_height": 6,
       "height_rand_a": 2,
       "height_rand_b": 0
     },
