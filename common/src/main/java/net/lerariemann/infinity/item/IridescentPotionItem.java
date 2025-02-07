@@ -80,7 +80,7 @@ public class IridescentPotionItem extends Item {
         int level = BackportMethods.getOrDefaultInt(stack, ModComponentTypes.F4_CHARGE, 0);
         List<StatusEffectInstance> effects = List.of(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT.value(),
                 Iridescence.getFullEffectLength(level), level));
-        PotionUtil.buildTooltip(effects, tooltip.add(effects), 1.0F, level);
+        PotionUtil.buildTooltip(effects, tooltip, level);
     }
 
     @Override

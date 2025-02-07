@@ -4,8 +4,7 @@ import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.NoteBlock;
-import net.minecraft.block.enums.NoteBlockInstrument;
+import net.minecraft.block.enums.Instrument;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
@@ -16,12 +15,16 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
+
+import static net.minecraft.block.NoteBlock.INSTRUMENT;
+import static net.minecraft.block.NoteBlock.getNotePitch;
 
 public class NotesBlock extends Block {
     public static final BooleanProperty POWERED = Properties.POWERED;
@@ -39,12 +42,12 @@ public class NotesBlock extends Block {
     }
 
     @Override
-    protected boolean hasRandomTicks(BlockState state) {
+    public boolean hasRandomTicks(BlockState state) {
         return state.contains(TICKING) && state.get(TICKING);
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
         boolean bl = world.isReceivingRedstonePower(pos);
         if (bl != state.get(POWERED)) {
             if (bl) this.play(null, world, pos);
@@ -57,14 +60,14 @@ public class NotesBlock extends Block {
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (isTicking(world, state) && random.nextInt(115) == 0) {
             this.play(null, world, pos);
         }
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else {
@@ -77,7 +80,7 @@ public class NotesBlock extends Block {
     }
 
     @Override
-    protected void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+    public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
         if (!world.isClient) {
             play(player, world, pos);
             player.incrementStat(Stats.PLAY_NOTEBLOCK);
@@ -92,26 +95,26 @@ public class NotesBlock extends Block {
     }
 
     @Override
-    protected boolean onSyncedBlockEvent(BlockState state, World world, BlockPos pos, int type, int data) {
-        NoteBlockInstrument noteBlockInstrument;
+    public boolean onSyncedBlockEvent(BlockState state, World world, BlockPos pos, int type, int data) {
+        Instrument[] instruments = (Instrument[]) INSTRUMENT.stream().toArray();
+        Instrument noteBlockInstrument = instruments[world.random.nextInt(instruments.length-7)];
         float f;
         if (world.getBlockEntity(pos.down()) instanceof ChromaticBlockEntity e) {
-            noteBlockInstrument = NoteBlockInstrument.GUITAR;
+            noteBlockInstrument = Instrument.GUITAR;
             f = (float)Math.pow(2.0, 2 * (e.brightness / 255f) - 1);
         }
         else {
-            NoteBlockInstrument[] instruments = NoteBlockInstrument.values();
-            noteBlockInstrument = instruments[world.random.nextInt(instruments.length-7)];
-            if (noteBlockInstrument.canBePitched()) {
-                int i = world.random.nextInt(24);
-                f = NoteBlock.getNotePitch(i);
-                world.addParticle(ParticleTypes.NOTE, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, i / 24.0, 0.0F, 0.0F);
+            if (noteBlockInstrument.shouldSpawnNoteParticles()) {
+                int i = world.random.nextInt(12);
+                f = getNotePitch(i);
+                world.addParticle(ParticleTypes.NOTE, (double)pos.getX() + (double)0.5F, (double)pos.getY() + 1.2, (double)pos.getZ() + (double)0.5F, (double)i / (double)24.0F, (double)0.0F, (double)0.0F);
             } else {
                 f = 1.0F;
             }
         }
 
-        world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, noteBlockInstrument.getSound(), SoundCategory.RECORDS, 3.0F, f, world.random.nextLong());
+
+        world.playSound(null, (double)pos.getX() + (double)0.5F, (double)pos.getY() + (double)0.5F, (double)pos.getZ() + (double)0.5F, noteBlockInstrument.getSound(), SoundCategory.RECORDS, 3.0F, f, world.random.nextLong());
         return true;
     }
 }

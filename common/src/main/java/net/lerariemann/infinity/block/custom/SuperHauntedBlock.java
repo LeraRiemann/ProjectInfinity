@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class SuperHauntedBlock extends BlockWithEntity {
-    public static final MapCodec<SuperHauntedBlock> CODEC = createCodec(SuperHauntedBlock::new);
+
     public SuperHauntedBlock(Settings settings) {
         super(settings);
     }
@@ -50,7 +50,7 @@ public class SuperHauntedBlock extends BlockWithEntity {
         return getOriginal(world, pos).getCollisionShape(world, pos);
     }
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return getOriginal(world, pos).getOutlineShape(world, pos);
     }
 
@@ -63,14 +63,10 @@ public class SuperHauntedBlock extends BlockWithEntity {
         return 15;
     }
     @Override
-    protected boolean emitsRedstonePower(BlockState state) {
+    public boolean emitsRedstonePower(BlockState state) {
         return true;
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CODEC;
-    }
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new HauntedBlockEntity(pos, state);

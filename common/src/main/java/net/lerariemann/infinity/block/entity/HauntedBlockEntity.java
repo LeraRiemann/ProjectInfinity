@@ -26,15 +26,15 @@ public class HauntedBlockEntity extends BlockEntity {
         return w.random.nextBetween(20, 200);
     }
 
-    public void writeNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(tag, registryLookup);
+    public void writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
         BlockState.CODEC.encodeStart(NbtOps.INSTANCE, original).ifSuccess(e -> tag.put("InnerBlockState", e));
     }
 
-    public void readNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(tag, registryLookup);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         if (tag.contains("InnerBlockState"))
-            BlockState.CODEC.decode(NbtOps.INSTANCE, tag.get("InnerBlockState")).ifSuccess(e -> original = e.getFirst());
+            BlockState.CODEC.decode(NbtOps.INSTANCE, tag.get("InnerBlockState")).ifSuccess(e -> original = e.get(0));
     }
 
     @Nullable
@@ -42,9 +42,10 @@ public class HauntedBlockEntity extends BlockEntity {
     public Packet<ClientPlayPacketListener> toUpdatePacket() {
         return BlockEntityUpdateS2CPacket.create(this);
     }
+
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        return createNbt(registryLookup);
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
     }
 
     public void updateFrom(BlockState bs) {
