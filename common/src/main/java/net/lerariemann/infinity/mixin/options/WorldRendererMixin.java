@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.options.SkyRenderer;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
@@ -74,10 +75,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         SkyRenderer renderer = new SkyRenderer(infinity$options(), client, world,
                 matrices, tickDelta, projectionMatrix,
                 lightSkyBuffer, starsBuffer);
-        if (renderer.testAndRenderNonOverworldySkies()) return;
-        renderer.setupOverworldySky();
-        renderer.renderAllCelestialBodies(fogCallback);
-        renderer.finish();
+        renderer.render(fogCallback);
     }
 
     @Unique

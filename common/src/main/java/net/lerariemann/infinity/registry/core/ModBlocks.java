@@ -52,6 +52,10 @@ public class ModBlocks {
             new NotesBlock(AbstractBlock.Settings.copy(Blocks.NOTE_BLOCK).ticksRandomly()));
     public static final RegistrySupplier<RailHelper> RAIL_HELPER = BLOCKS.register("rail_helper", () ->
             new RailHelper(AbstractBlock.Settings.copy(Blocks.BARRIER)));
+    public static final RegistrySupplier<Block> HAUNTED = BLOCKS.register("haunted", () ->
+            new SuperHauntedBlock(AbstractBlock.Settings.copy(Blocks.GLASS)));
+    public static final RegistrySupplier<Block> HAUNTED_AIR = BLOCKS.register("haunted_air", () ->
+            new HauntedBlock(Blocks.AIR));
 
     public static void registerModBlocks() {
         InfinityMod.LOGGER.debug("Registering blocks for " + MOD_ID);

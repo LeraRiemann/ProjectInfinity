@@ -1,11 +1,10 @@
 package net.lerariemann.infinity.item;
 
+import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
-import net.lerariemann.infinity.registry.core.ModItems;
-import net.lerariemann.infinity.util.BackportMethods;
+import net.lerariemann.infinity.util.ClientMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.screen.F4Screen;
 import net.lerariemann.infinity.util.teleport.InfinityPortal;
@@ -113,9 +112,8 @@ public class F4Item extends Item implements PortalDataHolder {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        if (player instanceof ClientPlayerEntity clientPlayer) {
-            MinecraftClient.getInstance().setScreen(F4Screen.of(clientPlayer));
-        }
+        if (world.isClient)
+            ClientMethods.setF4Screen(player);
         return TypedActionResult.success(player.getStackInHand(hand));
     }
 

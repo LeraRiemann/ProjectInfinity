@@ -3,7 +3,8 @@ package net.lerariemann.infinity.util.core;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Pair;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtString;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,36 +16,35 @@ import static java.nio.file.Files.walk;
 
 
 public class Easterizer {
-    public Map<String, Pair<NbtCompound, String>> map;
-    public Map<String, NbtCompound> optionmap;
-    public Map<String, Integer> colormap;
+    public Map<String, String> aliasMap = new HashMap<>();
+    public Map<String, NbtCompound> map = new HashMap<>();
+    public Map<String, String> typeMap = new HashMap<>();
+    public Map<String, NbtCompound> optionmap = new HashMap<>();
 
     public Easterizer() {
-        map = new HashMap<>();
-        optionmap = new HashMap<>();
-        colormap = new HashMap<>();
         try (Stream<Path> files = walk(InfinityMod.configPath.resolve("easter"))) {
             files.filter(p -> p.toFile().isFile() && !p.toString().endsWith("_type.json")).forEach(p -> {
                 String name = p.getFileName().toString().replace(".json", "");
-                String type = "default";
                 NbtCompound compound = CommonIO.read(p.toFile());
-                if (compound.contains("easter-name")) {
-                    name = compound.getString("easter-name");
-                    compound.remove("easter-name");
+                if (compound.contains("name"))
+                    name = compound.getString("name");
+                if (compound.contains("type"))
+                    typeMap.put(name, compound.getString("type"));
+                if (compound.contains("aliases", NbtElement.LIST_TYPE)) {
+                    String finalName = name;
+                    compound.getList("aliases", NbtElement.STRING_TYPE)
+                            .stream()
+                            .map(e -> (NbtString)e)
+                            .map(NbtString::asString)
+                            .forEach(alias -> aliasMap.put(alias, finalName));
                 }
-                if (compound.contains("easter-type")) {
-                    type = compound.getString("easter-type");
-                    compound.remove("easter-type");
+                else if (compound.contains("aliases", NbtElement.STRING_TYPE))
+                    aliasMap.put(compound.getString("aliases"), name);
+                if (compound.contains("options")) {
+                    optionmap.put(name, compound.getCompound("options"));
                 }
-                if (compound.contains("easter-color")) {
-                    colormap.put(name, compound.getInt("easter-color"));
-                    compound.remove("easter-color");
-                }
-                if (compound.contains("easter-options")) {
-                    optionmap.put(name, compound.getCompound("easter-options"));
-                    compound.remove("easter-options");
-                }
-                map.put(name, new Pair<>(compound, type));
+
+                map.put(name, compound.getCompound("generator"));
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -53,17 +53,25 @@ public class Easterizer {
 
     public boolean easterize(RandomDimension d) {
         String name = d.getName();
-        if (!isEaster(d.getName(), d.PROVIDER)) return false;
-        d.data.putString("type", InfinityMod.MOD_ID + ":" + map.get(name).getRight() + "_type");
-        d.data.put("generator", map.get(name).getLeft());
+        if (!isEaster(d.getName())) return false;
+        String type = typeMap.getOrDefault(name, "default");
+        if (!type.contains(":")) type = InfinityMod.MOD_ID + ":" + type;
+        d.data.putString("type", type);
+        d.data.put("generator", map.get(name));
         return true;
     }
 
-    public static boolean isDisabled(String name, RandomProvider provider) {
-        return provider.disabledDimensions.contains(name);
+    public static boolean isDisabled(String name) {
+        return InfinityMod.provider.disabledDimensions.contains(name);
     }
 
-    public boolean isEaster(String name, RandomProvider provider) {
-        return map.containsKey(name) && !isDisabled(name, provider);
+    public String getAsEaster(String name) {
+        if (aliasMap.containsKey(name)) return aliasMap.get(name);
+        if (isEaster(name)) return name;
+        return null;
+    }
+
+    public boolean isEaster(String name) {
+        return map.containsKey(name) && !isDisabled(name);
     }
 }

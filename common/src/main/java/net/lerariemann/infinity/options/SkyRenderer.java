@@ -35,6 +35,13 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
         return  (cameraSubmersionType == CameraSubmersionType.POWDER_SNOW
                 || cameraSubmersionType == CameraSubmersionType.LAVA);
     }
+
+    public void render(Runnable fogCallback) {
+        if (testAndRenderNonOverworldySkies()) return;
+        setupOverworldySky();
+        renderAllCelestialBodies(fogCallback);
+        finish();
+    }
     
     public boolean testAndRenderNonOverworldySkies() {
         if (client.world!=null && client.world.getDimensionEffects().getSkyType() == DimensionEffects.SkyType.END) {
