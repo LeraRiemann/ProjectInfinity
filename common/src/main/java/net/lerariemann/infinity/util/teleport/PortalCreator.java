@@ -56,7 +56,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPage;
-import static net.lerariemann.infinity.compat.ComputerCraftCompat.isPrintedPage;
 
 public interface PortalCreator {
     /**
@@ -94,20 +93,14 @@ public interface PortalCreator {
             }
         }
         else if (Platform.isModLoaded("computercraft")) {
-            if (isPrintedPage(itemStack.getItem())) {
-                NbtCompound compound = itemStack.getNbt();
-                String content;
-                if (compound != null) {
-                    content = checkPrintedPage(compound);
-                }
-                else content = "";
-                MinecraftServer server = world.getServer();
-                if (server != null) {
-                    Identifier id = InfinityMethods.dimTextToId(content);
-                    if (world instanceof ServerWorld serverWorld) {
-                        boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
-                        if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-                    }
+            String content;
+            content = checkPrintedPage(itemStack);
+            MinecraftServer server = world.getServer();
+            if (server != null) {
+                Identifier id = InfinityMethods.dimTextToId(content);
+                if (world instanceof ServerWorld serverWorld) {
+                    boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
+                    if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
                 }
             }
         }
