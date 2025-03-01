@@ -7,6 +7,8 @@ import net.minecraft.nbt.NbtList;
 
 import java.util.Random;
 
+import static net.lerariemann.infinity.util.core.RandomProvider.genBounds;
+
 /** Contains various common use methods for working with {@link NbtCompound} objects. */
 public interface NbtUtils {
     static String test(NbtCompound data, String key, String def) {
@@ -52,8 +54,10 @@ public interface NbtUtils {
     }
 
     static void addBounds(NbtCompound res, int lbound, int bound) {
-        res.putInt("min_inclusive", lbound);
-        res.putInt("max_inclusive", bound);
+        NbtCompound value = new NbtCompound();
+        value.putInt("min_inclusive", lbound);
+        value.putInt("max_inclusive", bound);
+        res.put("value", value);
     }
 
     static void addBounds(NbtCompound res, Random random, int lbound, int bound) {
@@ -82,15 +86,18 @@ public interface NbtUtils {
             }
             case 4 -> {
                 res.putString("type", "clamped");
-                addBounds(res, random, lbound, bound);
-                res.put("source", randomIntProvider(random, lbound, bound, false));
+                NbtCompound value = genBounds(lbound, bound);
+                value.put("source", randomIntProvider(random, lbound, bound, false));
+                res.put("value", value);
                 return res;
             }
             case 3 -> {
                 res.putString("type", "clamped_normal");
                 addBounds(res, random, lbound, bound);
-                res.putDouble("mean", lbound + random.nextDouble()*(bound-lbound));
-                res.putDouble("deviation", random.nextExponential());
+                NbtCompound value = genBounds(lbound, bound);
+                value.putDouble("mean", lbound + random.nextDouble()*(bound-lbound));
+                value.putDouble("deviation", random.nextExponential());
+                res.put("value", value);
                 return res;
             }
             case 5 -> {
