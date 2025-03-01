@@ -7,8 +7,6 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
-import net.lerariemann.infinity.block.entity.TintableBlockEntity;
-import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.block.BlockState;
@@ -22,7 +20,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
@@ -174,6 +171,10 @@ public interface InfinityMethods {
     static int getDiscColorFromComponents(ItemStack stack, int layer) {
         int color = getOverlayColorFromComponents(stack, layer);
         return layer == 0 ? color : 0xFFFFFF ^ color;
+    }
+
+    static int getPortalItemColor(ItemStack stack, int layer) {
+        return 0x00FFFF;
     }
 
     /**

@@ -43,6 +43,7 @@ public class InfinityMod {
 		ModEntities.registerEntities();
 		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
+		ModPayloads.registerC2SPacketsReceivers();
 		ModBlockEntities.registerBlockEntities();
 		ModPoi.registerPoi();
 		ModCommands.registerCommands();

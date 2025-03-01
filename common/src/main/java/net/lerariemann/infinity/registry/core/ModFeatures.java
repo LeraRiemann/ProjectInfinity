@@ -3,13 +3,11 @@ package net.lerariemann.infinity.registry.core;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.features.WonkyTrunkPlacer;
 import net.lerariemann.infinity.features.*;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.SingleStateFeatureConfig;
-import net.minecraft.world.gen.trunk.TrunkPlacerType;
 
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
@@ -24,10 +22,8 @@ public class ModFeatures {
     public static RegistrySupplier<RandomShapeFeature> RANDOM_STAR;
     public static RegistrySupplier<TextFeature> RANDOM_TEXT;
     public static RegistrySupplier<RandomPortalSetupper> PORTAL_SETUPPER;
-    public static RegistrySupplier<TrunkPlacerType<WonkyTrunkPlacer>> WONKY_TRUNK;
 
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(MOD_ID, RegistryKeys.FEATURE);
-    public static final DeferredRegister<TrunkPlacerType<?>> TRUNKS = DeferredRegister.create(MOD_ID, RegistryKeys.TRUNK_PLACER_TYPE);
 
     public static <C extends FeatureConfig, F extends Feature<C>> RegistrySupplier<F> register(String name, F feature) {
         return FEATURES.register(name, () -> feature);
@@ -44,8 +40,6 @@ public class ModFeatures {
         RANDOM_STAR = register("random_shape", new RandomShapeFeature(RandomShapeFeature.Config.CODEC));
         RANDOM_TEXT = register("random_text", new TextFeature(TextFeature.Config.CODEC));
         PORTAL_SETUPPER = register("portal_setupper", new RandomPortalSetupper((RandomPortalSetupper.Config.CODEC)));
-        WONKY_TRUNK = TRUNKS.register("wonky", () -> new TrunkPlacerType<>(WonkyTrunkPlacer.CODEC));
         FEATURES.register();
-        TRUNKS.register();
     }
 }

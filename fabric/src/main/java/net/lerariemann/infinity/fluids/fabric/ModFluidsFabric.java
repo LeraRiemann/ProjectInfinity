@@ -22,6 +22,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.state.StateManager;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -72,7 +73,7 @@ public class ModFluidsFabric {
             Block.dropStacks(state, world, pos, blockEntity);
         }
         @Override
-        protected int getMaxFlowDistance(WorldView world) {
+        protected int getFlowSpeed(WorldView world) {
             return 4;
         }
         @Override
@@ -129,7 +130,9 @@ public class ModFluidsFabric {
     public static class IridescenceVariantAttributeHandler implements FluidVariantAttributeHandler {
         @Override
         public Text getName(FluidVariant fluidVariant) {
-            return Text.translatable("block.infinity.iridescence").withColor(Iridescence.getTimeBasedColor());
+            MutableText txt = Text.translatable("block.infinity.iridescence");
+            txt = txt.setStyle(txt.getStyle().withColor(Iridescence.getTimeBasedColor()));
+            return txt;
         }
     }
     public static class IridescenceVariantRenderHandler implements FluidVariantRenderHandler {

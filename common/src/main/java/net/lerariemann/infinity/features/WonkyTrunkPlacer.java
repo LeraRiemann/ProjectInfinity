@@ -3,7 +3,6 @@ package net.lerariemann.infinity.features;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.lerariemann.infinity.registry.core.ModFeatures;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.dynamic.Codecs;
@@ -20,6 +19,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+@Deprecated
 public class WonkyTrunkPlacer extends TrunkPlacer {
     public static final MapCodec<WonkyTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec(
             instance -> fillTrunkPlacerFields(instance)
@@ -46,7 +46,7 @@ public class WonkyTrunkPlacer extends TrunkPlacer {
 
     @Override
     protected TrunkPlacerType<?> getType() {
-        return ModFeatures.WONKY_TRUNK.get();
+        return null;
     }
 
     @Override

@@ -2,7 +2,6 @@ package net.lerariemann.infinity.registry.core;
 
 import com.mojang.datafixers.types.Type;
 import dev.architectury.platform.Platform;
-import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
@@ -42,17 +41,9 @@ public class ModBlockEntities {
         BLOCK_ENTITY_TYPES.register("rail_helper_block_entity", () ->
                 BlockEntityType.Builder.create(RailHelper.RHBEntity::new,
                         ModBlocks.RAIL_HELPER.get()).build(type("rail_helper_block_entity")));
-    public static final RegistrySupplier<BlockEntityType<HauntedBlockEntity>> HAUNTED =
-            BLOCK_ENTITY_TYPES.register("haunted", () ->
-                    BlockEntityType.Builder.create(HauntedBlockEntity::new,
-                            ModBlocks.HAUNTED.get()).build(type("haunted")));
 
 
     public static void registerBlockEntities() {
         BLOCK_ENTITY_TYPES.register();
-    }
-
-    public static void registerBlockEntityRenderers() {
-        BlockEntityRendererRegistry.register(HAUNTED.get(), HauntedRenderer::new);
     }
 }

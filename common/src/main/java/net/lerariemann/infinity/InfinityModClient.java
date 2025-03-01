@@ -4,7 +4,6 @@ import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.lerariemann.infinity.item.F4Item;
-import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModPayloads;
@@ -27,13 +26,13 @@ public class InfinityModClient {
 
     public static void initializeClient() {
         ModEntities.registerEntityRenderers();
-        ModBlockEntities.registerBlockEntityRenderers();
         ModScreenHandlers.register();
         KeyMappingRegistry.register(f4ConfigKey);
+        ModPayloads.registerS2CPacketsReceivers();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (f4ConfigKey.wasPressed()) if (client.player != null
                     && client.player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.F4.get())) {
-                ClientPlayNetworking.send(ModPayloads.DEPLOY_F4);
+                ClientPlayNetworking.send(new ModPayloads.F4DeployingPacket());
                 TypedActionResult<ItemStack> result = F4Item.deploy(client.world, client.player, Hand.MAIN_HAND);
                 client.player.setStackInHand(Hand.MAIN_HAND, result.getValue());
             }

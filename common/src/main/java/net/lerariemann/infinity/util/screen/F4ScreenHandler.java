@@ -7,7 +7,6 @@ import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.registry.var.ModScreenHandlers;
 import net.lerariemann.infinity.util.BackportMethods;
-import net.minecraft.client.gui.screen.ingame.BeaconScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -62,7 +61,7 @@ public class F4ScreenHandler extends ScreenHandler {
         playerInventory.setStack(slot, st);
         super.onClosed(player);
         if (player instanceof ClientPlayerEntity) {
-            ClientPlayNetworking.send(new ModPayloads.F4Payload(slot, width.get(), height.get()));
+            ClientPlayNetworking.send(new ModPayloads.F4UpdatingValuesPacket(slot, width.get(), height.get()));
         }
     }
 

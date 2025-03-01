@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.options.InfinityOptions;
-import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FluidState;
@@ -78,10 +77,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     @Inject(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/fluid/FluidState;hasRandomTicks()Z"))
     void inj(WorldChunk chunk, int randomTickSpeed, CallbackInfo ci, @Local BlockState bs, @Local BlockPos blockPos2, @Local FluidState fs) {
         if (infinity$options.isHaunted() && random.nextInt(200) < (int)(Math.floor(getMoonSize() * 4))) {
-            if (bs.isAir()) {
-                setBlockState(blockPos2, ModBlocks.HAUNTED_AIR.get().getDefaultState());
-            }
-            else if (bs.contains(Properties.NOTE)) {
+            if (bs.contains(Properties.NOTE)) {
                 setBlockState(blockPos2, bs.with(Properties.NOTE, random.nextInt(24)));
             }
         }
