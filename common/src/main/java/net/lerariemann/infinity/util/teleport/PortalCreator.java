@@ -145,6 +145,10 @@ public interface PortalCreator {
             return false;
         }
 
+        if (dimName.getPath().equals("random")) {
+            dimName = InfinityMethods.getRandomId(world.random);
+        }
+
         /* Set color and destination. Open status = the world that is being accessed exists already. */
         boolean dimensionExistsAlready = server.getWorldRegistryKeys().contains(RegistryKey.of(RegistryKeys.WORLD, dimName));
         modifyPortalRecursive(world, pos, dimName, dimensionExistsAlready);
@@ -340,7 +344,7 @@ public interface PortalCreator {
 
     static boolean convertReturnPortal(ServerWorld destination, MinecraftServer server, RegistryKey<World> registryKey, TeleportTarget teleportTarget) {
         boolean bl = false;
-        if (InfinityMod.provider.rule("returnPortalsEnabled") &&
+        if (RandomProvider.rule("returnPortalsEnabled") &&
                 (registryKey.getValue().getNamespace().equals(InfinityMod.MOD_ID))) {
             BlockPos pos = BlockPos.ofFloored(teleportTarget.position);
             for (BlockPos pos2: new BlockPos[] {pos, pos.add(1, 0, 0), pos.add(0, 0, 1),
