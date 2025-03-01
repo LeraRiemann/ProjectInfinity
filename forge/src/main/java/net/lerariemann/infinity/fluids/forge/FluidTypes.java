@@ -66,7 +66,7 @@ public class FluidTypes {
 
                 @Override
                 public int getTintColor(@NotNull FluidState state, @NotNull BlockRenderView getter, @NotNull BlockPos pos) {
-                    return Iridescence.color(pos);
+                    return Iridescence.getPosBasedColor(pos);
                 }
             });
         }

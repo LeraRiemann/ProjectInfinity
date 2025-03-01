@@ -1,6 +1,6 @@
 package net.lerariemann.infinity.compat.forge;
 
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.CommonIO;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

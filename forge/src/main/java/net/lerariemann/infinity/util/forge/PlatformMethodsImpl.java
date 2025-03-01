@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.util.forge;
 
-import com.google.common.base.Suppliers;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -8,15 +7,12 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.lerariemann.infinity.item.forge.StarOfLangItemForge;
 import net.lerariemann.infinity.fluids.forge.FluidTypes;
 import net.lerariemann.infinity.item.StarOfLangItem;
-import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.forge.IridescenceLiquidBlockForge;
 import net.lerariemann.infinity.fluids.forge.ModFluidsForge;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.*;
-import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -34,13 +30,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.loading.FMLConfig;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * See {@link PlatformMethods} for usages.
@@ -123,9 +116,5 @@ public class PlatformMethodsImpl {
 
     public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
         return StarOfLangItemForge::new;
-    }
-
-    public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i) {
-        return new Item.Settings().component(componentTypeSupplier, i);
     }
 }

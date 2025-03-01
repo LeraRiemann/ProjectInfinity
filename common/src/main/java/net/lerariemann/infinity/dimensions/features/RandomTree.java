@@ -96,13 +96,13 @@ public class RandomTree extends RandomisedFeature {
                 res.put("branch_start_offset_from_top", branch_start_offset_from_top);
                 addRandomIntProvider(res, "branch_end_offset_from_top", -16, 15);
             }
-            case "infinity:wonky" -> {
-                float a = random.nextFloat();
-                float b = random.nextFloat();
-                res.putFloat("weight_up", Math.max(a, b));
-                res.putFloat("weight_down", Math.min(a, b));
-                res.putFloat("weight_side", random.nextFloat());
-            }
+//            case "infinity:wonky" -> {
+//                float a = random.nextFloat();
+//                float b = random.nextFloat();
+//                res.putFloat("weight_up", Math.max(a, b));
+//                res.putFloat("weight_down", Math.min(a, b));
+//                res.putFloat("weight_side", random.nextFloat());
+//            }
         }
         return res;
     }

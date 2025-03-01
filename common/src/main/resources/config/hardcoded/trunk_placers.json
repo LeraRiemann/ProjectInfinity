@@ -32,10 +32,6 @@
     {
       "key": "cherry_trunk_placer",
       "weight": 0.5
-    },
-    {
-      "key": "infinity:wonky",
-      "weight": 0.5
     }
   ]
 }

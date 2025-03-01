@@ -12,6 +12,7 @@ import net.lerariemann.infinity.fluids.forge.ModFluidsForge;
 import net.lerariemann.infinity.forge.client.InfinityModForgeClient;
 import net.lerariemann.infinity.registry.core.*;
 import net.lerariemann.infinity.registry.var.ModStats;
+import net.lerariemann.infinity.registry.var.ModTags;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraftforge.api.distmarker.Dist;
@@ -48,7 +49,7 @@ public final class InfinityModForge {
         FluidTypes.registerFluidTypes(eventBus);
         ModFluidsForge.registerModFluids();
         ModEffectsForge.register(eventBus);
-        ModItems.IRIDESCENT_TAG = ItemTags.create(InfinityMethods.getId("iridescent"));
+        ModTags.IRIDESCENT_ITEMS = ItemTags.create(InfinityMethods.getId("iridescent"));
     }
 
     @SubscribeEvent
@@ -62,6 +63,7 @@ public final class InfinityModForge {
         ModStatusEffects.IRIDESCENT_EFFECT = ModEffectsForge.IRIDESCENT_EFFECT.getHolder().get();
         ModStatusEffects.IRIDESCENT_SETUP = ModEffectsForge.IRIDESCENT_SETUP.getHolder().get();
         ModStatusEffects.IRIDESCENT_COOLDOWN = ModEffectsForge.IRIDESCENT_COOLDOWN.getHolder().get();
+        ModStatusEffects.AFTERGLOW = ModEffectsForge.AFTERGLOW.getHolder().get();
         ModBlocks.registerFlammableBlocks();
         ModItemFunctions.registerDispenserBehaviour();
         if (Platform.isModLoaded("create"))

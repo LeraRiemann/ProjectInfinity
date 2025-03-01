@@ -3,6 +3,7 @@ package net.lerariemann.infinity.fluids.forge;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.iridescence.IridescentCooldownEffect;
 import net.lerariemann.infinity.iridescence.IridescentEffect;
+import net.lerariemann.infinity.registry.core.ModStatusEffects;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.registry.RegistryKeys;
@@ -16,6 +17,7 @@ public class ModEffectsForge {
     public static RegistryObject<IridescentEffect> IRIDESCENT_EFFECT;
     public static RegistryObject<IridescentEffect.Setup> IRIDESCENT_SETUP;
     public static RegistryObject<IridescentCooldownEffect> IRIDESCENT_COOLDOWN;
+    public static RegistryObject<StatusEffect> AFTERGLOW;
 
 
     public static void register(IEventBus eventBus) {
@@ -25,6 +27,8 @@ public class ModEffectsForge {
                 () -> new IridescentEffect.Setup(StatusEffectCategory.NEUTRAL, 0xFF00FF));
         IRIDESCENT_COOLDOWN = EFFECTS.register("iridescent_cooldown",
                 () -> new IridescentCooldownEffect(StatusEffectCategory.NEUTRAL, 0x884488));
+        AFTERGLOW = EFFECTS.register("afterglow",
+                ModStatusEffects::getAfterglowInstanceForReg);
         LogManager.getLogger().info("Registered effects!!");
         EFFECTS.register(eventBus);
     }
