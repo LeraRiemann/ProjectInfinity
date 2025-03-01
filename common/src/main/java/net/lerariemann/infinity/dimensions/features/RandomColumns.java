@@ -16,8 +16,8 @@ public class RandomColumns extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        addRandomIntProvider(config, "reach", 0, 3);
-        addRandomIntProvider(config, "height", 1, 15);
+        addRandomIntProvider(config, "reach", 0, 2);
+        addRandomIntProvider(config, "height", 1, 14);
         addRandomBlockProvider(config, "block_provider", "full_blocks_worldgen");
         return feature(config);
     }

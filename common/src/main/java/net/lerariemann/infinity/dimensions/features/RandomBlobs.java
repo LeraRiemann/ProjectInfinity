@@ -20,7 +20,7 @@ public class RandomBlobs extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        addRandomIntProvider(config, "radius", 0, 12);
+        addRandomIntProvider(config, "radius", 0, 11);
         config.put("state", block);
         config.put("target", daddy.default_block);
         return feature(config);

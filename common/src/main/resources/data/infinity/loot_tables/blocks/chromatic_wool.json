@@ -9,11 +9,15 @@
           "name": "infinity:chromatic_wool",
           "functions": [
             {
-              "function": "minecraft:copy_components",
-              "include": [
-                "infinity:color"
-              ],
-              "source": "block_entity"
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "infinity:color",
+                  "target": "infinity:color",
+                  "op": "replace"
+                }
+              ]
             }
           ]
         }

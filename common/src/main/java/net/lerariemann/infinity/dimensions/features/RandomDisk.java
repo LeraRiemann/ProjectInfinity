@@ -28,7 +28,7 @@ public class RandomDisk extends RandomisedFeature {
         NbtCompound config = new NbtCompound();
         NbtCompound blockProvider = PROVIDER.randomBlockProvider(random, "full_blocks_worldgen");
         config.putInt("half_height", random.nextInt(5));
-        addRandomIntProvider(config, "radius", 0, 9);
+        addRandomIntProvider(config, "radius", 0, 8);
         NbtCompound targets = new NbtCompound();
         boolean awt = PROVIDER.roll(random, "ores_spawn_everywhere");
         targets.putString("type", awt ? "true" : "matching_blocks");

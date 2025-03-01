@@ -12,7 +12,7 @@ public class RandomFlowerPatch extends RandomisedFeature {
     }
 
     void placement() {
-        int a = random.nextInt(1, 9);
+        int a = random.nextInt(1, 8);
         if (a>1) addCount(a);
         addRarityFilter(1 + random.nextInt(32));
         addInSquare();

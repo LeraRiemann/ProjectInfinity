@@ -45,7 +45,7 @@ public class RandomTree extends RandomisedFeature {
         NbtCompound res = new NbtCompound();
         res.putString("type", "mangrove_root_placer");
         addRandomBlockProvider(res, "root_provider", "full_blocks");
-        res.put("trunk_offset_y", NbtUtils.randomIntProvider(random, 10, true));
+        res.put("trunk_offset_y", NbtUtils.randomIntProvider(random, 9, true));
         if (random.nextBoolean()) {
             NbtCompound above = new NbtCompound();
             addRandomBlockProvider(above, "above_root_provider", "blocks_features");
@@ -82,8 +82,8 @@ public class RandomTree extends RandomisedFeature {
                 res.putString("can_grow_through", "#" + PROVIDER.randomName(random, "tags"));
             }
             case "cherry_trunk_placer" -> {
-                addRandomIntProvider(res, "branch_count", 1, 3);
-                addRandomIntProvider(res, "branch_horizontal_length", 2, 16);
+                addRandomIntProvider(res, "branch_count", 1, 2);
+                addRandomIntProvider(res, "branch_horizontal_length", 2, 15);
                 NbtCompound branch_start_offset_from_top = new NbtCompound();
                 int a = random.nextInt(-16, 0);
                 int b = random.nextInt(-16, 0);
@@ -94,7 +94,7 @@ public class RandomTree extends RandomisedFeature {
                 branch_start_offset_from_top.putInt("min_inclusive", Math.min(a, b));
                 branch_start_offset_from_top.putInt("max_inclusive", Math.max(a, b));
                 res.put("branch_start_offset_from_top", branch_start_offset_from_top);
-                addRandomIntProvider(res, "branch_end_offset_from_top", -16, 16);
+                addRandomIntProvider(res, "branch_end_offset_from_top", -16, 15);
             }
             case "infinity:wonky" -> {
                 float a = random.nextFloat();
@@ -119,11 +119,11 @@ public class RandomTree extends RandomisedFeature {
             case "spruce_foliage_placer" -> res.put("trunk_height", NbtUtils.randomIntProvider(random, ishuge ? 24 : 6, true));
             case "mega_pine_foliage_placer" -> res.put("crown_height", NbtUtils.randomIntProvider(random, ishuge ? 24 : 6, true));
             case "random_spread_foliage_placer" -> {
-                addRandomIntProvider(res, "foliage_height", 1, ishuge ? 512 : 16);
+                addRandomIntProvider(res, "foliage_height", 1, ishuge ? 512 : 15);
                 res.putInt("leaf_placement_attempts", random.nextInt(256));
             }
             case "cherry_foliage_placer" -> {
-                res.put("height", NbtUtils.randomIntProvider(random, 4, 16, true));
+                res.put("height", NbtUtils.randomIntProvider(random, 4, 15, true));
                 res.putFloat("wide_bottom_layer_hole_chance", random.nextFloat());
                 res.putFloat("corner_hole_chance", random.nextFloat());
                 res.putFloat("hanging_leaves_chance", random.nextFloat());

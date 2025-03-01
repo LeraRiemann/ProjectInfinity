@@ -9,11 +9,18 @@
           "name": "infinity:chromatic_carpet",
           "functions": [
             {
-              "function": "minecraft:copy_components",
+              "function": "minecraft:copy_nbt",
               "include": [
                 "infinity:color"
               ],
-              "source": "block_entity"
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "infinity:color",
+                  "target": "infinity:color",
+                  "op": "replace"
+                }
+              ]
             }
           ]
         }

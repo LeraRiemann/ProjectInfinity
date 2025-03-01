@@ -81,7 +81,7 @@ public interface NbtUtils {
             }
             case 1, 2 -> {
                 res.putString("type", i==1 ? "uniform" : "biased_to_bottom");
-                addBounds(res, random, lbound, bound);
+                res.put("value", genBounds(lbound, bound));
                 return res;
             }
             case 4 -> {
@@ -93,7 +93,6 @@ public interface NbtUtils {
             }
             case 3 -> {
                 res.putString("type", "clamped_normal");
-                addBounds(res, random, lbound, bound);
                 NbtCompound value = genBounds(lbound, bound);
                 value.putDouble("mean", lbound + random.nextDouble()*(bound-lbound));
                 value.putDouble("deviation", random.nextExponential());
@@ -171,32 +170,34 @@ public interface NbtUtils {
         return res;
     }
 
-    static NbtCompound randomFloatProvider(Random random, float lbound, float bound) {
-        int i = random.nextInt(3);
-        String[] types = new String[]{"uniform", "clamped_normal", "trapezoid"};
-        NbtCompound res = new NbtCompound();
-        res.putString("type", types[i]);
-        float a = random.nextFloat(lbound, bound);
-        float b = random.nextFloat(lbound, bound);
-        float min = Math.min(a, b);
-        float max = Math.max(a, b);
-        switch (i) {
-            case 0 -> {
-                res.putFloat("max_exclusive", max);
-                res.putFloat("min_inclusive", min);
+        static NbtCompound randomFloatProvider(Random random, float lbound, float bound) {
+            int i = random.nextInt(3);
+            String[] types = new String[]{"uniform", "clamped_normal", "trapezoid"};
+            NbtCompound res = new NbtCompound();
+            res.putString("type", types[i]);
+            NbtCompound value = new NbtCompound();
+            float a = random.nextFloat(lbound, bound);
+            float b = random.nextFloat(lbound, bound);
+            float min = Math.min(a, b);
+            float max = Math.max(a, b);
+            switch (i) {
+                case 0 -> {
+                    value.putFloat("max_exclusive", max);
+                    value.putFloat("min_inclusive", min);
+                }
+                case 1 -> {
+                    value.putFloat("max", max);
+                    value.putFloat("min", min);
+                    value.putFloat("mean", random.nextFloat(min, max));
+                    value.putFloat("deviation", random.nextFloat(max - min));
+                }
+                case 2 -> {
+                    value.putFloat("max", max);
+                    value.putFloat("min", min);
+                    value.putFloat("plateau", random.nextFloat(max - min));
+                }
             }
-            case 1 -> {
-                res.putFloat("max", max);
-                res.putFloat("min", min);
-                res.putFloat("mean", random.nextFloat(min, max));
-                res.putFloat("deviation", random.nextFloat(max - min));
-            }
-            case 2 -> {
-                res.putFloat("max", max);
-                res.putFloat("min", min);
-                res.putFloat("plateau", random.nextFloat(max - min));
-            }
+            res.put("value", value);
+            return res;
         }
-        return res;
-    }
 }
