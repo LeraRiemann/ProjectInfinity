@@ -33,10 +33,10 @@ public class ModStatusEffects {
     public static StatusEffect getAfterglowInstanceForReg() {
         return new StatusEffect(StatusEffectCategory.BENEFICIAL, 0xAA77DD)
                 .addAttributeModifier(EntityAttributes.GENERIC_ATTACK_SPEED,
-                        String.valueOf(InfinityMethods.getId("effect.afterglow").hashCode()), 0.1F,
+                        "AF8B6E3F-3328-4C0A-AA36-5BA2BB9DBEF4", 0.1F,
                         EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
                 .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
-                        String.valueOf(InfinityMethods.getId("effect.afterglow").hashCode()), 0.2F,
+                        "AF8B6E3F-3328-4C0A-AA36-5BA2BB9DBEF4", 0.2F,
                         EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
     }
 

@@ -107,10 +107,6 @@ dependencies {
     modCompileOnly("dev.emi:emi-fabric:$emi_version+$minecraft_version:api")
     modLocalRuntime("dev.emi:emi-fabric:$emi_version+$minecraft_version")
 
-    // Devenv helpers
-    modImplementation "maven.modrinth:uwrad:1.1.0"
-    modImplementation "maven.modrinth:dev-tools-unlocker:1.0.0"
-
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

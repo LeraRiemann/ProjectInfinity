@@ -1,13 +1,11 @@
 package net.lerariemann.infinity.registry.core;
 
-import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.level.entity.EntityModelLayerRegistry;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.impl.object.builder.FabricEntityType;
 import net.lerariemann.infinity.entity.client.*;
 import net.lerariemann.infinity.entity.custom.*;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -24,7 +22,6 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.ServerWorldAccess;
 
-import static net.lerariemann.infinity.InfinityMod.LOGGER;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 
 public class ModEntities {
@@ -83,10 +80,7 @@ public class ModEntities {
     }
 
     public static String type(String id) {
-        if (!Platform.isFabric()) {
-            return "infinity:"+id;
-        }
-        else return null;
+        return "infinity:"+id;
     }
 
     public static void registerAttributes() {

@@ -40,8 +40,6 @@
     "mavity.PersistentProjectileEntityMixin",
     "mavity.SeveralEntitiesMixin",
     "mavity.ThrownEntityMixin",
-    "mobs.spawnrestrictions.EndermiteEntityMixin",
-    "mobs.spawnrestrictions.HoglinEntityMixin",
     "iridescence.StatusEffectUtilMixin",
     "mobs.CreeperEntityMixin",
     "mobs.LivingEntityMixin",

@@ -21,7 +21,7 @@ public abstract class GlassBottleItemMixin {
     @Shadow protected abstract ItemStack fill(ItemStack stack, PlayerEntity player, ItemStack outputStack);
 
     @Inject(method="use", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/World;emitGameEvent(Lnet/minecraft/entity/Entity;Lnet/minecraft/registry/entry/RegistryEntry;Lnet/minecraft/util/math/BlockPos;)V",
+            target = "Lnet/minecraft/world/World;emitGameEvent(Lnet/minecraft/entity/Entity;Lnet/minecraft/world/event/GameEvent;Lnet/minecraft/util/math/BlockPos;)V",
             shift = At.Shift.AFTER), cancellable = true)
     void inj(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir, @Local ItemStack itemStack, @Local BlockPos pos) {
         if (Iridescence.isIridescence(world, pos))

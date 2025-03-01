@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.mixin.SoundListMixin;
 import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.CommonIO;
@@ -33,11 +32,11 @@ import java.util.stream.Stream;
 
 /**
  * Pipeline for generating custom sound events and jukebox song definitions for every music track in the game.
- * TODO soundpacks
  */
+@Deprecated
 public record SoundScanner(Map<Identifier, Resource> soundIds) {
     /** Holds a map which allows to get the list of all sound IDs in existence and .ogg data for each.
-     * Seeded by {@link SoundListMixin} on client launch. */
+     * Seeded by SoundListMixin on client launch. */
     public static SoundScanner instance;
     public static boolean isPreloaded() {
         return instance != null;
