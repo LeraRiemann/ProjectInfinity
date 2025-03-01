@@ -14,12 +14,9 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
-import net.minecraft.util.math.random.CheckedRandom;
 import org.lwjgl.glfw.GLFW;
 
 public class InfinityModClient {
-    public final static DoublePerlinNoiseSampler sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -3, 1.0, 1.0, 1.0, 0.0);
     public static KeyBinding f4ConfigKey = new KeyBinding("key.infinity.f4",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_F4,

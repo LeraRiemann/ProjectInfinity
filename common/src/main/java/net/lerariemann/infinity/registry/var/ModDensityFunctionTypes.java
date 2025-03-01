@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
-import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
@@ -305,8 +305,8 @@ public class ModDensityFunctionTypes {
     }
 
     public static void registerFunctions() {
-        sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, Iridescence.genOctaves(8));
-        sampler2 = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -6, Iridescence.genOctaves(8));
+        sampler = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, InfinityMethods.genOctaves(8));
+        sampler2 = DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -6, InfinityMethods.genOctaves(8));
         for (NonbinaryOperation.Type enum_ : NonbinaryOperation.Type.values()) {
             register(enum_.name, enum_.codecHolder);
         }

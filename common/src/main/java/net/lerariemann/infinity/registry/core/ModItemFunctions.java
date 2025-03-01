@@ -117,6 +117,7 @@ public class ModItemFunctions {
         itemEntity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
     }
 
+    @Deprecated
     @Environment(EnvType.CLIENT)
     public static float iridPredicate(@Nullable ItemStack stack, ClientWorld world, @Nullable LivingEntity entity, int seed) {
         if (entity == null) return 0;

@@ -22,19 +22,32 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
+import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
 import java.nio.charset.StandardCharsets;
-
-import static net.lerariemann.infinity.InfinityModClient.sampler;
+import java.util.Arrays;
 
 /** Common mod methods that work identically on Fabric and NeoForge.
  * @see PlatformMethods */
 public interface InfinityMethods {
     String ofRandomDim = "infinity:random";
+    DoublePerlinNoiseSampler sampler =
+            DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, genOctaves(2));
+
+    static double[] genOctaves(int octaves){
+        double[] a = new double[octaves];
+        Arrays.fill(a, 1);
+        return a;
+    }
+    static double sample(BlockPos pos) {
+        return sampler.sample(pos.getX(), pos.getY(), pos.getZ());
+    }
 
     /**
      * Converts a string to an identifier in the Infinite Dimensions namespace.
@@ -75,10 +88,6 @@ public interface InfinityMethods {
 
     static void sendS2CPayload(ServerPlayerEntity entity, CustomPayload payload) {
         ServerPlayNetworking.send(entity, payload);
-    }
-
-    static double sample(int x, int y, int z) {
-        return sampler.sample(x, y, z);
     }
 
     static int properMod(int a, int b) {
@@ -137,20 +146,15 @@ public interface InfinityMethods {
         return i;
     }
 
-    /**
-     * Converts a coordinate value to a "random" color.
-     */
-    static int posToColor(BlockPos pos) {
-        double r = sample(pos.getX(), pos.getY() - 10000, pos.getZ());
-        double g = sample(pos.getX(), pos.getY(), pos.getZ());
-        double b = sample(pos.getX(), pos.getY() + 10000, pos.getZ());
-        return (int)(256 * ((r + 1)/2)) + 256*((int)(256 * ((g + 1)/2)) + 256*(int)(256 * ((b + 1)/2)));
+    private static float bookBoxSample(BlockPos pos, int offset) {
+        return MathHelper.clamp(0.5f * (1f + (float)sampler.sample(4*pos.getX(), 4*(pos.getY() + offset), 4*pos.getZ())), 0f, 1f);
     }
-
-
     static int getBookBoxColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
         if (pos != null) {
-            return posToColor(pos);
+            float r = bookBoxSample(pos, -1000);
+            float g = bookBoxSample(pos, 0);
+            float b = bookBoxSample(pos, 1000);
+            return MathHelper.packRgb(r, g, b);
         }
         return 16777215;
     }

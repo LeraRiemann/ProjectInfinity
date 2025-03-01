@@ -38,8 +38,6 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
-import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.world.*;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +46,6 @@ import java.awt.Color;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -57,18 +54,6 @@ public interface Iridescence {
     Identifier TEXTURE = InfinityMethods.getId("block/iridescence");
     Identifier FLOWING_TEXTURE = InfinityMethods.getId("block/iridescence");
     Identifier OVERLAY_TEXTURE = InfinityMethods.getId("block/iridescence_overlay");
-    DoublePerlinNoiseSampler sampler =
-            DoublePerlinNoiseSampler.create(new CheckedRandom(0L), -5, genOctaves(2));
-
-    static double[] genOctaves(int octaves){
-        double[] a = new double[octaves];
-        Arrays.fill(a, 1);
-        return a;
-    }
-
-    static double sample(BlockPos pos) {
-        return sampler.sample(pos.getX(), pos.getY(), pos.getZ());
-    }
 
     static boolean isInfinite(World world) {
         return switch (world.getRegistryKey().getValue().toString()) {
@@ -91,7 +76,7 @@ public interface Iridescence {
     }
 
     static int getPosBasedColor(BlockPos pos) {
-        return Color.HSBtoRGB((float)sample(pos), 1.0F, 1.0F) & 0xFFFFFF;
+        return Color.HSBtoRGB((float)InfinityMethods.sample(pos), 1.0F, 1.0F) & 0xFFFFFF;
     }
     //todo: figure out how minecraft offsets animations to sync this with irid items' textures' animation loops
     static int getTimeBasedColor() {
