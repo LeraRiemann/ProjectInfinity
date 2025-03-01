@@ -7,6 +7,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.block.BlockState;
@@ -154,23 +155,17 @@ public interface InfinityMethods {
     }
 
     static int getOverlayColorFromComponents(ItemStack stack, int layer) {
-        int color = 0xFFFFFF;
-        if (stack.getNbt() != null) {
+        if (stack.getNbt() != null && layer == 1) {
             if (stack.getItem().equals(ModItems.TRANSFINITE_KEY.get()))
-                color = stack.getNbt().getInt("key_color");
+                return stack.getNbt().getInt("key_color");
             else if (stack.getItem().equals(ModItems.BIOME_BOTTLE_ITEM.get())) {
-                color = stack.getNbt().getCompound("BlockEntityTag").getInt("Color");
+                return stack.getNbt().getCompound("BlockEntityTag").getInt("Color");
             }
-            if (layer == 1) {
-                return color;
+            else if (stack.getItem().equals(ModItems.F4.get())) {
+                return stack.getNbt().getInt(ModComponentTypes.KEY_COLOR);
             }
         }
         return 0xFFFFFF;
-    }
-
-    static int getDiscColorFromComponents(ItemStack stack, int layer) {
-        int color = getOverlayColorFromComponents(stack, layer);
-        return layer == 0 ? color : 0xFFFFFF ^ color;
     }
 
     static int getPortalItemColor(ItemStack stack, int layer) {

@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.util;
 
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
-import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +57,7 @@ public class BackportMethods {
     }
 
     public static @Nullable String getDimensionComponents(ItemStack stack) {
-        if (stack.getNbt() != null) {
+        if (stack.getNbt() != null && stack.getNbt().contains(ModComponentTypes.DESTINATION)) {
             return stack.getNbt().getString(ModComponentTypes.DESTINATION);
         }
         return null;

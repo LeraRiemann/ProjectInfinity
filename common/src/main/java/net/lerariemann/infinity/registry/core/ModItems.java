@@ -2,14 +2,12 @@ package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.item.*;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKey;
@@ -107,9 +105,6 @@ public class ModItems {
     public static final RegistrySupplier<F4Item> F4 =
             registerItemAfter("f4", ItemGroups.TOOLS, Items.WRITABLE_BOOK, F4Item::new,
                     new Item.Settings().rarity(Rarity.UNCOMMON));
-    public static final RegistrySupplier<Item> DISC =
-            registerItemAfter("disc", ItemGroups.TOOLS, Items.MUSIC_DISC_PIGSTEP, Item::new,
-                    new Item.Settings().rarity(Rarity.RARE));
     public static final RegistrySupplier<Item> IRIDESCENT_POTION =
             registerItemAfter("iridescent_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, IridescentPotionItem::new,
                     new Item.Settings());
