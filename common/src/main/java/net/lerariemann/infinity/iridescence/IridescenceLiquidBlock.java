@@ -25,7 +25,7 @@ public class IridescenceLiquidBlock extends ArchitecturyLiquidBlock {
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         super.onEntityCollision(state, world, pos, entity);
         if (world.getFluidState(pos).getLevel() > 3 && world instanceof ServerWorld w) switch (entity) {
-            case PlayerEntity player -> Iridescence.tryBeginJourney(player, 4, false);
+            case PlayerEntity player -> Iridescence.tryBeginJourney(player, 0, false);
             case MobEntity ent -> Iridescence.tryApplyEffect(ent);
             case ItemEntity item -> {
                 if (!Iridescence.isIridescentItem(item.getStack()) && item.getOwner() instanceof LivingEntity le &&
