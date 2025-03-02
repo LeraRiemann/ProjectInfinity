@@ -4,7 +4,6 @@ import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.lerariemann.infinity.item.F4Item;
-import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.registry.var.ModPayloads;
@@ -25,7 +24,6 @@ public class InfinityModClient {
     public static void initializeClient() {
         ModPayloads.registerPayloadsClient();
         ModEntities.registerEntityRenderers();
-        ModBlockEntities.registerBlockEntityRenderers();
         ModScreenHandlers.register();
         KeyMappingRegistry.register(f4ConfigKey);
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

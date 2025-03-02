@@ -50,8 +50,6 @@ public class ModBlocks {
             new IridescentKelpBlock.Plant(AbstractBlock.Settings.copy(Blocks.KELP).mapColor(MapColor.MAGENTA)));
     public static final RegistrySupplier<Block> NOTES_BLOCK = BLOCKS.register("notes_block", () ->
             new NotesBlock(AbstractBlock.Settings.copy(Blocks.NOTE_BLOCK).ticksRandomly()));
-    public static final RegistrySupplier<Block> HAUNTED = BLOCKS.register("haunted", () ->
-            new SuperHauntedBlock(AbstractBlock.Settings.copy(Blocks.GLASS)));
     public static final RegistrySupplier<Block> HAUNTED_AIR = BLOCKS.register("haunted_air", () ->
             new HauntedBlock(Blocks.AIR));
 
