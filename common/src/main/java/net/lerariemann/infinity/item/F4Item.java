@@ -1,18 +1,14 @@
 package net.lerariemann.infinity.item;
 
-import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.ClientMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.screen.F4Screen;
 import net.lerariemann.infinity.util.teleport.InfinityPortal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -272,7 +268,7 @@ public class F4Item extends Item implements PortalDataHolder {
             world.setBlockState(bp,  Blocks.AIR.getDefaultState(), 3, 0);
             obsidian++;
         }
-        for (int i = 0; i <= portal.width; i++) for (int j = -1; j <= portal.height; j++)
+        for (int i = 0; i < portal.width; i++) for (int j = 0; j < portal.height; j++)
             world.setBlockState(portal.lowerLeft.offset(axis, i).up(j), Blocks.AIR.getDefaultState(), 3, 0);
         stack.applyComponentsFrom(ComponentMap.builder()
                 .add(ModComponentTypes.CHARGE.get(), getCharge(stack) + obsidian).build());
