@@ -106,10 +106,10 @@ public class TimeBombBlock extends Block {
                         world.setBlockState(pos, state.with(ACTIVE, true));
                         world.playSound(null, pos, ModSounds.IVORY_MUSIC_CHALLENGER_EVENT, SoundCategory.RECORDS, 1f, 1f);
                     } //activate
-                    world.playSound(null, pos, SoundEvents.BLOCK_VAULT_REJECT_REWARDED_PLAYER, SoundCategory.BLOCKS, 1f, 1f);
                     return ActionResult.SUCCESS;
                 }
                 else if (world instanceof ServerWorld) {
+                    world.playSound(null, pos, SoundEvents.BLOCK_VAULT_REJECT_REWARDED_PLAYER, SoundCategory.BLOCKS, 1f, 1f);
                     player.sendMessage(Text.translatable("error.infinity.timebomb.fail"));
                 }
             }
