@@ -3,7 +3,6 @@ package net.lerariemann.infinity.util;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import dev.architectury.platform.Platform;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.TintableBlockEntity;
@@ -12,7 +11,6 @@ import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -35,6 +33,7 @@ import java.util.Arrays;
 
 /** Common mod methods that work identically on Fabric and NeoForge.
  * @see PlatformMethods */
+@SuppressWarnings("unused")
 public interface InfinityMethods {
     String ofRandomDim = "infinity:random";
     DoublePerlinNoiseSampler sampler =
@@ -84,10 +83,6 @@ public interface InfinityMethods {
     static boolean isFabricApiLoaded(String modID) {
         if (Platform.isFabric()) return Platform.isModLoaded(modID.replace("_", "-"));
         else return Platform.isModLoaded(modID.replace("-", "_"));
-    }
-
-    static void sendS2CPayload(ServerPlayerEntity entity, CustomPayload payload) {
-        ServerPlayNetworking.send(entity, payload);
     }
 
     static int properMod(int a, int b) {

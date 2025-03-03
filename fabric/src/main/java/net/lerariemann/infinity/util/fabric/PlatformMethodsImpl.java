@@ -2,22 +2,22 @@ package net.lerariemann.infinity.util.fabric;
 
 import dev.architectury.registry.registries.RegistrySupplier;
 import me.basiqueevangelist.dynreg.util.RegistryUtils;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.item.StarOfLangItem;
-import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
 import net.lerariemann.infinity.iridescence.IridescenceLiquidBlock;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.*;
 import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
@@ -25,11 +25,13 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
 import java.nio.file.Path;
@@ -41,9 +43,15 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings("unused")
 public class PlatformMethodsImpl {
-
     public static PacketByteBuf createPacketByteBufs() {
         return PacketByteBufs.create();
+    }
+
+    public static void sendS2CPayload(ServerPlayerEntity entity, CustomPayload payload) {
+        ServerPlayNetworking.send(entity, payload);
+    }
+    public static void sendC2SPayload(CustomPayload payload) {
+        ClientPlayNetworking.send(payload);
     }
 
     public static void onWorldLoad(Object mixin, ServerWorld world) {

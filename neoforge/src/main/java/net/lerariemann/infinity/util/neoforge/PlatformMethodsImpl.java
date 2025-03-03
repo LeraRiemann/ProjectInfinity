@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.util.neoforge;
 
-import com.google.common.base.Suppliers;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -8,13 +7,11 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.lerariemann.infinity.item.neoforge.StarOfLangItemNeoforge;
 import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
 import net.lerariemann.infinity.item.StarOfLangItem;
-import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.neoforge.IridescenceLiquidBlockNeoforge;
 import net.lerariemann.infinity.fluids.neoforge.ModFluidsNeoforge;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.*;
 import net.minecraft.component.ComponentType;
 import net.minecraft.entity.Entity;
@@ -23,6 +20,7 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.SimpleRegistry;
@@ -30,11 +28,13 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.nio.file.Path;
 import java.util.function.Function;
@@ -48,6 +48,13 @@ public class PlatformMethodsImpl {
 
     public static PacketByteBuf createPacketByteBufs() {
         return new PacketByteBuf(Unpooled.buffer());
+    }
+
+    public static void sendS2CPayload(ServerPlayerEntity entity, CustomPayload payload) {
+        PacketDistributor.sendToPlayer(entity, payload);
+    }
+    public static void sendC2SPayload(CustomPayload payload) {
+        PacketDistributor.sendToServer(payload);
     }
 
     public static void onWorldLoad(Object mixin, ServerWorld world) {

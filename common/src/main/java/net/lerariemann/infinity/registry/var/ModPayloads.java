@@ -1,8 +1,7 @@
 package net.lerariemann.infinity.registry.var;
 
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
@@ -10,7 +9,7 @@ import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.item.F4Item;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
-import net.lerariemann.infinity.util.config.SoundScanner;
+import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -34,10 +33,6 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public class ModPayloads {
-    public static MinecraftClient client(Object context) {
-        ClientPlayNetworking.Context clientContext = (ClientPlayNetworking.Context) context;
-        return clientContext.client();
-    }
     public static MinecraftServer server(Object context) {
         ServerPlayNetworking.Context serverContext = (ServerPlayNetworking.Context) context;
         return serverContext.server();
@@ -55,7 +50,7 @@ public class ModPayloads {
         }
     }
     public static void sendWorldAddPayload(ServerPlayerEntity player, Identifier id, NbtCompound data) {
-        InfinityMethods.sendS2CPayload(player, new WorldAddS2CPayload(id, data));
+        PlatformMethods.sendS2CPayload(player, new WorldAddS2CPayload(id, data));
     }
     public static void receiveWorldAddPayload(MinecraftClient client, Identifier id, NbtCompound data) {
         client.execute(() ->
@@ -75,7 +70,7 @@ public class ModPayloads {
         }
     }
     public static void sendBiomeAddPayload(ServerPlayerEntity player, Identifier id, NbtCompound data) {
-        InfinityMethods.sendS2CPayload(player, new BiomeAddS2CPayload(id, data));
+        PlatformMethods.sendS2CPayload(player, new BiomeAddS2CPayload(id, data));
     }
     public static void receiveBiomeAddPayload(MinecraftClient client, Identifier id, NbtCompound data) {
         client.execute(() ->
@@ -101,7 +96,7 @@ public class ModPayloads {
         sendShaderPayload(player, world, Iridescence.shouldApplyShader(player));
     }
     public static void sendShaderPayload(ServerPlayerEntity player, ServerWorld world, boolean iridescence) {
-        InfinityMethods.sendS2CPayload(player, new ShaderS2CPayload(
+        PlatformMethods.sendS2CPayload(player, new ShaderS2CPayload(
                 world == null ? new NbtCompound() : InfinityOptions.access(world).data(),
                 iridescence));
     }
@@ -122,7 +117,7 @@ public class ModPayloads {
         }
     }
     public static void sendStarsPayload(ServerPlayerEntity player) {
-        InfinityMethods.sendS2CPayload(player, StarsS2CPayload.INSTANCE);
+        PlatformMethods.sendS2CPayload(player, StarsS2CPayload.INSTANCE);
     }
     public static void receiveStarsPayload(MinecraftClient client) {
         ((WorldRendererAccess)(client.worldRenderer)).infinity$setNeedsStars(true);
@@ -141,7 +136,7 @@ public class ModPayloads {
         }
     }
     public static void sendF4UpdatePayload(int slot, int width, int height) {
-        ClientPlayNetworking.send(new F4UpdateC2SPayload(slot, width, height));
+        PlatformMethods.sendC2SPayload(new F4UpdateC2SPayload(slot, width, height));
     }
     public static void receiveF4UpdatePayload(ServerPlayerEntity player, int slot, int width, int height) {
         ItemStack st = player.getInventory().getStack(slot);
@@ -165,7 +160,7 @@ public class ModPayloads {
         }
     }
     public static void sendF4DeployPayload() {
-        ClientPlayNetworking.send(F4DeployC2SPayload.INSTANCE);
+        PlatformMethods.sendC2SPayload(F4DeployC2SPayload.INSTANCE);
     }
     public static void receiveF4DeployPayload(ServerPlayerEntity player) {
         ItemStack st = player.getStackInHand(Hand.MAIN_HAND);
@@ -186,7 +181,7 @@ public class ModPayloads {
         }
     }
     public static void sendSoundPackPayload(ServerPlayerEntity player, NbtCompound data) {
-        InfinityMethods.sendS2CPayload(player, new SoundPackS2CPayload(data));
+        PlatformMethods.sendS2CPayload(player, new SoundPackS2CPayload(data));
     }
 
     public record JukeboxesC2SPayload(NbtCompound data) implements CustomPayload {
@@ -199,37 +194,15 @@ public class ModPayloads {
         }
     }
     public static void sendJukeboxesPayload(NbtCompound data) {
-        ClientPlayNetworking.send(new JukeboxesC2SPayload(data));
+        PlatformMethods.sendC2SPayload(new JukeboxesC2SPayload(data));
     }
 
+    @ExpectPlatform
     public static void registerPayloadsServer() {
-        PayloadTypeRegistry.playS2C().register(WorldAddS2CPayload.ID, WorldAddS2CPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(BiomeAddS2CPayload.ID, BiomeAddS2CPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(ShaderS2CPayload.ID, ShaderS2CPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(StarsS2CPayload.ID, StarsS2CPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(SoundPackS2CPayload.ID, SoundPackS2CPayload.CODEC);
-
-        PayloadTypeRegistry.playC2S().register(F4UpdateC2SPayload.ID, F4UpdateC2SPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(F4DeployC2SPayload.ID, F4DeployC2SPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(JukeboxesC2SPayload.ID, JukeboxesC2SPayload.CODEC);
-        ServerPlayNetworking.registerGlobalReceiver(F4UpdateC2SPayload.ID, (payload, context) ->
-                receiveF4UpdatePayload(context.player(), payload.slot, payload.width, payload.height));
-        ServerPlayNetworking.registerGlobalReceiver(F4DeployC2SPayload.ID, (payload, context) ->
-                receiveF4DeployPayload(context.player()));
-        ServerPlayNetworking.registerGlobalReceiver(JukeboxesC2SPayload.ID, (payload, context) ->
-                SoundScanner.unpackUploadedJukeboxes(context.server(), payload.data));
+        throw new AssertionError();
     }
-
+    @ExpectPlatform
     public static void registerPayloadsClient() {
-        ClientPlayNetworking.registerGlobalReceiver(WorldAddS2CPayload.ID, (payload, context) ->
-                receiveWorldAddPayload(client(context), payload.world_id, payload.world_data));
-        ClientPlayNetworking.registerGlobalReceiver(BiomeAddS2CPayload.ID, (payload, context) ->
-                receiveBiomeAddPayload(client(context), payload.biome_id, payload.biome_data));
-        ClientPlayNetworking.registerGlobalReceiver(ShaderS2CPayload.ID, (payload, context) ->
-                receiveShaderPayload(client(context), payload.shader_data, payload.iridescence));
-        ClientPlayNetworking.registerGlobalReceiver(StarsS2CPayload.ID, (payload, context) ->
-                receiveStarsPayload(client(context)));
-        ClientPlayNetworking.registerGlobalReceiver(SoundPackS2CPayload.ID, (payload, context) ->
-                SoundScanner.unpackDownloadedPack(payload.songIds, client(context)));
+        throw new AssertionError();
     }
 }

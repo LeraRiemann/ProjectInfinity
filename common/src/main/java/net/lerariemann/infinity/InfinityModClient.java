@@ -21,7 +21,6 @@ public class InfinityModClient {
             "key.categories.misc");
 
     public static void initializeClient() {
-        ModPayloads.registerPayloadsClient();
         ModEntities.registerEntityRenderers();
         ModScreenHandlers.register();
         KeyMappingRegistry.register(f4ConfigKey);

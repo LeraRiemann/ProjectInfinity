@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
+import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
@@ -18,7 +19,7 @@ import net.minecraft.client.render.RenderLayer;
 public class InfinityModFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        // Apply colour handlers to tint blocks.
+        // Colour handlers
         ColorProviderRegistry.BLOCK.register(InfinityMethods::getBookBoxColor,
                 ModBlocks.BOOK_BOX.get());
         ColorProviderRegistry.BLOCK.register(InfinityMethods::getBlockEntityColor,
@@ -37,7 +38,8 @@ public class InfinityModFabricClient implements ClientModInitializer {
         ColorProviderRegistry.ITEM.register(InfinityMethods::getDiscColorFromComponents,
                 ModItems.DISC.get());
         ColorProviderRegistry.ITEM.register(InfinityMethods::getPortalItemColor, ModItems.PORTAL_ITEM.get());
-        // On Fabric, render layer maps are also applied to blocks.
+
+        // Render layer maps
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutoutMipped(),
                 ModBlocks.BOOK_BOX.get(),
                 ModBlocks.IRIDESCENT_KELP.get(),
@@ -47,15 +49,16 @@ public class InfinityModFabricClient implements ClientModInitializer {
                 ModBlocks.BIOME_BOTTLE.get(),
                 ModBlocks.CHROMATIC_WOOL.get(),
                 ModBlocks.CHROMATIC_CARPET.get());
-        // Render layer maps are also applied to fluids.
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(),
                 PlatformMethods.getIridescenceStill().get(),
                 PlatformMethods.getIridescenceFlowing().get());
-        // Common client setup tasks.
+
+        // Common client setup tasks
         InfinityModClient.initializeClient();
-        // Register model predicates for Transfinite Keys
+        ModPayloads.registerPayloadsClient();
         ModItemFunctions.registerModelPredicates();
 
+        //Fluid stuff
         FluidVariantAttributes.register(PlatformMethods.getIridescenceStill().get(), new ModFluidsFabric.IridescenceVariantAttributeHandler());
         FluidVariantAttributes.register(PlatformMethods.getIridescenceFlowing().get(), new ModFluidsFabric.IridescenceVariantAttributeHandler());
         FluidVariantRendering.register(PlatformMethods.getIridescenceStill().get(), new ModFluidsFabric.IridescenceVariantRenderHandler());

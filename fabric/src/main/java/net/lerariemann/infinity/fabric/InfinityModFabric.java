@@ -6,6 +6,7 @@ import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.registry.var.ModStats;
 
 public final class  InfinityModFabric implements ModInitializer {
@@ -23,5 +24,6 @@ public final class  InfinityModFabric implements ModInitializer {
         ModStats.load();
         ModBlocks.registerFlammableBlocks();
         ModItemFunctions.registerDispenserBehaviour();
+        ModPayloads.registerPayloadsServer();
     }
 }

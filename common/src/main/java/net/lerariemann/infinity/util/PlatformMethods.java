@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.item.StarOfLangItem;
-import net.lerariemann.infinity.registry.core.ModComponentTypes;
-import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
@@ -15,9 +13,11 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.poi.PointOfInterestType;
@@ -30,8 +30,8 @@ import java.util.function.Supplier;
  * Methods that require different implementations to work on Fabric vs. NeoForge and thus depend on {@link dev.architectury.injectables.annotations.ExpectPlatform}.
  * @see InfinityMethods
  */
+@SuppressWarnings("unused")
 public class PlatformMethods {
-
     /**
      * Creates an empty PacketByteBuf - intended to replace the method
      * in Fabric API.
@@ -43,6 +43,15 @@ public class PlatformMethods {
 
     @ExpectPlatform
     public static <E> PointOfInterestType registerPoi(Identifier id, int i, int i1, ImmutableSet<E> es) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static void sendS2CPayload(ServerPlayerEntity entity, CustomPayload payload) {
+        throw new AssertionError();
+    }
+    @ExpectPlatform
+    public static void sendC2SPayload(CustomPayload payload) {
         throw new AssertionError();
     }
 
