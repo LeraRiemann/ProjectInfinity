@@ -1,8 +1,12 @@
 package net.lerariemann.infinity.iridescence;
 
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
+import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.InstantStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
@@ -42,8 +46,11 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
     public void onRemoved(LivingEntity entity) {
         switch (entity) {
             case ServerPlayerEntity player -> {
-                unloadShader(player);
                 if (player.isInvulnerable()) endJourney(player, true, 0);
+                unloadShader(player);
+            }
+            case ClientPlayerEntity ignored -> {
+                ShaderLoader.reloadShaders(MinecraftClient.getInstance(), InfinityOptions.ofClient().data, false);
             }
             case ChaosPawn pawn -> {
                 if (pawn.getRandom().nextBoolean()) {
@@ -78,6 +85,9 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
                 player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW,
                         getAfterglowDuration() / 2, 0, true, true));
             }
+        }
+        if (entity instanceof ClientPlayerEntity) {
+            Iridescence.updateAtomics(duration, amplifier);
         }
     }
 

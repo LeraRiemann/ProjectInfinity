@@ -14,8 +14,10 @@ import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.RandomProvider;
+import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.block.Block;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -124,22 +126,23 @@ public interface Iridescence {
         return getOnsetLength(amplifier) + getEffectLength(amplifier);
     }
     static int getEffectLength(int amplifier) { //amplifier is 0 to 4
-        return getComeupLength() + getPeakLength(amplifier) + getOffsetLength(); //8 to 12 minutes
+        return getComeupLength() + getPeakLength(amplifier) + getOffsetLength(amplifier); //6 to 12 minutes
     }
     static int getOnsetLength(int amplifier) {
-        return ticksInHour * Math.max(20, 60 - 5*amplifier) / 30;
+        return ticksInHour * Math.max(20, 60 - 5*amplifier) / 120;
     }
     static int getComeupLength() {
         return ticksInHour;
     }
     static int getPeakLength(int amplifier) {
-        return ticksInHour * (4 + amplifier);
+        return ticksInHour * (3 + amplifier);
     }
-    static int getOffsetLength() {
-        return ticksInHour * 3;
+    static int getOffsetLength(int amplifier) {
+        return ticksInHour/2 * (4 + amplifier);
     }
     static int getAfterglowDuration() {
-        return ticksInHour * RandomProvider.ruleInt("afterglowDuration"); //default is 24 minutes
+        int minDuration = ticksInHour * RandomProvider.ruleInt("afterglowDuration"); //default is 24 minutes
+        return (int)Math.floor(minDuration * Math.pow(2, InfinityMod.random.nextDouble(-1, 1)));
     }
     static int getCooldownDuration() {
         return ticksInHour * RandomProvider.ruleInt("iridescenceCooldownDuration"); //default is 7*24 minutes
@@ -152,6 +155,19 @@ public interface Iridescence {
         DOWNWARDS
     }
 
+    static void updateAtomics(int duration, int amplifier) {
+        ShaderLoader.iridLevel.set(amplifier);
+        double distortion = MinecraftClient.getInstance().options.getDistortionEffectScale().getValue();
+        if (amplifier == 0 || distortion == 0)
+            ShaderLoader.iridProgress.set(0);
+        ShaderLoader.iridProgress.set(distortion * switch (getPhase(duration, amplifier)) {
+            case INITIAL -> 0.0;
+            case UPWARDS -> (getEffectLength(amplifier) - duration) / (1.0 * getComeupLength());
+            case PLATEAU -> 1.0;
+            case DOWNWARDS -> duration / (1.0 * getOffsetLength(amplifier));
+        });
+    }
+
     static Phase getPhase(LivingEntity entity) {
         StatusEffectInstance effect = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
         if (effect == null) return Phase.INITIAL;
@@ -160,14 +176,14 @@ public interface Iridescence {
     static Phase getPhase(int duration, int amplifier) {
         int time_passed = getEffectLength(amplifier) - duration;
         if (time_passed < 0) return Phase.INITIAL;
-        return (time_passed < getComeupLength()) ? Phase.UPWARDS : (duration <= getOffsetLength() || amplifier == 0) ? Phase.DOWNWARDS : Phase.PLATEAU;
+        return (time_passed < getComeupLength()) ? Phase.UPWARDS : (duration <= getOffsetLength(amplifier)) ? Phase.DOWNWARDS : Phase.PLATEAU;
     }
 
     static boolean shouldWarp(int duration, int amplifier) {
-        return (Iridescence.getPhase(duration, amplifier) == Iridescence.Phase.PLATEAU) && (duration % ticksInHour == 0);
+        return (amplifier > 0) && (Iridescence.getPhase(duration, amplifier) == Iridescence.Phase.PLATEAU) && (duration % ticksInHour == 0);
     }
     static boolean shouldReturn(int duration, int amplifier) {
-        return (amplifier > 0) && (duration == getOffsetLength());
+        return (amplifier > 0) && (duration == getOffsetLength(amplifier));
     }
     static boolean shouldRequestShaderLoad(int duration, int amplifier) {
         int time_passed = getEffectLength(amplifier) - duration;

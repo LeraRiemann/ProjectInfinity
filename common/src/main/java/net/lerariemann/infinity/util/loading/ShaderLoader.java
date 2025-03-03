@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.util.loading;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.access.GameRendererAccess;
@@ -13,10 +14,13 @@ import net.minecraft.resource.ResourcePackManager;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Environment(EnvType.CLIENT)
 public interface ShaderLoader {
     String FILENAME = "current.json";
+    AtomicInteger iridLevel = new AtomicInteger(-1);
+    AtomicDouble iridProgress = new AtomicDouble(0.0);
 
     static Path shaderDir(MinecraftClient client) {
         return client.getResourcePackDir().resolve("infinity/assets/infinity/shaders");
@@ -37,11 +41,13 @@ public interface ShaderLoader {
     }
 
     static void reloadShaders(MinecraftClient client, boolean isWorldShaderPresent, boolean isIridescenceShaderPresent) {
-        if (client.world == null) return;
+        if (client.player == null) return;
         if (isIridescenceShaderPresent) {
             ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMethods.getId("shaders/post/iridescence.json"));
             return;
         }
+        iridLevel.set(-1);
+        iridProgress.set(0.0);
         try {
             updateWorldShaderFromDisk(client);
         } catch (IOException e) {

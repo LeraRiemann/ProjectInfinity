@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
+import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.minecraft.client.gl.PostEffectPass;
 import net.minecraft.client.gl.PostEffectProcessor;
 import org.spongepowered.asm.mixin.Final;
@@ -9,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Mixin(PostEffectProcessor.class)
@@ -24,10 +26,16 @@ public abstract class PostEffectProcessorMixin {
 
     @Shadow protected abstract void setTexFilter(int texFilter);
 
+    @Shadow public abstract void setUniforms(String name, float value);
+
     /* Hook for the iridescence shader to receive the time uniform */
     @Inject(method="render", at = @At("HEAD"), cancellable = true)
     void inj(float tickDelta, CallbackInfo ci) {
         if (name.contains("infinity")) {
+            setUniforms("IridTimeSec", ((int)(LocalTime.now().toNanoOfDay() / 1000000)) / 1000.0f);
+            setUniforms("IridLevel", ShaderLoader.iridLevel.get());
+            setUniforms("IridProgress", (float)ShaderLoader.iridProgress.get());
+
             time += tickDelta;
 
             while (time > 2000.0F) {
