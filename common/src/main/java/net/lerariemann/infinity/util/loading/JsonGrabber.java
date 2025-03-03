@@ -91,7 +91,7 @@ public class JsonGrabber<E> {
         grab(registryKey, jsonElement, bl);
     }
 
-    E grab_with_return(String rootdir, String i, boolean register) {
+    E grabWithReturn(String rootdir, String i, boolean register) {
         String path = rootdir + "/" + i + ".json";
         RegistryKey<E> key = RegistryKey.of(registry.getKey(), InfinityMethods.getId(i));
         File file = new File(path);

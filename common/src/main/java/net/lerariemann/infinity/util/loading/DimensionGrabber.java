@@ -23,7 +23,8 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /**
- * Oversees runtime injection of generated content into Minecraft's registries.
+ * Prepares Minecraft's registries for runtime injection of generated content.
+ * Delegates the act of injection itself to per-registry {@link JsonGrabber}s.
  * @see net.lerariemann.infinity.mixin.core.SimpleRegistryMixin
  */
 public class DimensionGrabber {
@@ -108,7 +109,7 @@ public class DimensionGrabber {
     }
 
     private DimensionOptions grabDimension(Path rootdir, String i) {
-        DimensionOptions ret = buildGrabber(DimensionOptions.CODEC, RegistryKeys.DIMENSION).grab_with_return(rootdir.toString()+"/dimension", i, false);
+        DimensionOptions ret = buildGrabber(DimensionOptions.CODEC, RegistryKeys.DIMENSION).grabWithReturn(rootdir.toString()+"/dimension", i, false);
         close();
         return ret;
     }
@@ -121,6 +122,7 @@ public class DimensionGrabber {
         if (!(baseRegistryManager.get(key).contains(RegistryKey.of(key, id)))) buildGrabber(codec, key).grab(id, optiondata, false);
     }
 
+    /** Freezes all the registries after the grabbing is done, since registries can't be left unfrozen when the game's running. */
     private void close() {
         baseRegistryManager.streamAllRegistries().forEach((entry) -> entry.value().freeze());
     }
