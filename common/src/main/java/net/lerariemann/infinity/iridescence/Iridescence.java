@@ -121,13 +121,13 @@ public interface Iridescence {
     int ticksInHour = 1200;
 
     static int getFullEffectLength(int amplifier) {
-        return getOnsetLength() + getEffectLength(amplifier);
+        return getOnsetLength(amplifier) + getEffectLength(amplifier);
     }
     static int getEffectLength(int amplifier) { //amplifier is 0 to 4
         return getComeupLength() + getPeakLength(amplifier) + getOffsetLength(); //8 to 12 minutes
     }
-    static int getOnsetLength() {
-        return ticksInHour * RandomProvider.ruleInt("iridescenceInitialDuration") / 60; //default is 30 seconds
+    static int getOnsetLength(int amplifier) {
+        return ticksInHour * Math.max(20, 60 - 5*amplifier) / 30;
     }
     static int getComeupLength() {
         return ticksInHour;

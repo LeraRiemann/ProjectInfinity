@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2004003,
+  "infinity_version": 2004004,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "longArithmeticEnabled": false,
@@ -13,7 +13,8 @@
     "maxBiomeCount": 6,
     "maxDimensionScale": 0,
     "avgDimensionHeight": 256,
-    "iridescenceInitialDuration": 30,
+    "iridescenceContactLevel": 0,
+    "iridescencePotionLevel": 4,
     "iridescenceCooldownDuration": 168,
     "afterglowDuration": 24,
     "resetChargeCooldown": 6000
