@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin.fixes;
+package net.lerariemann.infinity.mixin.fabric.fixes;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.access.MobEntityAccess;

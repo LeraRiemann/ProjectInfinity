@@ -9,7 +9,8 @@
     "HeightLimitViewMixin",
     "ServerPlayerEntityMixin",
     "mavity.LivingEntityMixin",
-    "qol.EnderDragonEntityMixin"
+	"fixes.EnderDragonEntityMixin",
+    "fixes.SpawnHelperMixin"
   ],
   "client": [],
   "injectors": {

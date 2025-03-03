@@ -21,7 +21,6 @@
     "fixes.EntityMixin",
     "fixes.MobEntityMixin",
     "fixes.PointOfInterestStorageMixin",
-    "fixes.SpawnHelperMixin",
     "fixes.WorldChunkMixin",
     "iridescence.BrewingRecipeRegistryMixin",
     "iridescence.ConcretePowderBlockMixin",

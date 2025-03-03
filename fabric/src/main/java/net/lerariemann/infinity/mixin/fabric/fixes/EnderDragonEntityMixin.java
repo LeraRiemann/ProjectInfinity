@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.mixin.fabric.qol;
+package net.lerariemann.infinity.mixin.fabric.fixes;
 
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.EntityType;
