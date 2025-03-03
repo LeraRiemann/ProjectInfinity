@@ -22,10 +22,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+/**
+ * Oversees runtime injection of generated content into Minecraft's registries.
+ * @see net.lerariemann.infinity.mixin.core.SimpleRegistryMixin
+ */
 public class DimensionGrabber {
-    RegistryOps.RegistryInfoGetter registryInfoGetter;
     DynamicRegistryManager baseRegistryManager;
     Set<MutableRegistry<?>> mutableRegistries = new HashSet<>();
+    RegistryOps.RegistryInfoGetter registryInfoGetter;
 
     public DimensionGrabber(DynamicRegistryManager brm) {
         this(brm, Set.of(RegistryKeys.CONFIGURED_FEATURE,
@@ -39,6 +43,10 @@ public class DimensionGrabber {
                 RegistryKeys.DIMENSION));
     }
 
+    /**
+     * @param unfrozenKeys a set of keys for all registries we want to modify.
+     * unfortunately, unfreezing and refreezing literally everything leads to problems on neoforge servers
+     */
     public DimensionGrabber(DynamicRegistryManager brm, Set<RegistryKey<? extends Registry<?>>> unfrozenKeys) {
         baseRegistryManager = brm;
         baseRegistryManager.streamAllRegistries().forEach((entry) -> {
@@ -50,6 +58,10 @@ public class DimensionGrabber {
         registryInfoGetter = getGetter();
     }
 
+    /**
+     * Grabs everything within a dimension's datapack.
+     * @return a {@link DimensionOptions} object containing all necessary headers for creating the actual playable {@link net.minecraft.world.World}.
+     */
     public static DimensionOptions readDimensionFromDisk(RandomDimension d) {
         DimensionGrabber grabber = new DimensionGrabber(d.server.getRegistryManager());
         Path rootdir = Paths.get(d.getStoragePath());
@@ -59,12 +71,20 @@ public class DimensionGrabber {
         return options;
     }
 
+    /**
+     * Grabs contents of all files in a directory. Used by {@link net.lerariemann.infinity.util.config.SoundScanner} to runtime-inject jukebox song definition data.
+     */
     public static <T> void readCategoryFromDisk(MinecraftServer server, Codec<T> codec, RegistryKey<Registry<T>> registryKey, Path path) {
         DimensionGrabber grabber = new DimensionGrabber(server.getRegistryManager(), Set.of(registryKey));
         grabber.buildGrabber(codec, registryKey).grabAll(path);
         grabber.close();
     }
 
+    /**
+     * Inserts one object into one registry. Used on the client to insert individual dimension types and biomes when the server asks it to, since the client
+     * does not know or care about everything else a dimension datapack holds.
+     * @see net.lerariemann.infinity.registry.var.ModPayloads
+     */
     public static <T> void grabObjectForClient(MinecraftClient client, Codec<T> codec, RegistryKey<Registry<T>> registryKey,
                                            Identifier id, NbtCompound data) {
         if (data.isEmpty()) return;
@@ -105,6 +125,9 @@ public class DimensionGrabber {
         baseRegistryManager.streamAllRegistries().forEach((entry) -> entry.value().freeze());
     }
 
+    /**
+     * Creates and returns a {@link RegistryOps.RegistryInfoGetter}, which will be used by {@link JsonGrabber}s to translate raw json into all sorts of objects.
+     */
     private RegistryOps.RegistryInfoGetter getGetter() {
         final Map<RegistryKey<? extends Registry<?>>, RegistryOps.RegistryInfo<?>> map = new HashMap<>();
         baseRegistryManager.streamAllRegistries().forEach((entry) -> map.put(entry.key(), createInfo(entry.value())));
