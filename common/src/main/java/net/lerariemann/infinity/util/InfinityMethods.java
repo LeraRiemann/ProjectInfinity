@@ -181,13 +181,6 @@ public interface InfinityMethods {
     }
 
     /**
-     * Gets an Infinity Portal's item colour - hard set as a light blue.
-     */
-    static int getInfinityPortalColor(ItemStack stack, int layer) {
-        return -16717057;
-    }
-
-    /**
      * For use in color providers with blocks which the block entity sets color for.
      */
     static int getBlockEntityColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
@@ -281,6 +274,9 @@ public interface InfinityMethods {
     }
 
     static boolean isCreateLoaded() {
-        return Platform.isModLoaded("create") && Platform.getMod("create").getVersion().charAt(0) != '6';
+        if (Platform.isModLoaded("create")) {
+            return Platform.getMod("create").getVersion().charAt(0) != '6';
+        }
+        return false;
     }
 }
