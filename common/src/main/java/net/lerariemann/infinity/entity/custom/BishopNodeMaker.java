@@ -21,7 +21,7 @@ public class BishopNodeMaker extends LandPathNodeMaker {
 
         double d = this.getFeetY(new BlockPos(node.x, node.y, node.z));
 
-        PathNode[] succ = new PathNode[Direction.Type.HORIZONTAL.ordinal()];
+        PathNode[] succ = new PathNode[Direction.Type.HORIZONTAL.stream().toList().size()];
         for (Direction direction : Direction.Type.HORIZONTAL) {
             PathNode pathNode = this.getPathNode(node.x + direction.getOffsetX(), node.y, node.z + direction.getOffsetZ(), j, d, direction, pathNodeType2);
             succ[direction.getHorizontal()] = pathNode;
