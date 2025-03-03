@@ -7,8 +7,6 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.item.StarOfLangItem;
-import net.lerariemann.infinity.registry.core.ModComponentTypes;
-import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
@@ -30,9 +28,8 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 import java.nio.file.Path;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
-import static net.lerariemann.infinity.InfinityModClient.sampler;
+import static net.lerariemann.infinity.util.InfinityMethods.sampler;
 
 /**
  * Methods that require different implementations to work on Fabric vs. NeoForge and thus depend on {@link dev.architectury.injectables.annotations.ExpectPlatform}.
