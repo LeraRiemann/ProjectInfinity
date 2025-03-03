@@ -202,7 +202,7 @@ public class InfinityPortalBlockEntity extends TintableBlockEntity {
         return createNbt();
     }
 
-//    @Override
+    @Override
     public int getTint() {
         return propertyDelegate.get(0);
     }

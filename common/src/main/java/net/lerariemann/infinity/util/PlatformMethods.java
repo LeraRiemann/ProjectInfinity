@@ -113,8 +113,7 @@ public class PlatformMethods {
         if (world != null && pos != null) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof InfinityPortalBlockEntity be) {
-                Object j = be.getRenderData();
-                if (j == null) return 0;
+                Object j = be.getTint();
                 return (int)j & 0xFFFFFF;
             }
         }
@@ -125,8 +124,7 @@ public class PlatformMethods {
         if (world != null && pos != null) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof BiomeBottleBlockEntity be) {
-                Object j = be.getRenderData();
-                if (j == null) return 0;
+                Object j = be.getTint();
                 return (int)j & 0xFFFFFF;
             }
         }
