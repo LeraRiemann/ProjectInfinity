@@ -96,6 +96,7 @@
   "entity.infinity.chaos_creeper.description": "These hostile mobs change the biome around them when they explode. They can be washed with a water bucket to reset the stored biome.",
   "entity.infinity.chaos_pawn.description": "These neutral mobs can be found in some dimensions and sometimes spawn randomly in Infinity Portals. They drop a random item when killed.",
   "error.infinity.invocation_needed": "This multiverse still needs invocation. This is a bug, please contact Lera",
+  "error.infinity.timebomb.fail": "This dimension can't be erased from the multiverse",
   "error.infinity.portal.null": "This dimension does not exist. This is a bug, please contact Lera",
   "error.infinity.portal.deleted": "This dimension ceased to exist. It can be restored after reloading the world",
   "error.infinity.portal.closed": "This portal is closed; use a key (%s) to open it",
