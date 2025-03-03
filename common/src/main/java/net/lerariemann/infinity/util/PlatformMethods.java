@@ -64,7 +64,8 @@ public class PlatformMethods {
     }
 
     /**
-     * Try and add an item to an Item Group using Fabric API.
+     * Fabric-exclusive method of adding an item to an Item Group, which uses Fabric API.
+     * On NeoForge, does nothing.
      */
     @ExpectPlatform
     public static <T extends Item> void addAfter(RegistrySupplier<T> blockItem, RegistryKey<ItemGroup> group, Item item) {

@@ -133,7 +133,7 @@ public class ModItems {
      */
     public static <T extends Item> RegistrySupplier<T> registerItemAfter(String id, RegistryKey<ItemGroup> group, Item item,
                                                            Function<Item.Settings, T> constructor, Item.Settings settings) {
-        RegistrySupplier<T> registeredItem = register(id, addFallbackTab(settings, group), constructor);
+        RegistrySupplier<T> registeredItem = register(id, settings, constructor);
         addAfter(registeredItem, group, item);
         return registeredItem;
     }
@@ -152,7 +152,7 @@ public class ModItems {
     public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 Item.Settings settings,
                                                                 BiFunction<Block, Item.Settings, T> constructor) {
-        RegistrySupplier<T> registeredItem = registerBlockItem(block, addFallbackTab(settings, group), constructor);
+        RegistrySupplier<T> registeredItem = registerBlockItem(block, settings, constructor);
         addAfter(registeredItem, group, item);
         return registeredItem;
     }
@@ -162,15 +162,6 @@ public class ModItems {
     public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 BiFunction<Block, Item.Settings, T> constructor) {
         return registerBlockItemAfter(block, group, item, new Item.Settings(), constructor);
-    }
-
-    /**
-     * Adds an item to an Item Group through Architectury API if Fabric API is not installed.
-     */
-    public static Item.Settings addFallbackTab(Item.Settings settings, RegistryKey<ItemGroup> group){
-        if (!InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1"))
-            return settings.arch$tab(group);
-        return settings;
     }
 
     /**
