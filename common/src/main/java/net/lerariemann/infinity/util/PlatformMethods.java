@@ -14,7 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -61,15 +60,6 @@ public class PlatformMethods {
      */
     @ExpectPlatform
     public static void onWorldLoad(Object mixin, ServerWorld world) {
-        throw new AssertionError();
-    }
-
-    /**
-     * Unfreeze the registry while the game is running.
-     * This is through DynReg on Fabric and a NeoForge exclusive method.
-     */
-    @ExpectPlatform
-    public static void unfreeze(Registry<?> registry) {
         throw new AssertionError();
     }
 

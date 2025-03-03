@@ -1,7 +1,6 @@
 package net.lerariemann.infinity.util.fabric;
 
 import dev.architectury.registry.registries.RegistrySupplier;
-import me.basiqueevangelist.dynreg.util.RegistryUtils;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -26,7 +25,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -56,10 +54,6 @@ public class PlatformMethodsImpl {
 
     public static void onWorldLoad(Object mixin, ServerWorld world) {
         ServerWorldEvents.LOAD.invoker().onWorldLoad((MinecraftServer) mixin, world);
-    }
-
-    public static void unfreeze(Registry<?> registry) {
-        RegistryUtils.unfreeze(registry);
     }
 
     public static <T extends Item> void addAfter(RegistrySupplier<T> supplier, RegistryKey<ItemGroup> group, Item item) {

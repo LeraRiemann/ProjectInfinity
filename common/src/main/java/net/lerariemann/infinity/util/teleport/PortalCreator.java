@@ -41,7 +41,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionOptions;
 
 import java.util.*;
 import java.util.List;
@@ -239,10 +238,7 @@ public interface PortalCreator {
 
         if (!RandomProvider.rule("runtimeGenerationEnabled")) return false;
 
-        DimensionGrabber grabber = new DimensionGrabber(server.getRegistryManager());
-        DimensionOptions options = grabber.grabAllRelatedData(d);
-        grabber.close();
-        ((MinecraftServerAccess)(server)).infinity$addWorld(key, options); // create the dimension
+        ((MinecraftServerAccess)(server)).infinity$addWorld(key, DimensionGrabber.readDimensionFromDisk(d)); // create the dimension
         server.getPlayerManager().getPlayerList().forEach(
                 a -> sendNewWorld(a, id, d)); //and send everyone its data for clientside updating
         return true;

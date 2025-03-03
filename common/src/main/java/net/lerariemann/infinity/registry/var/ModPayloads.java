@@ -22,15 +22,17 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
 
 import java.nio.file.Path;
-import java.util.Objects;
 
 public class ModPayloads {
     public static MinecraftServer server(Object context) {
@@ -53,9 +55,7 @@ public class ModPayloads {
         PlatformMethods.sendS2CPayload(player, new WorldAddS2CPayload(id, data));
     }
     public static void receiveWorldAddPayload(MinecraftClient client, Identifier id, NbtCompound data) {
-        client.execute(() ->
-                (new DimensionGrabber(Objects.requireNonNull(client.getNetworkHandler()).getRegistryManager()))
-                        .grabDimensionForClient(id, data));
+        client.execute(() -> DimensionGrabber.grabObjectForClient(client, DimensionType.CODEC, RegistryKeys.DIMENSION_TYPE, id, data));
     }
 
     public record BiomeAddS2CPayload(Identifier biome_id, NbtCompound biome_data) implements CustomPayload {
@@ -73,9 +73,7 @@ public class ModPayloads {
         PlatformMethods.sendS2CPayload(player, new BiomeAddS2CPayload(id, data));
     }
     public static void receiveBiomeAddPayload(MinecraftClient client, Identifier id, NbtCompound data) {
-        client.execute(() ->
-                (new DimensionGrabber(Objects.requireNonNull(client.getNetworkHandler()).getRegistryManager()))
-                        .grabBiomeForClient(id, data));
+        client.execute(() -> DimensionGrabber.grabObjectForClient(client, Biome.CODEC, RegistryKeys.BIOME, id, data));
     }
 
     public record ShaderS2CPayload(NbtCompound shader_data, boolean iridescence) implements CustomPayload {

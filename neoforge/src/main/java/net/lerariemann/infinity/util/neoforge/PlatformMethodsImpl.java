@@ -21,9 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
@@ -62,11 +60,6 @@ public class PlatformMethodsImpl {
         server.forgeGetWorldMap().put(world.getRegistryKey(),world);
         server.markWorldsDirty();
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(world));
-    }
-
-    public static void unfreeze(Registry<?> registry) {
-        SimpleRegistry<?> writableRegistry = (SimpleRegistry<?>) registry;
-        writableRegistry.unfreeze();
     }
 
     //Optional, requires Item Group API.

@@ -17,6 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+/**
+ * Needed for runtime dimension generation to inject generated content into the game.
+ * Based on DynReg by BasiqueEvangelist.
+ * */
 @Mixin(SimpleRegistry.class)
 public abstract class SimpleRegistryMixin<T> implements RegistryAccess, Registry<T> {
     @Shadow

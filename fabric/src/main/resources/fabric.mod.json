@@ -32,8 +32,7 @@
     ]
   },
   "mixins": [
-    "infinity.mixins.json",
-    "dynreg.mixins.json"
+    "infinity.mixins.json"
   ],
   "accessWidener" : "infinity.accesswidener",
   "depends": {
