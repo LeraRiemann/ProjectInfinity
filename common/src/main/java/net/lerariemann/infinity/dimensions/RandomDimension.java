@@ -98,10 +98,9 @@ public class RandomDimension {
 
     public void genBasics() {
         type_alike = PROVIDER.randomName(random, "noise_presets");
-        min_y = 16*Math.min(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
-        if (!isOverworldLike()) min_y = Math.max(min_y, -48);
-        int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
-        if (!isOverworldLike()) max_y = Math.max(max_y, 80);
+        min_y = 16*Math.clamp((int)Math.floor(random.nextExponential() * 2), isOverworldLike() ? -125 : -3, 0);
+        int avgHeight = Math.clamp(RandomProvider.ruleInt("avgDimensionHeight"), 64, 1024);
+        int max_y = 16*Math.clamp((int)Math.floor(random.nextGaussian(avgHeight/16.0, avgHeight/64.0)), isOverworldLike() ? 1 : 5, 125);
         randomiseblocks = PROVIDER.roll(random, "randomise_blocks");
         int sea_level_default = 63;
         if (!isOverworldLike()) sea_level_default = switch(type_alike) {

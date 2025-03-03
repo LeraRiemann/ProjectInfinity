@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.registry.registries.DeferredRegister;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.registry.core.ModBlocks;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -65,7 +66,7 @@ public class ModMaterialRules {
     {
         @Override
         public BlockState tryApply(int i, int j, int k) {
-            double d = Iridescence.sampler.sample(i, j, k);
+            double d = InfinityMethods.sampler.sample(i, j, k);
             d = d - Math.floor(d);
             BlockState st = Iridescence.getRandomColorBlock(d, str).getDefaultState();
             if(st.contains(Properties.PERSISTENT)) st = st.with(Properties.PERSISTENT, Boolean.TRUE);

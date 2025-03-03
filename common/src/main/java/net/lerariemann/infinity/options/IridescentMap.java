@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.options;
 
-import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
@@ -10,12 +9,13 @@ import java.util.Random;
 
 import static net.lerariemann.infinity.block.custom.IridescentBlock.num_models;
 
+@Deprecated
 public interface IridescentMap {
     default int getColor(BlockPos pos) {
         return InfinityMethods.properMod((int)(num_models * getHue(pos)), num_models);
     }
     default double getHue(BlockPos pos) {
-        return Iridescence.sample(pos);
+        return InfinityMethods.sample(pos);
     }
 
     static IridescentMap decode(NbtCompound data) {

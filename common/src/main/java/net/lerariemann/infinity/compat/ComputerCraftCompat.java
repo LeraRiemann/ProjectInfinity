@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 public class ComputerCraftCompat {
 
     public static String checkPrintedPage(ItemStack itemStack) {
-        var print = (PrintoutContents.get(itemStack));
+        var print = PrintoutContents.get(itemStack);
         if (print != null) {
             String string = "";
             for (var l : print.getTextLines().toArray()) {

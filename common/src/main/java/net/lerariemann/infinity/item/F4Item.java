@@ -1,13 +1,11 @@
 package net.lerariemann.infinity.item;
 
-import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.ClientMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.screen.F4Screen;
 import net.lerariemann.infinity.util.teleport.InfinityPortal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -273,7 +271,7 @@ public class F4Item extends Item implements PortalDataHolder {
             world.setBlockState(bp,  Blocks.AIR.getDefaultState(), 3, 0);
             obsidian++;
         }
-        for (int i = 0; i <= portal.width; i++) for (int j = -1; j <= portal.height; j++)
+        for (int i = 0; i < portal.width; i++) for (int j = 0; j < portal.height; j++)
             world.setBlockState(portal.lowerLeft.offset(axis, i).up(j), Blocks.AIR.getDefaultState(), 3, 0);
         BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, getCharge(stack) + obsidian);
         world.playSound(null, origin, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1, 0.75f);
