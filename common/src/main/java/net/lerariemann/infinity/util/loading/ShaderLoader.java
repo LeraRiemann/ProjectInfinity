@@ -3,7 +3,7 @@ package net.lerariemann.infinity.util.loading;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.access.GameRendererAccess;
-import net.lerariemann.infinity.iridescence.Iridescence;
+import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.client.MinecraftClient;
@@ -17,39 +17,51 @@ import java.nio.file.Path;
 @Environment(EnvType.CLIENT)
 public interface ShaderLoader {
     String FILENAME = "current.json";
+
     static Path shaderDir(MinecraftClient client) {
         return client.getResourcePackDir().resolve("infinity/assets/infinity/shaders");
     }
 
-    static void reloadShaders(MinecraftClient client, boolean bl) {
-        reloadShaders(client, bl, Iridescence.shouldApplyShader(client.player));
+    static void reloadShaders(MinecraftClient client, NbtCompound worldShader, boolean isIridescenceShaderPresent) {
+        if (worldShader.isEmpty()) {
+            reloadShaders(client, false, isIridescenceShaderPresent);
+        }
+        else {
+            CommonIO.write(worldShader, shaderDir(client), ShaderLoader.FILENAME);
+            reloadShaders(client, true, isIridescenceShaderPresent);
+            if (!ModPayloads.resourcesReloaded) {
+                client.reloadResources();
+                ModPayloads.resourcesReloaded = true;
+            }
+        }
     }
 
-    static void reloadShaders(MinecraftClient client, boolean bl, boolean iridescence) {
+    static void reloadShaders(MinecraftClient client, boolean isWorldShaderPresent, boolean isIridescenceShaderPresent) {
         if (client.world == null) return;
-        if (iridescence) {
+        if (isIridescenceShaderPresent) {
             ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMethods.getId("shaders/post/iridescence.json"));
             return;
         }
         try {
-            load(client);
+            updateWorldShaderFromDisk(client);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if(bl && shaderDir(client).resolve(FILENAME).toFile().exists()) {
+        if(isWorldShaderPresent && shaderDir(client).resolve(FILENAME).toFile().exists()) {
             ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMethods.getId("shaders/" + FILENAME));
             return;
         }
         client.gameRenderer.disablePostProcessor();
     }
-    static void load(MinecraftClient client) throws IOException {
+
+    static void updateWorldShaderFromDisk(MinecraftClient client) throws IOException {
         ResourcePackManager m = client.getResourcePackManager();
-        Path path = client.getResourcePackDir().resolve("infinity");
-        String name = "file/" + path.getFileName().toString();
-        Files.createDirectories(path.resolve("assets/infinity/shaders"));
-        if (!path.resolve("pack.mcmeta").toFile().exists()) CommonIO.write(packMcmeta(), path.toString(), "pack.mcmeta");
+        Path resourcepackPath = client.getResourcePackDir().resolve("infinity");
+        Files.createDirectories(resourcepackPath.resolve("assets/infinity/shaders"));
+        if (!resourcepackPath.resolve("pack.mcmeta").toFile().exists())
+            CommonIO.write(packMcmeta(), resourcepackPath.toString(), "pack.mcmeta");
         m.scanPacks();
-        m.enable(name);
+        m.enable("file/" + resourcepackPath.getFileName().toString());
     }
 
     static NbtCompound packMcmeta() {

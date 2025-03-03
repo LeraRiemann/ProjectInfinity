@@ -15,7 +15,6 @@ import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.loading.ShaderLoader;
-import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.item.ItemStack;
@@ -35,7 +34,6 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public class ModPayloads {
-
     public static MinecraftClient client(Object context) {
         ClientPlayNetworking.Context clientContext = (ClientPlayNetworking.Context) context;
         return clientContext.client();
@@ -45,131 +43,131 @@ public class ModPayloads {
         return serverContext.server();
     }
 
-    public record WorldAddPayload(Identifier world_id, NbtCompound world_data) implements CustomPayload {
-        public static final CustomPayload.Id<WorldAddPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("add_world"));
-        public static final PacketCodec<RegistryByteBuf, WorldAddPayload> CODEC = PacketCodec.tuple(
-                Identifier.PACKET_CODEC, WorldAddPayload::world_id,
-                PacketCodecs.NBT_COMPOUND, WorldAddPayload::world_data,
-                WorldAddPayload::new);
+    public record WorldAddS2CPayload(Identifier world_id, NbtCompound world_data) implements CustomPayload {
+        public static final CustomPayload.Id<WorldAddS2CPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("add_world"));
+        public static final PacketCodec<RegistryByteBuf, WorldAddS2CPayload> CODEC = PacketCodec.tuple(
+                Identifier.PACKET_CODEC, WorldAddS2CPayload::world_id,
+                PacketCodecs.NBT_COMPOUND, WorldAddS2CPayload::world_data,
+                WorldAddS2CPayload::new);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {
             return ID;
         }
     }
-    public static void addWorld(WorldAddPayload payload, Object context) {
-        client(context).execute(() ->
-                (new DimensionGrabber(Objects.requireNonNull(client(context).getNetworkHandler()).getRegistryManager()))
-                        .grab_dim_for_client(payload.world_id, payload.world_data));
+    public static void sendWorldAddPayload(ServerPlayerEntity player, Identifier id, NbtCompound data) {
+        InfinityMethods.sendS2CPayload(player, new WorldAddS2CPayload(id, data));
+    }
+    public static void receiveWorldAddPayload(MinecraftClient client, Identifier id, NbtCompound data) {
+        client.execute(() ->
+                (new DimensionGrabber(Objects.requireNonNull(client.getNetworkHandler()).getRegistryManager()))
+                        .grab_dim_for_client(id, data));
     }
 
-    public record BiomeAddPayload(Identifier biome_id, NbtCompound biome_data) implements CustomPayload {
-        public static final CustomPayload.Id<BiomeAddPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("add_biome"));
-        public static final PacketCodec<RegistryByteBuf, BiomeAddPayload> CODEC = PacketCodec.tuple(
-                Identifier.PACKET_CODEC, BiomeAddPayload::biome_id,
-                PacketCodecs.NBT_COMPOUND, BiomeAddPayload::biome_data,
-                BiomeAddPayload::new);
+    public record BiomeAddS2CPayload(Identifier biome_id, NbtCompound biome_data) implements CustomPayload {
+        public static final CustomPayload.Id<BiomeAddS2CPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("add_biome"));
+        public static final PacketCodec<RegistryByteBuf, BiomeAddS2CPayload> CODEC = PacketCodec.tuple(
+                Identifier.PACKET_CODEC, BiomeAddS2CPayload::biome_id,
+                PacketCodecs.NBT_COMPOUND, BiomeAddS2CPayload::biome_data,
+                BiomeAddS2CPayload::new);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {
             return ID;
         }
     }
-    public static void addBiome(BiomeAddPayload payload, Object context) {
-        client(context).execute(() ->
-                (new DimensionGrabber(Objects.requireNonNull(client(context).getNetworkHandler()).getRegistryManager()))
-                        .grab_biome_for_client(payload.biome_id, payload.biome_data));
+    public static void sendBiomeAddPayload(ServerPlayerEntity player, Identifier id, NbtCompound data) {
+        InfinityMethods.sendS2CPayload(player, new BiomeAddS2CPayload(id, data));
+    }
+    public static void receiveBiomeAddPayload(MinecraftClient client, Identifier id, NbtCompound data) {
+        client.execute(() ->
+                (new DimensionGrabber(Objects.requireNonNull(client.getNetworkHandler()).getRegistryManager()))
+                        .grab_biome_for_client(id, data));
     }
 
-    public record ShaderRePayload(NbtCompound shader_data, boolean iridescence) implements CustomPayload {
-        public static final CustomPayload.Id<ShaderRePayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("reload_shader"));
-        public static final PacketCodec<RegistryByteBuf, ShaderRePayload> CODEC = PacketCodec.tuple(
-                PacketCodecs.NBT_COMPOUND, ShaderRePayload::shader_data,
-                PacketCodecs.BOOL, ShaderRePayload::iridescence,
-                ShaderRePayload::new);
+    public record ShaderS2CPayload(NbtCompound shader_data, boolean iridescence) implements CustomPayload {
+        public static final CustomPayload.Id<ShaderS2CPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("reload_shader"));
+        public static final PacketCodec<RegistryByteBuf, ShaderS2CPayload> CODEC = PacketCodec.tuple(
+                PacketCodecs.NBT_COMPOUND, ShaderS2CPayload::shader_data,
+                PacketCodecs.BOOL, ShaderS2CPayload::iridescence,
+                ShaderS2CPayload::new);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {
             return ID;
         }
     }
-    public static void receiveShader(ShaderRePayload payload, Object context) {
-        InfinityOptions options = new InfinityOptions(payload.shader_data);
-        MinecraftClient client = client(context);
+    public static void sendShaderPayload(ServerPlayerEntity player) {
+        sendShaderPayload(player, player.getServerWorld(), Iridescence.shouldApplyShader(player));
+    }
+    public static void sendShaderPayload(ServerPlayerEntity player, ServerWorld world) {
+        sendShaderPayload(player, world, Iridescence.shouldApplyShader(player));
+    }
+    public static void sendShaderPayload(ServerPlayerEntity player, ServerWorld world, boolean iridescence) {
+        InfinityMethods.sendS2CPayload(player, new ShaderS2CPayload(
+                world == null ? new NbtCompound() : InfinityOptions.access(world).data(),
+                iridescence));
+    }
+    public static void receiveShaderPayload(MinecraftClient client, NbtCompound data, boolean iridescence) {
+        InfinityOptions options = new InfinityOptions(data);
         ((InfinityOptionsAccess)client).infinity$setOptions(options);
-        NbtCompound shader = options.getShader();
-        boolean bl = shader.isEmpty();
-        if (bl) client.execute(() -> ShaderLoader.reloadShaders(client, false));
-        else {
-            client.execute(() -> {
-                CommonIO.write(shader, ShaderLoader.shaderDir(client), ShaderLoader.FILENAME);
-                ShaderLoader.reloadShaders(client, true);
-                if (!resourcesReloaded) {
-                    client.reloadResources();
-                    resourcesReloaded = true;
-                }
-            });
-        }
+        client.execute(() -> ShaderLoader.reloadShaders(client, options.getShader(), iridescence));
     }
-
     public static boolean resourcesReloaded = Path.of(Platform.getGameFolder() + "/resourcepacks/infinity/assets/infinity/shaders").toFile().exists();
 
-    public record StarsRePayLoad() implements CustomPayload {
-        public static final StarsRePayLoad INSTANCE = new StarsRePayLoad();
-        public static final CustomPayload.Id<StarsRePayLoad> ID = new CustomPayload.Id<>(InfinityMethods.getId("reload_stars"));
-        public static final PacketCodec<RegistryByteBuf, StarsRePayLoad> CODEC = PacketCodec.unit(INSTANCE);
+    public record StarsS2CPayload() implements CustomPayload {
+        public static final StarsS2CPayload INSTANCE = new StarsS2CPayload();
+        public static final CustomPayload.Id<StarsS2CPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("reload_stars"));
+        public static final PacketCodec<RegistryByteBuf, StarsS2CPayload> CODEC = PacketCodec.unit(INSTANCE);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {
             return ID;
         }
     }
-
-    public static void receiveStars(StarsRePayLoad payload, Object context) {
-        ((WorldRendererAccess)(client(context).worldRenderer)).infinity$setNeedsStars(true);
+    public static void sendStarsPayload(ServerPlayerEntity player) {
+        InfinityMethods.sendS2CPayload(player, StarsS2CPayload.INSTANCE);
+    }
+    public static void receiveStarsPayload(MinecraftClient client) {
+        ((WorldRendererAccess)(client.worldRenderer)).infinity$setNeedsStars(true);
     }
 
-    public static ShaderRePayload setShader(ServerPlayerEntity player) {
-        return setShaderFromWorld(player.getServerWorld(), player);
-    }
-    public static ShaderRePayload setShaderFromWorld(ServerWorld destination, ServerPlayerEntity player) {
-        return setShaderFromWorld(destination, Iridescence.shouldApplyShader(player));
-    }
-    public static ShaderRePayload setShaderFromWorld(ServerWorld destination, boolean bl) {
-        if (destination == null) return new ShaderRePayload(new NbtCompound(), bl);
-        return new ShaderRePayload(InfinityOptions.access(destination).data(), bl);
-    }
-
-    public record F4Payload(int slot, int width, int height) implements CustomPayload {
-        public static final CustomPayload.Id<F4Payload> ID = new CustomPayload.Id<>(InfinityMethods.getId("receive_f4"));
-        public static final PacketCodec<RegistryByteBuf, F4Payload> CODEC = PacketCodec.tuple(
-                PacketCodecs.VAR_INT, F4Payload::slot,
-                PacketCodecs.VAR_INT, F4Payload::width,
-                PacketCodecs.VAR_INT, F4Payload::height,
-                F4Payload::new);
+    public record F4UpdateC2SPayload(int slot, int width, int height) implements CustomPayload {
+        public static final CustomPayload.Id<F4UpdateC2SPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("receive_f4"));
+        public static final PacketCodec<RegistryByteBuf, F4UpdateC2SPayload> CODEC = PacketCodec.tuple(
+                PacketCodecs.VAR_INT, F4UpdateC2SPayload::slot,
+                PacketCodecs.VAR_INT, F4UpdateC2SPayload::width,
+                PacketCodecs.VAR_INT, F4UpdateC2SPayload::height,
+                F4UpdateC2SPayload::new);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {
             return ID;
         }
     }
-    public static void receiveF4(F4Payload payload, ServerPlayNetworking.Context context) {
-        ItemStack st = context.player().getInventory().getStack(payload.slot);
+    public static void sendF4UpdatePayload(int slot, int width, int height) {
+        ClientPlayNetworking.send(new F4UpdateC2SPayload(slot, width, height));
+    }
+    public static void receiveF4UpdatePayload(ServerPlayerEntity player, int slot, int width, int height) {
+        ItemStack st = player.getInventory().getStack(slot);
         if (st.isOf(ModItems.F4.get())) {
             ItemStack newStack = st.copy();
             newStack.applyComponentsFrom(ComponentMap.builder()
-                    .add(ModComponentTypes.SIZE_X.get(), Math.clamp(payload.width, 1, 21))
-                    .add(ModComponentTypes.SIZE_Y.get(), Math.clamp(payload.height, 1, 21))
+                    .add(ModComponentTypes.SIZE_X.get(), Math.clamp(width, 1, 21))
+                    .add(ModComponentTypes.SIZE_Y.get(), Math.clamp(height, 1, 21))
                     .build());
-            context.player().getInventory().setStack(payload.slot, newStack);
+            player.getInventory().setStack(slot, newStack);
         }
     }
-    public record DeployF4() implements CustomPayload {
-        public static final DeployF4 INSTANCE = new DeployF4();
-        public static final CustomPayload.Id<DeployF4> ID = new CustomPayload.Id<>(InfinityMethods.getId("deploy_f4"));
-        public static final PacketCodec<RegistryByteBuf, DeployF4> CODEC = PacketCodec.unit(INSTANCE);
+
+    public record F4DeployC2SPayload() implements CustomPayload {
+        public static final F4DeployC2SPayload INSTANCE = new F4DeployC2SPayload();
+        public static final CustomPayload.Id<F4DeployC2SPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("deploy_f4"));
+        public static final PacketCodec<RegistryByteBuf, F4DeployC2SPayload> CODEC = PacketCodec.unit(INSTANCE);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {
             return ID;
         }
     }
-    public static void deployF4(DeployF4 payload, ServerPlayNetworking.Context context) {
-        ServerPlayerEntity player = context.player();
+    public static void sendF4DeployPayload() {
+        ClientPlayNetworking.send(F4DeployC2SPayload.INSTANCE);
+    }
+    public static void receiveF4DeployPayload(ServerPlayerEntity player) {
         ItemStack st = player.getStackInHand(Hand.MAIN_HAND);
         if (st.isOf(ModItems.F4.get())) {
             TypedActionResult<ItemStack> result = F4Item.deploy(player.getServerWorld(), player, Hand.MAIN_HAND);
@@ -177,46 +175,61 @@ public class ModPayloads {
         }
     }
 
-    public record DownloadSoundPack(NbtCompound songIds) implements CustomPayload {
-        public static final CustomPayload.Id<DownloadSoundPack> ID = new CustomPayload.Id<>(InfinityMethods.getId("download_sound_pack"));
-        public static final PacketCodec<RegistryByteBuf, DownloadSoundPack> CODEC = PacketCodec.tuple(
-                PacketCodecs.NBT_COMPOUND, DownloadSoundPack::songIds, DownloadSoundPack::new);
+    public record SoundPackS2CPayload(NbtCompound songIds) implements CustomPayload {
+        public static final CustomPayload.Id<SoundPackS2CPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("download_sound_pack"));
+        public static final PacketCodec<RegistryByteBuf, SoundPackS2CPayload> CODEC = PacketCodec.tuple(
+                PacketCodecs.NBT_COMPOUND, SoundPackS2CPayload::songIds, SoundPackS2CPayload::new);
 
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {
             return ID;
         }
     }
-    public record UploadJukeboxes(NbtCompound data) implements CustomPayload {
-        public static final CustomPayload.Id<UploadJukeboxes> ID = new CustomPayload.Id<>(InfinityMethods.getId("upload_jukeboxes"));
-        public static final PacketCodec<RegistryByteBuf, UploadJukeboxes> CODEC = PacketCodec.tuple(
-                PacketCodecs.NBT_COMPOUND, UploadJukeboxes::data, UploadJukeboxes::new);
+    public static void sendSoundPackPayload(ServerPlayerEntity player, NbtCompound data) {
+        InfinityMethods.sendS2CPayload(player, new SoundPackS2CPayload(data));
+    }
+
+    public record JukeboxesC2SPayload(NbtCompound data) implements CustomPayload {
+        public static final CustomPayload.Id<JukeboxesC2SPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("upload_jukeboxes"));
+        public static final PacketCodec<RegistryByteBuf, JukeboxesC2SPayload> CODEC = PacketCodec.tuple(
+                PacketCodecs.NBT_COMPOUND, JukeboxesC2SPayload::data, JukeboxesC2SPayload::new);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {
             return ID;
         }
+    }
+    public static void sendJukeboxesPayload(NbtCompound data) {
+        ClientPlayNetworking.send(new JukeboxesC2SPayload(data));
     }
 
     public static void registerPayloadsServer() {
-        PayloadTypeRegistry.playS2C().register(WorldAddPayload.ID, WorldAddPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(BiomeAddPayload.ID, BiomeAddPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(ShaderRePayload.ID, ShaderRePayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(StarsRePayLoad.ID, StarsRePayLoad.CODEC);
-        PayloadTypeRegistry.playS2C().register(DownloadSoundPack.ID, DownloadSoundPack.CODEC);
+        PayloadTypeRegistry.playS2C().register(WorldAddS2CPayload.ID, WorldAddS2CPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(BiomeAddS2CPayload.ID, BiomeAddS2CPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ShaderS2CPayload.ID, ShaderS2CPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(StarsS2CPayload.ID, StarsS2CPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SoundPackS2CPayload.ID, SoundPackS2CPayload.CODEC);
 
-        PayloadTypeRegistry.playC2S().register(F4Payload.ID, F4Payload.CODEC);
-        PayloadTypeRegistry.playC2S().register(DeployF4.ID, DeployF4.CODEC);
-        PayloadTypeRegistry.playC2S().register(UploadJukeboxes.ID, UploadJukeboxes.CODEC);
-        ServerPlayNetworking.registerGlobalReceiver(F4Payload.ID, ModPayloads::receiveF4);
-        ServerPlayNetworking.registerGlobalReceiver(DeployF4.ID, ModPayloads::deployF4);
-        ServerPlayNetworking.registerGlobalReceiver(UploadJukeboxes.ID, SoundScanner::unpackUploadedJukeboxes);
+        PayloadTypeRegistry.playC2S().register(F4UpdateC2SPayload.ID, F4UpdateC2SPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(F4DeployC2SPayload.ID, F4DeployC2SPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(JukeboxesC2SPayload.ID, JukeboxesC2SPayload.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(F4UpdateC2SPayload.ID, (payload, context) ->
+                receiveF4UpdatePayload(context.player(), payload.slot, payload.width, payload.height));
+        ServerPlayNetworking.registerGlobalReceiver(F4DeployC2SPayload.ID, (payload, context) ->
+                receiveF4DeployPayload(context.player()));
+        ServerPlayNetworking.registerGlobalReceiver(JukeboxesC2SPayload.ID, (payload, context) ->
+                SoundScanner.unpackUploadedJukeboxes(context.server(), payload.data));
     }
 
     public static void registerPayloadsClient() {
-        ClientPlayNetworking.registerGlobalReceiver(WorldAddPayload.ID, ModPayloads::addWorld);
-        ClientPlayNetworking.registerGlobalReceiver(BiomeAddPayload.ID, ModPayloads::addBiome);
-        ClientPlayNetworking.registerGlobalReceiver(ShaderRePayload.ID, ModPayloads::receiveShader);
-        ClientPlayNetworking.registerGlobalReceiver(StarsRePayLoad.ID, ModPayloads::receiveStars);
-        ClientPlayNetworking.registerGlobalReceiver(DownloadSoundPack.ID, SoundScanner::unpackDownloadedPack);
+        ClientPlayNetworking.registerGlobalReceiver(WorldAddS2CPayload.ID, (payload, context) ->
+                receiveWorldAddPayload(client(context), payload.world_id, payload.world_data));
+        ClientPlayNetworking.registerGlobalReceiver(BiomeAddS2CPayload.ID, (payload, context) ->
+                receiveBiomeAddPayload(client(context), payload.biome_id, payload.biome_data));
+        ClientPlayNetworking.registerGlobalReceiver(ShaderS2CPayload.ID, (payload, context) ->
+                receiveShaderPayload(client(context), payload.shader_data, payload.iridescence));
+        ClientPlayNetworking.registerGlobalReceiver(StarsS2CPayload.ID, (payload, context) ->
+                receiveStarsPayload(client(context)));
+        ClientPlayNetworking.registerGlobalReceiver(SoundPackS2CPayload.ID, (payload, context) ->
+                SoundScanner.unpackDownloadedPack(payload.songIds, client(context)));
     }
 }

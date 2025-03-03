@@ -53,8 +53,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerManager()Lnet/minecraft/server/PlayerManager;"))
     private void injected3(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir) {
         ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
-        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(teleportTarget.world(), player));
-        InfinityMethods.sendS2CPayload(player, ModPayloads.StarsRePayLoad.INSTANCE);
+        ModPayloads.sendShaderPayload(player, teleportTarget.world());
+        ModPayloads.sendStarsPayload(player);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -72,8 +72,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     @Inject(method = "changeGameMode", at = @At("RETURN"))
     private void injected4(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) {
-            ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
-            InfinityMethods.sendS2CPayload(player, ModPayloads.setShader(player));
+            ModPayloads.sendShaderPayload((ServerPlayerEntity)(Object)this);
         }
     }
 

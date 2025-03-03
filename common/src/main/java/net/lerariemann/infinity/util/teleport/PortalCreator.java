@@ -247,8 +247,8 @@ public interface PortalCreator {
      * Create and send S2C packets necessary for the client to process a freshly added dimension.
      */
     static void sendNewWorld(ServerPlayerEntity player, Identifier id, RandomDimension d) {
-        d.random_biomes.forEach(b -> InfinityMethods.sendS2CPayload(player, new ModPayloads.BiomeAddPayload(InfinityMethods.getId(b.name), b.data)));
-        InfinityMethods.sendS2CPayload(player, new ModPayloads.WorldAddPayload(id, d.type != null ? d.type.data : new NbtCompound()));
+        d.random_biomes.forEach(b -> ModPayloads.sendBiomeAddPayload(player, InfinityMethods.getId(b.name), b.data));
+        ModPayloads.sendWorldAddPayload(player, id, d.type != null ? d.type.data : new NbtCompound());
     }
 
     /**

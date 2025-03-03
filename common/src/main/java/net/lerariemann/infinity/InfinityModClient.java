@@ -2,7 +2,6 @@ package net.lerariemann.infinity;
 
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.lerariemann.infinity.item.F4Item;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
@@ -29,7 +28,7 @@ public class InfinityModClient {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (f4ConfigKey.wasPressed()) if (client.player != null
                     && client.player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.F4.get())) {
-                ClientPlayNetworking.send(ModPayloads.DeployF4.INSTANCE);
+                ModPayloads.sendF4DeployPayload();
                 TypedActionResult<ItemStack> result = F4Item.deploy(client.world, client.player, Hand.MAIN_HAND);
                 client.player.setStackInHand(Hand.MAIN_HAND, result.getValue());
             }

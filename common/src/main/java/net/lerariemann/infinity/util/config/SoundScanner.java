@@ -1,7 +1,5 @@
 package net.lerariemann.infinity.util.config;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.mixin.SoundListMixin;
@@ -47,25 +45,24 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
     }
 
     /**
-     * <p>On player connect, the server sends a {@link ModPayloads.DownloadSoundPack} payload to the client.
+     * <p>On player connect, the server sends a {@link ModPayloads.SoundPackS2CPayload} payload to the client.
      * <p>If the server already contains data upon which the client should create its resource pack, it holds this data.
      * <p>Otherwise, this payload is empty, and the server relies on the client to create it and send it back to the server for future use. */
-    public static void unpackDownloadedPack(ModPayloads.DownloadSoundPack payload, Object clientContext) {
-        MinecraftClient cl = ModPayloads.client(clientContext);
+    public static void unpackDownloadedPack(NbtCompound songIds, MinecraftClient cl) {
         //the client unpacks a non-empty payload only when needed, meaning only if it doesn't have necessary files yet
-        if (!payload.songIds().isEmpty() && !Files.exists(cl.getResourcePackDir().resolve("infinity/assets/infinity/sounds.json"))) {
-            cl.execute(() -> saveResourcePack(cl, payload.songIds().getList("entries", NbtElement.STRING_TYPE).stream()
+        if (!songIds.isEmpty() && !Files.exists(cl.getResourcePackDir().resolve("infinity/assets/infinity/sounds.json"))) {
+            cl.execute(() -> saveResourcePack(cl, songIds.getList("entries", NbtElement.STRING_TYPE).stream()
                     .map(NbtElement::asString).map(Identifier::of), false));
         }
         else if (isPreloaded()) {
             cl.execute(() -> {
                 NbtCompound jukeboxes = saveResourcePack(cl, getMatchingLoadedIds(), true);
                 NbtCompound res = new NbtCompound();
-                NbtList songIds = new NbtList();
-                getMatchingLoadedIds().forEach(id -> songIds.add(NbtString.of(id.toString())));
-                res.put("entries", songIds);
+                NbtList songIdsList = new NbtList();
+                getMatchingLoadedIds().forEach(id -> songIdsList.add(NbtString.of(id.toString())));
+                res.put("entries", songIdsList);
                 res.put("jukeboxes", jukeboxes);
-                ClientPlayNetworking.send(new ModPayloads.UploadJukeboxes(res));
+                ModPayloads.sendJukeboxesPayload(res);
             });
         }
     }
@@ -108,22 +105,14 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
         return jukeboxes;
     }
 
-    /** Receiver for a C2S {@link ModPayloads.UploadJukeboxes} payload, which holds data to send to clients in the future for them to
+    /** Receiver for a C2S {@link ModPayloads.JukeboxesC2SPayload} payload, which holds data to send to clients in the future for them to
      * generate custom sound resource packs, as well as jukebox song definitions corresponding to this data. */
-    public static void unpackUploadedJukeboxes(ModPayloads.UploadJukeboxes payload, ServerPlayNetworking.Context context) {
+    public static void unpackUploadedJukeboxes(MinecraftServer server, NbtCompound data) {
         if (!RandomProvider.rule("useSoundSyncPackets")) return;
-        NbtCompound data = payload.data();
         if (!data.contains("jukeboxes") || !data.contains("entries")) return;
-        MinecraftServer server = context.player().server;
         if (Files.exists(server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))) return;
 
-        unpackUploadedJukeboxes(server, data.getCompound("jukeboxes"));
-        data.remove("jukeboxes");
-        NbtCompound packData = new NbtCompound();
-        packData.put("entries", data.get("entries"));
-        CommonIO.write(packData, server.getSavePath(WorldSavePath.DATAPACKS), "client_sound_pack_data.json");
-    }
-    public static void unpackUploadedJukeboxes(MinecraftServer server, NbtCompound allJukeboxes) {
+        NbtCompound allJukeboxes = data.getCompound("jukeboxes");
         Path pathJukeboxes = server.getSavePath(WorldSavePath.DATAPACKS).resolve("infinity/data/infinity/jukebox_song");
         for (String key: allJukeboxes.getKeys()) {
             if (allJukeboxes.get(key) instanceof NbtCompound jukebox) {
@@ -131,6 +120,11 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
             }
         }
         grabJukeboxes(server);
+
+        data.remove("jukeboxes");
+        NbtCompound packData = new NbtCompound();
+        packData.put("entries", data.get("entries"));
+        CommonIO.write(packData, server.getSavePath(WorldSavePath.DATAPACKS), "client_sound_pack_data.json");
     }
     /** Injects freshly received jukebox song definitions into the server's registries, config files and {@link RandomProvider}. */
     public static void grabJukeboxes(MinecraftServer server) {

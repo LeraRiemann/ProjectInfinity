@@ -2,7 +2,6 @@ package net.lerariemann.infinity.registry.core;
 
 import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
@@ -114,7 +113,7 @@ public class ModItems {
             registerItemAfter("disc", ItemGroups.TOOLS, Items.MUSIC_DISC_PIGSTEP, Item::new,
                     new Item.Settings().rarity(Rarity.RARE));
     public static final RegistrySupplier<Item> IRIDESCENT_POTION =
-            registerItemAfter("iridescent_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, settings -> new IridescentPotionItem(deferredIntComponent(ModComponentTypes.CHARGE, 0)),
+            registerItemAfter("iridescent_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, settings -> new IridescentPotionItem(deferredIntComponent(ModComponentTypes.CHARGE, 4)),
                     new Item.Settings()
                             .rarity(Rarity.UNCOMMON)
                             .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));

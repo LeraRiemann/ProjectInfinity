@@ -106,6 +106,10 @@ public interface Iridescence {
     }
 
     static int getAmplifierOnApply(LivingEntity entity, int original) {
+        StatusEffectInstance effect = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
+        if (effect != null) {
+            return effect.getAmplifier() < original ? original : -1;
+        }
         StatusEffectInstance cooldown = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_COOLDOWN);
         if (cooldown == null) return original;
         else if (cooldown.getAmplifier() < 1) {
@@ -171,10 +175,10 @@ public interface Iridescence {
     }
 
     static void loadShader(ServerPlayerEntity player) {
-        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(player.getServerWorld(), true));
+        ModPayloads.sendShaderPayload(player, player.getServerWorld(), true);
     }
     static void unloadShader(ServerPlayerEntity player) {
-        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(player.getServerWorld(), false));
+        ModPayloads.sendShaderPayload(player, player.getServerWorld(), false);
     }
 
     static boolean shouldApplyShader(@Nullable PlayerEntity player) {

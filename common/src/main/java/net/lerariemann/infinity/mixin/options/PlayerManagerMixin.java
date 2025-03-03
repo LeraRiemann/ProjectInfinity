@@ -5,7 +5,6 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
-import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
@@ -56,8 +55,8 @@ public class PlayerManagerMixin {
             target = "Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void injected(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci, @Local(ordinal=0) ServerWorld serverWorld2) {
         if (serverWorld2 == null) return;
-        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(serverWorld2, player));
-        InfinityMethods.sendS2CPayload(player, ModPayloads.StarsRePayLoad.INSTANCE);
+        ModPayloads.sendShaderPayload(player, serverWorld2);
+        ModPayloads.sendStarsPayload(player);
         MinecraftServerAccess acc = ((MinecraftServerAccess)(serverWorld2.getServer()));
         if (acc.infinity$needsInvocation()) {
             int y = serverWorld2.getTopY() - 10;
@@ -71,13 +70,13 @@ public class PlayerManagerMixin {
             });
         }
         InfinityMod.LOGGER.info("Sending sound pack to client");
-        if (RandomProvider.rule("useSoundSyncPackets")) InfinityMethods.sendS2CPayload(player, new ModPayloads.DownloadSoundPack(
-                CommonIO.read(player.server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))));
+        if (RandomProvider.rule("useSoundSyncPackets")) ModPayloads.sendSoundPackPayload(player, CommonIO.read(
+                player.server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json")));
     }
 
     @Inject(method="sendWorldInfo", at = @At("TAIL"))
     private void injected2(ServerPlayerEntity player, ServerWorld world, CallbackInfo ci) {
-        InfinityMethods.sendS2CPayload(player, ModPayloads.setShaderFromWorld(world, player));
-        InfinityMethods.sendS2CPayload(player, ModPayloads.StarsRePayLoad.INSTANCE);
+        ModPayloads.sendShaderPayload(player, world);
+        ModPayloads.sendStarsPayload(player);
     }
 }
