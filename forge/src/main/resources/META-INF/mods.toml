@@ -42,11 +42,6 @@ versionRange = "[0.92.2,)"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.infinity]]
-modId = "create"
-mandatory = false
-versionRange = "[,6.0.0)"
-
 [modproperties.infinity]
 catalogueItemIcon="infinity:book_box"
 catalogueBackground="background.png"

@@ -11,6 +11,7 @@ import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.var.ModStats;
 
 import static net.lerariemann.infinity.InfinityMod.LOGGER;
+import static net.lerariemann.infinity.util.InfinityMethods.isCreateLoaded;
 
 public final class InfinityModFabric implements ModInitializer {
     @Override
@@ -24,7 +25,7 @@ public final class InfinityModFabric implements ModInitializer {
         InfinityMod.init();
         // Run any remaining tasks that require waiting for the registry to freeze on NeoForge.
         ModEntities.registerSpawnRestrictions();
-        if (Platform.isModLoaded("create"))
+        if (isCreateLoaded())
             CreateCompat.register();
         ModStats.load();
         ModBlocks.registerFlammableBlocks();

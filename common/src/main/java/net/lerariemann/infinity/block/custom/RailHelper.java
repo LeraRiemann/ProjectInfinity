@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.block.custom;
 
-import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.compat.CreateCompat;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.minecraft.block.BlockState;
@@ -14,6 +13,8 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import static net.lerariemann.infinity.util.InfinityMethods.isCreateLoaded;
+
 public class RailHelper extends BlockWithEntity {
     public RailHelper(Settings settings) {
         super(settings);
@@ -26,7 +27,7 @@ public class RailHelper extends BlockWithEntity {
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (Platform.isModLoaded("create")) {
+        if (isCreateLoaded()) {
             CreateCompat.reattachRails(world, pos, getBlockEntity(world, pos));
         }
         else world.setBlockState(pos, Blocks.AIR.getDefaultState());

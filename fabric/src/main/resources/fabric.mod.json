@@ -47,9 +47,7 @@
   },
   "suggests": {
     "cloth-config": "*",
-    "modmenu": "*"
-  },
-  "breaks": {
+    "modmenu": "*",
     "create": ">6.0.0"
   },
   "custom": {

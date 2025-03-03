@@ -56,6 +56,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPage;
+import static net.lerariemann.infinity.util.InfinityMethods.isCreateLoaded;
 
 public interface PortalCreator {
     /**
@@ -243,7 +244,7 @@ public interface PortalCreator {
                 .addModifier(npbe -> npbe.setColor(applier.apply(npbe.getPos())))
                 .addModifier(npbe -> npbe.setOpen(open))
                 .addModifier(BlockEntity::markDirty);
-        if (Platform.isModLoaded("create")) {
+        if (isCreateLoaded()) {
             union.addModifier(CreateCompat::tryModifyRails);
         }
         return union;

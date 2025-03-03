@@ -27,6 +27,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
+import static net.lerariemann.infinity.util.InfinityMethods.isCreateLoaded;
+
 @Mod(InfinityMod.MOD_ID)
 public final class InfinityModForge {
     public InfinityModForge() {
@@ -77,7 +79,7 @@ public final class InfinityModForge {
         ModStatusEffects.AFTERGLOW = ModEffectsForge.AFTERGLOW.getHolder().get();
         ModBlocks.registerFlammableBlocks();
         ModItemFunctions.registerDispenserBehaviour();
-        if (Platform.isModLoaded("create"))
+        if (isCreateLoaded())
             CreateCompat.register();
     }
 }

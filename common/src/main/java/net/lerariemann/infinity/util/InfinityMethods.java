@@ -279,4 +279,8 @@ public interface InfinityMethods {
     static boolean longArithmeticEnabled() {
         return RandomProvider.rule("longArithmeticEnabled");
     }
+
+    static boolean isCreateLoaded() {
+        return Platform.isModLoaded("create") && Platform.getMod("create").getVersion().charAt(0) != '6';
+    }
 }
