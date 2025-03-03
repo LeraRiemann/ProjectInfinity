@@ -49,6 +49,9 @@
     "cloth-config": "*",
     "modmenu": "*"
   },
+  "breaks": {
+    "create": ">6.0.0"
+  },
   "custom": {
     "lithium:options": {
       "mixin.ai.poi.fast_portals": false
