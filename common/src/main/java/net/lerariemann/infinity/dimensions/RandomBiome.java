@@ -44,6 +44,13 @@ public class RandomBiome {
         return PROVIDER.roll(random, key);
     }
 
+    void rollAndPutSafe(NbtCompound res, String key, NbtElement randomSound) {
+        if (roll(key)) {
+            if (randomSound != null && !randomSound.asString().isBlank())
+                res.put(key, randomSound);
+        }
+    }
+
     public NbtInt randomColor() {
         return NbtInt.of(random.nextInt(16777216));
     }
@@ -70,16 +77,20 @@ public class RandomBiome {
         colors = res.copy();
         if (random.nextBoolean()) res.put("grass_color_modifier", NbtString.of(random.nextBoolean() ? "dark_forest" : "swamp"));
         if (roll("use_particles")) res.put("particle", randomParticle());
-        if (roll("ambient_sound")) res.put("ambient_sound", randomSound());
-        if (roll("mood_sound")) res.put("mood_sound", randomMoodSound());
-        if (roll("additions_sound")) res.put("additions_sound", randomAdditionSound());
+        rollAndPutSafe(res, "ambient_sound", randomSound());
+        rollAndPutSafe(res, "mood_sound", randomMoodSound());
+        rollAndPutSafe(res, "additions_sound", randomAdditionSound());
         if (roll("music")) res.put("music", randomMusic());
         return res;
     }
 
     NbtCompound randomMoodSound() {
         NbtCompound res = new NbtCompound();
-        res.put("sound", randomSound());
+        var sound = randomSound();
+        if (sound.asString().isEmpty()) {
+            return null;
+        }
+        res.put("sound", sound);
         res.putInt("tick_delay", random.nextInt(6000));
         res.putInt("block_search_extent", random.nextInt(32));
         res.putDouble("offset", random.nextDouble()*8);
@@ -88,7 +99,11 @@ public class RandomBiome {
 
     NbtCompound randomAdditionSound(){
         NbtCompound res = new NbtCompound();
-        res.put("sound", randomSound());
+        var sound = randomSound();
+        if (sound.asString().isEmpty()) {
+            return null;
+        }
+        res.put("sound", sound);
         res.putDouble("tick_chance", random.nextExponential()*0.01);
         return res;
     }
