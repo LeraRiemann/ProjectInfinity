@@ -1,7 +1,7 @@
 package net.lerariemann.infinity;
 
+import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.lerariemann.infinity.item.F4Item;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
@@ -24,7 +24,7 @@ public class InfinityModClient {
         ModEntities.registerEntityRenderers();
         ModScreenHandlers.register();
         KeyMappingRegistry.register(f4ConfigKey);
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+        ClientTickEvent.CLIENT_POST.register(client -> {
             while (f4ConfigKey.wasPressed()) if (client.player != null
                     && client.player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.F4.get())) {
                 ModPayloads.sendF4DeployPayload();
