@@ -12,6 +12,7 @@
     "core.NetherPortalBlockMixin",
     "core.NetherPortalMixin",
     "core.ServerPlayerEntityMixin",
+    "core.SimpleRegistryMixin",
     "fixes.AquifierSamplerImplMixin",
     "fixes.BeeGoalMixin",
     "fixes.BeeGoalMixin$BeeGoalMixin2",

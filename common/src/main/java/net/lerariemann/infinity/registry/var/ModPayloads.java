@@ -55,7 +55,7 @@ public class ModPayloads {
     public static void receiveWorldAddPayload(MinecraftClient client, Identifier id, NbtCompound data) {
         client.execute(() ->
                 (new DimensionGrabber(Objects.requireNonNull(client.getNetworkHandler()).getRegistryManager()))
-                        .grab_dim_for_client(id, data));
+                        .grabDimensionForClient(id, data));
     }
 
     public record BiomeAddS2CPayload(Identifier biome_id, NbtCompound biome_data) implements CustomPayload {
@@ -75,7 +75,7 @@ public class ModPayloads {
     public static void receiveBiomeAddPayload(MinecraftClient client, Identifier id, NbtCompound data) {
         client.execute(() ->
                 (new DimensionGrabber(Objects.requireNonNull(client.getNetworkHandler()).getRegistryManager()))
-                        .grab_biome_for_client(id, data));
+                        .grabBiomeForClient(id, data));
     }
 
     public record ShaderS2CPayload(NbtCompound shader_data, boolean iridescence) implements CustomPayload {

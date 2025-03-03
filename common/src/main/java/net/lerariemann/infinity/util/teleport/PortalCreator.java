@@ -41,8 +41,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionOptions;
 
 import java.util.*;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -236,8 +238,11 @@ public interface PortalCreator {
         RandomDimension d = new RandomDimension(id, server);
 
         if (!RandomProvider.rule("runtimeGenerationEnabled")) return false;
-        ((MinecraftServerAccess)(server)).infinity$addWorld(
-                key, (new DimensionGrabber(server.getRegistryManager())).grab_all(d)); // create the dimension
+
+        DimensionGrabber grabber = new DimensionGrabber(server.getRegistryManager());
+        DimensionOptions options = grabber.grabAllRelatedData(d);
+        grabber.close();
+        ((MinecraftServerAccess)(server)).infinity$addWorld(key, options); // create the dimension
         server.getPlayerManager().getPlayerList().forEach(
                 a -> sendNewWorld(a, id, d)); //and send everyone its data for clientside updating
         return true;

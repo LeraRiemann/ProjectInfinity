@@ -16,6 +16,7 @@ import net.minecraft.server.world.ChunkErrorHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.RandomSequencesState;
 import net.minecraft.util.thread.ReentrantThreadExecutor;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.SaveProperties;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.source.BiomeAccess;
@@ -110,16 +111,26 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
     @Override
     public void infinity$addWorld(RegistryKey<World> key, DimensionOptions options) {
         ServerWorldProperties serverWorldProperties = saveProperties.getMainWorldProperties();
-        ServerWorld world = new ServerWorld(((MinecraftServer) (Object) this), workerExecutor, session, serverWorldProperties,
-                key, options, worldGenerationProgressListenerFactory.create(11), saveProperties.isDebugWorld(),
-                BiomeAccess.hashSeed(saveProperties.getGeneratorOptions().getSeed()), ImmutableList.of(), false, getWorld(World.OVERWORLD).getRandomSequences());
+        ServerWorld world = new ServerWorld(
+                ((MinecraftServer) (Object) this),
+                workerExecutor,
+                session,
+                serverWorldProperties,
+                key,
+                options,
+                worldGenerationProgressListenerFactory.create(saveProperties.getGameRules().getInt(GameRules.SPAWN_CHUNK_RADIUS)),
+                saveProperties.isDebugWorld(),
+                BiomeAccess.hashSeed(saveProperties.getGeneratorOptions().getSeed()),
+                ImmutableList.of(),
+                false,
+                getWorld(World.OVERWORLD).getRandomSequences());
         getWorld(World.OVERWORLD).getWorldBorder().addListener(new WorldBorderListener.WorldBorderSyncer(world.getWorldBorder()));
         infinity$worldsToAdd.put(key, world);
         send(createTask(() -> {
             worlds.put(key, world);
             infinity$worldsToAdd.clear();
+            PlatformMethods.onWorldLoad(this, world);
         }));
-        PlatformMethods.onWorldLoad(this, world);
     }
 
     @Override
