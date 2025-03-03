@@ -14,6 +14,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.text.Text;
@@ -39,8 +40,8 @@ public class TimeBombBlock extends Block {
     public static final VoxelShape TOP_SHAPE = Block.createCuboidShape(3, 0, 3, 13, 2, 13);
     public static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(3, 12, 3, 13, 14, 13);
     public static final VoxelShape INNER_SHAPE = Block.createCuboidShape(4, 2, 4, 12, 12, 12);
-    public static final VoxelShape PIMP_SHAPE = Block.createCuboidShape(7, 14, 7, 9, 16, 9);
-    public static final VoxelShape SHAPE = VoxelShapes.union(BOTTOM_SHAPE, TOP_SHAPE, INNER_SHAPE, PIMP_SHAPE);
+    public static final VoxelShape TIP_SHAPE = Block.createCuboidShape(7, 14, 7, 9, 16, 9);
+    public static final VoxelShape SHAPE = VoxelShapes.union(BOTTOM_SHAPE, TOP_SHAPE, INNER_SHAPE, TIP_SHAPE);
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
@@ -103,8 +104,9 @@ public class TimeBombBlock extends Block {
                         player.increaseStat(ModStats.WORLDS_DESTROYED_STAT, 1);
                         ModCriteria.DIMS_CLOSED.get().trigger((ServerPlayerEntity)player);
                         world.setBlockState(pos, state.with(ACTIVE, true));
-                        world.playSound(null, pos, ModSounds.IVORY_MUSIC_CHALLENGER_EVENT, SoundCategory.BLOCKS, 1f, 1f);
+                        world.playSound(null, pos, ModSounds.IVORY_MUSIC_CHALLENGER_EVENT, SoundCategory.RECORDS, 1f, 1f);
                     } //activate
+                    world.playSound(null, pos, SoundEvents.BLOCK_VAULT_REJECT_REWARDED_PLAYER, SoundCategory.BLOCKS, 1f, 1f);
                     return ActionResult.SUCCESS;
                 }
                 else if (world instanceof ServerWorld) {
@@ -113,7 +115,7 @@ public class TimeBombBlock extends Block {
             }
             else {
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                player.getInventory().insertStack(ModItems.TIME_BOMB_ITEM.get().getDefaultStack());
+                if (!player.isCreative()) player.getInventory().insertStack(ModItems.TIME_BOMB_ITEM.get().getDefaultStack());
                 return ActionResult.SUCCESS;
             } //pick up
         }
