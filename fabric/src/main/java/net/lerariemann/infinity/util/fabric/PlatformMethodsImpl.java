@@ -57,9 +57,7 @@ public class PlatformMethodsImpl {
     }
 
     public static <T extends Item> void addAfter(RegistrySupplier<T> supplier, RegistryKey<ItemGroup> group, Item item) {
-        if (InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
-            ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, supplier.get()));
-        }
+        ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, supplier.get()));
     }
 
     public static boolean isInBlack(BlockState state) {

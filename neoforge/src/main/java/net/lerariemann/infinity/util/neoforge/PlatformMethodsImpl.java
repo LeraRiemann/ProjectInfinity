@@ -2,8 +2,6 @@ package net.lerariemann.infinity.util.neoforge;
 
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.lerariemann.infinity.item.neoforge.StarOfLangItemNeoforge;
 import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
 import net.lerariemann.infinity.item.StarOfLangItem;
@@ -62,11 +60,10 @@ public class PlatformMethodsImpl {
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(world));
     }
 
-    //Optional, requires Item Group API.
+    /**
+     * Replaced by NeoForge APIs. See {@link NeoItems}.
+     */
     public static <T extends Item> void addAfter(RegistrySupplier<T> supplier, RegistryKey<ItemGroup> group, Item item) {
-        if (InfinityMethods.isFabricApiLoaded("fabric-item-group-api-v1")) {
-            ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(item, supplier.get()));
-        }
     }
 
     public static boolean isInBlack(BlockState state) {
@@ -103,9 +100,8 @@ public class PlatformMethodsImpl {
     }
 
     public static void registerFlammableBlock(RegistrySupplier<Block> block, int burn, int spread) {
-        if (InfinityMethods.isFabricApiLoaded("fabric-content-registries-v0")) {
-            FlammableBlockRegistry.getDefaultInstance().add(block.get(), burn, spread);
-        }
+        FireBlock fireblock = (FireBlock)Blocks.FIRE;
+        fireblock.registerFlammableBlock(block.get(), burn, spread);
     }
 
     public static boolean acidTest(Entity entity, boolean eyes) {
