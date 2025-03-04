@@ -34,8 +34,8 @@ public class RandomGeode extends RandomisedFeature {
         NbtList inner_placements = new NbtList();
         inner_placements.add(PROVIDER.randomElement(random, "all_blocks"));
         blocks.put("inner_placements", inner_placements);
-        blocks.putString("cannot_replace", "#" + PROVIDER.randomName(random, "tags"));
-        blocks.putString("invalid_blocks", "#" + PROVIDER.randomName(random, "tags"));
+        blocks.putString("cannot_replace", PROVIDER.randomName(random, "tags"));
+        blocks.putString("invalid_blocks", PROVIDER.randomName(random, "tags"));
         config.put("blocks", blocks);
         NbtCompound layers = new NbtCompound();
         double r = 1.0;

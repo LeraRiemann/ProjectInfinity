@@ -1,0 +1,363 @@
+{
+  "feature": {
+    "type": "minecraft:random_selector",
+    "config": {
+      "default": {
+        "feature": "minecraft:oak",
+        "placement": []
+      },
+      "features": [
+        {
+          "chance": 0.1,
+          "feature": {
+            "feature": {
+              "type": "minecraft:simple_random_selector",
+              "config": {
+                "features": [
+                  {
+                    "feature": {
+                      "type": "minecraft:tree",
+                      "config": {
+                        "decorators": [],
+                        "dirt_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:red_wool"
+                          }
+                        },
+                        "foliage_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:red_wool"
+                          }
+                        },
+                        "trunk_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:red_terracotta"
+                          }
+                        },
+                        "foliage_placer": {
+                          "type": "minecraft:blob_foliage_placer",
+                          "height": 3,
+                          "offset": 0,
+                          "radius": 2
+                        },
+                        "force_dirt": false,
+                        "ignore_vines": true,
+                        "minimum_size": {
+                          "type": "minecraft:two_layers_feature_size",
+                          "limit": 1,
+                          "lower_size": 0,
+                          "upper_size": 1
+                        },
+                        "trunk_placer": {
+                          "type": "minecraft:straight_trunk_placer",
+                          "base_height": 4,
+                          "height_rand_a": 2,
+                          "height_rand_b": 0
+                        }
+                      }
+                    },
+                    "placement": []
+                  },
+                  {
+                    "feature": {
+                      "type": "minecraft:tree",
+                      "config": {
+                        "decorators": [],
+                        "dirt_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:orange_wool"
+                          }
+                        },
+                        "foliage_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:orange_wool"
+                          }
+                        },
+                        "trunk_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:orange_terracotta"
+                          }
+                        },
+                        "foliage_placer": {
+                          "type": "minecraft:blob_foliage_placer",
+                          "height": 3,
+                          "offset": 0,
+                          "radius": 2
+                        },
+                        "force_dirt": false,
+                        "ignore_vines": true,
+                        "minimum_size": {
+                          "type": "minecraft:two_layers_feature_size",
+                          "limit": 1,
+                          "lower_size": 0,
+                          "upper_size": 1
+                        },
+                        "trunk_placer": {
+                          "type": "minecraft:straight_trunk_placer",
+                          "base_height": 4,
+                          "height_rand_a": 2,
+                          "height_rand_b": 0
+                        }
+                      }
+                    },
+                    "placement": []
+                  },
+                  {
+                    "feature": {
+                      "type": "minecraft:tree",
+                      "config": {
+                        "decorators": [],
+                        "dirt_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:yellow_wool"
+                          }
+                        },
+                        "foliage_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:yellow_wool"
+                          }
+                        },
+                        "trunk_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:yellow_terracotta"
+                          }
+                        },
+                        "foliage_placer": {
+                          "type": "minecraft:blob_foliage_placer",
+                          "height": 3,
+                          "offset": 0,
+                          "radius": 2
+                        },
+                        "force_dirt": false,
+                        "ignore_vines": true,
+                        "minimum_size": {
+                          "type": "minecraft:two_layers_feature_size",
+                          "limit": 1,
+                          "lower_size": 0,
+                          "upper_size": 1
+                        },
+                        "trunk_placer": {
+                          "type": "minecraft:straight_trunk_placer",
+                          "base_height": 4,
+                          "height_rand_a": 2,
+                          "height_rand_b": 0
+                        }
+                      }
+                    },
+                    "placement": []
+                  },
+                  {
+                    "feature": {
+                      "type": "minecraft:tree",
+                      "config": {
+                        "decorators": [],
+                        "dirt_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:green_wool"
+                          }
+                        },
+                        "foliage_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:green_wool"
+                          }
+                        },
+                        "trunk_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:green_terracotta"
+                          }
+                        },
+                        "foliage_placer": {
+                          "type": "minecraft:blob_foliage_placer",
+                          "height": 3,
+                          "offset": 0,
+                          "radius": 2
+                        },
+                        "force_dirt": false,
+                        "ignore_vines": true,
+                        "minimum_size": {
+                          "type": "minecraft:two_layers_feature_size",
+                          "limit": 1,
+                          "lower_size": 0,
+                          "upper_size": 1
+                        },
+                        "trunk_placer": {
+                          "type": "minecraft:straight_trunk_placer",
+                          "base_height": 4,
+                          "height_rand_a": 2,
+                          "height_rand_b": 0
+                        }
+                      }
+                    },
+                    "placement": []
+                  },
+                  {
+                    "feature": {
+                      "type": "minecraft:tree",
+                      "config": {
+                        "decorators": [],
+                        "dirt_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:blue_wool"
+                          }
+                        },
+                        "foliage_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:blue_wool"
+                          }
+                        },
+                        "trunk_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:blue_terracotta"
+                          }
+                        },
+                        "foliage_placer": {
+                          "type": "minecraft:blob_foliage_placer",
+                          "height": 3,
+                          "offset": 0,
+                          "radius": 2
+                        },
+                        "force_dirt": false,
+                        "ignore_vines": true,
+                        "minimum_size": {
+                          "type": "minecraft:two_layers_feature_size",
+                          "limit": 1,
+                          "lower_size": 0,
+                          "upper_size": 1
+                        },
+                        "trunk_placer": {
+                          "type": "minecraft:straight_trunk_placer",
+                          "base_height": 4,
+                          "height_rand_a": 2,
+                          "height_rand_b": 0
+                        }
+                      }
+                    },
+                    "placement": []
+                  },
+                  {
+                    "feature": {
+                      "type": "minecraft:tree",
+                      "config": {
+                        "decorators": [],
+                        "dirt_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:purple_wool"
+                          }
+                        },
+                        "foliage_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:purple_wool"
+                          }
+                        },
+                        "trunk_provider": {
+                          "type": "minecraft:simple_state_provider",
+                          "state": {
+                            "Name": "minecraft:purple_terracotta"
+                          }
+                        },
+                        "foliage_placer": {
+                          "type": "minecraft:blob_foliage_placer",
+                          "height": 3,
+                          "offset": 0,
+                          "radius": 2
+                        },
+                        "force_dirt": false,
+                        "ignore_vines": true,
+                        "minimum_size": {
+                          "type": "minecraft:two_layers_feature_size",
+                          "limit": 1,
+                          "lower_size": 0,
+                          "upper_size": 1
+                        },
+                        "trunk_placer": {
+                          "type": "minecraft:straight_trunk_placer",
+                          "base_height": 4,
+                          "height_rand_a": 2,
+                          "height_rand_b": 0
+                        }
+                      }
+                    },
+                    "placement": []
+                  }
+                ]
+              }
+            },
+            "placement": []
+          }
+        },
+        {
+          "chance": 0.5,
+          "feature": {
+            "feature": "minecraft:fancy_oak",
+            "placement": []
+          }
+        }
+      ]
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": {
+        "type": "minecraft:weighted_list",
+        "distribution": [
+          {
+            "data": 0,
+            "weight": 8
+          },
+          {
+            "data": 1,
+            "weight": 3
+          },
+          {
+            "data": 2,
+            "weight": 1
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "minecraft:oak_sapling",
+          "Properties": {
+            "stage": "0"
+          }
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

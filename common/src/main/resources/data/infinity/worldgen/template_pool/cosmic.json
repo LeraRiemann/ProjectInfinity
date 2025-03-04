@@ -9,6 +9,15 @@
         "projection": "rigid",
         "processors": "minecraft:empty"
       }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "infinity:cosmic_pool/scratch_wool",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
     }
   ]
 }

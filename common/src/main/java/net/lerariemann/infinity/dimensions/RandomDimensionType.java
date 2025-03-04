@@ -44,7 +44,7 @@ public class RandomDimensionType {
         lightLevel.putString("type", "uniform");
             lightLevel.put("value", RandomProvider.genBounds(0, random.nextInt(15)));
         data.put("monster_spawn_light_level", lightLevel);
-        data.putString("infiniburn", "#" + dim.PROVIDER.randomName(random, "tags"));
+        data.putString("infiniburn", dim.PROVIDER.randomName(random, "tags"));
         String s = dim.PROVIDER.randomName(random, "dimension_effects");
         foggy = s.equals("minecraft:the_nether");
         data.putString("effects", s);
