@@ -19,7 +19,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-public class ChromaticBlock extends BlockWithEntity {
+public class ChromaticBlock extends BlockWithEntity implements Boopable {
     public static final MapCodec<ChromaticBlock> CODEC = createCodec(ChromaticBlock::new);
     public ChromaticBlock(Settings settings) {
         super(settings);
@@ -27,6 +27,7 @@ public class ChromaticBlock extends BlockWithEntity {
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
+        appendBoop(builder);
     }
 
     @Override

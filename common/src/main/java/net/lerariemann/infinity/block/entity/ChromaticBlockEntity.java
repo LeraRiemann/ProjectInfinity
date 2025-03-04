@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.block.entity;
 
+import net.lerariemann.infinity.block.custom.Boopable;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
@@ -151,9 +152,7 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     void sync() {
         markDirty();
         if (world != null) {
-            BlockState bs = world.getBlockState(pos);
-            bs.updateNeighbors(world, pos, 3);
-            world.updateListeners(pos, bs, bs, 0);
+            Boopable.boop(world, pos);
         }
     }
 
