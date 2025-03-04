@@ -275,7 +275,7 @@ public interface InfinityMethods {
 
     static boolean isCreateLoaded() {
         if (Platform.isModLoaded("create")) {
-            return Platform.getMod("create").getVersion().charAt(0) != '6';
+            return Platform.getMod("create").getVersion().charAt(0) != '5';
         }
         return false;
     }

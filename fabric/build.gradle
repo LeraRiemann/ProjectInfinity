@@ -63,21 +63,12 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
-    exclusiveContent {
-        forRepository {
-            maven {
-                name = "Fabricators of Create"
-                url = "https://mvn.devos.one/snapshots"
-            }
-        }
-        filter {
-            includeGroup "io.github.fabricators_of_create"
-            includeGroup "io.github.fabricators_of_create.Porting-Lib"
-            includeGroup "com.tterrag.registrate_fabric"
-            includeGroup "io.github.tropheusj"
-            includeGroup "com.simibubi.create"
-        }
+    maven {
+        name = "Fabricators of Create"
+        url = "https://mvn.devos.one/snapshots"
     }
+
+
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // Forge Config API Port
     maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
 
@@ -110,6 +101,24 @@ dependencies {
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+}
+
+
+configurations.configureEach {
+    resolutionStrategy {
+        force("io.github.fabricators_of_create.Porting-Lib:tags:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:brewing:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:client_events:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:tool_actions:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:models:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:transfer:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:obj_loader:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:networking:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:extensions:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:entity:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:base:${porting_lib_version}")
+
+    }
 }
 
 processResources {

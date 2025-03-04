@@ -81,6 +81,23 @@ dependencies {
 
 }
 
+configurations.configureEach {
+    resolutionStrategy {
+        force("io.github.fabricators_of_create.Porting-Lib:tags:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:brewing:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:client_events:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:tool_actions:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:models:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:transfer:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:obj_loader:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:networking:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:extensions:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:entity:${porting_lib_version}")
+        force("io.github.fabricators_of_create.Porting-Lib:base:${porting_lib_version}")
+
+    }
+}
+
 loom {
     accessWidenerPath = file("src/main/resources/infinity.accesswidener")
 }

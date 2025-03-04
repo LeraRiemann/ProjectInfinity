@@ -1,10 +1,10 @@
 package net.lerariemann.infinity.compat;
 
+import com.simibubi.create.api.contraption.train.PortalTrackProvider;
 import com.simibubi.create.content.trains.track.AllPortalTracks;
 import com.simibubi.create.content.trains.track.TrackBlock;
 import com.simibubi.create.content.trains.track.TrackShape;
-import com.simibubi.create.foundation.utility.BlockFace;
-import com.simibubi.create.foundation.utility.Pair;
+import net.createmod.catnip.math.BlockFace;
 import net.lerariemann.infinity.block.custom.RailHelper;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
@@ -23,28 +23,27 @@ import java.util.Optional;
 import java.util.Set;
 
 public class CreateCompat {
-    public static Pair<ServerWorld, BlockFace> infinityPortalProvider(Pair<ServerWorld, BlockFace> inbound) {
-        ServerWorld worldFrom = inbound.getFirst();
+    private static PortalTrackProvider.Exit infinityPortalProvider(ServerWorld worldFrom, BlockFace inbound) {
         MinecraftServer server = worldFrom.getServer();
         if (!server.isNetherAllowed()) return null;
-        BlockPos posFrom = inbound.getSecond().getConnectedPos();
+        BlockPos posFrom = inbound.getConnectedPos();
         if (worldFrom.getBlockEntity(posFrom) instanceof InfinityPortalBlockEntity ipbe
                 && ipbe.isConnectedBothSides()) { //we only allow trains through if portals are in sync
             ServerWorld worldTo = ipbe.getDimensionAsWorld();
             BlockPos posTo = ipbe.getOtherSidePos();
             assert posTo != null;
-            Direction targetDirection = inbound.getSecond().getFace();
+            Direction targetDirection = inbound.getFace();
             Direction.Axis axisTo = worldTo.getBlockState(posTo).get(Properties.HORIZONTAL_AXIS);
             if (targetDirection.getAxis().equals(axisTo)) {
                 targetDirection = targetDirection.rotateYClockwise();
             }
-            return Pair.of(worldTo, new BlockFace(posTo.offset(targetDirection), targetDirection.getOpposite()));
+            return new PortalTrackProvider.Exit(worldTo, new BlockFace(posTo.offset(targetDirection), targetDirection.getOpposite()));
         }
         return null;
     }
 
     public static void register() {
-        AllPortalTracks.registerIntegration(ModBlocks.PORTAL.get(), CreateCompat::infinityPortalProvider);
+        AllPortalTracks.tryRegisterIntegration(ModBlocks.PORTAL.getId(), CreateCompat::infinityPortalProvider);
     }
 
     public static void tryModifyRails(InfinityPortalBlockEntity ipbe) {
