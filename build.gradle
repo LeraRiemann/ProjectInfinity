@@ -102,6 +102,4 @@ subprojects {
             // retrieving dependencies.
         }
     }
-    build.finalizedBy(mergeJars)
-    assemble.finalizedBy(mergeJars)
 }
