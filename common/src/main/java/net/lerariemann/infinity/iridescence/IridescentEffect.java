@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.iridescence;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.util.loading.ShaderLoader;
@@ -88,6 +89,12 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         }
         if (entity instanceof ClientPlayerEntity) {
             Iridescence.updateAtomics(duration, amplifier);
+            if (amplifier == 0) return;
+            double prog = ShaderLoader.iridProgress.get();
+            if (prog > 0.5) {
+                if (InfinityMod.random.nextDouble() < 0.015*(2*prog - 1)*amplifier)
+                    entity.playSound(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, 1.0f, 1f + InfinityMod.random.nextFloat());
+            }
         }
     }
 

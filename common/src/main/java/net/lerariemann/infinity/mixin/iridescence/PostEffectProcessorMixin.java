@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.mixin.iridescence;
 
 import net.lerariemann.infinity.util.loading.ShaderLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.PostEffectPass;
 import net.minecraft.client.gl.PostEffectProcessor;
 import org.spongepowered.asm.mixin.Final;
@@ -35,6 +36,7 @@ public abstract class PostEffectProcessorMixin {
             setUniforms("IridTimeSec", ((int)(LocalTime.now().toNanoOfDay() / 1000000)) / 1000.0f);
             setUniforms("IridLevel", ShaderLoader.iridLevel.get());
             setUniforms("IridProgress", (float)ShaderLoader.iridProgress.get());
+            setUniforms("IridDistortion", MinecraftClient.getInstance().options.getDistortionEffectScale().getValue().floatValue());
 
             time += tickDelta;
 

@@ -17,7 +17,6 @@ import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.block.Block;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -107,7 +106,7 @@ public interface Iridescence {
         return Registries.BLOCK.get(Identifier.of(dyeColors.get((int)(d* dyeColors.size())).getName() + "_" + str));
     }
 
-    static int getAmplifierOnApply(LivingEntity entity, int original) {
+    static int getAmplifierOnApply(LivingEntity entity, int original, boolean willingly) {
         StatusEffectInstance effect = entity.getStatusEffect(ModStatusEffects.IRIDESCENT_EFFECT);
         if (effect != null) {
             return effect.getAmplifier() < original ? original : -1;
@@ -157,10 +156,7 @@ public interface Iridescence {
 
     static void updateAtomics(int duration, int amplifier) {
         ShaderLoader.iridLevel.set(amplifier);
-        double distortion = MinecraftClient.getInstance().options.getDistortionEffectScale().getValue();
-        if (amplifier == 0 || distortion == 0)
-            ShaderLoader.iridProgress.set(0);
-        ShaderLoader.iridProgress.set(distortion * switch (getPhase(duration, amplifier)) {
+        ShaderLoader.iridProgress.set(switch (getPhase(duration, amplifier)) {
             case INITIAL -> 0.0;
             case UPWARDS -> (getEffectLength(amplifier) - duration) / (1.0 * getComeupLength());
             case PLATEAU -> 1.0;
@@ -180,7 +176,7 @@ public interface Iridescence {
     }
 
     static boolean shouldWarp(int duration, int amplifier) {
-        return (amplifier > 0) && (Iridescence.getPhase(duration, amplifier) == Iridescence.Phase.PLATEAU) && (duration % ticksInHour == 0);
+        return (amplifier > 0) && (Iridescence.getPhase(duration, amplifier) == Iridescence.Phase.PLATEAU) && ((duration - getOffsetLength(amplifier)) % ticksInHour == 0);
     }
     static boolean shouldReturn(int duration, int amplifier) {
         return (amplifier > 0) && (duration == getOffsetLength(amplifier));
@@ -205,7 +201,7 @@ public interface Iridescence {
     }
 
     static void tryBeginJourney(LivingEntity entity, int amplifier, boolean willingly) {
-        amplifier = Iridescence.getAmplifierOnApply(entity, amplifier);
+        amplifier = Iridescence.getAmplifierOnApply(entity, amplifier, willingly);
         if (amplifier >= 0) {
             entity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.IRIDESCENT_EFFECT,
                     Iridescence.getFullEffectLength(amplifier),

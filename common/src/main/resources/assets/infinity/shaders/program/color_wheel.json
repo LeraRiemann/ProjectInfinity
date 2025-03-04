@@ -17,6 +17,7 @@
     { "name": "Time",     "type": "float",    "count": 1,  "values": [ 0.01 ]},
     { "name": "IridTimeSec",     "type": "float",    "count": 1,  "values": [ 0.0 ]},
     { "name": "IridLevel",     "type": "float",    "count": 1,  "values": [ 0.0 ]},
-    { "name": "IridProgress",     "type": "float",    "count": 1,  "values": [ 0.0 ]}
+    { "name": "IridProgress",     "type": "float",    "count": 1,  "values": [ 0.0 ]},
+    { "name": "IridDistortion",     "type": "float",    "count": 1,  "values": [ 0.0 ]}
   ]
 }
