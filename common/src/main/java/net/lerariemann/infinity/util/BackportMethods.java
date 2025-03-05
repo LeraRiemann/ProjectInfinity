@@ -12,7 +12,8 @@ public class BackportMethods {
     public static int getOrDefaultInt(ItemStack stack, String key, int i) {
         if (stack.hasNbt()) {
             assert stack.getNbt() != null;
-            return stack.getNbt().getInt(key);
+            if (stack.getNbt().contains(key))
+                return stack.getNbt().getInt(key);
         }
         return i;
     }
@@ -20,7 +21,8 @@ public class BackportMethods {
     public static String getOrDefaultString(ItemStack stack, String key, String i) {
         if (stack.hasNbt()) {
             assert stack.getNbt() != null;
-            return stack.getNbt().getString(key);
+            if (stack.getNbt().contains(key))
+                return stack.getNbt().getString(key);
         }
         return i;
     }
