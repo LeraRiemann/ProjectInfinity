@@ -49,11 +49,7 @@ public class F4Item extends Item implements PortalDataHolder {
 
 
     public static int getCharge(ItemStack f4) {
-        if (f4.hasNbt()) {
-            assert f4.getNbt() != null;
-            return f4.getNbt().getInt("f4_charge");
-        }
-        return 0;
+        return BackportMethods.getOrDefaultInt(f4, ModComponentTypes.F4_CHARGE, 0);
     }
 
     @Override
@@ -70,7 +66,7 @@ public class F4Item extends Item implements PortalDataHolder {
                                     int size_x, int size_y) {
         Direction.Axis dir2 = player.getHorizontalFacing().rotateClockwise(Direction.Axis.Y).getAxis();
 
-        int charges = getCharge(stack);
+        int charges = BackportMethods.getOrDefaultInt(stack, ModComponentTypes.F4_CHARGE, 0);
         int useCharges = player.isCreative() ? 0 : 2*(2 + size_x + size_y);
         if (charges < useCharges) {
             if (!world.isClient())

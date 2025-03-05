@@ -170,7 +170,7 @@ public interface InfinityMethods {
                 return stack.getNbt().getCompound("BlockEntityTag").getInt("Color");
             }
             else if (stack.getItem().equals(ModItems.F4.get())) {
-                return stack.getNbt().getInt(ModComponentTypes.KEY_COLOR);
+                return BackportMethods.getOrDefaultInt(stack, ModComponentTypes.KEY_COLOR, 8388863);
             }
         }
         return 0xFFFFFF;
