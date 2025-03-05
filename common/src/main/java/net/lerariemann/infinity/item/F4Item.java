@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.item;
 
+import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
@@ -169,6 +170,10 @@ public class F4Item extends Item implements PortalDataHolder {
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
         BlockState bs = world.getBlockState(pos);
+        if (bs.isReplaceable()) {
+            pos = pos.down();
+            bs = world.getBlockState(pos);
+        }
         Hand hand = context.getHand();
 
         if (isPortal(bs)) {
