@@ -61,7 +61,8 @@
     "options.GameRendererMixin",
     "options.MinecraftClientMixin",
     "options.SoundSystemMixin",
-    "options.WorldRendererMixin"
+    "options.WorldRendererMixin",
+    "qol.KeyboardMixin"
   ],
   "injectors": {
     "defaultRequire": 1
