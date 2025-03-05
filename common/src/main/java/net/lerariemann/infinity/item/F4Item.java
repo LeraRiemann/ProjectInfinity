@@ -101,8 +101,7 @@ public class F4Item extends Item implements PortalDataHolder {
         useCharges -= obsNotReplaced;
 
         world.playSound(player, player.getBlockPos(), SoundEvents.BLOCK_BELL_USE, SoundCategory.BLOCKS, 1, 0.75f);
-        BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, charges-useCharges);
-        return stack;
+        return BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, charges-useCharges);
     }
 
     @Override
@@ -269,8 +268,7 @@ public class F4Item extends Item implements PortalDataHolder {
         }
         for (int i = 0; i < portal.width; i++) for (int j = 0; j < portal.height; j++)
             world.setBlockState(portal.lowerLeft.offset(axis, i).up(j), Blocks.AIR.getDefaultState(), 3, 0);
-        BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, getCharge(stack) + obsidian);
         world.playSound(null, origin, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1, 0.75f);
-        return stack;
+        return BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, getCharge(stack) + obsidian);
     }
 }

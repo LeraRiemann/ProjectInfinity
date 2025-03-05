@@ -36,20 +36,19 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
 
     public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
         ItemStack f4 = null;
-        int i = 0;
-        for (int k = 0; k < inventory.getInputStacks().size(); k++) {
-            ItemStack itemStack = inventory.getStack(k);
+        int obsidian = 0;
+        for (int slot = 0; slot < inventory.getInputStacks().size(); slot++) {
+            ItemStack itemStack = inventory.getStack(slot);
             if (itemStack.isOf(ModItems.F4.get())) f4 = itemStack;
-            else if (!itemStack.isEmpty()) i++;
+            else if (!itemStack.isEmpty()) obsidian++;
         }
         assert f4 != null;
         int charge = F4Item.getCharge(f4);
-        if (i == 0) {
+        if (obsidian == 0) {
             if (charge > 0) return Items.OBSIDIAN.getDefaultStack().copyWithCount(Math.min(charge, 64)); //"removing obsidian" recipe
         }
         ItemStack result = f4.copy();
-        BackportMethods.apply(result, ModComponentTypes.F4_CHARGE, charge+i);
-        return result;
+        return BackportMethods.apply(result, ModComponentTypes.F4_CHARGE, charge+obsidian);
     }
 
     @Override
