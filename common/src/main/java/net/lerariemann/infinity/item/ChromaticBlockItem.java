@@ -29,7 +29,7 @@ public class ChromaticBlockItem extends BlockItem implements PortalDataHolder {
         if (player != null && player.getStackInHand(Hand.OFF_HAND)
                 .isOf(ModItems.CHROMATIC_MATTER.get())
                 && world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) {
-            cbe.setColor(BackportMethods.getOrDefaultInt(stack, ModComponentTypes.KEY_COLOR, 0xFFFFFF));
+            cbe.setColor(BackportMethods.getOrDefaultInt(stack, ModComponentTypes.COLOR, 0xFFFFFF));
         }
         return bl;
     }

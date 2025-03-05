@@ -6,11 +6,9 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.item.PortalDataHolder;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.var.ModPoi;
-import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.teleport.InfinityPortal;
 import net.lerariemann.infinity.util.teleport.PortalCreator;
@@ -174,7 +172,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         NbtCompound nbtCompound = new NbtCompound();
         if (!item.equals(Items.AMETHYST_SHARD)) return nbtCompound;
         int keycolor = WarpLogic.getKeyColorFromId(dim);
-        nbtCompound.putInt(ModComponentTypes.KEY_COLOR, keycolor);
+        nbtCompound.putInt(ModComponentTypes.COLOR, keycolor);
         nbtCompound.putString(ModComponentTypes.DESTINATION, dim.toString());
         return nbtCompound;
     }

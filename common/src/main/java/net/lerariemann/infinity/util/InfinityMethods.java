@@ -18,6 +18,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
@@ -163,15 +164,19 @@ public interface InfinityMethods {
     }
 
     static int getOverlayColorFromComponents(ItemStack stack, int layer) {
-        if (stack.getNbt() != null && layer == 1) {
-            if (stack.getItem().equals(ModItems.TRANSFINITE_KEY.get()))
-                return stack.getNbt().getInt("key_color");
-            else if (stack.getItem().equals(ModItems.BIOME_BOTTLE_ITEM.get())) {
-                return stack.getNbt().getCompound("BlockEntityTag").getInt("Color");
+        if (stack.getNbt() != null) {
+            if (layer == 1) {
+                if (stack.isOf(ModItems.TRANSFINITE_KEY.get()))
+                    return stack.getNbt().getInt(ModComponentTypes.COLOR);
+                else if (stack.isOf(ModItems.BIOME_BOTTLE_ITEM.get())) {
+                    return stack.getNbt().getCompound("BlockEntityTag").getInt("Color");
+                }
+                else if (stack.isOf(ModItems.F4.get())) {
+                    return BackportMethods.getOrDefaultInt(stack, ModComponentTypes.COLOR, 10879231);
+                }
             }
-            else if (stack.getItem().equals(ModItems.F4.get())) {
-                return BackportMethods.getOrDefaultInt(stack, ModComponentTypes.KEY_COLOR, 10879231);
-            }
+            else if (stack.isOf(ModItems.CHROMATIC_MATTER.get()) || stack.isOf(ModItems.CHROMATIC_WOOL.get()) || stack.isOf(ModItems.CHROMATIC_CARPET.get()))
+                return stack.getNbt().getInt(ModComponentTypes.COLOR);
         }
         return 0xFFFFFF;
     }

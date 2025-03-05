@@ -29,7 +29,8 @@ public class BackportMethods {
 
     public static boolean contains(ItemStack stack, String key) {
         if (stack.hasNbt()) {
-            return !Objects.requireNonNull(stack.getSubNbt(key)).isEmpty();
+            assert stack.getNbt() != null;
+            return stack.getNbt().contains(key);
         }
         return false;
     }
