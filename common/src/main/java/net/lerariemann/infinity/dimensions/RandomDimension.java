@@ -190,7 +190,7 @@ public class RandomDimension {
             case "minecraft:noise" -> {
                 res.put("biome_source", randomBiomeSource());
                 res.putString("settings", randomNoiseSettings());
-                res.putLong("seed", numericId);
+                res.putLong("seed", numericId ^ server.getOverworld().getSeed());
                 return res;
             }
             default -> {
