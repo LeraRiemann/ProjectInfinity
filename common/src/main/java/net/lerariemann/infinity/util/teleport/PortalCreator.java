@@ -71,7 +71,12 @@ public interface PortalCreator {
         WrittenBookContentComponent writtenComponent = itemStack.getComponents().get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
         String printedComponent = null;
         if (Platform.isModLoaded("computercraft")) {
-            printedComponent = checkPrintedPage(itemStack);
+            try {
+                printedComponent = checkPrintedPage(itemStack);
+            }
+            catch (Exception e) {
+                InfinityMod.LOGGER.warn("An incompatible version of ComputerCraft is present. Please update it to the latest version");
+            }
         }
         if (writableComponent != null || writtenComponent != null || printedComponent != null) {
             String content = parseComponents(writableComponent, writtenComponent, printedComponent);
