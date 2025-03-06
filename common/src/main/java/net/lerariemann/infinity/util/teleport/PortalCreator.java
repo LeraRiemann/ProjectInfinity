@@ -94,18 +94,21 @@ public interface PortalCreator {
             }
         }
         else if (Platform.isModLoaded("computercraft")) {
-            String content;
-            content = checkPrintedPage(itemStack);
-            MinecraftServer server = world.getServer();
-            if (server != null) {
-                Identifier id = InfinityMethods.dimTextToId(content);
-                if (world instanceof ServerWorld serverWorld) {
-                    boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
-                    if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+            try {
+                String content;
+                content = checkPrintedPage(itemStack);
+                MinecraftServer server = world.getServer();
+                if (server != null) {
+                    Identifier id = InfinityMethods.dimTextToId(content);
+                    if (world instanceof ServerWorld serverWorld) {
+                        boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
+                        if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                    }
                 }
+            } catch (Exception e) {
+                InfinityMod.LOGGER.warn("An incompatible version of ComputerCraft is present. Please update it to the latest version");
             }
         }
-
     }
 
     /**
