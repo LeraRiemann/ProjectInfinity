@@ -1,11 +1,12 @@
 package net.lerariemann.infinity.block.custom;
 
-import com.mojang.serialization.MapCodec;
 import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -33,8 +34,11 @@ public class ChromaticBlock extends BlockWithEntity implements Boopable {
     @Override
     public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         ItemStack res = super.getPickStack(world, pos, state);
-//        if (!res.isEmpty() && world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe)
-//            res.applyComponentsFrom(cbe.asMap());
+        if (!res.isEmpty() && world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) {
+            var c = new NbtCompound();
+            c.putInt(ModComponentTypes.COLOR, cbe.color);
+            res.setNbt(c);
+        }
         return res;
     }
 

@@ -7,6 +7,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.block.entity.TintableBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.core.RandomProvider;
@@ -191,23 +192,9 @@ public interface InfinityMethods {
     static int getBlockEntityColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
         if (world != null && pos != null) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof InfinityPortalBlockEntity be) {
+            if (blockEntity instanceof TintableBlockEntity be) {
                 Object j = be.getTint();
                 return (int)j & 0xFFFFFF;
-            }
-        }
-        return 0xFFFFFF;
-    }
-
-    /**
-     * Gets a Biome Bottle's color from its block entity - for use in color providers.
-     */
-    static int getBiomeBottleColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
-        if (world != null && pos != null) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof BiomeBottleBlockEntity be) {
-                int j = be.color;
-                return j & 0xFFFFFF;
             }
         }
         return 0xFFFFFF;

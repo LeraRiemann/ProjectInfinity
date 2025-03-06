@@ -2,6 +2,7 @@ package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.custom.AltarBlock;
 import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.var.ModTags;
@@ -68,6 +69,7 @@ public class ChromaticItem extends Item implements PortalDataHolder {
             ItemStack newStack = currStack.copy();
             int i = -1;
             if (world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) i = cbe.getTint();
+            else if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity cbe) i = cbe.getTint();
             else if (oldState.isOf(ModBlocks.ALTAR.get())) {
                 int altarState = oldState.get(AltarBlock.COLOR);
                 if (altarState == 0) i = ColorLogic.getChromaticColor(DyeColor.LIGHT_GRAY);
