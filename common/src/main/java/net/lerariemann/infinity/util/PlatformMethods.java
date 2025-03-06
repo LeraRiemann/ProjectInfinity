@@ -89,45 +89,6 @@ public class PlatformMethods {
         return (int)(256 * ((r + 1)/2)) + 256*((int)(256 * ((g + 1)/2)) + 256*(int)(256 * ((b + 1)/2)));
     }
 
-    public static int getBookBoxColour(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
-        if (pos != null) {
-            return posToColor(pos);
-        }
-        return 16777215;
-    }
-
-    public static int getOverlayColorFromComponents(ItemStack stack, int layer) {
-        if (stack.getNbt() != null) {
-            int color = stack.getNbt().getInt("key_color");
-            if (layer == 1) {
-                return color;
-            }
-        }
-        return 0xFFFFFF;
-    }
-
-    public static int getNeitherPortalColour(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
-        if (world != null && pos != null) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof InfinityPortalBlockEntity be) {
-                Object j = be.getTint();
-                return (int)j & 0xFFFFFF;
-            }
-        }
-        return 0xFFFFFF;
-    }
-
-    public static int getBiomeBottleColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
-        if (world != null && pos != null) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof BiomeBottleBlockEntity be) {
-                Object j = be.getTint();
-                return (int)j & 0xFFFFFF;
-            }
-        }
-        return 0xFFFFFF;
-    }
-
     @ExpectPlatform
     public static <T extends Item> void addAfter(RegistrySupplier<T> blockItem, RegistryKey<ItemGroup> group, Item item) {
         throw new AssertionError();
@@ -191,7 +152,7 @@ public class PlatformMethods {
     }
 
     /**
-     * Neoforge-exclusive method of testing if a mob is located in iridescence as far as fluid types are concerned.
+     * Forge-exclusive method of testing if a mob is located in iridescence as far as fluid types are concerned.
      * Used only in mixins, to fix the neoforge loader stripping mobs of ability to swim in non-water fluids.
      * On Fabric, returns false.
      */
@@ -199,6 +160,7 @@ public class PlatformMethods {
     public static boolean acidTest(Entity entity, boolean eyes) {
         throw new AssertionError();
     }
+
     @ExpectPlatform
     public static double acidHeightTest(Entity entity) {
         throw new AssertionError();
