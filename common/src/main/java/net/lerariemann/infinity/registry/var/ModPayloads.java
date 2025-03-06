@@ -2,7 +2,6 @@ package net.lerariemann.infinity.registry.var;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.iridescence.Iridescence;
@@ -35,10 +34,6 @@ import net.minecraft.world.dimension.DimensionType;
 import java.nio.file.Path;
 
 public class ModPayloads {
-    public static MinecraftServer server(Object context) {
-        ServerPlayNetworking.Context serverContext = (ServerPlayNetworking.Context) context;
-        return serverContext.server();
-    }
 
     public record WorldAddS2CPayload(Identifier world_id, NbtCompound world_data) implements CustomPayload {
         public static final CustomPayload.Id<WorldAddS2CPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("add_world"));

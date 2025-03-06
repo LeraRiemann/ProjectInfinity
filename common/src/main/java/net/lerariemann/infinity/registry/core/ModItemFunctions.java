@@ -19,6 +19,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.FluidModificationItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeSerializer;
@@ -89,7 +90,7 @@ public class ModItemFunctions {
                 World world = pointer.world();
                 if (fluidModificationItem.placeFluid(null, world, blockPos, null)) {
                     fluidModificationItem.onEmptied(null, world, stack, blockPos);
-                    return this.decrementStackWithRemainder(pointer, stack, stack.getRecipeRemainder());
+                    return this.decrementStackWithRemainder(pointer, stack, Items.BUCKET.getDefaultStack());
                 } else {
                     return new ItemDispenserBehavior().dispense(pointer, stack);
                 }
