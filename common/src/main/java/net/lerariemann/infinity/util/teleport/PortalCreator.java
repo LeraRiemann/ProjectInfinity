@@ -10,6 +10,7 @@ import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
@@ -27,6 +28,9 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
@@ -37,16 +41,19 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.World;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static net.lerariemann.infinity.InfinityMod.MOD_ID;
 import static net.lerariemann.infinity.compat.ComputerCraftCompat.checkPrintedPage;
 
 public interface PortalCreator {
@@ -83,6 +90,7 @@ public interface PortalCreator {
             Identifier id = InfinityMethods.dimTextToId(content);
             boolean bl = modifyOnInitialCollision(id, world, pos);
             if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+            recordIdTranslation(world.getServer(), id, content);
         }
     }
 
@@ -170,7 +178,7 @@ public interface PortalCreator {
         if (blockEntity instanceof InfinityPortalBlockEntity npbe) {
             /* Call dimension creation. */
             Identifier i = npbe.getDimension();
-            if (i.getNamespace().equals(InfinityMod.MOD_ID)) {
+            if (i.getNamespace().equals(MOD_ID)) {
                 bl = tryAddInfinityDimension(s, i);
             }
 
@@ -232,7 +240,7 @@ public interface PortalCreator {
      */
     static boolean tryAddInfinityDimension(MinecraftServer server, Identifier id) {
         /* checks if the dimension requested is valid and does not already exist */
-        if (!id.getNamespace().equals(InfinityMod.MOD_ID)) return false;
+        if (!id.getNamespace().equals(MOD_ID)) return false;
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, id);
         if (((MinecraftServerAccess)(server)).infinity$hasToAdd(key)) return false;
         ServerWorld w = server.getWorld(key);
@@ -299,5 +307,25 @@ public interface PortalCreator {
             if (blockEntity instanceof InfinityPortalBlockEntity npbe)
                 modifiers.forEach(modifier -> modifier.accept(npbe));
         }
+    }
+
+    static void recordIdTranslation(MinecraftServer server, Identifier id, String value) {
+        Path dir = server.getSavePath(WorldSavePath.DATAPACKS);
+        String filename = "translation_tables.json";
+        NbtCompound comp = CommonIO.read(dir.resolve(filename));
+        String key = id.getPath();
+        if (comp.contains(key)) {
+            NbtList l;
+            if (comp.contains(key, NbtElement.STRING_TYPE)) {
+                l = new NbtList();
+                l.add(comp.get(key));
+            }
+            else l = comp.getList(key, NbtElement.STRING_TYPE);
+            l.add(NbtString.of(value));
+            comp.remove(key);
+            comp.put(key, l);
+        }
+        else comp.putString(key, value);
+        CommonIO.write(comp, dir, filename);
     }
 }
