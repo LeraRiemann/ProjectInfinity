@@ -11,6 +11,7 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
@@ -38,9 +39,11 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
     }
 
     public void onRemoved(LivingEntity entity) {
-        if (Objects.requireNonNull(entity) instanceof ServerPlayerEntity player) {
-            unloadShader(player);
-            if (player.isInvulnerable()) endJourney(player, true, 0);
+        if (Objects.requireNonNull(entity) instanceof PlayerEntity player) {
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                unloadShader(serverPlayer);
+                if (player.isInvulnerable()) endJourney(serverPlayer, true, 0);
+            }
         } else if (entity instanceof ChaosPawn pawn) {
             if (pawn.getRandom().nextBoolean()) {
                 pawn.unchess();
@@ -49,29 +52,27 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             }
         } else if (entity instanceof MobEntity currEntity) {
             endConversion(currEntity);
-        } else if (entity instanceof MobEntity currEntity) {
-            endConversion(currEntity);
-        } else if (entity instanceof MobEntity currEntity) {
-            Iridescence.endConversion(currEntity);
         }
     }
 
     @Override
     public void tryApplySpecial(LivingEntity entity, int duration, int amplifier) {
-        if (entity instanceof ServerPlayerEntity player) {
-            if (shouldWarp(duration, amplifier)) {
-                if (!player.isInvulnerable()) {
-                    player.setInvulnerable(true);
-                    saveCookie(player);
+        if (entity instanceof PlayerEntity player) {
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                if (shouldWarp(duration, amplifier)) {
+                    if (!player.isInvulnerable()) {
+                        player.setInvulnerable(true);
+                        saveCookie(serverPlayer);
+                    }
+                    Identifier id = getIdForWarp(serverPlayer);
+                    WarpLogic.requestWarp(serverPlayer, id, false);
                 }
-                Identifier id = getIdForWarp(player);
-                WarpLogic.requestWarp(player, id, false);
+                if (shouldReturn(duration, amplifier)) {
+                    endJourney(serverPlayer, false, amplifier);
+                }
+                if (shouldRequestShaderLoad(duration, amplifier))
+                    loadShader(serverPlayer);
             }
-            if (shouldReturn(duration, amplifier)) {
-                endJourney(player, false, amplifier);
-            }
-            if (shouldRequestShaderLoad(duration, amplifier))
-                loadShader(player);
             if (amplifier == 0 && duration == 2) {
                 player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW.value(),
                         getAfterglowDuration() / 2, 0, true, true));
