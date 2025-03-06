@@ -10,7 +10,11 @@ Please make sure to report any problems you have with the mod on its [issue trac
 
 ## Dependencies
 
-Architectury API is required, as well as [Fabric API](https://modrinth.com/mod/fabric-api) on Fabric and [Forgified Fabric API](https://modrinth.com/mod/forgified-fabric-api) on Forge and NeoForge. Older versions of the mod (v1.13.0 and below) only require Fabric API.
+[Architectury API](https://modrinth.com/mod/architectury-api) is required, as well as [Fabric API](https://modrinth.com/mod/fabric-api) on Fabric. The Forge backport also requires [Forgified Fabric API](https://modrinth.com/mod/forgified-fabric-api).
+
+If you want to configure the mod in-game, you will need [Cloth Config](https://modrinth.com/mod/cloth-config) and [Mod Menu](https://modrinth.com/mod/modmenu) (on Fabric).
+
+Older versions may have different dependencies. See their specific version pages for more details.
 
 ## FAQ
 
