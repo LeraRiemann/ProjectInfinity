@@ -1,5 +1,7 @@
 # Infinite Dimensions
 
+[Download on Modrinth](https://modrinth.com/mod/infinite-dimensions) (recommended) / [Download on Curseforge](https://www.curseforge.com/minecraft/mc-mods/infinite-dimensions)
+
 **Infinite Dimensions** is a mod that reworks and reimagines 20w14infinite - the April Fools' snapshot of 2020 - in Minecraft 1.21.1.
 
 Get a Book and Quill, write anything in it, and throw it into a Nether Portal - and the portal will change its color before your eyes. Beyond lies one of 2.1+ billion dimensions this mod can generate! Whacky terrain, crazy sky colors and funky flora made out of random blocks - there's a possibility to find all this and more on the other side.
