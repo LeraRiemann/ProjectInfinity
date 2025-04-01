@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.command.argument.DimensionArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -23,7 +24,13 @@ public class ModCommands {
     );
 
     public static void registerCommands() {
-        CommandRegistrationEvent.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("warp")
+        String warp;
+        if (Platform.isModLoaded("ftbessentials")) // FTB Essentials adds their own warp command that plays havoc with ours.
+            warp = "dimwarp";
+        else {
+            warp = "warp";
+        }
+        CommandRegistrationEvent.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal(warp)
                 .requires(source -> source.hasPermissionLevel(2))
                 .then(
                         CommandManager.literal("existing").then(
