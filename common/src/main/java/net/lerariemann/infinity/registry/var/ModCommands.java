@@ -25,7 +25,7 @@ public class ModCommands {
 
     public static void registerCommands() {
         String warp;
-        if (Platform.isModLoaded("ftbessentials")) // FTB Essentials adds their own warp command that plays havoc with ours.
+        if (Platform.isModLoaded("ftbessentials") || Platform.isModLoaded("fabric-essentials")) // FTB/Fabric Essentials add their own warp command that plays havoc with ours.
             warp = "dimwarp";
         else {
             warp = "warp";
