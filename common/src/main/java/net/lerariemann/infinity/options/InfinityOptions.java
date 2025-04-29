@@ -25,11 +25,18 @@ public class InfinityOptions {
     public EffectGiver effect;
     public IridescentMap iridMap;
 
+    private final double mavity;
+    private final double timeScale;
+    private final boolean haunted;
+
     public InfinityOptions(NbtCompound data) {
         this.data = data;
         this.shifter = PitchShifter.decode(test(data, "pitch_shift", new NbtCompound()));
         this.effect = EffectGiver.of(test(data, "effect", new NbtCompound()));
         this.iridMap = IridescentMap.decode(test(data, "iridescent_map", new NbtCompound()));
+        this.mavity = test(data, "mavity", 1.0);
+        this.timeScale = test(data, "time_scale", 1.0);
+        this.haunted = test(data, "haunted", false);
     }
 
     public NbtCompound data() {
@@ -78,16 +85,16 @@ public class InfinityOptions {
     }
 
     public double getTimeScale() {
-        return test(data, "time_scale", 1.0);
+        return timeScale;
     }
     public double getMavity() {
-        return test(data, "mavity", 1.0);
+        return mavity;
     }
     public Function<Float, Float> getSoundPitch() {
         return shifter.applier();
     }
     public boolean isHaunted() {
-        return test(data, "haunted", false);
+        return haunted;
     }
     public int getHauntingTicks(Random random) {
         if (!isHaunted()) return -2;
