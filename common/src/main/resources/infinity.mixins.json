@@ -47,7 +47,8 @@
     "options.ServerWorldMixin",
     "qol.EnderDragonEntityMixin",
     "qol.FireBlockMixin",
-    "qol.LavaFluidMixin"
+    "qol.LavaFluidMixin",
+    "iridescence.LilyPadBlockMixin"
   ],
   "client": [
     "SoundListMixin",
