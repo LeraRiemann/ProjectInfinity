@@ -311,7 +311,7 @@ public interface PortalCreator {
 
     static void recordIdTranslation(MinecraftServer server, Identifier id, String value) {
         value = value.replaceAll("\n", "/n");
-        Path dir = server.getSavePath(WorldSavePath.DATAPACKS);
+        Path dir = server.getSavePath(WorldSavePath.DATAPACKS).resolve("infinity");
         String filename = "translation_tables.json";
         NbtCompound comp = CommonIO.read(dir.resolve(filename));
         String key = id.getPath();
