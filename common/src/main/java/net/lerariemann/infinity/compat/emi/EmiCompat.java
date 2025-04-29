@@ -81,7 +81,7 @@ public class EmiCompat implements EmiPlugin {
         registry.addRecipe(ChromaticEmiRecipe.of("brightness_plus", ModItems.WHITE_MATTER.get()));
         registry.addRecipe(ChromaticEmiRecipe.of("brightness_minus", ModItems.BLACK_MATTER.get()));
 
-        //recoloring wool with chroma matter in the crafting grid
+        //recoloring with chroma matter in the crafting grid
         EmiStack matter = EmiStack.of(ModItems.CHROMATIC_MATTER.get());
         EmiStack matter_catalyst = matter.copy().setRemainder(matter);
         for (RecipeEntry<ChromaticColoringRecipe> recipe : manager.listAllOfType(ModItemFunctions.CHROMATIC_COLORING_TYPE.get())) {
@@ -92,6 +92,14 @@ public class EmiCompat implements EmiPlugin {
                     EmiStack.of(recipe.value().getResult(registryManager)),
                     recipe.id()));
         }
+
+        //chroma carpet from wool
+        List<EmiIngredient> input = new ArrayList<>();
+        input.add(EmiStack.of(ModItems.CHROMATIC_WOOL.get()));
+        input.add(EmiStack.of(ModItems.CHROMATIC_WOOL.get()));
+        registry.addRecipe(new EmiCraftingRecipe(input,
+                EmiStack.of(ModItems.CHROMATIC_CARPET.get().getDefaultStack().copyWithCount(3)),
+                InfinityMethods.getId("/chromatic_carpet")));
 
         //brewing iridescence
         ItemStack awkward = Items.POTION.getDefaultStack();
