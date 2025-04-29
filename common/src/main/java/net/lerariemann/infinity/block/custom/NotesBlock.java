@@ -96,7 +96,7 @@ public class NotesBlock extends Block {
 
     @Override
     public boolean onSyncedBlockEvent(BlockState state, World world, BlockPos pos, int type, int data) {
-        Instrument[] instruments = (Instrument[]) INSTRUMENT.stream().toArray();
+        Instrument[] instruments = INSTRUMENT.getValues().toArray(Instrument[]::new);
         Instrument noteBlockInstrument = instruments[world.random.nextInt(instruments.length-7)];
         float f;
         if (world.getBlockEntity(pos.down()) instanceof ChromaticBlockEntity e) {
