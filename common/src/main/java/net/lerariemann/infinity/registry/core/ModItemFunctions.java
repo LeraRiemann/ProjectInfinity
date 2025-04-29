@@ -60,6 +60,9 @@ public class ModItemFunctions {
     public static RegistrySupplier<RecipeSerializer<F4RechargingRecipe>> F4_RECHARGING =
             RECIPE_SERIALIZERS.register("f4_recharging", () ->
                     new SpecialRecipeSerializer<>(F4RechargingRecipe::new));
+    public static RegistrySupplier<RecipeSerializer<ChromaCarpetRecipe>> CARPET =
+            RECIPE_SERIALIZERS.register("chroma_carpet", () ->
+                    new SpecialRecipeSerializer<>(ChromaCarpetRecipe::new));
 
     public static RegistrySupplier<RecipeSerializer<ChromaticColoringRecipe>> CHROMATIC_COLORING =
             RECIPE_SERIALIZERS.register("chromatic_coloring", () ->
