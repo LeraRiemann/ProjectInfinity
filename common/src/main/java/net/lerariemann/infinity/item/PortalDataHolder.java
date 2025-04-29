@@ -34,9 +34,7 @@ public interface PortalDataHolder {
     }
 
     default ComponentChanges addPortalComponents(ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
-        ComponentChanges changes = getPortalComponents(ipbe).build();
-        oldStack.applyChanges(changes);
-        return changes;
+        return getPortalComponents(ipbe).build();
     }
 
     default ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {

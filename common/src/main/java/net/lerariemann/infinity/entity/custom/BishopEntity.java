@@ -48,6 +48,7 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
     @Override
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData);
+        updateWeapon(random.nextBoolean(), true);
         updateAttackType();
         return entityData;
     }
@@ -78,16 +79,16 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
     @Override
     public void tickMovement() {
         if (age % 200 == 0 && getTarget() != null)
-            updateWeapon(random.nextBoolean());
+            updateWeapon(random.nextBoolean(), false);
         super.tickMovement();
     }
-    public void updateWeapon(boolean newAttackBow) {
+    public void updateWeapon(boolean newAttackBow, boolean initial) {
         if (this.getWorld() != null && !this.getWorld().isClient) {
-            boolean oldAttackBow = isHolding(Items.BOW);
-            if (!newAttackBow && oldAttackBow) {
+            boolean isHoldingBow = isHolding(Items.BOW);
+            if (!newAttackBow && (isHoldingBow || initial)) {
                 equipStack(EquipmentSlot.MAINHAND, (random.nextBoolean() ? Items.IRON_SWORD : Items.IRON_AXE).getDefaultStack());
             }
-            if (newAttackBow && !oldAttackBow) {
+            if (newAttackBow && !isHoldingBow) {
                 equipStack(EquipmentSlot.MAINHAND, Items.BOW.getDefaultStack());
             }
         }

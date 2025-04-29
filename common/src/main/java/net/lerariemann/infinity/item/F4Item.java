@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.item;
 
-import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
