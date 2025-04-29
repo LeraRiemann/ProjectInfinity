@@ -1,7 +1,7 @@
 {
   "textures": {
-    "particle": "infinity:block/neither_portal",
-    "portal": "infinity:block/neither_portal"
+    "particle": "infinity:block/portal",
+    "portal": "infinity:block/portal"
   },
   "elements": [
     {   "from": [ 0, 0, 6 ],

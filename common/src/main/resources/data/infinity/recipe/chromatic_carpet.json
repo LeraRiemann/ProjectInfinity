@@ -5,5 +5,6 @@
   },
   "output": {
     "id": "infinity:chromatic_carpet"
-  }
+  },
+  "lore": "recipe_info.portal.infinity.color"
 }

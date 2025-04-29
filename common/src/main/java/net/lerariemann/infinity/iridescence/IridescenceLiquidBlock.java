@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.iridescence;
 
 import dev.architectury.core.block.ArchitecturyLiquidBlock;
+import net.lerariemann.infinity.item.PortalDataHolder;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.block.BlockState;
@@ -14,7 +15,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class IridescenceLiquidBlock extends ArchitecturyLiquidBlock {
@@ -32,7 +32,7 @@ public class IridescenceLiquidBlock extends ArchitecturyLiquidBlock {
                 if (!Iridescence.isIridescentItem(item.getStack()) && item.getOwner() instanceof LivingEntity le &&
                 !Iridescence.getPhase(le).equals(Iridescence.Phase.INITIAL))
                     ModItemFunctions.checkCollisionRecipes(w, item, ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get(),
-                        i -> Optional.empty());
+                            PortalDataHolder::addIridComponents);
             }
             default -> {}
         }

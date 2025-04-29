@@ -1,12 +1,10 @@
 package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
-import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.component.ComponentChanges;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -18,12 +16,6 @@ import org.jetbrains.annotations.Nullable;
 public class ChromaticBlockItem extends BlockItem implements PortalDataHolder {
     public ChromaticBlockItem(Block block, Settings settings) {
         super(block, settings);
-    }
-
-    @Override
-    public ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
-        return ComponentChanges.builder()
-                .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
     }
 
     //todo: implement this properly

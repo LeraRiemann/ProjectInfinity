@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-public class F4Item extends Item implements PortalDataHolder {
+public class F4Item extends Item implements PortalDataHolder.Destinable {
     static final BlockState OBSIDIAN = Blocks.OBSIDIAN.getDefaultState();
 
     public F4Item(Settings settings) {

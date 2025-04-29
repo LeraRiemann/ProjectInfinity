@@ -2,22 +2,18 @@ package net.lerariemann.infinity.compat.emi;
 
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
-import dev.emi.emi.api.widget.TextWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.var.ColorLogic;
-import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.text.*;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 public class ChromaticEmiRecipe extends BasicEmiRecipe {
     Identifier infoId;
@@ -52,9 +48,7 @@ public class ChromaticEmiRecipe extends BasicEmiRecipe {
             finalText.append(ch.withColor(getCharColor(i, len)));
         }
         if (infoId != null)
-            widgets.add(new TextWidgetWithTooltip(Text.literal("ℹ").formatted(Formatting.GRAY)
-                    .asOrderedText(), 128, 5, 0xFFFFFF, false,
-                    Text.translatable(Util.createTranslationKey("chromatic_info", this.infoId))));
+            EmiCompat.addInfo(widgets, 128, 5, Text.translatable(Util.createTranslationKey("recipe_info.chromatic", this.infoId)));
         widgets.addText(finalText, 24, 5, 0xFFFFFF, false);
     }
 
@@ -79,17 +73,5 @@ public class ChromaticEmiRecipe extends BasicEmiRecipe {
         }
         else return ColorLogic.defaultChromatic;
         return Color.HSBtoRGB(hue, saturation, brightness);
-    }
-
-    public static class TextWidgetWithTooltip extends TextWidget {
-        Text tooltip;
-
-        public TextWidgetWithTooltip(OrderedText text, int x, int y, int color, boolean shadow, Text tooltip) {
-            super(text, x, y, color, shadow);
-            this.tooltip = tooltip;
-        }
-        public List<TooltipComponent> getTooltip(int mouseX, int mouseY) {
-            return List.of(TooltipComponent.of(tooltip.asOrderedText()));
-        }
     }
 }

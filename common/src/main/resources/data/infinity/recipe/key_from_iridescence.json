@@ -1,0 +1,10 @@
+{
+  "type": "infinity:collision_iridescence",
+  "input": {
+    "item": "infinity:key"
+  },
+  "output": {
+    "id": "infinity:key"
+  },
+  "lore": "recipe_info.iridescence.infinity.key"
+}

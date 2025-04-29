@@ -39,8 +39,16 @@ public interface PortalDataHolder {
 
     default ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
         return ComponentChanges.builder()
-                .add(ModComponentTypes.DESTINATION.get(), ipbe.getDimension())
                 .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
+    }
+
+    static Optional<ComponentChanges> addIridComponents(Item item) {
+        if (item instanceof PortalDataHolder pdh)
+            return pdh.addIridComponents();
+        return Optional.empty();
+    }
+    default Optional<ComponentChanges> addIridComponents() {
+        return Optional.empty();
     }
 
     default ItemStack withPortalData(InfinityPortalBlockEntity ipbe) {
@@ -50,4 +58,13 @@ public interface PortalDataHolder {
     }
 
     ItemStack getStack();
+
+    interface Destinable extends PortalDataHolder {
+        @Override
+        default ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+            return ComponentChanges.builder()
+                    .add(ModComponentTypes.DESTINATION.get(), ipbe.getDimension())
+                    .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
+        }
+    }
 }

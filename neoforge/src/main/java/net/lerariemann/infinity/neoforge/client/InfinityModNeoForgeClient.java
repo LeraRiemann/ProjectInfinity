@@ -66,7 +66,8 @@ public class InfinityModNeoForgeClient {
         event.register(InfinityMethods::getItemColorFromComponents,
                 ModItems.CHROMATIC_WOOL.get(),
                 ModItems.CHROMATIC_CARPET.get(),
-                ModItems.CHROMATIC_MATTER.get());
+                ModItems.CHROMATIC_MATTER.get(),
+                ModItems.PORTAL_ITEM.get());
         event.register(InfinityMethods::getDiscColorFromComponents,
                 ModItems.DISC.get());
     }

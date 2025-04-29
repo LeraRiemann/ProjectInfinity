@@ -30,6 +30,7 @@ public interface ColorLogic {
             Map.entry("magenta", 0xB22AAD),
             Map.entry("pink", 0xFF86AE));
     int defaultChromatic = 0x9154DB;
+    int defaultPortal = 0x00EEFF;
 
     static int getChromaticColor(DyeColor dye) {
         return chromaticColors.getOrDefault(dye.getName(), 0xFFFFFF);

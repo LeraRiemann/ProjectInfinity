@@ -9,6 +9,8 @@ import dev.emi.emi.api.recipe.EmiWorldInteractionRecipe;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.TextWidget;
+import dev.emi.emi.api.widget.WidgetHolder;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.item.function.CollisionCraftingRecipe;
@@ -16,6 +18,7 @@ import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
@@ -25,12 +28,16 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import java.util.List;
 
 @EmiEntrypoint
 public class EmiCompat implements EmiPlugin {
     public static final Identifier MY_SPRITE_SHEET = InfinityMethods.getId( "textures/gui/emi_simplified_textures.png");
-    public static final EmiStack PORTAL_WORKSTATION = EmiStack.of(ModBlocks.PORTAL.get());
+    public static final EmiStack PORTAL_WORKSTATION = EmiStack.of(ModItems.PORTAL_ITEM.get());
     public static final EmiRecipeCategory PORTAL_CRAFTING
             = new EmiRecipeCategory(ModItemFunctions.PORTAL_CRAFTING.getId(), PORTAL_WORKSTATION, new EmiTexture(MY_SPRITE_SHEET, 0, 0, 16, 16));
     public static EmiStack IRIDESCENCE_WORKSTATION = EmiStack.of(PlatformMethods.getIridescenceStill().get());
@@ -99,5 +106,22 @@ public class EmiCompat implements EmiPlugin {
                 .rightInput(EmiStack.of(ModItems.STAR_OF_LANG.get().getDefaultStack()), true)
                 .output(EmiStack.of(ModItems.CHROMATIC_CARPET.get().getDefaultStack()))
                 .build());
+    }
+
+    public static void addInfo(WidgetHolder widgets, int x, int y, Text info) {
+        widgets.add(new TextWidgetWithTooltip(Text.literal("ℹ").formatted(Formatting.GRAY).asOrderedText(),
+                x, y, 0xFFFFFF, false, info));
+    }
+
+    public static class TextWidgetWithTooltip extends TextWidget {
+        Text tooltip;
+
+        public TextWidgetWithTooltip(OrderedText text, int x, int y, int color, boolean shadow, Text tooltip) {
+            super(text, x, y, color, shadow);
+            this.tooltip = tooltip;
+        }
+        public List<TooltipComponent> getTooltip(int mouseX, int mouseY) {
+            return List.of(TooltipComponent.of(tooltip.asOrderedText()));
+        }
     }
 }

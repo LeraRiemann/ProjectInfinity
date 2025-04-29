@@ -34,10 +34,10 @@ public class InfinityModFabricClient implements ClientModInitializer {
         ColorProviderRegistry.ITEM.register(InfinityMethods::getItemColorFromComponents,
                 ModItems.CHROMATIC_WOOL.get(),
                 ModItems.CHROMATIC_CARPET.get(),
-                ModItems.CHROMATIC_MATTER.get());
+                ModItems.CHROMATIC_MATTER.get(),
+                ModItems.PORTAL_ITEM.get());
         ColorProviderRegistry.ITEM.register(InfinityMethods::getDiscColorFromComponents,
                 ModItems.DISC.get());
-        ColorProviderRegistry.ITEM.register(InfinityMethods::getPortalItemColor, ModItems.PORTAL_ITEM.get());
 
         // Render layer maps
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutoutMipped(),

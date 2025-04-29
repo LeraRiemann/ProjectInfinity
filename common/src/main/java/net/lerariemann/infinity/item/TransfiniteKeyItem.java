@@ -18,8 +18,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
-public class TransfiniteKeyItem extends Item implements PortalDataHolder {
+public class TransfiniteKeyItem extends Item implements PortalDataHolder.Destinable {
     public TransfiniteKeyItem(Settings settings) {
         super(settings);
     }
@@ -33,6 +34,14 @@ public class TransfiniteKeyItem extends Item implements PortalDataHolder {
         return ComponentChanges.builder()
                 .add(ModComponentTypes.DESTINATION.get(), id)
                 .add(ModComponentTypes.COLOR.get(), color & 0xFFFFFF);
+    }
+
+    @Override
+    public Optional<ComponentChanges> addIridComponents() {
+        return Optional.of(ComponentChanges.builder()
+                .remove(ModComponentTypes.DESTINATION.get())
+                .remove(ModComponentTypes.COLOR.get())
+                .build());
     }
 
     @NotNull

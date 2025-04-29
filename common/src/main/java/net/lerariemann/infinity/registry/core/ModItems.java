@@ -7,7 +7,6 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.item.*;
 import net.lerariemann.infinity.util.PlatformMethods;
-import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
@@ -31,7 +30,8 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, RegistryKeys.ITEM);
     //block items
     public static final RegistrySupplier<Item> PORTAL_ITEM =
-            ITEMS.register(ModBlocks.PORTAL.getId(), () -> new BlockItem(ModBlocks.PORTAL.get(), new Item.Settings()));
+            ITEMS.register(ModBlocks.PORTAL.getId(), () -> new BlockItem(ModBlocks.PORTAL.get(),
+                            new Item.Settings().component(ModComponentTypes.COLOR.get(), ColorLogic.defaultPortal)));
     public static final RegistrySupplier<Item> COSMIC_ALTAR_ITEM =
             registerBlockItemAfter(ModBlocks.COSMIC_ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN, BlockItem::new);
     public static final RegistrySupplier<Item> ALTAR_ITEM =

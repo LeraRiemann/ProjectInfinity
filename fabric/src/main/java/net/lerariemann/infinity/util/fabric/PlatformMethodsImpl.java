@@ -12,7 +12,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.item.StarOfLangItem;
-import net.lerariemann.infinity.item.fabric.StarOfLangItemFabric;
+import net.lerariemann.infinity.item.fabric.StarOfLangFabricItem;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
@@ -109,7 +109,7 @@ public class PlatformMethodsImpl {
     }
 
     public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
-        return StarOfLangItemFabric::new;
+        return StarOfLangFabricItem::new;
     }
 
     public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i) {
