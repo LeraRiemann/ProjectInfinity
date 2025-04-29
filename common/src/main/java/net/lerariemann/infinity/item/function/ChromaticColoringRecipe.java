@@ -10,6 +10,7 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
@@ -45,6 +46,14 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
             }
         }
         return foundChroma;
+    }
+
+    public enum Type implements RecipeType<ChromaticColoringRecipe> {
+        INSTANCE
+    }
+    @Override
+    public RecipeType<?> getType() {
+        return Type.INSTANCE;
     }
 
     @Override
@@ -83,6 +92,10 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
     @Override
     public boolean fits(int width, int height) {
         return width*height > 1;
+    }
+
+    public Ingredient getInput() {
+        return input;
     }
 
     @Override

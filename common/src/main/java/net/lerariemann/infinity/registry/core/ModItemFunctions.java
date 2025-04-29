@@ -75,6 +75,8 @@ public class ModItemFunctions {
             RECIPE_TYPES.register("collision_portal", () -> CollisionCraftingRecipe.Type.PORTAL);
     public static RegistrySupplier<RecipeType<CollisionCraftingRecipe>> IRIDESCENCE_CRAFTING_TYPE =
             RECIPE_TYPES.register("collision_iridescence", () -> CollisionCraftingRecipe.Type.IRIDESCENCE);
+    public static RegistrySupplier<RecipeType<ChromaticColoringRecipe>> CHROMATIC_COLORING_TYPE =
+            RECIPE_TYPES.register("chromatic_coloring", () -> ChromaticColoringRecipe.Type.INSTANCE);
 
     public static void registerItemFunctions() {
         LOOT_FUNCTION_TYPES.register();
