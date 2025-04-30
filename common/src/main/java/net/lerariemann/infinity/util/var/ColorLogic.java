@@ -36,6 +36,12 @@ public interface ColorLogic {
         return chromaticColors.getOrDefault(dye.getName(), 0xFFFFFF);
     }
 
+    static int getPureHue(double hue) {
+        return getPureHue((float)hue);
+    }
+    static int getPureHue(float hue) {
+        return Color.HSBtoRGB(hue, 1.0F, 1.0F) & 0xFFFFFF;
+    }
     static boolean matchesPureHue(int rgb, int pureHue) {
         Color c = new Color(rgb);
         float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);

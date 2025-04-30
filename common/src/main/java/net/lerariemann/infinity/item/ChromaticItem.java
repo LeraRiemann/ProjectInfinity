@@ -6,9 +6,11 @@ import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.var.ModTags;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentChanges;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,9 +20,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.awt.*;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChromaticItem extends Item implements PortalDataHolder {
@@ -28,12 +31,16 @@ public class ChromaticItem extends Item implements PortalDataHolder {
         super(settings);
     }
     @Override
-    public ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
-        return ComponentChanges.builder()
-                .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor())
-                .remove(ModComponentTypes.DYE_COLOR.get())
-                .remove(ModComponentTypes.HUE.get());
+    public ComponentChanges getPortalComponents(InfinityPortalBlockEntity ipbe) {
+        return ofColor(ipbe.getPortalColor());
     }
+    @Override
+    public Optional<ComponentChanges> getIridComponents(ItemEntity entity) {
+        Vec3d pos = entity.getPos();
+        int hue = (int)(360*InfinityMethods.sampler.sample(pos.x, pos.y, pos.z));
+        return Optional.of(ofHue(hue));
+    }
+
     @Override
     public ItemStack getStack() {
         return getDefaultStack();
@@ -52,7 +59,7 @@ public class ChromaticItem extends Item implements PortalDataHolder {
     }
     static ComponentChanges ofHue(int hue) {
         return ComponentChanges.builder()
-                .add(ModComponentTypes.COLOR.get(), Color.HSBtoRGB(hue/360f, 1.0f, 1.0f) & 0xFFFFFF)
+                .add(ModComponentTypes.COLOR.get(), ColorLogic.getPureHue(hue/360f))
                 .remove(ModComponentTypes.DYE_COLOR.get())
                 .add(ModComponentTypes.HUE.get(), hue)
                 .build();
@@ -99,7 +106,12 @@ public class ChromaticItem extends Item implements PortalDataHolder {
                 else return false;
             }
             if (i > 0) {
-                if (i != currColor) newStack.applyChanges(ofColor(i));
+                int currHue = currStack.getOrDefault(ModComponentTypes.HUE.get(), -1);
+                if (currHue > 0) {
+                    if (ColorLogic.matchesPureHue(i, currHue)) return false;
+                    newStack.applyChanges(ofColor(i));
+                }
+                else if (i != currColor) newStack.applyChanges(ofColor(i));
                 else return false;
             }
             player.setStackInHand(hand, newStack);

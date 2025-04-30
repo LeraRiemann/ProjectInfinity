@@ -160,7 +160,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             MinecraftServer server = world.getServer();
             if (entity instanceof ItemEntity e) {
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
-                        item -> PortalDataHolder.addPortalComponents(item, e.getStack(), ipbe));
+                        item -> PortalDataHolder.addPortalComponents(item, ipbe));
                 InfinityMod.provider.getPortalKeyAsItem().ifPresent(item -> { //opening a portal by tossing a key in
                     if (e.getStack().isOf(item)) {
                         InfinityPortal.tryUpdateOpenStatus(ipbe, world, pos, server);

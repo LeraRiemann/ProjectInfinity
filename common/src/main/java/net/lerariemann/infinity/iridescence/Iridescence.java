@@ -16,6 +16,7 @@ import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -43,7 +44,6 @@ import net.minecraft.world.*;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Color;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalTime;
@@ -77,13 +77,14 @@ public interface Iridescence {
     }
 
     static int getPosBasedColor(BlockPos pos) {
-        return Color.HSBtoRGB((float)InfinityMethods.sample(pos), 1.0F, 1.0F) & 0xFFFFFF;
+        return ColorLogic.getPureHue(InfinityMethods.sample(pos));
     }
+
     //todo: figure out how minecraft offsets animations to sync this with irid items' textures' animation loops
     static int getTimeBasedColor() {
         long timeMS = LocalTime.now().toNanoOfDay() / 1000000;
         int hue = (int)(timeMS % 24000);
-        return Color.HSBtoRGB((float)(hue / 24000.0), 1.0f, 1.0f) & 0xFFFFFF;
+        return ColorLogic.getPureHue(hue / 24000.0);
     }
 
     java.util.List<DyeColor> dyeColors = List.of(

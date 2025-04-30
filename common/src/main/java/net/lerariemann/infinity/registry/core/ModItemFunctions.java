@@ -48,12 +48,12 @@ public class ModItemFunctions {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
             DeferredRegister.create(MOD_ID, RegistryKeys.RECIPE_TYPE);
 
-
     public static RegistrySupplier<LootFunctionType<SetLevelLootFunction>> SET_BIOME_BOTTLE_LEVEL =
             LOOT_FUNCTION_TYPES.register("set_biome_bottle_level", () -> new LootFunctionType<>(SetLevelLootFunction.CODEC));
     public static RegistrySupplier<LootFunctionType<SetAltarStateLootFunction>> SET_ALTAR_STATE =
             LOOT_FUNCTION_TYPES.register("set_altar_state", () -> new LootFunctionType<>(SetAltarStateLootFunction.CODEC));
 
+    //special recipe serializers
     public static RegistrySupplier<RecipeSerializer<BiomeBottleCombiningRecipe>> BIOME_BOTTLE_COMBINING =
             RECIPE_SERIALIZERS.register("biome_bottle_combining", () ->
                     new SpecialRecipeSerializer<>(BiomeBottleCombiningRecipe::new));
@@ -63,7 +63,7 @@ public class ModItemFunctions {
     public static RegistrySupplier<RecipeSerializer<ChromaCarpetRecipe>> CARPET =
             RECIPE_SERIALIZERS.register("chroma_carpet", () ->
                     new SpecialRecipeSerializer<>(ChromaCarpetRecipe::new));
-
+    //regular recipe serializers
     public static RegistrySupplier<RecipeSerializer<ChromaticColoringRecipe>> CHROMATIC_COLORING =
             RECIPE_SERIALIZERS.register("chromatic_coloring", () ->
                     new ChromaticColoringRecipe.Serializer(ChromaticColoringRecipe::new));
@@ -73,7 +73,7 @@ public class ModItemFunctions {
     public static RegistrySupplier<RecipeSerializer<CollisionCraftingRecipe>> IRIDESCENCE_CRAFTING =
             RECIPE_SERIALIZERS.register("collision_iridescence", () ->
                     new CollisionCraftingRecipe.Serializer(CollisionCraftingRecipe.OfIridescence::new));
-
+    //recipe types
     public static RegistrySupplier<RecipeType<CollisionCraftingRecipe>> PORTAL_CRAFTING_TYPE =
             RECIPE_TYPES.register("collision_portal", () -> CollisionCraftingRecipe.Type.PORTAL);
     public static RegistrySupplier<RecipeType<CollisionCraftingRecipe>> IRIDESCENCE_CRAFTING_TYPE =
@@ -149,10 +149,6 @@ public class ModItemFunctions {
                     int charge = BiomeBottleBlock.getCharge(stack);
                     return Math.clamp(charge / 1000.0f, 0f, 1f);
                 });
-        ItemPropertiesRegistry.register(ModItems.IRIDESCENT_CARPET.get(), InfinityMethods.getId("iridescent"),
-                ModItemFunctions::iridPredicate);
-        ItemPropertiesRegistry.register(ModItems.IRIDESCENT_WOOL.get(), InfinityMethods.getId("iridescent"),
-                ModItemFunctions::iridPredicate);
         ItemPropertiesRegistry.register(ModItems.F4.get(), InfinityMethods.getId("f4"),
                 (stack, world, entity, seed) -> {
                     Identifier id = ModItems.F4.get().getDestination(stack);

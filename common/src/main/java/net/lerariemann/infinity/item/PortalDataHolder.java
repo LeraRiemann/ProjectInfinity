@@ -4,6 +4,7 @@ import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.component.ComponentChanges;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -27,33 +28,29 @@ public interface PortalDataHolder {
         return (isDestinationRandom(id)) ? InfinityMethods.getRandomId(world.random) : id;
     }
 
-    static Optional<ComponentChanges> addPortalComponents(Item item, ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
+    static Optional<ComponentChanges> addPortalComponents(Item item, InfinityPortalBlockEntity ipbe) {
         if (item instanceof PortalDataHolder pdh)
-            return Optional.of(pdh.addPortalComponents(oldStack, ipbe));
+            return Optional.of(pdh.getPortalComponents(ipbe));
         return Optional.empty();
     }
-
-    default ComponentChanges addPortalComponents(ItemStack oldStack, InfinityPortalBlockEntity ipbe) {
-        return getPortalComponents(ipbe).build();
-    }
-
-    default ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+    default ComponentChanges getPortalComponents(InfinityPortalBlockEntity ipbe) {
         return ComponentChanges.builder()
-                .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
+                .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor())
+                .build();
     }
 
-    static Optional<ComponentChanges> addIridComponents(Item item) {
+    static Optional<ComponentChanges> getIridComponents(Item item, ItemEntity entity) {
         if (item instanceof PortalDataHolder pdh)
-            return pdh.addIridComponents();
+            return pdh.getIridComponents(entity);
         return Optional.empty();
     }
-    default Optional<ComponentChanges> addIridComponents() {
+    default Optional<ComponentChanges> getIridComponents(ItemEntity entity) {
         return Optional.empty();
     }
 
     default ItemStack withPortalData(InfinityPortalBlockEntity ipbe) {
         ItemStack stack = getStack();
-        stack.applyChanges(addPortalComponents(stack, ipbe));
+        stack.applyChanges(getPortalComponents(ipbe));
         return stack;
     }
 
@@ -61,10 +58,11 @@ public interface PortalDataHolder {
 
     interface Destinable extends PortalDataHolder {
         @Override
-        default ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+        default ComponentChanges getPortalComponents(InfinityPortalBlockEntity ipbe) {
             return ComponentChanges.builder()
                     .add(ModComponentTypes.DESTINATION.get(), ipbe.getDimension())
-                    .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor());
+                    .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor())
+                    .build();
         }
     }
 }

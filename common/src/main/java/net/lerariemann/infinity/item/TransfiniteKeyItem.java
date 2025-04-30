@@ -5,6 +5,7 @@ import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.component.ComponentChanges;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
@@ -26,18 +27,19 @@ public class TransfiniteKeyItem extends Item implements PortalDataHolder.Destina
     }
 
     @Override
-    public ComponentChanges.Builder getPortalComponents(InfinityPortalBlockEntity ipbe) {
+    public ComponentChanges getPortalComponents(InfinityPortalBlockEntity ipbe) {
         Identifier id = ipbe.getDimension();
         int color = (ipbe.getWorld() instanceof ServerWorld w) ?
                 PortalColorApplier.of(id, w.getServer()).apply(BlockPos.ORIGIN) :
                 (int)InfinityMethods.getNumericFromId(id);
         return ComponentChanges.builder()
                 .add(ModComponentTypes.DESTINATION.get(), id)
-                .add(ModComponentTypes.COLOR.get(), color & 0xFFFFFF);
+                .add(ModComponentTypes.COLOR.get(), color & 0xFFFFFF)
+                .build();
     }
 
     @Override
-    public Optional<ComponentChanges> addIridComponents() {
+    public Optional<ComponentChanges> getIridComponents(ItemEntity entity) {
         return Optional.of(ComponentChanges.builder()
                 .remove(ModComponentTypes.DESTINATION.get())
                 .remove(ModComponentTypes.COLOR.get())
