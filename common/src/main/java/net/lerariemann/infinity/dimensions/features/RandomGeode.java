@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -26,16 +28,17 @@ public class RandomGeode extends RandomisedFeature {
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         NbtCompound blocks = new NbtCompound();
-        blocks.put("filling_provider", PROVIDER.randomBlockProvider(random, parent.roll("flood_geodes") ? "fluids" : "airs"));
-        blocks.put("inner_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks_worldgen"));
-        blocks.put("alternate_inner_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks_worldgen"));
-        blocks.put("middle_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks_worldgen"));
-        blocks.put("outer_layer_provider", PROVIDER.randomBlockProvider(random, "full_blocks_worldgen"));
+        blocks.put("filling_provider", parent.roll("flood_geodes") ? PROVIDER.randomBlockProvider(random, ConfigType.FLUIDS) :
+                NbtUtils.blockToSimpleStateProvider(NbtUtils.nameToElement("minecraft:air")));
+        blocks.put("inner_layer_provider", PROVIDER.randomBlockProvider(random, ConfigType.FULL_BLOCKS_WG));
+        blocks.put("alternate_inner_layer_provider", PROVIDER.randomBlockProvider(random, ConfigType.FULL_BLOCKS_WG));
+        blocks.put("middle_layer_provider", PROVIDER.randomBlockProvider(random, ConfigType.FULL_BLOCKS_WG));
+        blocks.put("outer_layer_provider", PROVIDER.randomBlockProvider(random, ConfigType.FULL_BLOCKS_WG));
         NbtList inner_placements = new NbtList();
-        inner_placements.add(PROVIDER.randomElement(random, "all_blocks"));
+        inner_placements.add(PROVIDER.randomElement(random, ConfigType.ALL_BLOCKS));
         blocks.put("inner_placements", inner_placements);
-        blocks.putString("cannot_replace", "#" + PROVIDER.randomName(random, "tags"));
-        blocks.putString("invalid_blocks", "#" + PROVIDER.randomName(random, "tags"));
+        blocks.putString("cannot_replace", "#" + PROVIDER.randomName(random, ConfigType.TAGS));
+        blocks.putString("invalid_blocks", "#" + PROVIDER.randomName(random, ConfigType.TAGS));
         config.put("blocks", blocks);
         NbtCompound layers = new NbtCompound();
         double r = 1.0;

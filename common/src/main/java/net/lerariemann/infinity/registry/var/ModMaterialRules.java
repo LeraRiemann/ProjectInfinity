@@ -7,6 +7,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import net.lerariemann.infinity.iridescence.Iridescence;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -36,7 +37,7 @@ public class ModMaterialRules {
             long seed = MathHelper.hashCode(i, j, k);
             double d = (seed & 0xFFFL) / (double)0xFFFL;
             d = d - Math.floor(d);
-            BlockState st = Registries.BLOCK.get(Identifier.of(prov.randomName(d, "full_blocks_worldgen"))).getDefaultState();
+            BlockState st = Registries.BLOCK.get(Identifier.of(prov.randomName(d, ConfigType.FULL_BLOCKS_WG))).getDefaultState();
             if(st.contains(Properties.PERSISTENT)) st = st.with(Properties.PERSISTENT, Boolean.TRUE);
             return st;
         }

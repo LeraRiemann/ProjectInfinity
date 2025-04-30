@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.util.core;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -11,19 +12,14 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
-import static java.nio.file.Files.walk;
 import static net.lerariemann.infinity.InfinityMod.configPath;
 
 public class RandomProvider {
-    public Map<String, WeighedStructure<String>> registry = new HashMap<>();
-    public Map<String, WeighedStructure<NbtElement>> compoundRegistry = new HashMap<>();
+    public Map<ConfigType, WeighedStructure> registry = new HashMap<>();
     private final Map<String, Double> rootChances = new HashMap<>();
     private final Map<String, Boolean> gameRules = new HashMap<>();
     private final Map<String, Integer> gameRulesInt = new HashMap<>();
@@ -79,125 +75,99 @@ public class RandomProvider {
         return (gameRulesDouble.get(key)).intValue();
     }
 
-    public String randomName(Random random, String key) {
+    public String randomName(Random random, ConfigType key) {
         return randomName(random.nextDouble(), key);
     }
-    public String randomName(net.minecraft.util.math.random.Random random, String key) {
+    public String randomName(net.minecraft.util.math.random.Random random, ConfigType key) {
         return randomName(random.nextDouble(), key);
     }
-    public String randomName(double d, String key) {
-        if (compoundRegistry.containsKey(key))
-            return NbtUtils.elementToName(compoundRegistry.get(key).getElement(d));
+    public String randomName(double d, ConfigType key) {
         if (registry.containsKey(key))
-            return registry.get(key).getElement(d);
-        return defaultMap.get(key);
+            return registry.get(key).getName(d);
+        return key.getDef();
     }
 
-    public NbtCompound randomElement(net.minecraft.util.math.random.Random random, String key) {
+    public NbtCompound randomElement(net.minecraft.util.math.random.Random random, ConfigType key) {
         return randomElement(random.nextDouble(), key);
     }
-    public NbtCompound randomElement(Random random, String key) {
+    public NbtCompound randomElement(Random random, ConfigType key) {
         return randomElement(random.nextDouble(), key);
     }
-    public NbtCompound randomElement(double d, String key) {
-        return randomElementInternal(d, key, key.equals("fluids") ? NbtUtils::nameToFluid : NbtUtils::nameToElement);
-    }
-    private NbtCompound randomElementInternal(double d, String key, Function<String, NbtCompound> converter) {
-        if (compoundRegistry.containsKey(key)) {
-            NbtElement compound = compoundRegistry.get(key).getElement(d);
-            if (compound instanceof NbtCompound) return ((NbtCompound)compound);
-            else if (compound instanceof NbtString) return converter.apply(compound.asString());
+    public NbtCompound randomElement(double d, ConfigType key) {
+        if (registry.containsKey(key)) {
+            WeighedStructure ws = registry.get(key);
+            return ws.getElement(ws.getName(d), key.getConverter());
         }
-        else if (registry.containsKey(key))
-            return converter.apply(registry.get(key).getElement(d));
-        return converter.apply(defaultMap.get(key));
+        return key.fromName(key.getDef());
     }
-
-    public static final Map<String, String> defaultMap = Map.ofEntries(
-            Map.entry("all_blocks", "minecraft:stone"),
-            Map.entry("top_blocks", "minecraft:stone"),
-            Map.entry("blocks_features", "minecraft:stone"),
-            Map.entry("full_blocks", "minecraft:stone"),
-            Map.entry("full_blocks_worldgen", "minecraft:stone"),
-            Map.entry("fluids", "minecraft:water"),
-            Map.entry("items", "minecraft:stick"),
-            Map.entry("sounds", "minecraft:block.stone.step"),
-            Map.entry("music", "minecraft:music.game"),
-            Map.entry("particles", "minecraft:heart"),
-            Map.entry("biomes", "minecraft:plains"),
-            Map.entry("mobs", "minecraft:pig"),
-            Map.entry("tags", "minecraft:air"),
-            Map.entry("trees", "minecraft:oak"),
-            Map.entry("loot_tables", "minecraft:blocks/stone"));
 
     void registerAll() {
         readRootConfig();
-        registerCategory(registry, "misc", CommonIO::readStringList);
-        registerCategory(registry, "features", CommonIO::readStringList);
-        registerCategory(registry, "vegetation", CommonIO::readStringList);
-        registerCategory(compoundRegistry, "blocks", CommonIO::readCompoundList);
-        extractBlocks();
-        registerCategory(compoundRegistry, "extra", CommonIO::readCompoundList);
-        extractMobs();
         registerHardcoded();
+        for (ConfigType type: ConfigType.normalModular) registerCategory(type);
+        extractBlocks();
+        extractMobs();
+    }
+    void registerCategory(ConfigType type) {
+        registerCategory(type, CommonIO.readCategory(type));
+    }
+    void registerCategory(ConfigType type, List<NbtCompound> data) {
+        registry.put(type, new WeighedStructure.Recursor(data, type));
     }
 
     void readRootConfig() {
         NbtCompound rootConfig = CommonIO.read(configPath.resolve("infinity.json"));
         portalKey = rootConfig.getString("portalKey");
         salt = rootConfig.getString("salt");
-        NbtCompound gamerules = rootConfig.getCompound("gameRules");
-        for (String s: gamerules.getKeys()) {
-            NbtElement elem = gamerules.get(s);
+        NbtCompound gameRules = rootConfig.getCompound("gameRules");
+        for (String s: gameRules.getKeys()) {
+            NbtElement elem = gameRules.get(s);
             if (elem!=null) {
-                if (elem.getType() == NbtElement.INT_TYPE) gameRulesInt.put(s, gamerules.getInt(s));
-                if (elem.getType() == NbtElement.DOUBLE_TYPE) gameRulesDouble.put(s, gamerules.getDouble(s));
-                else gameRules.put(s, gamerules.getBoolean(s));
+                if (elem.getType() == NbtElement.INT_TYPE) gameRulesInt.put(s, gameRules.getInt(s));
+                if (elem.getType() == NbtElement.DOUBLE_TYPE) gameRulesDouble.put(s, gameRules.getDouble(s));
+                else this.gameRules.put(s, gameRules.getBoolean(s));
             }
         }
-        NbtCompound rootchances = rootConfig.getCompound("rootChances");
-        for (String c: rootchances.getKeys()) {
-            for (String s: rootchances.getCompound(c).getKeys()) {
-                rootChances.put(s, rootchances.getCompound(c).getDouble(s));
+        NbtCompound rootChances = rootConfig.getCompound("rootChances");
+        for (String c: rootChances.getKeys()) {
+            for (String s: rootChances.getCompound(c).getKeys()) {
+                this.rootChances.put(s, rootChances.getCompound(c).getDouble(s));
             }
         }
 
-        NbtList disableddimensions = rootConfig.getList("disabledDimensions", 8);
-        for (NbtElement jsonElement : disableddimensions) {
-            disabledDimensions.add(jsonElement.asString());
+        NbtList disabledDimensions = rootConfig.getList("disabledDimensions", 8);
+        for (NbtElement jsonElement : disabledDimensions) {
+            this.disabledDimensions.add(jsonElement.asString());
         }
     }
 
     void extractBlocks() {
-        if (compoundRegistry.containsKey("blocks")) {
-            WeighedStructure<NbtElement> blocksSettings = compoundRegistry.get("blocks");
-            WeighedStructure<NbtElement> allBlocks = new WeighedStructure<>();
-            WeighedStructure<NbtElement> blocksFeatures = new WeighedStructure<>();
-            WeighedStructure<NbtElement> topBlocks = new WeighedStructure<>();
-            WeighedStructure<NbtElement> fullBlocks = new WeighedStructure<>();
-            WeighedStructure<NbtElement> fullBlocksWG = new WeighedStructure<>();
-            for (int i = 0; i < blocksSettings.keys.size(); i++) {
-                NbtCompound e = (NbtCompound)(blocksSettings.keys.get(i));
-                boolean isfull, istop, isfloat, islaggy;
-                isfull = popBlockData(e, "full", false);
-                islaggy = popBlockData(e, "laggy", false);
-                isfloat = popBlockData(e, "float", isfull);
-                istop = popBlockData(e, "top", isfull);
-                istop = istop || isfloat;
-                Double w = blocksSettings.weights.get(i);
-                allBlocks.add(e, w);
-                if (isfull) fullBlocks.add(e, w);
-                if (istop && !islaggy) topBlocks.add(e, w);
-                if (isfloat) blocksFeatures.add(e, w);
-                if (isfull && isfloat && !islaggy) fullBlocksWG.add(e, w);
-            }
-            compoundRegistry.put("all_blocks", allBlocks);
-            compoundRegistry.put("blocks_features", blocksFeatures);
-            compoundRegistry.put("full_blocks", fullBlocks);
-            compoundRegistry.put("full_blocks_worldgen", fullBlocksWG);
-            compoundRegistry.put("top_blocks", topBlocks);
-            compoundRegistry.remove("blocks");
+        List<NbtCompound> blocksSettings = CommonIO.readCategory(ConfigType.BLOCKS);
+        List<NbtCompound> allBlocks = new ArrayList<>();
+        List<NbtCompound> fullBlocks = new ArrayList<>();
+        List<NbtCompound> topBlocks = new ArrayList<>();
+        List<NbtCompound> blocksFeatures = new ArrayList<>();
+        List<NbtCompound> fullBlocksWG = new ArrayList<>();
+        for (NbtCompound block : blocksSettings) {
+            NbtCompound data = NbtUtils.test(block, "data", new NbtCompound());
+            boolean isfull, istop, isfloat, islaggy;
+            isfull = popBlockData(data, "full", false);
+            islaggy = popBlockData(data, "laggy", false);
+            isfloat = popBlockData(data, "float", isfull);
+            istop = popBlockData(data, "top", isfull);
+            istop = istop || isfloat;
+            block.put("data", data);
+            allBlocks.add(block);
+            if (isfull) fullBlocks.add(block);
+            if (istop && !islaggy) topBlocks.add(block);
+            if (isfloat) blocksFeatures.add(block);
+            if (isfull && isfloat && !islaggy) fullBlocksWG.add(block);
         }
+        registerCategory(ConfigType.ALL_BLOCKS, allBlocks);
+        registerCategory(ConfigType.BLOCKS_FEATURES, blocksFeatures);
+        registerCategory(ConfigType.ALL_BLOCKS, fullBlocks);
+        registerCategory(ConfigType.FULL_BLOCKS_WG, fullBlocksWG);
+        registerCategory(ConfigType.TOP_BLOCKS, topBlocks);
     }
     static boolean popBlockData(NbtCompound e, String key, boolean def) {
         boolean res = NbtUtils.test(e, key, def);
@@ -206,49 +176,44 @@ public class RandomProvider {
     }
 
     void extractMobs() {
-        if (compoundRegistry.containsKey("mobs")) {
-            WeighedStructure<NbtElement> allmobs = compoundRegistry.get("mobs");
-            WeighedStructure<String> allMobNames = new WeighedStructure<>();
-            for (int i = 0; i < allmobs.size(); i++) if (allmobs.keys.get(i) instanceof NbtCompound mob) {
-                String group = mob.getString("Category");
-                if (!registry.containsKey(group)) registry.put(group, new WeighedStructure<>());
-                registry.get(group).add(mob.getString("Name"), allmobs.weights.get(i));
-                allMobNames.add(mob.getString("Name"), allmobs.weights.get(i));
+        List<NbtCompound> allmobs = CommonIO.readCategory(ConfigType.MOBS);
+        Map<ConfigType, List<NbtCompound>> byCategory = new HashMap<>();
+        List<NbtCompound> cleanMobs = new ArrayList<>();
+        for (ConfigType type : ConfigType.mobCategories) byCategory.put(type, new ArrayList<>());
+        for (NbtCompound mob : allmobs) {
+            String group = mob.getCompound("data").getString("Category");
+            mob.remove("data");
+            ConfigType type = ConfigType.byName(group);
+            if (type != null) {
+                byCategory.get(type).add(mob);
+                cleanMobs.add(mob);
             }
-            registry.put("mobs", allMobNames);
-            compoundRegistry.remove("mobs");
         }
-    }
-
-    <B> void registerCategory(Map<String, B> reg, String subpath, ListReader<B> reader) {
-        Path path = configPath.resolve("modular");
-        try (Stream<Path> files = walk(path.resolve("minecraft").resolve(subpath))) {
-            files.filter(p -> p.toFile().isFile()).forEach(p -> {
-                String fullname = p.toString();
-                String name = p.getFileName().toString().replace(".json", "");
-                int i = fullname.replace("minecraft_", "%%%").lastIndexOf("minecraft");
-                String sub = fullname.substring(i+10);
-                reg.put(name, reader.op(path, sub));
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        registerCategory(ConfigType.MOBS, cleanMobs);
+        for (ConfigType type : byCategory.keySet())
+            registerCategory(type, byCategory.get(type));
     }
 
     void registerHardcoded() {
-        try (Stream<Path> files = walk(configPath.resolve("hardcoded"))) {
-            files.map(Path::toString).filter(s -> s.endsWith(".json")).forEach(fullname -> {
-                String name = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.length() - 5);
-                name = name.substring(name.lastIndexOf('\\') + 1);
-                if (!name.equals("none")) registry.put(name, CommonIO.readStringList(fullname));
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        Path root = configPath.resolve("hardcoded");
+        registerHardcoded(ConfigType.hardcoded, root);
+        registerHardcoded(ConfigType.vegetation, root.resolve("vegetation"));
+        registerHardcoded(ConfigType.features, root.resolve("features"));
+    }
+
+    void registerHardcoded(ConfigType[] types, Path dir) {
+        for (ConfigType type: types) {
+            Path file = dir.resolve(type.getKey() + ".json");
+            if (file.toFile().exists()) {
+                NbtCompound base = CommonIO.read(file);
+                List<NbtCompound> list = base.getList("elements", NbtElement.COMPOUND_TYPE).stream().map(e -> (NbtCompound)e).toList();
+                registry.put(type, new WeighedStructure.Simple(list, type.getDef()));
+            }
         }
     }
 
     public List<String> getMobCategories() {
-        return registry.get("mob_categories").keys;
+        return Arrays.stream(ConfigType.mobCategories).map(ConfigType::getKey).toList();
     }
 
     public NbtCompound blockToProvider(NbtCompound block, Random random) {
@@ -259,51 +224,39 @@ public class RandomProvider {
         res.put("state", block);
         return res;
     }
-    public NbtCompound randomBlockProvider(Random random, String key) {
+    public NbtCompound randomBlockProvider(Random random, ConfigType key) {
         return blockToProvider(randomElement(random, key), random);
     }
 
     public NbtCompound randomPreset(Random random, String key) {
-        NbtElement list = compoundRegistry.get("color_presets").getRandomElement(random);
+        String preset = randomName(random, ConfigType.COLOR_PRESETS);
+        NbtList lst = new NbtList();
+        Arrays.stream(ColorLogic.vanillaColors).forEach(color -> lst.add(NbtUtils.nameToElement(preset.replace("$", color))));
         NbtCompound res = new NbtCompound();
-        if (list instanceof NbtList lst) {
-            res.putString("type", key);
-            if (key.equals("noise_provider")) {
-                res.putInt("seed", 0);
-                res.putDouble("scale", 4.0);
-                res.put("states", lst);
-                res.put("noise", CommonIO.read(InfinityMod.utilPath + "/noise.json"));
+        res.putString("type", key);
+        if (key.equals("noise_provider")) {
+            res.putInt("seed", 0);
+            res.putDouble("scale", 4.0);
+            res.put("states", lst);
+            res.put("noise", CommonIO.read(InfinityMod.utilPath + "/noise.json"));
+        }
+        if (key.equals("weighted_state_provider")) {
+            NbtList entries = new NbtList();
+            for (NbtElement block : lst) {
+                NbtCompound entry = new NbtCompound();
+                entry.put("data", block);
+                entry.putDouble("weight", 1.0);
+                entries.add(entry);
             }
-            if (key.equals("weighted_state_provider")) {
-                NbtList entries = new NbtList();
-                for (NbtElement block : lst) {
-                    NbtCompound entry = new NbtCompound();
-                    entry.put("data", block);
-                    entry.putDouble("weight", 1.0);
-                    entries.add(entry);
-                }
-                res.put("entries", entries);
-            }
+            res.put("entries", entries);
         }
         return res;
     }
 
     public void kickGhostsOut(DynamicRegistryManager s) {
+        registry.remove(ConfigType.BIOMES);
+        List<NbtCompound> biomes = CommonIO.readCategory(ConfigType.BIOMES);
         Registry<Biome> reg = s.get(RegistryKeys.BIOME);
-        WeighedStructure<String> biomes = registry.get("biomes");
-        if (biomes != null) {
-            int i = 0;
-            while(i < biomes.keys.size()) {
-                if (!reg.containsId(Identifier.of(biomes.keys.get(i)))) {
-                    biomes.kick(i);
-                }
-                else i++;
-            }
-            registry.put("biomes", biomes);
-        }
-    }
-
-    interface ListReader<B>  {
-        B op(Path path, String subpath);
+        registerCategory(ConfigType.BIOMES, biomes.stream().filter(comp -> reg.containsId(Identifier.of(comp.getString("Name")))).toList());
     }
 }

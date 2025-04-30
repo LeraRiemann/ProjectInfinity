@@ -4,6 +4,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
@@ -96,7 +97,7 @@ public class RandomDimension {
     }
 
     public void genBasics() {
-        type_alike = PROVIDER.randomName(random, "noise_presets");
+        type_alike = PROVIDER.randomName(random, ConfigType.NOISE_PRESETS);
         min_y = 16*Math.clamp((int)Math.floor(random.nextExponential() * 2), isOverworldLike() ? -125 : -3, 0);
         int avgHeight = Math.clamp(RandomProvider.ruleInt("avgDimensionHeight"), 64, 1024);
         int max_y = 16*Math.clamp((int)Math.floor(random.nextGaussian(avgHeight/16.0, avgHeight/64.0)), isOverworldLike() ? 1 : 5, 125);
@@ -112,10 +113,10 @@ public class RandomDimension {
         max_y = Math.max(max_y, 16 * (int) (1 + Math.floor(sea_level / 16.0)));
         height = max_y - min_y;
         default_block = randomiseblocks ?
-                PROVIDER.randomElement(random, "full_blocks_worldgen") :
+                PROVIDER.randomElement(random, ConfigType.FULL_BLOCKS_WG) :
                 NbtUtils.nameToElement(getDefaultBlock("minecraft:stone"));
         default_fluid = randomiseblocks ?
-                PROVIDER.randomElement(random, "fluids") :
+                PROVIDER.randomElement(random, ConfigType.FLUIDS) :
                 NbtUtils.nameToFluid(getDefaultFluid());
         deepslate = Arrays.stream((new String[]{"minecraft:overworld", "minecraft:amplified", "infinity:whack"})).toList().contains(type_alike) ?
                 NbtUtils.nameToElement("minecraft:deepslate") : default_block;
@@ -179,7 +180,7 @@ public class RandomDimension {
 
     NbtCompound randomDimensionGenerator() {
         NbtCompound res = new NbtCompound();
-        String type = PROVIDER.randomName(random, "generator_types");
+        String type = PROVIDER.randomName(random, ConfigType.GENERATOR_TYPES);
         res.putString("type", type);
         switch (type) {
             case "minecraft:flat" -> {
@@ -215,14 +216,14 @@ public class RandomDimension {
         for (int i = 0; i < layer_count; i++) {
             int layerHeight = Math.min(heightLeft, 1 + (int) Math.floor(random.nextExponential() * 4));
             heightLeft -= layerHeight;
-            block = PROVIDER.randomName(random, "full_blocks_worldgen");
+            block = PROVIDER.randomName(random, ConfigType.FULL_BLOCKS_WG);
             layers.add(superflatLayer(layerHeight, block));
             if (heightLeft <= 1) {
                 break;
             }
         }
         if (random.nextBoolean()) {
-            block = PROVIDER.randomName(random, "top_blocks");
+            block = PROVIDER.randomName(random, ConfigType.TOP_BLOCKS);
             layers.add(superflatLayer(1, block));
         }
         res.putString("biome", biome);
@@ -236,7 +237,7 @@ public class RandomDimension {
 
     NbtCompound randomBiomeSource() {
         NbtCompound res = new NbtCompound();
-        String type = PROVIDER.randomName(random, "biome_source_types");
+        String type = PROVIDER.randomName(random, ConfigType.BIOME_SOURCE_TYPES);
         res.putString("type",type);
         switch (type) {
             case "minecraft:the_end" -> {
@@ -248,7 +249,7 @@ public class RandomDimension {
                 return res;
             }
             case "minecraft:multi_noise" -> {
-                String preset = PROVIDER.randomName(random, "multinoise_presets");
+                String preset = PROVIDER.randomName(random, ConfigType.MULTINOISE_PRESETS);
                 if (preset.equals("none") || hasCeiling()) res.put("biomes", randomBiomes());
                 else {
                     res.putString("preset", preset.replace("_", ":"));
@@ -322,7 +323,7 @@ public class RandomDimension {
     String randomBiome() {
         String biome;
         if (!hasCeiling() && !PROVIDER.roll(random, "use_random_biome")) {
-            biome = PROVIDER.randomName(random, "biomes");
+            biome = PROVIDER.randomName(random, ConfigType.BIOMES);
             vanilla_biomes.add(biome);
         }
         else {

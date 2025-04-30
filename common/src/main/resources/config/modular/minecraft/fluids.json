@@ -1,0 +1,26 @@
+{
+	"infinity_version": 2003000,
+	"elements": [
+		{
+			"data": {
+				"fluidName": "minecraft:empty"
+			},
+			"key": "minecraft:air",
+			"weight": 1.0
+		},
+		{
+			"data": {
+				"fluidName": "minecraft:lava"
+			},
+			"key": "minecraft:lava",
+			"weight": 2.0
+		},
+		{
+			"data": {
+				"fluidName": "minecraft:water"
+			},
+			"key": "minecraft:water",
+			"weight": 5.0
+		}
+	]
+}

@@ -1,11 +1,10 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
-
-import java.util.Objects;
 
 public class RandomDisk extends RandomisedFeature {
     String target;
@@ -26,7 +25,7 @@ public class RandomDisk extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        NbtCompound blockProvider = PROVIDER.randomBlockProvider(random, "full_blocks_worldgen");
+        NbtCompound blockProvider = PROVIDER.randomBlockProvider(random, ConfigType.FULL_BLOCKS_WG);
         config.putInt("half_height", random.nextInt(5));
         addRandomIntProvider(config, "radius", 0, 9);
         NbtCompound targets = new NbtCompound();

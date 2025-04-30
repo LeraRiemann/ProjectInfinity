@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -24,7 +25,7 @@ public class RandomCeilingBlob extends RandomisedFeature {
         targets.add(daddy.default_block);
         targets.addAll(daddy.additional_blocks);
         config.put("targets", targets);
-        addRandomBlockProvider(config, "block", "full_blocks");
+        addRandomBlockProvider(config, "block", ConfigType.FULL_BLOCKS);
         config.putInt("size_xz", random.nextInt(5, 12));
         config.putInt("size_y", random.nextInt(8, 16));
         return feature(config);

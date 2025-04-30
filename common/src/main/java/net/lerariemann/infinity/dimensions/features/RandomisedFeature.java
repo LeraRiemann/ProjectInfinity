@@ -5,6 +5,7 @@ import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
@@ -57,21 +58,19 @@ public abstract class RandomisedFeature {
     NbtCompound genBlockOrFluid() {
         NbtCompound block2;
         if (parent.roll("solid_lakes")) {
-            block2 = PROVIDER.randomElement(random, "blocks_features");
+            block2 = PROVIDER.randomElement(random, ConfigType.BLOCKS_FEATURES);
         }
         else {
             block2 = NbtUtils.nameToElement(
-                    PROVIDER.randomName(random, "fluids"));
+                    PROVIDER.randomName(random, ConfigType.FLUIDS));
         }
         return block2;
     }
 
-    void addRandomBlockProvider(NbtCompound config, String key, String group) {
-        NbtCompound block = PROVIDER.randomElement(random, group);
-        config.put(key, PROVIDER.blockToProvider(block, random));
+    void addRandomBlockProvider(NbtCompound config, String key, ConfigType group) {
+        config.put(key, PROVIDER.randomBlockProvider(random, group));
     }
-
-    void addRandomBlock(NbtCompound config, String key, String group) {
+    void addRandomBlock(NbtCompound config, String key, ConfigType group) {
         NbtCompound block = PROVIDER.randomElement(random, group);
         config.put(key, block);
     }

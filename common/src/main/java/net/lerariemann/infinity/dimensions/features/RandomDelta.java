@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 
@@ -19,7 +20,7 @@ public class RandomDelta extends RandomisedFeature {
         NbtCompound config = new NbtCompound();
         NbtCompound block = genBlockOrFluid();
         config.put("contents", block);
-        addRandomBlock(config, "rim", "full_blocks");
+        addRandomBlock(config, "rim", ConfigType.FULL_BLOCKS);
         config.put("size", NbtUtils.randomIntProvider(random, 17, true));
         config.put("rim_size", NbtUtils.randomIntProvider(random, 17, true));
         return feature(config);

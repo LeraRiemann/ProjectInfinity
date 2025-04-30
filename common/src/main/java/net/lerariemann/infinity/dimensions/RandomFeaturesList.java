@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.dimensions.features.*;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -33,21 +34,20 @@ public class RandomFeaturesList {
         data.add(localModifications());
         data.add(undergroundStructures());
         data.add(surfaceStructures());
-        data.add(getAllElements("strongholds"));
         data.add(undergroundOres());
         data.add(undergroundDecoration());
-        data.add(getAllElements("fluidsprings"));
+        data.add(fluidSprings());
         data.add(vegetation());
-        data.add(getAllElements("toplayermodification"));
+        data.add(getAllElements(ConfigType.TOP_LAYER));
     }
 
-    NbtString randomPlant(String path) {
+    NbtString randomPlant(ConfigType path) {
         return NbtString.of(PROVIDER.randomName(random, path));
     }
 
-    NbtList getAllElements(String name) {
+    NbtList getAllElements(ConfigType name) {
         if (!useVanillaFeatures) return new NbtList();
-        List<String> lst = PROVIDER.registry.get(name).getAllElements(random);
+        List<String> lst = PROVIDER.registry.get(name).getAllNames(random::nextDouble);
         NbtList res = new NbtList();
         for (String s : lst) res.add(NbtString.of(s));
         return res;
@@ -68,19 +68,20 @@ public class RandomFeaturesList {
     }
 
     NbtList endIsland() {
-        NbtList res = getAllElements("rawgeneration");
+        NbtList res = new NbtList();
         addRandomFeature("end_island", res, RandomEndIsland::new);
-        if (roll("shape")) addRandomFeature(res, new RandomShape(this, PROVIDER.randomName(random, "shape_types")));
+        if (roll("shape")) addRandomFeature(res, new RandomShape(this, PROVIDER.randomName(random, ConfigType.SHAPE_TYPES)));
         return res;
     }
 
     NbtList lakes() {
-        //addRandomFeature("lake", res, RandomLake::new);
-        return getAllElements("lakes");
+        NbtList res = getAllElements(ConfigType.LAKES);
+        addRandomFeature("lake", res, RandomLake::new);
+        return res;
     }
 
     NbtList localModifications() {
-        NbtList res = getAllElements("localmodifications");
+        NbtList res = getAllElements(ConfigType.LOCAL_MOD);
         addRandomFeature("iceberg", res, RandomIceberg::new);
         addRandomFeature("geode", res, RandomGeode::new);
         addRandomFeature("rock", res, RandomRock::new);
@@ -88,23 +89,23 @@ public class RandomFeaturesList {
     }
 
     NbtList undergroundStructures() {
-        NbtList res = getAllElements("undergroundstructures");
+        NbtList res = getAllElements(ConfigType.UNDERGROUND_STRUCTURES);
         addRandomFeature("dungeon", res, RandomDungeon::new);
         return res;
     }
 
     NbtList surfaceStructures() {
-        NbtList res = getAllElements("surfacestructures");
+        NbtList res = new NbtList();
         addRandomFeature("end_spikes", res, RandomEndSpikes::new);
         addRandomFeature("end_gateway", res, RandomEndGateway::new);
         addRandomFeature("delta", res, RandomDelta::new);
         addRandomFeature("columns", res, RandomColumns::new);
-        addRandomFeature("crops", res, RandomCrop::new);
+        addRandomFeature("well", res, RandomWell::new);
         return res;
     }
 
     NbtList undergroundOres() {
-        NbtList res = getAllElements("undergroundores");
+        NbtList res = getAllElements(ConfigType.UNDERGROUND_ORES);
         int num_ores = random.nextInt( 4);
         int num_disks = Math.max(3, (int) Math.floor(random.nextExponential()));
         for (int i = 0; i < num_ores; i++) {
@@ -117,24 +118,29 @@ public class RandomFeaturesList {
     }
 
     NbtList undergroundDecoration() {
-        NbtList res = getAllElements("undergrounddecoration");
+        NbtList res = getAllElements(ConfigType.UNDERGROUND_DEC);
         addRandomFeature("blobs", res, RandomBlobs::new);
         addRandomFeature("ceiling_blobs", res, RandomCeilingBlob::new);
+        return res;
+    }
+
+    NbtList fluidSprings() {
+        NbtList res = new NbtList();
+        addRandomFeature("springs", res, RandomSpring::new);
         return res;
     }
 
     NbtList vegetation() {
         NbtList res = new NbtList();
         addRandomFeature("vegetation", res, RandomVegetation::new);
-        res.addAll(getAllElements("vegetation_part1"));
-        if (!PROVIDER.roll(random, "random_flowers")) res.add(randomPlant("flowers_legacy"));
-        else addRandomFeature(res, RandomFlowerPatch::new);
-        res.add(randomPlant("grass"));
-        res.addAll(getAllElements("vegetation_part2"));
+        res.addAll(getAllElements(ConfigType.VEG1));
+        addRandomFeature(res, RandomFlowerPatch::new);
+        res.add(randomPlant(ConfigType.GRASS));
+        res.addAll(getAllElements(ConfigType.VEG2));
         addRandomFeature("surface_patch", res, RandomSurfacePatch::new);
         addRandomFeature("floating_patch", res, RandomFloatingPatch::new);
-        res.add(randomPlant("seagrass"));
-        res.addAll(getAllElements("vegetation_part3"));
+        res.add(randomPlant(ConfigType.SEAGRASS));
+        res.addAll(getAllElements(ConfigType.VEG3));
         return res;
     }
 

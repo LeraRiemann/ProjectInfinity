@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 
 public class RandomBlobs extends RandomisedFeature {
@@ -8,7 +9,7 @@ public class RandomBlobs extends RandomisedFeature {
 
     public RandomBlobs(RandomFeaturesList parent) {
         super(parent, "blob");
-        block = parent.PROVIDER.randomElement(random, "full_blocks_worldgen");
+        block = parent.PROVIDER.randomElement(random, ConfigType.FULL_BLOCKS_WG);
         daddy.additional_blocks.add(block);
         id = "netherrack_replace_blobs";
         save_with_placement();

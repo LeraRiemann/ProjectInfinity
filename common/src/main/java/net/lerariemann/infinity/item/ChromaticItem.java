@@ -83,6 +83,7 @@ public class ChromaticItem extends Item implements PortalDataHolder {
     public boolean useOnBlock(PlayerEntity player, Hand hand, World world, BlockPos pos, ItemStack currStack) {
         BlockState oldState = world.getBlockState(pos);
         int currColor = currStack.getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
+        int currHue = currStack.getOrDefault(ModComponentTypes.HUE.get(), -1);
         if (player.isSneaking()) { //copy color
             ItemStack newStack = currStack.copy();
             int i = -1;
@@ -106,7 +107,6 @@ public class ChromaticItem extends Item implements PortalDataHolder {
                 else return false;
             }
             if (i > 0) {
-                int currHue = currStack.getOrDefault(ModComponentTypes.HUE.get(), -1);
                 if (currHue > 0) {
                     if (ColorLogic.matchesPureHue(i, currHue)) return false;
                     newStack.applyChanges(ofColor(i));
@@ -126,8 +126,7 @@ public class ChromaticItem extends Item implements PortalDataHolder {
             world.setBlockState(pos, state);
             AtomicBoolean cancel = new AtomicBoolean(false);
             if (!bl && world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) {
-                int hue = currStack.getOrDefault(ModComponentTypes.HUE.get(), -1);
-                if (hue > 0) cbe.setColor(hue, 255, 255, cancel);
+                if (currHue > 0) cbe.setColor(currHue, 255, 255, cancel);
                 else cbe.setColor(currColor, cancel);
             }
             if (!cancel.get()) {

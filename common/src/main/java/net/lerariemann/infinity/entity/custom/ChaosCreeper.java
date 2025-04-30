@@ -6,6 +6,7 @@ import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -53,7 +54,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
-        NbtCompound biome = InfinityMod.provider.randomElement(world.getRandom(), "biomes");
+        NbtCompound biome = InfinityMod.provider.randomElement(world.getRandom(), ConfigType.BIOMES);
         this.setColor(NbtUtils.test(biome, "Color", 7842607));
         this.setRandomCharge();
         this.setBiome(biome.getString("Name"));
@@ -156,7 +157,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
         if (source.getAttacker() != null && source.getAttacker().getType().isIn(EntityTypeTags.SKELETONS)) {
             ItemStack stack = ModItems.DISC.get().getDefaultStack();
-            Identifier song = Identifier.of(InfinityMod.provider.randomName(world.random, "jukeboxes"));
+            Identifier song = Identifier.of(InfinityMod.provider.randomName(world.random, ConfigType.JUKEBOXES));
             stack.applyComponentsFrom(ComponentMap.builder()
                     .add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new RegistryPair<>(
                             RegistryKey.of(RegistryKeys.JUKEBOX_SONG, song)), true))

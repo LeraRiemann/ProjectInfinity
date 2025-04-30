@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -30,7 +31,7 @@ public class RandomFlowerPatch extends RandomisedFeature {
         int i = 1;
         while (i > 0) {
             NbtCompound entry = new NbtCompound();
-            addRandomBlock(entry, "data", "flowers");
+            addRandomBlock(entry, "data", ConfigType.FLOWERS);
             entry.putInt("weight", 1 + random.nextInt(20));
             flowerlist.add(entry);
             i = random.nextDouble() > 0.5 ? 1 : 0;

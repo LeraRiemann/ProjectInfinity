@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.config.ConfigManager;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import org.apache.commons.io.FileUtils;
@@ -41,7 +42,7 @@ public class RandomText extends RandomStructure {
         data.putString("step", "surface_structures");
         data.put("spawn_overrides", new NbtCompound());
         data.putString("biomes", parent.fullname);
-        data.put("block", daddy.PROVIDER.randomBlockProvider(random, "full_blocks_worldgen"));
+        data.put("block", daddy.PROVIDER.randomBlockProvider(random, ConfigType.FULL_BLOCKS_WG));
         data.put("y", NbtUtils.randomHeightProvider(random,
                 daddy.sea_level, daddy.min_y+daddy.height,
                 true, true));

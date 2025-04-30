@@ -2,7 +2,6 @@ package net.lerariemann.infinity.util.core;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 
 import java.nio.file.Path;
@@ -29,9 +28,7 @@ public record CorePack(RandomProvider provider, Path savingPath) {
     }
 
     void saveTrees() {
-        WeighedStructure<NbtElement> treesReg = provider.compoundRegistry.get("trees");
-        if (treesReg == null) return;
-        List<String> trees = treesReg.keys.stream().map(compound -> ((NbtCompound)compound).getString("Name")).toList();
+        List<String> trees = provider.registry.get(ConfigType.TREES).getAllNames();
         double size = trees.size();
         NbtCompound c = new NbtCompound();
         NbtList l = new NbtList();
@@ -51,9 +48,9 @@ public record CorePack(RandomProvider provider, Path savingPath) {
 
     void saveEndOfTime() {
         NbtCompound res = new NbtCompound();
-        for (String category : provider.getMobCategories()) {
+        for (ConfigType category : ConfigType.mobCategories) {
             NbtList entries = new NbtList();
-            for (String mob: provider.registry.get(category).keys) {
+            for (String mob: provider.registry.get(category).getAllNames()) {
                 NbtCompound entry = new NbtCompound();
                 entry.putString("type", mob);
                 entry.putInt("minCount", 1);
@@ -61,7 +58,7 @@ public record CorePack(RandomProvider provider, Path savingPath) {
                 entry.putInt("weight", 1);
                 entries.add(entry);
             }
-            res.put(category, entries);
+            res.put(category.getKey(), entries);
         }
         CommonIO.write(CommonIO.readAndAddCompound(InfinityMod.utilPath.resolve("end_of_time.json").toString(), res),
                 savingPath.resolve("data/" + InfinityMod.MOD_ID + "/worldgen/biome"), "end.json");

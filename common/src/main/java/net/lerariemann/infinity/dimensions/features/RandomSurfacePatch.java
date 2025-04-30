@@ -3,6 +3,7 @@ package net.lerariemann.infinity.dimensions.features;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 
 public class RandomSurfacePatch extends RandomisedFeature {
@@ -23,7 +24,7 @@ public class RandomSurfacePatch extends RandomisedFeature {
         int y_spread = 1 + random.nextInt(7);
         int tries_max = (xz_spread+1)*(xz_spread+1);
         NbtCompound config = CommonIO.readAndFormat(InfinityMod.utilPath + "/preplacements/surfacepatch.json",
-                CommonIO.compoundToString(PROVIDER.randomElement(random, "blocks_features")),
+                CommonIO.compoundToString(PROVIDER.randomElement(random, ConfigType.BLOCKS_FEATURES)),
                 parent.surface_block.getString("Name"), Math.min(256, random.nextInt(tries_max)), xz_spread, y_spread);
         return feature(config);
     }

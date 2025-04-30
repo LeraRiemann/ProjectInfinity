@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 
 public class RandomRock extends RandomisedFeature {
@@ -19,7 +20,7 @@ public class RandomRock extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        addRandomBlock(config, "state", "full_blocks");
+        addRandomBlock(config, "state", ConfigType.FULL_BLOCKS);
         return feature(config);
     }
 }

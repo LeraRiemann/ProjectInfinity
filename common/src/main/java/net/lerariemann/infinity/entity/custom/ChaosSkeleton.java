@@ -2,6 +2,7 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.registry.core.ModEntities;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -81,7 +82,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         Random r = new Random();
-        NbtCompound effect = InfinityMod.provider.randomElement(r, "effects");
+        NbtCompound effect = InfinityMod.provider.randomElement(r, ConfigType.EFFECTS);
         this.setEffect(effect);
         this.setDuration(r.nextInt(600));
         return super.initialize(world, difficulty, spawnReason, entityData);
@@ -144,7 +145,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     }
     public void setEffect(String eff, int c) {
         if (eff.isBlank()) {
-            NbtCompound newEffect = InfinityMod.provider.randomElement(random, "effects");
+            NbtCompound newEffect = InfinityMod.provider.randomElement(random, ConfigType.EFFECTS);
             eff = newEffect.getString("Name");
             c = newEffect.getInt("Color");
         }

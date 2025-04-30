@@ -3,6 +3,7 @@ package net.lerariemann.infinity.dimensions.features;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.CorePack;
 import net.minecraft.nbt.*;
 
@@ -26,9 +27,9 @@ public class RandomVegetation extends RandomisedFeature {
         addBiome();
     }
     NbtElement randomTree() {
-        String tree = "minecraft:oak";
+        String tree = ConfigType.TREES.getDef();
         if (parent.roll("use_vanilla_trees")) {
-            tree = PROVIDER.randomName(random, "trees");
+            tree = PROVIDER.randomName(random, ConfigType.TREES);
             NbtCompound c = CorePack.treePlacement(tree, parent.surface_block.getString("Name"));
             String s = tree.substring(tree.lastIndexOf(':') + 1).replace("/", "_") + "_" + parent.parent.id;
             s = s.replace("/", "_");
@@ -36,7 +37,7 @@ public class RandomVegetation extends RandomisedFeature {
             return NbtString.of(InfinityMod.MOD_ID + ":" + s);
         }
         else {
-            switch(PROVIDER.randomName(random, "floral_distribution")) {
+            switch(PROVIDER.randomName(random, ConfigType.FLORAL_DISTRIBUTION)) {
                 case "fungi" -> tree = (new RandomFungus(parent)).fullName();
                 case "mushrooms" -> tree = (new RandomMushroom(parent)).fullName();
                 case "trees" -> tree = (new RandomTree(parent)).fullName();

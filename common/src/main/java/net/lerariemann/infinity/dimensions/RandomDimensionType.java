@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 
@@ -45,8 +46,8 @@ public class RandomDimensionType {
         lightLevel.putInt("min_inclusive", 0);
         lightLevel.putInt("max_inclusive", random.nextInt(16));
         data.put("monster_spawn_light_level", lightLevel);
-        data.putString("infiniburn", "#" + dim.PROVIDER.randomName(random, "tags"));
-        String s = dim.PROVIDER.randomName(random, "dimension_effects");
+        data.putString("infiniburn", "#" + dim.PROVIDER.randomName(random, ConfigType.TAGS));
+        String s = dim.PROVIDER.randomName(random, ConfigType.DIMENSION_EFFECTS);
         foggy = s.equals("minecraft:the_nether");
         data.putString("effects", s);
         CommonIO.write(data, dim.getStoragePath() + "/dimension_type", name + ".json");

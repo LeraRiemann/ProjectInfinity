@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -30,7 +31,7 @@ public class RandomShape extends RandomisedFeature {
         NbtList replaceable = new NbtList();
         replaceable.add(NbtUtils.nameToElement(parent.parent.parent.default_fluid.getString("Name")));
         config.put("replaceable", replaceable);
-        if (!usePreset) addRandomBlockProvider(config, "block_provider", "full_blocks_worldgen");
+        if (!usePreset) addRandomBlockProvider(config, "block_provider", ConfigType.FULL_BLOCKS_WG);
         else config.put("block_provider", PROVIDER.randomPreset(random, useBands ? "weighted_state_provider" : "noise_provider"));
         config.put("radius", NbtUtils.randomFloatProvider(random, 2.0f, 20.0f));
         config.putBoolean("use_bands", useBands);

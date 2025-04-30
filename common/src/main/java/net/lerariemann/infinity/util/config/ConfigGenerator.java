@@ -2,6 +2,7 @@ package net.lerariemann.infinity.util.config;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.entity.CosmicAltarBlockEntity;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -46,52 +47,56 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public interface ConfigGenerator {
     static void generateAll(MinecraftServer server) {
-        ConfigFactory.of(Registries.ITEM).generate("misc", "items");
-        ConfigFactory.of(Registries.PARTICLE_TYPE, ConfigGenerator::extractParticle).generate("misc", "particles");
-        ConfigFactory.of(Registries.ENTITY_TYPE, ConfigGenerator::extractMob).generate("extra", "mobs");
-        ConfigFactory.of(Registries.STATUS_EFFECT, ConfigGenerator::extractEffect).generate("extra", "effects");
+        ConfigFactory.of(Registries.ITEM).generate(ConfigType.ITEMS);
+        ConfigFactory.of(Registries.PARTICLE_TYPE, ConfigGenerator::extractParticle).generate(ConfigType.PARTICLES);
+        ConfigFactory.of(Registries.ENTITY_TYPE, ConfigGenerator::extractMob).generate(ConfigType.MOBS);
+        ConfigFactory.of(Registries.STATUS_EFFECT, ConfigGenerator::extractEffect).generate(ConfigType.EFFECTS);
         generateSounds();
         generateBlockTags();
         SurfaceRuleScanner.scan(server);
         DynamicRegistryManager manager = server.getRegistryManager();
-        ConfigFactory.of(manager.get(RegistryKeys.JUKEBOX_SONG)).generate("misc", "jukeboxes");
-        ConfigFactory.of(manager.get(RegistryKeys.BIOME), ConfigGenerator::extractBiome).generate("extra", "biomes");
-        ConfigFactory.of(manager.get(RegistryKeys.STRUCTURE), ConfigGenerator::extractStructure).generate("extra", "structures");
-        ConfigFactory.of(manager.get(RegistryKeys.CONFIGURED_FEATURE), ConfigGenerator::extractFeature).generate("extra", "trees");
+        ConfigFactory.of(manager.get(RegistryKeys.JUKEBOX_SONG)).generate(ConfigType.JUKEBOXES);
+        ConfigFactory.of(manager.get(RegistryKeys.BIOME), ConfigGenerator::extractBiome).generate(ConfigType.BIOMES);
+        ConfigFactory.of(manager.get(RegistryKeys.STRUCTURE), ConfigGenerator::extractStructure).generate(ConfigType.STRUCTURES);
+        ConfigFactory.of(manager.get(RegistryKeys.CONFIGURED_FEATURE), ConfigGenerator::extractFeature).generate(ConfigType.TREES);
         ConfigFactory.of(server.getReloadableRegistries().getRegistryManager().get(RegistryKeys.LOOT_TABLE), ConfigGenerator::extractLootTable)
-                .generate("extra", "loot_tables");
+                .generate(ConfigType.LOOT_TABLES);
     }
 
     static void generateSounds() {
         Registry<SoundEvent> r = Registries.SOUND_EVENT;
-        DataCollection.Logged<String> music = new DataCollection.Logged<>("misc", "music", "music tracks");
-        DataCollection.Logged<String> sounds = new DataCollection.Logged<>("misc", "sounds");
+        DataCollection.Logged music = new DataCollection.Logged(ConfigType.MUSIC, "music tracks");
+        DataCollection.Logged sounds = new DataCollection.Logged(ConfigType.SOUNDS);
         r.getKeys().forEach(a -> {
             Identifier id = a.getValue();
-            if (id.toString().contains("music")) DataCollection.addIdentifier(music, id);
-            else DataCollection.addIdentifier(sounds, id);
+            if (id.toString().contains("music")) music.addIdentifier(id);
+            else sounds.addIdentifier(id);
         });
         sounds.save();
         music.save();
     }
 
     static void generateBlockTags() {
-        DataCollection.Logged<String> tagMap = new DataCollection.Logged<>("misc", "tags", "block tags");
-        Registries.BLOCK.streamTags().forEach(tagKey -> DataCollection.addIdentifier(tagMap, tagKey.id()));
+        DataCollection.Logged tagMap = new DataCollection.Logged(ConfigType.TAGS, "block tags");
+        Registries.BLOCK.streamTags().forEach(tagKey -> tagMap.addIdentifier(tagKey.id()));
         tagMap.save();
     }
 
     static Set<String> generateFluids() {
-        DataCollection.Logged<NbtCompound> fluidMap = new DataCollection.Logged<>("blocks", "fluids");
+        DataCollection.Logged fluidMap = new DataCollection.Logged(ConfigType.FLUIDS);
         Registry<Fluid> r = Registries.FLUID;
         Set<String> fluidBlockNames = new HashSet<>();
-        r.getKeys().forEach(a -> {
-            NbtCompound data = extractFluid(a);
-            fluidBlockNames.add(data.getString("Name"));
-            Fluid f = r.get(a.getValue());
+        r.getKeys().forEach(key -> {
+            Fluid b = Registries.FLUID.get(key);
+            assert b!= null;
+            String name = Registries.BLOCK.getId(b.getDefaultState().getBlockState().getBlock()).toString();
+            NbtCompound data = new NbtCompound();
+            data.putString("fluidName", key.getValue().toString());
+            fluidBlockNames.add(name);
+            Fluid f = r.get(key.getValue());
             if (f instanceof FlowableFluid fl && fl.equals(fl.getStill())) {
-                String modId = a.getValue().getNamespace();
-                fluidMap.add(modId, data);
+                String modId = key.getValue().getNamespace();
+                fluidMap.add(modId, name, data);
             }
         });
         fluidMap.save();
@@ -99,10 +104,9 @@ public interface ConfigGenerator {
     }
 
     static void generateBlocks(ServerWorld serverWorld, BlockPos inAir, BlockPos onAltar, Set<String> excludedBlockNames) {
-        DataCollection.Logged<NbtCompound> blockMap = new DataCollection.Logged<>("blocks", "blocks");
-        DataCollection<NbtList> colorPresetMap = new DataCollection<>("extra", "color_presets");
-        DataCollection<String> airMap = new DataCollection<>("blocks", "airs");
-        DataCollection<String> flowerMap = new DataCollection<>("blocks", "flowers");
+        DataCollection.Logged blockMap = new DataCollection.Logged(ConfigType.BLOCKS);
+        DataCollection colorPresetMap = new DataCollection(ConfigType.COLOR_PRESETS);
+        DataCollection flowerMap = new DataCollection(ConfigType.FLOWERS);
         Registry<Block> r = Registries.BLOCK;
         r.getKeys().forEach(key -> {
             String blockName = key.getValue().toString();
@@ -110,44 +114,27 @@ public interface ConfigGenerator {
             Block block = r.get(key);
             assert block != null;
             String modId = key.getValue().getNamespace();
-            blockMap.add(modId, extractBlock(key, serverWorld, inAir, onAltar));
+            blockMap.add(modId, blockName, extractBlock(key, serverWorld, inAir, onAltar));
             if (blockName.contains("magenta") && !isLaggy(block) && isFloat(block.getDefaultState(), serverWorld, inAir)) {
-                NbtList lst = checkColorSet(blockName);
-                if (lst != null) colorPresetMap.add(modId, lst);
+                if (checkColorSet(blockName)) colorPresetMap.add(modId, blockName.replace("magenta", "$"));
             }
-            if (block.getDefaultState().isIn(BlockTags.AIR)) DataCollection.addIdentifier(airMap, key.getValue());
-            if (block.getDefaultState().isIn(BlockTags.SMALL_FLOWERS)) DataCollection.addIdentifier(flowerMap, key.getValue());
+            if (block.getDefaultState().isIn(BlockTags.SMALL_FLOWERS)) flowerMap.addIdentifier(key.getValue());
         });
         blockMap.save();
         colorPresetMap.save();
-        airMap.save();
         flowerMap.save();
     }
 
-    static NbtList checkColorSet(String block) {
+    static boolean checkColorSet(String block) {
         AtomicInteger successCounter = new AtomicInteger();
-        NbtList colorSet = new NbtList();
         Arrays.stream(ColorLogic.vanillaColors).forEach(color -> {
             int i = block.lastIndexOf("magenta");
             String blockColored = block.substring(0, i) + color + block.substring(i+7);
             if (Registries.BLOCK.containsId(Identifier.of(blockColored))) {
                 successCounter.addAndGet(1);
-                NbtCompound c = new NbtCompound();
-                c.putString("Name", blockColored);
-                colorSet.add(c);
             }
         });
-        return (successCounter.get() == ColorLogic.vanillaColors.length) ? colorSet : null;
-    }
-
-    static NbtCompound extractFluid(RegistryKey<Fluid> key) {
-        Fluid b = Registries.FLUID.get(key);
-        assert b!= null;
-        NbtCompound res = new NbtCompound();
-        String name = Registries.BLOCK.getId(b.getDefaultState().getBlockState().getBlock()).toString();
-        res.putString("Name", name);
-        res.putString("fluidName", key.getValue().toString());
-        return res;
+        return (successCounter.get() == ColorLogic.vanillaColors.length);
     }
 
     static NbtCompound extractBlock(RegistryKey<Block> key, WorldView w, BlockPos inAir, BlockPos onStone) {
@@ -155,7 +142,6 @@ public interface ConfigGenerator {
         assert b!= null;
         BlockState bs = b.getDefaultState();
         NbtCompound res = new NbtCompound();
-        res.putString("Name", key.getValue().toString());
         res.putBoolean("laggy", isLaggy(b));
         res.putBoolean("full", isFull(bs, w, inAir));
         res.putBoolean("float", isFloat(bs, w, inAir));
@@ -195,10 +181,10 @@ public interface ConfigGenerator {
         return Block.isShapeFullCube(bs.getCollisionShape(w, inAir)) && Block.isShapeFullCube(bs.getOutlineShape(w, inAir));
     }
 
-    static String extractParticle(RegistryKey<ParticleType<?>> key) {
+    static NbtCompound extractParticle(RegistryKey<ParticleType<?>> key) {
         Identifier id = key.getValue();
         if (!id.getNamespace().equals("minecraft") && !(Registries.PARTICLE_TYPE.get(id) instanceof SimpleParticleType)) return null;
-        return id.toString();
+        return new NbtCompound();
     }
 
     static NbtCompound extractMob(RegistryKey<EntityType<?>> key) {
@@ -206,7 +192,6 @@ public interface ConfigGenerator {
         SpawnGroup sg = Registries.ENTITY_TYPE.get(key.getValue()).getSpawnGroup();
         if (sg == SpawnGroup.MISC) return null; //minecarts n stuff
         NbtCompound mob = new NbtCompound();
-        mob.putString("Name", key.getValue().toString());
         mob.putString("Category", sg.asString());
         return mob;
     }
@@ -216,7 +201,6 @@ public interface ConfigGenerator {
         Optional<StatusEffect> o = Registries.STATUS_EFFECT.getOrEmpty(key);
         if (o.isEmpty()) return null;
         StatusEffect effect = o.get();
-        res.putString("Name", key.getValue().toString());
         res.putString("Category", switch (effect.getCategory()) { //this data is unused for now but might be important later
             case HARMFUL -> "harmful";
             case BENEFICIAL -> "beneficial";
@@ -283,7 +267,6 @@ public interface ConfigGenerator {
         String type = getFeatureType(feature.feature());
         if (type.isEmpty()) return null;
         NbtCompound res = new NbtCompound();
-        res.putString("Name", id.toString());
         res.putString("Type", type); //this data is unused for now but might be important later
         return res;
     }
@@ -297,14 +280,12 @@ public interface ConfigGenerator {
     }
 
     static NbtCompound extractLootTable(Registry<LootTable> registry, RegistryKey<LootTable> key) {
-        Identifier id = key.getValue();
         Optional<LootTable> o = registry.getOrEmpty(key);
         if (o.isEmpty()) return null;
         LootTable table = o.get();
         Identifier type = LootContextTypes.MAP.inverse().get(table.getType());
         if (type == null) return null;
         NbtCompound res = new NbtCompound();
-        res.putString("Name", id.toString());
         res.putString("Type", type.getPath()); //this data is unused for now but might be important later
         return res;
     }
@@ -316,7 +297,6 @@ public interface ConfigGenerator {
         if (o.isEmpty()) return null;
         Biome biome = o.get();
         NbtCompound res = new NbtCompound();
-        res.putString("Name", id.toString());
         res.putInt("Color", biome.getFoliageColor());
         return res;
     }

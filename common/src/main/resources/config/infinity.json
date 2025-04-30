@@ -70,13 +70,13 @@
       "end_gateway": 0.05,
       "delta": 0.2,
       "columns": 0.2,
-      "crops": 0.2,
+      "springs": 0.5,
       "blobs": 0.33,
+      "well": 0.2,
       "ceiling_blobs": 0.5,
       "vegetation": 1.0,
       "surface_patch": 0.5,
-      "floating_patch": 0.1,
-      "random_flowers": 1.0
+      "floating_patch": 0.1
     },
     "features_rules": {
       "generate_vanilla_features": 0.5,

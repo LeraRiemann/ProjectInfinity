@@ -1,9 +1,7 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.util.core.CommonIO;
-import net.lerariemann.infinity.util.core.RandomProvider;
-import net.lerariemann.infinity.util.core.WeighedStructure;
+import net.lerariemann.infinity.util.core.*;
 import net.minecraft.nbt.*;
 
 import java.util.*;
@@ -68,7 +66,7 @@ public class RandomBiome {
     }
 
     NbtString randomSound(){
-        return NbtString.of(PROVIDER.randomName(random, "sounds"));
+        return NbtString.of(PROVIDER.randomName(random, ConfigType.SOUNDS));
     }
 
     NbtCompound randomEffects() {
@@ -115,7 +113,7 @@ public class RandomBiome {
 
     NbtCompound randomMusic(){
         NbtCompound res = new NbtCompound();
-        res.put("sound", NbtString.of(PROVIDER.randomName(random, "music")));
+        res.put("sound", NbtString.of(PROVIDER.randomName(random, ConfigType.MUSIC)));
         int a = random.nextInt(0, 12000);
         int b = random.nextInt(0, 24000);
         res.putInt("min_delay", Math.min(a,b));
@@ -133,18 +131,18 @@ public class RandomBiome {
 
     NbtCompound particleOptions() {
         NbtCompound res = new NbtCompound();
-        String particle = PROVIDER.randomName(random, "particles");
+        String particle = PROVIDER.randomName(random, ConfigType.PARTICLES);
         res.putString("type", particle);
         switch(particle) {
             case "minecraft:block", "minecraft:block_marker", "minecraft:dust_pillar", "minecraft:falling_dust" -> {
                 NbtCompound value = new NbtCompound();
-                value.putString("Name", PROVIDER.randomName(random, "all_blocks"));
+                value.putString("Name", PROVIDER.randomName(random, ConfigType.ALL_BLOCKS));
                 res.put("block_state", value);
                 return res;
             }
             case "minecraft:item" -> {
                 NbtCompound value = new NbtCompound();
-                value.putString("id", PROVIDER.randomName(random, "items"));
+                value.putString("id", PROVIDER.randomName(random, ConfigType.ITEMS));
                 res.put("item", value);
                 return res;
             }
@@ -187,7 +185,7 @@ public class RandomBiome {
 
     NbtCompound addMob(String category, boolean add) {
         NbtCompound mob = new NbtCompound();
-        String mobname = PROVIDER.randomName(random, category);
+        String mobname = PROVIDER.randomName(random, ConfigType.byName(category));
         mob.putString("type", mobname);
         if (add) mobs.add(mobname);
         mob.putInt("weight", 1 + random.nextInt(20));
@@ -214,10 +212,7 @@ public class RandomBiome {
         NbtList air = new NbtList();
         if (PROVIDER.roll(random, "use_random_cave")) air.add(NbtString.of((new RandomCarver(this, true)).fullname));
         if (PROVIDER.roll(random, "use_random_canyon")) air.add(NbtString.of((new RandomCarver(this, false)).fullname));
-        WeighedStructure<String> carvers = PROVIDER.registry.get("carvers");
-        for (int i = 0; i < carvers.keys.size(); i++) {
-            if (random.nextDouble() < carvers.weights.get(i)) air.add(NbtString.of(carvers.keys.get(i)));
-        }
+        PROVIDER.registry.get(ConfigType.CARVERS).getAllNames(random::nextDouble).forEach(s -> air.add(NbtString.of(s)));
         res.put("air", air);
         return res;
     }

@@ -12,7 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.BiFunction;
+
+import static net.lerariemann.infinity.InfinityMod.configPath;
 
 public interface CommonIO {
     static void write(NbtCompound base, String path, String filename) {
@@ -123,50 +124,24 @@ public interface CommonIO {
         }
     }
 
-    static WeighedStructure<String> readStringList(String path) {
-        NbtCompound base = read(path);
-        WeighedStructure<String> res = new WeighedStructure<>();
-        NbtList list = base.getList("elements", NbtElement.COMPOUND_TYPE);
-        for(int i = 0; i < list.size(); i++) {
-            NbtCompound a = list.getCompound(i);
-            res.add(a.getString("key"), a.getDouble("weight"));
-        }
-        return res;
-    }
-
     private static boolean _checkIfModLoaded(File path1) {
         if (!RandomProvider.rule("enforceModLoadedChecks")) return true;
         String modname = path1.toPath().getName(path1.toPath().getNameCount() - 1).toString();
         return Platform.isModLoaded(modname);
     }
 
-    private static NbtList _extractElements(File path1, String subpath) {
-        if (_checkIfModLoaded(path1)) {
-            File file = path1.toPath().resolve(subpath).toFile();
+    static List<NbtCompound> readCategory(ConfigType type) {
+        Path path = configPath.resolve("modular");
+        String fullname = type.getKey() + ".json";
+        List<NbtCompound> compounds = new ArrayList<>();
+        for (File modDir: Objects.requireNonNull(path.toFile().listFiles(File::isDirectory))) if (_checkIfModLoaded(modDir)) {
+            File file = modDir.toPath().resolve(fullname).toFile();
             if (file.exists()) {
                 NbtCompound base = read(file);
-                return base.getList("elements", NbtElement.COMPOUND_TYPE);
+                base.getList("elements", NbtElement.COMPOUND_TYPE).stream().map(e -> (NbtCompound)e).forEach(compounds::add);
             }
         }
-        return new NbtList();
-    }
-
-    static <T> WeighedStructure<T> readWeighedList(Path path, String subPath, BiFunction<NbtCompound, String, T> infoGetter) {
-        WeighedStructure<T> res = new WeighedStructure<>();
-        for (File path1: Objects.requireNonNull(path.toFile().listFiles(File::isDirectory))) {
-            NbtList list = _extractElements(path1, subPath);
-            for(int i = 0; i < list.size(); i++) {
-                NbtCompound a = list.getCompound(i);
-                res.add(infoGetter.apply(a, "key"), a.getDouble("weight"));
-            }
-        }
-        return res;
-    }
-    static WeighedStructure<String> readStringList(Path path, String subPath) {
-        return readWeighedList(path, subPath, NbtCompound::getString);
-    }
-    static WeighedStructure<NbtElement> readCompoundList(Path path, String subPath) {
-        return readWeighedList(path, subPath, NbtCompound::get);
+        return compounds;
     }
 
     static String appendTabs(String parent, int t) {

@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -43,7 +44,7 @@ public class RandomEndIsland extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        addRandomBlock(config, "state", "blocks_features");
+        addRandomBlock(config, "state", ConfigType.BLOCKS_FEATURES);
         return feature(config);
     }
 }

@@ -7,6 +7,7 @@ import net.minecraft.nbt.NbtList;
 
 import java.util.Arrays;
 
+@Deprecated
 public class RandomCrop extends RandomisedFeature {
     NbtCompound crop;
     boolean water;
@@ -15,7 +16,7 @@ public class RandomCrop extends RandomisedFeature {
     public RandomCrop(RandomFeaturesList parent) {
         super(parent, "crop");
         id = "block_column";
-        crop = PROVIDER.randomElement(random, "crops");
+        //crop = PROVIDER.randomElement(random, "crops");
         start = daddy.sea_level - (crop.getKeys().contains("offset") ? crop.getInt("offset") : 1);
         water = crop.getBoolean("needsWater");
         save_with_placement();

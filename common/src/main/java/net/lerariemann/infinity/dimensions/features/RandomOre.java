@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -25,7 +26,7 @@ public class RandomOre extends RandomisedFeature {
         NbtCompound config = new NbtCompound();
         config.putInt("size", 1 + Math.min(63, (int)Math.floor(random.nextExponential()*4)));
         config.putFloat("discard_chance_on_air_exposure", Math.max(0.0f, Math.min(1.0f, (float)(random.nextExponential()*0.2))));
-        NbtCompound block = PROVIDER.randomElement(random, "full_blocks_worldgen");
+        NbtCompound block = PROVIDER.randomElement(random, ConfigType.FULL_BLOCKS_WG);
         NbtList targets = new NbtList();
         int j = daddy.additional_blocks.size();
         for (int i = 0; i < j + 1; i++) {

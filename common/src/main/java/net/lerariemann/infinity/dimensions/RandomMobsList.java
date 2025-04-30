@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.dimensions;
 
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -24,7 +25,7 @@ public class RandomMobsList {
         }
         int mobCount = random.nextInt(20);
         for(int i = 0; i < mobCount; i++) {
-            String category = PROVIDER.randomName(random, "mob_categories");
+            String category = PROVIDER.randomName(random, ConfigType.MOB_CATEGORIES);
             NbtCompound mob = biome.addMob(category, true);
             data.get(category).add(mob);
         }

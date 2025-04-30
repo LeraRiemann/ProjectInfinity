@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
@@ -47,7 +48,7 @@ public class RandomLake extends RandomisedFeature {
         NbtCompound config = new NbtCompound();
         NbtCompound block = genBlockOrFluid();
         config.put("fluid", PROVIDER.blockToProvider(block, random));
-        addRandomBlockProvider(config, "barrier", "full_blocks_worldgen");
+        addRandomBlockProvider(config, "barrier", ConfigType.FULL_BLOCKS_WG);
         return feature(config);
     }
 }

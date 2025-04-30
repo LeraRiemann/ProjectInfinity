@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
@@ -28,7 +29,7 @@ public class RandomStructure {
     }
 
     void addData() {
-        data = parent.PROVIDER.randomElement(random, "structures");
+        data = parent.PROVIDER.randomElement(random, ConfigType.STRUCTURES);
         assert data.contains("id");
         type = data.getString("id");
         name = Identifier.of(type).getPath().replace("/", "_").replace("\\", "_") + "_" + id;
@@ -55,7 +56,7 @@ public class RandomStructure {
         Map<String, NbtList> moblist = new HashMap<>();
         int nummobs = random.nextInt(1, 7);
         for (int i = 0; i < nummobs; i++) {
-            String mobcategory = parent.PROVIDER.randomName(random, "mob_categories");
+            String mobcategory = parent.PROVIDER.randomName(random, ConfigType.MOB_CATEGORIES);
             NbtCompound mob = parent.addMob(mobcategory, false);
             if (!moblist.containsKey(mobcategory)) moblist.put(mobcategory, new NbtList());
             moblist.get(mobcategory).add(mob);

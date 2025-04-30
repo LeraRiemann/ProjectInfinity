@@ -2,6 +2,7 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
@@ -122,7 +123,7 @@ public class RandomNoisePreset {
     }
 
     NbtCompound buildSurfaceRule() {
-        parent.deepslate = parent.randomiseblocks ? PROVIDER.randomElement(parent.random, "full_blocks_worldgen") :
+        parent.deepslate = parent.randomiseblocks ? PROVIDER.randomElement(parent.random, ConfigType.FULL_BLOCKS_WG) :
                 NbtUtils.nameToElement("minecraft:deepslate");
         int i = 0;
         switch (surface_rule) {
@@ -163,7 +164,7 @@ public class RandomNoisePreset {
         return res;
     }
 
-    NbtCompound randomBlock(String s) {
+    NbtCompound randomBlock(ConfigType s) {
         return PROVIDER.randomElement(parent.random, s);
     }
 
@@ -191,13 +192,14 @@ public class RandomNoisePreset {
             String biome = "infinity:biome_" + id;
             String root = InfinityMod.utilPath + "/surface_rule/custom/";
             boolean useRandomBlock = parent.randomiseblocks && PROVIDER.roll(parent.random, "randomise_biome_blocks");
-            NbtCompound top_block = useRandomBlock ? randomBlock(RandomProvider.rule("forceSolidSurface") ? "full_blocks_worldgen" : "top_blocks") :
+            NbtCompound top_block = useRandomBlock ?
+                    randomBlock(RandomProvider.rule("forceSolidSurface") ? ConfigType.FULL_BLOCKS_WG : ConfigType.TOP_BLOCKS) :
                     NbtUtils.nameToElement(parent.getDefaultBlock("minecraft:grass_block"));
             parent.top_blocks.put(biome, top_block);
-            NbtCompound block_underwater = useRandomBlock ? randomBlock("full_blocks_worldgen") :
+            NbtCompound block_underwater = useRandomBlock ? randomBlock(ConfigType.FULL_BLOCKS_WG) :
                     NbtUtils.nameToElement(parent.getDefaultBlock("minecraft:dirt"));
             parent.underwater.put(biome, block_underwater);
-            NbtCompound beach = useRandomBlock ? randomBlock("full_blocks_worldgen") : top_block;
+            NbtCompound beach = useRandomBlock ? randomBlock(ConfigType.FULL_BLOCKS_WG) : top_block;
             NbtCompound rule1 = CommonIO.readAndFormat(root + "ceiling.json",
                     CommonIO.compoundToString(parent.deepslate, 5), CommonIO.compoundToString(parent.default_block, 4));
             NbtCompound rule2 = CommonIO.readAndFormat(root + "grass.json",

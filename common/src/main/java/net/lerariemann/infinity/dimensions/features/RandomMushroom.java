@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions.features;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 
 public class RandomMushroom extends RandomisedFeature {
@@ -16,8 +17,8 @@ public class RandomMushroom extends RandomisedFeature {
 
     NbtCompound feature() {
         NbtCompound config = new NbtCompound();
-        addRandomBlockProvider(config, "cap_provider", "full_blocks_worldgen");
-        addRandomBlockProvider(config, "stem_provider", "full_blocks_worldgen");
+        addRandomBlockProvider(config, "cap_provider", ConfigType.FULL_BLOCKS_WG);
+        addRandomBlockProvider(config, "stem_provider", ConfigType.FULL_BLOCKS_WG);
         config.put("valid_base_block", parent.surface_block);
         config.putInt("foliage_radius", random.nextBoolean() ? 2 : 1 + (int)Math.floor(random.nextExponential()*2));
         config.putInt("height", random.nextBoolean() ? 5 : random.nextInt(3, 7));
