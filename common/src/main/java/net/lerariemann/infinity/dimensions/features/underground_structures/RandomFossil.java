@@ -1,15 +1,16 @@
-package net.lerariemann.infinity.dimensions.features.surface_structures;
+package net.lerariemann.infinity.dimensions.features.underground_structures;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.features.Placement;
 import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
-public class RandomWell extends RandomisedFeature {
-    public RandomWell(RandomFeaturesList lst) {
+public class RandomFossil extends RandomisedFeature {
+    public RandomFossil(RandomFeaturesList lst) {
         super(lst, "well");
-        savePlacement("minecraft:desert_well");
+        savePlacement("minecraft:fossil_coal");
     }
 
     public NbtCompound feature() {
@@ -17,9 +18,10 @@ public class RandomWell extends RandomisedFeature {
     }
     public NbtList placement() {
         Placement res = new Placement();
-        res.addRarityFilter(random.nextInt(1, 1000));
+        res.addRarityFilter(random.nextInt(1, 128));
         res.addInSquare();
-        res.addHeightmap("MOTION_BLOCKING");
+        res.addHeightRange(NbtUtils.randomHeightProvider(random, daddy.min_y,
+                daddy.min_y + daddy.height, false, true));
         res.addBiome();
         return res.data;
     }

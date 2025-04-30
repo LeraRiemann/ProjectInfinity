@@ -49,16 +49,12 @@ public enum ConfigType implements StringIdentifiable {
     TREE_DECORATORS("tree_decorators", "attached_to_leaves"),
     TRUNK_PLACERS("trunk_placers", "straight_trunk_placer"),
     GRASS("grass", "minecraft:patch_grass_normal"),
-    SEAGRASS("seagrass", "minecraft:seagrass_normal"),
     VEG1("vegetation_part1", "minecraft:patch_sunflower"),
     VEG2("vegetation_part2", "minecraft:patch_pumpkin"),
-    VEG3("vegetation_part3", "minecraft:sea_pickle"),
-    LAKES("lakes", "minecraft:lake_lava_surface"),
     LOCAL_MOD("localmodifications", "minecraft:large_dripstone"),
     TOP_LAYER("toplayermodification", "minecraft:freeze_top_layer"),
     UNDERGROUND_DEC("undergrounddecoration", "minecraft:pointed_dripstone"),
-    UNDERGROUND_ORES("undergroundores", "minecraft:ore_dirt"),
-    UNDERGROUND_STRUCTURES("undergroundstructures", "minecraft:fossil_upper");
+    UNDERGROUND_ORES("undergroundores", "minecraft:ore_dirt");
 
     public static final ConfigType[] normalModular = new ConfigType[]{COLOR_PRESETS, EFFECTS, STRUCTURES,
             LOOT_TABLES, TAGS, PARTICLES, MUSIC, SOUNDS, ITEMS, TREES, JUKEBOXES};
@@ -70,10 +66,9 @@ public enum ConfigType implements StringIdentifiable {
             FLORAL_DISTRIBUTION, FOLIAGE_PLACERS, GENERATOR_TYPES, MOB_CATEGORIES, MULTINOISE_PRESETS, NOISE_PRESETS,
             SHAPE_TYPES, STRUCTURE_PLACEMENT_TYPES, TREE_DECORATORS, TRUNK_PLACERS};
 
-    public static final ConfigType[] vegetation = new ConfigType[]{GRASS, SEAGRASS, VEG1, VEG2, VEG3};
+    public static final ConfigType[] vegetation = new ConfigType[]{GRASS, VEG1, VEG2};
 
-    public static final ConfigType[] features = new ConfigType[]{LAKES, LOCAL_MOD, TOP_LAYER, UNDERGROUND_DEC,
-            UNDERGROUND_ORES, UNDERGROUND_STRUCTURES};
+    public static final ConfigType[] features = new ConfigType[]{LOCAL_MOD, TOP_LAYER, UNDERGROUND_DEC, UNDERGROUND_ORES};
 
     public static boolean addsName(ConfigType type) {
         return type != STRUCTURES;

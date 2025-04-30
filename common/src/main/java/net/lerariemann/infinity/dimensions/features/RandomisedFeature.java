@@ -44,6 +44,13 @@ public abstract class RandomisedFeature {
         CommonIO.write(moredata, parent.storagePath + "/worldgen/placed_feature", name + ".json");
     }
 
+    protected void savePlacement(String feature) {
+        NbtCompound moredata = new NbtCompound();
+        moredata.putString("feature", feature);
+        moredata.put("placement", placement());
+        CommonIO.write(moredata, parent.storagePath + "/worldgen/placed_feature", name + ".json");
+    }
+
     public NbtCompound genBlockOrFluid() {
         NbtCompound block2;
         if (parent.roll("solid_lakes")) {

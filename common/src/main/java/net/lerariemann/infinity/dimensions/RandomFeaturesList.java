@@ -14,10 +14,8 @@ import net.lerariemann.infinity.dimensions.features.underground_decoration.Rando
 import net.lerariemann.infinity.dimensions.features.underground_ores.RandomDisk;
 import net.lerariemann.infinity.dimensions.features.underground_ores.RandomOre;
 import net.lerariemann.infinity.dimensions.features.underground_structures.RandomDungeon;
-import net.lerariemann.infinity.dimensions.features.vegetation.RandomFloatingPatch;
-import net.lerariemann.infinity.dimensions.features.vegetation.RandomFlowerPatch;
-import net.lerariemann.infinity.dimensions.features.vegetation.RandomSurfacePatch;
-import net.lerariemann.infinity.dimensions.features.vegetation.RandomVegetation;
+import net.lerariemann.infinity.dimensions.features.underground_structures.RandomFossil;
+import net.lerariemann.infinity.dimensions.features.vegetation.*;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
@@ -46,7 +44,7 @@ public class RandomFeaturesList {
         blocks = new ArrayList<>();
         useVanillaFeatures = roll("generate_vanilla_features");
         data = new NbtList();
-        data.add(endIsland());
+        data.add(rawGeneration());
         data.add(lakes());
         data.add(localModifications());
         data.add(undergroundStructures());
@@ -56,10 +54,6 @@ public class RandomFeaturesList {
         data.add(fluidSprings());
         data.add(vegetation());
         data.add(getAllElements(ConfigType.TOP_LAYER));
-    }
-
-    NbtString randomPlant(ConfigType path) {
-        return NbtString.of(PROVIDER.randomName(random, path));
     }
 
     NbtList getAllElements(ConfigType name) {
@@ -84,7 +78,7 @@ public class RandomFeaturesList {
         return PROVIDER.roll(random, key);
     }
 
-    NbtList endIsland() {
+    NbtList rawGeneration() {
         NbtList res = new NbtList();
         addRandomFeature("end_island", res, RandomEndIsland::new);
         if (roll("shape")) addRandomFeature(res, new RandomShape(this, PROVIDER.randomName(random, ConfigType.SHAPE_TYPES)));
@@ -92,7 +86,7 @@ public class RandomFeaturesList {
     }
 
     NbtList lakes() {
-        NbtList res = getAllElements(ConfigType.LAKES);
+        NbtList res = new NbtList();
         addRandomFeature("lake", res, RandomLake::new);
         return res;
     }
@@ -106,8 +100,9 @@ public class RandomFeaturesList {
     }
 
     NbtList undergroundStructures() {
-        NbtList res = getAllElements(ConfigType.UNDERGROUND_STRUCTURES);
+        NbtList res = new NbtList();
         addRandomFeature("dungeon", res, RandomDungeon::new);
+        addRandomFeature("fossil", res, RandomFossil::new);
         return res;
     }
 
@@ -152,12 +147,15 @@ public class RandomFeaturesList {
         addRandomFeature("vegetation", res, RandomVegetation::new);
         res.addAll(getAllElements(ConfigType.VEG1));
         addRandomFeature(res, RandomFlowerPatch::new);
-        res.add(randomPlant(ConfigType.GRASS));
+        res.add(NbtString.of(PROVIDER.randomName(random, ConfigType.GRASS)));
         res.addAll(getAllElements(ConfigType.VEG2));
         addRandomFeature("surface_patch", res, RandomSurfacePatch::new);
         addRandomFeature("floating_patch", res, RandomFloatingPatch::new);
-        res.add(randomPlant(ConfigType.SEAGRASS));
-        res.addAll(getAllElements(ConfigType.VEG3));
+        if (parent.parent.default_fluid.getString("Name").contains("water")) {
+            addRandomFeature("water_plants", res, RandomSeagrass::new);
+            addRandomFeature("water_plants", res, RandomPickle::new);
+            addRandomFeature("water_plants", res, RandomKelp::new);
+        }
         return res;
     }
 
