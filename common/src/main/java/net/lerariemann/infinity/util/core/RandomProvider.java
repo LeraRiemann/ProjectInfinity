@@ -165,7 +165,7 @@ public class RandomProvider {
         }
         registerCategory(ConfigType.ALL_BLOCKS, allBlocks);
         registerCategory(ConfigType.BLOCKS_FEATURES, blocksFeatures);
-        registerCategory(ConfigType.ALL_BLOCKS, fullBlocks);
+        registerCategory(ConfigType.FULL_BLOCKS, fullBlocks);
         registerCategory(ConfigType.FULL_BLOCKS_WG, fullBlocksWG);
         registerCategory(ConfigType.TOP_BLOCKS, topBlocks);
     }

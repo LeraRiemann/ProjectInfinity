@@ -67,6 +67,13 @@
       "selector": "containing",
       "containing": "pipe",
       "results": "erase"
+    },
+    {
+      "area": "blocks",
+      "mod": "chipped",
+      "selector": "all",
+      "results": "set_value",
+      "value": 0.1
     }
   ]
 }
