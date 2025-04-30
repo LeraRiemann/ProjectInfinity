@@ -6,6 +6,7 @@ import net.lerariemann.infinity.mixin.SoundListMixin;
 import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.minecraft.block.jukebox.JukeboxSong;
@@ -132,7 +133,7 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
         InfinityMod.LOGGER.info("grabbing jukeboxes");
         DimensionGrabber.readCategoryFromDisk(server, JukeboxSong.CODEC, RegistryKeys.JUKEBOX_SONG, pathJukeboxes);
         if (!((MinecraftServerAccess)server).infinity$needsInvocation()) {
-            ConfigFactory.of(server.getRegistryManager().get(RegistryKeys.JUKEBOX_SONG)).generate("misc", "jukeboxes");
+            ConfigFactory.of(server.getRegistryManager().get(RegistryKeys.JUKEBOX_SONG)).generate(ConfigType.JUKEBOXES);
             InfinityMod.updateProvider(server);
         }
     }
