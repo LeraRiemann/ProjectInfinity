@@ -1,6 +1,8 @@
-package net.lerariemann.infinity.dimensions.features;
+package net.lerariemann.infinity.dimensions.features.raw_generation;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.dimensions.features.Placement;
+import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
@@ -17,16 +19,16 @@ public class RandomShape extends RandomisedFeature {
         this.usePreset = parent.roll("colourful_shapes");
         this.useBands = parent.roll("banded_shapes");
         id = (shape.equals("cube")) ? "infinity:random_cube" : "infinity:random_shape";
-        save_with_placement();
+        savePlacement();
     }
 
-    void placement() {
+    public NbtList placement() {
         int a = (int)random.nextGaussian(daddy.sea_level, 16);
         int b = random.nextInt(daddy.sea_level, daddy.height + daddy.min_y);
-        placement_floating(1 + random.nextInt(64), Math.max(a, daddy.min_y), b);
+        return Placement.floating(1 + random.nextInt(64), Math.max(a, daddy.min_y), b);
     }
 
-    NbtCompound feature() {
+    public NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         NbtList replaceable = new NbtList();
         replaceable.add(NbtUtils.nameToElement(parent.parent.parent.default_fluid.getString("Name")));

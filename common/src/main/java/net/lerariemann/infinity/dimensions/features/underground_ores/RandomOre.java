@@ -1,28 +1,34 @@
-package net.lerariemann.infinity.dimensions.features;
+package net.lerariemann.infinity.dimensions.features.underground_ores;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.dimensions.features.Placement;
+import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+
+import static net.lerariemann.infinity.dimensions.features.Placement.heightRange;
 
 public class RandomOre extends RandomisedFeature {
 
     public RandomOre(RandomFeaturesList parent) {
         super(parent, "ore");
         id = (parent.PROVIDER.roll(random, "scatter_ores")) ? "scattered_ore" : "ore";
-        save_with_placement();
+        savePlacement();
     }
 
-    void placement() {
+    public NbtList placement() {
+        Placement res = new Placement();
         int center = random.nextInt(daddy.min_y, daddy.min_y + daddy.height);
         int sigma = random.nextInt(daddy.height);
-        addCount(1 + random.nextInt(128));
-        addInSquare();
-        addHeightRange(heightRange(center - sigma,center + sigma, "trapezoid"));
-        addBiome();
+        res.addCount(1 + random.nextInt(128));
+        res.addInSquare();
+        res.addHeightRange(heightRange(center - sigma,center + sigma, "trapezoid"));
+        res.addBiome();
+        return res.data;
     }
 
-    NbtCompound feature() {
+    public NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         config.putInt("size", 1 + Math.min(63, (int)Math.floor(random.nextExponential()*4)));
         config.putFloat("discard_chance_on_air_exposure", Math.max(0.0f, Math.min(1.0f, (float)(random.nextExponential()*0.2))));

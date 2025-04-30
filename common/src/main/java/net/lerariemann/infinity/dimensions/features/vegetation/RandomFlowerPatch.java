@@ -1,27 +1,34 @@
-package net.lerariemann.infinity.dimensions.features;
+package net.lerariemann.infinity.dimensions.features.vegetation;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.dimensions.features.Placement;
+import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+
+import static net.lerariemann.infinity.dimensions.features.Placement.matchingBlocks;
+import static net.lerariemann.infinity.dimensions.features.Placement.singleRule;
 
 public class RandomFlowerPatch extends RandomisedFeature {
     public RandomFlowerPatch(RandomFeaturesList parent) {
         super(parent, "flowers");
         id = "flower";
-        save_with_placement();
+        savePlacement();
     }
 
-    void placement() {
+    public NbtList placement() {
+        Placement res = new Placement();
         int a = random.nextInt(1, 9);
-        if (a>1) addCount(a);
-        addRarityFilter(1 + random.nextInt(32));
-        addInSquare();
-        addHeightmap("MOTION_BLOCKING");
-        addBiome();
+        if (a>1) res.addCount(a);
+        res.addRarityFilter(1 + random.nextInt(32));
+        res.addInSquare();
+        res.addHeightmap("MOTION_BLOCKING");
+        res.addBiome();
+        return res.data;
     }
 
-    NbtCompound feature() {
+    public NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         config.putInt("tries", 1 + random.nextInt( 100));
         config.putInt("xz_spread", random.nextInt(2, 13));

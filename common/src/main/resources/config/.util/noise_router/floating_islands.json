@@ -1,8 +1,9 @@
 {
+  "infinity_version": 2004002,
   "barrier": 0.0,
-  "continents": 0.0,
-  "depth": 0.0,
-  "erosion": 0.0,
+  "continents": "minecraft:overworld/continents",
+  "depth": "minecraft:overworld/depth",
+  "erosion": "minecraft:overworld/erosion",
   "final_density": {
     "type": "minecraft:squeeze",
     "argument": {
@@ -57,10 +58,10 @@
   "fluid_level_spread": 0.0,
   "initial_density_without_jaggedness": 0.0,
   "lava": 0.0,
-  "ridges": 0.0,
+  "ridges": "minecraft:overworld/ridges",
   "temperature": "infinity:temperature",
   "vegetation": "infinity:vegetation",
-  "vein_gap": 0.0,
-  "vein_ridged": 0.0,
-  "vein_toggle": 0.0
+  "vein_gap": "infinity:vein_gap",
+  "vein_ridged": "infinity:vein_ridged",
+  "vein_toggle": "infinity:vein_toggle"
 }

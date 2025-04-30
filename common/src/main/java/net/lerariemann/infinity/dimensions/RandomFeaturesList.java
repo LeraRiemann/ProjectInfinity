@@ -1,6 +1,23 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.dimensions.features.*;
+import net.lerariemann.infinity.dimensions.features.fluid_springs.RandomSpring;
+import net.lerariemann.infinity.dimensions.features.lakes.RandomLake;
+import net.lerariemann.infinity.dimensions.features.local_modifications.RandomGeode;
+import net.lerariemann.infinity.dimensions.features.local_modifications.RandomIceberg;
+import net.lerariemann.infinity.dimensions.features.local_modifications.RandomRock;
+import net.lerariemann.infinity.dimensions.features.raw_generation.RandomEndIsland;
+import net.lerariemann.infinity.dimensions.features.raw_generation.RandomShape;
+import net.lerariemann.infinity.dimensions.features.surface_structures.*;
+import net.lerariemann.infinity.dimensions.features.underground_decoration.RandomBlobs;
+import net.lerariemann.infinity.dimensions.features.underground_decoration.RandomCeilingBlob;
+import net.lerariemann.infinity.dimensions.features.underground_ores.RandomDisk;
+import net.lerariemann.infinity.dimensions.features.underground_ores.RandomOre;
+import net.lerariemann.infinity.dimensions.features.underground_structures.RandomDungeon;
+import net.lerariemann.infinity.dimensions.features.vegetation.RandomFloatingPatch;
+import net.lerariemann.infinity.dimensions.features.vegetation.RandomFlowerPatch;
+import net.lerariemann.infinity.dimensions.features.vegetation.RandomSurfacePatch;
+import net.lerariemann.infinity.dimensions.features.vegetation.RandomVegetation;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.NbtCompound;

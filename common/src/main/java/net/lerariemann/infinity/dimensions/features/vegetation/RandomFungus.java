@@ -1,8 +1,11 @@
-package net.lerariemann.infinity.dimensions.features;
+package net.lerariemann.infinity.dimensions.features.vegetation;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.dimensions.features.Placement;
+import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 
 public class RandomFungus extends RandomisedFeature {
     NbtCompound mainsurfaceblock;
@@ -11,14 +14,16 @@ public class RandomFungus extends RandomisedFeature {
         super(parent, "fungus");
         id = "huge_fungus";
         mainsurfaceblock = parent.surface_block;
-        save_with_placement();
+        savePlacement();
     }
 
-    void placement() {
-        addCountEveryLayer(1);
+    public NbtList placement() {
+        Placement res = new Placement();
+        res.addCountEveryLayer(1);
+        return res.data;
     }
 
-    NbtCompound feature() {
+    public NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         addRandomBlock(config, "hat_state", ConfigType.FULL_BLOCKS_WG);
         addRandomBlock(config, "decor_state", ConfigType.BLOCKS_FEATURES);

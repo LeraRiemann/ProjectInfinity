@@ -302,21 +302,21 @@ public class RandomDimension {
         res.put("humidity", randomMultiNoiseParameter());
         res.put("continentalness", randomMultiNoiseParameter());
         res.put("erosion", randomMultiNoiseParameter());
-        res.put("weirdness", randomMultiNoiseParameter());
-        res.put("depth", randomMultiNoiseParameter());
-        res.put("offset", NbtDouble.of(random.nextDouble()));
+        res.put("weirdness", NbtDouble.of(0));
+        res.put("depth", NbtDouble.of(0));
+        res.put("offset", NbtDouble.of(0));
         return res;
     }
 
     NbtElement randomMultiNoiseParameter() {
-        if (random.nextBoolean()) {
+        /*if (random.nextBoolean()) {
             NbtCompound res = new NbtCompound();
             double a = (random.nextFloat()-0.5)*2;
             double b = (random.nextFloat()-0.5)*2;
             res.putFloat("min", (float)Math.min(a, b));
             res.putFloat("max", (float)Math.max(a, b));
             return res;
-        }
+        }*/
         return NbtDouble.of((random.nextDouble()-0.5)*2);
     }
 

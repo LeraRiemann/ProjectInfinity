@@ -1,6 +1,8 @@
-package net.lerariemann.infinity.dimensions.features;
+package net.lerariemann.infinity.dimensions.features.vegetation;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.dimensions.features.Placement;
+import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
@@ -9,6 +11,9 @@ import net.minecraft.nbt.NbtString;
 
 import java.util.Arrays;
 
+import static net.lerariemann.infinity.dimensions.features.Placement.matchingBlocks;
+import static net.lerariemann.infinity.dimensions.features.Placement.offsetToNbt;
+
 public class RandomTree extends RandomisedFeature {
     boolean ishuge;
 
@@ -16,18 +21,20 @@ public class RandomTree extends RandomisedFeature {
         super(parent, "tree");
         ishuge = parent.roll("huge_trees");
         id = "tree";
-        save_with_placement();
+        savePlacement();
     }
 
-    void placement() {
+    public NbtList placement() {
+        Placement res = new Placement();
         NbtCompound predicate = matchingBlocks(parent.surface_block.getString("Name"));
         predicate.put("offset", offsetToNbt(Arrays.asList(0, -1, 0)));
-        addCountEveryLayer(1);
-        addWaterDepthFilter((int) Math.floor(random.nextExponential()*4));
-        addBlockPredicateFilter(predicate);
+        res.addCountEveryLayer(1);
+        res.addWaterDepthFilter((int) Math.floor(random.nextExponential()*4));
+        res.addBlockPredicateFilter(predicate);
+        return res.data;
     }
 
-    NbtCompound feature() {
+    public NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         addRandomBlockProvider(config, "dirt_provider", ConfigType.FULL_BLOCKS);
         addRandomBlockProvider(config, "trunk_provider", ConfigType.FULL_BLOCKS_WG);

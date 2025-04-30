@@ -1,21 +1,26 @@
-package net.lerariemann.infinity.dimensions.features;
+package net.lerariemann.infinity.dimensions.features.vegetation;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.dimensions.features.Placement;
+import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 
 public class RandomMushroom extends RandomisedFeature {
     public RandomMushroom(RandomFeaturesList parent) {
         super(parent, "mushroom");
         id = random.nextBoolean() ? "infinity:random_flat_mushroom" : "infinity:random_round_mushroom";
-        save_with_placement();
+        savePlacement();
     }
 
-    void placement() {
-        addCountEveryLayer(1);
+    public NbtList placement() {
+        Placement res = new Placement();
+        res.addCountEveryLayer(1);
+        return res.data;
     }
 
-    NbtCompound feature() {
+    public NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         addRandomBlockProvider(config, "cap_provider", ConfigType.FULL_BLOCKS_WG);
         addRandomBlockProvider(config, "stem_provider", ConfigType.FULL_BLOCKS_WG);

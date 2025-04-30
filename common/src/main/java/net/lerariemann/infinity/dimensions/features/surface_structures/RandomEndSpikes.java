@@ -1,6 +1,8 @@
-package net.lerariemann.infinity.dimensions.features;
+package net.lerariemann.infinity.dimensions.features.surface_structures;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.dimensions.features.Placement;
+import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtList;
@@ -9,14 +11,16 @@ public class RandomEndSpikes extends RandomisedFeature {
     public RandomEndSpikes(RandomFeaturesList parent) {
         super(parent, "spikes");
         id = "end_spike";
-        save_with_placement();
+        savePlacement();
     }
 
-    void placement() {
-        addBiome();
+    public NbtList placement() {
+        Placement res = new Placement();
+        res.addBiome();
+        return res.data;
     }
 
-    NbtCompound feature() {
+    public NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         if (random.nextBoolean()) config.putBoolean("crystal_invulnerable", true);
         if (random.nextBoolean()) {

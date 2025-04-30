@@ -1,25 +1,31 @@
-package net.lerariemann.infinity.dimensions.features;
+package net.lerariemann.infinity.dimensions.features.underground_decoration;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.dimensions.features.Placement;
+import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+
+import static net.lerariemann.infinity.dimensions.features.Placement.fullHeightRange;
 
 public class RandomCeilingBlob extends RandomisedFeature {
     public RandomCeilingBlob(RandomFeaturesList parent) {
         super(parent, "ceilingblob");
         id = "infinity:random_ceiling_blob";
-        save_with_placement();
+        savePlacement();
     }
 
-    void placement() {
-        addCount(random.nextInt(1, daddy.height/8));
-        addInSquare();
-        addHeightRange(fullHeightRange());
-        addBiome();
+    public NbtList placement() {
+        Placement res = new Placement();
+        res.addCount(random.nextInt(1, daddy.height/8));
+        res.addInSquare();
+        res.addHeightRange(fullHeightRange());
+        res.addBiome();
+        return res.data;
     }
 
-    NbtCompound feature() {
+    public NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         NbtList targets = new NbtList();
         targets.add(daddy.default_block);

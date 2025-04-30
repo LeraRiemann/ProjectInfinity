@@ -1,31 +1,36 @@
-package net.lerariemann.infinity.dimensions.features;
+package net.lerariemann.infinity.dimensions.features.local_modifications;
 
 import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.dimensions.features.Placement;
+import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
 import static java.lang.Math.max;
+import static net.lerariemann.infinity.dimensions.features.Placement.uniformHeightRange;
 
 public class RandomGeode extends RandomisedFeature {
     public RandomGeode(RandomFeaturesList parent) {
         super(parent, "geode");
-        save_with_placement();
+        savePlacement();
     }
 
-    void placement() {
+    public NbtList placement() {
+        Placement res = new Placement();
         int sea = max(daddy.sea_level, daddy.min_y + daddy.height / 8);
         int halfsea = (sea + daddy.min_y) / 2;
         int minbound = random.nextInt(daddy.min_y, halfsea);
         int maxbound = random.nextInt(halfsea, sea);
-        addRarityFilter(1 + random.nextInt(32));
-        addInSquare();
-        addHeightRange(uniformHeightRange(minbound, maxbound));
-        addBiome();
+        res.addRarityFilter(1 + random.nextInt(32));
+        res.addInSquare();
+        res.addHeightRange(uniformHeightRange(minbound, maxbound));
+        res.addBiome();
+        return res.data;
     }
 
-    NbtCompound feature() {
+    public NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         NbtCompound blocks = new NbtCompound();
         blocks.put("filling_provider", parent.roll("flood_geodes") ? PROVIDER.randomBlockProvider(random, ConfigType.FLUIDS) :
