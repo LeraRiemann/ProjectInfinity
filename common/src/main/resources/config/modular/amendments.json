@@ -1,0 +1,72 @@
+{
+  "elements": [
+    {
+      "area": "fluids",
+      "mod": "minecraft",
+      "selector": "matching",
+      "matching": "minecraft:lava",
+      "results": "set_value",
+      "value": 2.0
+    },
+    {
+      "area": "fluids",
+      "mod": "minecraft",
+      "selector": "matching",
+      "matching": "minecraft:water",
+      "results": "set_value",
+      "value": 5.0
+    },
+    {
+      "area": "blocks",
+      "mod": "minecraft",
+      "selector": "matching_any",
+      "matching": [
+        "minecraft:slime_block",
+        "minecraft:honey_block",
+        "minecraft:mangrove_roots"
+      ],
+      "results": "set_field",
+      "field_name": "laggy",
+      "field": true
+    },
+    {
+      "area": "trees",
+      "mod": "all",
+      "selector": "containing",
+      "containing": "bees",
+      "results": "erase"
+    },
+    {
+      "area": "fluids",
+      "mod": "modern_industrialization",
+      "selector": "all",
+      "results": "erase"
+    },
+    {
+      "area": "mobs",
+      "mod": "minecolonies",
+      "selector": "all",
+      "results": "erase"
+    },
+    {
+      "area": "structures",
+      "mod": "alexscaves",
+      "selector": "all",
+      "results": "erase"
+    },
+    {
+      "area": "structures",
+      "mod": "aether",
+      "selector": "containing",
+      "containing": "dungeon",
+      "results": "erase"
+    },
+    {
+      "area": "structures",
+      "mod": "oritech",
+      "selector": "containing",
+      "containing": "pipe",
+      "results": "erase"
+    }
+  ]
+}

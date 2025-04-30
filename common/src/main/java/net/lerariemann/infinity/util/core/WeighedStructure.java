@@ -200,28 +200,4 @@ public interface WeighedStructure {
             return struct.getAllNames(d);
         }
     }
-
-    class RecursorMoreStorage extends Recursor {
-        public List<String> listAll;
-
-        public RecursorMoreStorage(List<NbtCompound> data, ConfigType type) {
-            super(data, type);
-            listAll = new ArrayList<>();
-        }
-        @Override
-        Leaf getLeaf(NbtCompound comp) {
-            Leaf str = super.getLeaf(comp);
-            listAll.add(str.name);
-            return str;
-        }
-        @Override
-        public List<String> getAllNames() {
-            if (!listAll.isEmpty()) {
-                List<String> res = listAll;
-                listAll.clear();
-                return res;
-            }
-            return super.getAllNames();
-        }
-    }
 }

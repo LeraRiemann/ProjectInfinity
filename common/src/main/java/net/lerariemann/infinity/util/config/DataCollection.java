@@ -7,6 +7,7 @@ import net.lerariemann.infinity.util.core.WeighedStructure;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,30 +17,41 @@ import java.util.stream.IntStream;
  * @author LeraRiemann */
 public class DataCollection {
     private final Map<String, List<NbtCompound>> map = new HashMap<>();
-    String name;
+    public static Map<ConfigType, List<Amendment>> amendmentList;
+    ConfigType type;
+    List<Amendment> amendments;
 
     DataCollection(ConfigType name) {
-        this.name = name.getKey();
+        this.type = name;
+        this.amendments = amendmentList.getOrDefault(type, List.of());
     }
 
     void add(String modId, NbtCompound elem) {
         if (!map.containsKey(modId)) map.put(modId, new ArrayList<>());
         map.get(modId).add(elem);
     }
-
-    void add(String modId, String key, NbtCompound data) {
-        NbtCompound elem = new NbtCompound();
-        elem.putString("key", key);
-        elem.put("data", data);
-        elem.putDouble("weight", 1.0);
+    void add(String modId, String key, @Nullable NbtCompound data) {
+        NbtCompound elem = getAmendedEntry(modId, key, data);
+        if (elem == null) return;
         add(modId, elem);
     }
-
     void add(String modId, String key) {
+        add(modId, key, null);
+    }
+
+    NbtCompound getAmendedEntry(String modId, String key, @Nullable NbtCompound data) {
+        double weight = 1.0;
+        for (Amendment a: amendments) if (a.applies(modId, key)) {
+            weight = a.apply();
+            data = a.apply(data);
+            break;
+        }
+        if (weight == 0) return null;
         NbtCompound elem = new NbtCompound();
         elem.putString("key", key);
-        elem.putDouble("weight", 1.0);
-        add(modId, elem);
+        if (data != null) elem.put("data", data);
+        elem.putDouble("weight", weight);
+        return elem;
     }
 
     public void addIdentifier(Identifier id) {
@@ -50,7 +62,7 @@ public class DataCollection {
     void save() {
         map.forEach((modId, data) -> CommonIO.write(wrapAndSortByKey(data),
                 InfinityMod.configPath.resolve("modular").resolve(modId),
-                name + ".json"));
+                type.getKey() + ".json"));
     }
 
     /**

@@ -47,6 +47,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public interface ConfigGenerator {
     static void generateAll(MinecraftServer server) {
+        DataCollection.amendmentList = Amendment.getAmendmentList();
         ConfigFactory.of(Registries.ITEM).generate(ConfigType.ITEMS);
         ConfigFactory.of(Registries.PARTICLE_TYPE, ConfigGenerator::extractParticle).generate(ConfigType.PARTICLES);
         ConfigFactory.of(Registries.ENTITY_TYPE, ConfigGenerator::extractMob).generate(ConfigType.MOBS);
@@ -188,7 +189,6 @@ public interface ConfigGenerator {
     }
 
     static NbtCompound extractMob(RegistryKey<EntityType<?>> key) {
-        if (key.getValue().getNamespace().equals("minecolonies")) return null; //this mod's mobs crash the game when spawned from the biome
         SpawnGroup sg = Registries.ENTITY_TYPE.get(key.getValue()).getSpawnGroup();
         if (sg == SpawnGroup.MISC) return null; //minecarts n stuff
         NbtCompound mob = new NbtCompound();
@@ -260,7 +260,6 @@ public interface ConfigGenerator {
     static NbtCompound extractFeature(Registry<ConfiguredFeature<?,?>> registry, RegistryKey<ConfiguredFeature<?,?>> key) {
         Identifier id = key.getValue();
         if (id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("_")) return null; //our mod's custom trees
-        if (id.toString().contains("bees")) return null; //bees lag the game -_-
         Optional<ConfiguredFeature<?,? extends Feature<?>>> o = registry.getOrEmpty(key);
         if (o.isEmpty()) return null;
         ConfiguredFeature<?,? extends Feature<?>> feature = o.get();
