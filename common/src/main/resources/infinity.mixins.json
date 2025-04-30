@@ -19,6 +19,7 @@
     "fixes.ChunkRegionMixin",
     "fixes.ColllisionShapeMixin",
     "fixes.EntityMixin",
+    "fixes.LakeFeatureMixin",
     "fixes.MobEntityMixin",
     "fixes.PointOfInterestStorageMixin",
     "fixes.SpawnHelperMixin",
@@ -32,6 +33,7 @@
     "iridescence.ItemStackMixin",
     "iridescence.KelpBlockMixin",
     "iridescence.LandPathNodeMakerMixin",
+    "iridescence.LilyPadBlockMixin",
     "iridescence.MobNavigationMixin",
     "iridescence.StatusEffectInstanceMixin",
     "iridescence.StatusEffectUtilMixin",
@@ -47,8 +49,7 @@
     "options.ServerWorldMixin",
     "qol.EnderDragonEntityMixin",
     "qol.FireBlockMixin",
-    "qol.LavaFluidMixin",
-    "iridescence.LilyPadBlockMixin"
+    "qol.LavaFluidMixin"
   ],
   "client": [
     "SoundListMixin",

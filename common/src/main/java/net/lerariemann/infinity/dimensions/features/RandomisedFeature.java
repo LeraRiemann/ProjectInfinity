@@ -9,7 +9,6 @@ import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
-import net.minecraft.registry.RegistryKeys;
 
 import java.util.List;
 import java.util.Random;
@@ -41,15 +40,9 @@ public abstract class RandomisedFeature {
         return InfinityMod.MOD_ID + ":" + name;
     }
 
-    public String fullNameConfigured() {
-        return InfinityMod.MOD_ID + ":configured_" + name;
-    }
-
     void save_with_placement() {
-        if (daddy.doesNotContain(RegistryKeys.CONFIGURED_FEATURE, name)) CommonIO.write(feature(),
-                parent.storagePath + "/worldgen/configured_feature", "configured_" + name + ".json");
         NbtCompound moredata = new NbtCompound();
-        moredata.putString("feature", fullNameConfigured());
+        moredata.put("feature", feature());
         placement();
         moredata.put("placement", placement_data);
         CommonIO.write(moredata, parent.storagePath + "/worldgen/placed_feature", name + ".json");
