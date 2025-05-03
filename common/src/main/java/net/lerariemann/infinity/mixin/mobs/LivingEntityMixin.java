@@ -21,6 +21,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Collection;
+
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
     @Shadow public abstract double getAttributeValue(RegistryEntry<EntityAttribute> attribute);
@@ -29,10 +31,12 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     /* Hook to allow unconventional effect removal logic */
-    @Inject(method = "onStatusEffectRemoved", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateAttributes()V"))
-    void inj(StatusEffectInstance effect, CallbackInfo ci) {
-        if (effect.getEffectType().value() instanceof ModStatusEffects.SpecialEffect eff) {
-            eff.onRemoved((LivingEntity)(Object)this);
+    @Inject(method = "onStatusEffectsRemoved", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateAttributes()V"))
+    void inj(Collection<StatusEffectInstance> effects, CallbackInfo ci) {
+        for (StatusEffectInstance effect : effects) {
+            if (effect.getEffectType().value() instanceof ModStatusEffects.SpecialEffect eff) {
+                eff.onRemoved((LivingEntity)(Object)this);
+            }
         }
     }
 

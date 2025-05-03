@@ -38,8 +38,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
     }
 
     @Shadow public abstract ServerWorld getServerWorld();
-    @Shadow public abstract boolean teleport(ServerWorld world, double destX, double destY, double destZ, Set<PositionFlag> flags, float yaw, float pitch);
-    @Shadow public abstract boolean damage(DamageSource source, float amount);
     @Shadow public abstract @Nullable Entity teleportTo(TeleportTarget teleportTarget);
     @Unique private long infinity$ticksUntilWarp;
     @Unique private Identifier infinity$idForWarp;

@@ -4,6 +4,7 @@ import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +20,7 @@ public abstract class EnderDragonEntityMixin extends MobEntity {
     /* Don't destroy blocks in infdims */
     @Inject(method = "destroyBlocks", at = @At(value = "HEAD",
             target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"), cancellable = true)
-    void inj(Box box, CallbackInfoReturnable<Boolean> cir) {
+    void inj(ServerWorld world, Box box, CallbackInfoReturnable<Boolean> cir) {
         if(InfinityMethods.isInfinity(getWorld())) cir.setReturnValue(true);
     }
 }

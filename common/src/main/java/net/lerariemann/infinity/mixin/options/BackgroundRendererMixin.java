@@ -33,7 +33,7 @@ public class BackgroundRendererMixin {
 
     @Inject(method = "getFogColor",
             at= @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BackgroundRenderer;getFogModifier(Lnet/minecraft/entity/Entity;F)Lnet/minecraft/client/render/BackgroundRenderer$StatusEffectFogModifier;"))
-    private static void injected(Camera camera, float tickDelta, ClientWorld world, int viewDistance, float skyDarkness, CallbackInfo ci) {
+    private static void injected(Camera camera, float tickDelta, ClientWorld world, int clampedViewDistance, float skyDarkness, CallbackInfoReturnable<Vector4f> cir) {
         InfinityOptions options = InfinityOptions.access(world);
         if (options.getSkyType().equals("rainbow") && camera.getSubmersionType() == CameraSubmersionType.NONE) {
             infinity$applyRainbowFog(world, tickDelta);
