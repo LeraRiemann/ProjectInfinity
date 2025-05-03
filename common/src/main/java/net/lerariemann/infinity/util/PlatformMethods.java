@@ -160,7 +160,7 @@ public class PlatformMethods {
     }
 
     @ExpectPlatform
-    public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i) {
+    public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i, String id) {
         throw new AssertionError();
     }
 }

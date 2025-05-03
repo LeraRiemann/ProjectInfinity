@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.util.fabric;
 
+import dev.architectury.platform.Mod;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
@@ -13,6 +14,7 @@ import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.item.StarOfLangItem;
 import net.lerariemann.infinity.item.fabric.StarOfLangFabricItem;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.fluids.fabric.ModFluidsFabric;
@@ -81,7 +83,7 @@ public class PlatformMethodsImpl {
     public static RegistrySupplier<FluidBlock> getIridBlockForReg() {
         return ModBlocks.BLOCKS.register("iridescence", () ->
                 new IridescenceLiquidBlock(PlatformMethods.getIridescenceStill(),
-                        AbstractBlock.Settings.copy(Blocks.WATER).mapColor(MapColor.MAGENTA)));
+                        ModBlocks.copy("iridescence", Blocks.WATER).mapColor(MapColor.MAGENTA)));
     }
 
     public static Path getRootConfigPath() {
@@ -112,7 +114,7 @@ public class PlatformMethodsImpl {
         return StarOfLangFabricItem::new;
     }
 
-    public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i) {
-        return new Item.Settings().component(componentTypeSupplier.get(), i);
+    public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i, String key) {
+        return ModItems.settings(key).component(componentTypeSupplier.get(), i);
     }
 }

@@ -97,7 +97,7 @@ public class ModItems {
                     settings("fine_item").component(DataComponentTypes.FOOD,
                             new FoodComponent(0, 0, true)));
     public static final RegistrySupplier<ChromaticItem> CHROMATIC_MATTER =
-            registerItemAfter("chromatic_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, settings -> new ChromaticItem(deferredIntComponent(ModComponentTypes.COLOR, ColorLogic.defaultChromatic)),
+            registerItemAfter("chromatic_matter", ItemGroups.INGREDIENTS, Items.DISC_FRAGMENT_5, settings -> new ChromaticItem(deferredIntComponent(ModComponentTypes.COLOR, ColorLogic.defaultChromatic, "chromatic_matter")),
                     settings("chromatic_matter"));
 
     public static final RegistrySupplier<Item> WHITE_MATTER =
@@ -118,13 +118,13 @@ public class ModItems {
                     settings("disc").rarity(Rarity.RARE));
     public static final RegistrySupplier<Item> IRIDESCENT_POTION =
             registerItemAfter("iridescent_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, settings ->
-                            new IridescentPotionItem(deferredIntComponent(ModComponentTypes.CHARGE, RandomProvider.ruleInt("iridescencePotionLevel"))),
+                            new IridescentPotionItem(deferredIntComponent(ModComponentTypes.CHARGE, RandomProvider.ruleInt("iridescencePotionLevel"), "iridescent_potion")),
                     settings("iridescent_potion")
                             .rarity(Rarity.UNCOMMON)
                             .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final RegistrySupplier<Item> CHROMATIC_POTION =
             registerItemAfter("chromatic_potion", ItemGroups.FOOD_AND_DRINK, Items.HONEY_BOTTLE, settings ->
-                            new IridescentPotionItem(deferredIntComponent(ModComponentTypes.CHARGE, 0)),
+                            new IridescentPotionItem(deferredIntComponent(ModComponentTypes.CHARGE, 0, "chromatic_potion")),
                     settings("chromatic_potion"));
 
     public static <T extends Item> RegistrySupplier<T> register(String item, Item.Settings settings, Function<Item.Settings, T> constructor) {
@@ -173,11 +173,11 @@ public class ModItems {
         return settings(id).arch$tab(ItemGroups.SPAWN_EGGS);
     }
 
-    private static Item.Settings settings(String id) {
+    public static Item.Settings settings(String id) {
         return new Item.Settings().registryKey(registryKey(id));
     }
 
-    public static RegistryKey<Item> registryKey(String id) {
+    private static RegistryKey<Item> registryKey(String id) {
         return RegistryKey.of(RegistryKeys.ITEM, InfinityMethods.getId(id));
     }
 

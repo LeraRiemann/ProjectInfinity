@@ -21,6 +21,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -63,7 +64,7 @@ public class ModFluidsFabric {
             return ModBlocks.IRIDESCENCE.get().getDefaultState().with(FluidBlock.LEVEL, getBlockStateLevel(state));
         }
         @Override
-        protected boolean isInfinite(World world) {
+        protected boolean isInfinite(ServerWorld world) {
             return Iridescence.isInfinite(world);
         }
         @Override
