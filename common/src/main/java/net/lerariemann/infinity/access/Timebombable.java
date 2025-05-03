@@ -34,9 +34,9 @@ public interface Timebombable {
         }
         else if (i > 200) {
             if (i%4 == 0) {
-                Registry<DamageType> r = player.getServerWorld().getServer().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE);
+                Registry<DamageType> r = player.getServerWorld().getServer().getRegistryManager().getOrThrow(RegistryKeys.DAMAGE_TYPE);
                 RegistryEntry<DamageType> entry = r.getEntry(r.get(InfinityMethods.getId("world_ceased")));
-                player.damage(new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
+                player.damage(player.getServerWorld(), new DamageSource(entry), i > 400 ? 2.0f : 1.0f);
             }
         }
     }

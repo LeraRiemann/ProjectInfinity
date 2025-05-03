@@ -65,13 +65,13 @@ dependencies {
     }
 
     // EMI
-//    modCompileOnly("dev.emi:emi-fabric:$emi_version+$minecraft_version:api")
+    modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version+1.21.1:api")
 //    modLocalRuntime("dev.emi:emi-fabric:$emi_version+$minecraft_version")
 
     // Devenv helpers
     modImplementation "maven.modrinth:uwrad:1.1.0"
     modImplementation "maven.modrinth:dev-tools-unlocker:1.0.0"
-    modImplementation("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cct_version")
+    modCompileOnly("cc.tweaked:cc-tweaked-1.21.1-fabric:$cct_version")
 
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }

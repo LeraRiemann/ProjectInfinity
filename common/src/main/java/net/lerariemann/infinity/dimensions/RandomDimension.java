@@ -157,7 +157,7 @@ public class RandomDimension {
     }
 
     public <T> boolean doesNotContain(RegistryKey<? extends Registry<T>> key, String name) {
-        return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMethods.getId(name))));
+        return !(server.getRegistryManager().getOptional(key).get().contains(RegistryKey.of(key, InfinityMethods.getId(name))));
     }
 
     boolean isOverworldLike() {
@@ -264,7 +264,7 @@ public class RandomDimension {
 
     void addPresetBiomes(String preset) {
         TagKey<Biome> tag = preset.equals("overworld") ? BiomeTags.IS_OVERWORLD : BiomeTags.IS_NETHER;
-        Registry<Biome> r = server.getRegistryManager().get(RegistryKeys.BIOME);
+        Registry<Biome> r = server.getRegistryManager().getOrThrow(RegistryKeys.BIOME);
         r.getKeys().forEach(key -> {
             if (!Objects.equals(key.getValue().getNamespace(), "infinity")) {
                 if (r.get(key) != null && r.getEntry(r.get(key)).isIn(tag)) vanilla_biomes.add(key.getValue().toString());

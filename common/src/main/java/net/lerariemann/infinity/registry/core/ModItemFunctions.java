@@ -24,8 +24,9 @@ import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -56,13 +57,13 @@ public class ModItemFunctions {
     //special recipe serializers
     public static RegistrySupplier<RecipeSerializer<BiomeBottleCombiningRecipe>> BIOME_BOTTLE_COMBINING =
             RECIPE_SERIALIZERS.register("biome_bottle_combining", () ->
-                    new SpecialRecipeSerializer<>(BiomeBottleCombiningRecipe::new));
+                    new SpecialCraftingRecipe.SpecialRecipeSerializer<>(BiomeBottleCombiningRecipe::new));
     public static RegistrySupplier<RecipeSerializer<F4RechargingRecipe>> F4_RECHARGING =
             RECIPE_SERIALIZERS.register("f4_recharging", () ->
-                    new SpecialRecipeSerializer<>(F4RechargingRecipe::new));
+                    new SpecialCraftingRecipe.SpecialRecipeSerializer<>(F4RechargingRecipe::new));
     public static RegistrySupplier<RecipeSerializer<ChromaCarpetRecipe>> CARPET =
             RECIPE_SERIALIZERS.register("chroma_carpet", () ->
-                    new SpecialRecipeSerializer<>(ChromaCarpetRecipe::new));
+                    new SpecialCraftingRecipe.SpecialRecipeSerializer<>(ChromaCarpetRecipe::new));
     //regular recipe serializers
     public static RegistrySupplier<RecipeSerializer<ChromaticColoringRecipe>> CHROMATIC_COLORING =
             RECIPE_SERIALIZERS.register("chromatic_coloring", () ->

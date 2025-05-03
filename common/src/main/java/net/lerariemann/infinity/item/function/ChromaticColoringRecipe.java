@@ -7,10 +7,7 @@ import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
@@ -35,7 +32,7 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
     @Override
     public boolean matches(CraftingRecipeInput input, World world) {
         boolean foundChroma = false;
-        for (int k = 0; k < input.getSize(); k++) {
+        for (int k = 0; k < input.size(); k++) {
             ItemStack itemStack = input.getStackInSlot(k);
             if (itemStack.isOf(ModItems.CHROMATIC_MATTER.get())) {
                 if (foundChroma) return false;
@@ -52,15 +49,20 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
         INSTANCE
     }
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<CraftingRecipe> getType() {
         return Type.INSTANCE;
+    }
+
+    @Override
+    public IngredientPlacement getIngredientPlacement() {
+        return IngredientPlacement.NONE;
     }
 
     @Override
     public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         ItemStack chroma = ItemStack.EMPTY;
         int i = 0;
-        for (int k = 0; k < input.getSize(); k++) {
+        for (int k = 0; k < input.size(); k++) {
             ItemStack itemStack = input.getStackInSlot(k);
             if (itemStack.isOf(ModItems.CHROMATIC_MATTER.get())) chroma = itemStack;
             else if (!itemStack.isEmpty()) {
@@ -78,7 +80,7 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
 
     @Override
     public DefaultedList<ItemStack> getRemainder(CraftingRecipeInput craftingRecipeInput) {
-        DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.getSize(), ItemStack.EMPTY);
+        DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.size(), ItemStack.EMPTY);
         int j = 0;
         for (int i = 0; i < defaultedList.size(); i++) {
             ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
@@ -86,7 +88,7 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
                 defaultedList.set(i, itemStack.copyWithCount(1));
             else if (!itemStack.isEmpty()) j++;
         }
-        return j > 0 ? defaultedList : DefaultedList.ofSize(craftingRecipeInput.getSize(), ItemStack.EMPTY);
+        return j > 0 ? defaultedList : DefaultedList.ofSize(craftingRecipeInput.size(), ItemStack.EMPTY);
     }
 
     @Override
@@ -104,7 +106,7 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends CraftingRecipe> getSerializer() {
         return ModItemFunctions.CHROMATIC_COLORING.get();
     }
 

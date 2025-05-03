@@ -10,9 +10,11 @@ import net.lerariemann.infinity.registry.var.ModScreenHandlers;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import org.lwjgl.glfw.GLFW;
+
+import javax.swing.*;
 
 public class InfinityModClient {
     public static KeyBinding f4ConfigKey = new KeyBinding("key.infinity.f4",
@@ -32,8 +34,9 @@ public class InfinityModClient {
             while (f4ConfigKey.wasPressed()) if (client.player != null
                     && client.player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.F4.get())) {
                 ModPayloads.sendF4DeployPayload();
-                TypedActionResult<ItemStack> result = F4Item.deploy(client.world, client.player, Hand.MAIN_HAND);
-                client.player.setStackInHand(Hand.MAIN_HAND, result.getValue());
+                ActionResult result = F4Item.deploy(client.world, client.player, Hand.MAIN_HAND);
+                // TODO get the itemstack back
+//                client.player.setStackInHand(Hand.MAIN_HAND, result.getValue());
             }
             while (postProcessorConfigKey.wasPressed()) client.gameRenderer.togglePostProcessorEnabled();
         });

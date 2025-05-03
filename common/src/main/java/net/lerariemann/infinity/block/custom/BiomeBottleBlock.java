@@ -144,7 +144,7 @@ public class BiomeBottleBlock extends BlockWithEntity {
     }
 
     public static RegistryEntry<Biome> biomeFromId(ServerWorld world, Identifier biome) {
-        Optional<RegistryEntry.Reference<Biome>> entry = world.getServer().getRegistryManager().get(RegistryKeys.BIOME).getEntry(biome);
+        Optional<RegistryEntry.Reference<Biome>> entry = world.getServer().getRegistryManager().getOrThrow(RegistryKeys.BIOME).getEntry(biome);
         return entry.orElse(null);
     }
 
@@ -182,7 +182,7 @@ public class BiomeBottleBlock extends BlockWithEntity {
                     }
                     return registryEntry2;
                 }, world.getChunkManager().getNoiseConfig().getMultiNoiseSampler());
-                chunk.setNeedsSaving(true);
+                chunk.markNeedsSaving();
             }
         });
         world.getChunkManager().chunkLoadingManager.sendChunkBiomePackets(set.stream().toList());

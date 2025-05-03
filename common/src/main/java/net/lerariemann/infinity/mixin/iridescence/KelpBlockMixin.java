@@ -26,7 +26,7 @@ public abstract class KelpBlockMixin extends AbstractPlantStemBlock {
             BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos().offset(this.growthDirection));
             if (blockState.isOf(ModBlocks.IRIDESCENT_KELP_PLANT.get()) || blockState.isOf(ModBlocks.IRIDESCENT_KELP.get()))
                 cir.setReturnValue(ModBlocks.IRIDESCENT_KELP_PLANT.get().getDefaultState());
-            cir.setReturnValue(ModBlocks.IRIDESCENT_KELP.get().getRandomGrowthState(ctx.getWorld()));
+            cir.setReturnValue(ModBlocks.IRIDESCENT_KELP.get().getRandomGrowthState(ctx.getWorld().random));
         }
     }
 }

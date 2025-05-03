@@ -6,8 +6,8 @@ import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.GlassBottleItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,9 +23,9 @@ public abstract class GlassBottleItemMixin {
     @Inject(method="use", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/World;emitGameEvent(Lnet/minecraft/entity/Entity;Lnet/minecraft/registry/entry/RegistryEntry;Lnet/minecraft/util/math/BlockPos;)V",
             shift = At.Shift.AFTER), cancellable = true)
-    void inj(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir, @Local ItemStack itemStack, @Local BlockPos pos) {
+    void inj(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> cir, @Local ItemStack itemStack, @Local BlockPos pos) {
         if (Iridescence.isIridescence(world, pos))
-            cir.setReturnValue(TypedActionResult.success(fill(itemStack, user,
-                    ModItems.IRIDESCENT_POTION.get().getDefaultStack()), world.isClient()));
+            cir.setReturnValue(ActionResult.SUCCESS.withNewHandStack(fill(itemStack, user,
+                    ModItems.IRIDESCENT_POTION.get().getDefaultStack())));
     }
 }

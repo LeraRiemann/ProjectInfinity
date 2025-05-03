@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.block.custom;
 
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.minecraft.block.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -14,7 +15,7 @@ public class HauntedBlock extends Block {
     BlockState original;
 
     public HauntedBlock(Block original) {
-        super(AbstractBlock.Settings.copy(original));
+        super(ModBlocks.copy("haunted_air", original));
         this.original = original.getDefaultState();
     }
 

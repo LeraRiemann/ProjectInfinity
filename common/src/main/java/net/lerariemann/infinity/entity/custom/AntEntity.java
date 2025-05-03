@@ -85,8 +85,8 @@ public class AntEntity extends AbstractChessFigure {
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1f)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 6);
+                .add(EntityAttributes.MOVEMENT_SPEED, 0.1f)
+                .add(EntityAttributes.MAX_HEALTH, 6);
     }
 
     @Override
@@ -165,10 +165,10 @@ public class AntEntity extends AbstractChessFigure {
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         if (!this.hasPassengers()
-                && this.getAttributeValue(EntityAttributes.GENERIC_SCALE) > 2
+                && this.getAttributeValue(EntityAttributes.SCALE) > 2
                 && player.getStackInHand(hand).isEmpty()) {
             this.putPlayerOnBack(player);
-            return ActionResult.success(this.getWorld().isClient);
+            return ActionResult.SUCCESS;
         }
         return super.interactMob(player, hand);
     }
@@ -186,7 +186,7 @@ public class AntEntity extends AbstractChessFigure {
     }
     @Override
     protected float getSaddledSpeed(PlayerEntity controllingPlayer) {
-        return (float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * 0.8f;
+        return (float)this.getAttributeValue(EntityAttributes.MOVEMENT_SPEED) * 0.8f;
     }
     @Nullable
     @Override

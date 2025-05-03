@@ -56,11 +56,11 @@ public interface ConfigGenerator {
         generateBlockTags();
         SurfaceRuleScanner.scan(server);
         DynamicRegistryManager manager = server.getRegistryManager();
-        ConfigFactory.of(manager.get(RegistryKeys.JUKEBOX_SONG)).generate(ConfigType.JUKEBOXES);
-        ConfigFactory.of(manager.get(RegistryKeys.BIOME), ConfigGenerator::extractBiome).generate(ConfigType.BIOMES);
-        ConfigFactory.of(manager.get(RegistryKeys.STRUCTURE), ConfigGenerator::extractStructure).generate(ConfigType.STRUCTURES);
-        ConfigFactory.of(manager.get(RegistryKeys.CONFIGURED_FEATURE), ConfigGenerator::extractFeature).generate(ConfigType.TREES);
-        ConfigFactory.of(server.getReloadableRegistries().getRegistryManager().get(RegistryKeys.LOOT_TABLE), ConfigGenerator::extractLootTable)
+        ConfigFactory.of(manager.getOrThrow(RegistryKeys.JUKEBOX_SONG)).generate(ConfigType.JUKEBOXES);
+        ConfigFactory.of(manager.getOrThrow(RegistryKeys.BIOME), ConfigGenerator::extractBiome).generate(ConfigType.BIOMES);
+        ConfigFactory.of(manager.getOrThrow(RegistryKeys.STRUCTURE), ConfigGenerator::extractStructure).generate(ConfigType.STRUCTURES);
+        ConfigFactory.of(manager.getOrThrow(RegistryKeys.CONFIGURED_FEATURE), ConfigGenerator::extractFeature).generate(ConfigType.TREES);
+        ConfigFactory.of(server.getRegistryManager().getOrThrow(RegistryKeys.LOOT_TABLE), ConfigGenerator::extractLootTable)
                 .generate(ConfigType.LOOT_TABLES);
     }
 
@@ -79,7 +79,7 @@ public interface ConfigGenerator {
 
     static void generateBlockTags() {
         DataCollection.Logged tagMap = new DataCollection.Logged(ConfigType.TAGS, "block tags");
-        Registries.BLOCK.streamTags().forEach(tagKey -> tagMap.addIdentifier(tagKey.id()));
+        Registries.BLOCK.streamTags().forEach(tagKey -> tagMap.addIdentifier(tagKey.getTag().id()));
         tagMap.save();
     }
 
@@ -198,7 +198,7 @@ public interface ConfigGenerator {
 
     static NbtCompound extractEffect(RegistryKey<StatusEffect> key) {
         NbtCompound res = new NbtCompound();
-        Optional<StatusEffect> o = Registries.STATUS_EFFECT.getOrEmpty(key);
+        Optional<StatusEffect> o = Registries.STATUS_EFFECT.getOptionalValue(key);
         if (o.isEmpty()) return null;
         StatusEffect effect = o.get();
         res.putString("Category", switch (effect.getCategory()) { //this data is unused for now but might be important later
@@ -214,7 +214,7 @@ public interface ConfigGenerator {
     static NbtCompound extractStructure(Registry<Structure> registry, RegistryKey<Structure> key) {
         Identifier id = key.getValue();
         if (id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("_")) return null;
-        Optional<Structure> o = registry.getOrEmpty(key);
+        Optional<Structure> o = registry.getOptionalValue(key);
         if (o.isEmpty()) return null;
         Structure structure = o.get();
         String step = structure.getFeatureGenerationStep().name().toLowerCase();
@@ -260,7 +260,7 @@ public interface ConfigGenerator {
     static NbtCompound extractFeature(Registry<ConfiguredFeature<?,?>> registry, RegistryKey<ConfiguredFeature<?,?>> key) {
         Identifier id = key.getValue();
         if (id.getNamespace().equals(InfinityMod.MOD_ID) && id.getPath().contains("_")) return null; //our mod's custom trees
-        Optional<ConfiguredFeature<?,? extends Feature<?>>> o = registry.getOrEmpty(key);
+        Optional<ConfiguredFeature<?,? extends Feature<?>>> o = registry.getOptionalValue(key);
         if (o.isEmpty()) return null;
         ConfiguredFeature<?,? extends Feature<?>> feature = o.get();
         String type = getFeatureType(feature.feature());
@@ -279,7 +279,7 @@ public interface ConfigGenerator {
     }
 
     static NbtCompound extractLootTable(Registry<LootTable> registry, RegistryKey<LootTable> key) {
-        Optional<LootTable> o = registry.getOrEmpty(key);
+        Optional<LootTable> o = registry.getOptionalValue(key);
         if (o.isEmpty()) return null;
         LootTable table = o.get();
         Identifier type = LootContextTypes.MAP.inverse().get(table.getType());
@@ -292,7 +292,7 @@ public interface ConfigGenerator {
     static NbtCompound extractBiome(Registry<Biome> registry, RegistryKey<Biome> key) {
         Identifier id = key.getValue();
         if (id.getNamespace().equals(InfinityMod.MOD_ID)) return null; //cull our generated biomes
-        Optional<Biome> o = registry.getOrEmpty(key);
+        Optional<Biome> o = registry.getOptionalValue(key);
         if (o.isEmpty()) return null;
         Biome biome = o.get();
         NbtCompound res = new NbtCompound();

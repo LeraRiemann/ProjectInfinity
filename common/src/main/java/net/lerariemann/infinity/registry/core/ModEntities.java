@@ -14,8 +14,10 @@ import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;
@@ -84,11 +86,13 @@ public class ModEntities {
         registerAttributes();
     }
 
-    public static String type(String id) {
-        if (!Platform.isFabric()) {
-            return "infinity:"+id;
-        }
-        else return null;
+    public static RegistryKey<EntityType<?>> type(String id) {
+        return registryKey(id);
+    }
+
+    public static RegistryKey<EntityType<?>> registryKey(String s) {
+        Identifier id = InfinityMethods.getId(s);
+        return RegistryKey.of(RegistryKeys.ENTITY_TYPE, id);
     }
 
     public static void registerAttributes() {

@@ -11,6 +11,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.EntityTypeTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,7 +38,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     /* Hook for sheep dropping wool when punched */
     @Inject(method = "damage", at = @At("RETURN"))
-    protected void injected_sheep(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {}
+    protected void injected_sheep(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {}
 
     /* Handle fall damage in dimensions with custom mavity */
     @Inject(method = "computeFallDamage", at = @At(value = "HEAD"), cancellable = true)
@@ -46,11 +47,11 @@ public abstract class LivingEntityMixin extends Entity {
         if (!options.isEmpty()) {
             if (this.getType().isIn(EntityTypeTags.FALL_DAMAGE_IMMUNE)) cir.setReturnValue(0);
             else {
-                double f = getAttributeValue(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE);
+                double f = getAttributeValue(EntityAttributes.SAFE_FALL_DISTANCE);
                 double clampedMavity = Math.clamp(options.getMavity(), 0.01, 2);
                 double g = fallDistance * clampedMavity - f;
                 cir.setReturnValue(MathHelper.ceil(
-                        (g * damageMultiplier) * this.getAttributeValue(EntityAttributes.GENERIC_FALL_DAMAGE_MULTIPLIER)));
+                        (g * damageMultiplier) * this.getAttributeValue(EntityAttributes.FALL_DAMAGE_MULTIPLIER)));
             }
         }
     }

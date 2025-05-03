@@ -23,7 +23,7 @@ public interface TintableEntity {
         float r = (float)(age % 25) / 25.0F;
         int s = SheepEntity.getRgbColor(DyeColor.byId(p));
         int t = SheepEntity.getRgbColor(DyeColor.byId(q));
-        return ColorHelper.Argb.lerp(r, s, t);
+        return ColorHelper.lerp(r, s, t);
     }
 
     int getColorNamed();
@@ -43,7 +43,7 @@ public interface TintableEntity {
     default int getColorForRender() {
         int v = getColorNamed();
         if (v!=-1) return v;
-        return ColorHelper.Argb.fullAlpha(this.getColor());
+        return ColorHelper.fullAlpha(this.getColor());
     }
 
     default int getColor() {

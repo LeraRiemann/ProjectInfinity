@@ -71,7 +71,7 @@ public class F4Item extends Item implements PortalDataHolder.Destinable {
         int useCharges = player.isCreative() ? 0 : 2*(2 + size_x + size_y);
         if (charges < useCharges) {
             if (!world.isClient())
-                player.sendMessage(Text.translatable("error.infinity.f4.no_charges", useCharges));
+                player.sendMessage(Text.translatable("error.infinity.f4.no_charges", useCharges), true);
             return null;
         }
         BlockPos lowerLeft = lowerCenter.offset(dir2, -(size_x/2));
@@ -108,13 +108,13 @@ public class F4Item extends Item implements PortalDataHolder.Destinable {
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public ActionResult use(World world, PlayerEntity player, Hand hand) {
         if (world.isClient)
             ClientMethods.setF4Screen(player);
-        return TypedActionResult.success(player.getStackInHand(hand));
+        return ActionResult.SUCCESS;
     }
 
-    public static TypedActionResult<ItemStack> deploy(World world, PlayerEntity player, Hand hand) {
+    public static ActionResult deploy(World world, PlayerEntity player, Hand hand) {
         Direction dir = player.getHorizontalFacing();
         Direction.Axis dir2 = dir.rotateClockwise(Direction.Axis.Y).getAxis();
         BlockPos lowerCenter = player.getBlockPos().offset(dir, 4);
@@ -130,7 +130,7 @@ public class F4Item extends Item implements PortalDataHolder.Destinable {
         }
 
         int lowerY = lowerCenter.getY();
-        if (world.isOutOfHeightLimit(lowerY)) return TypedActionResult.pass(stack);
+        if (world.isOutOfHeightLimit(lowerY)) return ActionResult.PASS;
 
         //finding a place position
         int i;
@@ -150,11 +150,11 @@ public class F4Item extends Item implements PortalDataHolder.Destinable {
             }
             if (positionFound) break;
         }
-        if (!positionFound) return TypedActionResult.pass(stack);
+        if (!positionFound) return ActionResult.PASS;
 
         ItemStack newStack = placePortal(world, player, stack.copy(), lowerCenter.up(i), size_x, size_y);
-        if (newStack == null) return TypedActionResult.pass(stack);
-        return TypedActionResult.consume(player.isCreative() ? stack : newStack);
+        if (newStack == null) return ActionResult.PASS;
+        return ActionResult.CONSUME.withNewHandStack(stack);
     }
 
     public static boolean isPortal(BlockState state) {

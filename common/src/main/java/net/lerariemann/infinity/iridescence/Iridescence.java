@@ -238,8 +238,9 @@ public interface Iridescence {
         Path cookie = InfinityMod.provider.savingPath.resolve(player.getUuidAsString() + ".json");
         try {
             NbtCompound comp = CommonIO.read(cookie);
+            // TODO maybe shouldn't pass null here
             player.teleport(player.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, Identifier.of(comp.getString("dim")))),
-                    comp.getDouble("x"), comp.getDouble("y"), comp.getDouble("z"), player.getYaw(), player.getPitch());
+                    comp.getDouble("x"), comp.getDouble("y"), comp.getDouble("z"), null, player.getYaw(), player.getPitch(), false);
         } catch (Exception e) {
             WarpLogic.respawnAlive(player);
         }
@@ -305,8 +306,9 @@ public interface Iridescence {
     static void convTriggers(LivingEntity entity) {
         triggerConversion(entity.getWorld().getClosestPlayer(entity.getX(), entity.getY(), entity.getZ(),
                 50, false), entity);
-        entity.getWorld().getPlayers(TargetPredicate.DEFAULT, entity, Box.of(entity.getPos(), 10,10, 10))
-                .forEach(p -> triggerConversion(p, entity));
+        // TODO reimplement
+//        entity.getWorld().getPlayers(TargetPredicate.DEFAULT, entity, Box.of(entity.getPos(), 10,10, 10))
+//                .forEach(p -> triggerConversion(p, entity));
     }
 
     static void triggerConversion(PlayerEntity player, LivingEntity entity) {

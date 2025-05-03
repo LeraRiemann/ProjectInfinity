@@ -139,7 +139,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
             ItemStack itemStack2 = new ItemStack(itemStack.getItem());
             this.playSound(SoundEvents.ITEM_BOTTLE_FILL, 1.0f, 1.0f);
             CreeperEntity newCreeper;
-            if (!this.getWorld().isClient() && (newCreeper = EntityType.CREEPER.create(this.getWorld())) != null) {
+            if (!this.getWorld().isClient() && (newCreeper = EntityType.CREEPER.create(this.getWorld(), SpawnReason.CONVERSION)) != null) {
                 itemStack2.applyComponentsFrom(BiomeBottleBlock.addComponents(ComponentMap.builder(),
                                 Identifier.of(getBiome()), getColor(), getCharge()).build());
                 ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
@@ -162,7 +162,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
                     .add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new RegistryPair<>(
                             RegistryKey.of(RegistryKeys.JUKEBOX_SONG, song)), true))
                     .add(ModComponentTypes.COLOR.get(), (int)InfinityMethods.getNumericFromId(song)).build());
-            this.dropStack(stack);
+            this.dropStack(world, stack);
         }
     }
 }

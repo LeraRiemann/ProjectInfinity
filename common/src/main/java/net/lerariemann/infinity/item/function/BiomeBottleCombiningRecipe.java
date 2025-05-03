@@ -21,7 +21,7 @@ public class BiomeBottleCombiningRecipe extends SpecialCraftingRecipe {
         ItemStack stack1 = null;
         boolean bl = true;
         int charge = 0;
-        for (int k = 0; k < craftingRecipeInput.getSize(); k++) {
+        for (int k = 0; k < craftingRecipeInput.size(); k++) {
             if (!bl) return false;
             ItemStack itemStack = craftingRecipeInput.getStackInSlot(k);
             if (!itemStack.isEmpty()) {
@@ -44,7 +44,7 @@ public class BiomeBottleCombiningRecipe extends SpecialCraftingRecipe {
         ItemStack stack1 = ItemStack.EMPTY;
         int i = 0;
         int charge = 0;
-        for (int k = 0; k < craftingRecipeInput.getSize(); k++) {
+        for (int k = 0; k < craftingRecipeInput.size(); k++) {
             ItemStack itemStack = craftingRecipeInput.getStackInSlot(k);
             if (!itemStack.isEmpty()) {
                 if (Block.getBlockFromItem(itemStack.getItem()) instanceof BiomeBottleBlock) {
@@ -61,12 +61,7 @@ public class BiomeBottleCombiningRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public boolean fits(int width, int height) {
-        return width*height >= 2;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
         return ModItemFunctions.BIOME_BOTTLE_COMBINING.get();
     }
 }

@@ -40,9 +40,9 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 150)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0);
+                .add(EntityAttributes.MOVEMENT_SPEED, 0.35)
+                .add(EntityAttributes.MAX_HEALTH, 150)
+                .add(EntityAttributes.ATTACK_DAMAGE, 5.0);
     }
 
     @Nullable
@@ -144,8 +144,8 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
         battle.addEntity(this);
     }
     @Override
-    protected void onRemoval(Entity.RemovalReason reason) {
-        super.onRemoval(reason);
+    protected void onRemoval(ServerWorld world, Entity.RemovalReason reason) {
+        super.onRemoval(world, reason);
         if (battle != null) battle.stop();
     }
 

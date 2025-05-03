@@ -52,7 +52,7 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
-        return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f);
+        return HostileEntity.createHostileAttributes().add(EntityAttributes.MOVEMENT_SPEED, 0.2f);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
 
     @Override
     protected ParticleEffect getParticles() {
-        return new DustParticleEffect(particleColorFromInt(this.getColorForRender()), 1.0f);
+        return new DustParticleEffect(this.getColorForRender(), 1.0f);
     }
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
@@ -109,7 +109,7 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     }
     @Override
     public RegistryKey<LootTable> getLootTableId() {
-        return this.getCore().getBlock().getLootTableKey();
+        return this.getCore().getBlock().getLootTableKey().get();
     }
 
     @Override

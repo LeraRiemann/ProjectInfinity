@@ -20,6 +20,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import net.minecraft.world.block.WireOrientation;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +45,7 @@ public class NotesBlock extends Block {
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, @Nullable WireOrientation wireOrientation, boolean notify) {
         boolean bl = world.isReceivingRedstonePower(pos);
         if (bl != state.get(POWERED)) {
             if (bl) this.play(null, world, pos);

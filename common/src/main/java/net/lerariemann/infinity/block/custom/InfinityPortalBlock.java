@@ -142,7 +142,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 int colorInt = npbe.getPortalColor();
                 Vec3d vec3d = Vec3d.unpackRgb(colorInt);
                 double color = 1.0D + (colorInt >> 16 & 0xFF) / 255.0D;
-                eff = new DustParticleEffect(new Vector3f((float)vec3d.x, (float)vec3d.y, (float)vec3d.z), (float)color);
+                eff = new DustParticleEffect(colorInt, 1.0f);
             }
 
             world.addParticle(eff, d, e, f, g, h, j);

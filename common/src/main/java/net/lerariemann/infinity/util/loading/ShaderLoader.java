@@ -57,7 +57,7 @@ public interface ShaderLoader {
             ((GameRendererAccess)(client.gameRenderer)).infinity$loadPP(InfinityMethods.getId("shaders/" + FILENAME));
             return;
         }
-        client.gameRenderer.disablePostProcessor();
+        client.gameRenderer.clearPostProcessor();
     }
 
     static void updateWorldShaderFromDisk(MinecraftClient client) throws IOException {

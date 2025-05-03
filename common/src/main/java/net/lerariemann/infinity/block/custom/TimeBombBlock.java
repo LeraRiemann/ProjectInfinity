@@ -110,7 +110,7 @@ public class TimeBombBlock extends Block {
                 }
                 else if (world instanceof ServerWorld) {
                     world.playSound(null, pos, SoundEvents.BLOCK_VAULT_REJECT_REWARDED_PLAYER, SoundCategory.BLOCKS, 1f, 1f);
-                    player.sendMessage(Text.translatable("error.infinity.timebomb.fail"));
+                    player.sendMessage(Text.translatable("error.infinity.timebomb.fail"), true);
                 }
             }
             else {

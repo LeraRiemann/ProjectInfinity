@@ -149,7 +149,7 @@ public interface InfinityMethods {
             float r = bookBoxSample(pos, -1000);
             float g = bookBoxSample(pos, 0);
             float b = bookBoxSample(pos, 1000);
-            return MathHelper.packRgb(r, g, b);
+            return MathHelper.hsvToRgb(r, g, b);
         }
         return 16777215;
     }
@@ -157,13 +157,13 @@ public interface InfinityMethods {
     static int getOverlayColorFromComponents(ItemStack stack, int layer) {
         int color = stack.getComponents().getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
         if (layer == 1) {
-            return ColorHelper.Argb.fullAlpha(color);
+            return ColorHelper.fullAlpha(color);
         }
-        return ColorHelper.Argb.fullAlpha(0xFFFFFF);
+        return ColorHelper.fullAlpha(0xFFFFFF);
     }
     static int getItemColorFromComponents(ItemStack stack, int layer) {
         int color = stack.getComponents().getOrDefault(ModComponentTypes.COLOR.get(), 0xFFFFFF);
-        return ColorHelper.Argb.fullAlpha(color);
+        return ColorHelper.fullAlpha(color);
     }
     static int getDiscColorFromComponents(ItemStack stack, int layer) {
         int color = getItemColorFromComponents(stack, layer);

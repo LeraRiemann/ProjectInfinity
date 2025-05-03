@@ -68,7 +68,7 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
             renderRainbowBackground();
         }
         else {
-            Vec3d vec3d = this.world.getSkyColor(client.gameRenderer.getCamera().getPos(), tickDelta);
+            Vec3d vec3d = Vec3d.unpackRgb(this.world.getSkyColor(client.gameRenderer.getCamera().getPos(), tickDelta));
             renderSingleColorBackground((float)vec3d.x, (float)vec3d.y, (float)vec3d.z, 1.0f);
         }
     }

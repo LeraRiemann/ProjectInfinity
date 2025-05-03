@@ -91,15 +91,15 @@ public interface WarpLogic {
         }
 
         double d = DimensionType.getCoordinateScaleFactor(player.getServerWorld().getDimension(), w.getDimension());
-        double y = MathHelper.clamp(player.getY(), w.getBottomY(), w.getTopY());
+        double y = MathHelper.clamp(player.getY(), w.getBottomY(), w.getTopYInclusive());
 
-        BlockPos blockPos2 = getPosForWarp(w.getWorldBorder().clamp(player.getX() * d, y, player.getZ() * d), w);
+        BlockPos blockPos2 = getPosForWarp(BlockPos.ofFloored(w.getWorldBorder().clamp(player.getX() * d, y, player.getZ() * d)), w);
 
         ensureSafety(w, blockPos2.down(), Blocks.OBSIDIAN);
         ensureSafety(w, blockPos2, Blocks.AIR);
         ensureSafety(w, blockPos2.up(), Blocks.AIR);
         player.teleport(w, blockPos2.getX() + 0.5, blockPos2.getY(), blockPos2.getZ() + 0.5,
-                new HashSet<>(), player.getYaw(), player.getPitch());
+                new HashSet<>(), player.getYaw(), player.getPitch(), false);
     }
 
     /**
@@ -108,7 +108,7 @@ public interface WarpLogic {
     static void respawnAlive(@Nullable ServerPlayerEntity player) {
         if (player == null) return;
         TeleportTarget targ = player.getRespawnTarget(true, TeleportTarget.NO_OP);
-        player.teleport(targ.world(), targ.pos().x, targ.pos().y, targ.pos().z, targ.yaw(), targ.pitch());
+        player.teleport(targ.world(), targ.position().x, targ.position().y, targ.position().z, new HashSet<>(), targ.yaw(), targ.pitch(), false);
     }
     /* will implement a proper end-of-time dimension later */
     static void sendToMissingno(ServerPlayerEntity player) {
@@ -143,7 +143,7 @@ public interface WarpLogic {
         int z = orig.getZ();
         if (isPosViable(x, y1, z, world, strong)) return orig;
         int y2 = y1;
-        while (y1 > world.getBottomY() || y2 < world.getTopY()) {
+        while (y1 > world.getBottomY() || y2 < world.getTopYInclusive()) {
             y1-=1;
             if (isPosViable(x, y1, z, world, strong)) return new BlockPos(x, y1, z);
             y2+=1;

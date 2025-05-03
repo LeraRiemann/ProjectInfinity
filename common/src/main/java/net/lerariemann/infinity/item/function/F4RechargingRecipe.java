@@ -22,7 +22,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
 
     public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
         boolean foundF4 = false;
-        for (int k = 0; k < craftingRecipeInput.getSize(); k++) {
+        for (int k = 0; k < craftingRecipeInput.size(); k++) {
             ItemStack itemStack = craftingRecipeInput.getStackInSlot(k);
             if (itemStack.isOf(ModItems.F4.get())) {
                 if (foundF4) return false;
@@ -36,7 +36,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
     public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup wrapperLookup) {
         ItemStack f4 = null;
         int i = 0;
-        for (int k = 0; k < craftingRecipeInput.getSize(); k++) {
+        for (int k = 0; k < craftingRecipeInput.size(); k++) {
             ItemStack itemStack = craftingRecipeInput.getStackInSlot(k);
             if (itemStack.isOf(ModItems.F4.get())) f4 = itemStack;
             else if (!itemStack.isEmpty()) i++;
@@ -59,7 +59,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
 
     @Override
     public DefaultedList<ItemStack> getRemainder(CraftingRecipeInput craftingRecipeInput) {
-        DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.getSize(), ItemStack.EMPTY);
+        DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.size(), ItemStack.EMPTY);
         ItemStack f4 = null;
         int f4pos = 0;
         for (int i = 0; i < defaultedList.size(); i++) {
@@ -88,7 +88,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
         return ModItemFunctions.F4_RECHARGING.get();
     }
 }

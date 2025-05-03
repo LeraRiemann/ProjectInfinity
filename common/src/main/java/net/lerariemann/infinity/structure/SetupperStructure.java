@@ -24,7 +24,7 @@ public class SetupperStructure extends Structure {
 
     @Override
     public Optional<StructurePosition> getStructurePosition(Context context) {
-        Structure shadow = context.dynamicRegistryManager().get(RegistryKeys.STRUCTURE).get(Identifier.of(id));
+        Structure shadow = context.dynamicRegistryManager().getOrThrow(RegistryKeys.STRUCTURE).get(Identifier.of(id));
         return shadow == null ? Optional.empty() : shadow.getStructurePosition(context);
     }
 

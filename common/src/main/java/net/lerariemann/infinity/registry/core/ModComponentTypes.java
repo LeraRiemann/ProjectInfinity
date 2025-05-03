@@ -29,7 +29,7 @@ public class ModComponentTypes {
     public static RegistrySupplier<ComponentType<String>> DYE_COLOR = registerComponentType("dye_color",
             (builder) -> builder.codec(Codec.STRING).packetCodec(PacketCodecs.STRING));
     public static RegistrySupplier<ComponentType<Integer>> CHARGE = registerComponentType("charge",
-            (builder) -> builder.codec(Codecs.NONNEGATIVE_INT).packetCodec(PacketCodecs.VAR_INT));
+            (builder) -> builder.codec(Codecs.NON_NEGATIVE_INT).packetCodec(PacketCodecs.VAR_INT));
     public static RegistrySupplier<ComponentType<Integer>> SIZE_X = registerComponentType("size_x",
             (builder) -> builder.codec(Codecs.POSITIVE_INT).packetCodec(PacketCodecs.VAR_INT));
     public static RegistrySupplier<ComponentType<Integer>> SIZE_Y = registerComponentType("size_y",

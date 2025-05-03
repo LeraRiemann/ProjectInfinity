@@ -5,6 +5,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.DyeColor;
 import net.minecraft.world.LocalDifficulty;
@@ -28,10 +29,10 @@ public abstract class SheepEntityMixin extends LivingEntityMixin implements Shea
 
     /* Makes sheep drop their wool when punched in the Classic biome. */
     @Override
-    protected void injected_sheep(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    protected void injected_sheep(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if(cir.getReturnValue() && !this.isSheared() && source.getAttacker() != null &&
                 source.getAttacker() instanceof PlayerEntity &&
-                getWorld().getBiome(getBlockPos()).getIdAsString().equals("infinity:classic")) {
+                world.getBiome(getBlockPos()).getIdAsString().equals("infinity:classic")) {
             this.sheared(SoundCategory.AMBIENT);
         }
     }

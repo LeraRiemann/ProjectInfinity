@@ -9,6 +9,7 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.recipe.*;
+import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.dynamic.Codecs;
@@ -36,15 +37,15 @@ public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecip
         return output;
     }
 
-    @Override
-    public boolean fits(int width, int height) {
-        return true;
-    }
+//    @Override
+//    public boolean fits(int width, int height) {
+//        return true;
+//    }
 
-    @Override
-    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
-        return output.copy();
-    }
+//    @Override
+//    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
+//        return output.copy();
+//    }
 
     public Ingredient getInput() {
         return input;
@@ -62,7 +63,7 @@ public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecip
         @Override
         public MapCodec<CollisionCraftingRecipe> codec() {
             return RecordCodecBuilder.mapCodec(instance -> instance.group(
-                            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input").forGetter(recipe -> recipe.input),
+                            Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.input),
                             ItemStack.VALIDATED_CODEC.fieldOf("output").forGetter(recipe -> recipe.output),
                             Codecs.NON_EMPTY_STRING.fieldOf("lore").forGetter(recipe -> recipe.lore))
                     .apply(instance, func));
@@ -92,12 +93,22 @@ public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecip
             super(input, output, lore);
         }
         @Override
-        public RecipeSerializer<?> getSerializer() {
+        public RecipeSerializer<? extends Recipe<SingleStackRecipeInput>> getSerializer() {
             return ModItemFunctions.PORTAL_CRAFTING.get();
         }
         @Override
-        public RecipeType<?> getType() {
+        public RecipeType<? extends Recipe<SingleStackRecipeInput>> getType() {
             return ModItemFunctions.PORTAL_CRAFTING_TYPE.get();
+        }
+
+        @Override
+        public IngredientPlacement getIngredientPlacement() {
+            return IngredientPlacement.NONE;
+        }
+
+        @Override
+        public RecipeBookCategory getRecipeBookCategory() {
+            return null;
         }
     }
 
@@ -106,12 +117,22 @@ public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecip
             super(input, output, lore);
         }
         @Override
-        public RecipeSerializer<?> getSerializer() {
+        public RecipeSerializer<? extends Recipe<SingleStackRecipeInput>> getSerializer() {
             return ModItemFunctions.IRIDESCENCE_CRAFTING.get();
         }
         @Override
-        public RecipeType<?> getType() {
+        public RecipeType<? extends Recipe<SingleStackRecipeInput>> getType() {
             return ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get();
+        }
+
+        @Override
+        public IngredientPlacement getIngredientPlacement() {
+            return IngredientPlacement.NONE;
+        }
+
+        @Override
+        public RecipeBookCategory getRecipeBookCategory() {
+            return null;
         }
     }
 }

@@ -32,13 +32,13 @@ public class ModStatusEffects {
 
     public static StatusEffect getAfterglowInstanceForReg() {
         return new StatusEffect(StatusEffectCategory.BENEFICIAL, 0xAA77DD)
-                .addAttributeModifier(EntityAttributes.GENERIC_ATTACK_SPEED,
+                .addAttributeModifier(EntityAttributes.ATTACK_SPEED,
                         InfinityMethods.getId("effect.afterglow"), 0.1F,
                         EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-                .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
+                .addAttributeModifier(EntityAttributes.MOVEMENT_SPEED,
                         InfinityMethods.getId("effect.afterglow"), 0.2F,
                         EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-                .addAttributeModifier(EntityAttributes.GENERIC_GRAVITY,
+                .addAttributeModifier(EntityAttributes.GRAVITY,
                         InfinityMethods.getId("effect.afterglow"), -0.1F,
                         EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }

@@ -43,7 +43,7 @@ public class RandomProvider {
 
     public Optional<Item> getPortalKeyAsItem() {
         if (portalKey.isBlank()) return Optional.empty();
-        return Registries.ITEM.getOrEmpty(Identifier.of(portalKey));
+        return Registries.ITEM.getOptionalValue(Identifier.of(portalKey));
     }
     public boolean isPortalKeyBlank() {
         return getPortalKeyAsItem().isEmpty();
@@ -256,7 +256,7 @@ public class RandomProvider {
     public void kickGhostsOut(DynamicRegistryManager s) {
         registry.remove(ConfigType.BIOMES);
         List<NbtCompound> biomes = CommonIO.readCategory(ConfigType.BIOMES);
-        Registry<Biome> reg = s.get(RegistryKeys.BIOME);
+        Registry<Biome> reg = s.getOrThrow(RegistryKeys.BIOME);
         registerCategory(ConfigType.BIOMES, biomes.stream().filter(comp -> reg.containsId(Identifier.of(comp.getString("Name")))).toList());
     }
 }

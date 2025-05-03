@@ -22,7 +22,7 @@ public class ChromaCarpetRecipe extends SpecialCraftingRecipe {
         int k_first = 0;
         boolean carpetDone = false;
         int w = craftingRecipeInput.getWidth();
-        for (int k = 0; k < craftingRecipeInput.getSize(); k++) {
+        for (int k = 0; k < craftingRecipeInput.size(); k++) {
             ItemStack itemStack = craftingRecipeInput.getStackInSlot(k);
             if (itemStack.isOf(ModItems.CHROMATIC_WOOL.get())) {
                 if (carpetDone) return false;
@@ -44,7 +44,7 @@ public class ChromaCarpetRecipe extends SpecialCraftingRecipe {
 
     public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup wrapperLookup) {
         int color = 0;
-        for (int k = 0; k < craftingRecipeInput.getSize(); k++) {
+        for (int k = 0; k < craftingRecipeInput.size(); k++) {
             ItemStack itemStack = craftingRecipeInput.getStackInSlot(k);
             if (itemStack.isOf(ModItems.CHROMATIC_WOOL.get())) {
                 color = itemStack.getOrDefault(ModComponentTypes.COLOR.get(), 0);
@@ -64,7 +64,7 @@ public class ChromaCarpetRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
         return ModItemFunctions.CARPET.get();
     }
 }

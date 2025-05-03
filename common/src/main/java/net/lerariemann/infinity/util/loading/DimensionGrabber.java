@@ -115,11 +115,11 @@ public class DimensionGrabber {
     }
 
     private <T> JsonGrabber<T> buildGrabber(Codec<T> codec, RegistryKey<Registry<T>> key) {
-        return (new JsonGrabber<>(registryInfoGetter, codec, (MutableRegistry<T>) (baseRegistryManager.get(key))));
+        return (new JsonGrabber<>(registryInfoGetter, codec, (MutableRegistry<T>) (baseRegistryManager.getOrThrow(key))));
     }
 
     private <T> void grabObjectForClient(Codec<T> codec, RegistryKey<Registry<T>> key, Identifier id, NbtCompound optiondata) {
-        if (!(baseRegistryManager.get(key).contains(RegistryKey.of(key, id)))) buildGrabber(codec, key).grab(id, optiondata, false);
+        if (!(baseRegistryManager.getOrThrow(key).contains(RegistryKey.of(key, id)))) buildGrabber(codec, key).grab(id, optiondata, false);
     }
 
     /** Freezes all the registries after the grabbing is done, since registries can't be left unfrozen when the game's running. */
@@ -142,7 +142,7 @@ public class DimensionGrabber {
     }
 
     public static <T> RegistryOps.RegistryInfo<T> createMutableInfo(MutableRegistry<T> registry) {
-        return new RegistryOps.RegistryInfo<>(registry.getReadOnlyWrapper(), registry.createMutableEntryLookup(), registry.getLifecycle());
+        return new RegistryOps.RegistryInfo<>(registry.getReadOnlyWrapper(), registry.createMutableRegistryLookup(), registry.getLifecycle());
     }
     public static <T> RegistryOps.RegistryInfo<T> createInfo(Registry<T> registry) {
         return new RegistryOps.RegistryInfo<>(registry.getReadOnlyWrapper(), registry.getTagCreatingWrapper(), registry.getLifecycle());

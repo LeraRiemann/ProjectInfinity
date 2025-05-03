@@ -25,9 +25,9 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
 
@@ -158,8 +158,8 @@ public class ModPayloads {
     public static void receiveF4DeployPayload(ServerPlayerEntity player) {
         ItemStack st = player.getStackInHand(Hand.MAIN_HAND);
         if (st.isOf(ModItems.F4.get())) {
-            TypedActionResult<ItemStack> result = F4Item.deploy(player.getServerWorld(), player, Hand.MAIN_HAND);
-            player.setStackInHand(Hand.MAIN_HAND, result.getValue());
+            ActionResult result = F4Item.deploy(player.getServerWorld(), player, Hand.MAIN_HAND);
+//            player.setStackInHand(Hand.MAIN_HAND, result);
         }
     }
 

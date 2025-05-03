@@ -49,10 +49,10 @@ public class ChaosPawn extends AbstractChessFigure {
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
-        return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0)
-                .add(EntityAttributes.GENERIC_SCALE, 0.9)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25F);
+        return HostileEntity.createHostileAttributes().add(EntityAttributes.ATTACK_DAMAGE, 5.0)
+                .add(EntityAttributes.FOLLOW_RANGE, 35.0)
+                .add(EntityAttributes.SCALE, 0.9)
+                .add(EntityAttributes.MOVEMENT_SPEED, 0.25F);
     }
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {
@@ -99,19 +99,20 @@ public class ChaosPawn extends AbstractChessFigure {
         this.dataTracker.set(special_case, nbt.getInt("case"));
     }
 
-    @Override
-    public RegistryKey<LootTable> getLootTableId() {
-        Identifier i = switch (getCase()) {
-            case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
-            case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
-            default -> {
-                boolean bl = RandomProvider.rule("pawnsCanDropIllegalItems");
-                if (bl) yield Identifier.of(""); //loot is defined in dropEquipment instead
-                else yield Identifier.of(InfinityMod.provider.randomName(random, ConfigType.LOOT_TABLES));
-            }
-        };
-        return RegistryKey.of(RegistryKeys.LOOT_TABLE, i);
-    }
+    // TODO mojang plz
+//    @Override
+//    public RegistryKey<LootTable> getLootTableId() {
+//        Identifier i = switch (getCase()) {
+//            case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
+//            case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
+//            default -> {
+//                boolean bl = RandomProvider.rule("pawnsCanDropIllegalItems");
+//                if (bl) yield Identifier.of(""); //loot is defined in dropEquipment instead
+//                else yield Identifier.of(InfinityMod.provider.randomName(random, ConfigType.LOOT_TABLES));
+//            }
+//        };
+//        return RegistryKey.of(RegistryKeys.LOOT_TABLE, i);
+//    }
 
     public static NbtCompound getColorSetup(Supplier<Integer> colorSupplier) {
         NbtCompound c = new NbtCompound();
@@ -157,7 +158,7 @@ public class ChaosPawn extends AbstractChessFigure {
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         initFromBlock(world.getBlockState(this.getBlockPos().down()));
         double i = random.nextDouble() * 40;
-        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(i);
+        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.MAX_HEALTH)).setBaseValue(i);
         this.setHealth((float)i);
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
@@ -167,10 +168,10 @@ public class ChaosPawn extends AbstractChessFigure {
         super.dropEquipment(world, source, causedByPlayer);
         if (!this.isBlackOrWhite() && RandomProvider.rule("pawnsCanDropIllegalItems")) {
             String s = InfinityMod.provider.randomName(random, ConfigType.ITEMS);
-            double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).getBaseValue() / 10;
+            double i = Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.MAX_HEALTH)).getBaseValue() / 10;
             ItemStack stack = Registries.ITEM.get(Identifier.of(s)).getDefaultStack().copyWithCount((int) (i * i));
             stack.applyComponentsFrom(ComponentMap.builder().add(DataComponentTypes.MAX_STACK_SIZE, 64).build());
-            this.dropStack(stack);
+            this.dropStack(world, stack);
         }
     }
 }

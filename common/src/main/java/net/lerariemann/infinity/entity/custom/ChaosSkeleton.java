@@ -3,6 +3,7 @@ package net.lerariemann.infinity.entity.custom;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -24,6 +25,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -112,7 +114,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
                 StatusEffect newEffect = Registries.STATUS_EFFECT.get(Identifier.of(i));
                 if (newEffect != null) {
                     ChaosSkeleton newSkeleton;
-                    if (!this.getWorld().isClient() && (newSkeleton = ModEntities.CHAOS_SKELETON.get().create(this.getWorld())) != null) {
+                    if (!this.getWorld().isClient() && (newSkeleton = ModEntities.CHAOS_SKELETON.get().create(this.getWorld(), SpawnReason.CONVERSION)) != null) {
                         ((ServerWorld) this.getWorld()).spawnParticles(ParticleTypes.HEART, this.getX(), this.getBodyY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
                         this.discard();
                         ModEntities.copy(this, newSkeleton);
@@ -130,7 +132,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
             player.setStackInHand(hand, itemStack3);
             this.playSound(SoundEvents.ITEM_BOTTLE_FILL, 1.0f, 1.0f);
             SkeletonEntity newSkeleton;
-            if (!this.getWorld().isClient() && (newSkeleton = EntityType.SKELETON.create(this.getWorld())) != null) {
+            if (!this.getWorld().isClient() && (newSkeleton = EntityType.SKELETON.create(this.getWorld(), SpawnReason.CONVERSION)) != null) {
                 this.discard();
                 ModEntities.copy(this, newSkeleton);
                 this.getWorld().spawnEntity(newSkeleton);
@@ -186,8 +188,7 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
         potionEffect.putInt("duration", duration);
         List<StatusEffectInstance> customEffects = new ArrayList<>();
         customEffects.add(StatusEffectInstance.fromNbt(potionEffect));
-        stack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Optional.empty(), Optional.of(color), customEffects));
-        stack.set(DataComponentTypes.ITEM_NAME, Text.translatable("potion.infinity.skeleton"));
+        stack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Optional.empty(), Optional.of(color), customEffects, Optional.of(I18n.translate("potion.infinity.skeleton"))));        stack.set(DataComponentTypes.ITEM_NAME, Text.translatable("potion.infinity.skeleton"));
         return stack;
     }
 
@@ -204,9 +205,14 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
         super.dropEquipment(world, source, causedByPlayer);
         ItemStack weapon = source.getWeaponStack();
-        RegistryEntry<Enchantment> looting = world.getServer().getRegistryManager().get(RegistryKeys.ENCHANTMENT).entryOf(Enchantments.LOOTING);
-        int lootingLevel = weapon == null ? 0 : weapon.getEnchantments().getLevel(looting);
+        Registry<Enchantment> optional = world.getServer().getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
+        Optional<RegistryEntry.Reference<Enchantment>> enchantment = optional.getOptional(Enchantments.LOOTING);
+        int lootingLevel = 0;
+        if (enchantment.isPresent()) {
+            RegistryEntry<Enchantment> looting = optional.getEntry(enchantment.get().value());
+            lootingLevel = weapon == null ? 0 : weapon.getEnchantments().getLevel(looting);
+        }
         int count = world.random.nextBetween(0, 2 + lootingLevel);
-        this.dropStack(getProjectileType().copyWithCount(count));
+        this.dropStack(world, getProjectileType().copyWithCount(count));
     }
 }

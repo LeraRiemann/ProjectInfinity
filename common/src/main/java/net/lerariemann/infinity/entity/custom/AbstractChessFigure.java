@@ -102,9 +102,9 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
     }
 
     @Override
-    protected void mobTick() {
-        this.tickAngerLogic((ServerWorld)this.getWorld(), false);
-        super.mobTick();
+    protected void mobTick(ServerWorld world) {
+        this.tickAngerLogic(world, false);
+        super.mobTick(world);
     }
 
     @Override
@@ -207,7 +207,7 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
 
         @Override
         public boolean canStart() {
-            return this.mob.getWorld().getGameRules().getBoolean(GameRules.UNIVERSAL_ANGER) && this.canStartUniversalAnger();
+            return this.mob.getWorld().getServer().getGameRules().getBoolean(GameRules.UNIVERSAL_ANGER) && this.canStartUniversalAnger();
         }
 
         private boolean canStartUniversalAnger() {
@@ -233,7 +233,7 @@ public abstract class AbstractChessFigure extends HostileEntity implements Anger
         }
 
         private List<? extends AbstractChessFigure> getOthersInRange() {
-            double d = this.mob.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE);
+            double d = this.mob.getAttributeValue(EntityAttributes.FOLLOW_RANGE);
             Box box = Box.from(this.mob.getPos()).expand(d, 10.0, d);
             return this.mob.getWorld().getEntitiesByClass(this.mob.getClass(), box, EntityPredicates.EXCEPT_SPECTATOR);
         }
