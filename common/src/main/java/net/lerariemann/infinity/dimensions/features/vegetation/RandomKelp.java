@@ -15,7 +15,7 @@ public class RandomKelp extends RandomisedFeature {
         return null;
     }
     public NbtCompound noiseCount() {
-        NbtCompound res = Placement.ofType("minecraft:noise_based_count");
+        NbtCompound res = Placement.ofType("noise_based_count");
         res.putDouble("noise_factor", 80.0);
         res.putDouble("noise_offset", 0.0);
         res.putInt("noise_to_count_ratio", 20 + random.nextInt(120));
