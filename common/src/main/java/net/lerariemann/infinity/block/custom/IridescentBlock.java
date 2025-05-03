@@ -1,21 +1,26 @@
 package net.lerariemann.infinity.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
+import net.lerariemann.infinity.registry.core.ModBlocks;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.*;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
+import org.jetbrains.annotations.Nullable;
 
 public class IridescentBlock extends Block {
     public static int num_models = 24;
@@ -38,26 +43,25 @@ public class IridescentBlock extends Block {
         builder.add(COLOR_OFFSET);
     }
 
-    @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return getPosBased(ctx.getWorld(), ctx.getBlockPos());
+    @Nullable
+    public BlockState toStatic(BlockState state) {
+        return ModBlocks.CHROMATIC_WOOL.get().getDefaultState();
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
-        tickView.scheduleBlockTick(pos, this, 1);
-        return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
-    }
-
-    @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        super.scheduledTick(state, world, pos, random);
-        BlockState s = getPosBased(world, pos);
-        if(!state.equals(s)) world.setBlockState(pos, s);
-    }
-
-    public BlockState getPosBased(World world, BlockPos pos) {
-        return getDefaultState().with(COLOR_OFFSET, InfinityOptions.access(world).iridMap.getColor(pos));
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.STAR_OF_LANG.get())) {
+            BlockState state1 = toStatic(state);
+            if (state1 != null) {
+                world.setBlockState(pos, state1);
+                if (world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) {
+                    cbe.setColor(state.get(COLOR_OFFSET)*(360 / num_models), 255, 255, null);
+                }
+                world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK, SoundCategory.BLOCKS, 1f, 1f);
+                return ActionResult.SUCCESS;
+            }
+        }
+        return super.onUse(state, world, pos, player, hit);
     }
 
     public static class Carpet extends IridescentBlock {
@@ -73,15 +77,20 @@ public class IridescentBlock extends Block {
         }
 
         @Override
-        protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
+        protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
             return !state.canPlaceAt(world, pos)
                     ? Blocks.AIR.getDefaultState()
-                    : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+                    : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         }
 
         @Override
         protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
             return !world.isAir(pos.down());
+        }
+
+        @Override
+        public BlockState toStatic(BlockState state) {
+            return ModBlocks.CHROMATIC_CARPET.get().getDefaultState();
         }
     }
 }

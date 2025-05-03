@@ -1,8 +1,8 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.util.CommonIO;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
@@ -34,11 +34,11 @@ public class RandomCarver {
             putScale(config, "yScale", 3.0f);
             putScale(config, "horizontal_radius_multiplier", 2.5f);
             putScale(config, "vertical_radius_multiplier", 2.5f);
-            config.put("floor_level", RandomProvider.floatProvider(random, -1.0f, 1.0f));
+            config.put("floor_level", NbtUtils.randomFloatProvider(random, -1.0f, 1.0f));
         }
         else {
             putScale(config, "yScale", 3.0f);
-            config.put("vertical_rotation", RandomProvider.floatProvider(random, -1.0f, 1.0f));
+            config.put("vertical_rotation", NbtUtils.randomFloatProvider(random, -1.0f, 1.0f));
             NbtCompound shape = new NbtCompound();
             putScale(shape, "distance_factor", 2.0f);
             putScale(shape, "thickness", 3.0f);
@@ -53,12 +53,12 @@ public class RandomCarver {
     }
 
     void putScale(NbtCompound config, String key, float bound) {
-        config.put(key, RandomProvider.floatProvider(random, 1/bound, bound));
+        config.put(key, NbtUtils.randomFloatProvider(random, 1/bound, bound));
     }
 
     NbtCompound y() {
         int min_y = parent.parent.min_y;
-        return RandomProvider.heightProvider(random, min_y, min_y + parent.parent.height, true, false);
+        return NbtUtils.randomHeightProvider(random, min_y, min_y + parent.parent.height, true, false);
     }
 
     NbtList replaceable() {

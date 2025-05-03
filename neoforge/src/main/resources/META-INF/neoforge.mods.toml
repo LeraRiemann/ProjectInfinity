@@ -35,23 +35,12 @@ versionRange = "[13.0.2,)"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.infinity]]
-modId = "fabric_api_base"
-type = "required"
-versionRange = "*"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.infinity]]
-modId = "fabric_networking_api_v1"
-type = "required"
-versionRange = "*"
-ordering = "AFTER"
-side = "BOTH"
-
 [[mixins]]
 config = "infinity.mixins.json"
 
 [modproperties.infinity]
 catalogueItemIcon="infinity:book_box"
 catalogueBackground="background.png"
+
+["lithium:options"]
+"mixin.ai.poi.fast_portals" = false

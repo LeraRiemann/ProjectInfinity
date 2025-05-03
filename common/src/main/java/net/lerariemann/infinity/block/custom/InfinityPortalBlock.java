@@ -6,17 +6,17 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.item.function.ModItemFunctions;
-import net.lerariemann.infinity.util.PortalCreationLogic;
-import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.entity.ModEntities;
+import net.lerariemann.infinity.item.PortalDataHolder;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
+import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.teleport.InfinityPortal;
+import net.lerariemann.infinity.util.teleport.PortalCreator;
+import net.lerariemann.infinity.util.core.RandomProvider;
+import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.util.WarpLogic;
-import net.lerariemann.infinity.var.ModPoi;
+import net.lerariemann.infinity.registry.core.ModItems;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.SpawnReason;
@@ -26,44 +26,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.WorldSavePath;
+import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.BlockLocating;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.TeleportTarget;
-import net.minecraft.world.World;
-import net.minecraft.world.border.WorldBorder;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.poi.PointOfInterest;
-import net.minecraft.world.poi.PointOfInterestStorage;
-import net.minecraft.world.poi.PointOfInterestTypes;
-import org.apache.logging.log4j.LogManager;
+import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider {
-    private static final Random RANDOM = new Random();
-    public static final BooleanProperty BOOP = BooleanProperty.of("boop");
-
+public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntityProvider, Boopable {
     public InfinityPortalBlock(Settings settings) {
         super(settings);
         this.setDefaultState(getDefaultState().with(BOOP, false));
@@ -72,12 +54,12 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
-        builder.add(BOOP);
+        appendBoop(builder);
     }
 
     @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new InfinityPortalBlockEntity(pos, state, Math.abs(RANDOM.nextInt()));
+        return new InfinityPortalBlockEntity(pos, state, World.OVERWORLD.getValue());
     }
 
     /**
@@ -91,36 +73,42 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof InfinityPortalBlockEntity npbe) {
                 /* If the portal is open already, nothing should happen. */
-                if (npbe.getOpen() && world_exists(s, npbe.getDimension()))
-                    return ActionResult.SUCCESS;
+                if (npbe.isOpen() && world_exists(s, npbe.getDimension()))
+                    return ActionResult.PASS;
 
                 /* If the portal key is blank, open the portal on any right-click. */
-                RandomProvider prov = RandomProvider.getProvider(s);
-                if (prov.portalKey.isBlank()) {
-                    PortalCreationLogic.openWithStatIncrease(player, s, world, pos);
+                RandomProvider prov = InfinityMod.provider;
+                Optional<Item> key = prov.getPortalKeyAsItem();
+                if (key.isEmpty()) {
+                    if (!npbe.isOpen()) PortalCreator.openWithStatIncrease(player, s, world, pos);
                 }
 
                 /* Otherwise check if we're using the correct key. If so, open. */
                 else {
                     ItemStack usedKey = player.getStackInHand(Hand.MAIN_HAND);
-                    Item correctKey = Registries.ITEM.get(Identifier.of(prov.portalKey));
-                    if (usedKey.isOf(correctKey)) {
-                        if (!player.getAbilities().creativeMode && prov.rule("consumePortalKey")) {
+                    if (usedKey.isOf(key.get())) {
+                        if (!player.getAbilities().creativeMode && RandomProvider.rule("consumePortalKey")) {
                             usedKey.decrement(1); // Consume the key if needed
                         }
-                        PortalCreationLogic.openWithStatIncrease(player, s, world, pos);
+                        PortalCreator.openWithStatIncrease(player, s, world, pos);
                     }
                 }
             }
         }
-        return ActionResult.SUCCESS;
+        return ActionResult.PASS;
     }
 
+    @Override
+    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+        if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe)
+            return ModItems.TRANSFINITE_KEY.get().withPortalData(ipbe);
+        return ItemStack.EMPTY;
+    }
 
     static boolean world_exists(MinecraftServer s, Identifier l) {
         return (!l.getNamespace().equals(InfinityMod.MOD_ID)) ||
                 s.getSavePath(WorldSavePath.DATAPACKS).resolve(l.getPath()).toFile().exists() ||
-                s.getWorld(RegistryKey.of(RegistryKeys.WORLD, l)) != null;
+                s.getWorldRegistryKeys().contains(RegistryKey.of(RegistryKeys.WORLD, l));
     }
 
     /**
@@ -161,42 +149,48 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
         }
     }
 
-    public static Optional<ComponentMap> getKeyComponents(Item item, Identifier dim, World w) {
-        if (!item.equals(ModItems.TRANSFINITE_KEY.get())) return Optional.empty();
-        Integer keycolor = WarpLogic.getKeyColorFromId(dim, w.getServer());
-        return Optional.of((ComponentMap.builder()
-                .add(ModItemFunctions.KEY_DESTINATION.get(), dim)
-                .add(ModItemFunctions.COLOR.get(), keycolor)).build());
-    }
-
     /**
      * Adds logic for portal-based recipes.
      */
     @Override
     public void onEntityCollision(BlockState state, World w, BlockPos pos, Entity entity) {
+        AtomicBoolean bl = new AtomicBoolean(false);
         if (w instanceof ServerWorld world
-                && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity npbe) {
+                && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
             MinecraftServer server = world.getServer();
-            if (entity instanceof ItemEntity e)
+            if (entity instanceof ItemEntity e) {
                 ModItemFunctions.checkCollisionRecipes(world, e, ModItemFunctions.PORTAL_CRAFTING_TYPE.get(),
-                    item -> getKeyComponents(item, npbe.getDimension(), world));
+                        item -> PortalDataHolder.addPortalComponents(item, ipbe));
+                InfinityMod.provider.getPortalKeyAsItem().ifPresent(item -> { //opening a portal by tossing a key in
+                    if (e.getStack().isOf(item)) {
+                        InfinityPortal.tryUpdateOpenStatus(ipbe, world, pos, server);
+                        if (ipbe.isOpen()) return;
+                        PlayerEntity nearestPlayer =
+                                world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
+                        PortalCreator.openWithStatIncrease(nearestPlayer, server, world, pos);
+                        e.getStack().decrement(1);
+                        e.setVelocity(e.getVelocity().multiply(-1));
+                        e.setPortalCooldown(200);
+                        bl.set(true);
+                    }
+                });
+            }
             if (entity instanceof PlayerEntity player
-                    && RandomProvider.getProvider(server).portalKey.isBlank()) {
-                ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, npbe.getDimension()));
-                if ((world1 == null) || !npbe.getOpen())
-                    PortalCreationLogic.openWithStatIncrease(player, server, world, pos);
+                    && InfinityMod.provider.isPortalKeyBlank()) {
+                ServerWorld world1 = server.getWorld(RegistryKey.of(RegistryKeys.WORLD, ipbe.getDimension()));
+                if ((world1 == null) || !ipbe.isOpen())
+                    PortalCreator.openWithStatIncrease(player, server, world, pos);
                 else {
                     Timebombable tw = (Timebombable)world1;
                     if (tw.infinity$isTimebombed() && tw.infinity$tryRestore()) {
-                        new RandomDimension(npbe.getDimension(), server);
-                        PortalCreationLogic.openWithStatIncrease(player, server, world, pos);
+                        new RandomDimension(ipbe.getDimension(), server);
+                        PortalCreator.openWithStatIncrease(player, server, world, pos);
                     }
                 }
             }
         }
-        super.onEntityCollision(state, w, pos, entity);
+        if (!bl.get()) super.onEntityCollision(state, w, pos, entity);
     }
-
     /**
      * Spawns chaos pawns in the portal.
      */
@@ -209,7 +203,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
                 pos = pos.down();
             }
             if (world.getBlockState(pos).allowsSpawning(world, pos, ModEntities.CHAOS_PAWN.get()) &&
-                    ModEntities.chaosMobsEnabled(world) &&
+                    InfinityMethods.chaosMobsEnabled() &&
                     (entity = ModEntities.CHAOS_PAWN.get().spawn(world, pos.up(), SpawnReason.STRUCTURE)) != null) {
                 entity.resetPortalCooldown();
                 BlockEntity blockEntity = world.getBlockEntity(pos.up());
@@ -228,135 +222,10 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     @Nullable @Override
     public TeleportTarget createTeleportTarget(ServerWorld worldFrom, Entity entity, BlockPos posFrom) {
         if (worldFrom.getBlockEntity(posFrom) instanceof InfinityPortalBlockEntity ipbe) {
-            Identifier id = ipbe.getDimension();
-            RegistryKey<World> keyTo = RegistryKey.of(RegistryKeys.WORLD, id);
-            ServerWorld worldTo = worldFrom.getServer().getWorld(keyTo);
-
-            if (WarpLogic.dimExists(worldTo) && ipbe.getOpen()) {
-                BlockPos targetPos = ipbe.getOtherSidePos();
-                if (isPosValid(worldTo, targetPos)) return getExistingTarget(worldTo, targetPos, entity);
-                return findNewTeleportTarget(worldFrom, posFrom, worldTo, entity);
-            }
+            return (new InfinityPortal(ipbe, worldFrom, posFrom)).getTeleportTarget(entity);
         }
-        return getExistingTarget(worldFrom, posFrom, entity); //if something goes wrong, don't teleport anywhere
-    }
-
-    /**
-     * Checks that synchronisation isn't broken.
-     */
-    static boolean isPosValid(ServerWorld worldTo, BlockPos posTo) {
-        if (!WarpLogic.dimExists(worldTo)) return false;
-        return ((posTo != null) && (worldTo.getBlockState(posTo).getBlock() instanceof NetherPortalBlock));
-    }
-
-    /**
-     * Teleporting to already recorded coordinates.
-     */
-    public static TeleportTarget getExistingTarget(ServerWorld worldTo, BlockPos posTo, Entity teleportingEntity) {
-        BlockState blockState = worldTo.getBlockState(posTo);
-        BlockLocating.Rectangle rectangle = BlockLocating.getLargestRectangle(
-                posTo, blockState.get(Properties.HORIZONTAL_AXIS),
-                21, Direction.Axis.Y, 21,
-                posx -> worldTo.getBlockState(posx) == blockState
-        );
-        return NetherPortalBlock.getExitPortalTarget(teleportingEntity, posTo, rectangle, worldTo,
-                TeleportTarget.SEND_TRAVEL_THROUGH_PORTAL_PACKET.then(entityx -> entityx.addPortalChunkTicketAt(posTo)));
-    }
-
-    /**
-     * Filter for portal blocks except infinity portals of other destinations.
-     */
-    public static boolean isValidDestinationWeak(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
-        return (worldTo.getBlockState(posTo).isOf(Blocks.NETHER_PORTAL)) || isValidDestinationStrong(worldFrom, worldTo, posTo);
-    }
-
-    /**
-     * Filter for infinity portals of the correct destination.
-     */
-    public static boolean isValidDestinationStrong(ServerWorld worldFrom, ServerWorld worldTo, BlockPos posTo) {
-        if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe) {
-            return ipbe.getDimension().toString().equals(worldFrom.getRegistryKey().getValue().toString());
-        }
-        return false;
-    }
-
-    public static TeleportTarget findNewTeleportTarget(ServerWorld worldFrom, BlockPos posFrom, ServerWorld worldTo, Entity teleportingEntity) {
-        WorldBorder wb = worldTo.getWorldBorder();
-        double d = DimensionType.getCoordinateScaleFactor(worldFrom.getDimension(), worldTo.getDimension());
-        BlockPos originOfTesting = wb.clamp(posFrom.getX() * d, posFrom.getY(), posFrom.getZ() * d);
-        int radiusOfTesting = 128;
-
-        PointOfInterestStorage poiStorage = worldTo.getPointOfInterestStorage();
-        poiStorage.preloadChunks(worldTo, originOfTesting, radiusOfTesting);
-        Set<BlockPos> allPortalsInRange = poiStorage.getInSquare(poiType ->
-                poiType.matchesKey(PointOfInterestTypes.NETHER_PORTAL) || poiType.matchesKey(ModPoi.NEITHER_PORTAL_KEY),
-                originOfTesting, radiusOfTesting, PointOfInterestStorage.OccupationStatus.ANY)
-                .map(PointOfInterest::getPos)
-                .filter(wb::contains)
-                .collect(Collectors.toSet());
-        Set<BlockPos> matchingPortalsInRange = allPortalsInRange
-                .stream()
-                .filter(pos -> isValidDestinationStrong(worldFrom, worldTo, pos))
-                .collect(Collectors.toSet());
-        if (matchingPortalsInRange.isEmpty())
-            matchingPortalsInRange = allPortalsInRange
-                    .stream()
-                    .filter(pos -> isValidDestinationWeak(worldFrom, worldTo, pos))
-                    .collect(Collectors.toSet());
-
-        Optional<BlockPos> optional = matchingPortalsInRange.stream()
-                .min(Comparator.comparingDouble(posTo -> posTo.getSquaredDistance(originOfTesting)));
-        BlockLocating.Rectangle rectangleTo;
-        TeleportTarget.PostDimensionTransition postDimensionTransition;
-        BlockPos posTo;
-
-        if (optional.isPresent()) {
-            posTo = optional.get();
-            BlockState blockState = worldTo.getBlockState(posTo);
-            rectangleTo = BlockLocating.getLargestRectangle(
-                    posTo,
-                    blockState.get(Properties.HORIZONTAL_AXIS),
-                    21, Direction.Axis.Y, 21,
-                    posx -> worldTo.getBlockState(posx) == blockState
-            );
-            postDimensionTransition = TeleportTarget.SEND_TRAVEL_THROUGH_PORTAL_PACKET
-                    .then(entityx -> entityx.addPortalChunkTicketAt(posTo));
-        }
-
-        else {
-            Direction.Axis axis = worldFrom.getBlockState(posFrom).getOrEmpty(AXIS).orElse(Direction.Axis.X);
-            Optional<BlockLocating.Rectangle> optional2 = worldTo.getPortalForcer().createPortal(originOfTesting, axis);
-            if (optional2.isEmpty()) {
-                LogManager.getLogger().error("Unable to create a portal, likely target out of worldborder");
-                return getExistingTarget(worldFrom, posFrom, teleportingEntity);
-            }
-            rectangleTo = optional2.get();
-            posTo = rectangleTo.lowerLeft;
-            postDimensionTransition = TeleportTarget.SEND_TRAVEL_THROUGH_PORTAL_PACKET
-                    .then(TeleportTarget.ADD_PORTAL_CHUNK_TICKET);
-        }
-
-        trySyncPortals(worldFrom, posFrom, worldTo, posTo);
-
-        return getExitPortalTarget(teleportingEntity, posFrom, rectangleTo, worldTo, postDimensionTransition);
-    }
-
-    static void trySyncPortals(ServerWorld worldFrom, BlockPos posFrom, ServerWorld worldTo, BlockPos posTo) {
-        if (!(worldTo.getBlockState(posTo).getBlock() instanceof NetherPortalBlock)) return;
-
-        PortalCreationLogic.PortalModifierUnion otherSideModifier = new PortalCreationLogic.PortalModifierUnion();
-        Identifier idFrom = worldFrom.getRegistryKey().getValue();
-
-        if (worldTo.getBlockEntity(posTo) instanceof InfinityPortalBlockEntity ipbe) {
-            if (ipbe.getDimension() != idFrom || isPosValid(worldFrom, ipbe.getOtherSidePos())) return; //don't resync what's already synced
-        }
-        else {
-            otherSideModifier = PortalCreationLogic.forInitialSetupping(worldTo, posTo, idFrom, true); //make it an infinity portal while you're at it
-        }
-
-        otherSideModifier.addModifier(ipbe1 -> ipbe1.setBlockPos(posFrom));
-        PortalCreationLogic.modifyPortalRecursive(worldFrom, posFrom,
-                new PortalCreationLogic.PortalModifier(ipbe -> ipbe.setBlockPos(posTo)));
-        PortalCreationLogic.modifyPortalRecursive(worldTo, posTo, otherSideModifier);
+        else if (entity instanceof ServerPlayerEntity player)
+            InfinityMethods.sendUnexpectedError(player, "portal");
+        return InfinityPortal.emptyTarget(entity); //if anything goes wrong, don't teleport anywhere
     }
 }

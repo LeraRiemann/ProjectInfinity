@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.access.WorldRendererAccess;
 import net.lerariemann.infinity.options.InfinityOptions;
 import net.lerariemann.infinity.options.SkyRenderer;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gl.ShaderProgramKeys;
@@ -45,7 +46,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     @Inject(method = "renderSky",
             at=@At("HEAD"), cancellable=true)
     private void injected4(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
-        if (!infinity$options().isEmpty()) {
+        if (InfinityMethods.isInfinity(world)) {
             infinity$renderEntireSky(matrix4f, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
             ci.cancel();
         }
@@ -72,10 +73,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         SkyRenderer renderer = new SkyRenderer(infinity$options(), client, world,
                 matrices, tickDelta, projectionMatrix,
                 lightSkyBuffer, starsBuffer);
-        if (renderer.testAndRenderNonOverworldySkies()) return;
-        renderer.setupOverworldySky();
-        renderer.renderAllCelestialBodies(fogCallback);
-        renderer.finish();
+        renderer.render(fogCallback);
     }
     @Unique
     private InfinityOptions infinity$options() {

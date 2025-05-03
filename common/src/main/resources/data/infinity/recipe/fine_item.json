@@ -5,13 +5,13 @@
     "G": {
       "item": "minecraft:grass_block"
     },
-    "M": {
-      "item": "infinity:white_matter"
+    "S": {
+      "item": "infinity:star_of_lang"
     }
   },
   "pattern": [
     "GGG",
-    "GMG",
+    "GSG",
     "GGG"
   ],
   "result": {

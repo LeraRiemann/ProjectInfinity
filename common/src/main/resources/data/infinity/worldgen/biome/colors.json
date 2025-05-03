@@ -29,7 +29,7 @@
         "type": "infinity:chaos_pawn",
         "maxCount": 4,
         "minCount": 4,
-        "weight": 100
+        "weight": 1
       }
     ],
     "creature": [
@@ -37,7 +37,15 @@
         "type": "minecraft:sheep",
         "maxCount": 4,
         "minCount": 4,
-        "weight": 2
+        "weight": 1
+      }
+    ],
+    "water_ambient": [
+      {
+        "type": "minecraft:tropical_fish",
+        "maxCount": 8,
+        "minCount": 8,
+        "weight": 1
       }
     ]
   },

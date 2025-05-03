@@ -1,21 +1,29 @@
 package net.lerariemann.infinity.mixin.options;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.minecraft.block.BlockState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.RandomSequencesState;
 import net.minecraft.util.profiler.Profiler;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.MutableWorldProperties;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.chunk.WorldChunk;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.level.ServerWorldProperties;
@@ -26,7 +34,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -60,9 +67,27 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
         if (InfinityMethods.isInfinity(getRegistryKey()) && infinity$timebombProgress > 0) infinity$timebombProgress++;
     }
 
-    @Redirect(method="tickWeather", at=@At(value="INVOKE", target="Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
-    private boolean injected3(GameRules instance, GameRules.Key<GameRules.BooleanRule> rule) {
-        return instance.getBoolean(rule) && !InfinityMethods.isInfinity(getRegistryKey());
+    /** InfDims share the weather with the Overworld, but if we don't do this, they will also tick it, causing the weather cycle to be very rapid */
+    @ModifyExpressionValue(method="tickWeather", at=@At(value="INVOKE", target="Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
+    private boolean mev(boolean original) {
+        return original && !InfinityMethods.isInfinity(getRegistryKey());
+    }
+
+    @ModifyExpressionValue(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/ChunkSection;hasRandomTicks()Z"))
+    boolean mev2(boolean original, @Local ChunkSection cs) {
+        return original || (infinity$options.isHaunted() && !cs.isEmpty());
+    }
+
+    @Inject(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/fluid/FluidState;hasRandomTicks()Z"))
+    void inj(WorldChunk chunk, int randomTickSpeed, CallbackInfo ci, @Local BlockState bs, @Local BlockPos blockPos2, @Local FluidState fs) {
+        if (infinity$options.isHaunted() && random.nextInt(200) < (int)(Math.floor(getMoonSize() * 4))) {
+            if (bs.isAir()) {
+                setBlockState(blockPos2, ModBlocks.HAUNTED_AIR.get().getDefaultState());
+            }
+            else if (bs.contains(Properties.NOTE)) {
+                setBlockState(blockPos2, bs.with(Properties.NOTE, random.nextInt(24)));
+            }
+        }
     }
 
     @Override
@@ -73,7 +98,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     }
     @Override
     public boolean infinity$tryRestore() {
-        if(InfinityMethods.isInfinity(getRegistryKey()) && (infinity$timebombProgress > Timebombable.cooldownTicks)) {
+        if(InfinityMethods.isInfinity(getRegistryKey()) && (infinity$timebombProgress > Timebombable.getCooldownTicks())) {
             infinity$timebombProgress = 0;
             return true;
         }

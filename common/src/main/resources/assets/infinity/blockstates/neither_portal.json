@@ -1,10 +1,10 @@
 {
   "variants": {
     "axis=x": {
-      "model": "infinity:block/neither_portal_ns"
+      "model": "infinity:block/portal_ns"
     },
     "axis=z": {
-      "model": "infinity:block/neither_portal_ew"
+      "model": "infinity:block/portal_ew"
     }
   }
 }

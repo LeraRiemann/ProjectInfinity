@@ -1,24 +1,28 @@
 package net.lerariemann.infinity.item.function;
 
+import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.recipe.*;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
-
-import java.util.function.BiFunction;
 
 public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecipeInput> {
     private final Ingredient input;
     private final ItemStack output;
+    private final String lore;
 
-    public CollisionCraftingRecipe(Ingredient input, ItemStack output) {
+    public CollisionCraftingRecipe(Ingredient input, ItemStack output, String lore) {
         this.input = input;
         this.output = output;
+        this.lore = lore;
     }
 
     @Override
@@ -42,24 +46,25 @@ public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecip
         return output.copy();
     }
 
-
     public Ingredient getInput() {
         return input;
     }
+    public String getLore() { return lore; }
 
     public enum Type implements RecipeType<CollisionCraftingRecipe> {
         PORTAL,
         IRIDESCENCE
     }
 
-    public record Serializer(BiFunction<Ingredient, ItemStack, CollisionCraftingRecipe> func)
+    public record Serializer(Function3<Ingredient, ItemStack, String, CollisionCraftingRecipe> func)
             implements RecipeSerializer<CollisionCraftingRecipe> {
 
         @Override
         public MapCodec<CollisionCraftingRecipe> codec() {
             return RecordCodecBuilder.mapCodec(instance -> instance.group(
                             Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input").forGetter(recipe -> recipe.input),
-                            ItemStack.VALIDATED_CODEC.fieldOf("output").forGetter(recipe -> recipe.output))
+                            ItemStack.VALIDATED_CODEC.fieldOf("output").forGetter(recipe -> recipe.output),
+                            Codecs.NON_EMPTY_STRING.fieldOf("lore").forGetter(recipe -> recipe.lore))
                     .apply(instance, func));
         }
 
@@ -71,18 +76,20 @@ public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecip
         private CollisionCraftingRecipe read(RegistryByteBuf buf) {
             Ingredient input = Ingredient.PACKET_CODEC.decode(buf);
             ItemStack output = ItemStack.PACKET_CODEC.decode(buf);
-            return func.apply(input, output);
+            String str = PacketCodecs.STRING.decode(buf);
+            return func.apply(input, output, str);
         }
 
         private void write(RegistryByteBuf buf, CollisionCraftingRecipe recipe) {
             Ingredient.PACKET_CODEC.encode(buf, recipe.input);
             ItemStack.PACKET_CODEC.encode(buf, recipe.output);
+            PacketCodecs.STRING.encode(buf, recipe.lore);
         }
     }
 
     public static class OfPortal extends CollisionCraftingRecipe {
-        public OfPortal(Ingredient input, ItemStack output) {
-            super(input, output);
+        public OfPortal(Ingredient input, ItemStack output, String lore) {
+            super(input, output, lore);
         }
         @Override
         public RecipeSerializer<?> getSerializer() {
@@ -95,8 +102,8 @@ public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecip
     }
 
     public static class OfIridescence extends CollisionCraftingRecipe {
-        public OfIridescence(Ingredient input, ItemStack output) {
-            super(input, output);
+        public OfIridescence(Ingredient input, ItemStack output, String lore) {
+            super(input, output, lore);
         }
         @Override
         public RecipeSerializer<?> getSerializer() {

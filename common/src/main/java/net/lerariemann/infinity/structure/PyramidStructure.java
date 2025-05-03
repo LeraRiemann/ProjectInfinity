@@ -3,6 +3,7 @@ package net.lerariemann.infinity.structure;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.lerariemann.infinity.registry.core.ModStructureTypes;
 import net.minecraft.structure.StructurePiecesCollector;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
@@ -34,7 +35,7 @@ public class PyramidStructure extends Structure {
     }
 
     private void addPieces(StructurePiecesCollector collector, Structure.Context context) {
-        collector.addPiece(new PyramidGenerator(context, top_y, bottom_y, block));
+        collector.addPiece(PyramidGenerator.of(context, top_y, bottom_y, block));
     }
 
     @Override

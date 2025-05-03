@@ -1,5 +1,5 @@
 plugins {
-    id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply false
+    id 'dev.architectury.loom' version '1.9-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
     id "io.github.pacifistmc.forgix" version "1.2.9-local.7"
@@ -13,6 +13,7 @@ architectury {
 allprojects {
     group = maven_group
     version = "$mod_version+$minecraft_version"
+    if (tbversion != "0") version = version + "-tb$tbversion"
 }
 
 forgix {
@@ -57,6 +58,17 @@ subprojects {
         // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
         // See https://docs.gradle.org/current/userguide/declaring_repositories.html
         // for more information about repositories.
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Modrinth"
+                    url = "https://api.modrinth.com/maven"
+                }
+            }
+            filter {
+                includeGroup "maven.modrinth"
+            }
+        }
     }
 
     dependencies {

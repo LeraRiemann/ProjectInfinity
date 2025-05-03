@@ -1,7 +1,8 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.util.RandomProvider;
+import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,13 +26,9 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColorHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Color;
-import java.util.Objects;
 import java.util.Random;
 
 public class ChaosSlime extends SlimeEntity implements TintableEntity {
@@ -44,19 +41,7 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
 
     @Override
     public int getColorNamed() {
-        if (hasCustomName()) {
-            String s = getName().getString();
-            if ("jeb_".equals(s)) {
-                return TintableEntity.getColorJeb(age, getId());
-            }
-            if ("hue".equals(s)) {
-                int n = age + 400*getId();
-                float hue = n / 400.f;
-                hue = hue - (int) hue;
-                return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
-            }
-        }
-        return -1;
+        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : -1;
     }
 
     @Override
@@ -67,15 +52,14 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
-        return HostileEntity.createHostileAttributes().add(EntityAttributes.MOVEMENT_SPEED, 0.2f);
+        return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f);
     }
 
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
-        RandomProvider p = RandomProvider.getProvider(Objects.requireNonNull(world.getServer()));
         Random r = new Random();
-        this.dataTracker.set(core, Registries.BLOCK.get(Identifier.of(p.randomName(r, "all_blocks"))).getDefaultState());
+        this.dataTracker.set(core, Registries.BLOCK.get(Identifier.of(InfinityMod.provider.randomName(r, ConfigType.ALL_BLOCKS))).getDefaultState());
         this.dataTracker.set(color, r.nextInt(16777216));
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
@@ -88,27 +72,24 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     public void setColor(int c) {
         this.dataTracker.set(color, c);
     }
+    @Override
+    public int getColor() {
+        return this.dataTracker.get(color);
+    }
+
     public void setCore(BlockState c) {
         this.dataTracker.set(core, c);
     }
-    @Override
-    public int getColorForRender() {
-        int v = getColorNamed();
-        if (v!=-1) return v;
-        return ColorHelper.getArgb(Vec3d.unpackRgb(this.dataTracker.get(color)));
-    }
-
     public BlockState getCore() {
         return this.dataTracker.get(core);
     }
-
     public BlockState getCoreForChild() {
         return Blocks.AIR.getDefaultState();
     }
 
     @Override
     protected ParticleEffect getParticles() {
-        return new DustParticleEffect(this.getColorForRender(), 1.0f);
+        return new DustParticleEffect(particleColorFromInt(this.getColorForRender()), 1.0f);
     }
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
@@ -127,14 +108,14 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
         return this.getCore().getSoundGroup().getFallSound();
     }
     @Override
-    public RegistryKey<LootTable> getLootTableKey() {
+    public RegistryKey<LootTable> getLootTableId() {
         return this.getCore().getBlock().getLootTableKey();
     }
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putInt("color", this.dataTracker.get(color));
+        nbt.putInt("color", getColor());
         nbt.putString("core", Registries.BLOCK.getId(this.getCore().getBlock()).toString());
     }
 
@@ -147,7 +128,7 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     }
 
     public static boolean canSpawn(EntityType<ChaosSlime> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        if (world.getDifficulty() != Difficulty.PEACEFUL && ModEntities.chaosMobsEnabled(world)) {
+        if (world.getDifficulty() != Difficulty.PEACEFUL && InfinityMethods.chaosMobsEnabled()) {
             if (!(world instanceof StructureWorldAccess)) {
                 return false;
             }

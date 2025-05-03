@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions;
 
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -40,7 +41,7 @@ public class RandomStructureSet {
         NbtCompound res = new NbtCompound();
         res.putInt("salt", random.nextInt(Integer.MAX_VALUE));
         res.putFloat("frequency", random.nextFloat());
-        String type = parent.parent.PROVIDER.randomName(random, "structure_placement_types");
+        String type = parent.parent.PROVIDER.randomName(random, ConfigType.STRUCTURE_PLACEMENT_TYPES);
         res.putString("type", type);
         switch (type) {
             case "minecraft:random_spread" -> {

@@ -1,17 +1,27 @@
 {
-  "infinity_version": 2001005,
+  "infinity_version": 2004005,
   "gameRules": {
     "runtimeGenerationEnabled": true,
-    "returnPortalsEnabled": true,
     "longArithmeticEnabled": false,
     "forceSolidSurface": false,
     "chaosMobsEnabled": true,
     "consumePortalKey": true,
-    "disabledUntilReview": true,
-    "maxBiomeCount": 6
+    "randomizeAllNetherPortals": false,
+    "pawnsCanDropIllegalItems": false,
+    "useSoundSyncPackets": true,
+    "enforceModLoadedChecks": true,
+    "maxBiomeCount": 6,
+    "maxDimensionScale": 0,
+    "avgDimensionHeight": 256,
+    "iridescenceContactLevel": 0,
+    "iridescencePotionLevel": 4,
+    "iridescenceCooldownDuration": 168,
+    "afterglowDuration": 24,
+    "resetChargeCooldown": 6000
   },
+  "disabledDimensions": ["ant", "bash", "checkerboard",
+    "missing", "notes", "perfection", "terminal"],
   "portalKey": "",
-  "altarKey": "minecraft:diamond",
   "salt": "",
   "rootChances": {
     "dimension_type": {
@@ -56,17 +66,19 @@
       "geode": 0.5,
       "rock": 0.33,
       "dungeon": 1.0,
+      "fossil": 0.2,
       "end_spikes": 0.2,
       "end_gateway": 0.05,
       "delta": 0.2,
       "columns": 0.2,
-      "crops": 0.2,
+      "springs": 0.5,
       "blobs": 0.33,
+      "well": 0.2,
       "ceiling_blobs": 0.5,
       "vegetation": 1.0,
       "surface_patch": 0.5,
       "floating_patch": 0.1,
-      "random_flowers": 1.0
+      "water_plants": 0.75
     },
     "features_rules": {
       "generate_vanilla_features": 0.5,

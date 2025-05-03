@@ -2,10 +2,11 @@ package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.options.RandomInfinityOptions;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.InfinityMethods;
-import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -48,9 +49,9 @@ public class RandomDimension {
 
     public RandomDimension(Identifier id, MinecraftServer server) {
         this.server = server;
-        PROVIDER = RandomProvider.getProvider(server);
+        PROVIDER = InfinityMod.provider;
         identifier = id;
-        numericId = WarpLogic.getNumericFromId(identifier, server);
+        numericId = InfinityMethods.getNumericFromId(identifier);
         random = new Random(numericId);
         initializeStorage();
         /* Code for easter dimensions */
@@ -96,11 +97,10 @@ public class RandomDimension {
     }
 
     public void genBasics() {
-        type_alike = PROVIDER.randomName(random, "noise_presets");
-        min_y = 16*Math.min(0, (int)Math.floor(random.nextGaussian(-4.0, 4.0)));
-        if (!isOverworldLike()) min_y = Math.max(min_y, -48);
-        int max_y = 16*Math.max(1, Math.min(125, (int)Math.floor(random.nextGaussian(16.0, 4.0))));
-        if (!isOverworldLike()) max_y = Math.max(max_y, 80);
+        type_alike = PROVIDER.randomName(random, ConfigType.NOISE_PRESETS);
+        min_y = 16*Math.clamp((int)Math.floor(random.nextExponential() * 2), isOverworldLike() ? -125 : -3, 0);
+        int avgHeight = Math.clamp(RandomProvider.ruleInt("avgDimensionHeight"), 64, 1024);
+        int max_y = 16*Math.clamp((int)Math.floor(random.nextGaussian(avgHeight/16.0, avgHeight/64.0)), isOverworldLike() ? 1 : 5, 125);
         randomiseblocks = PROVIDER.roll(random, "randomise_blocks");
         int sea_level_default = 63;
         if (!isOverworldLike()) sea_level_default = switch(type_alike) {
@@ -112,10 +112,14 @@ public class RandomDimension {
         sea_level = randomiseblocks ? (int)Math.floor(random.nextGaussian(sea_level_default, 8)) : sea_level_default;
         max_y = Math.max(max_y, 16 * (int) (1 + Math.floor(sea_level / 16.0)));
         height = max_y - min_y;
-        default_block = randomiseblocks ? PROVIDER.randomBlock(random, "full_blocks_worldgen") : RandomProvider.Block(defaultblock("minecraft:stone"));
-        default_fluid = randomiseblocks ? PROVIDER.randomFluid(random) : RandomProvider.Fluid(defaultfluid());
+        default_block = randomiseblocks ?
+                PROVIDER.randomElement(random, ConfigType.FULL_BLOCKS_WG) :
+                NbtUtils.nameToElement(getDefaultBlock("minecraft:stone"));
+        default_fluid = randomiseblocks ?
+                PROVIDER.randomElement(random, ConfigType.FLUIDS) :
+                NbtUtils.nameToFluid(getDefaultFluid());
         deepslate = Arrays.stream((new String[]{"minecraft:overworld", "minecraft:amplified", "infinity:whack"})).toList().contains(type_alike) ?
-                RandomProvider.Block("minecraft:deepslate") : default_block;
+                NbtUtils.nameToElement("minecraft:deepslate") : default_block;
     }
 
     void wrap_up(boolean isEasterDim) {
@@ -125,7 +129,7 @@ public class RandomDimension {
         if (!(Paths.get(getRootPath() + "/pack.mcmeta")).toFile().exists()) CommonIO.write(packMcmeta(), getRootPath(), "pack.mcmeta");
     }
 
-    String defaultblock(String s) {
+    String getDefaultBlock(String fallback) {
         switch(type_alike) {
             case "minecraft:end" -> {
                 return "minecraft:end_stone";
@@ -134,12 +138,11 @@ public class RandomDimension {
                 return "minecraft:netherrack";
             }
             default -> {
-                return s;
+                return fallback;
             }
         }
     }
-
-    String defaultfluid() {
+    String getDefaultFluid() {
         switch(type_alike) {
             case "minecraft:end" -> {
                 return "minecraft:air";
@@ -154,7 +157,7 @@ public class RandomDimension {
     }
 
     public <T> boolean doesNotContain(RegistryKey<? extends Registry<T>> key, String name) {
-        return !(server.getRegistryManager().getOrThrow(key).contains(RegistryKey.of(key, InfinityMethods.getId(name))));
+        return !(server.getRegistryManager().get(key).contains(RegistryKey.of(key, InfinityMethods.getId(name))));
     }
 
     boolean isOverworldLike() {
@@ -177,7 +180,7 @@ public class RandomDimension {
 
     NbtCompound randomDimensionGenerator() {
         NbtCompound res = new NbtCompound();
-        String type = PROVIDER.randomName(random, "generator_types");
+        String type = PROVIDER.randomName(random, ConfigType.GENERATOR_TYPES);
         res.putString("type", type);
         switch (type) {
             case "minecraft:flat" -> {
@@ -187,6 +190,7 @@ public class RandomDimension {
             case "minecraft:noise" -> {
                 res.put("biome_source", randomBiomeSource());
                 res.putString("settings", randomNoiseSettings());
+                res.putLong("seed", numericId ^ server.getOverworld().getSeed());
                 return res;
             }
             default -> {
@@ -212,28 +216,28 @@ public class RandomDimension {
         for (int i = 0; i < layer_count; i++) {
             int layerHeight = Math.min(heightLeft, 1 + (int) Math.floor(random.nextExponential() * 4));
             heightLeft -= layerHeight;
-            block = PROVIDER.randomName(random, "full_blocks_worldgen");
+            block = PROVIDER.randomName(random, ConfigType.FULL_BLOCKS_WG);
             layers.add(superflatLayer(layerHeight, block));
             if (heightLeft <= 1) {
                 break;
             }
         }
         if (random.nextBoolean()) {
-            block = PROVIDER.randomName(random, "top_blocks");
+            block = PROVIDER.randomName(random, ConfigType.TOP_BLOCKS);
             layers.add(superflatLayer(1, block));
         }
         res.putString("biome", biome);
         res.put("layers", layers);
         res.putBoolean("lakes", random.nextBoolean());
         res.putBoolean("features", random.nextBoolean());
-        top_blocks.put(biome, RandomProvider.Block(block));
-        underwater.put(biome, RandomProvider.Block(block));
+        top_blocks.put(biome, NbtUtils.nameToElement(block));
+        underwater.put(biome, NbtUtils.nameToElement(block));
         return res;
     }
 
     NbtCompound randomBiomeSource() {
         NbtCompound res = new NbtCompound();
-        String type = PROVIDER.randomName(random, "biome_source_types");
+        String type = PROVIDER.randomName(random, ConfigType.BIOME_SOURCE_TYPES);
         res.putString("type",type);
         switch (type) {
             case "minecraft:the_end" -> {
@@ -245,7 +249,7 @@ public class RandomDimension {
                 return res;
             }
             case "minecraft:multi_noise" -> {
-                String preset = PROVIDER.randomName(random, "multinoise_presets");
+                String preset = PROVIDER.randomName(random, ConfigType.MULTINOISE_PRESETS);
                 if (preset.equals("none") || hasCeiling()) res.put("biomes", randomBiomes());
                 else {
                     res.putString("preset", preset.replace("_", ":"));
@@ -260,7 +264,7 @@ public class RandomDimension {
 
     void addPresetBiomes(String preset) {
         TagKey<Biome> tag = preset.equals("overworld") ? BiomeTags.IS_OVERWORLD : BiomeTags.IS_NETHER;
-        Registry<Biome> r = server.getRegistryManager().getOrThrow(RegistryKeys.BIOME);
+        Registry<Biome> r = server.getRegistryManager().get(RegistryKeys.BIOME);
         r.getKeys().forEach(key -> {
             if (!Objects.equals(key.getValue().getNamespace(), "infinity")) {
                 if (r.get(key) != null && r.getEntry(r.get(key)).isIn(tag)) vanilla_biomes.add(key.getValue().toString());
@@ -268,18 +272,21 @@ public class RandomDimension {
         });
     }
 
+    int getBiomeCount() {
+        return random.nextInt(2, Math.clamp(RandomProvider.ruleInt("maxBiomeCount"), 2, 10));
+    }
+
     NbtList randomBiomesCheckerboard() {
         NbtList res = new NbtList();
-        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.gameRulesInt.get("maxBiomeCount")));
+        int biome_count = getBiomeCount();
         for (int i = 0; i < biome_count; i++) {
             res.add(NbtString.of(randomBiome()));
         }
         return res;
     }
-
     NbtList randomBiomes() {
         NbtList res = new NbtList();
-        int biome_count = random.nextInt(2, Math.max(2, PROVIDER.gameRulesInt.get("maxBiomeCount")));
+        int biome_count = getBiomeCount();
         for (int i = 0; i < biome_count; i++) {
             NbtCompound element = new NbtCompound();
             element.putString("biome", randomBiome());
@@ -295,28 +302,28 @@ public class RandomDimension {
         res.put("humidity", randomMultiNoiseParameter());
         res.put("continentalness", randomMultiNoiseParameter());
         res.put("erosion", randomMultiNoiseParameter());
-        res.put("weirdness", randomMultiNoiseParameter());
-        res.put("depth", randomMultiNoiseParameter());
-        res.put("offset", NbtDouble.of(random.nextDouble()));
+        res.put("weirdness", NbtDouble.of(0));
+        res.put("depth", NbtDouble.of(0));
+        res.put("offset", NbtDouble.of(0));
         return res;
     }
 
     NbtElement randomMultiNoiseParameter() {
-        if (random.nextBoolean()) {
-            NbtList res = new NbtList();
+        /*if (random.nextBoolean()) {
+            NbtCompound res = new NbtCompound();
             double a = (random.nextFloat()-0.5)*2;
             double b = (random.nextFloat()-0.5)*2;
-            res.add(NbtFloat.of((float)Math.min(a, b)));
-            res.add(NbtFloat.of((float)Math.max(a, b)));
+            res.putFloat("min", (float)Math.min(a, b));
+            res.putFloat("max", (float)Math.max(a, b));
             return res;
-        }
+        }*/
         return NbtDouble.of((random.nextDouble()-0.5)*2);
     }
 
     String randomBiome() {
         String biome;
         if (!hasCeiling() && !PROVIDER.roll(random, "use_random_biome")) {
-            biome = PROVIDER.randomName(random, "biomes");
+            biome = PROVIDER.randomName(random, ConfigType.BIOMES);
             vanilla_biomes.add(biome);
         }
         else {

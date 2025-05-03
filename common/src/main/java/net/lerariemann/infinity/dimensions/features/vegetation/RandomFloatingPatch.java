@@ -1,0 +1,34 @@
+package net.lerariemann.infinity.dimensions.features.vegetation;
+
+import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.dimensions.features.Placement;
+import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
+import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.dimensions.RandomFeaturesList;
+import net.lerariemann.infinity.util.core.ConfigType;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+
+public class RandomFloatingPatch extends RandomisedFeature {
+    public RandomFloatingPatch(RandomFeaturesList parent) {
+        super(parent, "patch_floating");
+        id = "random_patch";
+        savePlacement();
+    }
+
+    public NbtList placement() {
+        int a = daddy.min_y + random.nextInt(daddy.height);
+        int b = daddy.min_y + random.nextInt(daddy.height);
+        return Placement.floating(random.nextInt(1,8), a, b);
+    }
+
+    public NbtCompound feature() {
+        int xz_spread = 2 + random.nextInt(14);
+        int y_spread = 1 + random.nextInt(7);
+        int tries_max = (xz_spread+1)*(xz_spread+1);
+        NbtCompound config = CommonIO.readAndFormat(InfinityMod.utilPath + "/preplacements/floatingpatch.json",
+                CommonIO.compoundToString(PROVIDER.randomElement(random, ConfigType.BLOCKS_FEATURES)),
+                Math.min(256, random.nextInt(tries_max)), xz_spread, y_spread);
+        return feature(config);
+    }
+}

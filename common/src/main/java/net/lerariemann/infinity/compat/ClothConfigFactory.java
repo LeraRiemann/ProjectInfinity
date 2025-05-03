@@ -1,9 +1,7 @@
 package net.lerariemann.infinity.compat;
 
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.architectury.platform.Platform;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
@@ -13,10 +11,13 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.text.Text;
 import org.apache.commons.io.FileUtils;
@@ -26,15 +27,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
-import static net.lerariemann.infinity.InfinityMod.rootConfigPath;
-import static net.lerariemann.infinity.util.InfinityMethods.fallback;
+import static net.lerariemann.infinity.InfinityMod.rootConfigPathInJar;
+import static net.lerariemann.infinity.util.InfinityMethods.formatAsTitleCase;
 import static net.minecraft.client.resource.language.I18n.hasTranslation;
 
 public class ClothConfigFactory {
@@ -142,13 +142,13 @@ public class ClothConfigFactory {
         final var builder = ConfigBuilder.create()
                 .setParentScreen(parent)
                 .setTitle(Text.translatable("config.infinity.title"));
-
-        for (var field : readRootConfigJson().getAsJsonObject().entrySet()) {
+        JsonObject infinityJson = readRootConfigJson().getAsJsonObject();
+        for (var field : infinityJson.entrySet()) {
             if (field.getValue().isJsonPrimitive()) {
                 ConfigCategory category = builder.getOrCreateCategory(Text.translatable("config.infinity.title.general"));
                 addElement(field, null, builder, null, category);
             }
-            else {
+            else if (field.getValue().isJsonObject()) {
                 for (var field2 : field.getValue().getAsJsonObject().entrySet()) {
                     if (field2.getValue().isJsonPrimitive()) {
                         ConfigCategory category = builder.getOrCreateCategory(Text.translatable("config.infinity.title." + field.getKey()));
@@ -169,7 +169,53 @@ public class ClothConfigFactory {
                 }
             }
         }
+        ConfigCategory easterCategory = builder.getOrCreateCategory(Text.translatable("config.infinity.title.easter"));
+        JsonArray currentConfig = infinityJson.getAsJsonArray("disabledDimensions");
+        JsonArray defaultConfig = readJson(configPath()+("/.infinity-default.json")).getAsJsonObject().getAsJsonArray("disabledDimensions");
+        Stream<String> sorted = InfinityMod.provider.easterizer.map.keySet().stream().sorted();
+        for (String name : sorted.toList()) {
+            var defaultsDisabled = isEasterEggDisabled(defaultConfig, name);
+            easterCategory.addEntry(builder.entryBuilder().startBooleanToggle(
+                    Text.of(InfinityMethods.formatAsTitleCase(name)), isEasterEggDisabled(currentConfig, name))
+                    .setSaveConsumer(newValue -> easterSetter(name, newValue))
+                    .setTooltip(easterTooltip(defaultsDisabled))
+                    .setDefaultValue(defaultsDisabled).build());
+        }
         return builder.build();
+    }
+
+    static void easterSetter(String name, boolean newValue) {
+        NbtCompound rootConfig = readRootConfigNbt();
+        // If a dimension should be enabled...
+        if (newValue) {
+            System.out.println(name);
+            // and it is currently disabled (in the list of disabled dimensions)
+            if (rootConfig.getList("disabledDimensions", 8).contains(NbtString.of(name))) {
+                // remove it from the list of disabled dimensions.
+                rootConfig.getList("disabledDimensions", 8).remove(NbtString.of(name));
+
+                CommonIO.write(rootConfig, configPath(), "infinity.json");
+            }
+        }
+        // If a dimension should be disabled...
+        else {
+            if (!rootConfig.getList("disabledDimensions", 8).contains(NbtString.of(name))) {
+                // remove it from the list of disabled dimensions.
+                rootConfig.getList("disabledDimensions", 8).add(NbtString.of(name));
+
+                CommonIO.write(rootConfig, configPath(), "infinity.json");
+            }
+        }
+    }
+
+    public static boolean isEasterEggDisabled(JsonArray array, String name) {
+        boolean result = false;
+        for (JsonElement disabled : array) {
+            if (Objects.equals(disabled.getAsString(), name)) {
+                result = true;
+            }
+        }
+        return !result;
     }
 
     /**
@@ -180,7 +226,13 @@ public class ClothConfigFactory {
             category = "";
         }
         else category = category + ".";
-        return Text.translatableWithFallback("config."+MOD_ID + "." + category + field.getKey(), fallback(field.getKey()));
+        return Text.translatableWithFallback("config."+MOD_ID + "." + category + field.getKey(), formatAsTitleCase(field.getKey()));
+    }
+
+    static Optional<Text[]> easterTooltip(boolean enabled) {
+        if (!enabled)
+            return Optional.of(createTooltip("config.infinity.easter.disabled.description").toArray(new Text[0]));
+        else return Optional.empty();
     }
 
     /**
@@ -195,8 +247,12 @@ public class ClothConfigFactory {
         if (!nested.isEmpty()) {
             nested += ".";
         }
-        var translationKey = "config."+MOD_ID + "." + category + nested + field.getKey() + ".description";
+        var translationKey = "config.%s.%s%s%s.description".formatted(MOD_ID, category, nested, field.getKey());
         return createTooltip(translationKey).toArray(new Text[0]);
+    }
+
+    public static List<Text> createTooltip(String loreKey) {
+        return createTooltip(loreKey, true);
     }
 
     /**
@@ -205,7 +261,7 @@ public class ClothConfigFactory {
      * Cloth Config's tooltip wrapper can sometimes cause a crash.
     */
     @Environment(EnvType.CLIENT)
-    public static List<Text> createTooltip(String loreKey) {
+    public static List<Text> createTooltip(String loreKey, boolean translate) {
         //Setup list to store (potentially multi-line) tooltip.
         ArrayList<Text> lines = new ArrayList<>();
         int maxLength = 40;
@@ -214,7 +270,7 @@ public class ClothConfigFactory {
             //Translate the lore key.
             String translatedKey = I18n.translate(loreKey);
             //Check if the translated key exists.
-            if (hasTranslation(loreKey)) {
+            if (hasTranslation(loreKey) || (!translate)) {
                 //Check if custom wrapping should be used.
                 //Any tooltip longer than XX characters should be shortened.
                 while (translatedKey.length() >= maxLength) {
@@ -317,7 +373,7 @@ public class ClothConfigFactory {
     }
 
     public static NbtCompound readDefaultConfig() {
-        Path tempfile = rootConfigPath.resolve("infinity.json");
+        Path tempfile = rootConfigPathInJar.resolve("infinity.json");
         try {
             Files.copy(tempfile, Path.of(configPath() + "/.infinity-default.json"), REPLACE_EXISTING);
         } catch (IOException e) {

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "infinity:iridescent_wool"
+    "infinity:iridescent_wool",
+    "infinity:chromatic_wool"
   ]
 }

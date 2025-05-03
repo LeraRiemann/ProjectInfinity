@@ -1,10 +1,11 @@
 package net.lerariemann.infinity.util.neoforge;
 
+import net.lerariemann.infinity.util.config.ConfigManager;
 import net.neoforged.fml.loading.FMLConfig;
 
 import java.nio.file.Path;
 /**
- * See {@link net.lerariemann.infinity.util.ConfigManager} for usages.
+ * See {@link ConfigManager} for usages.
  */
 @SuppressWarnings("unused")
 public class ConfigManagerImpl {

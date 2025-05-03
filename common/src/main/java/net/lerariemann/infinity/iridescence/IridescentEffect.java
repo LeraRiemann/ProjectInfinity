@@ -1,21 +1,31 @@
 package net.lerariemann.infinity.iridescence;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
-import net.lerariemann.infinity.util.WarpLogic;
+import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.loading.ShaderLoader;
+import net.lerariemann.infinity.util.teleport.WarpLogic;
+import net.lerariemann.infinity.registry.core.ModStatusEffects;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.InstantStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 
 import java.awt.Color;
+
+import static net.lerariemann.infinity.iridescence.Iridescence.*;
 
 public class IridescentEffect extends StatusEffect implements ModStatusEffects.SpecialEffect {
     public IridescentEffect(StatusEffectCategory category, int color) {
@@ -29,20 +39,30 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
             entity.removeStatusEffect(ModStatusEffects.IRIDESCENT_SETUP);
         }
         if (entity instanceof Angerable ang) ang.stopAnger();
-        if (entity instanceof ServerPlayerEntity player) Iridescence.updateShader(player);
+        if (entity instanceof ServerPlayerEntity player
+                && shouldApplyShader(player))
+            loadShader(player);
     }
 
     public void onRemoved(LivingEntity entity) {
-        entity.setInvulnerable(false);
         switch (entity) {
-            case ServerPlayerEntity player -> Iridescence.updateShader(player);
+            case PlayerEntity player -> {
+                if (player instanceof ServerPlayerEntity serverPlayer) {
+                    if (player.isInvulnerable()) endJourney(serverPlayer, true, 0);
+                    unloadShader(serverPlayer);
+                }
+                else {
+                    ShaderLoader.reloadShaders(MinecraftClient.getInstance(), InfinityOptions.ofClient().data, false);
+                }
+            }
             case ChaosPawn pawn -> {
                 if (pawn.getRandom().nextBoolean()) {
                     pawn.unchess();
-                    Iridescence.convTriggers(pawn);
+                    pawn.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
+                    convTriggers(pawn);
                 }
             }
-            case MobEntity currEntity -> Iridescence.endConversion(currEntity);
+            case MobEntity currEntity -> endConversion(currEntity);
             default -> {
             }
         }
@@ -50,18 +70,34 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
 
     @Override
     public void tryApplySpecial(LivingEntity entity, int duration, int amplifier) {
-        if (entity instanceof ServerPlayerEntity player) {
-            if (Iridescence.shouldWarp(duration, amplifier)) {
-                player.setInvulnerable(true);
-                Identifier id = Iridescence.getIdForWarp(player);
-                WarpLogic.warpWithTimer(player, id, 10, false);
+        if (entity instanceof PlayerEntity p) {
+            if (p instanceof ServerPlayerEntity player) {
+                if (shouldWarp(duration, amplifier)) {
+                    if (!player.isInvulnerable()) {
+                        player.setInvulnerable(true);
+                        saveCookie(player);
+                    }
+                    Identifier id = getIdForWarp(player);
+                    WarpLogic.requestWarp(player, id, false);
+                }
+                if (shouldReturn(duration, amplifier)) {
+                    endJourney(player, false, amplifier);
+                }
+                if (shouldRequestShaderLoad(duration, amplifier))
+                    loadShader(player);
+                if (amplifier == 0 && duration == 2) {
+                    player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.AFTERGLOW,
+                            getAfterglowDuration() / 2, 0, true, true));
+                }
             }
-            if (Iridescence.shouldReturn(duration, amplifier)) {
-                player.setInvulnerable(false);
-                WarpLogic.respawnAlive(player);
-            }
-            if (Iridescence.shouldUpdateShader(duration, amplifier)) {
-                Iridescence.updateShader(player);
+            else {
+                Iridescence.updateAtomics(duration, amplifier);
+                if (amplifier == 0) return;
+                double prog = ShaderLoader.iridProgress.get();
+                if (prog > 0.5) {
+                    if (InfinityMod.random.nextDouble() < 0.015*(2*prog - 1)*amplifier)
+                        entity.playSound(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, 1.0f, 1f + InfinityMod.random.nextFloat());
+                }
             }
         }
     }
@@ -70,7 +106,18 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
     public ParticleEffect createParticle(StatusEffectInstance effect) {
         float hue = effect.getDuration() / 13.0f;
         return EntityEffectParticleEffect.create(
-                ParticleTypes.ENTITY_EFFECT, ColorHelper.withAlpha(255,
-                        Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
+                ParticleTypes.ENTITY_EFFECT, ColorHelper.Argb.fullAlpha(Color.HSBtoRGB(hue - (int)hue, 1.0f, 1.0f)));
+    }
+
+    public static class Setup extends InstantStatusEffect {
+        public Setup(StatusEffectCategory category, int color) {
+            super(category, color);
+        }
+
+        @Override
+        public void onApplied(LivingEntity entity, int amplifier) {
+            super.onApplied(entity, amplifier);
+            tryBeginJourney(entity, amplifier, true);
+        }
     }
 }

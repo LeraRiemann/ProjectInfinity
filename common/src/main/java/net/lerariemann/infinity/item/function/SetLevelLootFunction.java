@@ -2,7 +2,8 @@ package net.lerariemann.infinity.item.function;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.lerariemann.infinity.block.custom.BiomeBottle;
+import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
+import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
@@ -27,7 +28,7 @@ public class SetLevelLootFunction extends ConditionalLootFunction {
 
     @Override
     protected ItemStack process(ItemStack stack, LootContext context) {
-        BiomeBottle.updateCharge(stack);
+        BiomeBottleBlock.updateCharge(stack);
         return stack;
     }
 }

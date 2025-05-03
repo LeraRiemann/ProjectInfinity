@@ -1,10 +1,11 @@
 package net.lerariemann.infinity.util.fabric;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.lerariemann.infinity.util.config.ConfigManager;
 
 import java.nio.file.Path;
 /**
- * See {@link net.lerariemann.infinity.util.ConfigManager} for usages.
+ * See {@link ConfigManager} for usages.
  */
 @SuppressWarnings("unused")
 public class ConfigManagerImpl {

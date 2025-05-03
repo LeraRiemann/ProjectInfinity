@@ -1,52 +1,54 @@
 {
-  "infinity_version": 2000003,
-  "easter-options": {
+  "infinity_version": 2004002,
+  "options": {
     "portal_color": 16383998
   },
-  "easter-type": "library",
-  "type": "minecraft:noise",
-  "settings": {
-    "sea_level": 0,
-    "disable_mob_generation": false,
-    "ore_veins_enabled": false,
-    "aquifers_enabled": false,
-    "legacy_random_source": false,
-    "default_block": {
-      "Name": "minecraft:stone"
+  "type": "library",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": {
+      "sea_level": 0,
+      "disable_mob_generation": false,
+      "ore_veins_enabled": false,
+      "aquifers_enabled": false,
+      "legacy_random_source": false,
+      "default_block": {
+        "Name": "minecraft:stone"
+      },
+      "default_fluid": {
+        "Name": "minecraft:air"
+      },
+      "spawn_target": [],
+      "noise": {
+        "min_y": 0,
+        "height": 96,
+        "size_horizontal": 2,
+        "size_vertical": 2
+      },
+      "noise_router": {
+        "vein_ridged": "infinity:vein_ridged",
+        "fluid_level_spread": 0.0,
+        "vegetation": "infinity:vegetation",
+        "vein_gap": "infinity:vein_gap",
+        "continents": "minecraft:overworld/continents",
+        "initial_density_without_jaggedness": 1.0,
+        "lava": 0.0,
+        "barrier": 0.0,
+        "depth": 0.0,
+        "ridges": "minecraft:overworld/ridges",
+        "erosion": "minecraft:overworld/erosion",
+        "temperature": "infinity:temperature",
+        "final_density": 1.0,
+        "vein_toggle": "infinity:vein_toggle",
+        "fluid_level_floodedness": 0.0
+      },
+      "surface_rule": {
+        "type": "infinity:library"
+      }
     },
-    "default_fluid": {
-      "Name": "minecraft:air"
-    },
-    "spawn_target": [],
-    "noise": {
-      "min_y": 0,
-      "height": 96,
-      "size_horizontal": 2,
-      "size_vertical": 2
-    },
-    "noise_router": {
-      "vein_ridged": "infinity:vein_ridged",
-      "fluid_level_spread": 0.0,
-      "vegetation": "infinity:vegetation",
-      "vein_gap": "infinity:vein_gap",
-      "continents": "minecraft:overworld/continents",
-      "initial_density_without_jaggedness": 1.0,
-      "lava": 0.0,
-      "barrier": 0.0,
-      "depth": 0.0,
-      "ridges": "minecraft:overworld/ridges",
-      "erosion": "minecraft:overworld/erosion",
-      "temperature": "infinity:temperature",
-      "final_density": 1.0,
-      "vein_toggle": "infinity:vein_toggle",
-      "fluid_level_floodedness": 0.0
-    },
-    "surface_rule": {
-      "type": "infinity:library"
+    "biome_source": {
+      "type": "fixed",
+      "biome": "infinity:library"
     }
-  },
-  "biome_source": {
-    "type": "fixed",
-    "biome": "infinity:library"
   }
 }

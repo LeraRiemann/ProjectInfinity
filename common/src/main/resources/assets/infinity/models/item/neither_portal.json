@@ -1,3 +1,6 @@
 {
-  "parent": "infinity:block/neither_portal_ns"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "infinity:block/portal"
+  }
 }

@@ -4,18 +4,20 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.joml.Vector3f;
 
 import java.io.File;
 import java.util.function.Function;
+import static net.lerariemann.infinity.util.core.NbtUtils.*;
 
 public class InfinityOptions {
     public NbtCompound data;
@@ -23,11 +25,18 @@ public class InfinityOptions {
     public EffectGiver effect;
     public IridescentMap iridMap;
 
+    private final double mavity;
+    private final double timeScale;
+    private final boolean haunted;
+
     public InfinityOptions(NbtCompound data) {
         this.data = data;
         this.shifter = PitchShifter.decode(test(data, "pitch_shift", new NbtCompound()));
         this.effect = EffectGiver.of(test(data, "effect", new NbtCompound()));
         this.iridMap = IridescentMap.decode(test(data, "iridescent_map", new NbtCompound()));
+        this.mavity = test(data, "mavity", 1.0);
+        this.timeScale = test(data, "time_scale", 1.0);
+        this.haunted = test(data, "haunted", false);
     }
 
     public NbtCompound data() {
@@ -67,25 +76,6 @@ public class InfinityOptions {
         return (options != null) ? options : InfinityOptions.empty();
     }
 
-    public static String test(NbtCompound data, String key, String def) {
-        return data.contains(key, NbtElement.STRING_TYPE) ? data.getString(key) : def;
-    }
-    public static NbtCompound test(NbtCompound data, String key, NbtCompound def) {
-        return data.contains(key, NbtElement.COMPOUND_TYPE) ? data.getCompound(key) : def;
-    }
-    public static float test(NbtCompound data, String key, float def) {
-        return data.contains(key, NbtElement.DOUBLE_TYPE) ? data.getFloat(key) : def;
-    }
-    public static int test(NbtCompound data, String key, int def) {
-        return data.contains(key, NbtElement.INT_TYPE) ? data.getInt(key) : def;
-    }
-    public static double test(NbtCompound data, String key, double def) {
-        return data.contains(key, NbtElement.DOUBLE_TYPE) ? data.getDouble(key) : def;
-    }
-    public static boolean test(NbtCompound data, String key, boolean def) {
-        return data.contains(key) ? data.getBoolean(key) : def;
-    }
-
     public boolean isEmpty() {
         return data.isEmpty();
     }
@@ -95,13 +85,21 @@ public class InfinityOptions {
     }
 
     public double getTimeScale() {
-        return test(data, "time_scale", 1.0);
+        return timeScale;
     }
     public double getMavity() {
-        return test(data, "mavity", 1.0);
+        return mavity;
     }
     public Function<Float, Float> getSoundPitch() {
         return shifter.applier();
+    }
+    public boolean isHaunted() {
+        return haunted;
+    }
+    public int getHauntingTicks(Random random) {
+        if (!isHaunted()) return -2;
+        if (data.contains("haunting_ticks")) return data.getInt("haunting_ticks");
+        return random.nextBetween(test(data, "min_haunting_ticks", 20), test(data, "max_haunting_ticks", 200));
     }
 
     //sky - common

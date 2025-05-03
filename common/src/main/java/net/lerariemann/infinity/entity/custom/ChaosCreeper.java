@@ -1,14 +1,20 @@
 package net.lerariemann.infinity.entity.custom;
 
-import net.lerariemann.infinity.block.custom.BiomeBottle;
-import net.lerariemann.infinity.entity.ModEntities;
-import net.lerariemann.infinity.item.ModItems;
-import net.lerariemann.infinity.util.RandomProvider;
-import net.lerariemann.infinity.util.WeighedStructure;
+import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.block.custom.BiomeBottleBlock;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
+import net.lerariemann.infinity.registry.core.ModEntities;
+import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.JukeboxPlayableComponent;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -17,8 +23,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryPair;
+import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -28,16 +36,12 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
-
-import java.awt.Color;
 
 public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public static TrackedData<Integer> color = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.INTEGER);
     public static TrackedData<Float> range = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.FLOAT);
     public static TrackedData<String> biome = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.STRING);
-    public Registry<Biome> reg;
 
     public ChaosCreeper(EntityType<? extends CreeperEntity> entityType, World world) {
         super(entityType, world);
@@ -50,14 +54,10 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
-        MinecraftServer s = world.toServerWorld().getServer();
-        reg = s.getRegistryManager().getOrThrow(RegistryKeys.BIOME);
-        WeighedStructure<String> biomes = RandomProvider.getProvider(s).registry.get("biomes");
-        String biomename = biomes != null ? biomes.getElement(world.getRandom().nextDouble()) : "minecraft:plains";
-        Biome b = reg.get(Identifier.of(biomename));
-        this.setColor(b != null ? b.getFoliageColor() : 7842607);
+        NbtCompound biome = InfinityMod.provider.randomElement(world.getRandom(), ConfigType.BIOMES);
+        this.setColor(NbtUtils.test(biome, "Color", 7842607));
         this.setRandomCharge();
-        this.setBiome(biomename);
+        this.setBiome(biome.getString("Name"));
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
@@ -72,12 +72,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public void setBiome(String s) {
         this.dataTracker.set(biome, s);
     }
-
-    public Biome getBiome() {
-        return reg.get(Identifier.of(getBiomeId()));
-    }
-
-    public String getBiomeId() {
+    public String getBiome() {
         return this.dataTracker.get(biome);
     }
 
@@ -87,23 +82,11 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
 
     @Override
     public int getColorNamed() {
-        if (hasCustomName()) {
-            String s = getName().getString();
-            if ("jeb_".equals(s)) {
-                return TintableEntity.getColorJeb(age, getId());
-            }
-            if ("hue".equals(s)) {
-                int n = age + 400 * getId();
-                float hue = n / 400.f;
-                hue = hue - (int) hue;
-                return Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
-            }
-        }
-        return -1;
+        return hasCustomName() ? TintableEntity.getColorNamed(getName().getString(), age, getId()) : -1;
     }
 
     @Override
-    public int getColorRaw() {
+    public int getColor() {
         return this.dataTracker.get(color);
     }
 
@@ -119,8 +102,8 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putFloat("range", this.getRange());
-        nbt.putInt("color", this.getColorRaw());
-        nbt.putString("biome", this.getBiomeId());
+        nbt.putInt("color", this.getColor());
+        nbt.putString("biome", this.getBiome());
     }
 
     @Override
@@ -138,7 +121,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
         if (s != null) {
             ServerWorld serverWorld = s.getWorld(this.getWorld().getRegistryKey());
             if (serverWorld != null) {
-                BiomeBottle.spread(serverWorld, getBlockPos(), Identifier.of(getBiomeId()), getCharge());
+                BiomeBottleBlock.spreadCircle(serverWorld, getBlockPos(), Identifier.of(getBiome()), getCharge());
             }
         }
         this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), f, World.ExplosionSourceType.NONE);
@@ -152,13 +135,13 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
-        if (itemStack.isOf(ModItems.BIOME_BOTTLE_ITEM.get()) && BiomeBottle.isEmpty(itemStack)) {
+        if (itemStack.isOf(ModItems.BIOME_BOTTLE_ITEM.get()) && BiomeBottleBlock.isEmpty(itemStack)) {
             ItemStack itemStack2 = new ItemStack(itemStack.getItem());
             this.playSound(SoundEvents.ITEM_BOTTLE_FILL, 1.0f, 1.0f);
             CreeperEntity newCreeper;
             if (!this.getWorld().isClient() && (newCreeper = EntityType.CREEPER.create(this.getWorld())) != null) {
-                itemStack2.applyComponentsFrom(BiomeBottle.addComponents(ComponentMap.builder(),
-                                Identifier.of(getBiomeId()), getColorRaw(), getCharge()).build());
+                itemStack2.applyComponentsFrom(BiomeBottleBlock.addComponents(ComponentMap.builder(),
+                                Identifier.of(getBiome()), getColor(), getCharge()).build());
                 ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
                 player.setStackInHand(hand, itemStack3);
                 this.discard();
@@ -168,5 +151,18 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
             }
         }
         return super.interactMob(player, hand);
+    }
+
+    @Override
+    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
+        if (source.getAttacker() != null && source.getAttacker().getType().isIn(EntityTypeTags.SKELETONS)) {
+            ItemStack stack = ModItems.DISC.get().getDefaultStack();
+            Identifier song = Identifier.of(InfinityMod.provider.randomName(world.random, ConfigType.JUKEBOXES));
+            stack.applyComponentsFrom(ComponentMap.builder()
+                    .add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new RegistryPair<>(
+                            RegistryKey.of(RegistryKeys.JUKEBOX_SONG, song)), true))
+                    .add(ModComponentTypes.COLOR.get(), (int)InfinityMethods.getNumericFromId(song)).build());
+            this.dropStack(stack);
+        }
     }
 }

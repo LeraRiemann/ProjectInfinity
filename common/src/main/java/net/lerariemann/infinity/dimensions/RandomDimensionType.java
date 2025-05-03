@@ -1,7 +1,9 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
-import net.lerariemann.infinity.util.CommonIO;
+import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.*;
 
 import java.util.Random;
@@ -13,7 +15,7 @@ public class RandomDimensionType {
     public RandomDimension parent;
     public NbtCompound data;
     public boolean ultrawarm, foggy;
-    static double SQRT8 = Math.sqrt(8);
+    public static int scaleCap = 100000;
 
     RandomDimensionType(RandomDimension dim) {
         parent = dim;
@@ -44,8 +46,8 @@ public class RandomDimensionType {
         lightLevel.putInt("min_inclusive", 0);
         lightLevel.putInt("max_inclusive", random.nextInt(16));
         data.put("monster_spawn_light_level", lightLevel);
-        data.putString("infiniburn", dim.PROVIDER.randomName(random, "tags"));
-        String s = dim.PROVIDER.randomName(random, "dimension_effects");
+        data.putString("infiniburn", "#" + dim.PROVIDER.randomName(random, ConfigType.TAGS));
+        String s = dim.PROVIDER.randomName(random, ConfigType.DIMENSION_EFFECTS);
         foggy = s.equals("minecraft:the_nether");
         data.putString("effects", s);
         CommonIO.write(data, dim.getStoragePath() + "/dimension_type", name + ".json");
@@ -60,8 +62,12 @@ public class RandomDimensionType {
     }
 
     double coordinateScale() {
-        double random1 = random.nextBoolean() ? 1.0 : Math.max(SQRT8*random.nextDouble(), 0.00001);
-        double random2 = 8 / random1;
+        int scaleMax = RandomProvider.ruleInt("maxDimensionScale");
+        if (scaleMax <= 0 || scaleMax > scaleCap) scaleMax = scaleCap;
+        int distribParam = Math.min(scaleMax, 8);
+        double scaleMin = 1.0 / scaleMax;
+        double random1 = random.nextBoolean() ? 1.0 : scaleMin + (Math.sqrt(distribParam) - scaleMin)*random.nextDouble();
+        double random2 = distribParam / random1;
         return random.nextBoolean() ? random1 : random2;
     }
 }

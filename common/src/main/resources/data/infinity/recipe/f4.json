@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "S": {
+      "item": "infinity:iridescent_star"
+    }
+  },
+  "pattern": [
+    "OOO",
+    "OSO",
+    "OOO"
+  ],
+  "result": {
+    "count": 1,
+    "id": "infinity:f4"
+  },
+  "show_notification": true
+}

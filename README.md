@@ -1,7 +1,8 @@
 # Infinite Dimensions
-# This branch does not work in any way! It's a heavily work in progress port due to the changes to registries and rendering in 1.21.3. Suggestions and PRs are welcome.
 
-**Infinite Dimensions** is a mod that reworks and reimagines 20w14infinite - the April Fools' snapshot of 2020 - in Minecraft 1.21.3.
+[Download on Modrinth](https://modrinth.com/mod/infinite-dimensions) (recommended) / [Download on Curseforge](https://www.curseforge.com/minecraft/mc-mods/infinite-dimensions)
+
+**Infinite Dimensions** is a mod that reworks and reimagines 20w14infinite - the April Fools' snapshot of 2020 - in Minecraft 1.21.1.
 
 Get a Book and Quill, write anything in it, and throw it into a Nether Portal - and the portal will change its color before your eyes. Beyond lies one of 2.1+ billion dimensions this mod can generate! Whacky terrain, crazy sky colors and funky flora made out of random blocks - there's a possibility to find all this and more on the other side.
 
@@ -11,7 +12,11 @@ Please make sure to report any problems you have with the mod on its [issue trac
 
 ## Dependencies
 
-Architectury API is required, as well as [Fabric API](https://modrinth.com/mod/fabric-api) on Fabric and [Forgified Fabric API](https://modrinth.com/mod/forgified-fabric-api) on Forge and NeoForge. Older versions of the mod (v1.13.0 and below) only require Fabric API.
+[Architectury API](https://modrinth.com/mod/architectury-api) is required, as well as [Fabric API](https://modrinth.com/mod/fabric-api) on Fabric. The Forge backport also requires [Forgified Fabric API](https://modrinth.com/mod/forgified-fabric-api).
+
+If you want to configure the mod in-game, you will need [Cloth Config](https://modrinth.com/mod/cloth-config) and [Mod Menu](https://modrinth.com/mod/modmenu) (on Fabric).
+
+Older versions may have different dependencies. See their specific version pages for more details.
 
 ## FAQ
 

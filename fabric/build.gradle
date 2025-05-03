@@ -36,6 +36,17 @@ repositories {
         name = "Terraformers"
         url = "https://maven.terraformersmc.com/"
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "CC: Tweaked"
+                url = "https://maven.squiddev.cc"
+            }
+        }
+        filter {
+            includeGroup "cc.tweaked"
+        }
+    }
 }
 
 dependencies {
@@ -56,6 +67,11 @@ dependencies {
     // EMI
 //    modCompileOnly("dev.emi:emi-fabric:$emi_version+$minecraft_version:api")
 //    modLocalRuntime("dev.emi:emi-fabric:$emi_version+$minecraft_version")
+
+    // Devenv helpers
+    modImplementation "maven.modrinth:uwrad:1.1.0"
+    modImplementation "maven.modrinth:dev-tools-unlocker:1.0.0"
+    modImplementation("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cct_version")
 
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }

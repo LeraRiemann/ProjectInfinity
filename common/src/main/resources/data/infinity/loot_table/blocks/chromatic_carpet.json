@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "infinity:chromatic_carpet",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "infinity:color"
+              ],
+              "source": "block_entity"
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

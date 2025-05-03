@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "infinity:item/disc",
+    "layer1": "infinity:item/disc_overlay"
+  }
+}
