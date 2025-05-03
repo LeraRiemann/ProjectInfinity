@@ -1,12 +1,17 @@
 package net.lerariemann.infinity.util.config;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.access.BlockEntityTypeAccess;
 import net.lerariemann.infinity.block.entity.CosmicAltarBlockEntity;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.LootableContainerBlockEntity;
+import net.minecraft.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.block.enums.BlockFace;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -54,6 +59,7 @@ public interface ConfigGenerator {
         ConfigFactory.of(Registries.STATUS_EFFECT, ConfigGenerator::extractEffect).generate(ConfigType.EFFECTS);
         generateSounds();
         generateBlockTags();
+        generateBEs();
         SurfaceRuleScanner.scan(server);
         DynamicRegistryManager manager = server.getRegistryManager();
         ConfigFactory.of(manager.get(RegistryKeys.JUKEBOX_SONG)).generate(ConfigType.JUKEBOXES);
@@ -66,8 +72,8 @@ public interface ConfigGenerator {
 
     static void generateSounds() {
         Registry<SoundEvent> r = Registries.SOUND_EVENT;
-        DataCollection.Logged music = new DataCollection.Logged(ConfigType.MUSIC, "music tracks");
-        DataCollection.Logged sounds = new DataCollection.Logged(ConfigType.SOUNDS);
+        DataCollection music = new DataCollection.Logged(ConfigType.MUSIC, "music tracks");
+        DataCollection sounds = new DataCollection.Logged(ConfigType.SOUNDS);
         r.getKeys().forEach(a -> {
             Identifier id = a.getValue();
             if (id.toString().contains("music")) music.addIdentifier(id);
@@ -78,13 +84,13 @@ public interface ConfigGenerator {
     }
 
     static void generateBlockTags() {
-        DataCollection.Logged tagMap = new DataCollection.Logged(ConfigType.TAGS, "block tags");
+        DataCollection tagMap = new DataCollection.Logged(ConfigType.TAGS, "block tags");
         Registries.BLOCK.streamTags().forEach(tagKey -> tagMap.addIdentifier(tagKey.id()));
         tagMap.save();
     }
 
     static Set<String> generateFluids() {
-        DataCollection.Logged fluidMap = new DataCollection.Logged(ConfigType.FLUIDS);
+        DataCollection fluidMap = new DataCollection.Logged(ConfigType.FLUIDS);
         Registry<Fluid> r = Registries.FLUID;
         Set<String> fluidBlockNames = new HashSet<>();
         r.getKeys().forEach(key -> {
@@ -105,7 +111,7 @@ public interface ConfigGenerator {
     }
 
     static void generateBlocks(ServerWorld serverWorld, BlockPos inAir, BlockPos onAltar, Set<String> excludedBlockNames) {
-        DataCollection.Logged blockMap = new DataCollection.Logged(ConfigType.BLOCKS);
+        DataCollection blockMap = new DataCollection.Logged(ConfigType.BLOCKS);
         DataCollection colorPresetMap = new DataCollection(ConfigType.COLOR_PRESETS);
         DataCollection flowerMap = new DataCollection(ConfigType.FLOWERS);
         Registry<Block> r = Registries.BLOCK;
@@ -124,6 +130,24 @@ public interface ConfigGenerator {
         blockMap.save();
         colorPresetMap.save();
         flowerMap.save();
+    }
+
+    static void generateBEs() {
+        Registry<BlockEntityType<?>> r = Registries.BLOCK_ENTITY_TYPE;
+        DataCollection chests = new DataCollection.Logged(ConfigType.CHESTS);
+        Set<Identifier> allBlocks = new HashSet<>();
+        r.getKeys().forEach(key -> {
+            BlockEntityTypeAccess<? extends BlockEntity> bet = (BlockEntityTypeAccess<?>)(r.get(key));
+            assert bet != null;
+            Set<Block> blocks = bet.infinity$getBlocks();
+
+            BlockEntity be = bet.infinity$getFactory().create(BlockPos.ORIGIN, ((Block)blocks.toArray()[0]).getDefaultState());
+            if (be instanceof LootableContainerBlockEntity && !(be instanceof ShulkerBoxBlockEntity)) {
+                for (Block b : blocks) allBlocks.add(Registries.BLOCK.getId(b));
+            }
+        });
+        allBlocks.forEach(chests::addIdentifier);
+        chests.save();
     }
 
     static boolean checkColorSet(String block) {

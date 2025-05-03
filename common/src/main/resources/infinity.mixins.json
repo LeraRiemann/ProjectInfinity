@@ -47,6 +47,7 @@
     "options.EntityMixin",
     "options.PlayerManagerMixin",
     "options.ServerWorldMixin",
+    "qol.BlockEntityTypeMixin",
     "qol.EnderDragonEntityMixin",
     "qol.FireBlockMixin",
     "qol.LavaFluidMixin"

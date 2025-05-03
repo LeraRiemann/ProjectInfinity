@@ -1,4 +1,5 @@
 {
+  "infinity_version": 2004006,
   "elements": [
     {
       "key": "minecraft:freeze_top_layer",
@@ -7,10 +8,6 @@
     {
       "key": "minecraft:void_start_platform",
       "weight": 0.5
-    },
-    {
-      "key": "infinity:bonus_chest",
-      "weight": 0.2
     }
   ]
 }
