@@ -21,12 +21,12 @@ public abstract class GameRendererMixin implements GameRendererAccess {
     @Final
     private ResourceManager resourceManager;
     @Shadow
-    protected abstract void loadPostProcessor(Identifier id);
+    protected abstract void setPostProcessor(Identifier id);
 
     @Override
     public void infinity$loadPP(Identifier id) {
         if (resourceManager.getResource(id).isPresent()) {
-            loadPostProcessor(id);
+            setPostProcessor(id);
         }
         else {
             MinecraftClient.getInstance().options.refreshResourcePacks(MinecraftClient.getInstance().getResourcePackManager());
