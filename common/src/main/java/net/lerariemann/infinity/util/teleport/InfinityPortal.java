@@ -176,7 +176,7 @@ public class InfinityPortal {
         assert worldTo != null;
         WorldBorder wb = worldTo.getWorldBorder();
         double d = DimensionType.getCoordinateScaleFactor(worldFrom.getDimension(), worldTo.getDimension());
-        BlockPos originOfTesting = wb.clamp(posFrom.getX() * d, posFrom.getY(), posFrom.getZ() * d);
+        BlockPos originOfTesting = BlockPos.ofFloored(wb.clamp(posFrom.getX() * d, posFrom.getY(), posFrom.getZ() * d));
 
         Optional<BlockPos> optional = findNewExitPortalPosition(wb, originOfTesting);
 

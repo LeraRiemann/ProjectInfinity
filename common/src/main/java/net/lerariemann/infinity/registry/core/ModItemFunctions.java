@@ -21,10 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.*;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
@@ -112,8 +109,7 @@ public class ModItemFunctions {
         Optional<RecipeEntry<CollisionCraftingRecipe>> match = w.getRecipeManager()
                 .getFirstMatch(recipeType, new SingleStackRecipeInput(itemStack), w);
         if (match.isEmpty()) return;
-
-        ItemStack resStack = match.get().value().getResult(w.getRegistryManager());
+        ItemStack resStack = match.get().value().craft(new SingleStackRecipeInput(itemStack), w.getRegistryManager());
         if (resStack.isOf(itemStack.getItem())) resStack = itemStack.copy();
         componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyChanges);
 

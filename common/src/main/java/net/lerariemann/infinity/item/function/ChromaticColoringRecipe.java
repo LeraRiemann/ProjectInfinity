@@ -79,7 +79,7 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
     }
 
     @Override
-    public DefaultedList<ItemStack> getRemainder(CraftingRecipeInput craftingRecipeInput) {
+    public DefaultedList<ItemStack> getRecipeRemainders(CraftingRecipeInput craftingRecipeInput) {
         DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.size(), ItemStack.EMPTY);
         int j = 0;
         for (int i = 0; i < defaultedList.size(); i++) {
@@ -91,17 +91,17 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
         return j > 0 ? defaultedList : DefaultedList.ofSize(craftingRecipeInput.size(), ItemStack.EMPTY);
     }
 
-    @Override
-    public boolean fits(int width, int height) {
-        return width*height > 1;
-    }
+//    @Override
+//    public boolean fits(int width, int height) {
+//        return width*height > 1;
+//    }
 
     public Ingredient getInput() {
         return input;
     }
 
-    @Override
-    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
+
+    public ItemStack getResult() {
         return output;
     }
 
@@ -116,7 +116,7 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
         @Override
         public MapCodec<ChromaticColoringRecipe> codec() {
             return RecordCodecBuilder.mapCodec(instance -> instance.group(
-                            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input").forGetter(recipe -> recipe.input),
+                            Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.input),
                             ItemStack.VALIDATED_CODEC.fieldOf("output").forGetter(recipe -> recipe.output))
                     .apply(instance, func));
         }

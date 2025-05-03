@@ -15,12 +15,13 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
-public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecipeInput> {
+public abstract class CollisionCraftingRecipe extends SingleStackRecipe {
     private final Ingredient input;
     private final ItemStack output;
     private final String lore;
 
     public CollisionCraftingRecipe(Ingredient input, ItemStack output, String lore) {
+        super("collision", input, output);
         this.input = input;
         this.output = output;
         this.lore = lore;
@@ -93,11 +94,11 @@ public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecip
             super(input, output, lore);
         }
         @Override
-        public RecipeSerializer<? extends Recipe<SingleStackRecipeInput>> getSerializer() {
+        public RecipeSerializer<? extends SingleStackRecipe> getSerializer() {
             return ModItemFunctions.PORTAL_CRAFTING.get();
         }
         @Override
-        public RecipeType<? extends Recipe<SingleStackRecipeInput>> getType() {
+        public RecipeType<? extends SingleStackRecipe> getType() {
             return ModItemFunctions.PORTAL_CRAFTING_TYPE.get();
         }
 
@@ -117,11 +118,11 @@ public abstract class CollisionCraftingRecipe implements Recipe<SingleStackRecip
             super(input, output, lore);
         }
         @Override
-        public RecipeSerializer<? extends Recipe<SingleStackRecipeInput>> getSerializer() {
+        public RecipeSerializer<? extends SingleStackRecipe> getSerializer() {
             return ModItemFunctions.IRIDESCENCE_CRAFTING.get();
         }
         @Override
-        public RecipeType<? extends Recipe<SingleStackRecipeInput>> getType() {
+        public RecipeType<? extends SingleStackRecipe> getType() {
             return ModItemFunctions.IRIDESCENCE_CRAFTING_TYPE.get();
         }
 

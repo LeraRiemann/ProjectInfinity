@@ -58,7 +58,7 @@ public class ChromaCarpetRecipe extends SpecialCraftingRecipe {
         return result.copyWithCount(3);
     }
 
-    @Override
+//    @Override
     public boolean fits(int width, int height) {
         return width >= 2 && height >= 1;
     }

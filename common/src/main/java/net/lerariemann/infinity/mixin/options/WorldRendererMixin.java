@@ -30,13 +30,9 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     @Shadow private ClientWorld world;
     @Final
     @Shadow private MinecraftClient client;
-    @Shadow private VertexBuffer lightSkyBuffer;
-    @Shadow private VertexBuffer starsBuffer;
 
-    @Shadow protected abstract void renderStars();
     @Shadow protected abstract boolean hasBlindnessOrDarkness(Camera camera);
 
-    @Shadow public abstract void render(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2);
 
     @Override
     public void infinity$setNeedsStars(boolean b) {
@@ -45,12 +41,13 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
 
     @Inject(method = "renderSky",
             at=@At("HEAD"), cancellable=true)
-    private void injected4(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
+    private void injected4(FrameGraphBuilder frameGraphBuilder, Camera camera, float tickDelta, Fog fog, CallbackInfo ci) {
         if (InfinityMethods.isInfinity(world)) {
-            infinity$renderEntireSky(matrix4f, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
+            infinity$renderEntireSky(frameGraphBuilder, camera, tickDelta, fog, ci);
             ci.cancel();
         }
     }
+
     @ModifyConstant(method = "buildStarsBuffer(Lnet/minecraft/client/render/Tessellator;)Lnet/minecraft/client/render/BuiltBuffer;", constant = @Constant(intValue = 1500))
     private int injected(int constant) {
         return infinity$options().getNumStars();
@@ -65,7 +62,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
     }
 
     @Unique
-    private void infinity$renderEntireSky(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback) {
+    private void infinity$renderEntireSky(FrameGraphBuilder frameGraphBuilder, Camera camera, float tickDelta, Fog fog, CallbackInfo ci) {
         fogCallback.run();
         if (thickFog || hasBlindnessOrDarkness(camera) || SkyRenderer.testCameraCancels(camera)) return;
         MatrixStack matrices = new MatrixStack();

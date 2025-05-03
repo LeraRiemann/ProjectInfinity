@@ -142,9 +142,9 @@ public class DimensionGrabber {
     }
 
     public static <T> RegistryOps.RegistryInfo<T> createMutableInfo(MutableRegistry<T> registry) {
-        return new RegistryOps.RegistryInfo<>(registry.getReadOnlyWrapper(), registry.createMutableRegistryLookup(), registry.getLifecycle());
+        return new RegistryOps.RegistryInfo<>(registry, registry.createMutableRegistryLookup(), registry.getLifecycle());
     }
     public static <T> RegistryOps.RegistryInfo<T> createInfo(Registry<T> registry) {
-        return new RegistryOps.RegistryInfo<>(registry.getReadOnlyWrapper(), registry.getTagCreatingWrapper(), registry.getLifecycle());
+        return new RegistryOps.RegistryInfo<>(registry, registry, registry.getLifecycle());
     }
 }

@@ -6,6 +6,7 @@ import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.*;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -79,7 +80,7 @@ public class F4Screen extends HandledScreen<F4ScreenHandler> {
 
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        context.drawTexture(InfinityMethods.getId("textures/gui/f4.png"),
-                x, y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        context.drawGuiTexture(RenderLayer::getGuiTextured, InfinityMethods.getId("textures/gui/f4.png"),
+                x, y, this.backgroundWidth, this.backgroundHeight);
     }
 }

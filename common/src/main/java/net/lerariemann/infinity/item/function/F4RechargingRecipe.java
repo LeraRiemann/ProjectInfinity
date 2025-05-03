@@ -58,7 +58,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public DefaultedList<ItemStack> getRemainder(CraftingRecipeInput craftingRecipeInput) {
+    public DefaultedList<ItemStack> getRecipeRemainders(CraftingRecipeInput craftingRecipeInput) {
         DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.size(), ItemStack.EMPTY);
         ItemStack f4 = null;
         int f4pos = 0;
@@ -82,7 +82,7 @@ public class F4RechargingRecipe extends SpecialCraftingRecipe {
         return defaultedList;
     }
 
-    @Override
+//    @Override
     public boolean fits(int width, int height) {
         return width*height >= 2;
     }
