@@ -1,6 +1,6 @@
 {
   "type": "minecraft:shifted_noise",
-  "noise": "minecraft:temperature",
+  "noise": "infinity:temperature",
   "shift_x": "minecraft:shift_x",
   "shift_y": 0.0,
   "shift_z": "minecraft:shift_z",
