@@ -6,6 +6,7 @@ import net.lerariemann.infinity.dimensions.features.lakes.RandomLake;
 import net.lerariemann.infinity.dimensions.features.local_modifications.RandomGeode;
 import net.lerariemann.infinity.dimensions.features.local_modifications.RandomIceberg;
 import net.lerariemann.infinity.dimensions.features.local_modifications.RandomRock;
+import net.lerariemann.infinity.dimensions.features.raw_generation.RandomBonusChest;
 import net.lerariemann.infinity.dimensions.features.raw_generation.RandomEndIsland;
 import net.lerariemann.infinity.dimensions.features.raw_generation.RandomShape;
 import net.lerariemann.infinity.dimensions.features.surface_structures.*;
@@ -81,6 +82,7 @@ public class RandomFeaturesList {
     NbtList rawGeneration() {
         NbtList res = new NbtList();
         addRandomFeature("end_island", res, RandomEndIsland::new);
+        addRandomFeature("bonus_chest", res, RandomBonusChest::new);
         if (roll("shape")) addRandomFeature(res, new RandomShape(this, PROVIDER.randomName(random, ConfigType.SHAPE_TYPES)));
         return res;
     }
