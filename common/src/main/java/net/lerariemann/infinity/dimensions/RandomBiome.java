@@ -207,13 +207,11 @@ public class RandomBiome {
         return res;
     }
 
-    NbtCompound carvers() {
-        NbtCompound res = new NbtCompound();
+    NbtList carvers() {
         NbtList air = new NbtList();
         if (PROVIDER.roll(random, "use_random_cave")) air.add(NbtString.of((new RandomCarver(this, true)).fullname));
         if (PROVIDER.roll(random, "use_random_canyon")) air.add(NbtString.of((new RandomCarver(this, false)).fullname));
         PROVIDER.registry.get(ConfigType.CARVERS).getAllNames(random::nextDouble).forEach(s -> air.add(NbtString.of(s)));
-        res.put("air", air);
-        return res;
+        return air;
     }
 }
