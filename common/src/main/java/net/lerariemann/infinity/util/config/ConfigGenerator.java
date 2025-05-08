@@ -66,8 +66,8 @@ public interface ConfigGenerator {
         ConfigFactory.of(manager.getOrThrow(RegistryKeys.BIOME), ConfigGenerator::extractBiome).generate(ConfigType.BIOMES);
         ConfigFactory.of(manager.getOrThrow(RegistryKeys.STRUCTURE), ConfigGenerator::extractStructure).generate(ConfigType.STRUCTURES);
         ConfigFactory.of(manager.getOrThrow(RegistryKeys.CONFIGURED_FEATURE), ConfigGenerator::extractFeature).generate(ConfigType.TREES);
-        ConfigFactory.of(server.getRegistryManager().getOrThrow(RegistryKeys.LOOT_TABLE), ConfigGenerator::extractLootTable)
-                .generate(ConfigType.LOOT_TABLES);
+
+        generateLootTables(server.getReloadableRegistries());
     }
 
     static void generateSounds() {
@@ -300,6 +300,15 @@ public interface ConfigGenerator {
         if (type.equals(Feature.HUGE_BROWN_MUSHROOM)) return "huge_brown_mushroom";
         if (type.equals(Feature.HUGE_RED_MUSHROOM)) return "huge_red_mushroom";
         return "";
+    }
+
+    static void generateLootTables(ReloadableRegistries.Lookup reloadableRegistries) {
+        var r = reloadableRegistries.getIds(RegistryKeys.LOOT_TABLE);
+        DataCollection lootTables = new DataCollection.Logged(ConfigType.LOOT_TABLES, "loot tables");
+        r.forEach(id -> {
+            lootTables.addIdentifier(id);
+        });
+        lootTables.save();
     }
 
     static NbtCompound extractLootTable(Registry<LootTable> registry, RegistryKey<LootTable> key) {
