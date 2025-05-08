@@ -85,7 +85,7 @@ public interface ConfigGenerator {
 
     static void generateBlockTags() {
         DataCollection tagMap = new DataCollection.Logged(ConfigType.TAGS, "block tags");
-        Registries.BLOCK.streamTags().forEach(tagKey -> tagMap.addIdentifier(tagKey.id()));
+        Registries.BLOCK.streamTags().forEach(tagKey -> tagMap.addIdentifier(tagKey.getTag().id()));
         tagMap.save();
     }
 
