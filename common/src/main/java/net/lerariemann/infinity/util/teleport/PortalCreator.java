@@ -4,6 +4,7 @@ import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.custom.Boopable;
+import net.lerariemann.infinity.compat.DimLibCompat;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
@@ -250,8 +251,12 @@ public interface PortalCreator {
         RandomDimension d = new RandomDimension(id, server);
 
         if (!RandomProvider.rule("runtimeGenerationEnabled")) return false;
-
-        ((MinecraftServerAccess)(server)).infinity$addWorld(key, DimensionGrabber.readDimensionFromDisk(d)); // create the dimension
+        // create the dimension
+        if (Platform.isModLoaded("dimlib")) {
+            DimLibCompat.add(server, id, DimensionGrabber.readDimensionFromDisk(d));
+        } else {
+            ((MinecraftServerAccess)(server)).infinity$addWorld(key, DimensionGrabber.readDimensionFromDisk(d));
+        }
         server.getPlayerManager().getPlayerList().forEach(
                 a -> sendNewWorld(a, id, d)); //and send everyone its data for clientside updating
         return true;

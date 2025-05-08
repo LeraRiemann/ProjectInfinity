@@ -14,6 +14,7 @@ public enum ConfigType implements StringIdentifiable {
     FULL_BLOCKS("full_blocks", "minecraft:stone"),
     FULL_BLOCKS_WG("full_blocks_worldgen", "minecraft:stone"),
     FLOWERS("flowers", "minecraft:poppy"),
+    CHESTS("chests", "minecraft:chest"),
     FLUIDS("fluids", "minecraft:water", NbtUtils::nameToFluid),
     ITEMS("items", "minecraft:stick"),
     SOUNDS("sounds", "minecraft:block.stone.step"),

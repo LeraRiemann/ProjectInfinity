@@ -6,6 +6,7 @@ import net.lerariemann.infinity.dimensions.features.lakes.RandomLake;
 import net.lerariemann.infinity.dimensions.features.local_modifications.RandomGeode;
 import net.lerariemann.infinity.dimensions.features.local_modifications.RandomIceberg;
 import net.lerariemann.infinity.dimensions.features.local_modifications.RandomRock;
+import net.lerariemann.infinity.dimensions.features.top_layer.RandomBonusChest;
 import net.lerariemann.infinity.dimensions.features.raw_generation.RandomEndIsland;
 import net.lerariemann.infinity.dimensions.features.raw_generation.RandomShape;
 import net.lerariemann.infinity.dimensions.features.surface_structures.*;
@@ -53,7 +54,7 @@ public class RandomFeaturesList {
         data.add(undergroundDecoration());
         data.add(fluidSprings());
         data.add(vegetation());
-        data.add(getAllElements(ConfigType.TOP_LAYER));
+        data.add(topLayer());
     }
 
     NbtList getAllElements(ConfigType name) {
@@ -156,6 +157,12 @@ public class RandomFeaturesList {
             addRandomFeature("water_plants", res, RandomPickle::new);
             addRandomFeature("water_plants", res, RandomKelp::new);
         }
+        return res;
+    }
+
+    NbtList topLayer() {
+        NbtList res = getAllElements(ConfigType.TOP_LAYER);
+        addRandomFeature("bonus_chest", res, RandomBonusChest::new);
         return res;
     }
 

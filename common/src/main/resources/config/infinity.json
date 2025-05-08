@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2004005,
+  "infinity_version": 2004006,
   "gameRules": {
     "runtimeGenerationEnabled": true,
     "longArithmeticEnabled": false,
@@ -60,6 +60,7 @@
     },
     "features_chances": {
       "end_island": 0.2,
+      "bonus_chest": 0.2,
       "shape": 0.5,
       "lake": 0.5,
       "iceberg": 0.33,
