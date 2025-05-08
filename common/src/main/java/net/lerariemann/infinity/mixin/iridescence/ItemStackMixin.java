@@ -25,10 +25,11 @@ public abstract class ItemStackMixin {
 
     @Inject(method="getTooltip", at = @At(value = "INVOKE",
             target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0))
-    void inj(Item.TooltipContext context, PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir,
-             @Local LocalRef<MutableText> mutableText) {
-        if (isIn(ModTags.IRIDESCENT_ITEMS)) {
-            mutableText.set(mutableText.get().withColor(Iridescence.getTimeBasedColor()));
+    void inj(Item.TooltipContext context, PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir) {
+        if (isIn(ModTags.IRIDESCENT_ITEMS) && cir.getReturnValue() != null) {
+            var text = cir.getReturnValue().getFirst();
+            Style style = text.getStyle().withColor(Iridescence.getTimeBasedColor());
+            cir.getReturnValue().set(0, text.getWithStyle(style).getFirst());
         }
     }
 }

@@ -146,7 +146,7 @@ public class ModItems {
 
     public static <T extends Item> RegistrySupplier<T> registerBlockItem(RegistrySupplier<Block> block, Item.Settings settings,
                                                            BiFunction<Block, Item.Settings, T> constructor) {
-        return ITEMS.register(block.getId(), () -> constructor.apply(block.get(), settings));
+        return ITEMS.register(block.getId(), () -> constructor.apply(block.get(), settings.useBlockPrefixedTranslationKey()));
     }
     /**
      * Registers a BlockItem via Architectury API.
