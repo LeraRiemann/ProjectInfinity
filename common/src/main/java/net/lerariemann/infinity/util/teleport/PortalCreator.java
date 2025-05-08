@@ -47,7 +47,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.World;
-import qouteall.dimlib.api.DimensionAPI;
 
 import java.nio.file.Path;
 import java.util.*;
