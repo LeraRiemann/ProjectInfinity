@@ -69,6 +69,8 @@ subprojects {
                 includeGroup "maven.modrinth"
             }
         }
+        maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
+        maven { url = "https://maven.createmod.net" }
     }
 
     dependencies {
