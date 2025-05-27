@@ -6,9 +6,13 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.LootableInventory;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -41,11 +45,9 @@ public class RandomBonusChestFeature extends Feature<RandomBonusChestFeature.Con
 
             for (Direction direction : Direction.Type.HORIZONTAL) {
                 BlockPos blockPos2 = blockPos.offset(direction);
-                if (blockState.canPlaceAt(structureWorldAccess, blockPos2)) {
+                if (blockState.canPlaceAt(structureWorldAccess, blockPos2) && structureWorldAccess.getFluidState(blockPos2).isEmpty())
                     structureWorldAccess.setBlockState(blockPos2, blockState, 2);
-                }
             }
-
             return true;
         }
         return false;
