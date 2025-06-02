@@ -3,13 +3,11 @@ package net.lerariemann.infinity.mixin.options;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
-import net.lerariemann.infinity.registry.core.ModBlocks;
-import net.lerariemann.infinity.registry.core.ModBlockEntities;
+import net.lerariemann.infinity.util.config.ConfigGenInvocation;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.var.ModPayloads;
-import net.minecraft.block.BlockState;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.registry.CombinedDynamicRegistries;
 import net.minecraft.registry.ServerDynamicRegistryType;
@@ -19,7 +17,6 @@ import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.WorldSavePath;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.PlayerSaveHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -59,15 +56,7 @@ public class PlayerManagerMixin {
         ModPayloads.sendStarsPayload(player);
         MinecraftServerAccess acc = ((MinecraftServerAccess)(serverWorld2.getServer()));
         if (acc.infinity$needsInvocation()) {
-            int y = serverWorld2.getTopY() - 10;
-            BlockPos pos = new BlockPos(player.getBlockX(), y, player.getBlockZ());
-            BlockState st = serverWorld2.getBlockState(pos);
-            serverWorld2.setBlockState(pos, ModBlocks.COSMIC_ALTAR.get().getDefaultState());
-            serverWorld2.getBlockEntity(pos, ModBlockEntities.COSMIC_ALTAR.get()).ifPresent(e -> {
-                InfinityMod.LOGGER.info("Invoking the name of the Cosmic Altar...");
-                e.startTime();
-                e.addNull(st);
-            });
+            ConfigGenInvocation.invokeOn(player);
         }
         InfinityMod.LOGGER.info("Sending sound pack to client");
         if (RandomProvider.rule("useSoundSyncPackets")) ModPayloads.sendSoundPackPayload(player, CommonIO.read(
