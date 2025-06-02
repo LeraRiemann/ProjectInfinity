@@ -22,6 +22,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public record Amendment(ConfigType area, ModSelector modSelector, Selector selector, Results results) {
     public static Amendment of(NbtCompound data) {
+        String areaName = data.getString("area");
+        ConfigType area = ConfigType.byName(areaName);
+        if (area == null) {
+            InfinityMod.LOGGER.warn("Unknown amendment area: {}", areaName);
+            return null;
+        }
+
         String mod = data.getString("mod");
         ModSelector modSelector;
         if (mod.equals("all")) {
@@ -30,7 +37,6 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
         else if (!Platform.isModLoaded(mod)) return null;
         else modSelector = new MatchingModSelector(mod);
 
-        ConfigType area = ConfigType.byName(data.getString("area"));
         String selectorType = data.getString("selector");
         Selector selector = switch(selectorType) {
             case "all" -> new UniversalSelector();
@@ -44,6 +50,7 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
                 yield null;
             }
         };
+
         String resultType = data.getString("results");
         Results results = switch (resultType) {
             case "set_value" -> new SetValue(data.getInt("value"));
@@ -55,7 +62,7 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
             }
         };
 
-        if (area == null || selector == null || results == null) return null;
+        if (selector == null || results == null) return null;
         return new Amendment(area, modSelector, selector, results);
     }
 
@@ -114,11 +121,15 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
             return key.equals(this.key);
         }
     }
-    public record MatchingBlockTagSelector(String key) implements Selector {
+    public record MatchingBlockTagSelector(TagKey<Block> tag) implements Selector {
+        public MatchingBlockTagSelector(String key) {
+            this(TagKey.of(RegistryKeys.BLOCK, Identifier.of(key)));
+        }
+
         public boolean applies(String key) {
             Block b = Registries.BLOCK.get(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(key)));
             if (b != null) {
-                return b.getDefaultState().isIn(TagKey.of(RegistryKeys.BLOCK, Identifier.of(this.key)));
+                return b.getDefaultState().isIn(this.tag);
             }
             return false;
         }

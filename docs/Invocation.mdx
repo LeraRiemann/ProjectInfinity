@@ -58,6 +58,7 @@ Amendments consist of four distinct parts governing when and how the amendment w
 * Area. This is the scope of the amendment in terms of type of game content it affects: `"blocks"`, `"fluids"`, `"items"`, `"structures"` and `"mobs"`
 are the ones that would probably be most useful to a user, but there are other options too.
 * Mod. This cam be set to a mod ID (including `"minecraft"`) to only select content from this mod, or to `"all"` to skip the mod check.
+If the mod of the set ID is not loaded, the amendment is skipped.
 * Selector. This governs what content within the selected mod and area is affected by the amendment, and there are several types available:
  * `"all"` - amend everything (useful if you want to skip some mod entirely);
  * `"matching"` - amend a single entry, with it's key set as a value under a key `matching` (i.e., `"selector": "matching", "matching": "minecraft:lava"`);
