@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static net.lerariemann.infinity.InfinityMod.LOGGER;
 import static net.lerariemann.infinity.InfinityMod.configPath;
 
 public interface CommonIO {
@@ -46,18 +47,26 @@ public interface CommonIO {
     }
 
     static int getVersion(File file) {
+        return getStaistic(file, "infinity_version");
+    }
+    static int getAmendmentVersion(File file) {
+        return getStaistic(file, "amendment_version");
+    }
+
+    static int getStaistic(File file, String statname) {
         String content;
         try {
             content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            if (!content.contains("infinity_version")) return 0;
-            int i = content.indexOf("infinity_version");
+            if (!content.contains(statname)) return 0;
+            int i = content.indexOf(statname);
             int end = content.indexOf(",", i);
             if (end == -1) {
                 end = content.indexOf("\n", i);
             }
             return Integer.parseInt(content.substring(content.indexOf(" ", i)+1, end).trim());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            LOGGER.warn("No file found: {}", file);
+            return 0;
         }
     }
 
