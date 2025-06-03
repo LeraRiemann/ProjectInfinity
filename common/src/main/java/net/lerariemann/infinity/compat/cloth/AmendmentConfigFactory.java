@@ -87,7 +87,6 @@ public class AmendmentConfigFactory {
         String current = getSafeString(amendment, name);
         subCategory.add(builder.entryBuilder().startDropdownMenu(Text.translatable("config.infinity.amendments."+name), DropdownMenuBuilder.TopCellElementBuilder.of(current, (s) -> s))
                 .setTooltip(amendmentTooltip(name))
-                .setSuggestionMode(false)
                 .setSaveConsumer((value)-> amendmentSetter(name, String.valueOf(value), i))
                 .setSelections(options).build());
     }
