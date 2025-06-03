@@ -168,6 +168,7 @@
   "config.infinity.title.features_chances": "Feature Chances",
   "config.infinity.title.rootChances": "Root Chances",
   "config.infinity.amendment": "Amendment #%s",
+  "config.infinity.amendment.new": "New Amendment",
   "config.infinity.amendments.area": "Area",
   "config.infinity.amendments.area.description": "What part of Infinite Dimensions generation to affect. Options include blocks, fluids, trees, mobs, structures.",
   "config.infinity.amendments.mod": "Mod Name",
