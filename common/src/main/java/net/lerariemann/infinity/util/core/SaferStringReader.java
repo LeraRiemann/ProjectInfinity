@@ -26,14 +26,32 @@ public class SaferStringReader extends StringReader {
     @Override
     public String readStringUntil(char terminator) throws CommandSyntaxException {
         StringBuilder result = new StringBuilder();
+        boolean escaped = false;
 
         while(this.canRead()) {
             char c = this.read();
-            if (c == terminator) {
-                return result.toString();
-            }
+            if (escaped) {
+                if (c == terminator) {
+                    result.append(c);
+                    escaped = false;
+                }
+                else if (c == '\\') {
+                    result.append('\\');
+                }
+                else {
+                    result.append('\\');
+                    result.append(c);
+                    escaped = false;
+                }
+            } else if (c == '\\') {
+                escaped = true;
+            } else {
+                if (c == terminator) {
+                    return result.toString();
+                }
 
-            result.append(c);
+                result.append(c);
+            }
         }
 
         throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerExpectedEndOfQuote().createWithContext(this);
