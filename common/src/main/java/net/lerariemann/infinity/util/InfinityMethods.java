@@ -94,6 +94,12 @@ public interface InfinityMethods {
         player.sendMessage(Text.translatable("error.infinity." + type + ".unexpected"));
     }
 
+    static String dimTextPreprocess(String text) {
+        if (RandomProvider.rule("forceLowercase")) text = text.toLowerCase();
+        text = text.replaceAll("\n", " ");
+        return text;
+    }
+
     /**
      * Convert a provided string into a dimension ID.
      * This also checks if it matches an Easter Egg dimension.

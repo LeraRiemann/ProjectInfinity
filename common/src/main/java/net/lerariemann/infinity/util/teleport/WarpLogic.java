@@ -54,6 +54,7 @@ public interface WarpLogic {
      * Handles the /warp text command, warping the player to a specified dimension. This is the same as writing the input into a book.
      */
     static void requestWarpByText(CommandContext<ServerCommandSource> context, String value) {
+        value = InfinityMethods.dimTextPreprocess(value);
         Identifier id = InfinityMethods.dimTextToId(value);
         requestWarp(context.getSource().getPlayer(), id, true);
         PortalCreator.recordIdTranslation(context.getSource().getServer(), id, value);

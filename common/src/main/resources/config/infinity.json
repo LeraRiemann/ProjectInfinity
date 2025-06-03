@@ -10,6 +10,7 @@
     "pawnsCanDropIllegalItems": false,
     "useSoundSyncPackets": true,
     "enforceModLoadedChecks": true,
+    "forceLowercase": false,
     "maxBiomeCount": 6,
     "maxDimensionScale": 0,
     "avgDimensionHeight": 256,
