@@ -81,7 +81,7 @@ public interface CommonIO {
         try {
             if (file.exists()) {
                 content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-                NbtCompound c = StringNbtReader.parse(content);
+                NbtCompound c = SaferStringReader.parse(content);
                 c.remove("infinity_version");
                 return c;
             }
