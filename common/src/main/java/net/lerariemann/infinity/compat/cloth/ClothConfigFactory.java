@@ -1,4 +1,4 @@
-package net.lerariemann.infinity.compat;
+package net.lerariemann.infinity.compat.cloth;
 
 
 import com.google.gson.*;
@@ -91,6 +91,7 @@ public class ClothConfigFactory {
                     .build();
             addEntry(newOption, category);
 
+
         }
         else if (value.isBoolean()) {
             var newOption = entryBuilder.startBooleanToggle(fieldName(field, currentCategory), value.getAsBoolean())
@@ -169,53 +170,9 @@ public class ClothConfigFactory {
                 }
             }
         }
-        ConfigCategory easterCategory = builder.getOrCreateCategory(Text.translatable("config.infinity.title.easter"));
-        JsonArray currentConfig = infinityJson.getAsJsonArray("disabledDimensions");
-        JsonArray defaultConfig = readJson(configPath()+("/.infinity-default.json")).getAsJsonObject().getAsJsonArray("disabledDimensions");
-        Stream<String> sorted = InfinityMod.provider.easterizer.map.keySet().stream().sorted();
-        for (String name : sorted.toList()) {
-            var defaultsDisabled = isEasterEggDisabled(defaultConfig, name);
-            easterCategory.addEntry(builder.entryBuilder().startBooleanToggle(
-                    Text.of(InfinityMethods.formatAsTitleCase(name)), isEasterEggDisabled(currentConfig, name))
-                    .setSaveConsumer(newValue -> easterSetter(name, newValue))
-                    .setTooltip(easterTooltip(defaultsDisabled))
-                    .setDefaultValue(defaultsDisabled).build());
-        }
+        EasterConfigFactory.build(builder, infinityJson);
+        AmendmentConfigFactory.build(builder);
         return builder.build();
-    }
-
-    static void easterSetter(String name, boolean newValue) {
-        NbtCompound rootConfig = readRootConfigNbt();
-        // If a dimension should be enabled...
-        if (newValue) {
-            System.out.println(name);
-            // and it is currently disabled (in the list of disabled dimensions)
-            if (rootConfig.getList("disabledDimensions", 8).contains(NbtString.of(name))) {
-                // remove it from the list of disabled dimensions.
-                rootConfig.getList("disabledDimensions", 8).remove(NbtString.of(name));
-
-                CommonIO.write(rootConfig, configPath(), "infinity.json");
-            }
-        }
-        // If a dimension should be disabled...
-        else {
-            if (!rootConfig.getList("disabledDimensions", 8).contains(NbtString.of(name))) {
-                // remove it from the list of disabled dimensions.
-                rootConfig.getList("disabledDimensions", 8).add(NbtString.of(name));
-
-                CommonIO.write(rootConfig, configPath(), "infinity.json");
-            }
-        }
-    }
-
-    public static boolean isEasterEggDisabled(JsonArray array, String name) {
-        boolean result = false;
-        for (JsonElement disabled : array) {
-            if (Objects.equals(disabled.getAsString(), name)) {
-                result = true;
-            }
-        }
-        return !result;
     }
 
     /**
@@ -227,12 +184,6 @@ public class ClothConfigFactory {
         }
         else category = category + ".";
         return Text.translatableWithFallback("config."+MOD_ID + "." + category + field.getKey(), formatAsTitleCase(field.getKey()));
-    }
-
-    static Optional<Text[]> easterTooltip(boolean enabled) {
-        if (!enabled)
-            return Optional.of(createTooltip("config.infinity.easter.disabled.description").toArray(new Text[0]));
-        else return Optional.empty();
     }
 
     /**
