@@ -5,11 +5,14 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.platform.Platform;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.minecraft.command.argument.DimensionArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+
+import java.util.Random;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -18,7 +21,7 @@ public class ModCommands {
     public static final DynamicCommandExceptionType MALFORM_IDENTIFIER_EXCEPTION = new DynamicCommandExceptionType(
             id -> Text.stringifiedTranslatable("error.infinity.warp.malformed_identifier", id)
     );
-    public static final DynamicCommandExceptionType TIMEBOMBED_EXCEPRION = new DynamicCommandExceptionType(
+    public static final DynamicCommandExceptionType TIMEBOMBED_EXCEPTION = new DynamicCommandExceptionType(
             id -> Text.stringifiedTranslatable("error.infinity.warp.timebombed", id)
     );
 
@@ -31,6 +34,13 @@ public class ModCommands {
         }
         CommandRegistrationEvent.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal(warp)
                 .requires(source -> source.hasPermissionLevel(2))
+                .then(
+                        CommandManager.literal("random").executes((context -> {
+                            final long text = InfinityMethods.getRandomSeed(new Random());
+                            WarpLogic.requestWarpById(context, text);
+                            return 1;
+                        }))
+                )
                 .then(
                         CommandManager.literal("existing").then(
                                 argument("existing", DimensionArgumentType.dimension()).executes(context -> {

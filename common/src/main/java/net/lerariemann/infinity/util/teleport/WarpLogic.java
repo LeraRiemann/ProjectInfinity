@@ -47,7 +47,7 @@ public interface WarpLogic {
         if (w == null)
             throw ModCommands.MALFORM_IDENTIFIER_EXCEPTION.create(value);
         else if (InfinityMethods.isTimebombed(w))
-            throw ModCommands.TIMEBOMBED_EXCEPRION.create(value);
+            throw ModCommands.TIMEBOMBED_EXCEPTION.create(value);
         else requestWarp(context.getSource().getPlayer(), value, true);
     }
     /**
