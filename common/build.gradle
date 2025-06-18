@@ -41,7 +41,7 @@ dependencies {
 //    modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version+$minecraft_version:api")
 
     // Ponder
-    modCompileOnly("net.createmod.ponder:Ponder-Fabric-${minecraft_version}:${ponder_version}")
+//    modCompileOnly("net.createmod.ponder:Ponder-Fabric-${minecraft_version}:${ponder_version}")
 
 }
 
