@@ -41,11 +41,9 @@ public class RandomBonusChestFeature extends Feature<RandomBonusChestFeature.Con
 
             for (Direction direction : Direction.Type.HORIZONTAL) {
                 BlockPos blockPos2 = blockPos.offset(direction);
-                if (blockState.canPlaceAt(structureWorldAccess, blockPos2)) {
+                if (blockState.canPlaceAt(structureWorldAccess, blockPos2) && structureWorldAccess.getFluidState(blockPos2).isEmpty())
                     structureWorldAccess.setBlockState(blockPos2, blockState, 2);
-                }
             }
-
             return true;
         }
         return false;

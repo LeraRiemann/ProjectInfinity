@@ -6,10 +6,12 @@ import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,19 +31,31 @@ public interface ConfigManager {
     /** If the game was last started in a version of the mod that uses a different modular config format,
      * this deletes the old configs ensuring they will be regenerated in the correct format
      * by {@link ConfigFactory} on next world load. */
-    static void updateInvocationLock() {
+    static void updateInvocationUnlock() {
         File invlock = InfinityMod.invocationLock.toFile();
         if (!invlock.exists()) return;
         try {
-            if (!compareVersions(InfinityMod.invocationLock, InfinityMod.rootConfigPathInJar.resolve( ".util/invocation.lock"))) return;
+            int a = compareVersionsAndAmendments(InfinityMod.invocationLock, InfinityMod.rootConfigPathInJar.resolve( ".util/invocation.lock"));
+            if (a == 0) return;
             try (Stream<Path> files = Files.walk(configPath.resolve("modular"))) {
-                InfinityMod.LOGGER.info("Deleting outdated modular configs");
+                InfinityMod.LOGGER.info("Deleting {} modular configs", a == 1 ? "outdated" : "amended");
                 files.map(Path::toFile).filter(File::isFile).forEach(f -> {
                     if (!f.delete()) InfinityMod.LOGGER.info("Cannot delete file {}", f);
                 });
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+    
+    static void updateInvocationLock() throws IOException {
+        Path inv = InfinityMod.invocationLock;
+        if (!Files.exists(inv)) {
+            Files.createDirectories(inv.getParent());
+            Files.copy(InfinityMod.rootConfigPathInJar.resolve(".util/invocation.lock"), tempFile, REPLACE_EXISTING);
+            String s = FileUtils.readFileToString(tempFile.toFile(), StandardCharsets.UTF_8);
+            s = s.replace("&0", String.valueOf(CommonIO.getAmendmentVersion(InfinityMod.amendmentPath.toFile())));
+            Files.writeString(inv, s, StandardCharsets.UTF_8);
         }
     }
 
@@ -99,6 +113,17 @@ public interface ConfigManager {
         Files.copy(newFile, tempFile, REPLACE_EXISTING);
         int version_new = CommonIO.getVersion(tempFile.toFile());
         return version_new > version_old;
+    }
+
+    static int compareVersionsAndAmendments(Path oldFile, Path newFile) throws IOException {
+        int version_old = CommonIO.getVersion(oldFile.toFile());
+        int amendment_version_old = CommonIO.getAmendmentVersion(oldFile.toFile());
+        Files.copy(newFile, tempFile, REPLACE_EXISTING);
+        int version_new = CommonIO.getVersion(tempFile.toFile());
+        int amendment_version_new = CommonIO.getAmendmentVersion(InfinityMod.amendmentPath.toFile());
+        if (version_new > version_old) return 1;
+        if (amendment_version_new > amendment_version_old) return 2;
+        return 0;
     }
 
     @Deprecated

@@ -21,6 +21,7 @@ public class InfinityMod {
 	public static Path configPath = Path.of("config", InfinityMod.MOD_ID);
 	public static Path utilPath = configPath.resolve(".util");
 	public static Path invocationLock = configPath.resolve("modular/invocation.lock");
+	public static Path amendmentPath = configPath.resolve("amendments.json");
 
 	public static Path rootConfigPathInJar;
 	public static RandomProvider provider;
@@ -35,7 +36,7 @@ public class InfinityMod {
 
 	public static void init() {
 		rootConfigPathInJar = PlatformMethods.getRootConfigPath();
-		ConfigManager.updateInvocationLock();
+		ConfigManager.updateInvocationUnlock();
 		ConfigManager.unpackDefaultConfigs();
 		ModComponentTypes.registerComponentTypes();
 		ModStatusEffects.registerModEffects();

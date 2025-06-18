@@ -94,6 +94,13 @@ public interface InfinityMethods {
         player.sendMessage(Text.translatable("error.infinity." + type + ".unexpected"));
     }
 
+    static String dimTextPreprocess(String text) {
+        if (text.isEmpty()) return "missingno";
+        if (RandomProvider.rule("forceLowercase")) text = text.toLowerCase();
+        text = text.replaceAll("\n", " ");
+        return text;
+    }
+
     /**
      * Convert a provided string into a dimension ID.
      * This also checks if it matches an Easter Egg dimension.
@@ -101,8 +108,6 @@ public interface InfinityMethods {
     static Identifier dimTextToId(String text) {
         if (text.equals("abatised redivides"))
             return World.END.getValue();
-        if (text.isEmpty())
-            return InfinityMethods.getId("missingno");
         String easterId = InfinityMod.provider.easterizer.getAsEaster(text);
         if (easterId != null)
             return InfinityMethods.getId(easterId);

@@ -1,4 +1,5 @@
 {
+  "amendment_version": 0,
   "elements": [
     {
       "area": "fluids",
@@ -62,7 +63,7 @@
       "results": "erase"
     },
     {
-      "area": "structures",
+      "area": "blocks",
       "mod": "oritech",
       "selector": "containing",
       "containing": "pipe",

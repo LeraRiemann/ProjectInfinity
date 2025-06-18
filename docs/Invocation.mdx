@@ -21,7 +21,8 @@ Currently, the config files and therefore types of modded content which the invo
 * status effects,
 * block tags,
 * structures plus some of their additional data,
-* biomes and surface rules for them.
+* biomes,
+* (in limited capacity) surface rules for biomes.
 
 Blocks are auto-assigned tags needed for the generator to know which parts of worldgen are they usable for ("full", "laggy" etc.,
 see the page on [configuring the mod](Configuring-the-mod)), plus checked for different traits (being a flower, rotatable, dyeable etc.).
@@ -38,11 +39,151 @@ altogether (set the weight to 0.0 for that).
 ## Known issues with invocation
 * Invocation only happens once per game folder. As such, if you add new mods to the instance after you already loaded worlds on it once,
 invocation will not happen again. This especially stands for the default Minecraft launcher by Mojang, which by design only uses one.
-To force the invocation to happen again, you can either construct and activate the Transfinite Altar, or delete the file
-`config/infinity/modular/invocation.lock` and relaunch the game.
-    * Note that such reinvocation will not touch any of the existing files, only add new ones. As such, it is useful by itself only when
-    adding new mods to the instance. If you update one of the mods (including Infinite Dimensions!) to a newer version that brings
-    more content, or *especially* if you remove mods, you have to purge the `/config/modular` folder entirely to do a successful reinvocation.
+To force the invocation to happen again, you need to delete the file `config/infinity/modular/invocation.lock` and relaunch the game.
+* Repeated invocation will not touch any of the existing files, only add new ones. As such, it is useful by itself only when
+adding new mods to the instance. If you update one of the mods to a newer version that brings more content, or *especially* if you remove mods,
+you have to purge the `/config/modular` folder entirely to do a successful reinvocation.
 * Starting at version 2.1.0 of the mod, Infinite Dimensions will automatically delete all modular configs and issue reinvocation
 if it detects that the version of those configs (set in the invocation lock) is outdated. If you make changes to your modular configs,
 do a backup of them before updating the mod!
+
+## Amendments
+Amendments are a system of automatically changing values in config files without changing them one-by-one. A more proper integration (for editing them
+in GUI) will be explored later, but so far it is possible to do them by editing files.
+
+Amendments are stored in `config/infinity/amendments.json` and only can affect modular configs. To change the list of active amendments,
+one must edit the amendments.json file _making sure to increase up the amendment_version statistic at the top_, then fully close and restart the game.
+
+Amendments consist of four distinct parts governing when and how the amendment will be passed:
+* Area. This is the scope of the amendment in terms of type of game content it affects: `"blocks"`, `"fluids"`, `"items"`, `"structures"` and `"mobs"`
+are the ones that would probably be most useful to a user, but there are other options too.
+* Mod. This cam be set to a mod ID (including `"minecraft"`) to only select content from this mod, or to `"all"` to skip the mod check.
+If the mod of the set ID is not loaded, the amendment is skipped.
+* Selector. This governs what content within the selected mod and area is affected by the amendment, and there are several types available:
+ * `"all"` - amend everything (useful if you want to skip some mod entirely);
+ * `"matching"` - amend a single entry, with it's key set as a value under a key `matching` (i.e., `"selector": "matching", "matching": "minecraft:lava"`);
+ * `"matching_any"` - amend every entry in a list, provided under a key `matching`;
+ * `"matching_block_tag"` - only works when `area` is set to `"blocks"` and amends all blocks under a tag. The tag ID is provided under `matching` without
+ the leading `#` symbol.
+ * `"containing"` - amends all entries the names of which contain a certain string of characters set under the `containing` field.
+* Results - what will the amendment do, the following options are available:
+ * `"set_value"` - sets the weight of an element to a number provided under `value` (the default weight is 1);
+ * `"set_field"` - useful e.g. for blocks if you want to mark them as laggy overriding the default algorithm that checks it;
+ additional fields are `field_name` and `field` allowing you to add any field to the data amended content has;
+ * `"erase"` - skip the entry entirely, effectively the same as setting its weight to 0.
+
+Let's break down the default list of ten amendments the mod comes with. Most of them are fixes for various mod compatibility issues:
+```
+    {
+      "area": "fluids",
+      "mod": "minecraft",
+      "selector": "matching",
+      "matching": "minecraft:lava",
+      "results": "set_value",
+      "value": 2.0
+    },
+    {
+      "area": "fluids",
+      "mod": "minecraft",
+      "selector": "matching",
+      "matching": "minecraft:water",
+      "results": "set_value",
+      "value": 5.0
+    }
+```
+The first and second amendments modify the weights the two vanilla fluids have in the distribution of all fluids, making them
+a bit more common in modded scenarios.
+
+```
+    {
+      "area": "blocks",
+      "mod": "minecraft",
+      "selector": "matching_any",
+      "matching": [
+        "minecraft:slime_block",
+        "minecraft:honey_block",
+        "minecraft:mangrove_roots"
+      ],
+      "results": "set_field",
+      "field_name": "laggy",
+      "field": true
+    }
+```
+The third amendment marks some vanilla blocks as laggy. These are the blocks which can overwhelm the rendering algorithm when present in large blobs
+due to having unculled inner faces on their model.
+
+```
+    {
+      "area": "trees",
+      "mod": "all",
+      "selector": "containing",
+      "containing": "bees",
+      "results": "erase"
+    }
+```
+The fourth amendment forbids generation of any trees that have beehives on them (conveniently, their IDs all have the word bees in them),
+as large amounts of those leads to large amounts of bees present which can lag the game.
+
+```
+    {
+      "area": "fluids",
+      "mod": "modern_industrialization",
+      "selector": "all",
+      "results": "erase"
+    }
+```
+The fifth amendment forbids all fluids from the Modern Industrialization mod from appearing, as they lack fluid physics and rendering due to not having
+been supposed to ever be placed in-world.
+
+```
+    {
+      "area": "mobs",
+      "mod": "minecolonies",
+      "selector": "all",
+      "results": "erase"
+    }
+```
+The sixth amendment prevents all mobs from Minecolonies from spawning in this mod's biomes as part of the natural spawning algorithm,
+as these error out the game if they do due to incomplete entity data.
+
+```
+    {
+      "area": "structures",
+      "mod": "alexscaves",
+      "selector": "all",
+      "results": "erase"
+    },
+    {
+      "area": "structures",
+      "mod": "aether",
+      "selector": "containing",
+      "containing": "dungeon",
+      "results": "erase"
+    }
+```
+The seventh and eighth amendments bans all structures from Alex's Caves (aka, the caves themselves) and Aether dungeons from generating in this mod's
+custom dimensions, as they sometimes throw errors when they do due to failing their inner checks when called to generate outside of their natural
+environment.
+
+```
+    {
+      "area": "structures",
+      "mod": "oritech",
+      "selector": "containing",
+      "containing": "pipe",
+      "results": "erase"
+    }
+```
+The ninth amendment bans all pipe blocks from Oritech, because when these are placed during world generation, they try to update their shape
+and in the process poll the world for metrics which on this stage aren't yet present, resulting in a crash.
+
+```
+    {
+      "area": "blocks",
+      "mod": "chipped",
+      "selector": "all",
+      "results": "set_value",
+      "value": 0.1
+    }
+```
+The tenth amendment reduces weights of all blocks from the Chipped mod down to 0.1, as there are thousands of them :D

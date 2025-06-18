@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
+import net.lerariemann.infinity.util.config.ConfigManager;
 import net.minecraft.network.QueryableServer;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
@@ -36,13 +37,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Mixin(MinecraftServer.class)
 public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<ServerTask> implements QueryableServer, ChunkErrorHandler, CommandOutput, AutoCloseable, MinecraftServerAccess {
@@ -90,11 +88,7 @@ public abstract class MinecraftServerMixin extends ReentrantThreadExecutor<Serve
     public void infinity$onInvocation() {
         infinity$needsInvocation = false;
         try {
-            Path p = InfinityMod.invocationLock;
-            if (!Files.exists(p)) {
-                Files.createDirectories(p.getParent());
-                Files.copy(InfinityMod.rootConfigPathInJar.resolve(".util/invocation.lock"), p, REPLACE_EXISTING);
-            }
+            ConfigManager.updateInvocationLock();
             infinity$setDimensionProvider();
             InfinityMod.LOGGER.info("Invocation complete");
         } catch (IOException e) {

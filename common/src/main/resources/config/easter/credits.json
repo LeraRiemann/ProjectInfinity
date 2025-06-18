@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2004005,
+  "infinity_version": 2004006,
   "options": {
     "portal_color": 11894492
   },
@@ -73,7 +73,7 @@
             "then_run": {
               "type": "minecraft:condition",
               "if_true": {
-                "text": "Acknowledgements$n----------------------$nMod by LeraRiemann, cassiancc$n$nMusic by ivory rosewood$n$nAdditional code by:$n* BasiqueEvangelist$n* unilock$n$nAlpha testers:$n* MamonaTheGreed$n* Mirakuzura$n* sweetbriar$n$nGolden bug catcher:$n* JustImagineIT$n$nBug catchers:$n* ezioishere$n* MommysDebitCard$n* 0tvechau$n* purplenathaniel$n* bravely-beep$n* tylerb153$n* Lord_Drakostar$n* slomas04$n* Strike_GR$n* TVFLabs$n* krispyking24$n* wknowleskellett$n* CrownScorpion$n* CraftyZombie$n* Pookette$n* anhonestheart$n* hollow_egg$n* zontreck$n* erasemint$n* EssGeeEich$n* CryptidArtha----------------------$nMay contain elephants",
+                "text": "Acknowledgements$n----------------------$nMod by LeraRiemann, cassiancc$n$nMusic by ivory rosewood$n$nAdditional code by:$n* BasiqueEvangelist$n* unilock$n$nAlpha testers:$n* MamonaTheGreed$n* Mirakuzura$n* sweetbriar$n$nGolden bug catcher:$n* JustImagineIT$n$nBug catchers:$n* ezioishere$n* MommysDebitCard$n* 0tvechau$n* purplenathaniel$n* bravely-beep$n* tylerb153$n* Lord_Drakostar$n* slomas04$n* Strike_GR$n* TVFLabs$n* krispyking24$n* wknowleskellett$n* CrownScorpion$n* CraftyZombie$n* Pookette$n* anhonestheart$n* hollow_egg$n* zontreck$n* erasemint$n* EssGeeEich$n* CryptidArtha$n* general-chat----------------------$nMay contain elephants",
                 "type": "infinity:text"
               },
               "then_run": {

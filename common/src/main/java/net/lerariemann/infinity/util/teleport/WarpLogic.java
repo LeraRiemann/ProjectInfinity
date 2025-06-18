@@ -47,13 +47,14 @@ public interface WarpLogic {
         if (w == null)
             throw ModCommands.MALFORM_IDENTIFIER_EXCEPTION.create(value);
         else if (InfinityMethods.isTimebombed(w))
-            throw ModCommands.TIMEBOMBED_EXCEPRION.create(value);
+            throw ModCommands.TIMEBOMBED_EXCEPTION.create(value);
         else requestWarp(context.getSource().getPlayer(), value, true);
     }
     /**
      * Handles the /warp text command, warping the player to a specified dimension. This is the same as writing the input into a book.
      */
     static void requestWarpByText(CommandContext<ServerCommandSource> context, String value) {
+        value = InfinityMethods.dimTextPreprocess(value);
         Identifier id = InfinityMethods.dimTextToId(value);
         requestWarp(context.getSource().getPlayer(), id, true);
         PortalCreator.recordIdTranslation(context.getSource().getServer(), id, value);

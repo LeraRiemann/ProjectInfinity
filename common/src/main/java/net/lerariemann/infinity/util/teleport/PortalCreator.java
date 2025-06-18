@@ -88,6 +88,7 @@ public interface PortalCreator {
         }
         if (writableComponent != null || writtenComponent != null || printedComponent != null) {
             String content = parseComponents(writableComponent, writtenComponent, printedComponent);
+            content = InfinityMethods.dimTextPreprocess(content);
             Identifier id = InfinityMethods.dimTextToId(content);
             boolean bl = modifyOnInitialCollision(id, world, pos);
             if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
@@ -315,7 +316,6 @@ public interface PortalCreator {
     }
 
     static void recordIdTranslation(MinecraftServer server, Identifier id, String value) {
-        value = value.replaceAll("\n", "/n");
         Path dir = server.getSavePath(WorldSavePath.DATAPACKS).resolve("infinity");
         String filename = "translation_tables.json";
         NbtCompound comp = CommonIO.read(dir.resolve(filename));
@@ -327,7 +327,8 @@ public interface PortalCreator {
                 l.add(comp.get(key));
             }
             else l = comp.getList(key, NbtElement.STRING_TYPE);
-            l.add(NbtString.of(value));
+            NbtString nbts = NbtString.of(value);
+            if (l.contains(nbts)) return; //no need to record a value twice
             comp.remove(key);
             comp.put(key, l);
         }
