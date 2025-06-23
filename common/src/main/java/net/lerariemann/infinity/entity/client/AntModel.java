@@ -10,6 +10,8 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.Optional;
+
 public class AntModel extends EntityModel<AntEntityRenderState> {
 	public static final EntityModelLayer MODEL_LAYER =
 		new EntityModelLayer(InfinityMethods.getId("ant"), "main");
@@ -78,13 +80,13 @@ public class AntModel extends EntityModel<AntEntityRenderState> {
 
 
 	@Override
-	public ModelPart getPart() {
-		return body;
+	public Optional<ModelPart> getPart(String part) {
+		return Optional.of(body);
 	}
 
 	@Override
 	public void setAngles(AntEntityRenderState entity) {
-		this.getPart().traverse().forEach(ModelPart::resetTransform);
+		this.getParts().forEach(ModelPart::resetTransform);
 
 		this.head.yaw = MathHelper.clamp(entity.headYaw, -30.0F, 30.0F) * 0.017453292F;
 		this.head.pitch = MathHelper.clamp(entity.headPitch, -25.0F, 45.0F) * 0.017453292F;

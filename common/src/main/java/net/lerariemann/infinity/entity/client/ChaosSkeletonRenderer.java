@@ -6,7 +6,7 @@ import net.minecraft.client.render.entity.SkeletonEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.SkeletonEntityModel;
 
-public class ChaosSkeletonRenderer extends SkeletonEntityRenderer<ChaosSkeleton> {
+public class ChaosSkeletonRenderer extends SkeletonEntityRenderer {
     public ChaosSkeletonRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.addFeature(new TintedLayerRenderer<>(this, new SkeletonEntityModel<>(context.getPart(EntityModelLayers.SKELETON))));

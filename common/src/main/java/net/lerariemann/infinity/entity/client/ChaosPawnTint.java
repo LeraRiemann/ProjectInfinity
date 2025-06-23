@@ -56,7 +56,7 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawnRenderState, BipedEn
         VertexConsumer vertexConsumer = bl ? c.getBuffer(RenderLayer.getOutline(this.getTexture(e))) : vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(e)));
         (this.getContextModel()).copyStateTo(this.model);
         this.model.animateModel(e, f, g, h);
-        this.model.setAngles(e, f, g, j, k, l);
+        this.model.setAngles(state);
         int o = LivingEntityRenderer.getOverlay(e, 0.0f);
         renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.body, "body");
         renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.head, "head");

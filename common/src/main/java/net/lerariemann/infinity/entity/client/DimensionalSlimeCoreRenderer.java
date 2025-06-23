@@ -14,10 +14,10 @@ import net.minecraft.client.render.entity.model.SlimeEntityModel;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class DimensionalSlimeCoreRenderer extends FeatureRenderer<ChaosSlimeRenderState, SlimeEntityModel<ChaosSlimeRenderState>> {
+public class DimensionalSlimeCoreRenderer extends FeatureRenderer<ChaosSlimeRenderState, SlimeEntityModel> {
     private final BlockRenderManager blockRenderManager;
 
-    public DimensionalSlimeCoreRenderer(FeatureRendererContext<ChaosSlime, SlimeEntityModel<ChaosSlimeRenderState>> context, BlockRenderManager blockRenderManager) {
+    public DimensionalSlimeCoreRenderer(FeatureRendererContext<ChaosSlimeRenderState, SlimeEntityModel> context, BlockRenderManager blockRenderManager) {
         super(context);
         this.blockRenderManager = blockRenderManager;
     }
