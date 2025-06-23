@@ -1,8 +1,10 @@
 package net.lerariemann.infinity.entity.client;
 
 import net.lerariemann.infinity.entity.client.state.ChaosPawnRenderState;
+import net.lerariemann.infinity.entity.client.state.ChaosSlimeRenderState;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.entity.custom.TintableEntity;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
@@ -13,6 +15,7 @@ import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 
 import java.awt.Color;
@@ -24,16 +27,16 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawnRenderState, BipedEn
         this.model = model;
     }
 
-    public void renderOneLayer(MatrixStack matrixStack, VertexConsumer vertexConsumer, int light, int overlay, ChaosPawn livingEntity, ModelPart part, String name) {
+    public void renderOneLayer(MatrixStack matrixStack, VertexConsumer vertexConsumer, int light, int overlay, ChaosPawnRenderState livingEntity, ModelPart part, String name) {
         int color;
-        color = livingEntity.getColors().getInt(name);
-        if (livingEntity.hasCustomName()) {
-            String s = livingEntity.getName().getString();
+        color = livingEntity.colors.getInt(name);
+        if (livingEntity.customName != null) {
+            String s = livingEntity.customName.toString();
              if ("jeb_".equals(s)) {
-                 color = TintableEntity.getColorJeb(livingEntity.age + (name.equals("hat") ? 200 : 0), livingEntity.getId());
+                 color = TintableEntity.getColorJeb((int) (livingEntity.age + (name.equals("hat") ? 200 : 0)), livingEntity.id);
             }
             if ("hue".equals(s)) {
-                int n = livingEntity.age + (name.equals("hat") ? 200 : 0) + livingEntity.getId();
+                int n = (int) (livingEntity.age + (name.equals("hat") ? 200 : 0) + livingEntity.id);
                 float hue = n/400.f;
                 hue = hue - (int)hue;
                 color = Color.getHSBColor(hue, 1.0f, 1.0f).getRGB();
@@ -54,17 +57,19 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawnRenderState, BipedEn
         if (state.invisible && !bl) {
             return;
         }
-        VertexConsumer vertexConsumer = bl ? c.getBuffer(RenderLayer.getOutline(this.getTexture(e))) : vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(e)));
-        (this.getContextModel()).copyStateTo(this.model);
-        this.model.animateModel(e, f, g, h);
+        Identifier texture = InfinityMethods.getId("textures/entity/empty.png");
+        VertexConsumer vertexConsumer = bl ? vertexConsumerProvider.getBuffer(RenderLayer.getOutline(texture)) : vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(texture));
+        // TODO 1.21.3 these were probably necessary
+        //        (this.getContextModel()).copyStateTo(this.model);
+        //        this.model.animateModel(e, f, g, h);
         this.model.setAngles(state);
-        int o = LivingEntityRenderer.getOverlay(e, 0.0f);
-        renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.body, "body");
-        renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.head, "head");
-        renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.hat, "hat");
-        renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.leftArm, "left_arm");
-        renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.rightArm, "right_arm");
-        renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.leftLeg, "left_leg");
-        renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.rightLeg, "right_leg");
+        int o = LivingEntityRenderer.getOverlay(state, 0.0f);
+        renderOneLayer(matrixStack, vertexConsumer, light, o, state, model.body, "body");
+        renderOneLayer(matrixStack, vertexConsumer, light, o, state, model.head, "head");
+        renderOneLayer(matrixStack, vertexConsumer, light, o, state, model.hat, "hat");
+        renderOneLayer(matrixStack, vertexConsumer, light, o, state, model.leftArm, "left_arm");
+        renderOneLayer(matrixStack, vertexConsumer, light, o, state, model.rightArm, "right_arm");
+        renderOneLayer(matrixStack, vertexConsumer, light, o, state, model.leftLeg, "left_leg");
+        renderOneLayer(matrixStack, vertexConsumer, light, o, state, model.rightLeg, "right_leg");
     }
 }

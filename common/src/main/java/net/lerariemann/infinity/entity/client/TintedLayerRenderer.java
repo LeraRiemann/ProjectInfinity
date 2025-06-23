@@ -1,6 +1,9 @@
 package net.lerariemann.infinity.entity.client;
 
+import net.lerariemann.infinity.entity.client.state.ChaosPawnRenderState;
+import net.lerariemann.infinity.entity.client.state.ChaosSlimeRenderState;
 import net.lerariemann.infinity.entity.custom.TintableEntity;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -13,6 +16,7 @@ import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.util.Identifier;
 
 public class TintedLayerRenderer<T extends LivingEntityRenderState, S extends EntityModel<T>> extends FeatureRenderer<T, S> {
     private final S model;
@@ -29,8 +33,18 @@ public class TintedLayerRenderer<T extends LivingEntityRenderState, S extends En
         if (livingEntity.invisible && !bl) {
             return;
         }
-        VertexConsumer vertexConsumer = bl ? vertexConsumerProvider.getBuffer(RenderLayer.getOutline(this.getTexture(livingEntity))) : vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(livingEntity)));
-        (this.getContextModel()).copyStateTo(this.model);
+        // TODO 1.21.3 find a better way of extracting a texture from a render state
+        Identifier texture;
+        if (livingEntity instanceof ChaosPawnRenderState) {
+            texture = InfinityMethods.getId("textures/entity/empty.png");
+        } else if (livingEntity instanceof ChaosSlimeRenderState) {
+            texture = InfinityMethods.getId("textures/entity/slime.png");
+        } else {
+            texture = InfinityMethods.getId("textures/entity/empty.png");
+        }
+        VertexConsumer vertexConsumer = bl ? vertexConsumerProvider.getBuffer(RenderLayer.getOutline(texture)) : vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(texture));
+        // TODO 1.21.3 these were probably necessary
+//        this.getContextModel().copyStateTo(this.model);
 //        this.model.animateModel(livingEntity, f, g, h);
         this.model.setAngles(livingEntity);
         int color = 16777215;
