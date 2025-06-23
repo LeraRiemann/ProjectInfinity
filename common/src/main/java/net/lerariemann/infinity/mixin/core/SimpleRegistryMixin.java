@@ -6,10 +6,10 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.TagKey;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,6 +28,9 @@ public abstract class SimpleRegistryMixin<T> implements RegistryAccess, Registry
     @Shadow
     @Nullable
     private Map<T, RegistryEntry.Reference<T>> intrusiveValueToEntry;
+    @Mutable
+    @Shadow @Final private Map<TagKey<T>, RegistryEntryList.Named<T>> tags;
+    @Shadow private SimpleRegistry.TagLookup<T> tagLookup;
     @Unique
     private boolean infinity$intrusive;
 
@@ -39,6 +42,7 @@ public abstract class SimpleRegistryMixin<T> implements RegistryAccess, Registry
     @Override
     public void infinity$unfreeze() {
         frozen = false;
+        tagLookup = SimpleRegistry.TagLookup.ofUnbound();
         if (infinity$intrusive) this.intrusiveValueToEntry = new IdentityHashMap<>();
     }
 }

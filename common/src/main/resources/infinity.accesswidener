@@ -13,4 +13,5 @@ accessible field net/minecraft/entity/SpawnRestriction RESTRICTIONS Ljava/util/M
 accessible method net/minecraft/block/NetherPortalBlock getExitPortalTarget (Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/BlockLocating$Rectangle;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/world/TeleportTarget$PostDimensionTransition;)Lnet/minecraft/world/TeleportTarget;
 accessible method net/minecraft/block/NetherPortalBlock getOrCreateExitPortalTarget (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;ZLnet/minecraft/world/border/WorldBorder;)Lnet/minecraft/world/TeleportTarget;
 accessible class net/minecraft/entity/passive/FishEntity$FishMoveControl
+accessible class net/minecraft/registry/SimpleRegistry$TagLookup
 accessible field net/minecraft/loot/context/LootContextTypes MAP Lcom/google/common/collect/BiMap;
