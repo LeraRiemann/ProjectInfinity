@@ -48,10 +48,10 @@ public class ChromaticColoringRecipe implements CraftingRecipe {
     public enum Type implements RecipeType<ChromaticColoringRecipe> {
         INSTANCE
     }
-    @Override
-    public RecipeType<CraftingRecipe> getType() {
-        return Type.INSTANCE;
-    }
+//    @Override
+//    public RecipeType<ChromaticColoringRecipe> getType() {
+//        return ModRecipeTypes.CHROMATIC_COLORING.get();
+//    }
 
     @Override
     public IngredientPlacement getIngredientPlacement() {

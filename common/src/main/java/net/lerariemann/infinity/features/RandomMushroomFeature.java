@@ -38,7 +38,7 @@ public abstract class RandomMushroomFeature
 
     protected boolean canGenerate(WorldAccess world, BlockPos pos, int height, BlockPos.Mutable mutablePos, Config config) {
         int i = pos.getY();
-        if (i < world.getBottomY() + 1 || i + height + 1 >= world.getTopYInclusive()) {
+        if (i < world.getBottomY() + 1 || i + height + 1 >= world.getHeight()   ) {
             return false;
         }
         BlockState blockState = world.getBlockState(pos.down());

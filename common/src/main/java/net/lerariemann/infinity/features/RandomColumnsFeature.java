@@ -98,7 +98,7 @@ public class RandomColumnsFeature
 
     @Nullable
     private static BlockPos moveUpToAir(WorldAccess world, BlockPos.Mutable mutablePos, int distance) {
-        while (mutablePos.getY() < world.getTopYInclusive() && distance > 0) {
+        while (mutablePos.getY() < world.getHeight() && distance > 0) {
             --distance;
             BlockState blockState = world.getBlockState(mutablePos);
             if (CANNOT_REPLACE_BLOCKS.contains(blockState.getBlock())) {

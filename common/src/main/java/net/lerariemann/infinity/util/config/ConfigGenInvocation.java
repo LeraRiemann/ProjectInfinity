@@ -22,7 +22,7 @@ public class ConfigGenInvocation {
 
     public static void invokeOn(ServerPlayerEntity player) {
         ServerWorld w = player.getServerWorld();
-        int y = w.getTopY() - 10;
+        int y = w.getHeight() - 10;
         BlockPos pos = new BlockPos(player.getBlockX(), y, player.getBlockZ());
         (new ConfigGenInvocation(w, pos)).run();
     }

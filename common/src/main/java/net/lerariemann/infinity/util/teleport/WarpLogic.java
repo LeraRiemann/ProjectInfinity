@@ -92,7 +92,7 @@ public interface WarpLogic {
         }
 
         double d = DimensionType.getCoordinateScaleFactor(player.getServerWorld().getDimension(), w.getDimension());
-        double y = MathHelper.clamp(player.getY(), w.getBottomY(), w.getTopYInclusive());
+        double y = MathHelper.clamp(player.getY(), w.getBottomY(), w.getHeight());
 
         BlockPos blockPos2 = getPosForWarp(BlockPos.ofFloored(w.getWorldBorder().clamp(player.getX() * d, y, player.getZ() * d)), w);
 
@@ -144,7 +144,7 @@ public interface WarpLogic {
         int z = orig.getZ();
         if (isPosViable(x, y1, z, world, strong)) return orig;
         int y2 = y1;
-        while (y1 > world.getBottomY() || y2 < world.getTopYInclusive()) {
+        while (y1 > world.getBottomY() || y2 < world.getHeight()) {
             y1-=1;
             if (isPosViable(x, y1, z, world, strong)) return new BlockPos(x, y1, z);
             y2+=1;
