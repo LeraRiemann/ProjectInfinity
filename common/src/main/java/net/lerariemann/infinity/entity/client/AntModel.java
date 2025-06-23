@@ -1,16 +1,16 @@
 // Made with Blockbench 4.11.2
 package net.lerariemann.infinity.entity.client;
 
-import net.lerariemann.infinity.entity.custom.AntEntity;
+import net.lerariemann.infinity.entity.client.state.AntEntityRenderState;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
-public class AntModel<T extends AntEntity> extends SinglePartEntityModel<T> {
+public class AntModel extends EntityModel<AntEntityRenderState> {
 	public static final EntityModelLayer MODEL_LAYER =
 		new EntityModelLayer(InfinityMethods.getId("ant"), "main");
 
@@ -85,7 +85,7 @@ public class AntModel<T extends AntEntity> extends SinglePartEntityModel<T> {
 	}
 
 	@Override
-	public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+	public void setAngles(AntEntityRenderState entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
 		this.getPart().traverse().forEach(ModelPart::resetTransform);
 
 		this.head.yaw = MathHelper.clamp(headYaw, -30.0F, 30.0F) * 0.017453292F;

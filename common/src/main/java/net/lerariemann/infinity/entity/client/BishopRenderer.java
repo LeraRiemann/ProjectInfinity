@@ -7,6 +7,7 @@ import net.minecraft.client.render.entity.BipedEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -22,7 +23,7 @@ public class BishopRenderer extends BipedEntityRenderer<BishopEntity, BishopMode
     }
 
     @Override
-    public Identifier getTexture(BishopEntity entity) {
+    public Identifier getTexture(LivingEntityRenderState state) {
         return TEXTURE;
     }
 

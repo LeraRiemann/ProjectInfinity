@@ -9,10 +9,11 @@ import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.mob.MobEntity;
 
-public class TintedLayerRenderer<T extends MobEntity, S extends EntityModel<T>> extends FeatureRenderer<T, S> {
+public class TintedLayerRenderer<T extends EntityRenderState, S extends EntityModel<T>> extends FeatureRenderer<T, S> {
     private final S model;
 
     public TintedLayerRenderer(FeatureRendererContext<T, S> context, S model) {
@@ -23,8 +24,8 @@ public class TintedLayerRenderer<T extends MobEntity, S extends EntityModel<T>> 
 //    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
     @Override
     public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, T livingEntity, float limbAngle, float limbDistance) {
-        boolean bl = MinecraftClient.getInstance().hasOutline(livingEntity) && livingEntity.isInvisible();
-        if (livingEntity.isInvisible() && !bl) {
+        boolean bl = MinecraftClient.getInstance().hasOutline(livingEntity) && livingEntity.invisible;
+        if (livingEntity.invisible && !bl) {
             return;
         }
         VertexConsumer vertexConsumer = bl ? vertexConsumerProvider.getBuffer(RenderLayer.getOutline(this.getTexture(livingEntity))) : vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(livingEntity)));
