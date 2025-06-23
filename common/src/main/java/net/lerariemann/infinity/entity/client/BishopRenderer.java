@@ -17,10 +17,10 @@ public class BishopRenderer extends BipedEntityRenderer<BishopEntity, BishopEnti
 
     public BishopRenderer(EntityRendererFactory.Context context) {
         super(context, new BishopModel(context.getPart(BishopModel.MODEL_LAYER)), 0.6f);
-        this(new ArmorFeatureRenderer<>(this,
+        this.addFeature(new ArmorFeatureRenderer<>(this,
                 new BishopModel(context.getPart(EntityModelLayers.SKELETON_INNER_ARMOR)),
                 new BishopModel(context.getPart(EntityModelLayers.SKELETON_OUTER_ARMOR)),
-                context.getModelManager()));
+                context.getEquipmentRenderer()));
     }
 
     @Override
