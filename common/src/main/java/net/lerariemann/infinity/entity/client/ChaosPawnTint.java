@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.entity.client;
 
+import net.lerariemann.infinity.entity.client.state.ChaosPawnRenderState;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.entity.custom.TintableEntity;
 import net.minecraft.client.MinecraftClient;
@@ -15,9 +16,9 @@ import net.minecraft.util.math.ColorHelper;
 
 import java.awt.Color;
 
-public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<ChaosPawn>> {
-    private final BipedEntityModel<ChaosPawn> model;
-    public ChaosPawnTint(ChaosPawnRenderer context, BipedEntityModel<ChaosPawn> model) {
+public class ChaosPawnTint extends FeatureRenderer<ChaosPawnRenderState, BipedEntityModel<ChaosPawnRenderState>> {
+    private final BipedEntityModel<ChaosPawnRenderState> model;
+    public ChaosPawnTint(ChaosPawnRenderer context, BipedEntityModel<ChaosPawnRenderState> model) {
         super(context);
         this.model = model;
     }
@@ -45,13 +46,14 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
 
 
     @Override
-    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, ChaosPawn e, float f, float g) {
+    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, ChaosPawnRenderState state, float limbAngle, float limbDistance) {
+//        public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, ChaosPawn e, float f, float g) {
 //    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, ChaosPawn e, float f, float g, float h, float j, float k, float l) {
-        boolean bl = MinecraftClient.getInstance().hasOutline(e) && e.isInvisible();
-        if (e.isInvisible() && !bl) {
+        boolean bl = state.hasOutline && state.invisible;
+        if (state.invisible && !bl) {
             return;
         }
-        VertexConsumer vertexConsumer = bl ? vertexConsumerProvider.getBuffer(RenderLayer.getOutline(this.getTexture(e))) : vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(e)));
+        VertexConsumer vertexConsumer = bl ? c.getBuffer(RenderLayer.getOutline(this.getTexture(e))) : vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(e)));
         (this.getContextModel()).copyStateTo(this.model);
         this.model.animateModel(e, f, g, h);
         this.model.setAngles(e, f, g, j, k, l);
@@ -64,6 +66,4 @@ public class ChaosPawnTint extends FeatureRenderer<ChaosPawn, BipedEntityModel<C
         renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.leftLeg, "left_leg");
         renderOneLayer(matrixStack, vertexConsumer, i, o, e, model.rightLeg, "right_leg");
     }
-
-
 }

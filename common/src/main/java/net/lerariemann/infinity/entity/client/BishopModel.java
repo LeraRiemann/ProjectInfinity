@@ -1,12 +1,12 @@
 package net.lerariemann.infinity.entity.client;
 
-import net.lerariemann.infinity.entity.custom.BishopEntity;
+import net.lerariemann.infinity.entity.client.state.BishopEntityRenderState;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 
-public class BishopModel extends BipedEntityModel<BishopEntity> {
+public class BishopModel extends BipedEntityModel<BishopEntityRenderState> {
     public static final EntityModelLayer MODEL_LAYER =
             new EntityModelLayer(InfinityMethods.getId("bishop"), "main");
     public BishopModel(ModelPart root) {

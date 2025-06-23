@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.entity.client;
 
+import net.lerariemann.infinity.entity.client.state.ChaosSlimeRenderState;
 import net.lerariemann.infinity.entity.custom.ChaosSlime;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -13,25 +14,25 @@ import net.minecraft.client.render.entity.model.SlimeEntityModel;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class DimensionalSlimeCoreRenderer extends FeatureRenderer<ChaosSlime, SlimeEntityModel<ChaosSlime>> {
+public class DimensionalSlimeCoreRenderer extends FeatureRenderer<ChaosSlimeRenderState, SlimeEntityModel<ChaosSlimeRenderState>> {
     private final BlockRenderManager blockRenderManager;
 
-    public DimensionalSlimeCoreRenderer(FeatureRendererContext<ChaosSlime, SlimeEntityModel<ChaosSlime>> context, BlockRenderManager blockRenderManager) {
+    public DimensionalSlimeCoreRenderer(FeatureRendererContext<ChaosSlime, SlimeEntityModel<ChaosSlimeRenderState>> context, BlockRenderManager blockRenderManager) {
         super(context);
         this.blockRenderManager = blockRenderManager;
     }
     @Override
-    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, ChaosSlime slime, float f, float g, float h, float j, float k, float l) {
-        boolean bl = MinecraftClient.getInstance().hasOutline(slime) && slime.isInvisible();
-        if (slime.isInvisible() && !bl) {
+    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, ChaosSlimeRenderState slime, float limbAngle, float limbDistance) {
+        boolean bl = slime.hasOutline && slime.invisible;
+        if (slime.invisible && !bl) {
             return;
         }
-        BlockState blockState = slime.getCore();
+        BlockState blockState = slime.core;
         int m = LivingEntityRenderer.getOverlay(slime, 0.0f);
         matrixStack.push();
         matrixStack.scale(0.25f, 0.25f, 0.25f);
         matrixStack.translate(-0.5f, 4.5f, -0.5f);
-        this.renderCore(matrixStack, vertexConsumerProvider, i, blockState, m);
+        this.renderCore(matrixStack, vertexConsumerProvider, light, blockState, m);
         matrixStack.pop();
     }
 

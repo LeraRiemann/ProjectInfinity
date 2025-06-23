@@ -24,7 +24,8 @@ public class AntModel extends EntityModel<AntEntityRenderState> {
 	private final ModelPart back_right_leg;
 
 	public AntModel(ModelPart root) {
-		this.body = root.getChild("body");
+        super(root);
+        this.body = root.getChild("body");
 		this.head = body.getChild("head");
 		this.front_left_leg = body.getChild("front_left_leg");
 		this.center_left_leg = body.getChild("center_left_leg");
@@ -74,10 +75,7 @@ public class AntModel extends EntityModel<AntEntityRenderState> {
 		return TexturedModelData.of(modelData, 64, 64);
 	}
 
-	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		body.render(matrices, vertices, light, overlay, color);
-	}
+
 
 	@Override
 	public ModelPart getPart() {
@@ -85,17 +83,17 @@ public class AntModel extends EntityModel<AntEntityRenderState> {
 	}
 
 	@Override
-	public void setAngles(AntEntityRenderState entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+	public void setAngles(AntEntityRenderState entity) {
 		this.getPart().traverse().forEach(ModelPart::resetTransform);
 
-		this.head.yaw = MathHelper.clamp(headYaw, -30.0F, 30.0F) * 0.017453292F;
-		this.head.pitch = MathHelper.clamp(headPitch, -25.0F, 45.0F) * 0.017453292F;
+		this.head.yaw = MathHelper.clamp(entity.headYaw, -30.0F, 30.0F) * 0.017453292F;
+		this.head.pitch = MathHelper.clamp(entity.headPitch, -25.0F, 45.0F) * 0.017453292F;
 
 		float pi = 3.1415927F;
-		float speed = Math.min(0.5f, 3.0f * limbDistance);
-		float yawFront = MathHelper.cos(limbAngle * 0.6662F) * speed;
-		float yawCenter = MathHelper.cos(limbAngle * 0.6662F + pi / 4) * speed;
-		float yawBack = MathHelper.cos(limbAngle * 0.6662F + pi / 2) * speed;
+		float speed = Math.min(0.5f, 3.0f * entity.limbDistance);
+		float yawFront = MathHelper.cos(entity.limbAngle * 0.6662F) * speed;
+		float yawCenter = MathHelper.cos(entity.limbAngle * 0.6662F + pi / 4) * speed;
+		float yawBack = MathHelper.cos(entity.limbAngle * 0.6662F + pi / 2) * speed;
 		front_left_leg.yaw += yawFront;
 		center_left_leg.yaw += yawCenter;
 		back_left_leg.yaw += yawBack;

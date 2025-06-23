@@ -20,6 +20,6 @@ public class ChaosCreeperRenderer extends CreeperEntityRenderer {
 
     public ChaosCreeperRenderer(EntityRendererFactory.Context context) {
         super(context);
-        this.addFeature(new TintedLayerRenderer<>(this, new CreeperEntityModel<>(context.getPart(EntityModelLayers.CREEPER))));
+        this.addFeature(new TintedLayerRenderer<>(this, new CreeperEntityModel(context.getPart(EntityModelLayers.CREEPER))));
     }
 }

@@ -3,6 +3,7 @@ package net.lerariemann.infinity.entity.client;
 import net.lerariemann.infinity.entity.client.state.AntEntityRenderState;
 import net.lerariemann.infinity.entity.custom.AntEntity;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
