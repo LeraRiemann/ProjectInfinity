@@ -13,8 +13,8 @@ public class BishopModel extends BipedEntityModel<BishopEntityRenderState> {
         super(root);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
+    public static TexturedModelData getTexturedModelData(Dilation dilation) {
+        ModelData modelData = BipedEntityModel.getModelData(dilation, 0.0f);
         ModelPartData root = modelData.getRoot();
 
         root.addChild("body",

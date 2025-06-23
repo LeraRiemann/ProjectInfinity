@@ -9,6 +9,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.entity.client.*;
 import net.lerariemann.infinity.entity.custom.*;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.minecraft.client.model.Dilation;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.HostileEntity;
@@ -135,7 +136,7 @@ public class ModEntities {
 
     public static void registerEntityRenderers() {
         EntityModelLayerRegistry.register(AntModel.MODEL_LAYER, AntModel::getTexturedModelData);
-        EntityModelLayerRegistry.register(BishopModel.MODEL_LAYER, BishopModel::getTexturedModelData);
+        EntityModelLayerRegistry.register(BishopModel.MODEL_LAYER, () -> BishopModel.getTexturedModelData(Dilation.NONE));
 
         EntityRendererRegistry.register(CHAOS_SLIME, ChaosSlimeRenderer::new);
         EntityRendererRegistry.register(CHAOS_SKELETON, ChaosSkeletonRenderer::new);
