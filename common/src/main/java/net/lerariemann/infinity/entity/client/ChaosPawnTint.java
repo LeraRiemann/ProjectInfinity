@@ -19,7 +19,7 @@ import java.awt.Color;
 
 public class ChaosPawnTint extends FeatureRenderer<ChaosPawnRenderState, BipedEntityModel<ChaosPawnRenderState>> {
     private final BipedEntityModel<ChaosPawnRenderState> model;
-    public ChaosPawnTint(FeatureRendererContext<ChaosPawnRenderState, BipedEntityModel<ChaosPawnRenderState> context, BipedEntityModel<ChaosPawnRenderState> model) {
+    public ChaosPawnTint(FeatureRendererContext<ChaosPawnRenderState, BipedEntityModel<ChaosPawnRenderState>> context, BipedEntityModel<ChaosPawnRenderState> model) {
         super(context);
         this.model = model;
     }
