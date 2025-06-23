@@ -10,7 +10,6 @@ import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.SlimeEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 public class ChaosSlimeRenderer extends MobEntityRenderer<ChaosSlime, ChaosSlimeRenderState, SlimeEntityModel> {
     private static final Identifier TEXTURE = InfinityMethods.getId("textures/entity/slime.png");
@@ -29,6 +28,12 @@ public class ChaosSlimeRenderer extends MobEntityRenderer<ChaosSlime, ChaosSlime
     @Override
     public Identifier getTexture(ChaosSlimeRenderState state) {
         return TEXTURE;
+    }
+
+    @Override
+    public void updateRenderState(ChaosSlime slime, ChaosSlimeRenderState state, float f) {
+        super.updateRenderState(slime, state, f);
+        state.core = slime.getCore();
     }
 
     public void render(ChaosSlimeRenderState slimeEntity, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {

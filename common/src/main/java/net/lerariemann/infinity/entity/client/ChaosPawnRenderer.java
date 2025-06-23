@@ -24,6 +24,12 @@ public class ChaosPawnRenderer extends BipedEntityRenderer<ChaosPawn, ChaosPawnR
     }
 
     @Override
+    public void updateRenderState(ChaosPawn pawn, ChaosPawnRenderState state, float f) {
+        super.updateRenderState(pawn, state, f);
+        state.colors = pawn.getColors();
+    }
+
+    @Override
     public Identifier getTexture(ChaosPawnRenderState state) {
         return TEXTURE;
     }
