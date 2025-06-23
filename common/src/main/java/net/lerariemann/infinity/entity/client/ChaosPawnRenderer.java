@@ -11,7 +11,7 @@ import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Identifier;
 
-public class ChaosPawnRenderer extends BipedEntityRenderer<ChaosPawn, ChaosPawnRenderState, BipedEntityModel<ChaosPawn>> {
+public class ChaosPawnRenderer extends BipedEntityRenderer<ChaosPawn, ChaosPawnRenderState, BipedEntityModel<ChaosPawnRenderState>> {
     private static final Identifier TEXTURE = InfinityMethods.getId("textures/entity/empty.png");
     public ChaosPawnRenderer(EntityRendererFactory.Context context) {
         super(context, new BipedEntityModel<>(context.getPart(EntityModelLayers.PLAYER)), 0.25f);

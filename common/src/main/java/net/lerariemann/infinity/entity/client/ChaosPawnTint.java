@@ -10,6 +10,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
+import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.ColorHelper;
@@ -18,7 +19,7 @@ import java.awt.Color;
 
 public class ChaosPawnTint extends FeatureRenderer<ChaosPawnRenderState, BipedEntityModel<ChaosPawnRenderState>> {
     private final BipedEntityModel<ChaosPawnRenderState> model;
-    public ChaosPawnTint(ChaosPawnRenderer context, BipedEntityModel<ChaosPawnRenderState> model) {
+    public ChaosPawnTint(FeatureRendererContext<ChaosPawnRenderState, BipedEntityModel<ChaosPawnRenderState> context, BipedEntityModel<ChaosPawnRenderState> model) {
         super(context);
         this.model = model;
     }
