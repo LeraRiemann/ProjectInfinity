@@ -70,10 +70,10 @@ public class BiomeBottleBlockEntity extends TintableBlockEntity {
 
     public void readNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(tag, registryLookup);
-        this.charge = tag.getInt("Charge");
-        this.biome = Identifier.of(tag.getString("Biome"));
-        this.color = tag.getInt("Color");
-        this.from_charge = NbtUtils.test(tag, "from_charge", 0);
+        this.charge = NbtUtils.getInt(tag, "Charge");
+        this.biome = Identifier.of(NbtUtils.getString(tag, "Biome"));
+        this.color = NbtUtils.getInt(tag, "Color");
+        this.from_charge = NbtUtils.getInt(tag, "from_charge", 0);
     }
 
     @Override

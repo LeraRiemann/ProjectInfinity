@@ -4,6 +4,7 @@ import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -22,14 +23,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public record Amendment(ConfigType area, ModSelector modSelector, Selector selector, Results results) {
     public static Amendment of(NbtCompound data) {
-        String areaName = data.getString("area");
+        String areaName = NbtUtils.getString(data, "area", "");
         ConfigType area = ConfigType.byName(areaName);
         if (area == null) {
             InfinityMod.LOGGER.warn("Unknown amendment area: {}", areaName);
             return null;
         }
 
-        String mod = data.getString("mod");
+        String mod = NbtUtils.getString(data, "mod");
         ModSelector modSelector;
         if (mod.equals("all")) {
             modSelector = new UniversalModSelector();
@@ -37,12 +38,12 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
         else if (!Platform.isModLoaded(mod)) return null;
         else modSelector = new MatchingModSelector(mod);
 
-        String selectorType = data.getString("selector");
+        String selectorType = NbtUtils.getString(data,"selector", "");
         Selector selector = switch(selectorType) {
             case "all" -> new UniversalSelector();
-            case "containing" -> new ContainingSelector(data.getString("containing"));
-            case "matching" -> new MatchingSelector(data.getString("matching"));
-            case "matching_block_tag" -> new MatchingBlockTagSelector(data.getString("matching"));
+            case "containing" -> new ContainingSelector(NbtUtils.getString(data, "containing"));
+            case "matching" -> new MatchingSelector(NbtUtils.getString(data, "matching"));
+            case "matching_block_tag" -> new MatchingBlockTagSelector(NbtUtils.getString(data, "matching"));
             case "matching_any" -> new MatchingAnySelector(data.getList("matching", NbtElement.STRING_TYPE)
                     .stream().map(e->(NbtString)e).map(NbtString::asString).toList());
             default -> {
@@ -51,11 +52,11 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
             }
         };
 
-        String resultType = data.getString("results");
+        String resultType = NbtUtils.getString(data, "results");
         Results results = switch (resultType) {
-            case "set_value" -> new SetValue(data.getInt("value"));
+            case "set_value" -> new SetValue(NbtUtils.getInt(data, "value"));
             case "erase" -> new SetValue(0);
-            case "set_field" -> new SetField(data.getString("field_name"), data.get("field"));
+            case "set_field" -> new SetField(NbtUtils.getString(data, "field_name"), data.get("field"));
             default -> {
                 InfinityMod.LOGGER.warn("Unknown amendment result type: {}", resultType);
                 yield null;

@@ -3,6 +3,7 @@ package net.lerariemann.infinity.options;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.minecraft.nbt.NbtCompound;
@@ -126,7 +127,7 @@ public class RandomInfinityOptions {
         NbtCompound effect = provider.randomElement(r, ConfigType.EFFECTS);
         if (effect.getBoolean("Instant")) return new NbtCompound();
         int amplifier = Math.min(5, (int)(0.5*r.nextExponential()));
-        res.putString("id", effect.getString("Name"));
+        res.putString("id", NbtUtils.getString(effect, "Name"));
         res.putInt("amplifier", amplifier);
         return res;
     }

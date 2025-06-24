@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util.config;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.dimensions.RandomNoisePreset;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
@@ -70,10 +71,10 @@ public interface SurfaceRuleScanner {
         }
 
         void add(NbtCompound rule, TreeLeaf where) {
-            switch(rule.getString("type")) {
+            switch(NbtUtils.getString(rule,"type", "")) {
                 case "condition", "minecraft:condition" -> {
-                    NbtCompound next = rule.getCompound("then_run");
-                    NbtCompound c = rule.getCompound("if_true");
+                    NbtCompound next = NbtUtils.getCompound(rule,"then_run");
+                    NbtCompound c = NbtUtils.getCompound(rule, "if_true");
                     if (c.getString("type").contains("above_preliminary_surface")) {
                         add(next, where);
                     }
@@ -102,7 +103,7 @@ public interface SurfaceRuleScanner {
         }
 
         static boolean checkUnneededParts(NbtCompound rule) {
-            return rule.getString("type").contains("block")
+            return NbtUtils.getString(rule, "type", "").contains("block")
                     && (rule.toString().contains("minecraft:bedrock")
                     || rule.toString().contains("minecraft:deepslate"));
         }

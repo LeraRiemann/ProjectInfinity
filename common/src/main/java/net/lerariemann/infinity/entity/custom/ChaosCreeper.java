@@ -55,9 +55,9 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         NbtCompound biome = InfinityMod.provider.randomElement(world.getRandom(), ConfigType.BIOMES);
-        this.setColor(NbtUtils.test(biome, "Color", 7842607));
+        this.setColor(NbtUtils.getInt(biome, "Color", 7842607));
         this.setRandomCharge();
-        this.setBiome(biome.getString("Name"));
+        this.setBiome(NbtUtils.getString(biome, "Name"));
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
@@ -109,9 +109,9 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.setRange(nbt.getFloat("range"));
-        this.setColor(nbt.getInt("color"));
-        this.setBiome(nbt.getString("biome"));
+        this.setRange(NbtUtils.getFloat(nbt, "range"));
+        this.setColor(NbtUtils.getInt(nbt, "color"));
+        this.setBiome(NbtUtils.getString(nbt, "biome"));
     }
 
     public void blow_up() {

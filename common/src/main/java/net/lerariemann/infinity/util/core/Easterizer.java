@@ -27,9 +27,9 @@ public class Easterizer {
                 String name = p.getFileName().toString().replace(".json", "");
                 NbtCompound compound = CommonIO.read(p.toFile());
                 if (compound.contains("name"))
-                    name = compound.getString("name");
+                    name = NbtUtils.getString(compound, "name");
                 if (compound.contains("type"))
-                    typeMap.put(name, compound.getString("type"));
+                    typeMap.put(name, NbtUtils.getString(compound, "type"));
                 if (compound.contains("aliases", NbtElement.LIST_TYPE)) {
                     String finalName = name;
                     compound.getList("aliases", NbtElement.STRING_TYPE)
@@ -39,12 +39,12 @@ public class Easterizer {
                             .forEach(alias -> aliasMap.put(alias, finalName));
                 }
                 else if (compound.contains("aliases", NbtElement.STRING_TYPE))
-                    aliasMap.put(compound.getString("aliases"), name);
+                    aliasMap.put(NbtUtils.getString(compound, "aliases"), name);
                 if (compound.contains("options")) {
-                    optionmap.put(name, compound.getCompound("options"));
+                    optionmap.put(name, NbtUtils.getCompound(compound, "options"));
                 }
 
-                map.put(name, compound.getCompound("generator"));
+                map.put(name, NbtUtils.getCompound(compound, "generator"));
             });
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -4,6 +4,7 @@ import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.features.Placement;
 import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
@@ -14,7 +15,7 @@ public class RandomDisk extends RandomisedFeature {
     String target;
     public RandomDisk(RandomFeaturesList parent) {
         super(parent, "disk");
-        target = daddy.underwater.get(parent.parent.fullname).getString("Name");
+        target = NbtUtils.getString(daddy.underwater.get(parent.parent.fullname), "Name");
         id = "disk";
         savePlacement();
     }
@@ -23,7 +24,7 @@ public class RandomDisk extends RandomisedFeature {
         Placement res = new Placement();
         res.addInSquare();
         res.addHeightmap("OCEAN_FLOOR_WG");
-        String s = daddy.default_fluid.getString("fluidName");
+        String s = NbtUtils.getString(daddy.default_fluid, "fluidName");
         if (!s.equals("minecraft:air")) res.addBlockPredicateFilter(matchingFluids(s));
         res.addBiome();
         return res.data;
@@ -40,7 +41,7 @@ public class RandomDisk extends RandomisedFeature {
         if (!awt) {
             NbtList blocks = new NbtList();
             blocks.add(NbtString.of(target));
-            blocks.add(NbtString.of(blockProvider.getCompound("state").getString("Name")));
+            blocks.add(NbtString.of(NbtUtils.getString(NbtUtils.getCompound(blockProvider, "state"), "Name")));
             targets.put("blocks", blocks);
         }
         config.put("target", targets);

@@ -6,6 +6,7 @@ import net.lerariemann.infinity.dimensions.features.*;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.CorePack;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.*;
 
 public class RandomVegetation extends RandomisedFeature {
@@ -33,7 +34,7 @@ public class RandomVegetation extends RandomisedFeature {
         String tree = ConfigType.TREES.getDef();
         if (parent.roll("use_vanilla_trees")) {
             tree = PROVIDER.randomName(random, ConfigType.TREES);
-            NbtCompound c = CorePack.treePlacement(tree, parent.surface_block.getString("Name"));
+            NbtCompound c = CorePack.treePlacement(tree, NbtUtils.getString(parent.surface_block, "Name"));
             String s = tree.substring(tree.lastIndexOf(':') + 1).replace("/", "_") + "_" + parent.parent.id;
             s = s.replace("/", "_");
             CommonIO.write(c, parent.storagePath + "/worldgen/placed_feature", s + ".json");

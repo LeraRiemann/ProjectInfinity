@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util.config;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.WeighedStructure;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -76,7 +77,7 @@ public class DataCollection {
         range.sort(new Comparator<Integer>() {
             public String extract(int i) {
                 NbtCompound compound = w.get(i);
-                return compound.getString("key");
+                return NbtUtils.getString(compound, "key");
             }
             @Override
             public int compare(Integer i, Integer j) {

@@ -4,9 +4,11 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.registry.core.ModEntities;
 import net.lerariemann.infinity.util.core.ConfigType;
 import net.minecraft.client.resource.language.I18n;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -143,13 +145,13 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     }
 
     public void setEffect(NbtCompound eff) {
-        setEffect(eff.getString("Name"), eff.getInt("Color"));
+        setEffect(NbtUtils.getString(eff, "Name"), NbtUtils.getInt(eff, "Color"));
     }
     public void setEffect(String eff, int c) {
         if (eff.isBlank()) {
             NbtCompound newEffect = InfinityMod.provider.randomElement(random, ConfigType.EFFECTS);
-            eff = newEffect.getString("Name");
-            c = newEffect.getInt("Color");
+            eff = NbtUtils.getString(newEffect, "Name");
+            c = NbtUtils.getInt(newEffect, "Color");
         }
         this.dataTracker.set(effect, eff);
         this.dataTracker.set(color, c);
@@ -178,8 +180,8 @@ public class ChaosSkeleton extends SkeletonEntity implements TintableEntity {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.setEffect(nbt.getString("effect"), nbt.getInt("color"));
-        this.setDuration(nbt.getInt("duration"));
+        this.setEffect(NbtUtils.getString(nbt, "effect"), NbtUtils.getInt(nbt, "color"));
+        this.setDuration(NbtUtils.getInt(nbt,"duration"));
     }
 
     public static ItemStack setPotion(ItemStack stack, int color, String effect, int duration) {

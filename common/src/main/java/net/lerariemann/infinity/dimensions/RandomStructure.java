@@ -3,6 +3,7 @@ package net.lerariemann.infinity.dimensions;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
@@ -31,7 +32,7 @@ public class RandomStructure {
     void addData() {
         data = parent.PROVIDER.randomElement(random, ConfigType.STRUCTURES);
         assert data.contains("id");
-        type = data.getString("id");
+        type = NbtUtils.getString(data,"id");
         name = Identifier.of(type).getPath().replace("/", "_").replace("\\", "_") + "_" + id;
 
         data.putString("type", "infinity:setupper");

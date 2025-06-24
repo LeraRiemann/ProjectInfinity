@@ -3,6 +3,7 @@ package net.lerariemann.infinity.entity.custom;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -123,8 +124,8 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.setColor(nbt.getInt("color"));
-        Block b = Registries.BLOCK.get(Identifier.of(nbt.getString("core")));
+        this.setColor(NbtUtils.getInt(nbt, "color"));
+        Block b = Registries.BLOCK.get(Identifier.of(NbtUtils.getString(nbt,"core")));
         this.setCore(b.getDefaultState());
     }
 

@@ -3,6 +3,7 @@ package net.lerariemann.infinity.block.entity;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.teleport.InfinityPortal;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
@@ -154,26 +155,24 @@ public class InfinityPortalBlockEntity extends TintableBlockEntity {
     public void readNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(tag, registryLookup);
         if (tag.contains("Dimension", NbtElement.NUMBER_TYPE)) { //conversion from legacy formats
-            this.portalColor = tag.getInt("Dimension") & 0xFFFFFF;
+            this.portalColor = NbtUtils.getInt(tag, "Dimension") & 0xFFFFFF;
             if (tag.contains("DimensionName")) {
-                this.dimension = Identifier.of(tag.getString("DimensionName"));
+                this.dimension = Identifier.of(NbtUtils.getString(tag, "DimensionName"));
             }
             else this.dimension = InfinityMethods.getDimId(this.portalColor);
         }
         else if (tag.contains("Dimension", NbtElement.STRING_TYPE)) { //new better format
-            this.dimension = Identifier.of(tag.getString("Dimension"));
-            this.portalColor = tag.contains("Color", NbtElement.INT_TYPE) ?
-                    tag.getInt("Color") :
-                    (world != null ? PortalColorApplier.of(dimension, world.getServer()) :
-                            PortalColorApplier.of(dimension, new NbtCompound())).apply(pos) & 0xFFFFFF;
+            this.dimension = Identifier.of(NbtUtils.getString(tag, "Dimension"));
+            this.portalColor = NbtUtils.getInt(tag, "Color", (world != null ? PortalColorApplier.of(dimension, world.getServer()) :
+                    PortalColorApplier.of(dimension, new NbtCompound())).apply(pos) & 0xFFFFFF);
         }
         else {
             setDimension(InfinityMethods.getRandomSeed(new Random())); //random by default
         }
-        this.isOpen = tag.getBoolean("Open");
+        this.isOpen = NbtUtils.getBoolean(tag, "Open", false);
         if (tag.contains("other_side")) {
-            NbtCompound pos = tag.getCompound("other_side");
-            otherSidePos = new BlockPos(pos.getInt("x"), pos.getInt("y"), pos.getInt("z"));
+            NbtCompound pos = NbtUtils.getCompound(tag,"other_side");
+            otherSidePos = new BlockPos(NbtUtils.getInt(pos, "x"), NbtUtils.getInt(pos, "y"), NbtUtils.getInt(pos, "z"));
         }
     }
 

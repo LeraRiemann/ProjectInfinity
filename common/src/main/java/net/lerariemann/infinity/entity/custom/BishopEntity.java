@@ -2,6 +2,7 @@ package net.lerariemann.infinity.entity.custom;
 
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RangedAttackMob;
@@ -183,11 +184,11 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
 
     public ItemStack getProjectileType() {
         NbtCompound effect = InfinityMod.provider.randomElement(random, ConfigType.EFFECTS);
-        if (!effect.getString("Category").equals("harmful")
-                || effect.getBoolean("Instant")) return Items.ARROW.getDefaultStack();
+        if (!NbtUtils.getString(effect, "Category").equals("harmful")
+                || NbtUtils.getBoolean(effect, "Instant")) return Items.ARROW.getDefaultStack();
         return ChaosSkeleton.setPotion(Items.TIPPED_ARROW.getDefaultStack(),
-                effect.getInt("Color"),
-                effect.getString("Name"),
+                NbtUtils.getInt(effect, "Color"),
+                NbtUtils.getString(effect, "Name"),
                 200);
     }
 }

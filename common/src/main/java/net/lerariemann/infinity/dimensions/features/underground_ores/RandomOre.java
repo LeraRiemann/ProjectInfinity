@@ -4,6 +4,7 @@ import net.lerariemann.infinity.dimensions.RandomFeaturesList;
 import net.lerariemann.infinity.dimensions.features.Placement;
 import net.lerariemann.infinity.dimensions.features.RandomisedFeature;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -49,7 +50,7 @@ public class RandomOre extends RandomisedFeature {
     static NbtCompound target(NbtCompound block, boolean awt) {
         NbtCompound res = new NbtCompound();
         res.putString("predicate_type", awt ? "always_true" : "block_match");
-        if (!awt) res.putString("block", block.getString("Name"));
+        if (!awt) res.putString("block", NbtUtils.getString(block, "Name"));
         return res;
     }
 }

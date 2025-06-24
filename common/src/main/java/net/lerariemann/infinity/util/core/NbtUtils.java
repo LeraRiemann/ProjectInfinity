@@ -9,27 +9,46 @@ import java.util.Random;
 
 /** Contains various common use methods for working with {@link NbtCompound} objects. */
 public interface NbtUtils {
-    static String test(NbtCompound data, String key, String def) {
+    static String getString(NbtCompound data, String key, String def) {
         return data.contains(key, NbtElement.STRING_TYPE) ? data.getString(key) : def;
     }
-    static NbtCompound test(NbtCompound data, String key, NbtCompound def) {
+    static NbtCompound getCompound(NbtCompound data, String key, NbtCompound def) {
         return data.contains(key, NbtElement.COMPOUND_TYPE) ? data.getCompound(key) : def;
     }
-    static float test(NbtCompound data, String key, float def) {
+    static float getFloat(NbtCompound data, String key, float def) {
         return data.contains(key, NbtElement.DOUBLE_TYPE) ? data.getFloat(key) : def;
     }
-    static int test(NbtCompound data, String key, int def) {
+    static int getInt(NbtCompound data, String key, int def) {
         return data.contains(key, NbtElement.INT_TYPE) ? data.getInt(key) : def;
     }
-    static double test(NbtCompound data, String key, double def) {
+    static double getDouble(NbtCompound data, String key, double def) {
         return data.contains(key, NbtElement.DOUBLE_TYPE) ? data.getDouble(key) : def;
     }
-    static boolean test(NbtCompound data, String key, boolean def) {
+    static boolean getBoolean(NbtCompound data, String key, boolean def) {
         return data.contains(key) ? data.getBoolean(key) : def;
     }
 
+    static String getString(NbtCompound data, String key) {
+        return data.getString(key);
+    }
+    static NbtCompound getCompound(NbtCompound data, String key) {
+        return data.getCompound(key);
+    }
+    static float getFloat(NbtCompound data, String key) {
+        return data.getFloat(key);
+    }
+    static int getInt(NbtCompound data, String key) {
+        return data.getInt(key);
+    }
+    static double getDouble(NbtCompound data, String key) {
+        return data.getDouble(key);
+    }
+    static boolean getBoolean(NbtCompound data, String key) {
+        return data.getBoolean(key);
+    }
+
     static String elementToName(NbtElement e) {
-        if (e instanceof NbtCompound) return ((NbtCompound)e).getString("Name");
+        if (e instanceof NbtCompound compound) return NbtUtils.getString(compound, "Name");
         else return e.asString();
     }
     static NbtCompound nameToElement(String block) {
