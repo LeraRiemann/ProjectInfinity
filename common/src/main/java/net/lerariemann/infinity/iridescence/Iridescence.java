@@ -13,15 +13,16 @@ import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.FishEntity;
@@ -50,6 +51,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public interface Iridescence {
     Identifier TEXTURE = InfinityMethods.getId("block/iridescence");
@@ -238,9 +240,8 @@ public interface Iridescence {
         Path cookie = InfinityMod.provider.savingPath.resolve(player.getUuidAsString() + ".json");
         try {
             NbtCompound comp = CommonIO.read(cookie);
-            // TODO maybe shouldn't pass null here
-            player.teleport(player.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, Identifier.of(comp.getString("dim")))),
-                    comp.getDouble("x"), comp.getDouble("y"), comp.getDouble("z"), null, player.getYaw(), player.getPitch(), false);
+            player.teleport(player.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, Identifier.of(NbtUtils.getString(comp, "dim")))),
+                    NbtUtils.getDouble(comp, "x"), NbtUtils.getDouble(comp, "y"), NbtUtils.getDouble(comp, "z"), Set.of(), player.getYaw(), player.getPitch(), false);
         } catch (Exception e) {
             WarpLogic.respawnAlive(player);
         }
@@ -306,12 +307,11 @@ public interface Iridescence {
     static void convTriggers(LivingEntity entity) {
         triggerConversion(entity.getWorld().getClosestPlayer(entity.getX(), entity.getY(), entity.getZ(),
                 50, false), entity);
-        // TODO reimplement
-//        entity.getWorld().getPlayers(TargetPredicate.DEFAULT, entity, Box.of(entity.getPos(), 10,10, 10))
-//                .forEach(p -> triggerConversion(p, entity));
+        entity.getWorld().getOtherEntities(entity, Box.of(entity.getPos(), 10,10, 10))
+                .forEach(p -> triggerConversion(p, entity));
     }
 
-    static void triggerConversion(PlayerEntity player, LivingEntity entity) {
+    static void triggerConversion(Entity player, LivingEntity entity) {
         if (player instanceof ServerPlayerEntity np) {
             ModCriteria.CONVERT_MOB.get().trigger(np, entity);
         }
