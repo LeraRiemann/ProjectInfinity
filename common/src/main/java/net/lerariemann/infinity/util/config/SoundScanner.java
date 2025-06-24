@@ -7,6 +7,7 @@ import net.lerariemann.infinity.registry.var.ModPayloads;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.minecraft.block.jukebox.JukeboxSong;
@@ -52,7 +53,7 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
     public static void unpackDownloadedPack(NbtCompound songIds, MinecraftClient cl) {
         //the client unpacks a non-empty payload only when needed, meaning only if it doesn't have necessary files yet
         if (!songIds.isEmpty() && !Files.exists(cl.getResourcePackDir().resolve("infinity/assets/infinity/sounds.json"))) {
-            cl.execute(() -> saveResourcePack(cl, songIds.getList("entries", NbtElement.STRING_TYPE).stream()
+            cl.execute(() -> saveResourcePack(cl, NbtUtils.getList(songIds, "entries", NbtElement.STRING_TYPE).stream()
                     .map(NbtElement::asString).map(Identifier::of), false));
         }
         else if (isPreloaded()) {
@@ -113,7 +114,7 @@ public record SoundScanner(Map<Identifier, Resource> soundIds) {
         if (!data.contains("jukeboxes") || !data.contains("entries")) return;
         if (Files.exists(server.getSavePath(WorldSavePath.DATAPACKS).resolve("client_sound_pack_data.json"))) return;
 
-        NbtCompound allJukeboxes = data.getCompound("jukeboxes");
+        NbtCompound allJukeboxes = NbtUtils.getCompound(data, "jukeboxes");
         Path pathJukeboxes = server.getSavePath(WorldSavePath.DATAPACKS).resolve("infinity/data/infinity/jukebox_song");
         for (String key: allJukeboxes.getKeys()) {
             if (allJukeboxes.get(key) instanceof NbtCompound jukebox) {

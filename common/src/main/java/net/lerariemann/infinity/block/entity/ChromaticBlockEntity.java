@@ -4,6 +4,7 @@ import net.lerariemann.infinity.block.custom.Boopable;
 import net.lerariemann.infinity.registry.core.ModBlockEntities;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -159,13 +160,13 @@ public class ChromaticBlockEntity extends TintableBlockEntity {
     @Override
     public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(nbt, registryLookup);
-        if (nbt.contains("color", NbtElement.INT_TYPE))
+        if (nbt.getType("color") == NbtElement.INT_TYPE)
             setColor(nbt.getInt("color"));
-        else if (nbt.contains("color", NbtElement.COMPOUND_TYPE)) {
-            NbtCompound color = nbt.getCompound("color");
-            hue = color.getShort("h");
-            saturation = color.getShort("s");
-            brightness = color.getShort("b");
+        else if (nbt.getType("color") == NbtElement.COMPOUND_TYPE) {
+            NbtCompound color = NbtUtils.getCompound(nbt, "color");
+            hue = NbtUtils.getShort(color, "h");
+            saturation = NbtUtils.getShort(color, "s");
+            brightness = NbtUtils.getShort(color, "b");
             updateColor();
         }
     }

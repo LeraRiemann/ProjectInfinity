@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.options;
 
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 
@@ -31,7 +32,7 @@ public interface PitchShifter {
     }
 
     static PitchShifter decode(NbtCompound comp) {
-        return switch(comp.getString("type")) {
+        return switch(NbtUtils.getString(comp, "type")) {
             case "constant" -> new Constant(getFloat(comp, "value", 1));
             case "add" -> new Add(getFloat(comp, "value", 1));
             default -> Empty.INSTANCE;

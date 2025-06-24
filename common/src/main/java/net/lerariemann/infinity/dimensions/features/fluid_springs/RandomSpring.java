@@ -31,7 +31,7 @@ public class RandomSpring extends RandomisedFeature {
         }
         config.putBoolean("requires_block_below", random.nextBoolean());
         config.put("state", NbtUtils.nameToElement(PROVIDER.randomName(random, ConfigType.FLUIDS)));
-        config.putString("valid_blocks", daddy.default_block.getString("Name"));
+        config.putString("valid_blocks", NbtUtils.getString(daddy.default_block, "Name"));
         return feature(config);
     }
 
