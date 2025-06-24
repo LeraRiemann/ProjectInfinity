@@ -14,3 +14,4 @@ accessible method net/minecraft/block/NetherPortalBlock getExitPortalTarget (Lne
 accessible method net/minecraft/block/NetherPortalBlock getOrCreateExitPortalTarget (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;ZLnet/minecraft/world/border/WorldBorder;)Lnet/minecraft/world/TeleportTarget;
 accessible class net/minecraft/entity/passive/FishEntity$FishMoveControl
 accessible field net/minecraft/loot/context/LootContextTypes MAP Lcom/google/common/collect/BiMap;
+accessible method net/minecraft/client/gui/screen/Screen addDrawableChild (Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;

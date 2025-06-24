@@ -62,6 +62,7 @@
     "options.MinecraftClientMixin",
     "options.SoundSystemMixin",
     "options.WorldRendererMixin",
+    "qol.EditWorldScreenMixin",
     "qol.KeyboardMixin"
   ],
   "injectors": {
