@@ -60,7 +60,7 @@ public class RandomProvider {
         }
         Path root = configPath.resolve("infinity.json");
         if (!root.toFile().exists()) return def;
-        NbtCompound rules = CommonIO.read(configPath.resolve("infinity.json")).getCompound("gameRules");
+        NbtCompound rules = NbtUtils.getCompound(CommonIO.read(configPath.resolve("infinity.json")), "gameRules");
         if (!rules.contains(key)) return def;
         return applier2.apply(rules, key);
     }
@@ -125,7 +125,7 @@ public class RandomProvider {
             if (elem!=null) {
                 if (elem.getType() == NbtElement.INT_TYPE) gameRulesInt.put(s, NbtUtils.getInt(gameRules, s));
                 if (elem.getType() == NbtElement.DOUBLE_TYPE) gameRulesDouble.put(s, NbtUtils.getDouble(gameRules, s));
-                else this.gameRules.put(s, gameRules.getBoolean(s));
+                else this.gameRules.put(s, NbtUtils.getBoolean(gameRules, s));
             }
         }
         NbtCompound rootChances = NbtUtils.getCompound(rootConfig, "rootChances");
@@ -136,9 +136,9 @@ public class RandomProvider {
             }
         }
 
-        NbtList disabledDimensions = rootConfig.getList("disabledDimensions", NbtElement.STRING_TYPE);
+        NbtList disabledDimensions = NbtUtils.getList(rootConfig, "disabledDimensions", NbtElement.STRING_TYPE);
         for (NbtElement jsonElement : disabledDimensions) {
-            this.disabledDimensions.add(jsonElement.asString());
+            this.disabledDimensions.add(String.valueOf(jsonElement));
         }
     }
 
@@ -207,7 +207,7 @@ public class RandomProvider {
             Path file = dir.resolve(type.getKey() + ".json");
             if (file.toFile().exists()) {
                 NbtCompound base = CommonIO.read(file);
-                List<NbtCompound> list = base.getList("elements", NbtElement.COMPOUND_TYPE).stream().map(e -> (NbtCompound)e).toList();
+                List<NbtCompound> list = NbtUtils.getList(base, "elements", NbtElement.COMPOUND_TYPE).stream().map(e -> (NbtCompound)e).toList();
                 registry.put(type, new WeighedStructure.Simple(list, type.getDef()));
             }
         }

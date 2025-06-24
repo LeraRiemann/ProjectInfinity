@@ -31,7 +31,7 @@ public class RandomShape extends RandomisedFeature {
     public NbtCompound feature() {
         NbtCompound config = new NbtCompound();
         NbtList replaceable = new NbtList();
-        replaceable.add(NbtUtils.nameToElement(parent.parent.parent.default_fluid.getString("Name")));
+        replaceable.add(NbtUtils.nameToElement(NbtUtils.getString(parent.parent.parent.default_fluid, "Name")));
         config.put("replaceable", replaceable);
         if (!usePreset) addRandomBlockProvider(config, "block_provider", ConfigType.FULL_BLOCKS_WG);
         else config.put("block_provider", PROVIDER.randomPreset(random, useBands ? "weighted_state_provider" : "noise_provider"));

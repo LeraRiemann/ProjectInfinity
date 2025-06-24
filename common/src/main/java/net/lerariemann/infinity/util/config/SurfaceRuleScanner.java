@@ -23,7 +23,7 @@ public interface SurfaceRuleScanner {
                 o.ifPresent(settings -> {
                     Optional<NbtElement> c = ChunkGeneratorSettings.CODEC.encodeStart(NbtOps.INSTANCE, settings).result();
                     c.ifPresent(e -> {
-                        Tree t = new Tree(((NbtCompound) e).getCompound("surface_rule"));
+                        Tree t = new Tree(NbtUtils.getCompound(((NbtCompound) e), "surface_rule"));
                         t.biomeLocations.keySet().forEach(biome -> {
                             if (!map.containsKey(biome)) map.put(biome, t.wrappedRule(biome));
                         });
@@ -85,12 +85,12 @@ public interface SurfaceRuleScanner {
                     else {
                         TreeLeaf l = addOfRule(next, where, true);
                         if(Objects.requireNonNull(c.get("biome_is")).getNbtType().equals(NbtList.TYPE)) {
-                            c.getList("biome_is", NbtElement.STRING_TYPE).forEach(e -> addBiomeLoc(e.asString(), l.i));
+                            NbtUtils.getList(c, "biome_is", NbtElement.STRING_TYPE).forEach(e -> addBiomeLoc(e.asString(), l.i));
                         }
                     }
                 }
                 case "sequence", "minecraft:sequence" -> {
-                    NbtList sq = rule.getList("sequence", NbtElement.COMPOUND_TYPE);
+                    NbtList sq = NbtUtils.getList(rule, "sequence", NbtElement.COMPOUND_TYPE);
                     sq.forEach(e -> add((NbtCompound)e, where));
                 }
                 default -> {

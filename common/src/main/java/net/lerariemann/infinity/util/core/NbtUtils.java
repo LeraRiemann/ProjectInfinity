@@ -46,6 +46,9 @@ public interface NbtUtils {
     static boolean getBoolean(NbtCompound data, String key) {
         return data.getBoolean(key);
     }
+    static short getShort(NbtCompound data, String key) {
+        return data.getShort(key);
+    }
     static NbtList getList(NbtCompound data, String key, byte nbttype) {
         return data.getList(key, nbttype);
     }

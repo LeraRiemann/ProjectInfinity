@@ -24,11 +24,11 @@ public interface PortalColorApplier {
     }
     static PortalColorApplier of(NbtCompound data, int defaultColor) {
         if (!data.contains("portal_color")) return new PortalColorApplier.Simple(defaultColor);
-        if (data.contains("portal_color", NbtElement.INT_TYPE)) return new PortalColorApplier.Simple(NbtUtils.getInt(data, "portal_color"));
+        if (data.getType("portal_color") == NbtElement.INT_TYPE) return new PortalColorApplier.Simple(NbtUtils.getInt(data, "portal_color"));
         NbtCompound applierData = NbtUtils.getCompound(data, "portal_color");
         return switch (NbtUtils.getString(applierData, "type", "")) {
             case "simple" -> new PortalColorApplier.Simple(NbtUtils.getInt(applierData, "value"));
-            case "checker" -> new PortalColorApplier.Checker(applierData.getList("values", NbtElement.INT_TYPE));
+            case "checker" -> new PortalColorApplier.Checker(NbtUtils.getList(applierData, "values", NbtElement.INT_TYPE));
             case "random_hue" -> new PortalColorApplier.RandomHue(applierData);
             case "random" -> PortalColorApplier.RandomColor.INSTANCE;
             default -> new PortalColorApplier.Simple(defaultColor);

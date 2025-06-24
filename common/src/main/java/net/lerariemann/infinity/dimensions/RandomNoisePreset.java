@@ -220,13 +220,13 @@ public class RandomNoisePreset {
             biomestoadd.add(NbtString.of(biome));
             sequence.add(ruleWrap(biomestoadd, rule));
         }
-        sequence.add(CommonIO.readAndFormat(
+        sequence.add(NbtUtils.getCompound(CommonIO.readAndFormat(
                 InfinityMod.utilPath + "/surface_rule/default.json",
                 defaultBlock("minecraft:grass_block"),
                 defaultBlock("minecraft:dirt"),
                 defaultBlock("minecraft:dirt"),
                 defaultBlock("minecraft:stone"),
-                defaultBlock("minecraft:gravel")).getCompound("rule"));
+                defaultBlock("minecraft:gravel")), "rule"));
         return sequence;
     }
 

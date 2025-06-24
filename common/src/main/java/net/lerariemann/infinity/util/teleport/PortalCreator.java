@@ -12,6 +12,7 @@ import net.lerariemann.infinity.dimensions.RandomDimension;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
@@ -322,11 +323,11 @@ public interface PortalCreator {
         String key = id.getPath();
         if (comp.contains(key)) {
             NbtList l;
-            if (comp.contains(key, NbtElement.STRING_TYPE)) {
+            if (comp.getType(key) == NbtElement.STRING_TYPE) {
                 l = new NbtList();
                 l.add(comp.get(key));
             }
-            else l = comp.getList(key, NbtElement.STRING_TYPE);
+            else l = NbtUtils.getList(comp, key, NbtElement.STRING_TYPE);
             NbtString nbts = NbtString.of(value);
             if (l.contains(nbts)) return; //no need to record a value twice
             comp.remove(key);
