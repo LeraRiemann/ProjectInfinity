@@ -3,6 +3,7 @@ package net.lerariemann.infinity.mixin.core;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.world.level.LevelProperties;
@@ -20,7 +21,7 @@ public class LevelPropertiesMixin {
         if (instance.isEmpty()) return;
         NbtCompound c = ((NbtCompound) instance.get());
         if (c.contains("dimensions")) {
-            NbtCompound d = c.getCompound("dimensions");
+            NbtCompound d = NbtUtils.getCompound(c, "dimensions");
             NbtCompound newD = new NbtCompound();
             d.getKeys().stream().filter(s -> !s.startsWith(InfinityMod.MOD_ID + ":")).forEach(key -> newD.put(key, d.get(key)));
             c.put("dimensions", newD);

@@ -154,14 +154,14 @@ public class InfinityPortalBlockEntity extends TintableBlockEntity {
 
     public void readNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(tag, registryLookup);
-        if (tag.contains("Dimension", NbtElement.NUMBER_TYPE)) { //conversion from legacy formats
+        if (tag.getType("Dimension") == NbtElement.NUMBER_TYPE) { //conversion from legacy formats
             this.portalColor = NbtUtils.getInt(tag, "Dimension") & 0xFFFFFF;
             if (tag.contains("DimensionName")) {
                 this.dimension = Identifier.of(NbtUtils.getString(tag, "DimensionName"));
             }
             else this.dimension = InfinityMethods.getDimId(this.portalColor);
         }
-        else if (tag.contains("Dimension", NbtElement.STRING_TYPE)) { //new better format
+        else if (tag.getType("Dimension") == NbtElement.STRING_TYPE) { //new better format
             this.dimension = Identifier.of(NbtUtils.getString(tag, "Dimension"));
             this.portalColor = NbtUtils.getInt(tag, "Color", (world != null ? PortalColorApplier.of(dimension, world.getServer()) :
                     PortalColorApplier.of(dimension, new NbtCompound())).apply(pos) & 0xFFFFFF);

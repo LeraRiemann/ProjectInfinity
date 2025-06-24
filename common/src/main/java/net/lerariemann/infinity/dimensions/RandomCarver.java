@@ -66,7 +66,7 @@ public class RandomCarver {
         res.add(parent.parent.default_block.get("Name"));
         for (NbtCompound a : parent.parent.additional_blocks) res.add(a.get("Name"));
         res.add(parent.parent.default_fluid.get("Name"));
-        res.add(NbtString.of(parent.parent.underwater.get(parent.fullname).getString("Name")));
+        res.add(NbtString.of(NbtUtils.getString(parent.parent.underwater.get(parent.fullname), "Name")));
         return res;
     }
 }

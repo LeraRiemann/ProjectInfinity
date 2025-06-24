@@ -5,6 +5,8 @@ import net.minecraft.nbt.NbtElement;
 
 import java.util.function.Function;
 
+import static net.lerariemann.infinity.util.core.NbtUtils.getFloat;
+
 public interface PitchShifter {
     Function<Float, Float> applier();
 
@@ -30,14 +32,9 @@ public interface PitchShifter {
 
     static PitchShifter decode(NbtCompound comp) {
         return switch(comp.getString("type")) {
-            case "constant" -> new Constant(getFloat(comp, "value"));
-            case "add" -> new Add(getFloat(comp, "value"));
+            case "constant" -> new Constant(getFloat(comp, "value", 1));
+            case "add" -> new Add(getFloat(comp, "value", 1));
             default -> Empty.INSTANCE;
         };
-    }
-
-    static float getFloat(NbtCompound comp, String s) {
-        if (!comp.contains(s, NbtElement.FLOAT_TYPE)) return 1;
-        return comp.getFloat(s);
     }
 }
