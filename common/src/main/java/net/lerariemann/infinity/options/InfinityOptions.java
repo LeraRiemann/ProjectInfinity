@@ -166,13 +166,13 @@ public class InfinityOptions {
         return data.contains("lunar_texture");
     }
     public int getNumMoons() {
-        return data.contains("moons") ? data.getList("moons", NbtElement.COMPOUND_TYPE).size() : 1;
+        return data.contains("moons") ? NbtUtils.getList(data,"moons", NbtElement.COMPOUND_TYPE).size() : 1;
     }
     public boolean lunarTest(String key, int i) {
-        return data.contains("moons") && ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).contains(key);
+        return data.contains("moons") && ((NbtCompound)(NbtUtils.getList(data, "moons", NbtElement.COMPOUND_TYPE).get(i))).contains(key);
     }
     public float fullLunarTest(String key, int i, float def) {
-        return lunarTest(key, i) ? ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).getFloat(key) : def;
+        return lunarTest(key, i) ? ((NbtCompound)(NbtUtils.getList(data, "moons", NbtElement.COMPOUND_TYPE).get(i))).getFloat(key) : def;
     }
     public float getLunarSize(int i) {
         return fullLunarTest("lunar_size", i, 20.0f);
@@ -184,12 +184,13 @@ public class InfinityOptions {
         return fullLunarTest("lunar_tilt_z", i, 0.0f);
     }
     public Vector3f getLunarTint(int i) {
-        int color = lunarTest("lunar_tint", i) ? ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).getInt("lunar_tint") : 16777215;
+        int color = lunarTest("lunar_tint", i) ? ((NbtCompound)(NbtUtils.getList(data, "moons", NbtElement.COMPOUND_TYPE).get(i))).getInt("lunar_tint") : 16777215;
         return new Vector3f((float)(color >> 16 & 0xFF) / 255.0f, (float)(color >> 8 & 0xFF) / 255.0f, (float)(color & 0xFF) / 255.0f);
     }
     public Identifier getLunarTexture(int i) {
-        return Identifier.of(lunarTest("lunar_texture", i) ?
-                ((NbtCompound)(data.getList("moons", NbtElement.COMPOUND_TYPE).get(i))).getString("lunar_texture") : "textures/environment/moon_phases.png");
+        if (lunarTest("lunar_texture", i))
+            return Identifier.of(NbtUtils.getString(((NbtCompound) (NbtUtils.getList(data, "moons", NbtElement.COMPOUND_TYPE).get(i))), "lunar_texture"));
+        return Identifier.of("textures/environment/moon_phases.png");
     }
     public float getLunarVelocity(int i) {
         return fullLunarTest("lunar_velocity", i, 1.0f);

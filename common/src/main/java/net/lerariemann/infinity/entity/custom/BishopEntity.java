@@ -137,7 +137,7 @@ public class BishopEntity extends AbstractChessFigure implements RangedAttackMob
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         if (nbt.contains("battle") && getWorld() instanceof ServerWorld w)
-            battle = new BishopBattle(w, nbt.getString("battle"));
+            battle = new BishopBattle(w, NbtUtils.getString(nbt, "battle"));
         updateAttackType();
     }
     public void addToBattle(BishopBattle battle) {

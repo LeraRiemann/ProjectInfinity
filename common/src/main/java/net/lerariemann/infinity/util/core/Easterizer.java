@@ -30,7 +30,7 @@ public class Easterizer {
                     name = NbtUtils.getString(compound, "name");
                 if (compound.contains("type"))
                     typeMap.put(name, NbtUtils.getString(compound, "type"));
-                if (compound.contains("aliases", NbtElement.LIST_TYPE)) {
+                if (compound.getType("aliases") == NbtElement.LIST_TYPE) {
                     String finalName = name;
                     NbtUtils.getList(compound, "aliases", NbtElement.STRING_TYPE)
                             .stream()
