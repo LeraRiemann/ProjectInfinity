@@ -48,23 +48,10 @@ public abstract class WorldRendererMixin implements WorldRendererAccess {
         }
     }
 
-    @ModifyConstant(method = "buildStarsBuffer(Lnet/minecraft/client/render/Tessellator;)Lnet/minecraft/client/render/BuiltBuffer;", constant = @Constant(intValue = 1500))
-    private int injected(int constant) {
-        return infinity$options().getNumStars();
-    }
-    @ModifyConstant(method = "buildStarsBuffer(Lnet/minecraft/client/render/Tessellator;)Lnet/minecraft/client/render/BuiltBuffer;", constant = @Constant(floatValue = 0.15f))
-    private float injected2(float constant) {
-        return infinity$options().getStarSizeBase();
-    }
-    @ModifyConstant(method = "buildStarsBuffer(Lnet/minecraft/client/render/Tessellator;)Lnet/minecraft/client/render/BuiltBuffer;", constant = @Constant(floatValue = 0.1f))
-    private float injected3(float constant) {
-        return infinity$options().getStarSizeModifier();
-    }
-
     @Unique
     private void infinity$renderEntireSky(FrameGraphBuilder frameGraphBuilder, Camera camera, float tickDelta, Fog fog, CallbackInfo ci) {
-        fogCallback.run();
-        if (thickFog || hasBlindnessOrDarkness(camera) || SkyRenderer.testCameraCancels(camera)) return;
+        fog.run();
+        if (this.world.getDimensionEffects().useThickFog(0, 0) || hasBlindnessOrDarkness(camera) || SkyRenderer.testCameraCancels(camera)) return;
         MatrixStack matrices = new MatrixStack();
         matrices.multiplyPositionMatrix(matrix4f);
         SkyRenderer renderer = new SkyRenderer(infinity$options(), client, world,

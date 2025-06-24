@@ -60,6 +60,7 @@
     "options.ClientWorldMixin",
     "options.GameRendererMixin",
     "options.MinecraftClientMixin",
+    "options.SkyRenderingMixin",
     "options.SoundSystemMixin",
     "options.WorldRendererMixin",
     "qol.KeyboardMixin"
