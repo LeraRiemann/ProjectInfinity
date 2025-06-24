@@ -44,7 +44,7 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
             case "containing" -> new ContainingSelector(NbtUtils.getString(data, "containing"));
             case "matching" -> new MatchingSelector(NbtUtils.getString(data, "matching"));
             case "matching_block_tag" -> new MatchingBlockTagSelector(NbtUtils.getString(data, "matching"));
-            case "matching_any" -> new MatchingAnySelector(data.getList("matching", NbtElement.STRING_TYPE)
+            case "matching_any" -> new MatchingAnySelector(NbtUtils.getList(data, "matching", NbtElement.STRING_TYPE)
                     .stream().map(e->(NbtString)e).map(NbtString::asString).toList());
             default -> {
                 InfinityMod.LOGGER.warn("Unknown amendment selector type: {}", selectorType);
@@ -71,7 +71,7 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
         Map<ConfigType, List<Amendment>> data = new HashMap<>();
         NbtCompound rawData = CommonIO.read(InfinityMod.amendmentPath);
         AtomicInteger i = new AtomicInteger();
-        for (NbtElement e : rawData.getList("elements", NbtElement.COMPOUND_TYPE)) {
+        for (NbtElement e : NbtUtils.getList(rawData,"elements", NbtElement.COMPOUND_TYPE)) {
             Amendment amd = Amendment.of((NbtCompound)e);
             if (amd == null) continue;
             i.getAndIncrement();

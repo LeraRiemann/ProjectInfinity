@@ -98,7 +98,7 @@ public class InfinityOptions {
     }
     public int getHauntingTicks(Random random) {
         if (!isHaunted()) return -2;
-        if (data.contains("haunting_ticks")) return data.getInt("haunting_ticks");
+        if (data.contains("haunting_ticks")) return NbtUtils.getInt(data, "haunting_ticks");
         return random.nextBetween(NbtUtils.getInt(data, "min_haunting_ticks", 20), NbtUtils.getInt(data, "max_haunting_ticks", 200));
     }
 

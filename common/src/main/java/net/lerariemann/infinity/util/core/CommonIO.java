@@ -147,7 +147,7 @@ public interface CommonIO {
             File file = modDir.toPath().resolve(fullname).toFile();
             if (file.exists()) {
                 NbtCompound base = read(file);
-                base.getList("elements", NbtElement.COMPOUND_TYPE).stream().map(e -> (NbtCompound)e).forEach(compounds::add);
+                NbtUtils.getList(base,"elements", NbtElement.COMPOUND_TYPE).stream().map(e -> (NbtCompound)e).forEach(compounds::add);
             }
         }
         return compounds;

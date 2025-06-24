@@ -46,6 +46,12 @@ public interface NbtUtils {
     static boolean getBoolean(NbtCompound data, String key) {
         return data.getBoolean(key);
     }
+    static NbtList getList(NbtCompound data, String key, byte nbttype) {
+        return data.getList(key, nbttype);
+    }
+    static int getInt(NbtList data, int key) {
+        return data.getInt(key);
+    }
 
     static String elementToName(NbtElement e) {
         if (e instanceof NbtCompound compound) return NbtUtils.getString(compound, "Name");

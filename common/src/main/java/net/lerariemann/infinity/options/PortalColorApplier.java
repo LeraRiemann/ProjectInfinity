@@ -48,7 +48,7 @@ public interface PortalColorApplier {
         @Override
         public int apply(BlockPos pos) {
             int mod = InfinityMethods.properMod(pos.getX() + pos.getY() + pos.getZ(), values.size());
-            return values.getInt(mod);
+            return NbtUtils.getInt(values, mod);
         }
     }
 

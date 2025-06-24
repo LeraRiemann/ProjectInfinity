@@ -48,7 +48,7 @@ public class RandomNoisePreset {
         data.putBoolean("disable_mob_generation", false);
         data.putBoolean("legacy_random_source", false);
         data.put("default_block", parent.default_block);
-        data.put("default_fluid", NbtUtils.nameToElement(parent.default_fluid.getString("Name")));
+        data.put("default_fluid", NbtUtils.nameToElement(NbtUtils.getString(parent.default_fluid, "Name")));
         data.putInt("sea_level", parent.sea_level);
         data.put("noise", noise(dim));
         data.put("noise_router", getRouter(noise_router));
@@ -174,13 +174,13 @@ public class RandomNoisePreset {
             files.forEach(p -> {
                 if (p.toString().contains("surface_rule") && p.toFile().isFile()) {
                     NbtCompound compound = CommonIO.readSurfaceRule(p.toFile(), parent.sea_level);
-                    NbtList biomes = compound.getList("biomes", NbtElement.STRING_TYPE);
+                    NbtList biomes = NbtUtils.getList(compound, "biomes", NbtElement.STRING_TYPE);
                     NbtList biomestoadd = new NbtList();
                     for (NbtElement b : biomes) {
                         if (parent.vanilla_biomes.contains(b.asString())) biomestoadd.add(b);
                     }
                     if (!biomestoadd.isEmpty()) {
-                        NbtCompound rule = compound.getCompound("rule");
+                        NbtCompound rule = NbtUtils.getCompound(compound, "rule");
                         sequence.add(ruleWrap(biomestoadd, rule));
                     }
                 }

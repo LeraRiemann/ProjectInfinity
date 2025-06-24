@@ -3,6 +3,7 @@ package net.lerariemann.infinity.util.config;
 import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -130,7 +131,7 @@ public interface ConfigManager {
     static void evictOldFiles() {
         InfinityMod.LOGGER.info("Evicting old files");
         NbtCompound c = CommonIO.read(InfinityMod.utilPath.resolve("evicted_files.json"));
-        NbtList l = c.getList("content", NbtElement.STRING_TYPE);
+        NbtList l = NbtUtils.getList(c,"content", NbtElement.STRING_TYPE);
         try {
             for (NbtElement e : l) {
                 Path path1 = configPath.resolve(e.asString());

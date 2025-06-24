@@ -75,10 +75,10 @@ public interface SurfaceRuleScanner {
                 case "condition", "minecraft:condition" -> {
                     NbtCompound next = NbtUtils.getCompound(rule,"then_run");
                     NbtCompound c = NbtUtils.getCompound(rule, "if_true");
-                    if (c.getString("type").contains("above_preliminary_surface")) {
+                    if (NbtUtils.getString(c, "type").contains("above_preliminary_surface")) {
                         add(next, where);
                     }
-                    else if (!c.getString("type").contains("biome")) {
+                    else if (!NbtUtils.getString(c, "type").contains("biome")) {
                         TreeLeaf l = addOfRule(c, where, false);
                         add(next, l);
                     }
