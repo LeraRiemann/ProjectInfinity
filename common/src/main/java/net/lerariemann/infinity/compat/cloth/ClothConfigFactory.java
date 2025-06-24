@@ -263,10 +263,10 @@ public class ClothConfigFactory {
             NbtCompound configPath = rootConfig;
             if (t != field.getValue()) {
                 if (prevField != null) {
-                    configPath = rootConfig.getCompound(prevField);
+                    configPath = NbtUtils.getCompound(rootConfig, prevField);
                 }
                 if (prevPrevField != null) {
-                    configPath = rootConfig.getCompound(prevPrevField).getCompound(prevField);
+                    configPath = NbtUtils.getCompound(NbtUtils.getCompound(rootConfig, prevPrevField), prevField);
                 }
 
                 if (t instanceof String) {
