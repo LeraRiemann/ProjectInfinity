@@ -38,7 +38,7 @@ public class Easterizer {
                             .map(NbtString::asString)
                             .forEach(alias -> aliasMap.put(alias, finalName));
                 }
-                else if (compound.contains("aliases", NbtElement.STRING_TYPE))
+                else if (compound.getType("aliases") == NbtElement.STRING_TYPE)
                     aliasMap.put(NbtUtils.getString(compound, "aliases"), name);
                 if (compound.contains("options")) {
                     optionmap.put(name, NbtUtils.getCompound(compound, "options"));
