@@ -15,3 +15,4 @@ accessible method net/minecraft/block/NetherPortalBlock getOrCreateExitPortalTar
 accessible class net/minecraft/entity/passive/FishEntity$FishMoveControl
 accessible class net/minecraft/registry/SimpleRegistry$TagLookup
 accessible field net/minecraft/loot/context/LootContextTypes MAP Lcom/google/common/collect/BiMap;
+accessible field net/minecraft/client/render/BackgroundRenderer fogEnabled Z

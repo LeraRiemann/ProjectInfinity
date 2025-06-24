@@ -233,13 +233,19 @@ public record SkyRenderer(InfinityOptions options, MinecraftClient client, Clien
         Vector3f color = options.getStellarColor();
         if (u > 0.0f) {
             RenderSystem.setShaderColor(u*color.x, u*color.y, u*color.z, u);
-            BackgroundRenderer.clearFog();
+            clearFog();
             starsBuffer.bind();
             starsBuffer.draw(matrix4f2, projectionMatrix, GameRenderer.getPositionProgram());
             VertexBuffer.unbind();
             fogCallback.run();
         }
     }
+
+    private void clearFog() {
+        if (BackgroundRenderer.fogEnabled)
+            BackgroundRenderer.toggleFog();
+    }
+
     public float getStarBrightness(float tickDelta) {
         float f = world.getSkyAngle(tickDelta);
         float g = 1.0F - (MathHelper.cos(f * (float) (Math.PI * 2)) * 2.0F + 0.25F);
