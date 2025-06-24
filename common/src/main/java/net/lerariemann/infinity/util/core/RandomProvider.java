@@ -117,25 +117,26 @@ public class RandomProvider {
 
     void readRootConfig() {
         NbtCompound rootConfig = CommonIO.read(configPath.resolve("infinity.json"));
-        portalKey = rootConfig.getString("portalKey");
-        salt = rootConfig.getString("salt");
-        NbtCompound gameRules = rootConfig.getCompound("gameRules");
+        portalKey = NbtUtils.getString(rootConfig, "portalKey");
+        salt = NbtUtils.getString(rootConfig, "salt");
+        NbtCompound gameRules = NbtUtils.getCompound(rootConfig, "gameRules");
         for (String s: gameRules.getKeys()) {
             NbtElement elem = gameRules.get(s);
             if (elem!=null) {
-                if (elem.getType() == NbtElement.INT_TYPE) gameRulesInt.put(s, gameRules.getInt(s));
-                if (elem.getType() == NbtElement.DOUBLE_TYPE) gameRulesDouble.put(s, gameRules.getDouble(s));
+                if (elem.getType() == NbtElement.INT_TYPE) gameRulesInt.put(s, NbtUtils.getInt(gameRules, s));
+                if (elem.getType() == NbtElement.DOUBLE_TYPE) gameRulesDouble.put(s, NbtUtils.getDouble(gameRules, s));
                 else this.gameRules.put(s, gameRules.getBoolean(s));
             }
         }
-        NbtCompound rootChances = rootConfig.getCompound("rootChances");
+        NbtCompound rootChances = NbtUtils.getCompound(rootConfig, "rootChances");
         for (String c: rootChances.getKeys()) {
-            for (String s: rootChances.getCompound(c).getKeys()) {
-                this.rootChances.put(s, rootChances.getCompound(c).getDouble(s));
+            var compound = NbtUtils.getCompound(rootChances, c);
+            for (String s: compound.getKeys()) {
+                this.rootChances.put(s, NbtUtils.getDouble(compound, s));
             }
         }
 
-        NbtList disabledDimensions = rootConfig.getList("disabledDimensions", 8);
+        NbtList disabledDimensions = rootConfig.getList("disabledDimensions", NbtElement.STRING_TYPE);
         for (NbtElement jsonElement : disabledDimensions) {
             this.disabledDimensions.add(jsonElement.asString());
         }
@@ -149,7 +150,7 @@ public class RandomProvider {
         List<NbtCompound> blocksFeatures = new ArrayList<>();
         List<NbtCompound> fullBlocksWG = new ArrayList<>();
         for (NbtCompound block : blocksSettings) {
-            NbtCompound data = NbtUtils.test(block, "data", new NbtCompound());
+            NbtCompound data = NbtUtils.getCompound(block, "data", new NbtCompound());
             boolean isfull, istop, isfloat, islaggy;
             isfull = popBlockData(data, "full", false);
             islaggy = popBlockData(data, "laggy", false);
@@ -181,7 +182,7 @@ public class RandomProvider {
         List<NbtCompound> cleanMobs = new ArrayList<>();
         for (ConfigType type : ConfigType.mobCategories) byCategory.put(type, new ArrayList<>());
         for (NbtCompound mob : allmobs) {
-            String group = mob.getCompound("data").getString("Category");
+            String group = NbtUtils.getString(NbtUtils.getCompound(mob, "data"), "Category");
             mob.remove("data");
             ConfigType type = ConfigType.byName(group);
             if (type != null) {
@@ -218,7 +219,7 @@ public class RandomProvider {
 
     public NbtCompound blockToProvider(NbtCompound block, Random random) {
         NbtCompound res = new NbtCompound();
-        boolean isRotatable = Registries.BLOCK.get(Identifier.of(block.getString("Name"))).getDefaultState().getProperties().contains(Properties.AXIS);
+        boolean isRotatable = Registries.BLOCK.get(Identifier.of(NbtUtils.getString(block, "Name"))).getDefaultState().getProperties().contains(Properties.AXIS);
         res.putString("type", isRotatable && roll(random, "rotate_blocks") ?
                 "minecraft:rotated_block_provider" : "minecraft:simple_state_provider");
         res.put("state", block);
@@ -257,6 +258,6 @@ public class RandomProvider {
         registry.remove(ConfigType.BIOMES);
         List<NbtCompound> biomes = CommonIO.readCategory(ConfigType.BIOMES);
         Registry<Biome> reg = s.get(RegistryKeys.BIOME);
-        registerCategory(ConfigType.BIOMES, biomes.stream().filter(comp -> reg.containsId(Identifier.of(comp.getString("Name")))).toList());
+        registerCategory(ConfigType.BIOMES, biomes.stream().filter(comp -> reg.containsId(Identifier.of(NbtUtils.getString(comp,"Name")))).toList());
     }
 }

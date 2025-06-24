@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.InfinityOptionsAccess;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -31,9 +32,9 @@ public class InfinityOptions {
 
     public InfinityOptions(NbtCompound data) {
         this.data = data;
-        this.shifter = PitchShifter.decode(test(data, "pitch_shift", new NbtCompound()));
-        this.effect = EffectGiver.of(test(data, "effect", new NbtCompound()));
-        this.iridMap = IridescentMap.decode(test(data, "iridescent_map", new NbtCompound()));
+        this.shifter = PitchShifter.decode(NbtUtils.getCompound(data, "pitch_shift", new NbtCompound()));
+        this.effect = EffectGiver.of(NbtUtils.getCompound(data, "effect", new NbtCompound()));
+        this.iridMap = IridescentMap.decode(NbtUtils.getCompound(data, "iridescent_map", new NbtCompound()));
         this.mavity = test(data, "mavity", 1.0);
         this.timeScale = test(data, "time_scale", 1.0);
         this.haunted = test(data, "haunted", false);
@@ -81,7 +82,7 @@ public class InfinityOptions {
     }
 
     public NbtCompound getShader() {
-        return test(data, "shader", new NbtCompound());
+        return NbtUtils.getCompound(data, "shader", new NbtCompound());
     }
 
     public double getTimeScale() {

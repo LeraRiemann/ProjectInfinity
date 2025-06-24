@@ -12,7 +12,7 @@ public interface NbtUtils {
     static String test(NbtCompound data, String key, String def) {
         return data.contains(key, NbtElement.STRING_TYPE) ? data.getString(key) : def;
     }
-    static NbtCompound test(NbtCompound data, String key, NbtCompound def) {
+    static NbtCompound getCompound(NbtCompound data, String key, NbtCompound def) {
         return data.contains(key, NbtElement.COMPOUND_TYPE) ? data.getCompound(key) : def;
     }
     static float test(NbtCompound data, String key, float def) {
@@ -26,6 +26,25 @@ public interface NbtUtils {
     }
     static boolean test(NbtCompound data, String key, boolean def) {
         return data.contains(key) ? data.getBoolean(key) : def;
+    }
+
+    static String getString(NbtCompound data, String key) {
+        return data.getString(key);
+    }
+    static NbtCompound getCompound(NbtCompound data, String key) {
+        return data.getCompound(key);
+    }
+    static float getFloat(NbtCompound data, String key) {
+        return data.getFloat(key);
+    }
+    static int getInt(NbtCompound data, String key) {
+        return data.getInt(key);
+    }
+    static double getDouble(NbtCompound data, String key) {
+        return data.getDouble(key);
+    }
+    static boolean getBoolean(NbtCompound data, String key) {
+        return data.getBoolean(key);
     }
 
     static String elementToName(NbtElement e) {
