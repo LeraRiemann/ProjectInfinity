@@ -20,10 +20,10 @@ public interface IridescentMap {
 
     static IridescentMap decode(NbtCompound data) {
         if (!data.contains("type")) return Perliny.INSTANCE;
-        return switch (data.getString("type")) {
+        return switch (NbtUtils.getString(data,"type", "")) {
             case "linear" -> Linear.INSTANCE;
-            case "circles" -> new PrettyCircles(NbtUtils.test(data, "scale", num_models / 2.0f));
-            case "static" -> new Static(NbtUtils.test(data, "value", 0));
+            case "circles" -> new PrettyCircles(NbtUtils.getFloat(data, "scale", num_models / 2.0f));
+            case "static" -> new Static(NbtUtils.getInt(data, "value", 0));
             case "random" -> RandomMap.INSTANCE;
             default -> Perliny.INSTANCE;
         };

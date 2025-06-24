@@ -9,6 +9,7 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.lerariemann.infinity.util.core.CommonIO;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -114,7 +115,7 @@ public class AmendmentConfigFactory {
         NbtCompound elements = readNbt(configPath()+("/amendments.json"));
         NbtCompound amendment = elements.getList("elements", 10).getCompound(amendmentIndex);
         // Check if an amendment should be changed before writing
-        if (!Objects.equals(amendment.getString(newValue), newValue)) {
+        if (!Objects.equals(NbtUtils.getString(amendment, name), newValue)) {
             amendment.putString(name, newValue);
             CommonIO.write(elements, configPath(), "amendments.json");
         }
@@ -124,7 +125,7 @@ public class AmendmentConfigFactory {
         NbtCompound elements = readNbt(configPath()+("/amendments.json"));
         NbtCompound amendment = elements.getList("elements", 10).getCompound(amendmentIndex);
         // Check if an amendment should be changed before writing
-        if (amendment.getDouble(name) != newValue) {
+        if (NbtUtils.getDouble(amendment, name) != newValue) {
             amendment.putDouble(name, newValue);
             CommonIO.write(elements, configPath(), "amendments.json");
         }

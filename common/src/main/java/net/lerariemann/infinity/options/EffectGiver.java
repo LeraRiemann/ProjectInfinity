@@ -20,10 +20,10 @@ public record EffectGiver(RegistryEntry<StatusEffect> id, int duration, int ampl
     }
 
     public static EffectGiver of(NbtCompound data) {
-        if (data.contains("id")) return new EffectGiver(effectOf(data.getString("id")),
-                NbtUtils.test(data, "duration", 300),
-                NbtUtils.test(data, "amplifier", 0),
-                Math.min(NbtUtils.test(data, "cooldown", 100), 100));
+        if (data.contains("id")) return new EffectGiver(effectOf(NbtUtils.getString(data, "id")),
+                NbtUtils.getInt(data, "duration", 300),
+                NbtUtils.getInt(data, "amplifier", 0),
+                Math.min(NbtUtils.getInt(data, "cooldown", 100), 100));
         return new EffectGiver(null, 0,0,200);
     }
 

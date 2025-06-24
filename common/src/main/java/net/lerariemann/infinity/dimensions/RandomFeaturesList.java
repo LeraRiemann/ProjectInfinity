@@ -18,6 +18,7 @@ import net.lerariemann.infinity.dimensions.features.underground_structures.Rando
 import net.lerariemann.infinity.dimensions.features.underground_structures.RandomFossil;
 import net.lerariemann.infinity.dimensions.features.vegetation.*;
 import net.lerariemann.infinity.util.core.ConfigType;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -152,7 +153,7 @@ public class RandomFeaturesList {
         res.addAll(getAllElements(ConfigType.VEG2));
         addRandomFeature("surface_patch", res, RandomSurfacePatch::new);
         addRandomFeature("floating_patch", res, RandomFloatingPatch::new);
-        if (parent.parent.default_fluid.getString("Name").contains("water")) {
+        if (NbtUtils.getString(parent.parent.default_fluid, "Name").contains("water")) {
             addRandomFeature("water_plants", res, RandomSeagrass::new);
             addRandomFeature("water_plants", res, RandomPickle::new);
             addRandomFeature("water_plants", res, RandomKelp::new);

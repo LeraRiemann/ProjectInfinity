@@ -58,8 +58,8 @@ public interface WeighedStructure {
         double weight;
 
         public Leaf(NbtCompound comp) {
-            name = comp.getString("key");
-            weight = comp.getDouble("weight");
+            name = NbtUtils.getString(comp, "key");
+            weight = NbtUtils.getDouble(comp,"weight");
         }
 
         @Override
@@ -117,7 +117,7 @@ public interface WeighedStructure {
             weights = new ArrayList<>();
             statsum = 0;
             if (data.isEmpty()) add(def, 1);
-            else for (NbtCompound d : data) add(d.getString("key"), d.getDouble("weight"));
+            else for (NbtCompound d : data) add(NbtUtils.getString(d, "key"), NbtUtils.getDouble(d, "weight"));
         }
         public void add(String key, double weight) {
             statsum += weight;
@@ -165,7 +165,7 @@ public interface WeighedStructure {
 
         Leaf getLeaf(NbtCompound comp) {
             Leaf str = new Leaf(comp);
-            if (comp.contains("data")) dataMap.put(str.name, comp.getCompound("data"));
+            if (comp.contains("data")) dataMap.put(str.name, NbtUtils.getCompound(comp, "data"));
             return str;
         }
 

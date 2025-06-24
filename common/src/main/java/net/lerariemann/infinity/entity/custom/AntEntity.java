@@ -5,7 +5,6 @@ import net.lerariemann.infinity.util.core.NbtUtils;
 import net.lerariemann.infinity.util.var.BishopBattle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.FluidBlock;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -92,16 +91,16 @@ public class AntEntity extends AbstractChessFigure {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.dropsLoot = NbtUtils.test(nbt, "dropsLoot", true);
-        this.direction = switch(nbt.getString("direction")) {
+        this.dropsLoot = NbtUtils.getBoolean(nbt, "dropsLoot", true);
+        this.direction = switch(NbtUtils.getString(nbt, "direction")) {
             case "N" -> Direction.NORTH;
             case "W" -> Direction.WEST;
             case "S" -> Direction.SOUTH;
             default -> Direction.EAST;
         };
         if (nbt.contains("last_changed_pos")) {
-            NbtCompound pos = nbt.getCompound("last_changed_pos");
-            this.lastChangedPos = new BlockPos(pos.getInt("x"), pos.getInt("y"), pos.getInt("z"));
+            NbtCompound pos = NbtUtils.getCompound(nbt, "last_changed_pos");
+            this.lastChangedPos = new BlockPos(NbtUtils.getInt(pos, "x"), NbtUtils.getInt(nbt,"y"), NbtUtils.getInt(nbt, "z"));
         }
     }
 

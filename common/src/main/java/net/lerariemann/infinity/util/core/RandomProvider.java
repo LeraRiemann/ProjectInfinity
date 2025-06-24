@@ -171,7 +171,7 @@ public class RandomProvider {
         registerCategory(ConfigType.TOP_BLOCKS, topBlocks);
     }
     static boolean popBlockData(NbtCompound e, String key, boolean def) {
-        boolean res = NbtUtils.test(e, key, def);
+        boolean res = NbtUtils.getBoolean(e, key, def);
         e.remove(key);
         return res;
     }

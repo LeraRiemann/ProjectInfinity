@@ -14,6 +14,7 @@ import net.fabricmc.api.Environment;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.InfinityMethods;
+import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.nbt.NbtCompound;
@@ -296,17 +297,17 @@ public class ClothConfigFactory {
         NbtCompound rootConfig = readDefaultConfig();
         NbtCompound configPath = rootConfig;
         if (prevField != null) {
-            configPath = rootConfig.getCompound(prevField);
+            configPath = NbtUtils.getCompound(rootConfig, prevField);
         }
         if (prevPrevField != null) {
-            configPath = rootConfig.getCompound(prevPrevField).getCompound(prevField);
+            configPath = NbtUtils.getCompound(NbtUtils.getCompound(rootConfig, prevPrevField), prevField);
         }
 
         return switch (type) {
-            case "string" -> configPath.getString(field.getKey());
-            case "boolean" -> configPath.getBoolean(field.getKey());
-            case "double" -> configPath.getDouble(field.getKey());
-            case "int" -> configPath.getInt(field.getKey());
+            case "string" -> NbtUtils.getString(configPath, field.getKey());
+            case "boolean" -> NbtUtils.getBoolean(configPath, field.getKey());
+            case "double" -> NbtUtils.getDouble(configPath, field.getKey());
+            case "int" -> NbtUtils.getInt(configPath, field.getKey());
             default -> false;
         };
     }

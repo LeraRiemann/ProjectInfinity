@@ -26,7 +26,7 @@ public class RandomTree extends RandomisedFeature {
 
     public NbtList placement() {
         Placement res = new Placement();
-        NbtCompound predicate = matchingBlocks(parent.surface_block.getString("Name"));
+        NbtCompound predicate = matchingBlocks(NbtUtils.getString(parent.surface_block, "Name"));
         predicate.put("offset", offsetToNbt(Arrays.asList(0, -1, 0)));
         res.addCountEveryLayer(1);
         res.addWaterDepthFilter((int) Math.floor(random.nextExponential()*4));
