@@ -27,6 +27,8 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.level.storage.LevelStorage;
+import org.apache.commons.io.FileUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -246,5 +248,9 @@ public interface InfinityMethods {
 
     static boolean longArithmeticEnabled() {
         return RandomProvider.rule("longArithmeticEnabled");
+    }
+
+    static boolean deleteLevel(LevelStorage.Session session) {
+        return FileUtils.deleteQuietly(session.getDirectory().path().resolve("datapacks").toFile());
     }
 }

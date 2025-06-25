@@ -82,8 +82,8 @@ public class InfinityModNeoForgeClient {
 
     @SubscribeEvent
     public static void registerFluidRenderLayers(FMLClientSetupEvent event) {
-        RenderLayers.setRenderLayer(PlatformMethods.getIridescenceStill().get(), RenderLayer.getTranslucent());
-        RenderLayers.setRenderLayer(PlatformMethods.getIridescenceFlowing().get(), RenderLayer.getTranslucent());
+//        RenderLayers.setRenderLayer(PlatformMethods.getIridescenceStill().get(), RenderLayer.getTranslucent());
+//        RenderLayers.setRenderLayer(PlatformMethods.getIridescenceFlowing().get(), RenderLayer.getTranslucent());
     }
 
     @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = InfinityMod.MOD_ID)
