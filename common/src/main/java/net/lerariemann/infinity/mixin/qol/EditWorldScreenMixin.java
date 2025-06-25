@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.world.EditWorldScreen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.DirectionalLayoutWidget;
 import net.minecraft.server.world.ServerWorld;
@@ -32,10 +33,10 @@ public class EditWorldScreenMixin {
     @Inject(method = "<init>", at = @At(value = "RETURN", target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
     void inj(MinecraftClient client, LevelStorage.Session session, String levelName, BooleanConsumer callback, CallbackInfo ci) {
         var screen = (EditWorldScreen) (Object) this;
-        screen.addDrawableChild(ButtonWidget.builder(Text.literal("[Infinity] Delete Datapacks"), button -> {
+        screen.addDrawableChild(ButtonWidget.builder(Text.translatable("screen.infinity.delete_datapacks"), button -> {
             boolean bl = deleteLevel(session);
             this.callback.accept(!bl);
-        }).width(200).build());
+        }).width(200).tooltip(Tooltip.of(Text.translatable("screen.infinity.delete_datapacks.tooltip"), null)).build());
     }
 
     private boolean deleteLevel(LevelStorage.Session session) {
