@@ -72,7 +72,7 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    maven { url = "https://maven.tterrag.com/" } // Flywheel on both, Create and Registrate on forge
+    maven { url = "https://modmaven.dev/" } // Flywheel on both, Create and Registrate on forge
 }
 
 processResources {

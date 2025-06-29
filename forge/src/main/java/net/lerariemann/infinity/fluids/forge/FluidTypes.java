@@ -10,6 +10,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -66,7 +67,7 @@ public class FluidTypes {
 
                 @Override
                 public int getTintColor(@NotNull FluidState state, @NotNull BlockRenderView getter, @NotNull BlockPos pos) {
-                    return Iridescence.getPosBasedColor(pos);
+                    return ColorHelper.Abgr.toOpaque(Iridescence.getPosBasedColor(pos));
                 }
             });
         }
