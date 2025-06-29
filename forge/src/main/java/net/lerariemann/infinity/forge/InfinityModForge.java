@@ -50,11 +50,9 @@ public final class InfinityModForge {
         // Run any remaining Forge specific tasks.
         eventBus.addListener(InfinityModForge::registerSpawns);
         eventBus.addListener(InfinityModForge::commonSetup);
-        eventBus.addListener(FluidTypes::registerFluidInteractions);
         MinecraftForge.EVENT_BUS.addListener(InfinityModForge::sliderSpamFix);
-        
-        FluidTypes.registerFluidTypes(eventBus);
-        ModFluidsForge.registerModFluids();
+
+        ModFluidsForge.registerModFluids(eventBus);
         ModEffectsForge.register(eventBus);
         ModTags.IRIDESCENT_ITEMS = ItemTags.create(InfinityMethods.getId("iridescent"));
     }
@@ -82,5 +80,6 @@ public final class InfinityModForge {
         ModItemFunctions.registerDispenserBehaviour();
         if (isCreateLoaded())
             CreateCompat.register();
+        ModFluidsForge.registerFluidInteractions();
     }
 }

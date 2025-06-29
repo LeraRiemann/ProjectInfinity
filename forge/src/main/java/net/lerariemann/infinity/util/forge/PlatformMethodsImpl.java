@@ -105,13 +105,13 @@ public class PlatformMethodsImpl {
 
     public static boolean acidTest(Entity entity, boolean eyes) {
         if (entity instanceof PlayerEntity) return false;
-        if (eyes) return entity.isEyeInFluidType(FluidTypes.IRIDESCENCE_TYPE.get());
-        return entity.isInFluidType(FluidTypes.IRIDESCENCE_TYPE.get());
+        if (eyes) return entity.isEyeInFluidType(ModFluidsForge.IRIDESCENCE_TYPE.get());
+        return entity.isInFluidType(ModFluidsForge.IRIDESCENCE_TYPE.get());
     }
 
     public static double acidHeightTest(Entity entity) {
         if (entity instanceof PlayerEntity) return -1;
-        return entity.getFluidTypeHeight(FluidTypes.IRIDESCENCE_TYPE.get());
+        return entity.getFluidTypeHeight(ModFluidsForge.IRIDESCENCE_TYPE.get());
     }
 
     public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {

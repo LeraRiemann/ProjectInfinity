@@ -14,6 +14,7 @@ import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -21,7 +22,7 @@ public class InfinityModForgeClient {
 
     public static void initializeClient(FMLJavaModLoadingContext context, IEventBus eventBus) {
         InfinityModClient.initializeClient();
-        InfinityModForgeClient.registerModsPage(context);
+        InfinityModForgeClient.registerModsPage(ModLoadingContext.get());
         eventBus.addListener(InfinityModForgeClient::registerBlockColorHandlers);
         eventBus.addListener(InfinityModForgeClient::registerItemColorHandlers);
         eventBus.addListener(InfinityModForgeClient::registerFluidRenderLayers);
@@ -29,7 +30,7 @@ public class InfinityModForgeClient {
     }
 
     //Integrate Cloth Config screen (if mod present) with Forge mod menu.
-    public static void registerModsPage(FMLJavaModLoadingContext context) {
+    public static void registerModsPage(ModLoadingContext context) {
         if (clothConfigInstalled()) context.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(ModConfigFactory::createScreen));
     }
 
