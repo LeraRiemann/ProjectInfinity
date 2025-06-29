@@ -15,4 +15,4 @@ rootProject.name = 'infinity'
 
 include 'common'
 include 'fabric'
-//include 'neoforge'
+include 'neoforge'

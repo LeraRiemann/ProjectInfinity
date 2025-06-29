@@ -108,7 +108,7 @@ public class ModItems {
             registerItemAfter("iridescent_star", ItemGroups.INGREDIENTS, Items.NETHER_STAR, IridescentStarItem::new,
                     settings("iridescent_star").rarity(Rarity.UNCOMMON).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final RegistrySupplier<? extends StarOfLangItem> STAR_OF_LANG =
-            registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, PlatformMethods.getStarOfLangConstructor(),
+            registerItemAfter("star_of_lang", ItemGroups.INGREDIENTS, Items.NETHER_STAR, StarOfLangItem::new,
                     settings("star_of_lang").component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final RegistrySupplier<F4Item> F4 =
             registerItemAfter("f4", ItemGroups.TOOLS, Items.WRITABLE_BOOK, F4Item::new,

@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.util.fabric;
 
-import dev.architectury.platform.Mod;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
@@ -13,7 +12,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.item.StarOfLangItem;
-import net.lerariemann.infinity.item.fabric.StarOfLangFabricItem;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.registry.core.ModBlocks;
@@ -108,10 +106,6 @@ public class PlatformMethodsImpl {
     }
     public static double acidHeightTest(Entity entity) {
         return -1;
-    }
-
-    public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
-        return StarOfLangFabricItem::new;
     }
 
     public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i, String key) {

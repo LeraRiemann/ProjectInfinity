@@ -2,7 +2,6 @@ package net.lerariemann.infinity.util.neoforge;
 
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
-import net.lerariemann.infinity.item.neoforge.StarOfLangItemNeoforge;
 import net.lerariemann.infinity.fluids.neoforge.FluidTypes;
 import net.lerariemann.infinity.item.StarOfLangItem;
 import net.lerariemann.infinity.util.PlatformMethods;
@@ -113,10 +112,6 @@ public class PlatformMethodsImpl {
     public static double acidHeightTest(Entity entity) {
         if (entity instanceof PlayerEntity) return -1;
         return entity.getFluidTypeHeight(FluidTypes.IRIDESCENCE_TYPE.value());
-    }
-
-    public static Function<Item.Settings, ? extends StarOfLangItem> getStarOfLangConstructor() {
-        return StarOfLangItemNeoforge::new;
     }
 
     public static Item.Settings deferredIntComponent(Supplier<ComponentType<Integer>> componentTypeSupplier, int i) {
