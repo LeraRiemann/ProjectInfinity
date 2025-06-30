@@ -4,6 +4,7 @@ import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.component.ComponentChanges;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,6 +37,7 @@ public interface PortalDataHolder {
     default ComponentChanges getPortalComponents(InfinityPortalBlockEntity ipbe) {
         return ComponentChanges.builder()
                 .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor())
+                .add(DataComponentTypes.CUSTOM_MODEL_DATA, InfinityMethods.getColoredModel(ipbe.getPortalColor()))
                 .build();
     }
 
@@ -62,6 +64,7 @@ public interface PortalDataHolder {
             return ComponentChanges.builder()
                     .add(ModComponentTypes.DESTINATION.get(), ipbe.getDimension())
                     .add(ModComponentTypes.COLOR.get(), ipbe.getPortalColor())
+                    .add(DataComponentTypes.CUSTOM_MODEL_DATA, InfinityMethods.getColoredModel(ipbe.getPortalColor()))
                     .build();
         }
     }
