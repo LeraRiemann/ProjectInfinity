@@ -1,1 +1,34 @@
-{"model":{"type":"minecraft:model","model":"infinity:item/key"}}
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {
+        "when": "generated",
+        "model": {
+          "type": "minecraft:model",
+          "model": "infinity:item/key/generated"
+        }
+      },
+      {
+        "when": "end",
+        "model": {
+          "type": "minecraft:model",
+          "model": "infinity:item/key/end"
+        }
+      },
+      {
+        "when": "pride",
+        "model": {
+          "type": "minecraft:model",
+          "model": "infinity:item/key/pride"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "infinity:item/key"
+    }
+  }
+}

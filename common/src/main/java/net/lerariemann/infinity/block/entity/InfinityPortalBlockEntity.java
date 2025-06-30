@@ -163,7 +163,7 @@ public class InfinityPortalBlockEntity extends TintableBlockEntity {
         }
         else if (tag.getType("Dimension") == NbtElement.STRING_TYPE) { //new better format
             this.dimension = Identifier.of(NbtUtils.getString(tag, "Dimension"));
-            this.portalColor = NbtUtils.getInt(tag, "Color", (world != null ? PortalColorApplier.of(dimension, world.getServer()) :
+            this.portalColor = NbtUtils.getInt(tag, "Color", (world instanceof ServerWorld serverWorld ? PortalColorApplier.of(dimension, serverWorld.getServer()) :
                     PortalColorApplier.of(dimension, new NbtCompound())).apply(pos) & 0xFFFFFF);
         }
         else {

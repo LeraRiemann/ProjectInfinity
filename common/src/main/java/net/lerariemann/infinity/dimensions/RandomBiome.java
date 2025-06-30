@@ -111,14 +111,23 @@ public class RandomBiome {
         return res;
     }
 
-    NbtCompound randomMusic(){
+    NbtList randomMusic(){ // TODO multiple music selections per biome?
+        NbtList list = new NbtList();
+        list.add(randomWeightedMusic());
+        return list;
+    }
+
+    NbtCompound randomWeightedMusic() {
         NbtCompound res = new NbtCompound();
-        res.put("sound", NbtString.of(PROVIDER.randomName(random, ConfigType.MUSIC)));
+        res.putInt("weight", 1);
+        NbtCompound data = new NbtCompound();
+        data.put("sound", NbtString.of(PROVIDER.randomName(random, ConfigType.MUSIC)));
         int a = random.nextInt(0, 12000);
         int b = random.nextInt(0, 24000);
-        res.putInt("min_delay", Math.min(a,b));
-        res.putInt("max_delay", Math.max(a,b));
-        res.putBoolean("replace_current_music", random.nextBoolean());
+        data.putInt("min_delay", Math.min(a,b));
+        data.putInt("max_delay", Math.max(a,b));
+        data.putBoolean("replace_current_music", random.nextBoolean());
+        res.put("data", data);
         return res;
     }
 

@@ -1,10 +1,13 @@
 package net.lerariemann.infinity.item;
 
+import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.options.PortalColorApplier;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.minecraft.component.ComponentChanges;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,6 +38,7 @@ public class TransfiniteKeyItem extends Item implements PortalDataHolder.Destina
         return ComponentChanges.builder()
                 .add(ModComponentTypes.DESTINATION.get(), id)
                 .add(ModComponentTypes.COLOR.get(), color & 0xFFFFFF)
+                .add(DataComponentTypes.CUSTOM_MODEL_DATA, getDataForClientItem(id))
                 .build();
     }
 
@@ -59,12 +63,32 @@ public class TransfiniteKeyItem extends Item implements PortalDataHolder.Destina
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
         Identifier dimension = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
         MutableText mutableText = (dimension != null)
                 ? InfinityMethods.getDimensionNameAsText(dimension)
                 : Text.translatable("tooltip.infinity.key.randomise");
         tooltip.add(mutableText.formatted(Formatting.GRAY));
+    }
+
+    public CustomModelDataComponent getDataForClientItem(ItemStack stack) {
+        Identifier dimension = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
+        return getDataForClientItem(dimension != null ? dimension : InfinityMethods.getId("random"));
+    }
+
+    public CustomModelDataComponent getDataForClientItem(Identifier dimension) {
+        String data;
+        if (dimension.getPath().contains("generated")) {
+            data = "generated";
+        }
+        else if (dimension.equals(Identifier.of("end"))) {
+            data = "end";
+        } else if (dimension.equals(InfinityMethods.getId("pride"))) {
+            data = "pride";
+        } else {
+            data = "random";
+        }
+        return new CustomModelDataComponent(List.of(), List.of(), List.of(data), List.of());
     }
 }
