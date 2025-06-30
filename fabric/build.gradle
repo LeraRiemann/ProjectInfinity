@@ -73,6 +73,10 @@ dependencies {
     modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version+1.21.1:api")
 //    modLocalRuntime("dev.emi:emi-fabric:$emi_version+$minecraft_version")
 
+    // EIV
+    modImplementation "maven.modrinth:eiv:${eiv_version}+${minecraft_version}"
+
+
     // Devenv helpers
 //    modImplementation "maven.modrinth:uwrad:1.1.0"
 //    modImplementation "maven.modrinth:dev-tools-unlocker:1.0.0"

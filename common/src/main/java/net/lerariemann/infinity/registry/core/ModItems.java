@@ -32,7 +32,7 @@ public class ModItems {
     //block items
     public static final RegistrySupplier<Item> PORTAL_ITEM =
             ITEMS.register(ModBlocks.PORTAL.getId(), () -> new BlockItem(ModBlocks.PORTAL.get(),
-                            settings(ModBlocks.PORTAL.getId().getPath()).component(ModComponentTypes.COLOR.get(), ColorLogic.defaultPortal)));
+                            settings(ModBlocks.PORTAL).component(ModComponentTypes.COLOR.get(), ColorLogic.defaultPortal)));
     public static final RegistrySupplier<Item> COSMIC_ALTAR_ITEM =
             registerBlockItemAfter(ModBlocks.COSMIC_ALTAR, ItemGroups.FUNCTIONAL, Items.LECTERN, BlockItem::new);
     public static final RegistrySupplier<Item> ALTAR_ITEM =
@@ -57,12 +57,12 @@ public class ModItems {
             registerBlockItemAfter(ModBlocks.IRIDESCENT_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET, BlockItem::new);
     public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_WOOL  =
             registerBlockItemAfter(ModBlocks.CHROMATIC_WOOL, ItemGroups.COLORED_BLOCKS, Items.PINK_WOOL,
-                    settings(ModBlocks.CHROMATIC_WOOL.getId().getPath()),
-                    (p, settings) -> new ChromaticBlockItem(p, settings(ModBlocks.CHROMATIC_WOOL.getId().getPath()).component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic)));
+                    settings(ModBlocks.CHROMATIC_WOOL),
+                    (p, settings) -> new ChromaticBlockItem(p, settings(ModBlocks.CHROMATIC_WOOL).component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic)));
     public static final RegistrySupplier<ChromaticBlockItem> CHROMATIC_CARPET  =
             registerBlockItemAfter(ModBlocks.CHROMATIC_CARPET, ItemGroups.COLORED_BLOCKS, Items.PINK_CARPET,
-                    settings(ModBlocks.CHROMATIC_CARPET.getId().getPath()),
-                    (p, settings) -> new ChromaticBlockItem(p, settings(ModBlocks.CHROMATIC_WOOL.getId().getPath()).component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic)));
+                    settings(ModBlocks.CHROMATIC_CARPET),
+                    (p, settings) -> new ChromaticBlockItem(p, settings(ModBlocks.CHROMATIC_CARPET).component(ModComponentTypes.COLOR.get(), ColorLogic.defaultChromatic)));
     public static final RegistrySupplier<Item> BIOME_BOTTLE_ITEM =
             registerBlockItemAfter(ModBlocks.BIOME_BOTTLE, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE, BiomeBottleItem::new);
     //spawn eggs
@@ -163,7 +163,7 @@ public class ModItems {
      */
     public static <T extends Item> RegistrySupplier<T> registerBlockItemAfter(RegistrySupplier<Block> block, RegistryKey<ItemGroup> group, Item item,
                                                                 BiFunction<Block, Item.Settings, T> constructor) {
-        return registerBlockItemAfter(block, group, item, new Item.Settings().registryKey(registryKey(block.getId().getPath())), constructor);
+        return registerBlockItemAfter(block, group, item, settings(block), constructor);
     }
 
     /**
@@ -175,6 +175,10 @@ public class ModItems {
 
     public static Item.Settings settings(String id) {
         return new Item.Settings().registryKey(registryKey(id));
+    }
+
+    public static Item.Settings settings(RegistrySupplier<Block> id) {
+        return new Item.Settings().registryKey(registryKey(id.getId().getPath())).useBlockPrefixedTranslationKey();
     }
 
     private static RegistryKey<Item> registryKey(String id) {
