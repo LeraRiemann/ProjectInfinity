@@ -1,1 +1,12 @@
-{"model":{"type":"minecraft:model","model":"infinity:block/chromatic/carpet"}}
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "infinity:block/chromatic/carpet",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": 13408767
+      }
+    ]
+  }
+}

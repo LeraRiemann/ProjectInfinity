@@ -1,1 +1,12 @@
-{"model":{"type":"minecraft:model","model":"infinity:item/neither_portal"}}
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "infinity:item/neither_portal",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": 65535
+      }
+    ]
+  }
+}
