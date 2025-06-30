@@ -24,13 +24,13 @@ public class BishopNodeMaker extends LandPathNodeMaker {
         PathNode[] succ = new PathNode[Direction.Type.HORIZONTAL.getFacingCount()];
         for (Direction direction : Direction.Type.HORIZONTAL) {
             PathNode pathNode = this.getPathNode(node.x + direction.getOffsetX(), node.y, node.z + direction.getOffsetZ(), j, d, direction, pathNodeType2);
-            succ[direction.getHorizontal()] = pathNode;
+            succ[direction.getHorizontalQuarterTurns()] = pathNode;
         }
         for (Direction directionx : Direction.Type.HORIZONTAL) {
             Direction direction2 = directionx.rotateYClockwise();
             if (this.isValidDiagonalSuccessor(node,
-                    succ[directionx.getHorizontal()],
-                    succ[direction2.getHorizontal()])) {
+                    succ[directionx.getHorizontalQuarterTurns()],
+                    succ[direction2.getHorizontalQuarterTurns()])) {
                 PathNode pathNode2 = this.getPathNode(
                         node.x + directionx.getOffsetX() + direction2.getOffsetX(),
                         node.y,

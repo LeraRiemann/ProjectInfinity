@@ -15,7 +15,7 @@ public class ChaosPawnRenderer extends BipedEntityRenderer<ChaosPawn, ChaosPawnR
     private static final Identifier TEXTURE = InfinityMethods.getId("textures/entity/empty.png");
     public ChaosPawnRenderer(EntityRendererFactory.Context context) {
         super(context, new BipedEntityModel<>(context.getPart(EntityModelLayers.PLAYER)), 0.25f);
-        this.addFeature(new ChaosPawnTint(this, new BipedEntityModel<>(context.getModelLoader().getModelPart(EntityModelLayers.PLAYER))));
+        this.addFeature(new ChaosPawnTint(this, new BipedEntityModel<>(context.getEntityModels().getModelPart(EntityModelLayers.PLAYER))));
     }
 
     @Override

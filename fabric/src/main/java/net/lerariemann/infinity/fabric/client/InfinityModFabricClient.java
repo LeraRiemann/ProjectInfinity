@@ -27,17 +27,6 @@ public class InfinityModFabricClient implements ClientModInitializer {
                 ModBlocks.BIOME_BOTTLE.get(),
                 ModBlocks.CHROMATIC_WOOL.get(),
                 ModBlocks.CHROMATIC_CARPET.get());
-        ColorProviderRegistry.ITEM.register(InfinityMethods::getOverlayColorFromComponents,
-                ModItems.TRANSFINITE_KEY.get(),
-                ModItems.BIOME_BOTTLE_ITEM.get(),
-                ModItems.F4.get());
-        ColorProviderRegistry.ITEM.register(InfinityMethods::getItemColorFromComponents,
-                ModItems.CHROMATIC_WOOL.get(),
-                ModItems.CHROMATIC_CARPET.get(),
-                ModItems.CHROMATIC_MATTER.get(),
-                ModItems.PORTAL_ITEM.get());
-        ColorProviderRegistry.ITEM.register(InfinityMethods::getDiscColorFromComponents,
-                ModItems.DISC.get());
 
         // Render layer maps
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutoutMipped(),

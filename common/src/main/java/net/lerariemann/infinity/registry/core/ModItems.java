@@ -67,22 +67,22 @@ public class ModItems {
             registerBlockItemAfter(ModBlocks.BIOME_BOTTLE, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE, BiomeBottleItem::new);
     //spawn eggs
     public static final RegistrySupplier<Item> CHAOS_CREEPER_SPAWN_EGG = ITEMS.register("chaos_creeper_spawn_egg", () ->
-            new ArchitecturySpawnEggItem(ModEntities.CHAOS_CREEPER, 0x91BD59, 0x78A7FF,
+            new ArchitecturySpawnEggItem(ModEntities.CHAOS_CREEPER,
                     createSpawnEggSettings("chaos_creeper_spawn_egg")));
     public static final RegistrySupplier<Item> CHAOS_SKELETON_SPAWN_EGG = ITEMS.register("chaos_skeleton_spawn_egg", () ->
-            new ArchitecturySpawnEggItem(ModEntities.CHAOS_SKELETON, 0xF3CFB9, 0x87A363,
+            new ArchitecturySpawnEggItem(ModEntities.CHAOS_SKELETON,
                     createSpawnEggSettings("chaos_skeleton_spawn_egg")));
     public static final RegistrySupplier<Item> CHAOS_SLIME_SPAWN_EGG = ITEMS.register("chaos_slime_spawn_egg",  () ->
-            new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME, 0xFF66FF, 0xAA77DD,
+            new ArchitecturySpawnEggItem(ModEntities.CHAOS_SLIME,
                     createSpawnEggSettings("chaos_slime_spawn_egg")));
     public static final RegistrySupplier<Item> CHAOS_PAWN_SPAWN_EGG = ITEMS.register("chaos_pawn_spawn_egg", () ->
-            new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN, 0x222222, 0xFFFFFF,
+            new ArchitecturySpawnEggItem(ModEntities.CHAOS_PAWN,
                     createSpawnEggSettings("chaos_pawn_spawn_egg")));
     public static final RegistrySupplier<Item> ANT_SPAWN_EGG = ITEMS.register("ant_spawn_egg",  () ->
-            new ArchitecturySpawnEggItem(ModEntities.ANT, 0x444444, 0xFFFFFF,
+            new ArchitecturySpawnEggItem(ModEntities.ANT,
                     createSpawnEggSettings("ant_spawn_egg")));
     public static final RegistrySupplier<Item> BISHOP_SPAWN_EGG = ITEMS.register("bishop_spawn_egg",  () ->
-            new ArchitecturySpawnEggItem(ModEntities.BISHOP, 0, 0xFFFFFF,
+            new ArchitecturySpawnEggItem(ModEntities.BISHOP,
                     createSpawnEggSettings("bishop_spawn_egg")));
     //bucket
     public static final RegistrySupplier<Item> IRIDESCENCE_BUCKET = ITEMS.register("iridescence_bucket", () ->

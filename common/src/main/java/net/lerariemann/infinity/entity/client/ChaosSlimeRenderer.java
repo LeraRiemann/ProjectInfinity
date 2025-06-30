@@ -17,7 +17,7 @@ public class ChaosSlimeRenderer extends MobEntityRenderer<ChaosSlime, ChaosSlime
     public ChaosSlimeRenderer(EntityRendererFactory.Context context) {
         super(context, new SlimeEntityModel(context.getPart(EntityModelLayers.SLIME)), 0.25f);
         this.addFeature(new DimensionalSlimeCoreRenderer(this, context.getBlockRenderManager()));
-        this.addFeature(new TintedLayerRenderer(this, new SlimeEntityModel(context.getModelLoader().getModelPart(EntityModelLayers.SLIME_OUTER))));
+        this.addFeature(new TintedLayerRenderer(this, new SlimeEntityModel(context.getEntityModels().getModelPart(EntityModelLayers.SLIME_OUTER))));
     }
 
     @Override

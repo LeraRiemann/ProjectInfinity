@@ -75,7 +75,7 @@ public class ModPayloads {
         public static final CustomPayload.Id<ShaderS2CPayload> ID = new CustomPayload.Id<>(InfinityMethods.getId("reload_shader"));
         public static final PacketCodec<RegistryByteBuf, ShaderS2CPayload> CODEC = PacketCodec.tuple(
                 PacketCodecs.NBT_COMPOUND, ShaderS2CPayload::shader_data,
-                PacketCodecs.BOOL, ShaderS2CPayload::iridescence,
+                PacketCodecs.BOOLEAN, ShaderS2CPayload::iridescence,
                 ShaderS2CPayload::new);
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {

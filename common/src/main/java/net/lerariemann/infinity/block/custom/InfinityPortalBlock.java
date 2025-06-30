@@ -99,7 +99,7 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+    protected ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
         if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe)
             return ModItems.TRANSFINITE_KEY.get().withPortalData(ipbe);
         return ItemStack.EMPTY;

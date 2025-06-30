@@ -30,6 +30,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
+import java.util.List;
 import java.util.Map;
 
 public class AltarBlock extends Block {
@@ -75,15 +76,15 @@ public class AltarBlock extends Block {
                         new BlockStateComponent(Map.of())
                                 .with(AltarBlock.COLOR, color)
                                 .with(AltarBlock.FLOWER, flower))
-                .add(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(color +
-                        (flower ? AltarBlock.numColors : 0)))
+                .add(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(List.of(), List.of(), List.of(),
+                        List.of(color + (flower ? AltarBlock.numColors : 0))))
                 .build();
         return ComponentChanges.EMPTY;
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
-        ItemStack res = super.getPickStack(world, pos, state);
+    protected ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+        ItemStack res = super.getPickStack(world, pos, state, includeData);
         res.applyChanges(toComponentChanges(state));
         return res;
     }

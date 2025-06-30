@@ -83,10 +83,10 @@ public class BiomeBottleBlock extends BlockWithEntity {
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+    protected ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
         return world.getBlockEntity(pos) instanceof BiomeBottleBlockEntity bbbe
                 ? bbbe.asStack()
-                : super.getPickStack(world, pos, state);
+                : super.getPickStack(world, pos, state, includeData);
     }
 
     public static final int maxAllowedCharge = 10000;

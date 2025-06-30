@@ -33,8 +33,8 @@ public class ChromaticBlock extends BlockWithEntity implements Boopable {
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
-        ItemStack res = super.getPickStack(world, pos, state);
+    protected ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+        ItemStack res = super.getPickStack(world, pos, state, true);
         if (!res.isEmpty() && world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe)
             res.applyComponentsFrom(cbe.asMap());
         return res;

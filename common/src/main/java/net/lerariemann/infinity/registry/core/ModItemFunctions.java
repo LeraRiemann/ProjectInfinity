@@ -1,6 +1,5 @@
 package net.lerariemann.infinity.registry.core;
 
-import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.api.EnvType;
@@ -130,6 +129,7 @@ public class ModItemFunctions {
 
     @Environment(EnvType.CLIENT)
     public static void registerModelPredicates() {
+        /*
         ItemPropertiesRegistry.register(ModItems.TRANSFINITE_KEY.get(), InfinityMethods.getId("key"), (stack, world, entity, seed) -> {
             Identifier id = ModItems.TRANSFINITE_KEY.get().getDestination(stack);
             String s = id.toString();
@@ -153,5 +153,9 @@ public class ModItemFunctions {
                     if (id.toString().equals(InfinityMethods.ofRandomDim)) return 0.02f;
                     return 0.01f;
                 });
+                
+         */
     }
+
+
 }

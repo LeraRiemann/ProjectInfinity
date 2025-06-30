@@ -265,7 +265,7 @@ public class AntEntity extends AbstractChessFigure {
             if (targetPos == null) return;
             Vec3d v = targetPos.toBottomCenterPos();
             mob.teleport(v.x, v.y, v.z, false);
-            mob.setYaw(mob.direction.asRotation());
+            mob.setYaw(mob.direction.getPositiveHorizontalDegrees());
         }
     }
 
