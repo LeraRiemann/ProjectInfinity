@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class FireBlockMixin {
     /* Disabling fire tick in infdims */
     @ModifyExpressionValue(method = "scheduledTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
-    boolean inj(boolean original, @Local(argsOnly = true) ServerWorld world) {
+    boolean disableFireTick(boolean original, @Local(argsOnly = true) ServerWorld world) {
         if (InfinityMethods.isInfinity(world)) return false;
         return original;
     }

@@ -141,6 +141,8 @@
   "recipe_info.portal.infinity.attuned": "The item is attuned to the portal used",
   "recipe_info.iridescence.infinity.key": "No matter the key provided, a random one is born",
   "recipe_info.iridescence.infinity.chromatic_matter": "Gets drenched with the liquid's hue",
+  "screen.infinity.delete_datapacks": "[Infinity] Delete Datapacks",
+  "screen.infinity.delete_datapacks.tooltip": "WARNING: This option will forcibly delete all datapacks in this world's files. Use to recover a world if a dimension is preventing the world from being loaded.",
   "stat.infinity.portals_opened_stat": "Infinity portals opened",
   "stat.infinity.dimensions_opened_stat": "Unique dimensions discovered",
   "stat.infinity.worlds_destroyed_stat": "Unique dimensions destroyed",

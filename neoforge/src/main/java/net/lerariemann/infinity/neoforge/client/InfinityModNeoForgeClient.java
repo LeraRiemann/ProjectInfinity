@@ -16,6 +16,7 @@ import net.lerariemann.infinity.util.screen.F4Screen;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.BlockRenderView;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -106,11 +107,11 @@ public class InfinityModNeoForgeClient {
 
                 @Override
                 public int getTintColor() {
-                    return Iridescence.getTimeBasedColor();
+                    return ColorHelper.Argb.fullAlpha(Iridescence.getTimeBasedColor());
                 }
                 @Override
                 public int getTintColor(@NotNull FluidState state, @NotNull BlockRenderView getter, @NotNull BlockPos pos) {
-                    return Iridescence.getPosBasedColor(pos);
+                    return ColorHelper.Argb.fullAlpha(Iridescence.getPosBasedColor(pos));
                 }
 
             }, FluidTypes.IRIDESCENCE_TYPE.value());

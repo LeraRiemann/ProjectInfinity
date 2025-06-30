@@ -63,6 +63,7 @@
     "options.SkyRenderingMixin",
     "options.SoundSystemMixin",
     "options.WorldRendererMixin",
+    "qol.EditWorldScreenMixin",
     "qol.KeyboardMixin"
   ],
   "injectors": {
