@@ -27,8 +27,8 @@
     "modmenu": [
       "net.lerariemann.infinity.compat.fabric.ModMenuCompat"
     ],
-    "emi": [
-      "net.lerariemann.infinity.compat.emi.EmiCompat"
+    "eiv": [
+      "net.lerariemann.infinity.compat.eiv.EivIntegration"
     ]
   },
   "mixins": [

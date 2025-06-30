@@ -30,6 +30,9 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-fabric:$project.cloth_version") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+
+    modImplementation "maven.modrinth:eiv:${eiv_version}+${minecraft_version}"
+
     // modApi("com.github.iPortalTeam:DimLib:${dimlib_version}") {
     //     exclude(group: "net.fabricmc.fabric-api")
     // }

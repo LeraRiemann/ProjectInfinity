@@ -43,10 +43,9 @@ public abstract class CollisionCraftingRecipe extends SingleStackRecipe {
 //        return true;
 //    }
 
-//    @Override
-//    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
-//        return output.copy();
-//    }
+    public ItemStack getResult() {
+        return output.copy();
+    }
 
     public Ingredient getInput() {
         return input;
