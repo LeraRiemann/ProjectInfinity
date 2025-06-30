@@ -38,7 +38,7 @@ public class TransfiniteKeyItem extends Item implements PortalDataHolder.Destina
         return ComponentChanges.builder()
                 .add(ModComponentTypes.DESTINATION.get(), id)
                 .add(ModComponentTypes.COLOR.get(), color & 0xFFFFFF)
-                .add(DataComponentTypes.CUSTOM_MODEL_DATA, getDataForClientItem(id))
+                .add(DataComponentTypes.CUSTOM_MODEL_DATA, getDataForClientItem(id, color & 0xFFFFFF))
                 .build();
     }
 
@@ -73,22 +73,22 @@ public class TransfiniteKeyItem extends Item implements PortalDataHolder.Destina
     }
 
     public CustomModelDataComponent getDataForClientItem(ItemStack stack) {
-        Identifier dimension = stack.getComponents().get(ModComponentTypes.DESTINATION.get());
-        return getDataForClientItem(dimension != null ? dimension : InfinityMethods.getId("random"));
+        return getDataForClientItem(stack.getComponents().getOrDefault(ModComponentTypes.DESTINATION.get(), InfinityMethods.getId("random")), stack.getComponents().getOrDefault(ModComponentTypes.COLOR.get(), 0));
     }
 
-    public CustomModelDataComponent getDataForClientItem(Identifier dimension) {
+    public CustomModelDataComponent getDataForClientItem(Identifier dimension, int color) {
         String data;
         if (dimension.getPath().contains("generated")) {
             data = "generated";
-        }
-        else if (dimension.equals(Identifier.of("end"))) {
+        } else if (dimension.equals(Identifier.ofVanilla("end"))) {
             data = "end";
         } else if (dimension.equals(InfinityMethods.getId("pride"))) {
             data = "pride";
+        } else if (InfinityMod.provider.easterizer.isEaster(dimension.getPath()) || !dimension.getNamespace().equals("infinity")) {
+            data = "golden";
         } else {
             data = "random";
         }
-        return new CustomModelDataComponent(List.of(), List.of(), List.of(data), List.of());
+        return new CustomModelDataComponent(List.of(), List.of(), List.of(data), List.of(color));
     }
 }
