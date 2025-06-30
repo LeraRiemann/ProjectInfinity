@@ -10,6 +10,7 @@ import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -30,6 +31,7 @@ import net.minecraft.world.WorldAccess;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 
 /** Common mod methods that work identically on Fabric and NeoForge.
  * @see PlatformMethods */
@@ -246,5 +248,9 @@ public interface InfinityMethods {
 
     static boolean longArithmeticEnabled() {
         return RandomProvider.rule("longArithmeticEnabled");
+    }
+
+    static CustomModelDataComponent getColoredModel(int color) {
+        return new CustomModelDataComponent(List.of(), List.of(), List.of(), List.of(color));
     }
 }

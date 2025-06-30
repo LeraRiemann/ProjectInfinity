@@ -1,1 +1,17 @@
-{"model":{"type":"minecraft:model","model":"infinity:item/disc"}}
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "infinity:item/disc",
+    "tints": [
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 0,
+        "default": 16777215
+      },
+      {
+        "type": "minecraft:constant",
+        "value": 0
+      }
+    ]
+  }
+}

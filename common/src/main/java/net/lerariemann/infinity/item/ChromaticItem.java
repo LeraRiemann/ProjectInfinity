@@ -10,6 +10,8 @@ import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.var.ColorLogic;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentChanges;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -23,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -53,20 +56,25 @@ public class ChromaticItem extends Item implements PortalDataHolder {
     static ComponentChanges ofColor(int color) {
         return ComponentChanges.builder()
                 .add(ModComponentTypes.COLOR.get(), color)
+                .add(DataComponentTypes.CUSTOM_MODEL_DATA, InfinityMethods.getColoredModel(color))
                 .remove(ModComponentTypes.DYE_COLOR.get())
                 .remove(ModComponentTypes.HUE.get())
                 .build();
     }
     static ComponentChanges ofHue(int hue) {
+        var color = ColorLogic.getPureHue(hue/360f);
         return ComponentChanges.builder()
-                .add(ModComponentTypes.COLOR.get(), ColorLogic.getPureHue(hue/360f))
+                .add(ModComponentTypes.COLOR.get(), color)
+                .add(DataComponentTypes.CUSTOM_MODEL_DATA, InfinityMethods.getColoredModel(color))
                 .remove(ModComponentTypes.DYE_COLOR.get())
                 .add(ModComponentTypes.HUE.get(), hue)
                 .build();
     }
     static ComponentChanges ofDye(DyeColor dyeColor) {
+        var color = ColorLogic.getChromaticColor(dyeColor);
         return ComponentChanges.builder()
-                .add(ModComponentTypes.COLOR.get(), ColorLogic.getChromaticColor(dyeColor))
+                .add(ModComponentTypes.COLOR.get(), color)
+                .add(DataComponentTypes.CUSTOM_MODEL_DATA, InfinityMethods.getColoredModel(color))
                 .add(ModComponentTypes.DYE_COLOR.get(), dyeColor.getName())
                 .remove(ModComponentTypes.HUE.get())
                 .build();

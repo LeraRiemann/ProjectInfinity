@@ -158,10 +158,11 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
         if (source.getAttacker() != null && source.getAttacker().getType().isIn(EntityTypeTags.SKELETONS)) {
             ItemStack stack = ModItems.DISC.get().getDefaultStack();
             Identifier song = Identifier.of(InfinityMod.provider.randomName(world.random, ConfigType.JUKEBOXES));
+            var color = (int)InfinityMethods.getNumericFromId(song);
             stack.applyComponentsFrom(ComponentMap.builder()
                     .add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new RegistryPair<>(
                             RegistryKey.of(RegistryKeys.JUKEBOX_SONG, song)), true))
-                    .add(ModComponentTypes.COLOR.get(), (int)InfinityMethods.getNumericFromId(song)).build());
+                    .add(ModComponentTypes.COLOR.get(), color).add(DataComponentTypes.CUSTOM_MODEL_DATA, InfinityMethods.getColoredModel(color)).build());
             this.dropStack(world, stack);
         }
     }
