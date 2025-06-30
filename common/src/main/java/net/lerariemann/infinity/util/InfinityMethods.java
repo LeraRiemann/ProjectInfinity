@@ -259,4 +259,16 @@ public interface InfinityMethods {
     static boolean deleteLevel(LevelStorage.Session session) {
         return FileUtils.deleteQuietly(session.getDirectory().path().resolve("datapacks").toFile());
     }
+
+    static int invertColor(int color) {
+            int a = (color >> 24) & 0xff;
+            int r = (color >> 16) & 0xff;
+            int g = (color >> 8) & 0xff;
+            int b = color & 0xff;
+
+            r = 255 - r;
+            g = 255 - g;
+            b = 255 - b;
+            return ColorHelper.getArgb(a, r, g, b);
+    }
 }

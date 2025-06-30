@@ -10,6 +10,7 @@ import net.lerariemann.infinity.util.core.ConfigType;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.component.type.JukeboxPlayableComponent;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -33,10 +34,14 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.awt.*;
+import java.util.List;
 
 public class ChaosCreeper extends CreeperEntity implements TintableEntity {
     public static TrackedData<Integer> color = DataTracker.registerData(ChaosCreeper.class, TrackedDataHandlerRegistry.INTEGER);
@@ -162,7 +167,7 @@ public class ChaosCreeper extends CreeperEntity implements TintableEntity {
             stack.applyComponentsFrom(ComponentMap.builder()
                     .add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new RegistryPair<>(
                             RegistryKey.of(RegistryKeys.JUKEBOX_SONG, song)), true))
-                    .add(ModComponentTypes.COLOR.get(), color).add(DataComponentTypes.CUSTOM_MODEL_DATA, InfinityMethods.getColoredModel(color)).build());
+                    .add(ModComponentTypes.COLOR.get(), color).add(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(List.of(), List.of(), List.of(), List.of(color, InfinityMethods.invertColor(color)))).build());
             this.dropStack(world, stack);
         }
     }

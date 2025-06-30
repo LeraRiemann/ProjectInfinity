@@ -9,8 +9,9 @@
         "default": 16777215
       },
       {
-        "type": "minecraft:constant",
-        "value": 0
+        "type": "minecraft:custom_model_data",
+        "index": 1,
+        "default": 0
       }
     ]
   }
