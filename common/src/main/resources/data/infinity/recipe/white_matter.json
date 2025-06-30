@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "item": "minecraft:white_concrete"
-    }
+    "B": "minecraft:white_concrete"
   },
   "pattern": [
     "BBB",

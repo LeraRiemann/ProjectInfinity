@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "O": {
-      "item": "minecraft:obsidian"
-    },
-    "S": {
-      "item": "infinity:iridescent_star"
-    }
+    "O":  "minecraft:obsidian",
+    "S": "infinity:iridescent_star"
   },
   "pattern": [
     "OOO",

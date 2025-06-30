@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "L": {
-      "item": "minecraft:lime_concrete"
-    },
-    "B": {
-      "item": "minecraft:black_concrete"
-    },
-    "S": {
-      "item": "infinity:star_of_lang"
-    }
+    "L":  "minecraft:lime_concrete",
+    "B": "minecraft:black_concrete",
+    "S": "infinity:star_of_lang"
   },
   "pattern": [
     "BLB",

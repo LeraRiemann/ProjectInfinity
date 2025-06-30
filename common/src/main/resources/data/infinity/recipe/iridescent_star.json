@@ -1,8 +1,6 @@
 {
   "type": "infinity:collision_iridescence",
-  "input": {
-    "item": "infinity:star_of_lang"
-  },
+  "input": "infinity:star_of_lang",
   "output": {
     "id": "infinity:iridescent_star"
   },

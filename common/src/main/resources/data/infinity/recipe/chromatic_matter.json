@@ -1,8 +1,6 @@
 {
   "type": "infinity:collision_portal",
-  "input": {
-    "tag": "infinity:matter"
-  },
+  "input": "#infinity:matter",
   "output": {
     "id": "infinity:chromatic_matter"
   },

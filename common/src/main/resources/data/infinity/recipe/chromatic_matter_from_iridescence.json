@@ -1,8 +1,6 @@
 {
   "type": "infinity:collision_iridescence",
-  "input": {
-    "item": "infinity:chromatic_matter"
-  },
+  "input": "infinity:chromatic_matter",
   "output": {
     "id": "infinity:chromatic_matter"
   },

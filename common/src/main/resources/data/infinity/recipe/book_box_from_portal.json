@@ -1,8 +1,6 @@
 {
   "type": "infinity:collision_portal",
-  "input": {
-    "item": "minecraft:bookshelf"
-  },
+  "input": "minecraft:bookshelf",
   "output": {
     "id": "infinity:book_box"
   },

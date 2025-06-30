@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "P": {
-      "item": "minecraft:light_gray_stained_glass_pane"
-    }
+    "P": "minecraft:light_gray_stained_glass_pane"
   },
   "pattern": [
     "PPP",

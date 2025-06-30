@@ -1,8 +1,6 @@
 {
   "type": "infinity:collision_portal",
-  "input": {
-    "item": "minecraft:glass_bottle"
-  },
+  "input":  "minecraft:glass_bottle",
   "output": {
     "id": "infinity:biome_bottle"
   },

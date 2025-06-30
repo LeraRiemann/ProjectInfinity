@@ -1,8 +1,6 @@
 {
   "type": "infinity:collision_portal",
-  "input": {
-    "item": "minecraft:amethyst_shard"
-  },
+  "input": "minecraft:amethyst_shard",
   "output": {
     "id": "infinity:key"
   },

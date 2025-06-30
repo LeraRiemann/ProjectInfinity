@@ -1,8 +1,6 @@
 {
   "type": "infinity:collision_iridescence",
-  "input": {
-    "item": "infinity:key"
-  },
+  "input":  "infinity:key",
   "output": {
     "id": "infinity:key"
   },

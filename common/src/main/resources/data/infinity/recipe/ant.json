@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "B": {
-      "item": "minecraft:black_concrete"
-    },
-    "W": {
-      "item": "minecraft:white_concrete"
-    },
-    "M": {
-      "item": "infinity:star_of_lang"
-    }
+    "B":  "minecraft:black_concrete",
+    "W": "minecraft:white_concrete",
+    "M": "infinity:star_of_lang"
   },
   "pattern": [
     "WBW",

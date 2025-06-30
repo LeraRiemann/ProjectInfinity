@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": {
-      "item": "minecraft:lodestone"
-    },
-    "A": {
-      "item": "infinity:altar"
-    },
-    "S": {
-      "item": "infinity:iridescent_star"
-    }
+    "L": "minecraft:lodestone",
+    "A": "infinity:altar",
+    "S": "infinity:iridescent_star"
   },
   "pattern": [
     "LAL",
