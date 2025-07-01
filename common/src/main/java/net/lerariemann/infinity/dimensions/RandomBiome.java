@@ -65,6 +65,14 @@ public class RandomBiome {
         return res;
     }
 
+    private NbtList zeroBlockPos() {
+        NbtList nbtElements = new NbtList();
+        nbtElements.add(NbtFloat.of(0));
+        nbtElements.add(NbtFloat.of(0));
+        nbtElements.add(NbtFloat.of(0));
+        return nbtElements;
+    }
+
     NbtString randomSound(){
         return NbtString.of(PROVIDER.randomName(random, ConfigType.SOUNDS));
     }
@@ -186,6 +194,12 @@ public class RandomBiome {
                 destination.put("pos", pos);
                 res.put("destination", destination);
                 res.putInt("arrival_in_ticks", random.nextInt(20000));
+                return res;
+            }
+            case "minecraft:trail" -> {
+                res.put("color", randomColor());
+                res.put("target", zeroBlockPos());
+                res.putInt("duration", random.nextInt(500));
                 return res;
             }
         }
