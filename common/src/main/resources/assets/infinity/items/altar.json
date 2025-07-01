@@ -1,1 +1,195 @@
-{"model":{"type":"minecraft:model","model":"infinity:block/altar/0"}}
+{
+    "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:custom_model_data",
+        "index": 0,
+        "cases": [
+            {
+                "when": "0",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/0"
+                }
+            },
+            {
+                "when": "1",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/red"
+                }
+            },
+            {
+                "when": "2",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/orange"
+                }
+            },
+            {
+                "when": "3",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/yellow"
+                }
+            },
+            {
+                "when": "4",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/lime"
+                }
+            },
+            {
+                "when": "5",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/green"
+                }
+            },
+            {
+                "when": "6",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/teal"
+                }
+            },
+            {
+                "when": "7",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/cyan"
+                }
+            },
+            {
+                "when": "8",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/azure"
+                }
+            },
+            {
+                "when": "9",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/blue"
+                }
+            },
+            {
+                "when": "10",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/purple"
+                }
+            },
+            {
+                "when": "11",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/magenta"
+                }
+            },
+            {
+                "when": "12",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/rose"
+                }
+            },
+            {
+                "when": "13",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/0"
+                }
+            },
+            {
+                "when": "14",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/red"
+                }
+            },
+            {
+                "when": "15",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar/orange"
+                }
+            },
+            {
+                "when": "16",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/yellow"
+                }
+            },
+            {
+                "when": "17",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/lime"
+                }
+            },
+            {
+                "when": "18",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/green"
+                }
+            },
+            {
+                "when": "19",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/teal"
+                }
+            },
+            {
+                "when": "20",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/cyan"
+                }
+            },
+            {
+                "when": "21",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/azure"
+                }
+            },
+            {
+                "when": "22",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/blue"
+                }
+            },
+            {
+                "when": "23",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/purple"
+                }
+            },
+            {
+                "when": "24",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/magenta"
+                }
+            },
+            {
+                "when": "25",
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "infinity:block/altar_flower/rose"
+                }
+            }
+        ],
+        "fallback": {
+            "type": "minecraft:model",
+            "model": "infinity:block/altar/0"
+        }
+    }
+}

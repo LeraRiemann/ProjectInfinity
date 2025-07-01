@@ -76,8 +76,8 @@ public class AltarBlock extends Block {
                         new BlockStateComponent(Map.of())
                                 .with(AltarBlock.COLOR, color)
                                 .with(AltarBlock.FLOWER, flower))
-                .add(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(List.of(), List.of(), List.of(),
-                        List.of(color + (flower ? AltarBlock.numColors : 0))))
+                .add(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(List.of(), List.of(),
+                        List.of(String.valueOf(color + (flower ? AltarBlock.numColors : 0))), List.of()))
                 .build();
         return ComponentChanges.EMPTY;
     }
