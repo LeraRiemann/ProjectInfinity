@@ -1,6 +1,7 @@
 package net.lerariemann.infinity.dimensions;
 
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.*;
 import net.minecraft.nbt.*;
 
@@ -119,8 +120,12 @@ public class RandomBiome {
         return res;
     }
 
-    NbtList randomMusic(){ // TODO multiple music selections per biome?
+    NbtList randomMusic() {
         NbtList list = new NbtList();
+        int maxTrackCount = RandomProvider.ruleInt("maxBiomeCount");
+        for (int i = 0; i < maxTrackCount; i++) {
+            list.add(randomWeightedMusic());
+        }
         list.add(randomWeightedMusic());
         return list;
     }
