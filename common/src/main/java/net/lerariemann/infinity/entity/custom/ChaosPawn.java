@@ -99,21 +99,6 @@ public class ChaosPawn extends AbstractChessFigure {
         this.dataTracker.set(special_case, nbt.getInt("case"));
     }
 
-    // TODO mojang plz
-//    @Override
-//    public RegistryKey<LootTable> getLootTableId() {
-//        Identifier i = switch (getCase()) {
-//            case 0 -> Identifier.of("infinity:entities/chaos_pawn_black");
-//            case 1 -> Identifier.of("infinity:entities/chaos_pawn_white");
-//            default -> {
-//                boolean bl = RandomProvider.rule("pawnsCanDropIllegalItems");
-//                if (bl) yield Identifier.of(""); //loot is defined in dropEquipment instead
-//                else yield Identifier.of(InfinityMod.provider.randomName(random, ConfigType.LOOT_TABLES));
-//            }
-//        };
-//        return RegistryKey.of(RegistryKeys.LOOT_TABLE, i);
-//    }
-
     public static NbtCompound getColorSetup(Supplier<Integer> colorSupplier) {
         NbtCompound c = new NbtCompound();
         Arrays.stream((new String[]{"body", "left_arm", "right_arm", "left_leg", "right_leg"})).forEach(

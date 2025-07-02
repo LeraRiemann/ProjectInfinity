@@ -108,11 +108,6 @@ public class ChaosSlime extends SlimeEntity implements TintableEntity {
     protected SoundEvent getJumpSound() {
         return this.getCore().getSoundGroup().getFallSound();
     }
-//    @Override
-    // TODO
-    public RegistryKey<LootTable> getLootTableId() {
-        return this.getCore().getBlock().getLootTableKey().get();
-    }
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {

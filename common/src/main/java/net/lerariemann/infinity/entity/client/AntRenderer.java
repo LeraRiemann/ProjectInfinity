@@ -17,7 +17,6 @@ public class AntRenderer extends MobEntityRenderer<AntEntity, AntEntityRenderSta
         super(context, new AntModel(context.getPart(AntModel.MODEL_LAYER)), 0.6f);
     }
 
-    // TODO ENTITY RENDER STATE
     @Override
     public AntEntityRenderState createRenderState() {
         return new AntEntityRenderState();

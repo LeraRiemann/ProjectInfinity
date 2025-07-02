@@ -39,6 +39,7 @@
     "iridescence.StatusEffectUtilMixin",
     "mobs.CreeperEntityMixin",
     "mobs.LivingEntityMixin",
+    "mobs.MobEntityMixin",
     "mobs.SheepEntityMixin",
     "mobs.SlimeEntityMixin",
     "mobs.SpawnRestrictionMixin",
