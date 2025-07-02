@@ -12,6 +12,8 @@ import net.minecraft.datafixer.TypeReferences;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Util;
 
+import java.util.Set;
+
 public class ModBlockEntities {
     public static Type<?> type(String id) {
         if (!Platform.isFabric())
@@ -20,24 +22,22 @@ public class ModBlockEntities {
     }
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(InfinityMod.MOD_ID, RegistryKeys.BLOCK_ENTITY_TYPE);
 
-    // TODO find an arch way to do this, they seem to have abandoned us again
     public static final RegistrySupplier<BlockEntityType<InfinityPortalBlockEntity>> NEITHER_PORTAL =
             BLOCK_ENTITY_TYPES.register("neither_portal", () ->
-                    FabricBlockEntityTypeBuilder.create(InfinityPortalBlockEntity::new,
-                            ModBlocks.PORTAL.get()).build(type("neither_portal")));
+                    new BlockEntityType<>(InfinityPortalBlockEntity::new,
+                            Set.of(ModBlocks.PORTAL.get())));
     public static final RegistrySupplier<BlockEntityType<CosmicAltarBlockEntity>> COSMIC_ALTAR =
             BLOCK_ENTITY_TYPES.register("cosmic_altar", () ->
-                    FabricBlockEntityTypeBuilder.create(CosmicAltarBlockEntity::new,
-                            ModBlocks.COSMIC_ALTAR.get()).build(type("cosmic_altar")));
+                    new BlockEntityType<>(CosmicAltarBlockEntity::new,
+                            Set.of(ModBlocks.COSMIC_ALTAR.get())));
     public static final RegistrySupplier<BlockEntityType<BiomeBottleBlockEntity>> BIOME_BOTTLE =
             BLOCK_ENTITY_TYPES.register("biome_bottle", () ->
-                    FabricBlockEntityTypeBuilder.create(BiomeBottleBlockEntity::new,
-                            ModBlocks.BIOME_BOTTLE.get()).build(type("biome_bottle")));
+                    new BlockEntityType<>(BiomeBottleBlockEntity::new,
+                            Set.of(ModBlocks.BIOME_BOTTLE.get())));
     public static final RegistrySupplier<BlockEntityType<ChromaticBlockEntity>> CHROMATIC =
             BLOCK_ENTITY_TYPES.register("chromatic", () ->
-                    FabricBlockEntityTypeBuilder.create(ChromaticBlockEntity::new,
-                            ModBlocks.CHROMATIC_WOOL.get(),
-                            ModBlocks.CHROMATIC_CARPET.get()).build(type("chromatic")));
+                    new BlockEntityType<>(ChromaticBlockEntity::new, Set.of(ModBlocks.CHROMATIC_WOOL.get(),
+                            ModBlocks.CHROMATIC_CARPET.get())));
 
 
     public static void registerBlockEntities() {

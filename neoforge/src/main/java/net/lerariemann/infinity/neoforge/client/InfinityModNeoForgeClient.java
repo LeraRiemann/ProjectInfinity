@@ -37,8 +37,6 @@ public class InfinityModNeoForgeClient {
     public static void initializeClient(IEventBus eventBus) {
         InfinityModClient.initializeClient();
         InfinityModNeoForgeClient.registerModsPage();
-        eventBus.addListener(InfinityModNeoForgeClient::registerBlockColorHandlers);
-        eventBus.addListener(InfinityModNeoForgeClient::registerItemColorHandlers);
         eventBus.addListener(InfinityModNeoForgeClient::registerFluidRenderLayers);
         eventBus.addListener(InfinityModNeoForgeClient::registerModelPredicates);
         eventBus.addListener(InfinityModNeoForgeClient::registerMenuScreens);
@@ -58,20 +56,7 @@ public class InfinityModNeoForgeClient {
                 ModBlocks.CHROMATIC_CARPET.get());
         event.register(InfinityMethods::getBookBoxColor, ModBlocks.BOOK_BOX.get());
     }
-    @SubscribeEvent
-    public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(InfinityMethods::getOverlayColorFromComponents,
-                ModItems.TRANSFINITE_KEY.get(),
-                ModItems.BIOME_BOTTLE_ITEM.get(),
-                ModItems.F4.get());
-        event.register(InfinityMethods::getItemColorFromComponents,
-                ModItems.CHROMATIC_WOOL.get(),
-                ModItems.CHROMATIC_CARPET.get(),
-                ModItems.CHROMATIC_MATTER.get(),
-                ModItems.PORTAL_ITEM.get());
-        event.register(InfinityMethods::getDiscColorFromComponents,
-                ModItems.DISC.get());
-    }
+
     @SubscribeEvent
     public static void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModScreenHandlers.F4.get(), F4Screen::new);
@@ -107,11 +92,11 @@ public class InfinityModNeoForgeClient {
 
                 @Override
                 public int getTintColor() {
-                    return ColorHelper.Argb.fullAlpha(Iridescence.getTimeBasedColor());
+                    return ColorHelper.fullAlpha(Iridescence.getTimeBasedColor());
                 }
                 @Override
                 public int getTintColor(@NotNull FluidState state, @NotNull BlockRenderView getter, @NotNull BlockPos pos) {
-                    return ColorHelper.Argb.fullAlpha(Iridescence.getPosBasedColor(pos));
+                    return ColorHelper.fullAlpha(Iridescence.getPosBasedColor(pos));
                 }
 
             }, FluidTypes.IRIDESCENCE_TYPE.value());
