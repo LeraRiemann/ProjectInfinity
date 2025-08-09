@@ -1,7 +1,7 @@
 {
-  "infinity_version": 2004006,
+  "infinity_version": 2004007,
   "gameRules": {
-    "runtimeGenerationEnabled": true,
+    "safeMode": false,
     "longArithmeticEnabled": false,
     "forceSolidSurface": false,
     "chaosMobsEnabled": true,

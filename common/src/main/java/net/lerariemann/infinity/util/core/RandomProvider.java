@@ -152,11 +152,15 @@ public class RandomProvider {
         for (NbtCompound block : blocksSettings) {
             NbtCompound data = NbtUtils.getCompound(block, "data", new NbtCompound());
             boolean isfull, istop, isfloat, islaggy;
-            isfull = popBlockData(data, "full", false);
+
             islaggy = popBlockData(data, "laggy", false);
+            if (islaggy && RandomProvider.rule("safeMode")) continue;
+
+            isfull = popBlockData(data, "full", false);
             isfloat = popBlockData(data, "float", isfull);
             istop = popBlockData(data, "top", isfull);
             istop = istop || isfloat;
+
             block.put("data", data);
             allBlocks.add(block);
             if (isfull) fullBlocks.add(block);

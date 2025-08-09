@@ -12,7 +12,7 @@ The randomizer used for generating dimensions calls for configs almost constantl
 The file `/config/infinity/infinity.json` is the master file for configuring gamerules and root chances of generation. These settings can also be configured via Mod Menu on Fabric and the Mods menu on NeoForge. This page will walk you through them.
 
 ### Gamerules
-* `runtimeGenerationEnabled` - setting this to false will disable registration of dimensions and features in runtime, meaning you need to quit to title and enter the world again to access dimensions after tossing the book. Included for compatibility reasons.
+* `safeMode` - setting this to true will disable all block entities from being used in generation of future dimensions. Useful for heavily modded instances.
 * `longArithmeticEnabled` - setting this to true will expand the range in which dimension, biome and feature IDs generate from the integer limit (~2 billion) to the long limit (~9 quintillion). You know, if for some reason 2 billion dimensions is not enough for you :D
 * `forceSolidSurface` - setting this to true will disallow non-full blocks from being used as material for the surface of random biomes.
 * `chaosMobsEnabled` - a toggle to enable/disable custom mobs, added in the mod, from naturally spawning.
