@@ -1,9 +1,6 @@
 package net.lerariemann.infinity.compat.cloth;
 
 import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.Requirement;
@@ -26,26 +23,62 @@ import static net.lerariemann.infinity.compat.cloth.ClothConfigFactory.*;
 
 public class AmendmentConfigFactory {
     public static void build(ConfigBuilder builder) {
-        ConfigCategory amendmentCategory = builder.getOrCreateCategory(Text.translatable("config.infinity.title.amendments"));
-        JsonObject amendmentList = readJson(configPath()+("/amendments.json")).getAsJsonObject();
-        var elements = amendmentList.getAsJsonArray("elements");
-        int numAmendments = 0;
-        for (JsonElement amendmentElement : elements) {
-            amendmentCategory.addEntry(AmendmentBuilder.getNew(builder, amendmentElement, numAmendments));
-            numAmendments++;
+        AmendmentConfigFactory factory = new AmendmentConfigFactory(builder);
+        builder.setSavingRunnable(factory::save);
+    }
+
+    Map<Integer, NbtCompound> amendments = new HashMap<>();
+    boolean edited = false;
+    ConfigCategory amendmentCategory;
+    ConfigBuilder builder;
+
+    AmendmentConfigFactory(ConfigBuilder builder) {
+        this.builder = builder;
+
+        NbtList list = readNbt(configPath()+"/amendments.json").getList("elements", 10);
+        int N = list.size();
+        for (int i = 0; i < N; i++) if (list.get(i) instanceof NbtCompound e) {
+            amendments.put(i, e);
         }
 
-        var moreAmendments = builder.entryBuilder().startIntField(Text.literal("Add more amendments:"), 0).setMax(10).build();
-        amendmentCategory.addEntry(moreAmendments);
-        for (int i = 0; i < 10; i++) {
-            amendmentCategory.addEntry(AmendmentBuilder.getShadow(builder, numAmendments, moreAmendments, i));
-            numAmendments++;
+        //adding amendments from the disk
+        this.amendmentCategory = builder.getOrCreateCategory(Text.translatable("config.infinity.title.amendments"));
+        for (int i = 0; i < N; i++) {
+            amendmentCategory.addEntry(AmendmentBuilder.getNew(this, i));
         }
+
+        //"button" to show new amendments
+        var moreAmendmentsField = builder.entryBuilder()
+                .startIntField(Text.translatable("config.infinity.amendments.addmore"), 0)
+                .setTooltip(amendmentTooltip("addmore"))
+                .setMax(10)
+                .build();
+        amendmentCategory.addEntry(moreAmendmentsField);
+
+        //empty fields to add new amendments
+        for (int i = N; i < N + 10; i++) {
+            amendments.put(i, new NbtCompound());
+            amendmentCategory.addEntry(AmendmentBuilder.getShadow(this, i, moreAmendmentsField, i - N));
+        }
+    }
+
+    void save() {
+        if (!edited) return;
+        NbtList elements = new NbtList();
+        var keys = amendments.keySet().stream().sorted().toList();
+        for (int k: keys) {
+            NbtCompound value = amendments.get(k);
+            if (!value.isEmpty()) elements.add(value);
+        }
+        NbtCompound res = new NbtCompound();
+        res.putInt("amendment_version", (int)((System.currentTimeMillis() - 1754769333185L)/1000));
+        res.put("elements", elements);
+        CommonIO.write(res, configPath(), "amendments.json");
     }
 
     interface AmendmentUpdater<T> {
         boolean check(NbtCompound amendment, String key, T value);
-        void update(NbtCompound amendment, String key, T value);
+        NbtCompound update(NbtCompound amendment, String key, T value);
 
         AmendmentUpdater<String> ofString = new AmendmentUpdater<>() {
             @Override
@@ -54,8 +87,9 @@ public class AmendmentConfigFactory {
             }
 
             @Override
-            public void update(NbtCompound amendment, String key, String value) {
+            public NbtCompound update(NbtCompound amendment, String key, String value) {
                 amendment.putString(key, value);
+                return amendment;
             }
         };
         AmendmentUpdater<Double> ofDouble = new AmendmentUpdater<>() {
@@ -65,8 +99,9 @@ public class AmendmentConfigFactory {
             }
 
             @Override
-            public void update(NbtCompound amendment, String key, Double value) {
+            public NbtCompound update(NbtCompound amendment, String key, Double value) {
                 amendment.putDouble(key, value);
+                return amendment;
             }
         };
         AmendmentUpdater<List<String>> ofStringList = new AmendmentUpdater<>() {
@@ -80,8 +115,9 @@ public class AmendmentConfigFactory {
                 return !Objects.equals(a.toString(), b.toString());
             }
             @Override
-            public void update(NbtCompound amendment, String key, List<String> value) {
+            public NbtCompound update(NbtCompound amendment, String key, List<String> value) {
                 amendment.put(key, convertNbtList(value));
+                return amendment;
             }
         };
     }
@@ -91,17 +127,9 @@ public class AmendmentConfigFactory {
         return () -> Objects.equals(holder.getValue(), m);
     }
 
-    static class AmendmentBuilder {
-        ConfigBuilder builder;
-        SubCategoryBuilder subCategory;
-        int i;
-        JsonObject amendment;
-
-        AmendmentBuilder(ConfigBuilder builder, SubCategoryBuilder subCategory, int i, JsonObject amendment) {
-            this.builder = builder;
-            this.subCategory = subCategory;
-            this.i = i;
-            this.amendment = amendment;
+    record AmendmentBuilder(AmendmentConfigFactory parent, SubCategoryBuilder subCategory, int index) {
+        NbtCompound getData() {
+            return parent.amendments.get(index);
         }
 
         void build() {
@@ -122,123 +150,102 @@ public class AmendmentConfigFactory {
             addStringDropdownOption("field_name",
                     Requirement.all(matches(area, "blocks"), matches(results, "set_field")),
                     Lists.newArrayList("full", "float", "top", "laggy"));
+            addDeleteButton();
+        }
+
+        private void addDeleteButton() {
+            subCategory.add(parent.builder.entryBuilder().startBooleanToggle(Text.translatable("config.infinity.amendments.delete"), false)
+                    .requireRestart()
+                    .setTooltip(amendmentTooltip("delete"))
+                    .setSaveConsumer((value) -> {
+                        if (value) deleteAmendment();
+                    })
+                    .build());
         }
 
         private void addStringOption(String name, Requirement req) {
-            String current = getSafeString(amendment, name);
-            subCategory.add(builder.entryBuilder().startStrField(
+            String current = NbtUtils.getString(getData(), name, "");
+            subCategory.add(parent.builder.entryBuilder().startStrField(
                             Text.translatable("config.infinity.amendments."+name),
                             current)
+                    .requireRestart()
                     .setTooltip(amendmentTooltip(name))
                     .setDisplayRequirement(req)
-                    .setSaveConsumer((value)-> amendmentSetter(name, value, i, AmendmentUpdater.ofString)).build());
+                    .setSaveConsumer((value)-> amendmentSetter(name, value, AmendmentUpdater.ofString)).build());
         }
 
         private DropdownBoxEntry<String> addStringDropdownOption(String name, Requirement req, List<String> options) {
-            String current = getSafeString(amendment, name);
-            DropdownBoxEntry<String> res = builder.entryBuilder().startDropdownMenu(Text.translatable("config.infinity.amendments."+name), DropdownMenuBuilder.TopCellElementBuilder.of(current, (s) -> s))
+            String current = NbtUtils.getString(getData(), name, "");
+            DropdownBoxEntry<String> res = parent.builder.entryBuilder().startDropdownMenu(
+                            Text.translatable("config.infinity.amendments."+name),
+                            DropdownMenuBuilder.TopCellElementBuilder.of(current, (s) -> s))
+                    .requireRestart()
                     .setTooltip(amendmentTooltip(name))
                     .setDisplayRequirement(req)
-                    .setSaveConsumer((value) -> amendmentSetter(name, String.valueOf(value), i, AmendmentUpdater.ofString))
+                    .setSaveConsumer((value) -> amendmentSetter(name, String.valueOf(value), AmendmentUpdater.ofString))
                     .setSelections(options).build();
             subCategory.add(res);
             return res;
         }
 
         private void addDoubleOption(String name, Requirement req) {
-            Double current = getSafeDouble(amendment, name);
-            subCategory.add(builder.entryBuilder().startDoubleField(
+            double current = NbtUtils.getDouble(getData(), name, 0d);
+            subCategory.add(parent.builder.entryBuilder().startDoubleField(
                             Text.translatable("config.infinity.amendments."+name),
                             current)
+                    .requireRestart()
                     .setTooltip(amendmentTooltip(name))
                     .setDisplayRequirement(req)
-                    .setSaveConsumer((value) -> amendmentSetter(name, value, i, AmendmentUpdater.ofDouble)).build());
+                    .setSaveConsumer((value) -> amendmentSetter(name, value, AmendmentUpdater.ofDouble)).build());
+        }
+
+        List<String> getSafeList(String name) {
+            NbtCompound data = getData();
+            if (data.contains(name, NbtElement.LIST_TYPE)) return convertNbtList(data.getList(name, NbtElement.STRING_TYPE));
+            return List.of("");
         }
 
         private void addListOption(String name, Requirement req) {
-            JsonElement list = amendment.get(name);
-            List<String> current = (list == null || !list.isJsonArray()) ? List.of("") : convertNbtList(list.getAsJsonArray());
-            if (!Objects.equals(current.getLast(), ""))
-                current.add("");
-            subCategory.add(builder.entryBuilder().startStrList(
+            List<String> current = getSafeList(name);
+            if (!Objects.equals(current.getLast(), "")) current.add("");
+            subCategory.add(parent.builder.entryBuilder().startStrList(
                             Text.translatable("config.infinity.amendments."+name),
                             current)
+                    .requireRestart()
                     .setTooltip(amendmentTooltip(name))
                     .setDisplayRequirement(req)
-                    .setSaveConsumer((value) -> amendmentSetter(name, value, i, AmendmentUpdater.ofStringList)).build());
+                    .setSaveConsumer((value) -> amendmentSetter(name, value, AmendmentUpdater.ofStringList)).build());
         }
 
-        <T> void amendmentSetter(String name, T newValue, int amendmentIndex, AmendmentUpdater<T> updater) {
-            NbtCompound elements = readNbt(configPath()+"/amendments.json");
-            NbtList list = elements.getList("elements", 10);
-            NbtCompound amendmentNbt = list.getCompound(amendmentIndex);
-
+        <T> void amendmentSetter(String key, T newValue, AmendmentUpdater<T> updater) {
+            NbtCompound amendmentNbt = getData();
             // Check if an amendment should be changed before writing
-            if (updater.check(amendmentNbt, name, newValue)) {
-                updater.update(amendmentNbt, name, newValue);
-                updateAmendmentVersion(elements);
-                CommonIO.write(elements, configPath(), "amendments.json");
+            if (updater.check(amendmentNbt, key, newValue)) {
+                amendmentNbt = updater.update(amendmentNbt, key, newValue);
+                parent.edited = true;
+                parent.amendments.put(index, amendmentNbt);
             }
         }
 
-        static SubCategoryListEntry getNew(ConfigBuilder builder, JsonElement amendmentElement, int i) {
-            JsonObject amendment = amendmentElement.getAsJsonObject();;
-            SubCategoryBuilder subCategory = builder.entryBuilder().startSubCategory(Text.translatable("config.infinity.amendment", String.valueOf(i)));
+        void deleteAmendment() {
+            parent.amendments.put(index, new NbtCompound());
+            parent.edited = true;
+        }
 
-            (new AmendmentBuilder(builder, subCategory, i, amendment)).build();
+        static SubCategoryListEntry getNew(AmendmentConfigFactory parent, int i) {
+            SubCategoryBuilder subCategory = parent.builder.entryBuilder().startSubCategory(
+                    Text.translatable("config.infinity.amendment", String.valueOf(i)));
+            (new AmendmentBuilder(parent, subCategory, i)).build();
             return subCategory.build();
         }
 
-        static SubCategoryListEntry getShadow(ConfigBuilder builder, int i, ValueHolder<Integer> shadowAmount, int shadowI) {
-            SubCategoryBuilder subCategory = builder.entryBuilder()
+        static SubCategoryListEntry getShadow(AmendmentConfigFactory parent, int i, ValueHolder<Integer> shadowAmount, int shadowI) {
+            SubCategoryBuilder subCategory = parent.builder.entryBuilder()
                     .startSubCategory(Text.translatable("config.infinity.amendment.new"))
                     .setDisplayRequirement(() -> shadowAmount.getValue() > shadowI);
-
-            (new NewAmendmentBuilder(builder, subCategory, i)).build();
+            (new AmendmentBuilder(parent, subCategory, i)).build();
             return subCategory.build();
         }
-
-        static void updateAmendmentVersion(NbtCompound elements) {
-            elements.putInt("amendment_version", (int)((System.currentTimeMillis() - 1754769333185L)/1000));
-        }
-    }
-
-    static class NewAmendmentBuilder extends AmendmentBuilder {
-        NewAmendmentBuilder(ConfigBuilder builder, SubCategoryBuilder subCategory, int i) {
-            super(builder, subCategory, i, new JsonObject());
-        }
-
-        @Override
-        <T> void amendmentSetter(String name, T newValue, int amendmentIndex, AmendmentUpdater<T> updater) {
-            NbtCompound elements = readNbt(configPath()+"/amendments.json");
-            NbtList list = elements.getList("elements", 10);
-            if (amendmentIndex < list.size()) {
-                super.amendmentSetter(name, newValue, amendmentIndex, updater);
-                return;
-            }
-            NbtCompound amendmentNbt = new NbtCompound();
-
-            // Check if an amendment should be changed before writing
-            if (updater.check(amendmentNbt, name, newValue)) {
-                updater.update(amendmentNbt, name, newValue);
-                list.add(amendmentNbt);
-                updateAmendmentVersion(elements);
-                CommonIO.write(elements, configPath(), "amendments.json");
-            }
-        }
-    }
-
-    private static String getSafeString(JsonObject amendment, String key) {
-        var amend = amendment.get(key);
-        if (amend != null && !amend.isJsonArray())
-            return amend.getAsString();
-        else return "";
-    }
-    private static Double getSafeDouble(JsonObject amendment, String key) {
-        var amend = amendment.get(key);
-        if (amend != null && !amend.isJsonArray())
-            return amend.getAsDouble();
-        else return 0d;
     }
 
     static NbtList convertNbtList(List<String> list) {
@@ -249,10 +256,10 @@ public class AmendmentConfigFactory {
         return nbtList;
     }
 
-    static List<String> convertNbtList(JsonArray nbtList) {
+    static List<String> convertNbtList(NbtList nbtList) {
         ArrayList<String> list = new ArrayList<>();
-        for (JsonElement s : nbtList) {
-            list.add(s.getAsString());
+        for (NbtElement s : nbtList) {
+            list.add(s.asString());
         }
         return list;
     }
