@@ -77,7 +77,7 @@ void main() {
 
     float Luma = dot(OutColor, vec3(0.3, 0.59, 0.11));
     vec3 Chroma = OutColor - Luma;
-    OutColor = Chroma * (1 + alpha*(0.8 + 0.1*IridLevel)) + Luma;
+    OutColor = Chroma * (1 + alpha*(0.5 + 0.1*IridLevel)) + Luma;
 
     fragColor = vec4(OutColor, 1.0);
 }

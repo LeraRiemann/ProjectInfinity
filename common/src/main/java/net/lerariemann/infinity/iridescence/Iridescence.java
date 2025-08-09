@@ -14,7 +14,6 @@ import net.lerariemann.infinity.entity.custom.ChaosCreeper;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.NbtUtils;
-import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.util.var.ColorLogic;
@@ -139,14 +138,14 @@ public interface Iridescence {
         return ticksInHour * (3 + amplifier);
     }
     static int getOffsetLength(int amplifier) {
-        return ticksInHour/2 * (4 + amplifier);
+        return ticksInHour * (4 + amplifier) / 2;
     }
     static int getAfterglowDuration() {
-        int minDuration = ticksInHour * RandomProvider.ruleInt("afterglowDuration"); //default is 24 minutes
+        int minDuration = ticksInHour * 20;
         return (int)Math.floor(minDuration * Math.pow(2, InfinityMod.random.nextDouble(-1, 1)));
     }
     static int getCooldownDuration() {
-        return ticksInHour * RandomProvider.ruleInt("iridescenceCooldownDuration"); //default is 7*24 minutes
+        return ticksInHour * 20 * 7;
     }
 
     enum Phase {

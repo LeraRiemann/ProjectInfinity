@@ -3,6 +3,7 @@ package net.lerariemann.infinity.iridescence;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.entity.custom.ChaosPawn;
 import net.lerariemann.infinity.options.InfinityOptions;
+import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.ShaderLoader;
 import net.lerariemann.infinity.util.teleport.WarpLogic;
 import net.lerariemann.infinity.registry.core.ModStatusEffects;
@@ -48,7 +49,8 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         switch (entity) {
             case PlayerEntity player -> {
                 if (player instanceof ServerPlayerEntity serverPlayer) {
-                    if (player.isInvulnerable()) endJourney(serverPlayer, true, 0);
+                    if (player.isInvulnerable()) player.setInvulnerable(false);
+                    if (Iridescence.getPhase(entity) == Iridescence.Phase.PLATEAU) endJourney(serverPlayer, true, 0);
                     unloadShader(serverPlayer);
                 }
                 else {
@@ -73,8 +75,8 @@ public class IridescentEffect extends StatusEffect implements ModStatusEffects.S
         if (entity instanceof PlayerEntity p) {
             if (p instanceof ServerPlayerEntity player) {
                 if (shouldWarp(duration, amplifier)) {
-                    if (!player.isInvulnerable()) {
-                        player.setInvulnerable(true);
+                    if (Iridescence.getPhase(duration + ticksInHour, amplifier) != Iridescence.Phase.PLATEAU) { //the first warp
+                        if (RandomProvider.rule("iridSafeMode")) player.setInvulnerable(true);
                         saveCookie(player);
                     }
                     Identifier id = getIdForWarp(player);

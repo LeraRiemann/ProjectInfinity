@@ -1,5 +1,5 @@
 {
-  "infinity_version": 2004007,
+  "infinity_version": 2004008,
   "gameRules": {
     "safeMode": false,
     "longArithmeticEnabled": false,
@@ -11,13 +11,12 @@
     "useSoundSyncPackets": true,
     "enforceModLoadedChecks": true,
     "forceLowercase": false,
+    "iridSafeMode": false,
     "maxBiomeCount": 6,
     "maxDimensionScale": 0,
     "avgDimensionHeight": 256,
     "iridescenceContactLevel": 0,
     "iridescencePotionLevel": 4,
-    "iridescenceCooldownDuration": 168,
-    "afterglowDuration": 24,
     "resetChargeCooldown": 6000
   },
   "disabledDimensions": ["ant", "bash", "checkerboard",
