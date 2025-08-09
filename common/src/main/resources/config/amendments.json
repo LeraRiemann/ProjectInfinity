@@ -1,5 +1,5 @@
 {
-  "amendment_version": 0,
+  "amendment_version": 1,
   "elements": [
     {
       "area": "fluids",
@@ -21,7 +21,7 @@
       "area": "blocks",
       "mod": "minecraft",
       "selector": "matching_any",
-      "matching": [
+      "matching_any": [
         "minecraft:slime_block",
         "minecraft:honey_block",
         "minecraft:mangrove_roots"

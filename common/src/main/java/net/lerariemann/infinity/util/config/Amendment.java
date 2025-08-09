@@ -30,7 +30,7 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
             return null;
         }
 
-        String mod = NbtUtils.getString(data, "mod");
+        String mod = NbtUtils.getString(data, "mod", "");
         ModSelector modSelector;
         if (mod.equals("all")) {
             modSelector = new UniversalModSelector();
@@ -43,8 +43,8 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
             case "all" -> new UniversalSelector();
             case "containing" -> new ContainingSelector(NbtUtils.getString(data, "containing"));
             case "matching" -> new MatchingSelector(NbtUtils.getString(data, "matching"));
-            case "matching_block_tag" -> new MatchingBlockTagSelector(NbtUtils.getString(data, "matching"));
-            case "matching_any" -> new MatchingAnySelector(NbtUtils.getList(data, "matching", NbtElement.STRING_TYPE)
+            case "matching_block_tag" -> new MatchingBlockTagSelector(NbtUtils.getString(data, "matching_block_tag"));
+            case "matching_any" -> new MatchingAnySelector(NbtUtils.getList(data, "matching_any", NbtElement.STRING_TYPE)
                     .stream().map(e->(NbtString)e).map(NbtString::asString).toList());
             default -> {
                 InfinityMod.LOGGER.warn("Unknown amendment selector type: {}", selectorType);
@@ -52,7 +52,7 @@ public record Amendment(ConfigType area, ModSelector modSelector, Selector selec
             }
         };
 
-        String resultType = NbtUtils.getString(data, "results");
+        String resultType = NbtUtils.getString(data, "results", "");
         Results results = switch (resultType) {
             case "set_value" -> new SetValue(NbtUtils.getInt(data, "value"));
             case "erase" -> new SetValue(0);
