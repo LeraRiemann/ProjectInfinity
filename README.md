@@ -24,7 +24,7 @@ Older versions may have different dependencies. See their specific version pages
 Absolutely, if you link back to here!
 
 ### Can I use it in a modpack or as a dependency?
-Also yes, though keep in mind that due to the nature of the mod there might be bugs and crashes when paired with other mods. Please report these issues on [GitHub](https://github.com/LeraRiemann/ProjectInfinity/issues) or in the [Discord](https://discord.gg/NrvaQWV7Qv), as we're actively working on fixing them.
+Also yes, though keep in mind that due to the nature of the mod there might be bugs and crashes when paired with other mods. Please report these issues in the [Discord](https://discord.gg/NrvaQWV7Qv), as we're actively working on fixing them.
 
 ### Are there Easter Egg dimensions?
 Yes! The set is a bit different from the original snapshot though, since it is a new vision :D The list of them can be found on the [Modded Minecraft Wiki](https://moddedmc.org/en/project/infinite-dimensions/docs/easter-eggs), and modpacks can also add their own!
@@ -33,7 +33,7 @@ Yes! The set is a bit different from the original snapshot though, since it is a
 You can do so on my Discord, but make sure to stay respectful and don't expect much, especially in terms of ETAs. I can implement ideas that I like (and that aren't super hard to implement) when I have time and resources, but I never can promise when would that be.
 
 ## Acknowledgements
-I appreciate [Cassian](https://cassian.cc), for their plethora of bugfixing commits and hosting a server for the mod, and BasiqueEvangelist, for helping with runtime dimension registration on Fabric and his permission to port a part of his code.
+I appreciate [Cassian](https://cassian.cc), my codeveloper, for their immense help with bugfixes, backporting, and compatibility, as well as hosting a server for the mod; BasiqueEvangelist, for helping with runtime dimension registration on Fabric and his permission to port a part of his code; and JustImagineIT, for how many bugs he helped to weed out.
 
 The Forge and NeoForge versions of the mod would not be possible without the work of the Sinytra team on the [Forgified Fabric API](https://modrinth.com/mod/forgified-fabric-api), and Commoble's [infiniverse](https://github.com/Commoble/infiniverse/tree/main) library, which was referenced to troubleshoot errors with dimension unfreezing on Forge and runtime dimension ticking on Forge and NeoForge.
 
