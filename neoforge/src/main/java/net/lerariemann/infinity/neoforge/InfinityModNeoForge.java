@@ -1,6 +1,8 @@
 package net.lerariemann.infinity.neoforge;
 
+import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.compat.CreateCompat;
 import net.lerariemann.infinity.util.neoforge.NeoItems;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModEntities;
@@ -57,6 +59,8 @@ public final class InfinityModNeoForge {
         ModStats.load();
         ModBlocks.registerFlammableBlocks();
         ModItemFunctions.registerDispenserBehaviour();
+        if (Platform.isModLoaded("create"))
+            CreateCompat.register();
     }
 
     public static MinecraftClient client() {

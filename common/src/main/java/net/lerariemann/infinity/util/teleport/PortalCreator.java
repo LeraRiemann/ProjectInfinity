@@ -4,6 +4,7 @@ import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.MinecraftServerAccess;
 import net.lerariemann.infinity.block.custom.Boopable;
+import net.lerariemann.infinity.compat.CreateCompat;
 import net.lerariemann.infinity.compat.DimLibCompat;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.block.custom.InfinityPortalBlock;
@@ -227,14 +228,16 @@ public interface PortalCreator {
 
     static PortalModifierUnion forInitialSetupping(ServerWorld world, BlockPos pos, Identifier id, boolean open) {
         PortalColorApplier applier = PortalColorApplier.of(id, world.getServer());
-        return new PortalModifierUnion()
+        PortalModifierUnion union = new PortalModifierUnion()
                 .addSetupper(infPortalSetupper(world, pos))
-                .addModifier(npbe -> {
-                    npbe.setDimension(id);
-                    npbe.setColor(applier.apply(npbe.getPos()));
-                    npbe.setOpen(open);
-                    npbe.markDirty();
-                });
+                .addModifier(nbpe -> nbpe.setDimension(id))
+                .addModifier(npbe -> npbe.setColor(applier.apply(npbe.getPos())))
+                .addModifier(npbe -> npbe.setOpen(open))
+                .addModifier(BlockEntity::markDirty);
+        if (Platform.isModLoaded("create")) {
+            union.addModifier(CreateCompat::tryModifyRails);
+        }
+        return union;
     }
 
     /**
