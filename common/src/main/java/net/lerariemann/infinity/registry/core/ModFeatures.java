@@ -21,6 +21,7 @@ public class ModFeatures {
     public static RegistrySupplier<RandomRoundMushroomFeature> RANDOM_ROUND_MUSHROOM;
     public static RegistrySupplier<RandomCeilingBlobFeature> RANDOM_CEILING_BLOB;
     public static RegistrySupplier<RandomBonusChestFeature> RANDOM_BONUS_CHEST;
+    public static RegistrySupplier<RandomEndGatewayFeature> RANDOM_END_GATEWAY;
     public static RegistrySupplier<RandomCubeFeature> RANDOM_CUBE;
     public static RegistrySupplier<RandomShapeFeature> RANDOM_STAR;
     public static RegistrySupplier<TextFeature> RANDOM_TEXT;
@@ -46,6 +47,7 @@ public class ModFeatures {
         RANDOM_TEXT = register("random_text", new TextFeature(TextFeature.Config.CODEC));
         PORTAL_SETUPPER = register("portal_setupper", new RandomPortalSetupper((RandomPortalSetupper.Config.CODEC)));
         RANDOM_BONUS_CHEST = register("bonus_chest", new RandomBonusChestFeature(RandomBonusChestFeature.Config.CODEC));
+        RANDOM_END_GATEWAY = register("end_gateway", new RandomEndGatewayFeature(RandomEndGatewayFeature.Config.CODEC));
         WONKY_TRUNK = TRUNKS.register("wonky", () -> new TrunkPlacerType<>(WonkyTrunkPlacer.CODEC));
         FEATURES.register();
         TRUNKS.register();

@@ -92,7 +92,7 @@
       "scatter_ores": 0.2,
       "scatter_end_spikes": 0.67,
       "cage_crystals": 0.2,
-      "exact_gateways": 0.2,
+      "gateways_random_block": 0.8,
       "colourful_shapes": 0.5,
       "banded_shapes": 0.5
     },

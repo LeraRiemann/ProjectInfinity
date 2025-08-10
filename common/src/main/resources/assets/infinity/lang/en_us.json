@@ -242,7 +242,7 @@
   "config.infinity.rootChances.features_rules.scatter_ores.description": "This setting changes how often to toggle between \"ore\" and \"scattered_ore\" types of ore deposit generation.",
   "config.infinity.rootChances.features_rules.scatter_end_spikes.description": "When you have end spikes in a random dimension, this is a chance they will be all over the place like in pre-1.9 and not in a perfect circle.",
   "config.infinity.rootChances.features_rules.cage_crystals.description": "This setting controls the percentage of spikes that have their end crystal in a cage.",
-  "config.infinity.rootChances.features_rules.exact_gateways.description": "This setting controls the chance that an End Gateway will teleport you to exact coordinates without regards to if you'll get stuck in a wall there. Otherwise, it will at least try to find a safe spot nearby.",
+  "config.infinity.rootChances.features_rules.gateways_bedrock.description": "This setting controls the chance that End Gateways will use a random block instead of bedrock.",
   "config.infinity.rootChances.features_rules.colourful_shapes.description": "This setting controls whether the large balls that spawn being of one random block or of a bunch of colored blocks.",
   "config.infinity.rootChances.features_rules.banded_shapes.description": "This setting controls whether large balls made of coloured blocks are arranged in a perlin noise map or in diagonal bands.",
   "config.infinity.rootChances.dimension_type.piglin_safe.description": "This setting controls the percentage of dimensions where Piglins are not converted into Zombie Piglins.",
