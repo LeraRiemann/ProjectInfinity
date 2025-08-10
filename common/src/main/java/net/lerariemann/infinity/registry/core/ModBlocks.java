@@ -6,6 +6,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.block.custom.*;
 import net.minecraft.block.*;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
 
@@ -52,6 +53,8 @@ public class ModBlocks {
             new NotesBlock(AbstractBlock.Settings.copy(Blocks.NOTE_BLOCK).ticksRandomly()));
     public static final RegistrySupplier<Block> HAUNTED_AIR = BLOCKS.register("haunted_air", () ->
             new HauntedBlock(Blocks.AIR));
+    public static final RegistrySupplier<RailHelper> RAIL_HELPER = BLOCKS.register("rail_helper", () ->
+            new RailHelper(AbstractBlock.Settings.create().strength(-1.0F, 3600000.8F).mapColor(MapColor.CLEAR).dropsNothing().nonOpaque().allowsSpawning(Blocks::never).noBlockBreakParticles().pistonBehavior(PistonBehavior.BLOCK)));
 
     public static void registerModBlocks() {
         InfinityMod.LOGGER.debug("Registering blocks for " + MOD_ID);

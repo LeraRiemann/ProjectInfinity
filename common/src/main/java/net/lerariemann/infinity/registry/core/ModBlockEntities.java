@@ -6,6 +6,7 @@ import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.block.custom.RailHelper;
 import net.lerariemann.infinity.block.entity.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.datafixer.TypeReferences;
@@ -37,6 +38,10 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.create(ChromaticBlockEntity::new,
                             ModBlocks.CHROMATIC_WOOL.get(),
                             ModBlocks.CHROMATIC_CARPET.get()).build(type("chromatic")));
+    public static final RegistrySupplier<BlockEntityType<RailHelper.RHBEntity>> RAIL_HELPER =
+            BLOCK_ENTITY_TYPES.register("rail_helper_block_entity", () ->
+                    BlockEntityType.Builder.create(RailHelper.RHBEntity::new,
+                            ModBlocks.RAIL_HELPER.get()).build(type("rail_helper_block_entity")));
 
 
     public static void registerBlockEntities() {

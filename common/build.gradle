@@ -14,6 +14,21 @@ repositories {
         url = "https://maven.terraformersmc.com/"
     }
     maven { url 'https://jitpack.io' }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Fabricators of Create"
+                url = "https://mvn.devos.one/snapshots"
+            }
+        }
+        filter {
+            includeGroup "io.github.fabricators_of_create"
+            includeGroup "io.github.fabricators_of_create.Porting-Lib"
+            includeGroup "com.tterrag.registrate_fabric"
+            includeGroup "io.github.tropheusj"
+            includeGroup "com.simibubi.create"
+        }
+    }
 }
 
 dependencies {
@@ -39,9 +54,9 @@ dependencies {
     // EMI
     modCompileOnly("dev.emi:emi-xplat-intermediary:$emi_version+$minecraft_version:api")
 
-    // Ponder
+    // Create
     modCompileOnly("net.createmod.ponder:Ponder-Fabric-${minecraft_version}:${ponder_version}")
-
+    modCompileOnly("com.simibubi.create:create-fucked-up-${minecraft_version}:6.0.6+053024d") { transitive = false }
 }
 
 loom {
