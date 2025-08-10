@@ -11,14 +11,12 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lerariemann.infinity.InfinityMod;
+import net.lerariemann.infinity.dimensions.RandomDimensionType;
 import net.lerariemann.infinity.util.core.CommonIO;
-import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.core.NbtUtils;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtString;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.text.Text;
 import org.apache.commons.io.FileUtils;
@@ -30,7 +28,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static net.lerariemann.infinity.InfinityMod.MOD_ID;
@@ -128,9 +125,15 @@ public class ClothConfigFactory {
                     var newOption = entryBuilder.startIntField(fieldName(field, currentCategory), value.getAsInt())
                             .setSaveConsumer(mapSetter(field, prevKey, prevPrevKey))
                             .setTooltip(fieldTooltip(field, currentCategory, nestedCurrentCategory))
-                            .setDefaultValue((int) getDefaultValue(field, prevKey, prevPrevKey, "int"))
-                            .build();
-                    addEntry(newOption, category);
+                            .setDefaultValue((int) getDefaultValue(field, prevKey, prevPrevKey, "int"));
+                    switch (field.getKey()) {
+                        case "maxBiomeCount" -> newOption = newOption.setMin(2).setMax(10);
+                        case "maxStructureCount", "iridescenceContactLevel", "iridescencePotionLevel" -> newOption = newOption.setMin(0).setMax(8);
+                        case "avgDimensionHeight" -> newOption = newOption.setMin(64).setMax(1024);
+                        case "maxDimensionScale" -> newOption = newOption.setMin(0).setMax(RandomDimensionType.scaleCap);
+                        case "resetChargeCooldown" -> newOption = newOption.setMin(0);
+                    }
+                    addEntry(newOption.build(), category);
                 }
             }
         }

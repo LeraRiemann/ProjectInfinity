@@ -309,14 +309,6 @@ public class RandomDimension {
     }
 
     NbtElement randomMultiNoiseParameter() {
-        /*if (random.nextBoolean()) {
-            NbtCompound res = new NbtCompound();
-            double a = (random.nextFloat()-0.5)*2;
-            double b = (random.nextFloat()-0.5)*2;
-            res.putFloat("min", (float)Math.min(a, b));
-            res.putFloat("max", (float)Math.max(a, b));
-            return res;
-        }*/
         return NbtDouble.of((random.nextDouble()-0.5)*2);
     }
 
@@ -340,10 +332,14 @@ public class RandomDimension {
     }
 
     void addStructures(RandomBiome b) {
-        int numstructures = random.nextInt(1, 5);
+        int maxCount = RandomProvider.ruleInt("maxStructureCount");
         Set<String> temp = new HashSet<>();
-        for (int i = 0; i < numstructures; i++) {
-            addStructure(new RandomStructure(random.nextInt(), b), temp);
+        if (maxCount > 0) {
+            maxCount = Math.min(maxCount, 8);
+            int numstructures = random.nextInt(1, maxCount + 1);
+            for (int i = 0; i < numstructures; i++) {
+                addStructure(new RandomStructure(random.nextInt(), b), temp);
+            }
         }
         if (PROVIDER.roll( random, "text")) {
             addStructure(new RandomText(random.nextInt(), b), temp);
