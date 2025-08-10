@@ -59,9 +59,14 @@ public class NetherPortalBlockMixin extends AbstractBlockMixin {
 			if (!bl && !InfinityMethods.isInfinity(world)) return;
 			world.setBlockState(pos, ModBlocks.PORTAL.get().getDefaultState().
 					with(AXIS, state.get(AXIS)));
-			if (bl && world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
-				long l = InfinityMethods.getRandomSeed(new java.util.Random(world.getTime()));
-				ipbe.setDimension(l);
+			if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity ipbe) {
+				if (bl) {
+					long l = InfinityMethods.getRandomSeed(new java.util.Random(world.getTime()));
+					ipbe.setDimension(l);
+				}
+				else {
+					ipbe.setOpen(true);
+				}
 			}
 		}
 	}

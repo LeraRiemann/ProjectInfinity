@@ -58,7 +58,7 @@ subprojects {
         // See https://docs.gradle.org/current/userguide/declaring_repositories.html
         // for more information about repositories.
         maven { // Flywheel
-            url = "https://maven.tterrag.com/"
+            url = "https://modmaven.dev"
             content {
                 // need to be specific here due to version overlaps
                 includeGroup("com.jozufozu.flywheel")

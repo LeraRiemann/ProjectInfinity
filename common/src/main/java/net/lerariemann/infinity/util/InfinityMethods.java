@@ -7,6 +7,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.BiomeBottleBlockEntity;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
+import net.lerariemann.infinity.block.entity.TintableBlockEntity;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.core.RandomProvider;
@@ -18,6 +19,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
@@ -163,15 +165,19 @@ public interface InfinityMethods {
     }
 
     static int getOverlayColorFromComponents(ItemStack stack, int layer) {
-        if (stack.getNbt() != null && layer == 1) {
-            if (stack.getItem().equals(ModItems.TRANSFINITE_KEY.get()))
-                return stack.getNbt().getInt("key_color");
-            else if (stack.getItem().equals(ModItems.BIOME_BOTTLE_ITEM.get())) {
-                return stack.getNbt().getCompound("BlockEntityTag").getInt("Color");
+        if (stack.getNbt() != null) {
+            if (layer == 1) {
+                if (stack.isOf(ModItems.TRANSFINITE_KEY.get()))
+                    return stack.getNbt().getInt(ModComponentTypes.COLOR);
+                else if (stack.isOf(ModItems.BIOME_BOTTLE_ITEM.get())) {
+                    return stack.getNbt().getCompound("BlockEntityTag").getInt("Color");
+                }
+                else if (stack.isOf(ModItems.F4.get())) {
+                    return BackportMethods.getOrDefaultInt(stack, ModComponentTypes.COLOR, 10879231);
+                }
             }
-            else if (stack.getItem().equals(ModItems.F4.get())) {
-                return stack.getNbt().getInt(ModComponentTypes.KEY_COLOR);
-            }
+            else if (stack.isOf(ModItems.CHROMATIC_MATTER.get()) || stack.isOf(ModItems.CHROMATIC_WOOL.get()) || stack.isOf(ModItems.CHROMATIC_CARPET.get()))
+                return stack.getNbt().getInt(ModComponentTypes.COLOR);
         }
         return 0xFFFFFF;
     }
@@ -186,23 +192,9 @@ public interface InfinityMethods {
     static int getBlockEntityColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
         if (world != null && pos != null) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof InfinityPortalBlockEntity be) {
+            if (blockEntity instanceof TintableBlockEntity be) {
                 Object j = be.getTint();
                 return (int)j & 0xFFFFFF;
-            }
-        }
-        return 0xFFFFFF;
-    }
-
-    /**
-     * Gets a Biome Bottle's color from its block entity - for use in color providers.
-     */
-    static int getBiomeBottleColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
-        if (world != null && pos != null) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof BiomeBottleBlockEntity be) {
-                int j = be.color;
-                return j & 0xFFFFFF;
             }
         }
         return 0xFFFFFF;

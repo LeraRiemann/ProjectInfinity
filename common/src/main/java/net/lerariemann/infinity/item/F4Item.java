@@ -1,5 +1,6 @@
 package net.lerariemann.infinity.item;
 
+import dev.architectury.platform.Platform;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
@@ -49,11 +50,7 @@ public class F4Item extends Item implements PortalDataHolder {
 
 
     public static int getCharge(ItemStack f4) {
-        if (f4.hasNbt()) {
-            assert f4.getNbt() != null;
-            return f4.getNbt().getInt("f4_charge");
-        }
-        return 0;
+        return BackportMethods.getOrDefaultInt(f4, ModComponentTypes.F4_CHARGE, 0);
     }
 
     @Override
@@ -70,7 +67,7 @@ public class F4Item extends Item implements PortalDataHolder {
                                     int size_x, int size_y) {
         Direction.Axis dir2 = player.getHorizontalFacing().rotateClockwise(Direction.Axis.Y).getAxis();
 
-        int charges = getCharge(stack);
+        int charges = BackportMethods.getOrDefaultInt(stack, ModComponentTypes.F4_CHARGE, 0);
         int useCharges = player.isCreative() ? 0 : 2*(2 + size_x + size_y);
         if (charges < useCharges) {
             if (!world.isClient())
@@ -105,8 +102,7 @@ public class F4Item extends Item implements PortalDataHolder {
         useCharges -= obsNotReplaced;
 
         world.playSound(player, player.getBlockPos(), SoundEvents.BLOCK_BELL_USE, SoundCategory.BLOCKS, 1, 0.75f);
-        BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, charges-useCharges);
-        return stack;
+        return BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, charges-useCharges);
     }
 
     @Override
@@ -172,6 +168,10 @@ public class F4Item extends Item implements PortalDataHolder {
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
         BlockState bs = world.getBlockState(pos);
+        if (bs.isReplaceable()) {
+            pos = pos.down();
+            bs = world.getBlockState(pos);
+        }
         Hand hand = context.getHand();
 
         if (isPortal(bs)) {
@@ -273,8 +273,7 @@ public class F4Item extends Item implements PortalDataHolder {
         }
         for (int i = 0; i < portal.width; i++) for (int j = 0; j < portal.height; j++)
             world.setBlockState(portal.lowerLeft.offset(axis, i).up(j), Blocks.AIR.getDefaultState(), 3, 0);
-        BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, getCharge(stack) + obsidian);
         world.playSound(null, origin, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1, 0.75f);
-        return stack;
+        return BackportMethods.apply(stack, ModComponentTypes.F4_CHARGE, getCharge(stack) + obsidian);
     }
 }

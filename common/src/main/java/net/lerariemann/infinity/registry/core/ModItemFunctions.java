@@ -124,7 +124,7 @@ public class ModItemFunctions {
         if (match.isEmpty()) return;
 
         ItemStack resStack = match.get().getOutput(w.getRegistryManager());
-//        componentFunction.apply(resStack.getItem()).ifPresent(resStack::applyChanges);
+        resStack.setNbt(compound);
 
         Vec3d v = itemEntity.getVelocity();
         ItemEntity result = new ItemEntity(w, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(),

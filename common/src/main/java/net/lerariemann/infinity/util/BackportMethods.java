@@ -2,6 +2,7 @@ package net.lerariemann.infinity.util;
 
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +12,8 @@ public class BackportMethods {
     public static int getOrDefaultInt(ItemStack stack, String key, int i) {
         if (stack.hasNbt()) {
             assert stack.getNbt() != null;
-            return stack.getNbt().getInt(key);
+            if (stack.getNbt().contains(key))
+                return stack.getNbt().getInt(key);
         }
         return i;
     }
@@ -19,14 +21,16 @@ public class BackportMethods {
     public static String getOrDefaultString(ItemStack stack, String key, String i) {
         if (stack.hasNbt()) {
             assert stack.getNbt() != null;
-            return stack.getNbt().getString(key);
+            if (stack.getNbt().contains(key))
+                return stack.getNbt().getString(key);
         }
         return i;
     }
 
     public static boolean contains(ItemStack stack, String key) {
         if (stack.hasNbt()) {
-            return !Objects.requireNonNull(stack.getSubNbt(key)).isEmpty();
+            assert stack.getNbt() != null;
+            return stack.getNbt().contains(key);
         }
         return false;
     }
@@ -36,6 +40,10 @@ public class BackportMethods {
             assert stack.getNbt() != null;
             stack.getNbt().putInt(key, i);
             return stack;
+        } else {
+            NbtCompound nbtCompound = new NbtCompound();
+            nbtCompound.putInt(key, i);
+            stack.setNbt(nbtCompound);
         }
         return stack;
     }
@@ -45,6 +53,10 @@ public class BackportMethods {
             assert stack.getNbt() != null;
             stack.getNbt().putString(key, i);
             return stack;
+        } else {
+            NbtCompound nbtCompound = new NbtCompound();
+            nbtCompound.putString(key, i);
+            stack.setNbt(nbtCompound);
         }
         return stack;
     }

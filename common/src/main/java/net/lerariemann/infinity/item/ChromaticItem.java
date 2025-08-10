@@ -2,6 +2,7 @@ package net.lerariemann.infinity.item;
 
 import net.lerariemann.infinity.block.custom.AltarBlock;
 import net.lerariemann.infinity.block.entity.ChromaticBlockEntity;
+import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.var.ModTags;
@@ -12,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -21,6 +23,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.awt.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChromaticItem extends Item implements PortalDataHolder {
@@ -30,6 +33,25 @@ public class ChromaticItem extends Item implements PortalDataHolder {
 
     public static void playDing(PlayerEntity player, float pitch) {
         player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, pitch);
+    }
+
+    static NbtCompound ofColor(int color) {
+        NbtCompound compound = new NbtCompound();
+        compound.putInt(ModComponentTypes.COLOR, color);
+        return compound;
+    }
+
+    static NbtCompound ofHue(int hue) {
+        NbtCompound compound = new NbtCompound();
+        compound.putInt(ModComponentTypes.COLOR, Color.HSBtoRGB(hue/360f, 1.0f, 1.0f) & 0xFFFFFF);
+        return compound;
+    }
+
+    static NbtCompound ofDye(DyeColor dyeColor) {
+        NbtCompound compound = new NbtCompound();
+        compound.putInt(ModComponentTypes.COLOR, ColorLogic.getChromaticColor(dyeColor));
+        compound.putString(ModComponentTypes.DYE_COLOR, dyeColor.getName());
+        return compound;
     }
 
     @Override
@@ -42,31 +64,32 @@ public class ChromaticItem extends Item implements PortalDataHolder {
 
     public boolean useOnBlock(PlayerEntity player, Hand hand, World world, BlockPos pos, ItemStack currStack) {
         BlockState oldState = world.getBlockState(pos);
-        int currColor = BackportMethods.getOrDefaultInt(currStack, ModComponentTypes.KEY_COLOR, 0xFFFFFF);
+        int currColor = BackportMethods.getOrDefaultInt(currStack, ModComponentTypes.COLOR, 0xFFFFFF);
         if (player.isSneaking()) { //copy color
             ItemStack newStack = currStack.copy();
             int i = -1;
             if (world.getBlockEntity(pos) instanceof ChromaticBlockEntity cbe) i = cbe.getTint();
+            else if (world.getBlockEntity(pos) instanceof InfinityPortalBlockEntity cbe) i = cbe.getTint();
             else if (oldState.isOf(ModBlocks.ALTAR.get())) {
                 int altarState = oldState.get(AltarBlock.COLOR);
                 if (altarState == 0) i = ColorLogic.getChromaticColor(DyeColor.LIGHT_GRAY);
                 else {
                     int hue = (altarState - 1) * (360 / (AltarBlock.numColors - 1));
                     if (!ColorLogic.matchesPureHue(currColor, hue))
-                        BackportMethods.apply(newStack, ModComponentTypes.HUE, hue);
+                        newStack.setNbt(ofHue(hue));
                     else return false;
                 }
             }
             else { //copy color from vanilla blocks
                 DyeColor dyeColor = ColorLogic.getColorByState(oldState);
                 if (dyeColor != null &&
-                        !(dyeColor.getId() == (BackportMethods.getOrDefaultInt(newStack, ModComponentTypes.DYE_COLOR, -1)))) {
-                    BackportMethods.apply(newStack, ModComponentTypes.DYE_COLOR, dyeColor.getId());
+                        !dyeColor.getName().equals(BackportMethods.getOrDefaultString(newStack, ModComponentTypes.DYE_COLOR, "null"))) {
+                    newStack.setNbt(ofDye(dyeColor));
                 }
                 else return false;
             }
             if (i > 0) {
-                if (i != currColor) BackportMethods.apply(newStack, ModComponentTypes.DYE_COLOR, i);
+                if (i != currColor) newStack.setNbt(ofColor(i));
                 else return false;
             }
             player.setStackInHand(hand, newStack);
@@ -77,7 +100,7 @@ public class ChromaticItem extends Item implements PortalDataHolder {
             if (oldState.isIn(ModTags.IRIDESCENT_BLOCKS)) return false;
             boolean bl = BackportMethods.contains(currStack, ModComponentTypes.DYE_COLOR);
             BlockState state;
-            if (bl) state = ColorLogic.recolor(BackportMethods.getOrDefaultString(currStack, ModComponentTypes.DYE_COLOR, "infinity:chromatic"), oldState);
+            if (bl) state = ColorLogic.recolor(BackportMethods.getOrDefaultString(currStack, ModComponentTypes.DYE_COLOR, null), oldState);
             else state = ColorLogic.recolor("infinity:chromatic", oldState);
             if (state == null) return false;
             world.setBlockState(pos, state);

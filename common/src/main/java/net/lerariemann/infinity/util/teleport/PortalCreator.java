@@ -14,6 +14,7 @@ import net.lerariemann.infinity.registry.core.ModItems;
 import net.lerariemann.infinity.util.BackportMethods;
 import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PlatformMethods;
+import net.lerariemann.infinity.util.core.CommonIO;
 import net.lerariemann.infinity.util.core.RandomProvider;
 import net.lerariemann.infinity.util.loading.DimensionGrabber;
 import net.lerariemann.infinity.options.PortalColorApplier;
@@ -34,6 +35,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -45,12 +47,14 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -90,22 +94,27 @@ public interface PortalCreator {
                 if (world instanceof ServerWorld serverWorld) {
                     boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
                     if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                    recordIdTranslation(world.getServer(), id, content);
                 }
             }
         }
         else if (Platform.isModLoaded("computercraft")) {
-            String content;
-            content = checkPrintedPage(itemStack);
-            MinecraftServer server = world.getServer();
-            if (server != null) {
-                Identifier id = InfinityMethods.dimTextToId(content);
-                if (world instanceof ServerWorld serverWorld) {
-                    boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
-                    if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+            try {
+                String content;
+                content = checkPrintedPage(itemStack);
+                MinecraftServer server = world.getServer();
+                if (server != null) {
+                    Identifier id = InfinityMethods.dimTextToId(content);
+                    if (world instanceof ServerWorld serverWorld) {
+                        boolean bl = modifyOnInitialCollision(id, serverWorld, pos);
+                        if (bl) entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+                        recordIdTranslation(world.getServer(), id, content);
+                    }
                 }
+            } catch (Exception e) {
+                InfinityMod.LOGGER.warn("An incompatible version of ComputerCraft is present. Please update it to the latest version");
             }
         }
-
     }
 
     /**
@@ -350,5 +359,26 @@ public interface PortalCreator {
             }
         }
         return bl;
+    }
+
+    static void recordIdTranslation(MinecraftServer server, Identifier id, String value) {
+        value = value.replaceAll("\n", "/n");
+        Path dir = server.getSavePath(WorldSavePath.DATAPACKS).resolve("infinity");
+        String filename = "translation_tables.json";
+        NbtCompound comp = CommonIO.read(dir.resolve(filename));
+        String key = id.getPath();
+        if (comp.contains(key)) {
+            NbtList l;
+            if (comp.contains(key, NbtElement.STRING_TYPE)) {
+                l = new NbtList();
+                l.add(comp.get(key));
+            }
+            else l = comp.getList(key, NbtElement.STRING_TYPE);
+            l.add(NbtString.of(value));
+            comp.remove(key);
+            comp.put(key, l);
+        }
+        else comp.putString(key, value);
+        CommonIO.write(comp, dir, filename);
     }
 }

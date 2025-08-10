@@ -5,6 +5,7 @@ import net.lerariemann.infinity.InfinityModClient;
 import net.lerariemann.infinity.registry.core.ModBlocks;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.core.ModItems;
+import net.lerariemann.infinity.util.InfinityMethods;
 import net.lerariemann.infinity.util.PlatformMethods;
 import net.lerariemann.infinity.compat.forge.ModConfigFactory;
 import net.minecraft.client.render.RenderLayer;
@@ -15,12 +16,13 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class InfinityModForgeClient {
 
-    public static void initializeClient(IEventBus eventBus) {
+    public static void initializeClient(FMLJavaModLoadingContext context, IEventBus eventBus) {
         InfinityModClient.initializeClient();
-        InfinityModForgeClient.registerModsPage();
+        InfinityModForgeClient.registerModsPage(ModLoadingContext.get());
         eventBus.addListener(InfinityModForgeClient::registerBlockColorHandlers);
         eventBus.addListener(InfinityModForgeClient::registerItemColorHandlers);
         eventBus.addListener(InfinityModForgeClient::registerFluidRenderLayers);
@@ -28,19 +30,32 @@ public class InfinityModForgeClient {
     }
 
     //Integrate Cloth Config screen (if mod present) with Forge mod menu.
-    public static void registerModsPage() {
-        if (clothConfigInstalled()) ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(ModConfigFactory::createScreen));
+    public static void registerModsPage(ModLoadingContext context) {
+        if (clothConfigInstalled()) context.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(ModConfigFactory::createScreen));
     }
 
     // Apply colour handlers to tint Neither Portals and Book Boxes.
     @SubscribeEvent
     public static void registerBlockColorHandlers(RegisterColorHandlersEvent.Block event) {
-        event.register(PlatformMethods::getNeitherPortalColour, ModBlocks.PORTAL.get());
-        event.register(PlatformMethods::getBookBoxColour, ModBlocks.BOOK_BOX.get(), ModBlocks.IRIDESCENCE.get());
+        event.register(InfinityMethods::getBlockEntityColor,
+                ModBlocks.PORTAL.get(),
+                ModBlocks.BIOME_BOTTLE.get(),
+                ModBlocks.CHROMATIC_WOOL.get(),
+                ModBlocks.CHROMATIC_CARPET.get());
+        event.register(InfinityMethods::getBookBoxColor,
+                ModBlocks.BOOK_BOX.get());
     }
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(PlatformMethods::getOverlayColorFromComponents, ModItems.TRANSFINITE_KEY.get(), ModItems.BIOME_BOTTLE_ITEM.get());
+        event.register(InfinityMethods::getOverlayColorFromComponents,
+                ModItems.TRANSFINITE_KEY.get(),
+                ModItems.BIOME_BOTTLE_ITEM.get(),
+                ModItems.F4.get(),
+                ModItems.CHROMATIC_WOOL.get(),
+                ModItems.CHROMATIC_CARPET.get(),
+                ModItems.CHROMATIC_MATTER.get());
+        event.register(InfinityMethods::getPortalItemColor,
+                ModItems.PORTAL_ITEM.get());
     }
     @SubscribeEvent
     public static void registerModelPredicates(FMLClientSetupEvent event) {

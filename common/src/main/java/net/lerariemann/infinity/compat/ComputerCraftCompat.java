@@ -14,6 +14,6 @@ public class ComputerCraftCompat {
             }
             return string;
         }
-        return null;
+        return "";
     }
 }

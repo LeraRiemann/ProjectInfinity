@@ -50,7 +50,8 @@
     "options.PlayerManagerMixin",
     "options.ServerWorldMixin",
     "qol.FireBlockMixin",
-    "qol.LavaFluidMixin"
+    "qol.LavaFluidMixin",
+    "iridescence.LilyPadBlockMixin"
   ],
   "client": [
     "SoundListMixin",
@@ -61,7 +62,8 @@
     "options.GameRendererMixin",
     "options.MinecraftClientMixin",
     "options.SoundSystemMixin",
-    "options.WorldRendererMixin"
+    "options.WorldRendererMixin",
+    "qol.KeyboardMixin"
   ],
   "injectors": {
     "defaultRequire": 1

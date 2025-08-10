@@ -127,6 +127,7 @@
   "item.infinity.chromatic_potion": "Chromatic Potion",
   "item.infinity.iridescent_potion": "Iridescent Potion",
   "key.infinity.f4": "Place a Nether Portal",
+  "key.infinity.postprocessor": "Toggle dimension postprocessing shaders",
   "lore.infinity.altar": "This block can be crafted by throwing a Lectern into an Infinity Portal.",
   "lore.infinity.ant": "This strange block rapidly moves, changing White Concrete to Black Concrete and back again.",
   "lore.infinity.book_box": "This block can be found in the Infinite Library. Using it will give you a randomly generated book based on the block's position.",

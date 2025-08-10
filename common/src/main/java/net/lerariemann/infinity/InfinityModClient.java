@@ -20,6 +20,10 @@ public class InfinityModClient {
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_F4,
             "key.categories.misc");
+    public static KeyBinding postProcessorConfigKey = new KeyBinding("key.infinity.postprocessor",
+            InputUtil.Type.KEYSYM,
+            GLFW.GLFW_KEY_F12,
+            "key.categories.misc");
 
     public static void initializeClient() {
         ModEntities.registerEntityRenderers();
@@ -33,6 +37,7 @@ public class InfinityModClient {
                 TypedActionResult<ItemStack> result = F4Item.deploy(client.world, client.player, Hand.MAIN_HAND);
                 client.player.setStackInHand(Hand.MAIN_HAND, result.getValue());
             }
+            while (postProcessorConfigKey.wasPressed()) client.gameRenderer.togglePostProcessorEnabled();
         });
     }
 }

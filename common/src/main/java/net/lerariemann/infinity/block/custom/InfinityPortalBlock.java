@@ -6,7 +6,7 @@ import net.lerariemann.infinity.InfinityMod;
 import net.lerariemann.infinity.access.Timebombable;
 import net.lerariemann.infinity.block.entity.InfinityPortalBlockEntity;
 import net.lerariemann.infinity.dimensions.RandomDimension;
-import net.lerariemann.infinity.item.PortalDataHolder;
+import net.lerariemann.infinity.registry.core.ModComponentTypes;
 import net.lerariemann.infinity.registry.core.ModItemFunctions;
 import net.lerariemann.infinity.registry.var.ModPoi;
 import net.lerariemann.infinity.util.InfinityMethods;
@@ -32,6 +32,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketType;
@@ -170,10 +171,13 @@ public class InfinityPortalBlock extends NetherPortalBlock implements BlockEntit
 
     public static NbtCompound putKeyComponents(Item item, Identifier dim) {
         NbtCompound nbtCompound = new NbtCompound();
-        if (!item.equals(Items.AMETHYST_SHARD)) return nbtCompound;
+        if (!(item.equals(Items.AMETHYST_SHARD) || item.getDefaultStack().isIn(ItemTags.WOOL) || item.getDefaultStack().isIn(ItemTags.WOOL_CARPETS)))
+            return nbtCompound;
         int keycolor = WarpLogic.getKeyColorFromId(dim);
-        nbtCompound.putInt("key_color", keycolor);
-        nbtCompound.putString("key_destination", dim.toString());
+        nbtCompound.putInt(ModComponentTypes.COLOR, keycolor);
+        if (!item.equals(Items.AMETHYST_SHARD))
+            return nbtCompound;
+        nbtCompound.putString(ModComponentTypes.DESTINATION, dim.toString());
         return nbtCompound;
     }
 

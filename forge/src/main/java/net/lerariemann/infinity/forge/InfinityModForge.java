@@ -32,6 +32,7 @@ import static net.lerariemann.infinity.util.InfinityMethods.isCreateLoaded;
 @Mod(InfinityMod.MOD_ID)
 public final class InfinityModForge {
     public InfinityModForge() {
+        FMLJavaModLoadingContext context = FMLJavaModLoadingContext.get();
         // Register compat file ASAP to prevent a Canary crash.
         if (Platform.isModLoaded("canary"))
             CanaryCompat.writeCompatFile();
@@ -39,21 +40,19 @@ public final class InfinityModForge {
         if (Platform.isModLoaded("radium"))
             RadiumCompat.writeCompatFile();
         // Submit our event bus to let Architectury API register our content on the right time.
-        EventBuses.registerModEventBus(InfinityMod.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        EventBuses.registerModEventBus(InfinityMod.MOD_ID, context.getModEventBus());
+        IEventBus eventBus = context.getModEventBus();
         // Run our common setup.
         InfinityMod.init();
         // Run our client setup.
         if (FMLEnvironment.dist == Dist.CLIENT)
-            InfinityModForgeClient.initializeClient(eventBus);
+            InfinityModForgeClient.initializeClient(context, eventBus);
         // Run any remaining Forge specific tasks.
         eventBus.addListener(InfinityModForge::registerSpawns);
         eventBus.addListener(InfinityModForge::commonSetup);
-        eventBus.addListener(FluidTypes::registerFluidInteractions);
         MinecraftForge.EVENT_BUS.addListener(InfinityModForge::sliderSpamFix);
-        
-        FluidTypes.registerFluidTypes(eventBus);
-        ModFluidsForge.registerModFluids();
+
+        ModFluidsForge.registerModFluids(eventBus);
         ModEffectsForge.register(eventBus);
         ModTags.IRIDESCENT_ITEMS = ItemTags.create(InfinityMethods.getId("iridescent"));
     }
@@ -81,5 +80,6 @@ public final class InfinityModForge {
         ModItemFunctions.registerDispenserBehaviour();
         if (isCreateLoaded())
             CreateCompat.register();
+        ModFluidsForge.registerFluidInteractions();
     }
 }
