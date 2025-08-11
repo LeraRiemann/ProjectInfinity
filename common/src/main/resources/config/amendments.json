@@ -1,5 +1,5 @@
 {
-  "amendment_version": 1,
+  "amendment_version": 2,
   "elements": [
     {
       "area": "fluids",
@@ -60,6 +60,12 @@
       "mod": "aether",
       "selector": "containing",
       "containing": "dungeon",
+      "results": "erase"
+    },
+    {
+      "area": "structures",
+      "mod": "vampirism",
+      "selector": "all",
       "results": "erase"
     },
     {
