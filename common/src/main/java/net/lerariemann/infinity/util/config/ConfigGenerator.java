@@ -140,10 +140,11 @@ public interface ConfigGenerator {
             BlockEntityTypeAccess<? extends BlockEntity> bet = (BlockEntityTypeAccess<?>)(r.get(key));
             assert bet != null;
             Set<Block> blocks = bet.infinity$getBlocks();
-
-            BlockEntity be = bet.infinity$getFactory().create(BlockPos.ORIGIN, ((Block)blocks.toArray()[0]).getDefaultState());
-            if (be instanceof LootableContainerBlockEntity && !(be instanceof ShulkerBoxBlockEntity)) {
-                for (Block b : blocks) allBlocks.add(Registries.BLOCK.getId(b));
+            if (!blocks.isEmpty()) {
+                BlockEntity be = bet.infinity$getFactory().create(BlockPos.ORIGIN, ((Block)blocks.toArray()[0]).getDefaultState());
+                if (be instanceof LootableContainerBlockEntity && !(be instanceof ShulkerBoxBlockEntity)) {
+                    for (Block b : blocks) allBlocks.add(Registries.BLOCK.getId(b));
+                }
             }
         });
         allBlocks.forEach(chests::addIdentifier);
