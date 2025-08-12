@@ -1,3 +1,5 @@
+## This repository is discontinued - check [tangled](https://tangled.sh/@lerariemann.nekoweb.org/ProjectInfinity/) for future updates!
+
 # Infinite Dimensions
 
 [Download on Modrinth](https://modrinth.com/mod/infinite-dimensions) (recommended) / [Download on Curseforge](https://www.curseforge.com/minecraft/mc-mods/infinite-dimensions)
